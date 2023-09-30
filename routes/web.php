@@ -19,9 +19,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-// Route::get('/kunjungan', 'kunjunganController@index')->name('landing.kunjungan');
 Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
 
-// Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], function () {
+    Route::resource('datakaryawan', '\App\Http\Controllers\HakAkses\DataKaryawanController');
+});
 
-// });
+// CATATAN
+
+// Route::get('/kunjungan', 'kunjunganController@index')->name('landing.kunjungan');

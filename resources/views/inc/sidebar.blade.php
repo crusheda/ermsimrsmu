@@ -5,7 +5,27 @@
         <div id="sidebar-menu">
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
-                <li class="menu-title" key="t-menu">Menu</li>
+                <li>
+                    <a href="{{ route('dashboard') }}" class="waves-effect">
+                        <i class="bx bx-home-circle"></i>
+                        <span key="t-chat">Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="menu-title" key="t-menu">Atur Pengguna</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bxs-user-detail"></i>
+                        <span key="t-dashboards">Hak Akses</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="javascript: void(0);" key="t-default">Jabatan</a></li>
+                        <li><a href="javascript: void(0);" key="t-saas">Perilaku</a></li>
+                        <li><a href="{{ route('datakaryawan.index') }}" key="t-crypto">Data Karyawan</a></li>
+                    </ul>
+                </li>
+                {{-- <li class="menu-title" key="t-menu">Menu</li>
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
@@ -19,7 +39,7 @@
                         <li><a href="dashboard-blog.html" key="t-blog">Blog</a></li>
                         <li><a href="dashboard-job.html" key="t-jobs">Jobs</a></li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">

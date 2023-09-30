@@ -5,16 +5,16 @@
             <div class="navbar-brand-box">
                 <a href="index-2.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{ asset('images/logo/logo_simrs_flexy_v3_light.png') }}" alt="" height="22">
+                        <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('images/logo/logo_simrs_flexy_v3_light.png') }}" alt="" height="17">
+                        <img src="{{ asset('images/logo/logo_simrs_v3.png') }}" alt="" height="30">
                     </span>
                 </a>
 
                 <a href="index-2.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{ asset('images/logo/logo_simrs_flexy_v3_light.png') }}" alt="" height="22">
+                        <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30">
                     </span>
                     <span class="logo-lg">
                         <img src="{{ asset('images/logo/logo_simrs_v3.png') }}" alt="" height="30">
