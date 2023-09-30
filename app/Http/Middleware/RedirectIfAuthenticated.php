@@ -28,5 +28,11 @@ class RedirectIfAuthenticated
         }
 
         return $next($request);
+
+        // if (Auth::guard($guard)->check()) {
+        //     return redirect('/welcome');
+        // }
+
+        // return $next($request);
     }
 }
