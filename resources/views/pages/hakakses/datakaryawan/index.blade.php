@@ -5,76 +5,74 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Data Karyawan</h4>
+                <h4 class="mb-sm-0 font-size-18">Akun Pengguna</h4>
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-body table-responsive text-nowrap">
-            <h4 class="card-title">
-                <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('datakaryawan.create') }}'"><i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Pengguna</button>
-            </h4><hr>
-            <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
-                <thead>
-                    <tr>
-                        <th class="cell-fit">ID</th>
-                        <th class="cell-fit">USERNAME</th>
-                        <th>NAMA</th>
-                        <th>ROLE</th>
-                        <th class="cell-fit">UPDATE</th>
-                        <th class="cell-fit">#</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (count($list['user']) > 0)
-                        @foreach ($list['user'] as $item)
-                            <tr>
-                                <td>{{ $item->id }}</td>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->nama }}</td>
-                                <td>
-                                    @foreach ($list['role'] as $val)
-                                        @if ($item->id == $val->id_user)
-                                            <kbd>{{ $val->nama_role }}</kbd>
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td>{{ $item->updated_at }}</td>
-                                <td>
-                                    <center>
-                                        <div class='btn-group'>
-                                            <button type='button'
-                                                class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow'
-                                                data-bs-toggle='dropdown' aria-expanded='false'><i
-                                                    class='bx bx-dots-vertical-rounded'></i></button>
-                                            <ul class='dropdown-menu dropdown-menu-end'>
-                                                <li><a href='javascript:void(0);' class='dropdown-item text-warning'
-                                                        onclick="window.location.href='{{ url('v2/admin/user/' . $item->id . '') }}'"><i
-                                                            class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                <li><a href='javascript:void(0);' class='dropdown-item text-danger'
-                                                        onclick="hapus({{ $item->id }})"><i
-                                                            class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>
-                                            </ul>
-                                        </div>
-                                    </center>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th class="cell-fit">ID</th>
-                        <th class="cell-fit">USERNAME</th>
-                        <th>NAMA</th>
-                        <th>ROLE</th>
-                        <th class="cell-fit">UPDATE</th>
-                        <th class="cell-fit">#</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+    <div class="card card-body table-responsive text-nowrap">
+        <h4 class="card-title">
+            <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('datakaryawan.create') }}'"><i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Pengguna</button>
+        </h4><hr>
+        <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
+            <thead>
+                <tr>
+                    <th class="cell-fit">ID</th>
+                    <th class="cell-fit">USERNAME</th>
+                    <th>NAMA</th>
+                    <th>ROLE</th>
+                    <th class="cell-fit">UPDATE</th>
+                    <th class="cell-fit">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (count($list['user']) > 0)
+                    @foreach ($list['user'] as $item)
+                        <tr>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->nama }}</td>
+                            <td>
+                                @foreach ($list['role'] as $val)
+                                    @if ($item->id == $val->id_user)
+                                        <kbd>{{ $val->nama_role }}</kbd>
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>{{ $item->updated_at }}</td>
+                            <td>
+                                <center>
+                                    <div class='btn-group'>
+                                        <button type='button'
+                                            class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow'
+                                            data-bs-toggle='dropdown' aria-expanded='false'><i
+                                                class='bx bx-dots-vertical-rounded'></i></button>
+                                        <ul class='dropdown-menu dropdown-menu-end'>
+                                            <li><a href='javascript:void(0);' class='dropdown-item text-warning'
+                                                    onclick="window.location.href='{{ url('v2/admin/user/' . $item->id . '') }}'"><i
+                                                        class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                            <li><a href='javascript:void(0);' class='dropdown-item text-danger'
+                                                    onclick="hapus({{ $item->id }})"><i
+                                                        class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>
+                                        </ul>
+                                    </div>
+                                </center>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="cell-fit">ID</th>
+                    <th class="cell-fit">USERNAME</th>
+                    <th>NAMA</th>
+                    <th>ROLE</th>
+                    <th class="cell-fit">UPDATE</th>
+                    <th class="cell-fit">#</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
     <script>
         $(document).ready(function() {

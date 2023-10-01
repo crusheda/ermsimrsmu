@@ -3,16 +3,16 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index-2.html" class="logo logo-dark">
+                {{-- <a href="index-2.html" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30">
                     </span>
                     <span class="logo-lg">
                         <img src="{{ asset('images/logo/logo_simrs_v3.png') }}" alt="" height="30">
                     </span>
-                </a>
+                </a> --}}
 
-                <a href="index-2.html" class="logo logo-light">
+                <a href="{{ route('portal') }}" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30">
                     </span>
@@ -29,12 +29,12 @@
             <!-- App Search-->
             <form class="app-search d-none d-lg-block">
                 <div class="position-relative">
-                    <input type="text" class="form-control" placeholder="Search...">
+                    <input type="text" class="form-control" placeholder="Cari...">
                     <span class="bx bx-search-alt"></span>
                 </div>
             </form>
 
-            <div class="dropdown dropdown-mega d-none d-lg-block ms-2">
+            {{-- <div class="dropdown dropdown-mega d-none d-lg-block ms-2">
                 <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
                     aria-haspopup="false" aria-expanded="false">
                     <span key="t-megamenu">Mega Menu</span>
@@ -169,7 +169,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="d-flex">
@@ -186,7 +186,7 @@
                     <form class="p-3">
                         <div class="form-group m-0">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search ..."
+                                <input type="text" class="form-control" placeholder="Cari ..."
                                     aria-label="Recipient's username">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit"><i
@@ -198,7 +198,7 @@
                 </div>
             </div>
 
-            <div class="dropdown d-inline-block">
+            {{-- <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <img id="header-lang-img" src="{{ asset('images/flags/us.jpg') }}" alt="Header Language" height="16">
@@ -286,7 +286,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
@@ -299,7 +299,7 @@
                     id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <i class="bx bx-bell bx-tada"></i>
-                    <span class="badge bg-danger rounded-pill">3</span>
+                    <span class="badge bg-danger rounded-pill">1</span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                     aria-labelledby="page-header-notifications-dropdown">
@@ -309,12 +309,12 @@
                                 <h6 class="m-0" key="t-notifications"> Notifications </h6>
                             </div>
                             <div class="col-auto">
-                                <a href="#!" class="small" key="t-view-all"> View All</a>
+                                <a href="javascript: void(0);" class="small" key="t-view-all"> View All</a>
                             </div>
                         </div>
                     </div>
                     <div data-simplebar style="max-height: 230px;">
-                        <a href="javascript: void(0);" class="text-reset notification-item">
+                        {{-- <a href="javascript: void(0);" class="text-reset notification-item">
                             <div class="d-flex">
                                 <div class="avatar-xs me-3">
                                     <span class="avatar-title bg-primary rounded-circle font-size-16">
@@ -349,25 +349,6 @@
                         </a>
                         <a href="javascript: void(0);" class="text-reset notification-item">
                             <div class="d-flex">
-                                <div class="avatar-xs me-3">
-                                    <span class="avatar-title bg-success rounded-circle font-size-16">
-                                        <i class="bx bx-badge-check"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1" key="t-shipped">Your item is shipped</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-grammer">If several languages coalesce the
-                                            grammar</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span
-                                                key="t-min-ago">3 min ago</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="javascript: void(0);" class="text-reset notification-item">
-                            <div class="d-flex">
                                 <img src="{{ asset('images/users/avatar-4.jpg') }}" class="me-3 rounded-circle avatar-xs"
                                     alt="user-pic">
                                 <div class="flex-grow-1">
@@ -380,7 +361,25 @@
                                     </div>
                                 </div>
                             </div>
+                        </a> --}}
+                        <a href="javascript: void(0);" class="text-reset notification-item">
+                            <div class="d-flex">
+                                <div class="avatar-xs me-3">
+                                    <span class="avatar-title bg-success rounded-circle font-size-16">
+                                        <i class="bx bx-badge-check"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1" key="t-shipped">All You Can Everything!</h6>
+                                    <div class="font-size-12 text-muted">
+                                        <p class="mb-1" key="t-grammer">Tahun baru 2024 dengan tampilan Simrs yang baru</p>
+                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span
+                                                key="t-min-ago">2024</span></p>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
+
                     </div>
                     <div class="p-2 border-top d-grid">
                         <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
@@ -394,36 +393,37 @@
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{ asset('images/users/avatar-1.jpg') }}"
+                    <img class="rounded-circle header-profile-user" src="{{ asset('images/pku/user.png') }}"
                         alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1" key="t-henry">Henry</span>
+                    <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ Auth::user()->name }}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
-                    <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i>
+                    <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-user font-size-16 align-middle me-1"></i>
                         <span key="t-profile">Profile</span></a>
-                    <a class="dropdown-item" href="#"><i
+                    {{-- <a class="dropdown-item" href="#"><i
                             class="bx bx-wallet font-size-16 align-middle me-1"></i> <span key="t-my-wallet">My
-                            Wallet</span></a>
-                    <a class="dropdown-item d-block" href="#"><span
-                            class="badge bg-success float-end">11</span><i
-                            class="bx bx-wrench font-size-16 align-middle me-1"></i> <span
-                            key="t-settings">Settings</span></a>
-                    <a class="dropdown-item" href="#"><i
+                            Wallet</span></a> --}}
+                    <a class="dropdown-item d-block" href="javascript:void(0);"><i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings">Settings</span></a>
+                    {{-- <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end">11</span><i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings">Settings</span></a> --}}
+                    {{-- <a class="dropdown-item" href="#"><i
                             class="bx bx-lock-open font-size-16 align-middle me-1"></i> <span key="t-lock-screen">Lock
-                            screen</span></a>
+                            screen</span></a> --}}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" href="auth-login.html"><i
+                    <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logoutform').submit();"><i
                             class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span
                             key="t-logout">Logout</span></a>
                 </div>
             </div>
 
             <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
+                <button type="button" class="btn header-item noti-icon waves-effect">
                     <i class="bx bx-cog bx-spin"></i>
                 </button>
+                {{-- <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
+                    <i class="bx bx-cog bx-spin"></i>
+                </button> --}}
             </div>
 
         </div>

@@ -14,7 +14,13 @@ class DefaultController extends Controller
      */
     public function index()
     {
-        return view('pages.dashboard.default');
+        // $lastVideoYoutube = Youtube::listChannelVideos('@rspkumuhsukoharjo1801', 50, "date");
+
+        // $data = [
+        //     'video' => $lastVideoYoutube,
+        // ];
+
+        return view('pages.dashboard.default'); // ->with('list', $data)
     }
 
     /**

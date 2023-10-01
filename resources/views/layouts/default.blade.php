@@ -45,6 +45,7 @@
 
         <!-- Responsive datatable examples -->
         <link href="{{ asset('libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('libs/admin-resources/rwd-table/rwd-table.min.css') }}" rel="stylesheet" type="text/css" />
 
         <!-- Notif examples -->
         <link rel="stylesheet" href="{{ asset('css/iziToast.css') }}" />
@@ -86,6 +87,11 @@
     <!-- END layout-wrapper -->
 
     @include('inc.floatmenu')
+
+    <!-- Logout Form -->
+    <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
 
     <!-- Right bar overlay-->
     <div class="rightbar-overlay"></div>
@@ -131,6 +137,7 @@
         <!-- Responsive examples -->
         <script src="{{ asset('libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('libs/admin-resources/rwd-table/rwd-table.min.js') }}"></script>
 
         <!-- Datatable init js -->
         <script src="{{ asset('js/pages/datatables.init.js') }}"></script>

@@ -6,6 +6,12 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li>
+                    <a href="{{ route('portal') }}" class="waves-effect">
+                        <i class="bx bx-chalkboard"></i>
+                        <span key="t-chat">Portal Utama</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('dashboard') }}" class="waves-effect">
                         <i class="bx bx-home-circle"></i>
                         <span key="t-chat">Dashboard</span>
@@ -20,11 +26,47 @@
                         <span key="t-dashboards">Hak Akses</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="javascript: void(0);" key="t-saas">Akses</a></li>
                         <li><a href="javascript: void(0);" key="t-default">Jabatan</a></li>
-                        <li><a href="javascript: void(0);" key="t-saas">Perilaku</a></li>
-                        <li><a href="{{ route('datakaryawan.index') }}" key="t-crypto">Data Karyawan</a></li>
+                        <li><a href="{{ route('datakaryawan.index') }}" key="t-crypto">Akun Pengguna</a></li>
                     </ul>
                 </li>
+
+                <li>
+                    <a href="{{ route('profilkaryawan.index') }}" class="waves-effect">
+                        <i class="bx bxs-user-badge"></i>
+                        <span key="t-chat">Profil Karyawan</span>
+                    </a>
+                </li>
+
+                <li class="menu-title" key="t-menu">Administrasi</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-archive"></i>
+                        <span key="t-dashboards">Berkas</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="javascript: void(0);" key="t-saas">Laporan Bulanan</a></li>
+                        <li><a href="javascript: void(0);" key="t-default">Rapat</a></li>
+                        <li><a href="javascript: void(0);" key="t-crypto">RKA</a></li>
+                        <li><a href="javascript: void(0);" key="t-crypto">Regulasi</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" key="t-menu">Pengaduan</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bxs-wrench"></i>
+                        <span key="t-dashboards">Perbaikan</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="javascript: void(0);" key="t-saas">IPSRS</a></li>
+                        <li><a href="javascript: void(0);" key="t-default">IT</a></li>
+                    </ul>
+                </li>
+
                 {{-- <li class="menu-title" key="t-menu">Menu</li>
 
                 <li>

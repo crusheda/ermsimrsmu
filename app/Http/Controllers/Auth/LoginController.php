@@ -21,10 +21,12 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    // public function showLoginForm()
-    // {
-    //     return redirect('/');
-    // }
+    public function showLoginForm()
+    {
+        // return view('pages.auth.login');
+        return redirect()->route('auth.login');
+        // return redirect()->route('login');
+    }
 
     /**
      * Where to redirect users after login.
@@ -43,8 +45,8 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    // public function username()
-    // {
-    //     return 'name';
-    // }
+    public function username()
+    {
+        return 'name';
+    }
 }

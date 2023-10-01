@@ -34,14 +34,14 @@
     </div>
     <!-- end page title -->
     <div class="row">
-        <div class="col-xl-4">
+        <div class="col-md-4">
             <div class="card overflow-hidden">
                 <div class="bg-primary-subtle">
                     <div class="row">
                         <div class="col-7">
                             <div class="text-primary p-3">
-                                <h5 class="text-primary">Welcome Back !</h5>
-                                <p>Skote Dashboard</p>
+                                <h5 class="text-primary">Selamat Datang !</h5>
+                                <p>Sistem Informasi Rumah Sakit PKU Muhammadiyah Sukoharjo</p>
                             </div>
                         </div>
                         <div class="col-5 align-self-end">
@@ -53,11 +53,11 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="avatar-md profile-user-wid mb-4">
-                                <img src="{{ asset('images/users/avatar-1.jpg') }}" alt=""
+                                <img src="{{ asset('images/pku/user.png') }}" alt=""
                                     class="img-thumbnail rounded-circle">
                             </div>
-                            <h5 class="font-size-15 text-truncate">Henry Price</h5>
-                            <p class="text-muted mb-0 text-truncate">UI/UX Designer</p>
+                            <h5 class="font-size-15 text-truncate">{{ Auth::user()->name }}</h5>
+                            <p class="text-muted mb-0 text-truncate">Administrator</p>
                         </div>
 
                         <div class="col-sm-8">
@@ -66,24 +66,39 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <h5 class="font-size-15">125</h5>
-                                        <p class="text-muted mb-0">Projects</p>
+                                        <p class="text-muted mb-0">Upload</p>
                                     </div>
                                     <div class="col-6">
-                                        <h5 class="font-size-15">$1245</h5>
+                                        <h5 class="font-size-15">5</h5>
                                         <p class="text-muted mb-0">Revenue</p>
                                     </div>
                                 </div>
                                 <div class="mt-4">
                                     <a href="javascript: void(0);"
-                                        class="btn btn-primary waves-effect waves-light btn-sm">View
-                                        Profile <i class="mdi mdi-arrow-right ms-1"></i></a>
+                                        class="btn btn-primary waves-effect waves-light btn-sm">Lihat Profil <i class="mdi mdi-arrow-right ms-1"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        {{-- <div class="col-md-8">
             <div class="card">
+                <div class="card-body">
+
+                    <h4 class="card-title">Responsive embed video 16:9</h4>
+                    <p class="card-title-desc">Aspect ratios can be customized with modifier classes.</p>
+
+                    <!-- 16:9 aspect ratio -->
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/1y_kfWUCFDQ" title="YouTube video" allowfullscreen></iframe>
+                    </div>
+                </div><!-- end card-body -->
+            </div><!-- end card -->
+        </div> <!-- end col --> --}}
+
+            {{-- <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Monthly Earning</h4>
                     <div class="row">
@@ -107,9 +122,8 @@
                     </div>
                     <p class="text-muted mb-0">We craft digital, graphic and dimensional thinking.</p>
                 </div>
-            </div>
-        </div>
-        <div class="col-xl-8">
+            </div> --}}
+        {{-- <div class="col-xl-8">
             <div class="row">
                 <div class="col-md-4">
                     <div class="card mini-stats-wid">
@@ -625,7 +639,7 @@
                     <!-- end table-responsive -->
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 <!-- end row -->
 @endsection
