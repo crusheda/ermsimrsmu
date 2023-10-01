@@ -40,7 +40,7 @@ class DataKaryawanController extends Controller
     {
         $role = roles::where('name', '<>','administrator')->get();
 
-        return view('pages.administrator.user.tambah')->with('role', $role);
+        return view('pages.hakakses.datakaryawan.tambah')->with('role', $role);
     }
 
     /**

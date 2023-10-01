@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('hakakses/datakaryawan/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('datakaryawan.verif');
+Route::get('hakakses/datakaryawan/hapus/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@hapus')->name('datakaryawan.hapus');

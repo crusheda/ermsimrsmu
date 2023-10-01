@@ -41,7 +41,7 @@
                     </ul>
                 </li> --}}
 
-                <li>
+                {{-- <li>
                     <a href="javascript: void(0);" class="waves-effect">
                         <span class="badge rounded-pill bg-danger float-end" key="t-hot">Hot</span>
                         <i class="bx bx-layout"></i>
@@ -425,7 +425,7 @@
                             </ul>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
             </ul>
         </div>
