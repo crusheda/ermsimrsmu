@@ -33,7 +33,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="text-center mb-5 text-muted">
+                    <div class="text-center mb-5 text-muted mt-3">
                         <a href="{{ route('portal') }}" class="d-block auth-logo">
                             <img src="{{ asset('images/logo/logo_simrs_v3_dark.png') }}" alt="" height="30"
                                 class="auth-logo-dark mx-auto">

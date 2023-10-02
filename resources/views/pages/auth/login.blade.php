@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6 col-xl-5">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body ">
                     <div class="w-100">
                         <h5 class="text-primary">Selamat Datang! 👋</h5>
                         <p class="text-muted">Silakan masuk terlebih dahulu.</p>
@@ -57,12 +57,12 @@
                                 </label>
                             </div>
 
-                            <div class="mt-3 d-grid">
+                            <div class="mt-3 mb-3 d-grid">
                                 <button class="btn btn-primary waves-effect waves-light" type="submit">Log In</button>
                             </div>
 
 
-                            <div class="mt-4 text-center">
+                            {{-- <div class="mt-4 text-center">
                                 <h5 class="font-size-14 mb-3">Sign in with</h5>
 
                                 <ul class="list-inline">
@@ -85,7 +85,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
 
                         </form>
                         <div class="text-center">

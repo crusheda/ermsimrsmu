@@ -26,8 +26,8 @@
                         <span key="t-dashboards">Hak Akses</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="javascript: void(0);" key="t-saas">Akses</a></li>
-                        <li><a href="javascript: void(0);" key="t-default">Jabatan</a></li>
+                        <li><a href="javascript: void(0);" key="t-saas"><s>Akses</s></a></li>
+                        <li><a href="javascript: void(0);" key="t-default"><s>Jabatan</s></a></li>
                         <li><a href="{{ route('datakaryawan.index') }}" key="t-crypto">Akun Pengguna</a></li>
                     </ul>
                 </li>
@@ -47,10 +47,10 @@
                         <span key="t-dashboards">Berkas</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="javascript: void(0);" key="t-saas">Laporan Bulanan</a></li>
-                        <li><a href="javascript: void(0);" key="t-default">Rapat</a></li>
-                        <li><a href="javascript: void(0);" key="t-crypto">RKA</a></li>
-                        <li><a href="javascript: void(0);" key="t-crypto">Regulasi</a></li>
+                        <li><a href="javascript: void(0);" key="t-saas"><s>Laporan Bulanan</s></a></li>
+                        <li><a href="javascript: void(0);" key="t-default"><s>Rapat</s></a></li>
+                        <li><a href="{{ route('rka.index') }}" key="t-crypto">RKA</a></li>
+                        <li><a href="javascript: void(0);" key="t-crypto"><s>Regulasi</s></a></li>
                     </ul>
                 </li>
 
@@ -62,8 +62,8 @@
                         <span key="t-dashboards">Perbaikan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="javascript: void(0);" key="t-saas">IPSRS</a></li>
-                        <li><a href="javascript: void(0);" key="t-default">IT</a></li>
+                        <li><a href="javascript: void(0);" key="t-saas"><s>IPSRS</s></a></li>
+                        <li><a href="javascript: void(0);" key="t-default"><s>IT</s></a></li>
                     </ul>
                 </li>
 

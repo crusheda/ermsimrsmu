@@ -67,7 +67,7 @@ class DataKaryawanController extends Controller
             $model->save();
         }
 
-        return redirect()->route('user.index')->with('message','Ubah Akun '.$data->name.' Berhasil');
+        return redirect()->route('datakaryawan.index')->with('message','Tambah Akun '.$data->name.' Berhasil');
     }
 
     /**
@@ -91,7 +91,7 @@ class DataKaryawanController extends Controller
             'role' => $role,
         ];
 
-        return view('pages.administrator.user.ubah')->with('list', $data);
+        return view('pages.hakakses.datakaryawan.ubah')->with('list', $data);
     }
 
     /**
@@ -134,7 +134,7 @@ class DataKaryawanController extends Controller
             $model->save();
         }
 
-        return redirect()->route('user.index')->with('message','Ubah Akun '.$data->name.' Berhasil');
+        return redirect()->route('datakaryawan.index')->with('message','Ubah Akun '.$data->name.' Berhasil');
     }
 
     /**

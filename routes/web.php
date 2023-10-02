@@ -13,15 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// Auth::routes();
+Auth::routes(['register' => false]);
+// Auth::routes(['register' => false]);
+// ----------------------------------------------------------------------------------------------------------------------------------------------------
 Route::get('/', function () {
     return view('pages.comingsoon');
 })->name('portal');
 
 Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->name('auth.login');
-
-// Auth::routes();
-Auth::routes(['register' => false]);
-// Auth::routes(['register' => false]);
 
 Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
 
@@ -36,6 +37,14 @@ Route::get('/profilkaryawan/{id}', [App\Http\Controllers\ProfilKaryawanControlle
 Route::delete('/profilkaryawan/{id}/nonaktif', [App\Http\Controllers\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
 // Route::resource('profilkaryawan', '\App\Http\Controllers\ProfilKaryawanController');
 
+// BERKAS
+Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], function () {
+    // RKA
+    Route::post('rka/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
+    Route::resource('rka', '\App\Http\Controllers\Berkas\RkaController');
+});
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------
 // CATATAN
 
 // Route::get('/kunjungan', 'kunjunganController@index')->name('landing.kunjungan');

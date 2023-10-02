@@ -18,5 +18,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// HAK AKSES
 Route::get('hakakses/datakaryawan/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('datakaryawan.verif');
 Route::get('hakakses/datakaryawan/hapus/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@hapus')->name('datakaryawan.hapus');
+
+// BERKAS
+    // RKA
+    Route::get('rka/table', '\App\Http\Controllers\Berkas\RkaController@table');
+    Route::get('rka/hapus/{id}', '\App\Http\Controllers\Berkas\RkaController@hapus');

@@ -49,7 +49,7 @@
                                                 class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-end'>
                                             <li><a href='javascript:void(0);' class='dropdown-item text-warning'
-                                                    onclick="window.location.href='{{ url('v2/admin/user/' . $item->id . '') }}'"><i
+                                                    onclick="window.location.href='{{ url('hakakses/datakaryawan/' . $item->id . '') }}'"><i
                                                         class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                             <li><a href='javascript:void(0);' class='dropdown-item text-danger'
                                                     onclick="hapus({{ $item->id }})"><i
@@ -91,7 +91,7 @@
         function hapus(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: 'Hapus Akun Pengguna ID : ' + id,
+                text: 'Hapus Permanen Akun Pengguna ID : ' + id,
                 icon: 'warning',
                 reverseButtons: false,
                 showDenyButton: false,
@@ -100,12 +100,12 @@
                 focusCancel: true,
                 confirmButtonColor: '#FF4845',
                 confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
-                cancelButtonText: `<i class="fa fa-times"></i> Batal`,
+                cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
                 backdrop: `rgba(26,27,41,0.8)`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/api/admin/user/hapus/" + id,
+                        url: "/api/hakakses/datakaryawan/hapus/" + id,
                         type: 'GET',
                         dataType: 'json', // added data type
                         success: function(res) {
