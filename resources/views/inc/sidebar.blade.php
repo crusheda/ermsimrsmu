@@ -33,6 +33,13 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('strukturorganisasi.index') }}" class="waves-effect">
+                        <i class="bx bx-git-repo-forked"></i>
+                        <span key="t-chat">Struktur Organisasi</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('profilkaryawan.index') }}" class="waves-effect">
                         <i class="bx bxs-user-badge"></i>
                         <span key="t-chat">Profil Karyawan</span>

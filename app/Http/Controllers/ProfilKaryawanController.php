@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use App\Models\users;
 use App\Models\users_foto;
-use App\Models\model_has_role;
 use App\Models\logs;
 use Carbon\Carbon;
 use Auth;

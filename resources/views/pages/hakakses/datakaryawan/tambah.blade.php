@@ -12,14 +12,14 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">
-                <button class="btn btn-outline-secondary"
-                    onclick="window.location.href='{{ route('datakaryawan.index') }}'"><i
+                <button class="btn btn-outline-secondary" onclick="window.location.href='{{ URL::previous() }}'"><i
                         class="bx bx-chevron-left"></i>&nbsp;&nbsp;Kembali</button>
             </h4>
             <hr>
 
             <form class="form-auth-small" name="formTambah" action="{{ route('datakaryawan.store') }}" method="POST"
                 enctype="multipart/form-data">
+                @csrf
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="form-group">
@@ -59,10 +59,10 @@
                             <label for="defaultFormControlInput" class="form-label">Password</label>
                             <div class="input-group">
                                 <input type="password" name="password" class="form-control" id="password1" minlength="8"
-                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        onpaste="return false" required />
+                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                    onpaste="return false" required />
                                 <button class="btn btn-outline-primary" type="button" id="open-password1"><i
-                                    class="bx bx-hide"></i></button>
+                                        class="bx bx-hide"></i></button>
                             </div>
                             <sub>Masukkan password minimal 8 karakter</sub>
                         </div>
@@ -75,7 +75,7 @@
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     onpaste="return false" required />
                                 <button class="btn btn-outline-primary" type="button" id="open-password2"><i
-                                    class="bx bx-hide"></i></button>
+                                        class="bx bx-hide"></i></button>
                             </div>
                         </div>
                     </div>
@@ -95,28 +95,6 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#name').keypress(function() {
-                $("#btn-simpan").prop('disabled', true);
-            }).on('keydown', function(e) {
-                if (e.keyCode == 8)
-                    $("#btn-simpan").prop('disabled', true);
-            });
-            $("#open-password1").on("click", function() {
-                var x = $("#password1");
-                if (x[0].type === "password") {
-                    x[0].type = "text";
-                } else {
-                    x[0].type = "password";
-                }
-            });
-            $("#open-password2").on("click", function() {
-                var x = $("#password2");
-                if (x[0].type === "password") {
-                    x[0].type = "text";
-                } else {
-                    x[0].type = "password";
-                }
-            });
             $(".select2").select2();
         })
 

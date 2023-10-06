@@ -31,6 +31,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], fun
     Route::resource('datakaryawan', '\App\Http\Controllers\HakAkses\DataKaryawanController');
 });
 
+// STRUKTUR ORGANISASI
+Route::get('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi.index');
+Route::get('strukturorganisasi/tambah', [App\Http\Controllers\StrukturOrganisasiController::class, 'create'])->name('strukturorganisasi.tambah');
+Route::post('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('strukturorganisasi.simpan');
+
 // PROFIL KARYAWAN
 Route::get('/profilkaryawan', [App\Http\Controllers\ProfilKaryawanController::class, 'index'])->name('profilkaryawan.index');
 Route::get('/profilkaryawan/{id}', [App\Http\Controllers\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
