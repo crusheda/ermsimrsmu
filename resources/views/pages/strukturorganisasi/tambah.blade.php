@@ -79,7 +79,7 @@
             $(".select2").select2({
                 placeholder: "",
                 allowClear: true
-            }).val('').trigger('change');;
+            }).val('').trigger('change');
             // $(".select2").addClass('form-control').select2();
             // $(".select2multiple").select2();
         })

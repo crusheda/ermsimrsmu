@@ -39,7 +39,10 @@
         type="text/css" />
 
     <!-- Form Advanced examples -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.5/css/bootstrap-select.min.css" rel="stylesheet" /> --}}
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"> --}}
+    <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     {{-- <link href="{{ asset('libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" /> --}}
     <link href="{{ asset('libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
         type="text/css">
@@ -59,7 +62,6 @@
     <link rel="stylesheet" href="{{ asset('css/iziToast.css') }}" />
 
     <!-- End Addon css -->
-
 </head>
 
 <body data-sidebar="dark">
@@ -105,6 +107,11 @@
     <div class="rightbar-overlay"></div>
     <!-- JAVASCRIPT -->
     {{-- <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script> --}}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
     <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('libs/metismenu/metisMenu.min.js') }}"></script>
     <script src="{{ asset('libs/simplebar/simplebar.min.js') }}"></script>
@@ -134,7 +141,10 @@
     <script src="{{ asset('libs/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
 
     <!-- Form Advanced examples -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.5/js/bootstrap-select.min.js"></script> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script> --}}
+    <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
     {{-- <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script> --}}
     <script src="{{ asset('libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('libs/spectrum-colorpicker2/spectrum.min.js') }}"></script>
