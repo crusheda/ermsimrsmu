@@ -29,6 +29,9 @@
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
 
     <!-- Start Addon css -->
+    <!-- Flat Pickr css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <!-- Sweet Alert-->
     <link href="{{ asset('libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 
@@ -76,6 +79,29 @@
             <div class="page-content">
                 <!-- container-fluid -->
                 <div class="container-fluid">
+
+                    <!-- start toart notification -->
+
+                    {{-- <button type="button" class="btn btn-primary" onclick="message({{ session('message') }})">Show live toast</button> --}}
+                    {{-- @if (session('message'))
+                        {{ message({{ session('message') }}); }}
+                    @endif --}}
+                    <div class="d-flex flex-wrap gap-2">
+                        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1005">
+                            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <img src="{{ asset('images/logo.svg') }}" alt="" class="me-2" height="18">
+                                    <strong class="me-auto">Pesan dari Sistem</strong>
+                                    <small>Baru saja</small>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body">
+                                    <p id="message"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end toart notification -->
 
                     @yield('content') <!-- ALL CONTENT HERE -->
 
@@ -142,6 +168,7 @@
     <script src="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
     <script src="{{ asset('libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
     <script src="{{ asset('libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
     <!-- Responsive examples -->
     <script src="{{ asset('libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
@@ -151,6 +178,9 @@
     <!-- Datatable init js -->
     <script src="{{ asset('js/pages/datatables.init.js') }}"></script>
 
+    <!-- Flat Pickr js -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <!-- Sweet Alerts js -->
     <script src="{{ asset('libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('js/pages/sweet-alerts.init.js') }}"></script>
@@ -158,6 +188,26 @@
     <!-- Notif js -->
     <script src="{{ asset('js/iziToast.js') }}"></script>
     <!-- End Addon js -->
+
+    {{-- JS INIT --}}
+    <script>
+        $(document).ready(function() {
+            if ("{{ session('message') }}") {
+                message("{{ session('message') }}");
+                // alert('berhasil');
+            }
+        })
+
+        // ALL FUNCTION BELOW
+        function message(message) {
+            //  Bootstrap Toast Message
+            var toastme = document.getElementById('liveToast')
+            $('#message').text(message);
+            var toast = new bootstrap.Toast(toastme)
+
+            toast.show()
+        }
+    </script>
 </body>
 
 </html>

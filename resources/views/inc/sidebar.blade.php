@@ -55,7 +55,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="javascript: void(0);" key="t-saas"><s>Laporan Bulanan</s></a></li>
-                        <li><a href="javascript: void(0);" key="t-default"><s>Rapat</s></a></li>
+                        <li><a href="{{ route('rapat.index') }}" key="t-default">Rapat</a></li>
                         <li><a href="{{ route('rka.index') }}" key="t-crypto">RKA</a></li>
                         <li><a href="javascript: void(0);" key="t-crypto"><s>Regulasi</s></a></li>
                     </ul>

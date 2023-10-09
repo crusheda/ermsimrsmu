@@ -49,6 +49,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
     // RKA
     Route::post('rka/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
     Route::resource('rka', '\App\Http\Controllers\Berkas\RkaController');
+    // RAPAT
+    // Route::post('rapat/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
+    Route::resource('rapat', '\App\Http\Controllers\Berkas\RapatController');
 });
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
