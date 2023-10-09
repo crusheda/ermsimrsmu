@@ -65,4 +65,54 @@ class StrukturOrganisasiController extends Controller
 
         return redirect()->route('strukturorganisasi.index')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
     }
+
+    function edit($id)
+    {
+        $user  = users::where('status',null)->get();
+        $role  = roles::get();
+        $struktur_organisasi  = struktur_organisasi::where('id',$id)->first();
+
+        $data = [
+            'id' => $struktur_organisasi->id,
+            'id_user' => $struktur_organisasi->id_user,
+            'bawahan' => json_decode($struktur_organisasi->bawahan),
+            'user' => $user,
+            'role' => $role,
+        ];
+
+        return view('pages.strukturorganisasi.ubah')->with('list', $data);
+    }
+
+    function update(Request $request, $id)
+    {
+        $getUser  = users::where('id',$request->user)->first();
+        $getRoleUser  = model_has_roles::where('model_id',$getUser->id)->get();
+
+        foreach ($getRoleUser as $key => $value) {
+            $roleUser[] = strval($value->role_id);
+        }
+
+        $data = new struktur_organisasi;
+        $data->id_user = $getUser->id;
+        $data->nama_user = $getUser->nama.' ('.$getUser->name.')';
+        $data->role = json_encode($roleUser);
+        // $data->bawahan = $request->bawahan;
+        $data->bawahan = json_encode($request->bawahan);
+        // dd($data);
+        // print_r($data);
+        // die();
+        $data->save();
+
+        return redirect()->route('strukturorganisasi.index')->with('message','Tambah Bawahan Struktur '.$getUser->nama.' Berhasil');
+    }
+
+    public function destroy($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = struktur_organisasi::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
+    }
 }
