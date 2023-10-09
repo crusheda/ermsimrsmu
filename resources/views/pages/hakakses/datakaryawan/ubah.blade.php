@@ -21,7 +21,6 @@
             <hr>
 
             {{ Form::model($list['user'], ['route' => ['datakaryawan.update', $list['user']->id], 'method' => 'PUT', 'id' => 'formUbah']) }}
-            @csrf
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <div class="form-group">

@@ -44,7 +44,7 @@
                                 <center>
                                     <div class='btn-group'>
                                         <button type='button'
-                                            class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle hide-arrow'
+                                            class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow'
                                             data-bs-toggle='dropdown' aria-expanded='false'><i
                                                 class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-end'>
