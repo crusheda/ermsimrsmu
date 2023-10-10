@@ -26,6 +26,9 @@ Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->na
 
 Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
 
+// Profil
+Route::resource('profil', '\App\Http\Controllers\Setting\Profil\ProfilController');
+
 // HAK AKSES
 Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], function () {
     Route::resource('datakaryawan', '\App\Http\Controllers\HakAkses\DataKaryawanController');
