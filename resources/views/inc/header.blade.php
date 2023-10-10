@@ -14,10 +14,12 @@
 
                 <a href="{{ route('portal') }}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30">
+                        <img src="{{ asset('images/logo/logo.png') }}" alt="" height="20">
+                        {{-- <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30"> --}}
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('images/logo/logo_simrs_v3.png') }}" alt="" height="30">
+                        <img src="{{ asset('images/logo/logo_simrsmu.png') }}" alt="" height="20">
+                        {{-- <img src="{{ asset('images/logo/logo_simrs_v3.png') }}" alt="" height="30"> --}}
                     </span>
                 </a>
             </div>

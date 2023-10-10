@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>SIMRS V3 - {{ Auth::user()->name }}</title>
+    <title>SIMRSMU V3 - {{ Auth::user()->name }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sistem Manajemen Rumah Sakit PKU Muhammadiyah Sukoharjo" />
     <meta name="keywords"
@@ -14,9 +14,9 @@
     <meta name="author" content="Yussuf Faisal" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('images/pku/pku_ico.png') }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/pku/pku_ico.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/pku/pku_ico.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/logo/logo.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo.png') }}">
     <!-- Bootstrap Css -->
     <link href="{{ asset('css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
