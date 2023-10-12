@@ -16,7 +16,15 @@
                 <div class="card-body">
                     <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
-                            <img src="{{ asset('images/pku/user.png') }}" alt="" class="avatar-sm rounded-circle img-thumbnail">
+                            @if (empty($list['foto']->filename))
+                            <a class="image-popup-no-margins" href="{{ asset('images/pku/user.png') }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Tekan untuk memperbesar foto profil">
+                                <img class="img-fluid avatar-sm rounded-circle img-thumbnail" alt="" src="{{ asset('images/pku/user.png') }}" width="75">
+                            </a>
+                            @else
+                            <a class="image-popup-no-margins" href="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Tekan untuk memperbesar foto profil">
+                                <img class="img-fluid avatar-sm rounded-circle img-thumbnail" alt="" src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" width="75">
+                            </a>
+                            @endif
                         </div>
                         <div class="flex-grow-1">
                             <div class="d-flex">
@@ -33,7 +41,8 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
                                         <a class="dropdown-item" href="#">Ubah Biodata</a>
-                                        <a class="dropdown-item" href="#">Ubah Foto Profil</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
+                                        data-bs-target="#ubahfoto">Ubah Foto Profil</a>
                                         <a class="dropdown-item" href="#">Ubah Password</a>
                                     </div>
                                 </div>
@@ -46,7 +55,7 @@
                                 <div class="col-4">
                                     <div>
                                         <p class="text-muted text-truncate mb-2">#</p>
-                                        <h5 class="mb-0">..</h5>
+                                        <h5 class="mb-0">...</h5>
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -511,9 +520,47 @@
         </div>
     </div>
 
+    {{-- START MODAL --}}
+    <div class="modal fade" tabindex="-1" id="ubahfoto" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ubah Foto Profil Anda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ Form::model($list['show'], ['route' => ['profil.ubahfoto', $list['show']->id], 'method' => 'PUT', 'id' => 'formUbah', 'files' => true]) }}
+                    {{-- <form class="form-auth-small" name="formTambah" action="{{ route('profil.ubahfoto') }}" method="POST" enctype="multipart/form-data"> --}}
+                        @csrf
+                        <input name="file" type="file" class="form-control mb-1">
+                        <small><i class="fa-fw fas fa-caret-right nav-icon"></i> File foto tidak boleh melebihi ukuran <kbd>50 Mb</kbd></small>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-simpan" onclick="saveData()">
+                        <i class="fas fa-upload"></i>&nbsp;&nbsp;
+                        <span class="align-middle d-sm-inline-block d-none me-sm-1">Upload</span>
+                    </button>
+                    {{-- </form> --}}
+                    {!! Form::close() !!}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END MODAL --}}
+
     <script>
         $(document).ready(function() {
 
         })
+
+        // FUNCTION
+        function saveData() {
+            $("#formUbah").one('submit', function() {
+                $("#btn-simpan").attr('disabled', 'disabled');
+                $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+                return true;
+            });
+        }
     </script>
 @endsection

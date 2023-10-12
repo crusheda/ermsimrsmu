@@ -14,7 +14,7 @@
 
                 <a href="{{ route('portal') }}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{ asset('images/logo/logo.png') }}" alt="" height="20">
+                        <img src="{{ asset('images/logo/logo_yf_dark.png') }}" alt="" height="20">
                         {{-- <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30"> --}}
                     </span>
                     <span class="logo-lg">

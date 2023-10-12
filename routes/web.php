@@ -28,6 +28,7 @@ Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::clas
 
 // Profil
 Route::resource('profil', '\App\Http\Controllers\Setting\Profil\ProfilController');
+Route::put('profil/{id}/ubahfoto', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'storeImg'])->name('profil.ubahfoto');
 
 // HAK AKSES
 Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], function () {

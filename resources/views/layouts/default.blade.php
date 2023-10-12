@@ -14,9 +14,9 @@
     <meta name="author" content="Yussuf Faisal" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('images/logo/logo.png') }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/logo/logo_yf_dark.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_yf_dark.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_yf_dark.png') }}">
     <!-- Bootstrap Css -->
     <link href="{{ asset('css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -60,6 +60,11 @@
 
     <!-- Notif examples -->
     <link rel="stylesheet" href="{{ asset('css/iziToast.css') }}" />
+
+    <!-- Lightbox css -->
+    <link href="{{ asset('libs/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Plugins css -->
+    <link href="{{ asset('libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- End Addon css -->
 
@@ -187,6 +192,16 @@
 
     <!-- Notif js -->
     <script src="{{ asset('js/iziToast.js') }}"></script>
+
+    <!-- Magnific Popup-->
+    <script src="{{ asset('libs/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+
+    <!-- lightbox init js-->
+    <script src="{{ asset('js/pages/lightbox.init.js') }}"></script>
+
+    <!-- Plugins js -->
+    <script src="{{ asset('libs/dropzone/dropzone-min.js') }}"></script>
+
     <!-- End Addon js -->
 
     {{-- JS INIT --}}
