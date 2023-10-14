@@ -40,7 +40,7 @@
                                         <i class="bx bx-caret-down align-middle me-1"></i> Menu
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">Ubah Biodata</a>
+                                        <a class="dropdown-item" href="{{ url('profil/'.$list['show']->id.'/edit') }}">Ubah Biodata</a>
                                         <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
                                         data-bs-target="#ubahfoto">Ubah Foto Profil</a>
                                         <a class="dropdown-item" href="#">Ubah Password</a>
@@ -217,14 +217,14 @@
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <p class="text-muted fw-medium mb-2">Index</p>
-                                    <h4 class="mb-0">#</h4>
+                                    <p class="text-muted fw-medium mb-2">Terakhir Perbarui Profil</p>
+                                    <h4 class="mb-0">{{ \Carbon\Carbon::parse($list['show']->updated_at)->diffForHumans() }}</h4>
                                 </div>
 
                                 <div class="flex-shrink-0 align-self-center">
                                     <div class="avatar-sm mini-stat-icon rounded-circle bg-primary">
                                         <span class="avatar-title">
-                                            <i class="bx bx-package font-size-24"></i>
+                                            <i class="bx bx-user-check font-size-24"></i>
                                         </span>
                                     </div>
                                 </div>

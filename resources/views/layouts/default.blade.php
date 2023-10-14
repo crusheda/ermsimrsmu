@@ -201,6 +201,8 @@
 
     <!-- Plugins js -->
     <script src="{{ asset('libs/dropzone/dropzone-min.js') }}"></script>
+    <!-- jquery step -->
+    <script src="{{ asset('libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
 
     <!-- End Addon js -->
 

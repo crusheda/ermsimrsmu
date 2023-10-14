@@ -393,10 +393,16 @@
             </div>
 
             <div class="dropdown d-inline-block">
+                <?php $foto_profil = \DB::table('users_foto')->where('user_id', Auth::user()->id)->first(); ?>
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @if (empty($foto_profil->filename))
                     <img class="rounded-circle header-profile-user" src="{{ asset('images/pku/user.png') }}"
                         alt="Header Avatar">
+                    @else
+                    <img class="rounded-circle header-profile-user" src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}"
+                        alt="Header Avatar">
+                    @endif
                     <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ Auth::user()->name }}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
@@ -407,7 +413,7 @@
                     {{-- <a class="dropdown-item" href="#"><i
                             class="bx bx-wallet font-size-16 align-middle me-1"></i> <span key="t-my-wallet">My
                             Wallet</span></a> --}}
-                    <a class="dropdown-item d-block" href="javascript:void(0);"><i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings">Pengaturan</span></a>
+                    <a class="dropdown-item d-block" href="javascript:void(0);"><i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings"><s>Pengaturan</s></span></a>
                     {{-- <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end">11</span><i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings">Settings</span></a> --}}
                     {{-- <a class="dropdown-item" href="#"><i
                             class="bx bx-lock-open font-size-16 align-middle me-1"></i> <span key="t-lock-screen">Lock
