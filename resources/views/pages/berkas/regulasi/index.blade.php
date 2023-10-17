@@ -20,10 +20,10 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    {{-- @if (Auth::user()->hasRole('it|sekretaris-direktur|administrator')) --}}
+                    @if (Auth::user()->getManyRole(['karu-it','sekretaris-direktur','administrator']))
                         <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Regulasi</a>
                         <div class="dropdown-divider"></div>
-                    {{-- @endif --}}
+                    @endif
                     <a class="dropdown-item" href="javascript:void(0);" onclick="tataCara()">Tata Cara</a>
                     <a class="dropdown-item" href="javascript:void(0);" onclick="showTotal()">Total Regulasi</a>
                 </div>
@@ -95,8 +95,8 @@
         <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
             <thead>
                 <tr>
-                    <th class="cell-fit"></th>
-                    <th class="cell-fit">ID</th>
+                    <th style="width: 50px"></th>
+                    <th style="width: 50px">ID</th>
                     <th style="width: 90px">DISAHKAN</th>
                     <th>JUDUL - UNIT TERKAIT</th>
                     <th class="cell-fit">UNIT PEMBUAT</th>
@@ -112,8 +112,8 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="cell-fit"></th>
-                    <th class="cell-fit">ID</th>
+                    <th style="width: 50px"></th>
+                    <th style="width: 50px">ID</th>
                     <th style="width: 90px">DISAHKAN</th>
                     <th>JUDUL - UNIT TERKAIT</th>
                     <th class="cell-fit">UNIT PEMBUAT</th>
@@ -320,7 +320,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Regulasi <a class="text-danger">*</a></label>
-                                <select class="form-select select2" id="jns_regulasi_edit">
+                                <select class="form-select select2" id="jns_regulasi_edit" style="width: 100%">
                                     <option value="" hidden>Pilih</option>
                                 </select>
                             </div>
@@ -334,7 +334,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Unit Pembuat <a class="text-danger">*</a></label>
-                                <select class="form-select select2" id="pembuat_edit">
+                                <select class="form-select select2" id="pembuat_edit" style="width: 100%">
                                     <option value="" hidden>Pilih</option>
                                 </select>
                             </div>
@@ -506,30 +506,30 @@
                         pembuat: pembuat,
                     },
                     success: function(res) {
-                        var editorID = "{{ Auth::user()->hasRole('it|sekretaris-direktur|administrator') }}";
-                        var adminID = "{{ Auth::user()->hasRole('administrator') }}";
+                        var editorID = "{{ Auth::user()->getManyRole(['karu-it','sekretaris-direktur','administrator']) }}";
+                        var adminID = "{{ Auth::user()->getRole('administrator') }}";
                         iziToast.success({
                             title: 'Pesan Sukses!',
                             message: res.count+' data pencarian ditemukan',
                             position: 'topRight'
                         });
                         $("#tampil-tbody").empty();
-                        $('#table').DataTable().clear().destroy();
+                        $('#dttable').DataTable().clear().destroy();
                         res.show.forEach(item => {
                             // VALIDASI TUJUAN FROM JSON
                             // var us = JSON.parse(res.user);
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-end'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v2/regulasi/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`;
+                            content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="mdi mdi-dots-horizontal"></i></a><div class='dropdown-menu'>`
+                                    + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/regulasi/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a>`;
                                     if (editorID) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>`
+                                                + `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>`;
                                     }
-                            content += `</ul></center></td><td>`;
+                            content += `</div></center></td><td>`;
                             content += item.id + "</td><td>"
                                         + item.sah + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-primary'><u><a href='/v2/regulasi/" + item.id + "/download' target='_blank'>" + item.judul + "</a></u></h6><small class='text-truncate text-muted' style='white-space: normal !important;word-wrap: break-word;'>"
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-primary'><u><a href='/berkas/regulasi/" + item.id + "/download' target='_blank'>" + item.judul + "</a></u></h6><small class='text-truncate text-muted' style='white-space: normal !important;word-wrap: break-word;'>"
                                         if (item.unit) {
                                             content += item.unit;
                                         } else {
@@ -544,54 +544,18 @@
                             content += "</td><td>" + item.updated_at + "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
-                        $('#table').DataTable(
-                        {
-                            order: [[5, "desc"]],
-                            dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-                            displayLength: 10,
-                            lengthMenu: [10, 25, 50, 75, 100, 200, 500, 1000],
-                            buttons: [{
-                                extend: "collection",
-                                className: "btn btn-label-primary dropdown-toggle me-2",
-                                text: '<i class="bx bx-export me-sm-2"></i> <span class="d-none d-sm-inline-block">Export</span>',
-                                buttons: [{
-                                    extend: "print",
-                                    text: '<i class="bx bx-printer me-2" ></i>Print',
-                                    className: "dropdown-item",
-                                    // exportOptions: {
-                                    //     columns: [3, 4, 5, 6, 7]
-                                    // }
-                                }, {
-                                    extend: "excel",
-                                    text: '<i class="bx bxs-spreadsheet me-2"></i>Excel',
-                                    className: "dropdown-item",
-                                    autoFilter: true,
-                                    attr: {id: 'exportButton'},
-                                    sheetName: 'data',
-                                    title: '',
-                                    filename: 'Regulasi'
-                                }, {
-                                    extend: "pdf",
-                                    text: '<i class="bx bxs-file-pdf me-2"></i>Pdf',
-                                    className: "dropdown-item",
-                                }, {
-                                    extend: "copy",
-                                    text: '<i class="bx bx-copy me-2" ></i>Copy',
-                                    className: "dropdown-item",
-                                    // exportOptions: {
-                                    //     columns: [3, 4, 5, 6, 7]
-                                    // }
-                                },]
-                            }],
-                            columnDefs: [
-                                { targets: 0, orderable: !1,searchable: !1, },
-                                // { targets: 1, orderable: !1,searchable: !1, },
-                                // { targets: 5, orderable: !1,searchable: !1, },
-                                // { targets: 6, visible: false },
-                            ],
-                        },
-                        );
-                        $("div.head-label").html('<h5 class="card-title mb-0">Hasil Pencarian Regulasi</h5>');
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [5, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                     },
                     error: function(res) {
                         iziToast.error({
@@ -632,6 +596,7 @@
             $("#btn-upload").prop('disabled', true);
             $("#btn-upload").find("i").toggleClass("fa-save fa-sync fa-spin");
 
+            var user_id         = "{{ Auth::user()->id }}";
             var jns_regulasi    = $("#jns_regulasi").val();
             var tgl             = $("#tgl").val();
             var pembuat         = $("#pembuat").val();
@@ -654,6 +619,7 @@
                 var judul = $("#judul").val();
                 fd.append('file',files[0]);
 
+                fd.append('user_id',user_id);
                 fd.append('jns_regulasi',$("#jns_regulasi").val());
                 fd.append('tgl',$("#tgl").val());
                 fd.append('pembuat',$("#pembuat").val());
@@ -746,6 +712,7 @@
             $("#btn-ubah").prop('disabled', true);
             $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
 
+            var user_id         = "{{ Auth::user()->id }}";
             var id_edit         = $("#id_edit").val();
             var jns_regulasi    = $("#jns_regulasi_edit").val();
             var tgl             = $("#tgl_edit").val();
@@ -773,6 +740,7 @@
                     fd.append('file',files[0]);
                 }
 
+                fd.append('user_id',user_id);
                 fd.append('id_edit',$("#id_edit").val());
                 fd.append('jns_regulasi',$("#jns_regulasi_edit").val());
                 fd.append('tgl',$("#tgl_edit").val());

@@ -43,6 +43,7 @@ Route::get('berkas/rapat/data/{id}/zip', '\App\Http\Controllers\Berkas\RapatCont
         Route::get('rka/table', '\App\Http\Controllers\Berkas\RkaController@table');
         Route::get('rka/hapus/{id}', '\App\Http\Controllers\Berkas\RkaController@hapus');
     // REGULASI
+    // Route::group(['middleware' => ['web']], function () {
         Route::get('regulasi/showtambah', '\App\Http\Controllers\Berkas\RegulasiController@showTambah');
         Route::post('regulasi/tambah', '\App\Http\Controllers\Berkas\RegulasiController@tambah')->name('regulasi.tambah');
         Route::get('regulasi/showubah/{id}', '\App\Http\Controllers\Berkas\RegulasiController@showUbah');
@@ -50,3 +51,4 @@ Route::get('berkas/rapat/data/{id}/zip', '\App\Http\Controllers\Berkas\RapatCont
         Route::delete('regulasi/{id}', '\App\Http\Controllers\Berkas\RegulasiController@hapus');
         Route::post('regulasi/filter', '\App\Http\Controllers\Berkas\RegulasiController@cariRegulasi');
         Route::get('regulasi/totalregulasi', '\App\Http\Controllers\Berkas\RegulasiController@apiTotalRegulasi');
+    // });

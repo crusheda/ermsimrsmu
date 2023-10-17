@@ -26,6 +26,8 @@ class RegulasiController extends Controller
     {
         // print_r(Auth::user()->hasRole('it|sekretaris-direktur|administrator'));
         // die();
+        // print_r(Auth::user()->id);
+        // die();
         $unit = unit::orderBy('nama','asc')->get();
 
         $data = [
@@ -96,7 +98,7 @@ class RegulasiController extends Controller
             }
 
             $data = new berkas_regulasi;
-            $data->id_user = Auth::user()->id;
+            $data->id_user = $request->user_id;
             $data->jns_regulasi = $request->jns_regulasi;
             $data->sah = $request->tgl;
             $data->judul = $request->judul;
@@ -129,7 +131,7 @@ class RegulasiController extends Controller
 
         if ($uploadedFile == null) {
             $data = berkas_regulasi::find($request->id_edit);
-            $data->id_user = Auth::user()->id;
+            $data->id_user = $request->user_id;
             $data->jns_regulasi = $request->jns_regulasi;
             $data->sah = $request->tgl;
             $data->judul = $request->judul;
@@ -165,7 +167,7 @@ class RegulasiController extends Controller
                 }
 
                 $data = berkas_regulasi::find($request->id_edit);
-                $data->id_user = Auth::user()->id;
+                $data->id_user = $request->user_id;
                 $data->jns_regulasi = $request->jns_regulasi;
                 $data->sah = $request->tgl;
                 $data->judul = $request->judul;
