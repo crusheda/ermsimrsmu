@@ -71,34 +71,34 @@ class RapatController extends Controller
         // die();
         // $this->validate($request,['file2' => ['required','mimes:doc,docx,xls,xlsx,ppt,pptx,pdf','max:50000']]);
 
-        $users = Auth::users();
-        $id_users = $users->id;
-        $nama_users = $users->nama;
+        $user = Auth::user();
+        $user_id = $user->id;
+        $user_nama = $user->nama;
 
         $uploadedFile2 = $request->file('file2');
 
-        if ($request->hasFile('file2')) {
-            foreach ($uploadedFile2 as $file) {
-                $array_filename2[] = $file->store('public/files/rapat/'.$id_users);
-                $array_title2[] = $file->getClientOriginalName();
-            }
-        }
-
-        $data = new rapat;
-        $data->id_users = $id_users;
-        $data->nama_users = $nama_users;
+        $data = new berkas_rapat;
+        $data->id_user = $user_id;
+        $data->nama_user = $user_nama;
         $data->nama = $request->nama;
         $data->kepala = $request->kepala;
         $data->tanggal = $request->tanggal;
         $data->lokasi = $request->lokasi;
 
+            if ($request->hasFile('file2')) {
+                foreach ($uploadedFile2 as $file) {
+                    $array_filename2[] = $file->store('public/files/rapat/'.$user_id);
+                    $array_title2[] = $file->getClientOriginalName();
+                }
+            }
             $data->title2 = json_encode($array_title2);
             $data->filename2 = json_encode($array_filename2);
 
         $data->keterangan = $request->keterangan;
-        $data->users_id = $id_users;
+        $data->user_id = $user_id;
         // print_r($id);
         // die();
+
         $data->save();
 
         return redirect()->back()->with('message','Tambah Berkas Rapat Berhasil');
@@ -120,7 +120,7 @@ class RapatController extends Controller
     {
         $data = berkas_rapat::where('id', $id)->first();
 
-        $name = $data->nama_users;
+        $name = $data->nama_user;
         $tgl = Carbon::parse($data->created_at)->isoFormat('D MMM Y');
 
         // Text from DB Convert into Array First with JsonDECODE
@@ -128,11 +128,11 @@ class RapatController extends Controller
         $filename_mentah = json_decode($data->title2);
 
         // Define Where ZIP will be Saved and Named
-        $zip_path = storage_path().'/app/public/files/rapat/'.$data->id_users.'/zip'.'/'.$name.' - '.$tgl.'.zip'; // Folder dibuat manual dulu
+        $zip_path = storage_path().'/app/public/files/rapat/'.$data->id_user.'/zip'.'/'.$name.' - '.$tgl.'.zip'; // Folder dibuat manual dulu
         $zip_name = $name.' - '.$tgl.'.zip';
 
         // Check if Folder exist
-        $path_folder_zip = storage_path().'/app/public/files/rapat/'.$data->id_users.'/zip';
+        $path_folder_zip = storage_path().'/app/public/files/rapat/'.$data->id_user.'/zip';
         if(!File::exists($path_folder_zip)) {
             // Make Directory for ZIP
             File::makeDirectory($path_folder_zip);
@@ -253,7 +253,7 @@ class RapatController extends Controller
 
     public function getRapat()
     {
-        // $users = Auth::users();
+        // $users = Auth::user();
         $show = berkas_rapat::join('users','berkas_rapat.kepala','=','users.id')
                         ->select('users.nama as nama_kepala','berkas_rapat.*')
                         // ->where('users.status',null)
@@ -272,7 +272,7 @@ class RapatController extends Controller
 
     public function detailRapat($id)
     {
-        $show = berkas_rapat::join('users','rapat.users_id','=','users.id')->select('users.nama as users_nama','berkas_rapat.*')->where('users.status',null)->where('berkas_rapat.id',$id)->first();
+        $show = berkas_rapat::join('users','berkas_rapat.user_id','=','users.id')->select('users.nama as user_nama','berkas_rapat.*')->where('users.status',null)->where('berkas_rapat.id',$id)->first();
         $kepala = users::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
 
         $data = [

@@ -12,8 +12,7 @@
 
     <div class="card card-body table-responsive text-nowrap">
         <h4 classs="card-title">
-            <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                data-bs-target="#tambah"><i
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i
                     class="tf-icon bx bx-upload"></i>&nbsp;&nbsp;Upload Berkas</button>
         </h4>
         <hr>
@@ -95,9 +94,7 @@
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label class="mb-2">Tanggal</label>
-                                    <input class="form-control" name="tanggal" type="datetime-local">
-                                    {{-- <input type="text" class="form-control flatpickr" name="tanggal"
-                                        placeholder="Tanggal Rapat" id="tanggal" required /> --}}
+                                    <input class="form-control flatpickr" name="tanggal" type="text">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -110,12 +107,12 @@
                         </div>
                         <div class="form-group mb-3">
                             <label class="mb-2">Keterangan</label>
-                            <textarea rows="3" class="form-control" name="keterangan" id="keterangan" placeholder="Optional"></textarea>
+                            <textarea maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control"
+                                name="keterangan" id="keterangan" placeholder="Optional"></textarea>
                         </div>
                         <div class="form-group">
                             <label class="mb-2">Upload</label>
-                            <input type="file" class="form-control mb-2" name="file2[]" id="file2" multiple
-                                required>
+                            <input type="file" class="form-control mb-2" name="file2[]" id="file2" multiple required>
                             <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen dan bisa
                             lebih dari satu file<br>
                             <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah
@@ -166,9 +163,8 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="mb-2">Tanggal :</label>
-                                <input class="form-control" name="tanggal_edit" type="datetime-local">
-                                {{-- <input type="text" id="tanggal_edit" class="form-control flatpickr"
-                                    placeholder="Tanggal Rapat" required> --}}
+                                <input type="text" id="tanggal_edit" class="form-control flatpickr"
+                                    placeholder="Tanggal Rapat" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -180,7 +176,7 @@
                     </div>
                     <div class="form-group">
                         <label class="mb-2">Keterangan :</label>
-                        <textarea rows="3" class="form-control" id="keterangan_edit" placeholder="Optional"></textarea>
+                        <textarea  maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control" id="keterangan_edit" ></textarea>
                     </div>
                     <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Waktu pengubahan berkas rapat hanya berlaku pada
                         hari saat anda mengupload</sub><br>
@@ -210,7 +206,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered align-middle">
                             <thead>
                                 <tr>
                                     <th><i class="fa-fw fas fa-sort-numeric-down nav-icon"></i> Nama File</th>
@@ -253,133 +249,149 @@
                 })
             });
             // DATEPICKER
-                // DATE
-                const today = new Date();
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const next = new Date(today);
-                next.setDate(next.getDate() + 999999);
-                const l = $('.flatpickr');
-                // const dates = new Date(Date.now());
-                // const tomorow = dates.getTime();
-                // const m = new Date(Date.now());
-                // const c = new Date(Date.now() + 1728e5); // 3 hari kedepan
-                var now = moment().locale('id').format('Y-MM-DD HH:mm');
-                l.flatpickr({
-                    enableTime: !0,
-                    defaultDate: now,
-                    minuteIncrement: 1,
-                    // monthSelectorType: "static",
-                    // inline: true,
-                    // defaultHour: 12,
-                    // defaultMinute: "today",
-                    time_24hr: true,
-                    // dateFormat: "Y-m-d H:m",
-                    disable: [{
-                        from: tomorrow.toISOString().split("T")[0],
-                        to: next.toISOString().split("T")[0]
-                    }]
-                    // ,
-                    // onChange: function(rawdate, altdate, FPOBJ) {
-                    //     FPOBJ.close(); // Close datepicker on date select
-                    //     FPOBJ._input.blur(); // Blur input field on date select
-                    // }
-                })
+            // DATE
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const next = new Date(today);
+            next.setDate(next.getDate() + 999999);
+            const l = $('.flatpickr');
+            // const dates = new Date(Date.now());
+            // const tomorow = dates.getTime();
+            // const m = new Date(Date.now());
+            // const c = new Date(Date.now() + 1728e5); // 3 hari kedepan
+            var now = moment().locale('id').format('Y-MM-DD HH:mm');
+            l.flatpickr({
+                enableTime: !0,
+                defaultDate: now,
+                minuteIncrement: 1,
+                // monthSelectorType: "static",
+                // inline: true,
+                // defaultHour: 12,
+                // defaultMinute: "today",
+                time_24hr: true,
+                // dateFormat: "Y-m-d H:m",
+                disable: [{
+                    from: tomorrow.toISOString().split("T")[0],
+                    to: next.toISOString().split("T")[0]
+                }]
+                // ,
+                // onChange: function(rawdate, altdate, FPOBJ) {
+                //     FPOBJ.close(); // Close datepicker on date select
+                //     FPOBJ._input.blur(); // Blur input field on date select
+                // }
+            })
 
-                // DATETIME
-                $('.flatpickrtime').flatpickr({
-                    enableTime: !0,
-                    dateFormat: "Y-m-d H:i"
-                });
+            // DATETIME
+            $('.flatpickrtime').flatpickr({
+                enableTime: !0,
+                dateFormat: "Y-m-d H:i"
+            });
 
-            $.ajax(
-                {
-                    url: "/api/berkas/rapat/data",
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        $("#tampil-tbody").empty();
-                        var date = new Date().toISOString().split('T')[0];
-                        var userID = "{{ Auth::user()->id }}";
-                        var adminID = "{{ Auth::user()->hasRole('it') }}";
-                        var date = getDateTime();
-                        res.show.forEach(item => {
-                            var updet = item.updated_at.substring(0, 10);
-                            content = "<tr id='data"+ item.id +"'><td>"
-                                        + item.id + "</td><td>"
-                                        + item.nama + "</td><td>"
-                                        + item.nama_kepala + "</td><td>"
-                                        + item.tanggal + "</td><td>"
-                                        + item.lokasi + "</td><td>";
-                                        if (item.keterangan != null) {
-                                            content += item.keterangan;
-                                        }
-                            content += '</td><td>'
-                                        + item.updated_at + '</td><td>'
-                                        + item.nama_user + '</td>';
-                            content += `<td><center><div class='btn-group'>
+            $.ajax({
+                url: "/api/berkas/rapat/data",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    var date = new Date().toISOString().split('T')[0];
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->hasRole('it') }}";
+                    var date = getDateTime();
+                    res.show.forEach(item => {
+                        var updet = item.updated_at.substring(0, 10);
+                        content = "<tr id='data" + item.id + "'><td>" +
+                            item.id + "</td><td>" +
+                            item.nama + "</td><td>" +
+                            item.nama_kepala + "</td><td>" +
+                            item.tanggal + "</td><td>" +
+                            item.lokasi + "</td><td>";
+                        if (item.keterangan != null) {
+                            content += item.keterangan;
+                        }
+                        content += '</td><td>' +
+                            item.updated_at + '</td><td>' +
+                            item.nama_user + '</td>';
+                        content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-end'>`;
-                                            if (adminID) {
-                                                content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(`+item.id+`)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                                            <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            }
-                                            else {
-                                                if (item.user_id == userID) {
-                                                    if (updet == date) {
-                                                        content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(`+item.id+`)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                                                    <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                                    } else {
-                                                        content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(`+item.id+`)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                        if (adminID) {
+                            content +=
+                                `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
+                                item.id +
+                                `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                                            <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
+                                item.id +
+                                `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                        } else {
+                            if (item.user_id == userID) {
+                                if (updet == date) {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
+                                        item.id +
+                                        `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                                                    <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
+                                        item.id +
+                                        `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
+                                        item.id +
+                                        `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                } else {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
+                                        item.id +
+                                        `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
                                                                     <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                                                     <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                                    }
-                                                } else {
-                                                    content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(`+item.id+`)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                }
+                            } else {
+                                content +=
+                                    `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
+                                    item.id +
+                                    `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
                                                                 <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                                                 <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                                }
-                                            }
-                            content += "</div></center></td></tr>";
-                            $('#tampil-tbody').append(content);
-                        });
-                        var table = $('#dttable').DataTable({
-                            order: [[0, "desc"]],
-                            displayLength: 7,
-                            lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
-                        });
+                            }
+                        }
+                        content += "</div></center></td></tr>";
+                        $('#tampil-tbody').append(content);
+                    });
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [0, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
 
-                        table.buttons().container()
-                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
-                    }
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                 }
-            );
+            });
         });
 
         function getDateTime() {
-            var now     = new Date();
-            var year    = now.getFullYear();
-            var month   = now.getMonth()+1;
-            var day     = now.getDate();
-            if(month.toString().length == 1) {
-                    month = '0'+month;
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+            if (month.toString().length == 1) {
+                month = '0' + month;
             }
-            if(day.toString().length == 1) {
-                    day = '0'+day;
+            if (day.toString().length == 1) {
+                day = '0' + day;
             }
-            var dateTime = year+'-'+month+'-'+day;
+            var dateTime = year + '-' + month + '-' + day;
             return dateTime;
         }
 
         function showUbah(id) {
-            $("#ubah"+id).prop('disabled', true);
-            $("#ubah"+id).find("i").toggleClass("fa-edit fa-sync fa-spin");
-            $.ajax(
-            {
-                url: "/api/berkas/rapat/data/"+id,
+            $("#ubah" + id).prop('disabled', true);
+            $("#ubah" + id).find("i").toggleClass("fa-edit fa-sync fa-spin");
+            $.ajax({
+                url: "/api/berkas/rapat/data/" + id,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
@@ -387,7 +399,7 @@
                     // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
                     var dt = moment(res.show.tanggal).format('Y-MM-DD HH:mm');
                     // console.log(dt);
-                    document.getElementById('show_edit').innerHTML = "ID : "+res.show.id;
+                    document.getElementById('show_edit').innerHTML = "ID : " + res.show.id;
                     document.getElementById('user_edit').innerHTML = res.show.user_nama;
                     $("#id_edit").val(res.show.id);
                     $("#nama_edit").val(res.show.nama);
@@ -400,22 +412,21 @@
                             <option value="${item.id}" ${item.id == res.show.kepala? "selected":""}>${item.nama}</option>
                         `);
                     });
-                    $("#ubah"+id).find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
-                    $("#ubah"+id).prop('disabled', false);
+                    $("#ubah" + id).find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+                    $("#ubah" + id).prop('disabled', false);
                 }
-            }
-            );
+            });
         }
 
         function ubah() {
             $("#submit_edit").prop('disabled', true);
             $("#submit_edit").find("i").toggleClass("fa-save fa-sync fa-spin");
-            var id          = $("#id_edit").val();
-            var nama        = $("#nama_edit").val();
-            var kepala      = $("#kepala_edit").val();
-            var tanggal     = $("#tanggal_edit").val();
-            var lokasi      = $("#lokasi_edit").val();
-            var keterangan  = $("#keterangan_edit").val();
+            var id = $("#id_edit").val();
+            var nama = $("#nama_edit").val();
+            var kepala = $("#kepala_edit").val();
+            var tanggal = $("#tanggal_edit").val();
+            var lokasi = $("#lokasi_edit").val();
+            var keterangan = $("#keterangan_edit").val();
 
             if (nama == "" || kepala == "" || tanggal == "") {
                 iziToast.error({
@@ -425,35 +436,35 @@
                 });
             } else {
                 $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                method: 'POST',
-                url: '/api/berkas/rapat/data/'+id+'/ubah',
-                dataType: 'json',
-                data: {
-                    id: id,
-                    nama: nama,
-                    kepala: kepala,
-                    tanggal: tanggal,
-                    lokasi: lokasi,
-                    keterangan: keterangan,
-                },
-                success: function(res) {
-                    if (res) {
-                        $('#ubah').modal('hide');
-                        fresh();
-                        // $("#tampil-tbody").empty();
-                        // content += `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`;
-                        // $('#tampil-tbody').append(content);
-                        window.location.reload();
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/berkas/rapat/data/' + id + '/ubah',
+                    dataType: 'json',
+                    data: {
+                        id: id,
+                        nama: nama,
+                        kepala: kepala,
+                        tanggal: tanggal,
+                        lokasi: lokasi,
+                        keterangan: keterangan,
+                    },
+                    success: function(res) {
+                        if (res) {
+                            $('#ubah').modal('hide');
+                            // fresh();
+                            // $("#tampil-tbody").empty();
+                            // content += `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`;
+                            // $('#tampil-tbody').append(content);
+                            window.location.reload();
+                        }
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Berkas Rapat berhasil diubah pada ' + res,
+                            position: 'topRight'
+                        });
                     }
-                    iziToast.success({
-                        title: 'Pesan Sukses!',
-                        message: 'Berkas Rapat berhasil diubah pada '+res,
-                        position: 'topRight'
-                    });
-                }
                 });
             }
             $("#submit_edit").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
@@ -464,15 +475,14 @@
             // $("#ubah"+id).prop('disabled', true);
             // $("#ubah"+id).find("i").toggleClass("fa-edit fa-sync fa-spin");
             $('#download').modal('show');
-            $.ajax(
-            {
-                url: "/api/berkas/rapat/data/"+id+"/download",
+            $.ajax({
+                url: "/api/berkas/rapat/data/" + id + "/download",
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody-file").empty();
                     document.getElementById('tgl_upload').innerHTML = res.tgl_upload;
-                    document.getElementById('download_btn').href = "/api/berkas/rapat/data/"+res.id+"/zip";
+                    document.getElementById('download_btn').href = "/api/berkas/rapat/data/" + res.id + "/zip";
                     content = "";
                     res.file.forEach(item => {
                         content += "<tr>";
@@ -482,48 +492,47 @@
                     });
                     $('#tampil-tbody-file').append(content);
                 }
-            }
-            );
+            });
         }
 
         function hapus(id) {
             Swal.fire({
-            title: 'Apakah anda yakin?',
-            text: 'Ingin menghapus Berkas Rapat ID : '+id,
-            icon: 'warning',
-            reverseButtons: false,
-            showDenyButton: false,
-            showCloseButton: false,
-            showCancelButton: true,
-            focusCancel: true,
-            confirmButtonColor: '#FF4845',
-            confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
-            cancelButtonText: `<i class="fa fa-times"></i> Batal`,
-            backdrop: `rgba(26,27,41,0.8)`,
+                title: 'Apakah anda yakin?',
+                text: 'Ingin menghapus Berkas Rapat ID : ' + id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times"></i> Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
             }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                url: "/api/berkas/rapat/data/"+id+"/hapus",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    iziToast.success({
-                        title: 'Pesan Sukses!',
-                        message: 'Berkas gagal telah berhasil dihapus',
-                        position: 'topRight'
-                    });
-                    fresh();
-                    window.location.reload();
-                },
-                error: function(res) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: 'Berkas gagal diupload',
-                        position: 'topRight'
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/berkas/rapat/data/" + id + "/hapus",
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Berkas telah berhasil dihapus',
+                                position: 'topRight'
+                            });
+                            // fresh();
+                            window.location.reload();
+                        },
+                        error: function(res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Berkas gagal diupload',
+                                position: 'topRight'
+                            });
+                        }
                     });
                 }
-                });
-            }
             })
         }
 
@@ -539,7 +548,7 @@
                     });
                     return false;
                 } else {
-                    $("#btn-simpan").attr('disabled','disabled');
+                    $("#btn-simpan").attr('disabled', 'disabled');
                     $("#btn-simpan").find("i").removeClass("fa-upload").addClass("fa-sync fa-spin");
                     return true;
                 }
