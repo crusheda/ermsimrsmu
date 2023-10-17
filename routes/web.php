@@ -51,11 +51,14 @@ Route::delete('/profilkaryawan/{id}/nonaktif', [App\Http\Controllers\ProfilKarya
 // BERKAS
 Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], function () {
     // RKA
-    Route::post('rka/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
-    Route::resource('rka', '\App\Http\Controllers\Berkas\RkaController');
+        Route::post('rka/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
+        Route::resource('rka', '\App\Http\Controllers\Berkas\RkaController');
     // RAPAT
-    // Route::post('rapat/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
-    Route::resource('rapat', '\App\Http\Controllers\Berkas\RapatController');
+        // Route::post('rapat/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
+        Route::resource('rapat', '\App\Http\Controllers\Berkas\RapatController');
+    // REGULASI
+        Route::get('regulasi', '\App\Http\Controllers\Berkas\RegulasiController@index')->name('regulasi.index');
+        Route::get('regulasi/{id}/download', '\App\Http\Controllers\Berkas\RegulasiController@download')->name('regulasi.download');
 });
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
