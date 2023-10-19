@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Auth;
+use Hash;
 
 // use HasRoles;
 
@@ -60,7 +61,8 @@ class User extends Authenticatable
 
     public function userID()
     {
-        return $this->user_id;
+        dd(Auth::user());
+        return Auth::user()->id;
     }
 
     public function getRole($role)

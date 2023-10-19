@@ -81,7 +81,7 @@
                                 <div>
                                     <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);"
                                             class="text-dark"
-                                            onclick="window.location.href='{{ url('v2/kepegawaian/karyawan/' . $item->id . '') }}'">
+                                            onclick="window.location.href='{{ url('profilkaryawan/detail/' . $item->id . '') }}'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Detail Profil">
                                             <u>{{ $item->nama }}</u>
                                         </a></h5>
                                     <p class="text-muted mb-0">

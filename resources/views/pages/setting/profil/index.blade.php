@@ -30,24 +30,29 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <div class="text-muted">
-                                        <h5 class="mb-1">{{ Auth::user()->name }}</h5>
+                                        <h5 class="mb-1">{{ $list['show']->name }}</h5>
                                         <p class="mb-0">NIP. @if (!empty($list['show']->nip)) {{ $list['show']->nip }} @else - @endif</p>
                                     </div>
                                 </div>
 
                                 <div class="flex-shrink-0 dropdown ms-2">
-                                    <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="bx bx-caret-down align-middle me-1"></i> Menu
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="{{ url('profil/'.$list['show']->id.'/edit') }}">Ubah Biodata</a>
-                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                                        data-bs-target="#ubahfoto">Ubah Foto Profil</a>
-                                        <a class="dropdown-item" href="#">Ubah Password</a>
-                                    </div>
+                                    @if (Auth::user()->id == $list['show']->id)
+                                        <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-caret-down align-middle me-1"></i> Menu
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="{{ url('profil/'.$list['show']->id.'/edit') }}">Ubah Biodata</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
+                                            data-bs-target="#ubahfoto">Ubah Foto Profil</a>
+                                            <a class="dropdown-item" href="{{ route('profil.ubahpassword') }}">Ubah Password</a>
+                                        </div>
+                                    @else
+                                    <a href="{{ route('profilkaryawan.index') }}" class="btn btn-dark btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Kembali ke Profil Karyawan">
+                                        <i class="bx bx-caret-left align-middle me-1"></i> Kembali
+                                    </a>
+                                    @endif
                                 </div>
                             </div>
-
 
                             <hr>
 

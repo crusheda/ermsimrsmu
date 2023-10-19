@@ -451,7 +451,7 @@
                 </div>
                 <div class="col-12 text-center">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
-                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -544,19 +544,19 @@
                             content += "</td><td>" + item.updated_at + "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
-                    var table = $('#dttable').DataTable({
-                        order: [
-                            [5, "desc"]
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
+                        var table = $('#dttable').DataTable({
+                            order: [
+                                [5, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
 
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
-                    },
+                        table.buttons().container()
+                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+                        },
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',

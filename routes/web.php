@@ -26,27 +26,34 @@ Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->na
 
 Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
 
-// Profil
-Route::resource('profil', '\App\Http\Controllers\Setting\Profil\ProfilController');
-Route::put('profil/{id}/ubahfoto', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'storeImg'])->name('profil.ubahfoto');
+Route::group(['middleware' => ['auth']], function () {
+    // PROFIL
+    Route::get('profil/ubahpassword', [App\Http\Controllers\Setting\UbahPassword\UbahPasswordController::class, 'showChangePasswordForm'])->name('profil.ubahpassword');
+    Route::patch('profil/ubahpassword', [App\Http\Controllers\Setting\UbahPassword\UbahPasswordController::class, 'changePassword'])->name('auth.change_password');
+    Route::resource('profil', '\App\Http\Controllers\Setting\Profil\ProfilController');
+    Route::put('profil/{id}/ubahfoto', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'storeImg'])->name('profil.ubahfoto');
+});
 
 // HAK AKSES
 Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], function () {
     Route::resource('datakaryawan', '\App\Http\Controllers\HakAkses\DataKaryawanController');
 });
 
-// STRUKTUR ORGANISASI
-Route::get('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi.index');
-Route::get('strukturorganisasi/tambah', [App\Http\Controllers\StrukturOrganisasiController::class, 'create'])->name('strukturorganisasi.tambah');
-Route::post('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('strukturorganisasi.simpan');
-Route::get('strukturorganisasi/{id}/ubah', [App\Http\Controllers\StrukturOrganisasiController::class, 'edit'])->name('strukturorganisasi.ubah');
-Route::put('strukturorganisasi/{id}', [App\Http\Controllers\StrukturOrganisasiController::class, 'update'])->name('strukturorganisasi.update');
+Route::group(['middleware' => ['auth']], function () {
+    // STRUKTUR ORGANISASI
+    Route::get('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi.index');
+    Route::get('strukturorganisasi/tambah', [App\Http\Controllers\StrukturOrganisasiController::class, 'create'])->name('strukturorganisasi.tambah');
+    Route::post('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('strukturorganisasi.simpan');
+    Route::get('strukturorganisasi/{id}/ubah', [App\Http\Controllers\StrukturOrganisasiController::class, 'edit'])->name('strukturorganisasi.ubah');
+    Route::put('strukturorganisasi/{id}', [App\Http\Controllers\StrukturOrganisasiController::class, 'update'])->name('strukturorganisasi.update');
 
-// PROFIL KARYAWAN
-Route::get('/profilkaryawan', [App\Http\Controllers\ProfilKaryawanController::class, 'index'])->name('profilkaryawan.index');
-Route::get('/profilkaryawan/{id}', [App\Http\Controllers\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
-Route::delete('/profilkaryawan/{id}/nonaktif', [App\Http\Controllers\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
-// Route::resource('profilkaryawan', '\App\Http\Controllers\ProfilKaryawanController');
+    // PROFIL KARYAWAN
+    Route::get('profilkaryawan', [App\Http\Controllers\ProfilKaryawanController::class, 'index'])->name('profilkaryawan.index');
+    Route::get('profilkaryawan/{id}', [App\Http\Controllers\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
+    Route::get('profilkaryawan/detail/{id}', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'indexKepegawaian'])->name('profilkaryawan.kepegawaian');
+    Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
+    // Route::resource('profilkaryawan', '\App\Http\Controllers\ProfilKaryawanController');
+});
 
 // BERKAS
 Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], function () {
@@ -59,6 +66,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
     // REGULASI
         Route::get('regulasi', '\App\Http\Controllers\Berkas\RegulasiController@index')->name('regulasi.index');
         Route::get('regulasi/{id}/download', '\App\Http\Controllers\Berkas\RegulasiController@download')->name('regulasi.download');
+    // LAPORAN BULANAN
+        Route::get('laporan/bulanan/verif', '\App\Http\Controllers\Berkas\LaporanBulananController@showVerif')->name('bulanan.verif');
+        Route::resource('laporan/bulanan', '\App\Http\Controllers\Berkas\LaporanBulananController');
 });
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
