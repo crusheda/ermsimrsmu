@@ -26,6 +26,8 @@ class LaporanBulananController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    // LAPORAN BULANAN ----------------------------------------------------------------------------------------------------------------------------------
     public function index()
     {
         $thn = Carbon::now()->isoFormat('Y');
@@ -43,17 +45,30 @@ class LaporanBulananController extends Controller
         return view('pages.berkas.laporanbulanan.index')->with('list', $data);
     }
 
-    public function showVerif()
+    public function formUpload($id)
     {
-        $jabatan = $this->cariJabatan();
-        // print_r($jabatan);
-        // die();
-        if ($jabatan != null) {
-            return view('pages.administrasi.laporan.bulanan.verif');
+        $user = $this->userUpload($id);
+
+        if ($user == 1) {
+            $res = 1;
+            return response()->json($res, 200);
         } else {
-            return redirect()->back()->withErrors("Maaf anda tidak mempunyai HAK untuk verifikasi Dokumen Bawahan");
+            $res = 0;
+            return response()->json($res, 200);
         }
     }
+
+    // public function showVerif()
+    // {
+    //     $jabatan = $this->cariJabatan();
+    //     // print_r($jabatan);
+    //     // die();
+    //     if ($jabatan != null) {
+    //         return view('pages.berkas.laporanbulanan.verif');
+    //     } else {
+    //         return redirect()->back()->withErrors("Maaf anda tidak mempunyai HAK untuk verifikasi Dokumen Bawahan");
+    //     }
+    // }
 
     public function verif($id)
     {
@@ -75,31 +90,7 @@ class LaporanBulananController extends Controller
         return response()->json($data, 200);
     }
 
-    public function formVerif()
-    {
-        $jabatan = $this->cariJabatan();
 
-        if ($jabatan != null) {
-            $res = 1;
-            return response()->json($res, 200);
-        } else {
-            $res = 0;
-            return response()->json($res, 200);
-        }
-    }
-
-    public function formUpload($id)
-    {
-        $user = $this->userUpload($id);
-
-        if ($user == 1) {
-            $res = 1;
-            return response()->json($res, 200);
-        } else {
-            $res = 0;
-            return response()->json($res, 200);
-        }
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -243,29 +234,64 @@ class LaporanBulananController extends Controller
         return response()->json($data, 200);
     }
 
-    public function tableVerif()
+    // VERIF LAPORAN BULANAN ----------------------------------------------------------------------------------------------------------------------------------
+    public function formVerif($id)
     {
-        $jabatan = $this->cariJabatan();
+        $cek = struktur_organisasi::where('id_user',$id)->first();
 
-        if (Auth::user()->hasRole(['kasubag-perencanaan-it','sekretaris-direktur'])) {
-            $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulananid_user', '=', 'users.id')
-                ->select('users.nama','berkas_laporan_bulanan*')
-                ->orderBy('berkas_laporan_bulananupdated_at', 'desc')
-                ->get();
+        if (!empty($cek->nama_user)) {
+            $res = 1;
+            return response()->json($res, 200);
         } else {
-            $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulananid_user', '=', 'users.id')
-                ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->select('users.nama','berkas_laporan_bulananid','berkas_laporan_bulananunit','berkas_laporan_bulananjudul','berkas_laporan_bulananbln','berkas_laporan_bulananthn','berkas_laporan_bulananket','berkas_laporan_bulananupdated_at')
-                ->whereIn('roles.name', $jabatan)
-                ->orderBy('berkas_laporan_bulananupdated_at', 'desc')
-                ->groupBy('users.nama','berkas_laporan_bulananid','berkas_laporan_bulananunit','berkas_laporan_bulananjudul','berkas_laporan_bulananbln','berkas_laporan_bulananthn','berkas_laporan_bulananket','berkas_laporan_bulananupdated_at')
-                ->get();
-            // $show = array_flip($gett);
+            $res = 0;
+            return response()->json($res, 200);
         }
+    }
+
+    function showVerif()
+    {
+        return view('pages.berkas.laporanbulanan.verif');
+    }
+
+    public function tableVerif($id)
+    {
+        $jabatan = struktur_organisasi::where('id_user',$id)->first();
+
+        $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
+                ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                // ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
+                ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
+                ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                ->get();
 
         return response()->json($show, 200);
     }
+
+    // public function tableVerif()
+    // {
+    //     $jabatan = $this->cariJabatan();
+
+    //     if (Auth::user()->hasRole(['kasubag-perencanaan-it','sekretaris-direktur'])) {
+    //         $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulananid_user', '=', 'users.id')
+    //             ->select('users.nama','berkas_laporan_bulanan*')
+    //             ->orderBy('berkas_laporan_bulananupdated_at', 'desc')
+    //             ->get();
+    //     } else {
+    //         $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulananid_user', '=', 'users.id')
+    //             ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+    //             ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+    //             ->select('users.nama','berkas_laporan_bulananid','berkas_laporan_bulananunit','berkas_laporan_bulananjudul','berkas_laporan_bulananbln','berkas_laporan_bulananthn','berkas_laporan_bulananket','berkas_laporan_bulananupdated_at')
+    //             ->whereIn('roles.name', $jabatan)
+    //             ->orderBy('berkas_laporan_bulananupdated_at', 'desc')
+    //             ->groupBy('users.nama','berkas_laporan_bulananid','berkas_laporan_bulananunit','berkas_laporan_bulananjudul','berkas_laporan_bulananbln','berkas_laporan_bulananthn','berkas_laporan_bulananket','berkas_laporan_bulananupdated_at')
+    //             ->get();
+    //         // $show = array_flip($gett);
+    //     }
+
+    //     return response()->json($show, 200);
+    // }
 
     public function getubah($id)
     {

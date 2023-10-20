@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Blank Page</h4>
+                <h4 class="mb-sm-0 font-size-18">Laporan Bulanan</h4>
             </div>
         </div>
     </div>
@@ -381,7 +381,7 @@
             $("#btn-verif").prop('disabled', true);
             $("#btn-verif").find("i").toggleClass("fa-history fa-sync fa-spin");
             $.ajax({
-                url: "/api/laporan/bulanan/formverif",
+                url: "/api/laporan/bulanan/formverif/{{ Auth::user()->id }}",
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
