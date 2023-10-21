@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\struktur_organisasi;
 use App\Models\berkas_laporan_bulanan;
-// use App\Models\laporan_bulanan_verif;
+use App\Models\berkas_laporan_bulanan_verif;
 use App\Models\unit;
 use App\Models\User;
 use App\Models\users;
@@ -69,26 +69,6 @@ class LaporanBulananController extends Controller
     //         return redirect()->back()->withErrors("Maaf anda tidak mempunyai HAK untuk verifikasi Dokumen Bawahan");
     //     }
     // }
-
-    public function verif($id)
-    {
-        $user = Auth::user();
-        $user_id = Auth::user()->id;
-
-        $unit = $user->roles; //kabag-keperawatan
-
-        foreach ($unit as $key => $value) {
-            $role[] = $value->id;
-        }
-
-        $getBawahan = strukturorganisasi::whereIn('role_id', $role)->get();
-
-        $data = [
-            'show'  => $show,
-        ];
-
-        return response()->json($data, 200);
-    }
 
 
 
@@ -253,6 +233,7 @@ class LaporanBulananController extends Controller
         return view('pages.berkas.laporanbulanan.verif');
     }
 
+    // Menampilkan tabel laporan Bawahan
     public function tableVerif($id)
     {
         $jabatan = struktur_organisasi::where('id_user',$id)->first();
@@ -268,6 +249,19 @@ class LaporanBulananController extends Controller
 
         return response()->json($show, 200);
     }
+
+    // Menampilkan siapa saja yg sudah verif
+    public function verif($id)
+    {
+        $show = berkas_laporan_bulanan_verif::where('lap_id', $id)->get();
+
+        $data = [
+            'show'  => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
 
     // public function tableVerif()
     // {

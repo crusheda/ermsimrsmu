@@ -59,11 +59,37 @@
         <div class="modal-dialog modal-simple modal-enable-otp modal-dialog-centered">
             <div class="modal-content p-3 p-md-5">
                 <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="text-center mb-4">
-                        <h3 class="mb-5">Verifikasi Dokumen</h3>
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Verifikasi Dokumen
+                        </h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                     </div>
-                    <p id="siapaini"></p>
+                    <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>ID USER</th>
+                                <th>NAMA USER</th>
+                                <th>JABATAN</th>
+                                <th>UPDATE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tampil-tbody-verif">
+                            <tr>
+                                <td colspan="7"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>NO</th>
+                                <th>ID USER</th>
+                                <th>NAMA USER</th>
+                                <th>JABATAN</th>
+                                <th>UPDATE</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
@@ -99,7 +125,7 @@
                         var updet = item.updated_at.substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
                         content += `<td><center><div class="btn-group">
-                        <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('v2/laporan/bulanan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i></button>
+                        <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i></button>
                         <button class='btn btn-info btn-sm' onclick="showVerif(` + item.id +
                             `)"><i class="fa-fw fas fa-check nav-icon"></i></button>`;
                         // if(item.tgl_verif != null) {
@@ -158,13 +184,20 @@
         }
 
         function showVerif(id) {
-            $('#verif').modal('show');
             $.ajax({
                 url: "/api/laporan/bulanan/table/verif/" + id,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    $('#siapaini').text(res);
+                    if (res != null) {
+                        res.forEach(item => {
+                            $content = ``;
+                            $('#tampil-tbody-verif').append(content);
+                        })
+                    } else {
+                        $('#tampil-tbody-verif').append(`<td colspan="5">Belum ada yg verifikasi</td>`);
+                    }
+                    $('#verif').modal('show');
                 }
             })
         }
