@@ -56,6 +56,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
         // LAPORAN BULANAN
         Route::get('laporan/bulanan/table/verif/{id}', '\App\Http\Controllers\Berkas\LaporanBulananController@verif');
+        Route::get('laporan/bulanan/table/verif/{id}/batal', '\App\Http\Controllers\Berkas\LaporanBulananController@batalVerif');
+        Route::get('laporan/bulanan/table/verif/{id}/user/{user}', '\App\Http\Controllers\Berkas\LaporanBulananController@verifUser');
         Route::get('laporan/bulanan/formverif/{id}', '\App\Http\Controllers\Berkas\LaporanBulananController@formVerif');
         Route::get('laporan/bulanan/formupload/{id}', '\App\Http\Controllers\Berkas\LaporanBulananController@formUpload');
         Route::get('laporan/bulanan/table/{id}/verif', '\App\Http\Controllers\Berkas\LaporanBulananController@tableVerif');

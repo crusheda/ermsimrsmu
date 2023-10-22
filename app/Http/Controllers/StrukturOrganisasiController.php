@@ -19,7 +19,7 @@ class StrukturOrganisasiController extends Controller
     {
         $user  = users::where('status',null)->get();
         $roles  = roles::get();
-        $struktur_organisasi  = struktur_organisasi::get();
+        $struktur_organisasi  = struktur_organisasi::orderBy('updated_at','desc')->get();
 
         $data = [
             'user' => $user,
@@ -50,6 +50,11 @@ class StrukturOrganisasiController extends Controller
 
         foreach ($getRoleUser as $key => $value) {
             $roleUser[] = strval($value->role_id);
+        }
+
+        $verifikasi = struktur_organisasi::where('id_user',$request->user)->first();
+        if (!empty($verifikasi)) {
+            return redirect()->back()->with('message','Struktur Organisasi '.$getUser->nama.' sudah ada.');
         }
 
         $data = new struktur_organisasi;
@@ -90,6 +95,11 @@ class StrukturOrganisasiController extends Controller
 
         foreach ($getRoleUser as $key => $value) {
             $roleUser[] = strval($value->role_id);
+        }
+
+        $verifikasi = struktur_organisasi::where('id_user',$request->user)->first();
+        if (!empty($verifikasi)) {
+            struktur_organisasi::find($verifikasi->id)->delete();
         }
 
         $data = new struktur_organisasi;

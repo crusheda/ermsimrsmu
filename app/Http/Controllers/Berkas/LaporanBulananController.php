@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\struktur_organisasi;
+use App\Models\roles;
 use App\Models\berkas_laporan_bulanan;
 use App\Models\berkas_laporan_bulanan_verif;
 use App\Models\unit;
@@ -45,6 +46,7 @@ class LaporanBulananController extends Controller
         return view('pages.berkas.laporanbulanan.index')->with('list', $data);
     }
 
+    // Validasi User boleh Upload atau tidak
     public function formUpload($id)
     {
         $user = $this->userUpload($id);
@@ -58,36 +60,12 @@ class LaporanBulananController extends Controller
         }
     }
 
-    // public function showVerif()
-    // {
-    //     $jabatan = $this->cariJabatan();
-    //     // print_r($jabatan);
-    //     // die();
-    //     if ($jabatan != null) {
-    //         return view('pages.berkas.laporanbulanan.verif');
-    //     } else {
-    //         return redirect()->back()->withErrors("Maaf anda tidak mempunyai HAK untuk verifikasi Dokumen Bawahan");
-    //     }
-    // }
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // Upload dokumen laporan bulanan
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -192,11 +170,17 @@ class LaporanBulananController extends Controller
         //
     }
 
+    // Menampilkan tabel laporan bulanan
     public function table($id)
     {
         $show = berkas_laporan_bulanan::where('id_user',$id)->orderBy('updated_at','desc')->get();
-        // print_r($show);
-        // die();
+        $getId = [];
+        if (!empty($show)) {
+            foreach ($show as $key => $value) {
+                $getId[] = $value->id;
+            }
+        }
+        $getVerif = berkas_laporan_bulanan_verif::whereIn('lap_id',$getId)->get();
 
         $tgl = Carbon::now()->isoFormat('YYYY/MM/DD');
         $tglAfter3Day = Carbon::now()->addDays(3)->isoFormat('YYYY/MM/DD');
@@ -204,6 +188,7 @@ class LaporanBulananController extends Controller
         $tglAfter1Day = Carbon::now()->addDays(1)->isoFormat('YYYY/MM/DD');
 
         $data = [
+            'verif' => $getVerif,
             'show' => $show,
             'tgl' => $tgl,
             'tglAfter1Day' => $tglAfter1Day,
@@ -211,10 +196,12 @@ class LaporanBulananController extends Controller
             'tglAfter3Day' => $tglAfter3Day,
         ];
 
+
         return response()->json($data, 200);
     }
 
     // VERIF LAPORAN BULANAN ----------------------------------------------------------------------------------------------------------------------------------
+    // Verifikasi User boleh verifikasi atau tidak / boleh berpindah ke halaman laporan bawahan atau tidak
     public function formVerif($id)
     {
         $cek = struktur_organisasi::where('id_user',$id)->first();
@@ -228,6 +215,7 @@ class LaporanBulananController extends Controller
         }
     }
 
+    // Berpindah ke halaman Verifikasi
     function showVerif()
     {
         return view('pages.berkas.laporanbulanan.verif');
@@ -236,18 +224,26 @@ class LaporanBulananController extends Controller
     // Menampilkan tabel laporan Bawahan
     public function tableVerif($id)
     {
-        $jabatan = struktur_organisasi::where('id_user',$id)->first();
+        $jabatan = struktur_organisasi::where('id_user',$id)->orderBy('updated_at','desc')->first();
+
+        $getVerif = berkas_laporan_bulanan_verif::where('user_id',$id)->get();
 
         $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
                 ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                 // ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
+                ->where('berkas_laporan_bulanan.id_user','!=',$id)
                 ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
                 ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
                 ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
                 ->get();
 
-        return response()->json($show, 200);
+        $data = [
+            'verif' => $getVerif,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
     }
 
     // Menampilkan siapa saja yg sudah verif
@@ -258,30 +254,44 @@ class LaporanBulananController extends Controller
         return response()->json($data, 200);
     }
 
+    // Proses Verifikasi laporan bulanan
+    function verifUser($id , $user)
+    {
+        $getLast = berkas_laporan_bulanan_verif::where('lap_id', $id)->orderBy('updated_at')->first();
+        $getUser = users::where('id', $user)->first();
+        $getJabatan = struktur_organisasi::where('id_user',$user)->first();
+        $getRoles = roles::select('id','name')->get();
 
-    // public function tableVerif()
-    // {
-    //     $jabatan = $this->cariJabatan();
+        foreach (json_decode($getJabatan->role) as $a => $valjab) {
+            foreach ($getRoles as $b => $valrol) {
+                if ($valjab == $valrol->id) {
+                    $unit[] = $valrol->name;
+                }
+            }
+        }
 
-    //     if (Auth::user()->hasRole(['kasubag-perencanaan-it','sekretaris-direktur'])) {
-    //         $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulananid_user', '=', 'users.id')
-    //             ->select('users.nama','berkas_laporan_bulanan*')
-    //             ->orderBy('berkas_laporan_bulananupdated_at', 'desc')
-    //             ->get();
-    //     } else {
-    //         $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulananid_user', '=', 'users.id')
-    //             ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-    //             ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-    //             ->select('users.nama','berkas_laporan_bulananid','berkas_laporan_bulananunit','berkas_laporan_bulananjudul','berkas_laporan_bulananbln','berkas_laporan_bulananthn','berkas_laporan_bulananket','berkas_laporan_bulananupdated_at')
-    //             ->whereIn('roles.name', $jabatan)
-    //             ->orderBy('berkas_laporan_bulananupdated_at', 'desc')
-    //             ->groupBy('users.nama','berkas_laporan_bulananid','berkas_laporan_bulananunit','berkas_laporan_bulananjudul','berkas_laporan_bulananbln','berkas_laporan_bulananthn','berkas_laporan_bulananket','berkas_laporan_bulananupdated_at')
-    //             ->get();
-    //         // $show = array_flip($gett);
-    //     }
+        $data = new berkas_laporan_bulanan_verif;
+        if (empty($getLast)) {
+            $data->queue = 1;
+        } else {
+            $data->queue = $getLast->queue + 1;
+        }
+        $data->lap_id = $id;
+        $data->user_id = $getUser->id;
+        $data->user_name = $getUser->nama;
+        $data->role_name = json_encode($unit);
+        $data->save();
 
-    //     return response()->json($show, 200);
-    // }
+        return response()->json($data, 200);
+    }
+
+    // Proses Verifikasi laporan bulanan
+    function batalVerif($id)
+    {
+        berkas_laporan_bulanan_verif::where('id', $id)->delete();
+
+        return response()->json($id, 200);
+    }
 
     public function getubah($id)
     {

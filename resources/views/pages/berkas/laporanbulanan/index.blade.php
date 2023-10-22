@@ -36,20 +36,21 @@
 
     <div class="card card-body table-responsive text-nowrap">
         <div classs="card-title">
-            <button class="btn btn-outline-primary" id="btn-verif" onclick="verif()" data-bs-toggle="tooltip"
-                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                title="Menampilkan Semua Data Laporan Bulanan Bawahan">
-                <i class="fas fa-history"></i>&nbsp;
-                <span class="align-middle">Laporan Bawahan</span>
-            </button>
+            <div class="btn-group">
+                <button class="btn btn-outline-primary" id="btn-verif" onclick="verif()" data-bs-toggle="tooltip"
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Menampilkan Semua Data Laporan Bulanan Bawahan">
+                    <i class="fas fa-history"></i>&nbsp;
+                    <span class="align-middle">Laporan Bawahan</span>
+                </button>
+                <button class="btn btn-outline-secondary" onclick="tutorial()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                data-bs-html="true" title="Lihat tutorial verifikasi dokumen" disabled><i class="far fa-question-circle"></i> Tutorial</button>
+            </div>
         </div>
         <hr>
         <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
             <thead>
                 <tr>
-                    <th class="cell-fit">
-                        <center>STATUS</center>
-                    </th>
                     <th>DIUPDATE</th>
                     <th>JUDUL</th>
                     <th>BLN / THN</th>
@@ -61,13 +62,10 @@
             </thead>
             <tbody id="tampil-tbody">
                 <tr>
-                    <td colspan="6"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                    <td colspan="5"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
                 </tr>
             </tbody>
             <tfoot>
-                <th class="cell-fit">
-                    <center>STATUS</center>
-                </th>
                 <th>DIUPDATE</th>
                 <th>JUDUL</th>
                 <th>BLN / THN</th>
@@ -278,14 +276,14 @@
                     var date = getDateTime();
                     res.show.forEach(item => {
                         var updet = item.updated_at.substring(0, 10);
-                        content = `<tr id="data` + item.id + `"><td>`;
-                        if (item.tgl_verif != null) {
-                            content +=
-                                `<center><i class="fa-fw fas fa-check nav-icon text-primary"></i></center>`;
-                        }
-                        content += `</td><td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td>
-                              <td>` + item.judul + `</td>
-                              <td>` + item.bln + ` / ` + item.thn + `</td><td>`;
+                        content = `<tr id="data` + item.id + `">`;
+                        content += `<td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td><td>` + item.judul + ` `;
+                        res.verif.forEach(valver => {
+                            if (valver.lap_id == item.id) {
+                                content += `<i class="bx bxs-badge-check h5 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Laporan Terverifikasi"></i>`;
+                            }
+                        });
+                        content += `</td><td>` + item.bln + ` / ` + item.thn + `</td><td>`;
                         if (item.ket != null) {
                             content += item.ket;
                         }
@@ -322,7 +320,7 @@
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [1, "desc"]
+                            [0, "desc"]
                         ],
                         displayLength: 7,
                         lengthChange: true,
@@ -332,6 +330,11 @@
 
                     table.buttons().container()
                         .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger : 'hover'
+                    })
                 }
             });
 
