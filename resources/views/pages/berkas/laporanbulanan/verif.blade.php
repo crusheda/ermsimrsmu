@@ -55,17 +55,27 @@
     </div>
 
     {{-- MODAL --}}
-    <div class="modal fade animate__animated animate__lightSpeedIn" id="verif" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-simple modal-enable-otp modal-dialog-centered">
-            <div class="modal-content p-3 p-md-5">
+    <div class="modal fade animate__animated animate__jackInTheBox" id="verif" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">
+                    Verifikasi Dokumen
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
                 <div class="modal-body">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            Verifikasi Dokumen
-                        </h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <button type="button" class="btn btn-info waves-effect btn-label waves-light"><i class="bx bx-check label-icon"></i> Verifikasi</button>
+                    <button type="button" class="btn btn-outline-warning waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#tampil-catatan"><i class="bx bx-note label-icon "></i> Tambahkan Catatan</button>
+                    <div class="collapse" id="tampil-catatan">
+                        <div class="form-group mb-2 mt-2">
+                            <textarea class="form-control" id="catatan" placeholder="Tuliskan Catatan Laporan"></textarea>
+                        </div>
+                        <button class="btn btn-success" id="btn-simpan-catatan" onclick="saveCatatan()"><i
+                                class="fa-fw fas fa-save nav-icon"></i> Simpan Catatan</button>
                     </div>
-                    <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+                    <hr>
+                    <table id="dttable" class="table dt-responsive table-hover table-bordered nowrap w-100 align-middle">
                         <thead>
                             <tr>
                                 <th>NO</th>

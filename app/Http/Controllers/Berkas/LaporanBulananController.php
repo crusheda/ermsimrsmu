@@ -253,11 +253,7 @@ class LaporanBulananController extends Controller
     // Menampilkan siapa saja yg sudah verif
     public function verif($id)
     {
-        $show = berkas_laporan_bulanan_verif::where('lap_id', $id)->get();
-
-        $data = [
-            'show'  => $show,
-        ];
+        $data = berkas_laporan_bulanan_verif::where('lap_id', $id)->get();
 
         return response()->json($data, 200);
     }
