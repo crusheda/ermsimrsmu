@@ -17,7 +17,7 @@
             </h4>
             <hr>
 
-            <form class="form-auth-small" name="formTambah" action="{{ route('datakaryawan.store') }}" method="POST"
+            <form class="form-auth-small" name="formTambah" action="{{ route('akunpengguna.store') }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="row">
@@ -139,7 +139,7 @@
         function verifName() {
             var name = $("#name").val();
             $.ajax({
-                url: "/api/hakakses/datakaryawan/verif/" + name,
+                url: "/api/hakakses/akunpengguna/verif/" + name,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {

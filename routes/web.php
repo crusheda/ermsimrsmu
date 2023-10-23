@@ -36,7 +36,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 // HAK AKSES
 Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], function () {
-    Route::resource('datakaryawan', '\App\Http\Controllers\HakAkses\DataKaryawanController');
+    Route::resource('akunpengguna', '\App\Http\Controllers\HakAkses\DataKaryawanController');
+    Route::resource('jabatan', '\App\Http\Controllers\HakAkses\JabatanController');
 });
 
 Route::group(['middleware' => ['auth']], function () {

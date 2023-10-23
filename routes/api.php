@@ -26,8 +26,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('kecamatan/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKecamatan');
 
     // HAK AKSES
-    Route::get('hakakses/datakaryawan/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('datakaryawan.verif');
-    Route::get('hakakses/datakaryawan/hapus/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@hapus')->name('datakaryawan.hapus');
+        // JABATAN
+        Route::get('hakakses/jabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\JabatanController@hapus')->name('jabatan.hapus');
+        // AKUN PENGGUNA
+        Route::get('hakakses/akunpengguna/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('akunpengguna.verif');
+        Route::get('hakakses/akunpengguna/hapus/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@hapus')->name('akunpengguna.hapus');
 
     // STRUKTUR ORGANISASI
     Route::get('strukturorganisasi/hapus/{id}', '\App\Http\Controllers\StrukturOrganisasiController@destroy')->name('strukturorganisasi.hapus');

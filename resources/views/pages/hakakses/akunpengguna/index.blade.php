@@ -12,7 +12,7 @@
 
     <div class="card card-body table-responsive text-nowrap">
         <h4 class="card-title">
-            <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('datakaryawan.create') }}'"><i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Pengguna</button>
+            <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('akunpengguna.create') }}'"><i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Pengguna</button>
         </h4><hr>
         <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
             <thead>
@@ -49,7 +49,7 @@
                                                 class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-end'>
                                             <li><a href='javascript:void(0);' class='dropdown-item text-warning'
-                                                    onclick="window.location.href='{{ url('hakakses/datakaryawan/' . $item->id . '') }}'"><i
+                                                    onclick="window.location.href='{{ url('hakakses/akunpengguna/' . $item->id . '') }}'"><i
                                                         class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                             <li><a href='javascript:void(0);' class='dropdown-item text-danger'
                                                     onclick="hapus({{ $item->id }})"><i
@@ -105,7 +105,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/api/hakakses/datakaryawan/hapus/" + id,
+                        url: "/api/hakakses/akunpengguna/hapus/" + id,
                         type: 'GET',
                         dataType: 'json', // added data type
                         success: function(res) {

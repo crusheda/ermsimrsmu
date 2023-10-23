@@ -20,7 +20,7 @@
             </h4>
             <hr>
 
-            {{ Form::model($list['user'], ['route' => ['datakaryawan.update', $list['user']->id], 'method' => 'PUT', 'id' => 'formUbah']) }}
+            {{ Form::model($list['user'], ['route' => ['akunpengguna.update', $list['user']->id], 'method' => 'PUT', 'id' => 'formUbah']) }}
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <div class="form-group">

@@ -28,7 +28,7 @@ class DataKaryawanController extends Controller
             'role' => $role,
         ];
 
-        return view('pages.hakakses.datakaryawan.index')->with('list', $data);
+        return view('pages.hakakses.akunpengguna.index')->with('list', $data);
     }
 
     /**
@@ -40,7 +40,7 @@ class DataKaryawanController extends Controller
     {
         $role = roles::where('name', '<>','administrator')->get();
 
-        return view('pages.hakakses.datakaryawan.tambah')->with('role', $role);
+        return view('pages.hakakses.akunpengguna.tambah')->with('role', $role);
     }
 
     /**
@@ -67,7 +67,7 @@ class DataKaryawanController extends Controller
             $model->save();
         }
 
-        return redirect()->route('datakaryawan.index')->with('message','Tambah Akun '.$data->name.' Berhasil');
+        return redirect()->route('akunpengguna.index')->with('message','Tambah Akun '.$data->name.' Berhasil');
     }
 
     /**
@@ -91,7 +91,7 @@ class DataKaryawanController extends Controller
             'role' => $role,
         ];
 
-        return view('pages.hakakses.datakaryawan.ubah')->with('list', $data);
+        return view('pages.hakakses.akunpengguna.ubah')->with('list', $data);
     }
 
     /**
@@ -134,7 +134,7 @@ class DataKaryawanController extends Controller
             $model->save();
         }
 
-        return redirect()->route('datakaryawan.index')->with('message','Ubah Akun '.$data->name.' Berhasil');
+        return redirect()->route('akunpengguna.index')->with('message','Ubah Akun '.$data->name.' Berhasil');
     }
 
     /**
