@@ -20,7 +20,7 @@ class JabatanController extends Controller
      */
     public function index()
     {
-        $show = roles::where('name', '<>','administrator')->get();
+        $show = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
 
         $data = [
             'show' => $show,
@@ -36,7 +36,7 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        return view('pages.hakakses.jabatan.tambah');
+        // return view('pages.hakakses.jabatan.tambah');
     }
 
     /**
@@ -47,7 +47,13 @@ class JabatanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new roles;
+        $data->name = $request->name;
+        $data->guard_name = 'web';
+
+        $data->save();
+
+        return Redirect::back()->with('message','Tambah Jabatan Baru Berhasil');
     }
 
     /**
@@ -93,5 +99,16 @@ class JabatanController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // API
+    public function hapus($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = roles::where('id', $id)->first();
+        $data->delete();
+
+        return response()->json($tgl, 200);
     }
 }

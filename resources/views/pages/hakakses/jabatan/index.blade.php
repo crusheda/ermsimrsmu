@@ -12,13 +12,13 @@
 
     <div class="card card-body text-nowrap">
         <h4 class="card-title">
-            <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('jabatan.create') }}'"><i
+            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#formTambah"><i
                     class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Jabatan</button>
         </h4>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card card-body table-responsive text-nowrap">
                 <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
                     <thead>
@@ -26,7 +26,7 @@
                             <th class="cell-fit">ID</th>
                             <th class="cell-fit">NAME</th>
                             <th class="cell-fit">UPDATE</th>
-                            <th class="cell-fit">#</th>
+                            <th class="cell-fit"><center>#</center></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,7 +38,7 @@
                                     <td>{{ $item->updated_at }}</td>
                                     <td>
                                         <center>
-                                            <div class='btn-group'>
+                                            {{-- <div class='btn-group'>
                                                 <button type='button'
                                                     class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow'
                                                     data-bs-toggle='dropdown' aria-expanded='false'><i
@@ -51,7 +51,10 @@
                                                             onclick="hapus({{ $item->id }})"><i
                                                                 class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>
                                                 </ul>
-                                            </div>
+                                            </div> --}}
+                                            <button class='btn btn-danger btn-sm'
+                                            onclick="hapus({{ $item->id }})"><i
+                                                class="fa-fw fas fa-trash nav-icon"></i></button>
                                         </center>
                                     </td>
                                 </tr>
@@ -63,14 +66,36 @@
                             <th class="cell-fit">ID</th>
                             <th class="cell-fit">NAME</th>
                             <th class="cell-fit">UPDATE</th>
-                            <th class="cell-fit">#</th>
+                            <th class="cell-fit"><center>#</center></th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
         </div>
-        <div class="col-md-6">
+    </div>
 
+    {{-- MODAL --}}
+    <div class="modal fade animate__animated animate__jackInTheBox" id="formTambah" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal" role="document">
+            <div class="modal-content">
+                <form id="tambah" action="{{ route('jabatan.store') }}" method="post">
+                    @csrf
+                    <div class="modal-header">
+                    <h4 class="modal-title">
+                        Tambah Jabatan
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="">Jabatan</label>
+                        <input type="text" name="name" class="form-control" placeholder="Masukkan nama jabatan">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="btn-simpan" onclick="tambah()"><i class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -90,6 +115,14 @@
                 .appendTo('#dttable_wrapper .col-md-6:eq(0)');
         })
 
+        function tambah() {
+            $("#tambah").one('submit', function() {
+                $("#btn-simpan").attr('disabled', 'disabled');
+                $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+                return true;
+            });
+        }
+
         function hapus(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -107,7 +140,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/api/hakakses/akunpengguna/hapus/" + id,
+                        url: "/api/hakakses/jabatan/hapus/" + id,
                         type: 'GET',
                         dataType: 'json', // added data type
                         success: function(res) {
