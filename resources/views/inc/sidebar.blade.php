@@ -34,7 +34,7 @@
 
                 <li>
                     <a href="{{ route('strukturorganisasi.index') }}" class="waves-effect">
-                        <i class="bx bx-git-repo-forked"></i>
+                        <i class="bx bx-sitemap"></i>
                         <span key="t-chat">Struktur Organisasi</span>
                     </a>
                 </li>
@@ -58,6 +58,13 @@
                         <li><a href="{{ route('rapat.index') }}" key="t-default">Rapat</a></li>
                         <li><a href="{{ route('rka.index') }}" key="t-crypto">RKA</a></li>
                         <li><a href="{{ route('regulasi.index') }}" key="t-crypto">Regulasi</a></li>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow" key="t-level-1-2">Surat</a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="{{ route('suratmasuk.index') }}" key="t-level-2-1">Surat Masuk</a></li>
+                                <li><a href="{{ route('suratkeluar.index') }}" key="t-level-2-2">Surat Keluar</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
 
@@ -72,6 +79,22 @@
                         <li><a href="javascript: void(0);" key="t-saas"><s>IPSRS</s></a></li>
                         <li><a href="javascript: void(0);" key="t-default"><s>IT</s></a></li>
                     </ul>
+                </li>
+
+                <li class="menu-title" key="t-menu">Pelayanan</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="fas fa-baby" style="font-size: 1rem"></i>
+                        <span key="t-chat"><s>Surat Keterangan Lahir</s></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="fas fa-hand-lizard" style="font-size: 0.9rem"></i>
+                        <span key="t-chat"><s>Surat Antigen</s></span>
+                    </a>
                 </li>
 
                 {{-- <li class="menu-title" key="t-menu">Menu</li>

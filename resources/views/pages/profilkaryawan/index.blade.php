@@ -18,7 +18,7 @@
                 <button class="btn btn-secondary" data-bs-target="#karyawanmin" data-bs-toggle="modal" disabled><i
                         class="fas fa-user-minus"></i>&nbsp;&nbsp;Belum Lengkap</button>
             </div>
-            <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('datakaryawan.create') }}'"><i
+            <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('akunpengguna.create') }}'"><i
                     class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Pengguna</button>
         </h4>
         <hr>

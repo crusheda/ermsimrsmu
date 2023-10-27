@@ -53,7 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('profilkaryawan/{id}', [App\Http\Controllers\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
     Route::get('profilkaryawan/detail/{id}', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'indexKepegawaian'])->name('profilkaryawan.kepegawaian');
     Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
-    // Route::resource('profilkaryawan', '\App\Http\Controllers\ProfilKaryawanController');
+    Route::resource('profilkaryawan', '\App\Http\Controllers\ProfilKaryawanController');
 });
 
 // BERKAS
@@ -70,6 +70,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
     // LAPORAN BULANAN
         Route::get('laporan/bulanan/verif', '\App\Http\Controllers\Berkas\LaporanBulananController@showVerif')->name('bulanan.verif');
         Route::resource('laporan/bulanan', '\App\Http\Controllers\Berkas\LaporanBulananController');
+    // SURAT
+        // SURAT MASUK
+            Route::get('suratmasuk', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@index')->name('suratmasuk.index');
+            Route::get('suratmasuk/{id}/download', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@download');
+            Route::post('suratmasuk', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@store')->name('suratmasuk.store');
+        // SURAT KELUAR
+            Route::get('suratkeluar', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@index')->name('suratkeluar.index');
+            Route::get('suratkeluar/{id}/download', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@download');
+            Route::post('suratkeluar', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@store')->name('suratkeluar.store');
 });
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
