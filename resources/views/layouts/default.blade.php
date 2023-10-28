@@ -148,7 +148,7 @@
     <script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
 
     <!-- dashboard init -->
-    <script src="{{ asset('js/pages/dashboard.init.js') }}"></script>
+    {{-- <script src="{{ asset('js/pages/dashboard.init.js') }}"></script> --}}
 
     <!-- App js -->
     <script src="{{ asset('js/app.js') }}"></script>

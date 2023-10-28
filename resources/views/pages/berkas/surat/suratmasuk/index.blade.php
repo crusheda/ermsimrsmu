@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-    <!-- start page title -->
+{{-- @if (Auth::user()->getPermission('tu')) --}}
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="card card-body table-responsive text-nowrap">
+    <div class="card card-body table-responsive text-nowrap" style="overflow: visible;">
         <h4 classs="card-title">
             <div class="btn-group">
                 <a class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#tambah" value="animate__jackInTheBox">
@@ -66,7 +66,7 @@
 
     {{-- MODAL TAMBAH --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="tambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <form class="form-auth-small" name="formTambah" action="{{ route('suratmasuk.store') }}" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
@@ -154,7 +154,7 @@
 
     {{-- MODAL UBAH --}}
     <div class="modal fade animate__animated animate__rubberBand" id="ubah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
@@ -230,28 +230,28 @@
     {{-- MODAL HAPUS --}}
     <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
-            <div class="modal-content p-3 p-md-5">
-                <div class="row">
-                    <h4 class="modal-title text-center mb-3">
-                        Hapus Surat
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Hapus&nbsp;&nbsp;&nbsp;
                     </h4>
-                    <div class="col-12 mb-3">
-                        <input type="text" id="id_hapus" hidden>
-                        <p style="text-align: justify;">Anda akan menghapus berkas surat masuk tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
-                            Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
-                        <label class="switch">
-                            <input type="checkbox" class="switch-input" id="setujuhapus">
-                            <span class="switch-toggle-slider">
-                            <span class="switch-on"></span>
-                            <span class="switch-off"></span>
-                            </span>
-                            <span class="switch-label">Anda siap menerima Risiko</span>
-                        </label>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
-                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
-                    </div>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_hapus" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus berkas surat masuk tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
+                        Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -259,7 +259,7 @@
 
     <script>
         $(document).ready(function() {
-            $("html").addClass('layout-menu-collapsed');
+            $("body").addClass('sidebar-enable vertical-collpsed');
 
             // SELECT2
             var t = $(".select2");
@@ -356,10 +356,10 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-end'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v2/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
@@ -395,7 +395,7 @@
                                             content += item.tglFrom.substring(0, 10) + " - " + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
-                                        + item.updated_at + "</td><td>";
+                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -432,14 +432,14 @@
                     success: function(res) {
                         var adminID = "{{ Auth::user()->hasRole('administrator') }}";
                         $("#tampil-tbody").empty();
-                        $('#table').DataTable().clear().destroy();
+                        $('#dttable').DataTable().clear().destroy();
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-end'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/v2/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
@@ -475,7 +475,7 @@
                                             content += item.tglFrom.substring(0, 10) + " - " + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
-                                        + item.updated_at + "</td><td>";
+                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -541,8 +541,8 @@
                     if (res.show.filename != null) {
                         document.getElementById('linksurat').innerHTML = `
                         <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>&nbsp;&nbsp;
-                        <button class='btn btn-xs btn-outline-dark' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
-                        <h6 class='mb-2'><a href='/v2/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
+                        <button class='btn btn-sm btn-outline-dark' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
+                        <h6 class='mb-2'><a href='/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
                         <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>`;
                         $("#verifberkas"+res.show.id).val(0);
                     } else {
@@ -804,4 +804,5 @@
             });
         }
     </script>
+{{-- @endif --}}
 @endsection

@@ -107,7 +107,7 @@ class SuratKeluarController extends Controller
     // API
     public function apiGet()
     {
-        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','surat_keluar.kode')->select('berkas_surat_keluar_kode.kode as kode_jenis','surat_keluar.*')->get();
+        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')->get();
         $getUser = user::select('id','nama')->get();
         $user = json_encode($getUser);
 
