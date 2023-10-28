@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
-use App\Models\tu\surat_masuk;
+use App\Models\surat_masuk;
 use Carbon\Carbon;
 use Validator,Redirect,Response,File;
 use Exception;

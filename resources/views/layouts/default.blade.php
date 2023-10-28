@@ -67,6 +67,9 @@
     <!-- Plugins css -->
     <link href="{{ asset('libs/dropzone/dropzone.css') }}" rel="stylesheet" type="text/css" />
 
+    <!-- typeahead css -->
+    <link rel="stylesheet" href="{{ asset('libs/typeahead-js/typeahead.css') }}" />
+
     <!-- End Addon css -->
 
 </head>
@@ -205,6 +208,9 @@
     <script src="{{ asset('libs/dropzone/dropzone-min.js') }}"></script>
     <!-- jquery step -->
     <script src="{{ asset('libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
+
+    <!-- Typeahead -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 
     <!-- End Addon js -->
 
