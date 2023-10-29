@@ -233,7 +233,7 @@
     {{-- MODAL HAPUS --}}
     <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
-            <div class="modal-content p-3 p-md-5">
+            <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
                         Form Hapus&nbsp;&nbsp;&nbsp;
@@ -241,7 +241,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus berkas surat keluar tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
+                    <p style="text-align: justify;">Anda akan menghapus berkas surat masuk tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
                         Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
@@ -252,9 +252,9 @@
                         <span class="switch-label">Anda siap menerima Risiko</span>
                     </label>
                 </div>
-                <div class="col-12 text-center">
+                <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
-                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -332,7 +332,7 @@
                             content += `</ul></center></td><td>`;
                             content += item.urutan + "</td><td>"
                                         + item.tgl + "</td><td>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -359,18 +359,23 @@
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
-                    var table = $('#dttable').DataTable({
-                        order: [
-                            [6, "desc"]
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
+                        var table = $('#dttable').DataTable({
+                            order: [
+                                [6, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
 
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+                        table.buttons().container()
+                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger : 'hover'
+                        })
                     }
                 }
             );
@@ -430,7 +435,7 @@
                             content += `</ul></center></td><td>`;
                             content += item.urutan + "</td><td>"
                                         + item.tgl + "</td><td>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -457,18 +462,23 @@
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
-                    var table = $('#dttable').DataTable({
-                        order: [
-                            [6, "desc"]
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
+                        var table = $('#dttable').DataTable({
+                            order: [
+                                [6, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
 
-                    table.buttons().container()
+                        table.buttons().container()
                         .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger : 'hover'
+                        })
                     }
                 }
             );

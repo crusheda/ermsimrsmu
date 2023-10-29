@@ -77,6 +77,13 @@
 <body data-sidebar="dark">
     <div id="layout-wrapper">
 
+        <!-- Dropdown Select2 appear behind Modal Ajx -->
+        <style>
+            .select2-container{
+                z-index:100000;
+            }
+        </style>
+
         @include('inc.header')
 
         @include('inc.sidebar')

@@ -5,14 +5,14 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Jabatan</h4>
+                <h4 class="mb-sm-0 font-size-18">Hak Akses - Jabatan</h4>
             </div>
         </div>
     </div>
 
     <div class="card card-body text-nowrap">
         <h4 class="card-title">
-            <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#formTambah"><i
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#formTambah"><i
                     class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Jabatan</button>
         </h4>
     </div>
@@ -88,11 +88,11 @@
                     </div>
                     <div class="modal-body">
                         <label for="">Jabatan</label>
-                        <input type="text" name="name" class="form-control" placeholder="Masukkan nama jabatan">
+                        <input type="text" name="name" class="form-control" placeholder="Masukkan nama jabatan" required>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" id="btn-simpan" onclick="tambah()"><i class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                     </div>
                 </form>
             </div>

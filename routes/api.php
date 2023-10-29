@@ -26,8 +26,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('kecamatan/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKecamatan');
 
     // HAK AKSES
-        // JABATAN
-        Route::get('hakakses/jabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\JabatanController@hapus')->name('jabatan.hapus');
+        // AKSES JABATAN
+        Route::get('hakakses/aksesjabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapus')->name('akses.hapus');
+        Route::get('hakakses/akses/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableAkses')->name('akses.data');
+        Route::get('hakakses/akses/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapus')->name('akses.hapus');
+        Route::get('hakakses/jabatan/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableJabatan')->name('akses.data');
+        Route::get('hakakses/jabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapus')->name('jabatan.hapus');
 
         // AKUN PENGGUNA
         Route::get('hakakses/akunpengguna/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('akunpengguna.verif');

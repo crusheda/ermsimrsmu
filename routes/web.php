@@ -36,8 +36,16 @@ Route::group(['middleware' => ['auth']], function () {
 
 // HAK AKSES
 Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], function () {
+    // AKSES JABATAN
+    Route::get('aksesjabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@index')->name('aksesjabatan.index');
+    Route::post('aksesjabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@destroy')->name('aksesjabatan.destroy');
+    Route::post('aksesjabatan/store', '\App\Http\Controllers\HakAkses\AksesJabatanController@store')->name('aksesjabatan.store');
+    Route::post('aksesjabatan/storeAkses', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeAkses')->name('akses.store');
+    Route::post('aksesjabatan/storeJabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeJabatan')->name('jabatan.store');
+    Route::delete('akses', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapusAkses')->name('akses.destroy');
+    Route::delete('jabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapusJabatan')->name('jabatan.destroy');
+    // AKUN PENGGUNA
     Route::resource('akunpengguna', '\App\Http\Controllers\HakAkses\DataKaryawanController');
-    Route::resource('jabatan', '\App\Http\Controllers\HakAkses\JabatanController');
 });
 
 Route::group(['middleware' => ['auth']], function () {

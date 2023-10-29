@@ -26,8 +26,7 @@
                         <span key="t-dashboards">Hak Akses</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="javascript: void(0);" key="t-saas"><s>Akses</s></a></li>
-                        <li><a href="{{ route('jabatan.index') }}" key="t-default">Jabatan</a></li>
+                        <li><a href="{{ route('aksesjabatan.index') }}" key="t-saas">Akses Jabatan</a></li>
                         <li><a href="{{ route('akunpengguna.index') }}" key="t-crypto">Akun Pengguna</a></li>
                     </ul>
                 </li>
