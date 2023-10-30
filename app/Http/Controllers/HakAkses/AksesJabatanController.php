@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\HakAkses;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +18,66 @@ use Carbon\Carbon;
 class AksesJabatanController extends Controller
 {
     function index()
+    {
+        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+        $permissions = permissions::orderBy('updated_at','desc')->get();
+
+        $data = [
+            'role' => $role,
+            'permissions' => $permissions,
+        ];
+
+        return view('pages.hakakses.aksesjabatan.index')->with('list',$data);
+    }
+
+    function store(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Validate
+        foreach ($request->akses as $key => $value) {
+            if ($request->jabatan == $value) {
+                return response()->json(['error' => 'Nama Jabatan tidak boleh ikut/sama dengan Nama Akses'], 400);
+            }
+        }
+
+        // SAVING
+        // foreach ($request->akses as $key => $value) {
+        //     $role = role::where('id',$request->jabatan)->first();
+        //     $role->givePermissionTo($value);
+        // }
+        $role = role::where('id',$request->jabatan)->first();
+        $role->syncPermissions($request->akses);
+
+        return response()->json($tgl, 200);
+    }
+
+    function storeAkses(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $data = new permissions;
+        $data->name = $request->akses;
+        $data->guard_name = 'web';
+
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function storeJabatan(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $data = new roles;
+        $data->name = $request->jabatan;
+        $data->guard_name = 'web';
+
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    // API
+    function tableAksesJabatan()
     {
         $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
         $permission = permissions::orderBy('name','asc')->get();
@@ -39,37 +101,9 @@ class AksesJabatanController extends Controller
             'show' => $show
         ];
 
-        return view('pages.hakakses.aksesjabatan.index')->with('list', $data);
+        return response()->json($data, 200);
     }
 
-    function store(Request $request)
-    {
-
-    }
-
-    function storeAkses(Request $request){
-        print_r($request->all());
-        die();
-        $data = new role_has_permissions;
-        $data->name = $request->role;
-        $data->guard_name = 'web';
-
-        // $data->save();
-
-        return Redirect::back()->with('message','Tambah Jabatan Baru Berhasil');
-    }
-
-    function storeJabatan(Request $request){
-        $data = new roles;
-        $data->name = $request->name;
-        $data->guard_name = 'web';
-
-        $data->save();
-
-        return Redirect::back()->with('message','Tambah Jabatan Baru Berhasil');
-    }
-
-    // API
     function tableAkses()
     {
         $show = permissions::get();
@@ -95,7 +129,8 @@ class AksesJabatanController extends Controller
     function hapusAkses($id){
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        $data = role_has_permissions::where('role_id', $id)->delete();
+        $data = permissions::where('id', $id)->first();
+        $data->delete();
 
         return response()->json($tgl, 200);
     }
@@ -112,7 +147,7 @@ class AksesJabatanController extends Controller
     function destroy($id){
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        $data = role_has_permissions::where('id', $id)->first();
+        $data = role_has_permissions::where('role_id', $id)->get();
         $data->delete();
 
         return response()->json($tgl, 200);

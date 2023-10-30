@@ -13,12 +13,12 @@
     <div class="card card-body table-responsive text-nowrap">
         <h4 class="card-title">
             <div class="btn-group">
-                <button class="btn btn-secondary" disabled><i class="fas fa-user-slash"></i>&nbsp;&nbsp;Riwayat
+                <button class="btn btn-danger" onclick="showNonAktif()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Daftar Karyawan yang sudah Nonaktif"><i class="fas fa-user-slash"></i>&nbsp;&nbsp;Riwayat
                     Nonaktif</button>
-                <button class="btn btn-secondary" data-bs-target="#karyawanmin" data-bs-toggle="modal" disabled><i
-                        class="fas fa-user-minus"></i>&nbsp;&nbsp;Belum Lengkap</button>
+                <button class="btn btn-warning" onclick="showNonLengkap()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Daftar Karyawan yang belum lengkap pengisian Profil Karyawan"><i
+                        class="fas fa-user-minus"></i>&nbsp;&nbsp;Belum Lengkap <span class="badge bg-light">{{ $list['showmin'] }}</span></button>
             </div>
-            <button class="btn btn-outline-secondary" onclick="window.location.href='{{ route('akunpengguna.create') }}'"><i
+            <button class="btn btn-outline-dark" onclick="window.location.href='{{ route('akunpengguna.create') }}'"><i
                     class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Pengguna</button>
         </h4>
         <hr>
@@ -229,8 +229,112 @@
                 </tr>
             </tfoot>
         </table>
-
     </div>
+
+    {{-- NONAKTIF --}}
+    <div class="modal fade animate__animated animate__jackInTheBox" id="nonaktif" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Daftar Karyawan Nonaktif
+                    </h4>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive text-nowrap" style="border: 0px">
+                        <table id="dttable-nonaktif" class="table dt-responsive table-hover nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit">NAME</th>
+                                    <th class="cell-fit">NAMA LENGKAP</th>
+                                    <th class="cell-fit">TGL NONAKTIF</th>
+                                    <th class="cell-fit">
+                                        <center>#</center>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-nonaktif">
+                                <tr>
+                                    <td colspan="9">
+                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit">NAME</th>
+                                    <th class="cell-fit">NAMA LENGKAP</th>
+                                    <th class="cell-fit">TGL NONAKTIF</th>
+                                    <th class="cell-fit">
+                                        <center>#</center>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group">
+                        <button class="btn btn-warning" onclick="refreshNonAktif()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Segarkan"><i
+                                class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- TIDAK LENGKAP --}}
+    <div class="modal fade animate__animated animate__jackInTheBox" id="nonlengkap" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Daftar Pengisian Profil Karyawan yang Belum Lengkap
+                    </h4>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive text-nowrap" style="border: 0px">
+                        <table id="dttable-nonlengkap" class="table dt-responsive table-hover nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit">NAME</th>
+                                    <th class="cell-fit">DITAMBAHKAN</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-nonlengkap">
+                                <tr>
+                                    <td colspan="9">
+                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit">NAME</th>
+                                    <th class="cell-fit">DITAMBAHKAN</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group">
+                        <button class="btn btn-warning" onclick="refreshNonLengkap()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Segarkan"><i
+                                class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             var table = $('#dttable').DataTable({
@@ -246,5 +350,182 @@
             table.buttons().container()
                 .appendTo('#dttable_wrapper .col-md-6:eq(0)');
         })
+
+        function showNonAktif() {
+            $('#nonaktif').modal('show');
+            $.ajax({
+                url: "/api/profilkaryawan/nonaktif",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-nonaktif").empty();
+                    $('#dttable-nonaktif').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `
+                                <tr>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.nama + `</td>
+                                    <td>` + item.deleted_at.substring(0, 19).replace('T', ' ') +
+                            `</td>
+                                    <td><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="batalNonAktif(` +
+                            item.id + `)"><i class='fa-fw fas fa-user-check nav-icon'></i> Aktifkan</a></td>
+                                </tr>
+                            `;
+                        $('#tampil-tbody-nonaktif').append(content);
+                    })
+                    var table = $('#dttable-nonaktif').DataTable({
+                        order: [
+                            [3, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable-nonaktif_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        function showNonLengkap() {
+            $('#nonlengkap').modal('show');
+            $.ajax({
+                url: "/api/profilkaryawan/nonlengkap",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-nonlengkap").empty();
+                    $('#dttable-nonlengkap').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `<tr>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.created_at.substring(0, 19).replace('T', ' ') + `</td></tr>`;
+                        $('#tampil-tbody-nonlengkap').append(content);
+                    })
+                    var table = $('#dttable-nonlengkap').DataTable({
+                        order: [
+                            [2, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable-nonlengkap_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        function refreshNonAktif() {
+            $.ajax({
+                url: "/api/profilkaryawan/nonaktif",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-nonaktif").empty();
+                    $('#dttable-nonaktif').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `
+                                <tr>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.nama + `</td>
+                                    <td>` + item.deleted_at.substring(0, 19).replace('T', ' ') +
+                            `</td>
+                                    <td><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="batalNonAktif(` +
+                            item.id + `)"><i class='fa-fw fas fa-user-check nav-icon'></i> Aktifkan</a></td>
+                                </tr>
+                            `;
+                        $('#tampil-tbody-nonaktif').append(content);
+                    })
+                    var table = $('#dttable-nonaktif').DataTable({
+                        order: [
+                            [3, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable-nonaktif_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        function refreshNonLengkap() {
+            $.ajax({
+                url: "/api/profilkaryawan/nonlengkap",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-nonlengkap").empty();
+                    $('#dttable-nonlengkap').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `<tr>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.created_at.substring(0, 19).replace('T', ' ') + `</td></tr>`;
+                        $('#tampil-tbody-nonlengkap').append(content);
+                    })
+                    var table = $('#dttable-nonlengkap').DataTable({
+                        order: [
+                            [2, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable-nonlengkap_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        function batalNonAktif(id) {
+            $.ajax({
+                url: "/api/profilkaryawan/setaktif/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: 'User ID : '+id+' sukses di Aktifkan kembali pada '+ res,
+                        position: 'topRight'
+                    });
+                    refreshNonAktif();
+                    window.location.reload();
+                }
+            })
+        }
     </script>
 @endsection

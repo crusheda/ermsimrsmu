@@ -239,6 +239,10 @@
 
             toast.show()
         }
+
+        function closeModal() {
+            $('.modal').modal('hide');
+        }
     </script>
 </body>
 

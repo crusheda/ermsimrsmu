@@ -38,12 +38,14 @@
                     </a>
                 </li>
 
+                @if (Auth::user()->getPermission('profilkaryawan') == true)
                 <li>
                     <a href="{{ route('profilkaryawan.index') }}" class="waves-effect">
                         <i class="bx bxs-user-badge"></i>
                         <span key="t-chat">Profil Karyawan</span>
                     </a>
                 </li>
+                @endif
 
                 <li class="menu-title" key="t-menu">Administrasi</li>
 

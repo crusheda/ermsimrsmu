@@ -6,6 +6,20 @@
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                 <h4 class="mb-sm-0 font-size-18">Profil User</h4>
+
+                @if (Auth::user()->getPermission('profilkaryawan') == true)
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item">
+                            @if ($list['show']->deleted_at == null)
+                                <button class="btn btn-danger btn-sm" onclick="nonaktif({{ $list['show']->id }})"><i class='fa-fw fas fa-user-slash nav-icon'></i>&nbsp;&nbsp;Nonaktifkan User</button>
+                            @else
+                                <button class="btn btn-primary btn-sm" onclick="batalNonAktif({{ $list['show']->id }})"><i class='fa-fw fas fa-user-check nav-icon'></i>&nbsp;&nbsp;Aktifkan User</button>
+                            @endif
+                        </li>
+                    </ol>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -183,15 +197,23 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <p class="text-muted fw-medium mb-2">Status Pegawai</p>
-                                    <h4 class="mb-0">{{ $list['show']->status != 1? 'Aktif':'Non Aktif' }}</h4>
+                                    <h4 class="mb-0">{{ $list['show']->deleted_at == null? 'Aktif':'Non Aktif' }}</h4>
                                 </div>
 
                                 <div class="flex-shrink-0 align-self-center">
-                                    <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
-                                        <span class="avatar-title">
-                                            <i class="bx bx-check-circle font-size-24"></i>
-                                        </span>
-                                    </div>
+                                    @if ($list['show']->deleted_at == null)
+                                        <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+                                            <span class="avatar-title">
+                                                <i class="bx bx-check-circle font-size-24"></i>
+                                            </span>
+                                        </div>
+                                    @else
+                                        <div class="mini-stat-icon avatar-sm rounded-circle bg-danger">
+                                            <span class="avatar-title bg-danger">
+                                                <i class="bx bx-block font-size-24"></i>
+                                            </span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -566,6 +588,70 @@
                 $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
                 return true;
             });
+        }
+
+        function nonaktif(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Ingin menonaktifkan User ID : ' + id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-user-slash"></i> Nonaktifkan`,
+                cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/profilkaryawan/setnonaktif/" + id,
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Sukses!',
+                                message: 'Karyawan berhasil dinonaktifkan pada ' + res,
+                                position: 'topRight'
+                            });
+                            window.location.href = '/profilkaryawan';
+                            // window.location.reload();
+                        },
+                        error: function(res) {
+                            Swal.fire({
+                                title: `Gagal di Nonaktifkan!`,
+                                text: 'Pada ' + res,
+                                icon: `error`,
+                                showConfirmButton: false,
+                                showCancelButton: false,
+                                allowOutsideClick: true,
+                                allowEscapeKey: true,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                backdrop: `rgba(26,27,41,0.8)`,
+                            });
+                        }
+                    });
+                }
+            })
+        }
+
+        function batalNonAktif(id) {
+            $.ajax({
+                url: "/api/profilkaryawan/setaktif/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: 'User ID : '+id+' sukses di Aktifkan kembali pada '+ res,
+                        position: 'topRight'
+                    });
+                    window.location.reload();
+                }
+            })
         }
     </script>
 @endsection

@@ -15,26 +15,31 @@
             <div class="d-flex">
                 <div class="btn-group">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formSync"><i
-                            class="bx bxs-magnet"></i>&nbsp;&nbsp;Sinkronisasi <kbd>Jabatan x Akses</kbd></button>
-                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#info"><i
-                            class="bx bxs-info-circle"></i>&nbsp;&nbsp;Informasi</button>
-                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            class="bx bxs-magnet"></i>&nbsp;&nbsp;Sinkronisasi <span class="badge bg-light">Jabatan x Akses</span></button>
+                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#info" disabled><i
+                            class="bx bxs-info-circle"></i>&nbsp;&nbsp;Kamus Akses</button>
+                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="bottom" data-bs-html="true"
                         title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Segarkan</span>" onclick="refresh()">
-                        <i class="fa-fw fas fa-sync nav-icon"></i>&nbsp;&nbsp;Segarkan</button>
+                        <i class="fa-fw fas fa-sync nav-icon"></i></button>
                 </div>
                 <div class="hstack gap-3 ms-auto">
                     <div class="btn-group">
-                        <button class="btn btn-info" onclick="showAkses()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Tambah Akses"><i class="bx bx-key"></i></button>
-                        <button class="btn btn-outline-warning" onclick="showDaftarAkses()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Lihat Daftar Akses"><i class="bx bx-spreadsheet"></i></button>
+                        <button class="btn btn-info" onclick="showAkses()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                            data-bs-placement="bottom" data-bs-html="true" title="Tambah Akses"><i
+                                class="bx bx-key"></i></button>
+                        <button class="btn btn-outline-warning" onclick="showDaftarAkses()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Lihat Daftar Akses"><i class="bx bx-spreadsheet"></i></button>
                     </div>
                     <div class="vr"></div>
                     <div class="btn-group">
-                        <button class="btn btn-info" onclick="showJabatan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Tambah Jabatan"><i class="bx bxs-traffic-barrier"></i></button>
-                        <button class="btn btn-outline-warning" onclick="showDaftarJabatan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Lihat Daftar Jabatan"><i class="bx bx-detail"></i></button>
+                        <button class="btn btn-info" onclick="showJabatan()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                            data-bs-placement="bottom" data-bs-html="true" title="Tambah Jabatan"><i
+                                class="bx bxs-traffic-barrier"></i></button>
+                        <button class="btn btn-outline-warning" onclick="showDaftarJabatan()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Lihat Daftar Jabatan"><i class="bx bx-detail"></i></button>
                     </div>
                 </div>
             </div>
@@ -49,38 +54,25 @@
                         <tr>
                             <th class="cell-fit">JABATAN</th>
                             <th class="cell-fit">AKSES</th>
-                            <th class="cell-fit"><center>#</center></th>
+                            <th class="cell-fit">
+                                <center>#</center>
+                            </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @if (count($list['show']) > 0)
-                            @foreach ($list['show'] as $item)
-                                <tr>
-                                    <td>{{ $item->name }}</td>
-                                    <td>
-                                        @if (count($list['selection']) > 0)
-                                            @foreach ($list['selection'] as $val)
-                                                @if ($val->id_role == $item->role_id)
-                                                    <kbd>{{ $val->name_permission }}</kbd>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <center>
-                                            <button class='btn btn-danger btn-sm'
-                                            onclick="hapus({{ $item->role_id }})"><i class="fa-fw fas fa-trash nav-icon"></i></button>
-                                        </center>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
+                    <tbody id="tampil-tbody">
+                        <tr>
+                            <td colspan="9">
+                                <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                            </td>
+                        </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <th class="cell-fit">JABATAN</th>
                             <th class="cell-fit">AKSES</th>
-                            <th class="cell-fit"><center>#</center></th>
+                            <th class="cell-fit">
+                                <center>#</center>
+                            </th>
                         </tr>
                     </tfoot>
                 </table>
@@ -93,94 +85,95 @@
     <div class="modal fade animate__animated animate__jackInTheBox" id="formTambahAkses" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal" role="document">
             <div class="modal-content">
-                <form id="tambah" action="{{ route('akses.store') }}" method="post">
-                    @csrf
-                    <div class="modal-header">
+                <div class="modal-header">
                     <h4 class="modal-title">
                         Tambah Akses
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">Akses</label>
-                        <input type="text" name="akses" class="form-control" placeholder="Masukkan nama akses">
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" id="btn-simpan" onclick="tambah()"><i class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
-                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button> --}}
-                    </div>
-                </form>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="">Akses</label>
+                    <input type="text" id="inp-akses" class="form-control" placeholder="Masukkan nama akses">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-simpan-akses" onclick="tambahAkses()"><i
+                            class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
             </div>
         </div>
     </div>
+
     {{-- TAMBAH JABATAN --}}
-    <div class="modal fade animate__animated animate__jackInTheBox" id="formTambahJabatan" tabindex="-1" aria-hidden="true">
+    <div class="modal fade animate__animated animate__jackInTheBox" id="formTambahJabatan" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal" role="document">
             <div class="modal-content">
-                <form id="tambah" action="{{ route('jabatan.store') }}" method="post">
-                    @csrf
-                    <div class="modal-header">
+                <div class="modal-header">
                     <h4 class="modal-title">
                         Tambah Jabatan
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">Jabatan</label>
-                        <input type="text" name="name" class="form-control" placeholder="Masukkan nama jabatan" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" id="btn-simpan" onclick="tambah()"><i class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
-                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                    </div>
-                </form>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="">Jabatan</label>
+                    <input type="text" id="inp-jabatan" class="form-control" placeholder="Masukkan nama jabatan"
+                        required>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-simpan-jabatan" onclick="tambahJabatan()"><i
+                            class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
             </div>
         </div>
     </div>
+
     {{-- TAMBAH SYNC AKSES --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="formSync" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal" role="document">
             <div class="modal-content">
-                <form id="sync" action="{{ route('aksesjabatan.store') }}" method="post">
-                    @csrf
-                    <div class="modal-header">
+                <div class="modal-header">
                     <h4 class="modal-title">
                         Hubungkan Jabatan dengan Akses
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label for="">Pilih Salah Satu <b>Jabatan</b></label>
+                        <select class="select2 form-control" id="aksesjabatan-jabatan" style="width: 100%" required>
+                            <option value="">Pilih</option>
+                            @if (count($list['role']) > 0)
+                                @foreach ($list['role'] as $key => $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <small>Refresh browser apabila tidak ditemukan <kbd>Jabatan</kbd> yang baru saja ditambahkan.</small>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label for="">Jabatan</label>
-                            <select class="select2 form-control" name="role" style="width: 100%" required>
-                                <option value="">Pilih</option>
-                                @if (count($list['role']) > 0)
-                                    @foreach ($list['role'] as $key => $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Akses</label>
-                            <select name="akses[]" class="select2 form-control"
-                                data-bs-auto-close="outside" required multiple="multiple" style="width: 100%">
-                                @if (count($list['role']) > 0)
-                                    @foreach ($list['role'] as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
+                        <select id="aksesjabatan-akses" class="select2 form-control" data-bs-auto-close="outside"
+                            required multiple="multiple" style="width: 100%">
+                            @if (count($list['permissions']) > 0)
+                                @foreach ($list['permissions'] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <small>Refresh browser apabila tidak ditemukan <kbd>Akses</kbd> yang baru saja ditambahkan.</small>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" id="btn-simpan" onclick="tambah()"><i class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
-                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-simpan-sync" onclick="tambahAksesJabatan()"><i
+                            class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
             </div>
         </div>
     </div>
+
     {{-- DAFTAR AKSES --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="daftarAkses" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal modal-xl" role="document">
@@ -189,7 +182,7 @@
                     <h4 class="modal-title">
                         Daftar Akses
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive text-nowrap" style="border: 0px">
@@ -199,7 +192,9 @@
                                     <th class="cell-fit">ID</th>
                                     <th class="cell-fit">NAME</th>
                                     <th class="cell-fit">UPDATE</th>
-                                    <th class="cell-fit"><center>#</center></th>
+                                    <th class="cell-fit">
+                                        <center>#</center>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody-akses">
@@ -214,28 +209,38 @@
                                     <th class="cell-fit">ID</th>
                                     <th class="cell-fit">NAME</th>
                                     <th class="cell-fit">UPDATE</th>
-                                    <th class="cell-fit"><center>#</center></th>
+                                    <th class="cell-fit">
+                                        <center>#</center>
+                                    </th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-info" onclick="showAkses()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                    title="Tambah Akses"><i class="bx bxs-plus-square"></i>&nbsp;&nbsp;Tambah Akses</button>
+                    <div class="btn-group">
+                        <button class="btn btn-warning" onclick="refreshAkses()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Segarkan"><i
+                                class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
+                        <button class="btn btn-info" onclick="showAkses()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                            data-bs-placement="top" data-bs-html="true" title="Tambah Akses"><i
+                                class="bx bxs-plus-square"></i>&nbsp;&nbsp;Tambah Akses</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     {{-- DAFTAR JABATAN --}}
-    <div class="modal fade animate__animated animate__jackInTheBox" id="daftarJabatan" tabindex="-1" aria-hidden="true">
+    <div class="modal fade animate__animated animate__jackInTheBox" id="daftarJabatan" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
                         Daftar Jabatan
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive text-nowrap" style="border: 0px">
@@ -245,7 +250,9 @@
                                     <th class="cell-fit">ID</th>
                                     <th class="cell-fit">NAME</th>
                                     <th class="cell-fit">UPDATE</th>
-                                    <th class="cell-fit"><center>#</center></th>
+                                    <th class="cell-fit">
+                                        <center>#</center>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody-jabatan">
@@ -260,15 +267,23 @@
                                     <th class="cell-fit">ID</th>
                                     <th class="cell-fit">NAME</th>
                                     <th class="cell-fit">UPDATE</th>
-                                    <th class="cell-fit"><center>#</center></th>
+                                    <th class="cell-fit">
+                                        <center>#</center>
+                                    </th>
                                 </tr>
-                            </tfoot>
+                            </tfoot>&nbsp;
                         </table>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-info" onclick="showJabatan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                    title="Tambah Jabatan"><i class="bx bxs-plus-square"></i>&nbsp;&nbsp;Tambah Jabatan</button>
+                    <div class="btn-group">
+                        <button class="btn btn-warning" onclick="refreshJabatan()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Segarkan"><i
+                                class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
+                        <button class="btn btn-info" onclick="showJabatan()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                            title="Tambah Jabatan"><i class="bx bxs-plus-square"></i>&nbsp;&nbsp;Tambah Jabatan</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -276,19 +291,41 @@
 
     <script>
         $(document).ready(function() {
+            $.ajax({
+                url: "/api/hakakses/aksesjabatan/data",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `<tr><td>` + item.name + `</td><td>`;
+                        res.selection.forEach(val => {
+                            if (val.id_role == item.role_id) {
+                                content += `<kbd>` + val.name_permission +
+                                    `</kbd>&nbsp;`;
+                            }
+                        })
+                        content +=
+                            `</td><td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAksesJabatan(` +
+                            item.role_id +
+                            `)"><i class="fa-fw fas fa-undo nav-icon"></i> Reset</a></td></tr>`;
+                        $('#tampil-tbody').append(content);
+                    })
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [0, "asc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
 
-            var table = $('#dttable').DataTable({
-                order: [
-                    [0, "asc"]
-                ],
-                displayLength: 7,
-                lengthChange: true,
-                lengthMenu: [7, 10, 25, 50, 75, 100],
-                buttons: ['copy', 'excel', 'pdf', 'colvis']
-            });
-
-            table.buttons().container()
-                .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+                }
+            })
 
             $(".select2").select2({
                 placeholder: "",
@@ -296,12 +333,285 @@
             }).val('').trigger('change');
         })
 
-        function tambah() {
-            $("#tambah").one('submit', function() {
-                $("#btn-simpan").attr('disabled', 'disabled');
-                $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
-                return true;
-            });
+        function refresh() {
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/hakakses/aksesjabatan/data",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `<tr><td>` + item.name + `</td><td>`;
+                        res.selection.forEach(val => {
+                            if (val.id_role == item.role_id) {
+                                content += `<kbd>` + val.name_permission + `</kbd>&nbsp;`;
+                            }
+                        })
+                        content +=
+                            `</td><td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAksesJabatan(` +
+                            item.role_id +
+                            `)"><i class="fa-fw fas fa-undo nav-icon"></i> Reset</a></td></tr>`;
+                        $('#tampil-tbody').append(content);
+                    })
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [0, "asc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        function refreshAkses() {
+            $("#tampil-tbody-akses").empty().append(
+                `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/hakakses/akses/data",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-akses").empty();
+                    $('#dttable-akses').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `
+                                <tr>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
+                            `</td>
+                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAkses(` +
+                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
+                                </tr>
+                            `;
+                        $('#tampil-tbody-akses').append(content);
+                    })
+                    var table = $('#dttable-akses').DataTable({
+                        order: [
+                            [2, "asc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable-akses_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        function refreshJabatan() {
+            $("#tampil-tbody-jabatan").empty().append(
+                `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/hakakses/jabatan/data",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-jabatan").empty();
+                    $('#dttable-jabatan').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `
+                                <tr>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
+                            `</td>
+                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusJabatan(` +
+                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
+                                </tr>
+                            `;
+                        $('#tampil-tbody-jabatan').append(content);
+                    })
+                    var table = $('#dttable-jabatan').DataTable({
+                        order: [
+                            [2, "asc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable-jabatan_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        // $("#tambah").one('submit', function() {
+        //     $("#btn-simpan").attr('disabled', 'disabled');
+        //     $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+        //     return true;
+        // });
+
+        function tambahAkses() {
+            var akses = $("#inp-akses").val();
+            var user = '{{ Auth::user()->nama }}';
+
+            if (akses == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/hakakses/akses/store',
+                    dataType: 'json',
+                    data: {
+                        akses: akses,
+                        user: user,
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Tambah Akses berhasil oleh '+user+' pada '+ res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            $('.modal').modal('hide');
+                            refresh();
+                            $("#inp-akses").val('');
+                            $('#showDaftarAkses').modal('show');
+                            refreshAkses();
+                        }
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+        function tambahJabatan() {
+            var jabatan = $("#inp-jabatan").val();
+            var user = '{{ Auth::user()->nama }}';
+
+            if (jabatan == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/hakakses/jabatan/store',
+                    dataType: 'json',
+                    data: {
+                        jabatan: jabatan,
+                        user: user,
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Tambah Jabatan berhasil oleh '+user+' pada '+ res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            $('.modal').modal('hide');
+                            refresh();
+                            $("#inp-jabatan").val('');
+                            $('#showDaftarJabatan').modal('show');
+                            refreshJabatan();
+                        }
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+        function tambahAksesJabatan() {
+            var jabatan = $("#aksesjabatan-jabatan").val();
+            var akses = $("#aksesjabatan-akses").val();
+            var user = '{{ Auth::user()->nama }}';
+
+            if (jabatan == "" || akses == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/hakakses/aksesjabatan/store',
+                    dataType: 'json',
+                    data: {
+                        jabatan: jabatan,
+                        akses: akses,
+                        user: user,
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Tambah Akses Jabatan berhasil oleh '+user+' pada '+ res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            $('.modal').modal('hide');
+                            $("#aksesjabatan-jabatan").val('').change();
+                            $("#aksesjabatan-akses").val('').change();
+                            refresh();
+                        }
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
         }
 
         // MODAL OPEN
@@ -309,131 +619,142 @@
             $('.modal').modal('hide');
             $('#formTambahAkses').modal('show');
         }
+
         function showJabatan() {
             $('.modal').modal('hide');
             $('#formTambahJabatan').modal('show');
         }
+
         function showDaftarAkses() {
             $('#daftarAkses').modal('show');
-            $.ajax(
-                {
-                    url: "/api/hakakses/akses/data",
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        $("#tampil-tbody-akses").empty();
-                        $('#dttable-akses').DataTable().clear().destroy();
-                        res.show.forEach(item => {
-                            content = `
+            $.ajax({
+                url: "/api/hakakses/akses/data",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-akses").empty();
+                    $('#dttable-akses').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `
                                 <tr>
-                                    <td>`+item.id+`</td>
-                                    <td>`+item.name+`</td>
-                                    <td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td>
-                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAkses(`+item.id+`)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
+                            `</td>
+                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAkses(` +
+                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
                                 </tr>
                             `;
-                            $('#tampil-tbody-akses').append(content);
-                        })
-                        var table = $('#dttable-akses').DataTable({
-                            order: [
-                                [2, "asc"]
-                            ],
-                            displayLength: 7,
-                            lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
-                        });
+                        $('#tampil-tbody-akses').append(content);
+                    })
+                    var table = $('#dttable-akses').DataTable({
+                        order: [
+                            [2, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
 
-                        table.buttons().container()
-                            .appendTo('#dttable-akses_wrapper .col-md-6:eq(0)');
-                    }
+                    table.buttons().container()
+                        .appendTo('#dttable-akses_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
                 }
-            )
+            })
         }
+
         function showDaftarJabatan() {
             $('#daftarJabatan').modal('show');
-            $.ajax(
-                {
-                    url: "/api/hakakses/jabatan/data",
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        $("#tampil-tbody-jabatan").empty();
-                        $('#dttable-jabatan').DataTable().clear().destroy();
-                        res.show.forEach(item => {
-                            content = `
+            $.ajax({
+                url: "/api/hakakses/jabatan/data",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-jabatan").empty();
+                    $('#dttable-jabatan').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = `
                                 <tr>
-                                    <td>`+item.id+`</td>
-                                    <td>`+item.name+`</td>
-                                    <td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td>
-                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusJabatan(`+item.id+`)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
+                                    <td>` + item.id + `</td>
+                                    <td>` + item.name + `</td>
+                                    <td>` + item.updated_at.substring(0, 19).replace('T', ' ') +
+                            `</td>
+                                    <td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusJabatan(` +
+                            item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></td>
                                 </tr>
                             `;
-                            $('#tampil-tbody-jabatan').append(content);
-                        })
-                        var table = $('#dttable-jabatan').DataTable({
-                            order: [
-                                [2, "asc"]
-                            ],
-                            displayLength: 7,
-                            lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
-                        });
+                        $('#tampil-tbody-jabatan').append(content);
+                    })
+                    var table = $('#dttable-jabatan').DataTable({
+                        order: [
+                            [2, "desc"]
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
 
-                        table.buttons().container()
-                            .appendTo('#dttable-jabatan_wrapper .col-md-6:eq(0)');
-                    }
+                    table.buttons().container()
+                        .appendTo('#dttable-jabatan_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
                 }
-            )
+            })
         }
 
         // HAPUS AKSES JABATAN
         function hapusAksesJabatan(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: 'Hapus Permanen Akses Jabatan ID : ' + id,
-                icon: 'warning',
-                reverseButtons: false,
-                showDenyButton: false,
-                showCloseButton: false,
-                showCancelButton: true,
-                focusCancel: true,
-                confirmButtonColor: '#FF4845',
-                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
-                cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
-                backdrop: `rgba(26,27,41,0.8)`,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/api/hakakses/aksesjabatan/hapus/" + id,
-                        type: 'GET',
-                        dataType: 'json', // added data type
-                        success: function(res) {
-                            iziToast.success({
-                                title: 'Sukses!',
-                                message: 'Hapus Akses Jabatan berhasil pada ' + res,
-                                position: 'topRight'
-                            });
-                            window.location.reload();
-                        },
-                        error: function(res) {
-                            Swal.fire({
-                                title: `Gagal di hapus!`,
-                                text: 'Pada ' + res,
-                                icon: `error`,
-                                showConfirmButton: false,
-                                showCancelButton: false,
-                                allowOutsideClick: true,
-                                allowEscapeKey: true,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                backdrop: `rgba(26,27,41,0.8)`,
-                            });
-                        }
-                    });
-                }
-            })
+            iziToast.error({
+                title: 'Pesan Perhatian!',
+                message: 'Maaf, Reset belum tersedia untuk saat ini. Silakan tunggu Update selanjutnya :)',
+                position: 'topRight'
+            });
+            // Swal.fire({
+            //     title: 'Apakah anda yakin?',
+            //     text: 'Hapus Permanen Akses Jabatan ID : ' + id,
+            //     icon: 'warning',
+            //     reverseButtons: false,
+            //     showDenyButton: false,
+            //     showCloseButton: false,
+            //     showCancelButton: true,
+            //     focusCancel: true,
+            //     confirmButtonColor: '#FF4845',
+            //     confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
+            //     cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
+            //     backdrop: `rgba(26,27,41,0.8)`,
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+            //         $.ajax({
+            //             url: "/api/hakakses/aksesjabatan/hapus/" + id,
+            //             type: 'GET',
+            //             dataType: 'json', // added data type
+            //             success: function(res) {
+            //                 iziToast.success({
+            //                     title: 'Sukses!',
+            //                     message: 'Hapus Akses Jabatan berhasil pada ' + res,
+            //                     position: 'topRight'
+            //                 });
+            //                 refresh();
+            //             },
+            //             error: function(res) {
+            //                 iziToast.error({
+            //                     title: 'Pesan Galat!',
+            //                     message: 'Hapus Akses Jabatan gagal!',
+            //                     position: 'topRight'
+            //                 });
+            //             }
+            //         });
+            //     }
+            // })
         }
 
         // HAPUS AKSES
@@ -463,7 +784,8 @@
                                 message: 'Hapus Akses berhasil pada ' + res,
                                 position: 'topRight'
                             });
-                            window.location.reload();
+                            refreshAkses();
+                            refresh();
                         },
                         error: function(res) {
                             Swal.fire({
@@ -511,7 +833,10 @@
                                 message: 'Hapus Jabatan berhasil pada ' + res,
                                 position: 'topRight'
                             });
-                            window.location.reload();
+                            refreshJabatan();
+                            refresh();
+                            // $('.modal').modal('hide');
+                            // $('#daftarJabatan').modal('show');
                         },
                         error: function(res) {
                             Swal.fire({

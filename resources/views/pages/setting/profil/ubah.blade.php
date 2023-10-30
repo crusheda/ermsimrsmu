@@ -415,6 +415,11 @@
                 </section>
             </form>
         </div>
+        <div class="align-middle card-footer">
+            <button class="btn btn-secondary" type="button" onclick="window.location='{{ route('profil.index') }}'">
+                <i class="fas fa-chevron-left"></i> Kembali
+            </button>&nbsp;&nbsp;Kembali ke Halaman Profil
+        </div>
 
     </div>
     <!-- end card body -->

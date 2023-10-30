@@ -28,7 +28,7 @@ class ProfilController extends Controller
     {
         $user  = Auth::user();
         $id    = $user->id;
-        $show  = users::where('id','=', $id)->first();
+        $show  = DB::table('users')->where('id','=', $id)->first();
         $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
         $showlog = logs::where('user_id', $id)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
@@ -47,7 +47,7 @@ class ProfilController extends Controller
 
     function indexKepegawaian($id)
     {
-        $show  = users::where('id','=', $id)->first();
+        $show  = DB::table('users')->where('id','=', $id)->first();
         $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
         $showlog = logs::where('user_id', $id)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();

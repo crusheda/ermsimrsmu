@@ -24,8 +24,8 @@ class ProfilKaryawanController extends Controller
      */
     public function index()
     {
-        $show  = users::where('nik','!=',null)->get();
-        $showMin  = users::where('nik',null)->get();
+        $show  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+        $showMin  = users::where('nik',null)->count();
 
         $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
@@ -34,7 +34,7 @@ class ProfilKaryawanController extends Controller
 
         $data = [
             'show' => $show,
-            'showMin' => $showMin,
+            'showmin' => $showMin,
             'role' => $role,
         ];
 
@@ -129,5 +129,50 @@ class ProfilKaryawanController extends Controller
         $data->delete();
 
         return Redirect::back()->with('message','Anda berhasil menonaktifkan Karyawan pada '.$tgl);
+    }
+
+    // API
+    function tableNonaktif()
+    {
+        $show = users::onlyTrashed()->orderBy('deleted_at','desc')->get();
+
+        $data = [
+            'show' => $show
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tableNonLengkap()
+    {
+        $show = users::where('nik', null)->orderBy('updated_at','desc')->get();
+
+        $data = [
+            'show' => $show
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function setAktif($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // $data = DB::table('users')->where('id',$id)->first();
+        $data = users::onlyTrashed()->where('id',$id)->first();
+        $data->deleted_at = null;
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function setNonAktif($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = users::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
     }
 }

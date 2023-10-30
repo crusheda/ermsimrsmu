@@ -25,13 +25,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('kota/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKota');
     Route::get('kecamatan/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKecamatan');
 
+    // PROFIL KARYAWAN - KEPEGAWAIAN
+    Route::get('profilkaryawan/setaktif/{id}', [\App\Http\Controllers\ProfilKaryawanController::class, 'setAktif'])->name('profilkaryawan.setaktif');
+    Route::get('profilkaryawan/setnonaktif/{id}', [\App\Http\Controllers\ProfilKaryawanController::class, 'setNonAktif'])->name('profilkaryawan.setnonaktif');
+    Route::get('profilkaryawan/nonaktif', [\App\Http\Controllers\ProfilKaryawanController::class, 'tableNonaktif'])->name('profilkaryawan.nonaktif');
+    Route::get('profilkaryawan/nonlengkap', [\App\Http\Controllers\ProfilKaryawanController::class, 'tableNonLengkap'])->name('profilkaryawan.nonlengkap');
+
     // HAK AKSES
         // AKSES JABATAN
-        Route::get('hakakses/aksesjabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapus')->name('akses.hapus');
+        Route::get('hakakses/aksesjabatan/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableAksesJabatan')->name('aksesjabatan.data');
+        Route::post('hakakses/aksesjabatan/store', '\App\Http\Controllers\HakAkses\AksesJabatanController@store')->name('aksesjabatan.store');
+        Route::get('hakakses/aksesjabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@destroy')->name('aksesaksesjabatan.hapus');
         Route::get('hakakses/akses/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableAkses')->name('akses.data');
-        Route::get('hakakses/akses/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapus')->name('akses.hapus');
-        Route::get('hakakses/jabatan/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableJabatan')->name('akses.data');
-        Route::get('hakakses/jabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapus')->name('jabatan.hapus');
+        Route::post('hakakses/akses/store', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeAkses')->name('akses.store');
+        Route::get('hakakses/akses/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapusAkses')->name('akses.hapus');
+        Route::get('hakakses/jabatan/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableJabatan')->name('jabatan.data');
+        Route::post('hakakses/jabatan/store', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeJabatan')->name('jabatan.store');
+        Route::get('hakakses/jabatan/hapus/{id}', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapusJabatan')->name('jabatan.hapus');
 
         // AKUN PENGGUNA
         Route::get('hakakses/akunpengguna/verif/{id}', '\App\Http\Controllers\HakAkses\DataKaryawanController@verifName')->name('akunpengguna.verif');
