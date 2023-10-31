@@ -87,6 +87,22 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
             Route::post('suratkeluar', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@store')->name('suratkeluar.store');
 });
 
+// PELAYANAN
+Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], function () {
+    // Kebidanan
+        Route::get('kebidanan/skl/all','\App\Http\Controllers\Pelayanan\Kebidanan\sklController@showAll')->name('skl.all');
+        Route::get('kebidanan/skl/{id}/cetak','\App\Http\Controllers\Pelayanan\Kebidanan\sklController@cetak')->name('skl.cetak');
+        Route::get('kebidanan/skl/{id}/print','\App\Http\Controllers\Pelayanan\Kebidanan\sklController@print')->name('skl.print');
+        Route::resource('kebidanan/skl', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController');
+
+    // Lab
+        // Route::get('lab/antigen/all','lab\antigenController@showAll')->name('antigen.all');
+        Route::get('lab/antigen/filter','\App\Http\Controllers\Pelayanan\Lab\antigenController@filter')->name('antigen.filter');
+        Route::get('lab/antigen/{id}/cetak','\App\Http\Controllers\Pelayanan\Lab\antigenController@cetak')->name('antigen.cetak');
+        Route::get('lab/antigen/{id}/print','\App\Http\Controllers\Pelayanan\Lab\antigenController@print')->name('antigen.print');
+        Route::resource('/lab/antigen', '\App\Http\Controllers\Pelayanan\Lab\antigenController');
+});
+
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
 // CATATAN
 

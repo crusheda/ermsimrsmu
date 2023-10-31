@@ -85,16 +85,16 @@
                 <li class="menu-title" key="t-menu">Pelayanan</li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('skl.index') }}" class="waves-effect">
                         <i class="fas fa-baby" style="font-size: 1rem"></i>
-                        <span key="t-chat"><s>Surat Keterangan Lahir</s></span>
+                        <span key="t-chat">Surat Keterangan Lahir</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="javascript:void(0);" class="waves-effect"> {{-- {{ route('antigen.index') }} --}}
                         <i class="fas fa-hand-lizard" style="font-size: 0.9rem"></i>
-                        <span key="t-chat"><s>Surat Antigen</s></span>
+                        <span key="t-chat">Surat Antigen</span>
                     </a>
                 </li>
 

@@ -78,11 +78,12 @@
     <div id="layout-wrapper">
 
         <!-- Dropdown Select2 appear behind Modal Ajx -->
-        <style>
+        {{-- <style>
             .select2-container{
-                z-index:100000;
+                z-index:auto;
             }
-        </style>
+        </style> --}}
+        {{-- SUDAH DI SET AUTO DI CSS NYA, \PATH_PROJECT\public\libs\select2\css\select2.min.css --}}
 
         @include('inc.header')
 

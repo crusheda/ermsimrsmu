@@ -100,4 +100,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post('suratkeluar/ubah', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@ubah')->name('suratkeluar.ubah');
         Route::delete('suratkeluar/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@hapus');
 
+    // PELAYANAN
+        // SKL
+        Route::get('kebidanan/skl/get','\App\Http\Controllers\Pelayanan\Kebidanan\sklController@apiGet');
+        Route::get('kebidanan/skl/cari/{id}','\App\Http\Controllers\Pelayanan\Kebidanan\sklController@filterIbu');
+        Route::get('kebidanan/skl/all','\App\Http\Controllers\Pelayanan\Kebidanan\sklController@apiAll');
+        Route::get('kebidanan/skl/getubah/{id}', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController@getubah');
+        Route::get('kebidanan/skl/hapus/{id}', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController@hapus');
+        Route::post('kebidanan/skl/ubah/{id}', '\App\Http\Controllers\Pelayanan\Kebidanan\sklController@ubah');
+
+        // ANTIGEN
+        Route::get('antigen/all','\App\Http\Controllers\Pelayanan\Lab\antigenController@apiShowAll')->name('antigen.apiall');
+        Route::get('antigen/get','\App\Http\Controllers\Pelayanan\Lab\antigenController@apiGet')->name('antigen.apiget');
+        Route::post('antigen/filter', '\App\Http\Controllers\Pelayanan\Lab\antigenController@apiFilter')->name('antigen.apifilter');
+        // Route::get('antigen/filter/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@apiFilter')->name('antigen.apiFilter');
+        Route::post('antigen/ubah/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@ubah')->name('antigen.ubah');
+        Route::get('antigen/getubah/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getubah')->name('antigen.getubah');
+        Route::get('antigen/hapus/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@hapus')->name('antigen.hapus');
+        Route::get('antigen/getpasien/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getPasien');
 // });

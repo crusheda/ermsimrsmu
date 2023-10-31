@@ -1,6 +1,12 @@
 @extends('layouts.default')
 
 @section('content')
+    <!-- Dropdown Select2 appear behind Modal Ajx -->
+    <style>
+        .select2-container{
+            z-index:100000;
+        }
+    </style>
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
