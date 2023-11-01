@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\roles;
 use App\Models\surat_masuk;
+use App\Models\disposisi;
 use Carbon\Carbon;
 use Validator,Redirect,Response,File;
 use Exception;
@@ -99,6 +101,19 @@ class SuratMasukController extends Controller
 
         $data = [
             'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function apiGetDisposisi($id)
+    {
+        $show = disposisi::where('id_surat',$id)->get();
+        $roles = roles::orderBy('name','ASC')->get();
+
+        $data = [
+            'show' => $show,
+            'roles' => $roles,
         ];
 
         return response()->json($data, 200);

@@ -84,8 +84,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('laporan/bulanan/hapus/{id}','\App\Http\Controllers\Berkas\LaporanBulananController@hapus');
         Route::post('laporan/bulanan/ubah/{id}','\App\Http\Controllers\Berkas\LaporanBulananController@ubah');
 
+        // DISPOSISI
+        Route::get('disposisi/data', '\App\Http\Controllers\Berkas\Surat\DisposisiController@apiGet')->name('disposisi.data');
+        Route::get('disposisi/data/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGetDisposisi')->name('disposisi.detail');
+        Route::post('disposisi/simpan', '\App\Http\Controllers\Berkas\Surat\DisposisiController@store')->name('disposisi.simpan');
+        Route::delete('disposisi/{id}', '\App\Http\Controllers\Berkas\Surat\DisposisiController@hapus')->name('disposisi.hapus');
+
         // SURAT MASUK
         Route::get('suratmasuk/data', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGet');
+        Route::get('suratmasuk/data/disposisi/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGetDisposisi');
         Route::get('suratmasuk/data/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@showChange');
         Route::post('suratmasuk/ubah', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@ubah')->name('suratmasuk.ubah');
         // Route::put('suratmasuk/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@update');
@@ -93,7 +100,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('suratmasuk/cariasal', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@acAsal')->name('ac.asal.cari');
         Route::get('suratmasuk/caritempat', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@acTempat')->name('ac.tempat.cari');
 
-        // SURAT MASUK
+        // SURAT KELUAR
         Route::get('suratkeluar/getkode/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@apiKode');
         Route::get('suratkeluar/data', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@apiGet');
         Route::get('suratkeluar/data/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@showChange');

@@ -308,10 +308,10 @@
                     <div class="p-3">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="m-0" key="t-notifications"> Notifications </h6>
+                                <h6 class="m-0" key="t-notifications"> Notifikasi </h6>
                             </div>
                             <div class="col-auto">
-                                <a href="javascript: void(0);" class="small" key="t-view-all"> View All</a>
+                                <a href="javascript: void(0);" class="small" key="t-view-all"> Lihat Semua</a>
                             </div>
                         </div>
                     </div>
@@ -367,16 +367,16 @@
                         <a href="javascript: void(0);" class="text-reset notification-item">
                             <div class="d-flex">
                                 <div class="avatar-xs me-3">
-                                    <span class="avatar-title bg-success rounded-circle font-size-16">
+                                    <span class="avatar-title bg-success rounded-circle font-size-16" style="height: 85%">
                                         <i class="bx bx-badge-check"></i>
                                     </span>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-1" key="t-shipped">All You Can Everything!</h6>
+                                    <h6 class="mb-1" key="t-shipped">Pesan Developer</h6>
                                     <div class="font-size-12 text-muted">
                                         <p class="mb-1" key="t-grammer">Tahun baru 2024 dengan tampilan Simrs yang baru</p>
                                         <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span
-                                                key="t-min-ago">2024</span></p>
+                                                key="t-min-ago">Jan 2024</span></p>
                                     </div>
                                 </div>
                             </div>
@@ -385,8 +385,7 @@
                     </div>
                     <div class="p-2 border-top d-grid">
                         <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-                            <i class="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">View
-                                More..</span>
+                            <i class="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">Lihat lebih banyak..</span>
                         </a>
                     </div>
                 </div>

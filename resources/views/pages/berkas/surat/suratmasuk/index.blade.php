@@ -29,7 +29,7 @@
                     <th class="cell-fit">
                         <center></center>
                     </th>
-                    <th class="cell-fit">NO</th>
+                    <th class="cell-fit">NO SURAT</th>
                     <th class="cell-fit">TGL SURAT</th>
                     <th class="cell-fit">TGL DITERIMA</th>
                     <th>ASAL/NO.SRT</th>
@@ -51,7 +51,7 @@
                     <th class="cell-fit">
                         <center></center>
                     </th>
-                    <th class="cell-fit">NO</th>
+                    <th class="cell-fit">NO SURAT</th>
                     <th class="cell-fit">TGL SURAT</th>
                     <th class="cell-fit">TGL DITERIMA</th>
                     <th>ASAL/NO.SRT</th>
@@ -235,6 +235,7 @@
                     <h4 class="modal-title">
                         Form Hapus&nbsp;&nbsp;&nbsp;
                     </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
@@ -252,6 +253,42 @@
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL LIHAT DISPOSISI --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="disposisi" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-simple modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Detail Disposisi&nbsp;&nbsp;&nbsp;
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table dt-responsive table-hover table-bordered nowrap w-100 align-middle">
+                        <thead>
+                            <tr>
+                                <th>DITUJUKAN KEPADA</th>
+                                <th>TINDAK LANJUT</th>
+                                <th>KETERANGAN</th>
+                                <th>UPDATE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tampil-tbody-disposisi">
+                            <tr>
+                                <td colspan="9">
+                                    <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <div id="showBtnDownload"></div>
                 </div>
             </div>
         </div>
@@ -356,16 +393,24 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh</a></li>`
                                     }
                                     // if (adminID) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
                                     // }
-                            content += `</ul></center></td><td>`;
-                            content += item.urutan + "</td><td>";
+                            if (item.verif_disposisi == true) {
+                                content += `<div class="dropdown-divider"></div><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='bx bx-book-open scaleX-n1-rtl'></i> Lihat</a></li>`
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh</a></li>`
+                            }
+                            content += `</ul></center></td><td>` + item.urutan + `&nbsp;&nbsp;`;
+                            if (item.verif_disposisi != null) {
+                                content += `<i class="bx bxs-badge-check h5 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
+                            }
+                            content += "</td><td>";
                                         if (item.tgl_surat != null) {
                                             content += item.tgl_surat;
                                         } else {
@@ -392,7 +437,7 @@
                                                 content += item.tglFrom.substring(0, 10);
                                             }
                                         } else {
-                                            content += item.tglFrom.substring(0, 10) + " - " + item.tglTo.substring(0, 10);
+                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="mdi mdi-arrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
                                         + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
@@ -403,18 +448,23 @@
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
-                    var table = $('#dttable').DataTable({
-                        order: [
-                            [7, "desc"]
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
+                        var table = $('#dttable').DataTable({
+                            order: [
+                                [7, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
 
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+                        table.buttons().container()
+                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
                     }
                 }
             );
@@ -436,16 +486,24 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh</a></li>`
                                     }
                                     // if (adminID) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
                                     // }
-                            content += `</ul></center></td><td>`;
-                            content += item.urutan + "</td><td>";
+                            if (item.verif_disposisi != null) {
+                                content += `<div class="dropdown-divider"></div><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='bx bx-book-open scaleX-n1-rtl'></i> Lihat</a></li>`
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh</a></li>`
+                            }
+                            content += `</ul></center></td><td>` + item.urutan + `&nbsp;&nbsp;`;
+                            if (item.verif_disposisi != null) {
+                                content += `<i class="bx bxs-badge-check h5 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
+                            }
+                            content += "</td><td>";
                                         if (item.tgl_surat != null) {
                                             content += item.tgl_surat;
                                         } else {
@@ -472,7 +530,7 @@
                                                 content += item.tglFrom.substring(0, 10);
                                             }
                                         } else {
-                                            content += item.tglFrom.substring(0, 10) + " - " + item.tglTo.substring(0, 10);
+                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="mdi mdi-arrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
                                         + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
@@ -483,18 +541,23 @@
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
-                    var table = $('#dttable').DataTable({
-                        order: [
-                            [7, "desc"]
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
+                        var table = $('#dttable').DataTable({
+                            order: [
+                                [7, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
 
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+                        table.buttons().container()
+                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
                     }
                 }
             );
@@ -790,6 +853,43 @@
                     }
                 });
             }
+        }
+
+        function showDisposisi(id) {
+            $('#disposisi').modal('show');
+            $("#tampil-tbody-disposisi").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/suratmasuk/data/disposisi/"+id,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $("#tampil-tbody-disposisi").empty();
+                        res.show.forEach(item => {
+                            if (item.filename != null) {
+                                $('#showBtnDownload').empty();
+                                $('#showBtnDownload').append(`<button class='btn btn-info' onclick="window.open('/berkas/disposisi/`+item.id_surat+`')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh <span class="badge bg-light">`+item.title+`</span></button>`);
+                            }
+                            // var updet = item.updated_at.substring(0, 10);
+                            content = "<tr id='data"+ item.id +"'><td>";
+                            var tujuan = JSON.parse(item.tujuan);
+                            tujuan.forEach(tuju => {
+                                res.roles.forEach(val => {
+                                    if (tuju == val.id) {
+                                        content += `<kbd>`+val.name+`</kbd>&nbsp;`;
+                                    }
+                                })
+                            })
+                            content += `</td><td>`+item.tindak_lanjut+`</td><td>`;
+                            if (item.ket != null) {
+                                content += item.ket;
+                            }
+                            content += `</td><td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
+                        })
+                        $('#tampil-tbody-disposisi').append(content);
+                    }
+                }
+            )
         }
 
         function saveData() {

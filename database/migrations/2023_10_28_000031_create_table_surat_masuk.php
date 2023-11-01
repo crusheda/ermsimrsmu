@@ -26,7 +26,8 @@ class CreateTableSuratMasuk extends Migration
             $table->dateTime('tglTo')->nullable();
             $table->string('title')->nullable();
             $table->string('filename')->nullable();
-            $table->integer('user');
+            $table->boolean('verif_disposisi')->nullable();
+            $table->integer('user')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

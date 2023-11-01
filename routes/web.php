@@ -77,6 +77,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
         Route::get('laporan/bulanan/verif', '\App\Http\Controllers\Berkas\LaporanBulananController@showVerif')->name('bulanan.verif');
         Route::resource('laporan/bulanan', '\App\Http\Controllers\Berkas\LaporanBulananController');
     // SURAT
+        // DISPOSISI
+            Route::get('disposisi', '\App\Http\Controllers\Berkas\Surat\DisposisiController@index')->name('disposisi.index');
+            Route::get('disposisi/{id}', '\App\Http\Controllers\Berkas\Surat\DisposisiController@show')->name('disposisi.show');
         // SURAT MASUK
             Route::get('suratmasuk', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@index')->name('suratmasuk.index');
             Route::get('suratmasuk/{id}/download', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@download');

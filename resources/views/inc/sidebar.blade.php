@@ -62,6 +62,7 @@
                         <li>
                             <a href="javascript: void(0);" class="has-arrow" key="t-level-1-2">Surat</a>
                             <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="{{ route('disposisi.index') }}" key="t-level-2-1">Disposisi</a></li>
                                 <li><a href="{{ route('suratmasuk.index') }}" key="t-level-2-1">Surat Masuk</a></li>
                                 <li><a href="{{ route('suratkeluar.index') }}" key="t-level-2-2">Surat Keluar</a></li>
                             </ul>
