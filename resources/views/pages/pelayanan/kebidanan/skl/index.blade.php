@@ -10,7 +10,6 @@
         </div>
     </div>
 
-
     <div class="card card-body table-responsive text-nowrap" style="overflow: visible;">
         <div classs="card-title">
             <div class="d-flex">

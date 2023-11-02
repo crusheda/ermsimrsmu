@@ -86,7 +86,7 @@
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Tindak Lanjut <a class="text-danger">*</a></label>
-                                    <textarea rows="3" class="form-control" id="tindak_lanjut_add" placeholder="Optional"></textarea>
+                                    <textarea rows="3" class="form-control" id="tindak_lanjut_add" placeholder="..."></textarea>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">

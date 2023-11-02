@@ -90,6 +90,25 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
             Route::post('suratkeluar', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@store')->name('suratkeluar.store');
 });
 
+// PENGADUAN
+Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], function () {
+    // IPSRS
+        Route::post('ipsrs/catatan', '\App\Http\Controllers\Perbaikan\ipsrsController@catatan')->name('ipsrs.catatan');
+        Route::post('ipsrs/catatan/ubah', '\App\Http\Controllers\Perbaikan\ipsrsController@ubahCatatan')->name('ipsrs.ubahCatatan');
+        Route::get('ipsrs/detail/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@detail')->name('ipsrs.detail');
+        Route::get('ipsrs/riwayat', '\App\Http\Controllers\Perbaikan\ipsrsController@riwayat')->name('ipsrs.riwayat');
+        Route::resource('ipsrs', '\App\Http\Controllers\Perbaikan\ipsrsController');
+        // Route::post('ipsrs/selesai', '\App\Http\Controllers\Perbaikan\ipsrsController@selesai')->name('pengaduan.ipsrs.selesai');
+        // Route::post('ipsrs/tambahketerangan', '\App\Http\Controllers\Perbaikan\ipsrsController@tambahketerangan')->name('pengaduan.ipsrs.tambahketerangan');
+        // Route::post('ipsrs/kerjakan', '\App\Http\Controllers\Perbaikan\ipsrsController@kerjakan')->name('pengaduan.ipsrs.kerjakan');
+        // Route::post('ipsrs/kerjakan/ubah', '\App\Http\Controllers\Perbaikan\ipsrsController@ubahKerjakan')->name('pengaduan.ipsrs.ubah.kerjakan');
+        // Route::post('ipsrs/terima', '\App\Http\Controllers\Perbaikan\ipsrsController@terima')->name('pengaduan.ipsrs.terima');
+        // Route::post('ipsrs/terima/ubah', '\App\Http\Controllers\Perbaikan\ipsrsController@ubahTerima')->name('pengaduan.ipsrs.ubah.terima');
+        // Route::post('ipsrs/tolak', '\App\Http\Controllers\Perbaikan\ipsrsController@tolak')->name('pengaduan.ipsrs.tolak');
+        // Route::get('ipsrs/catatan/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@downloadCatatan');
+        // Route::get('ipsrs/history', '\App\Http\Controllers\Perbaikan\ipsrsController@history')->name('ipsrs.history');
+});
+
 // PELAYANAN
 Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], function () {
     // Kebidanan

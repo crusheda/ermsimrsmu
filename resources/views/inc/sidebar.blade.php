@@ -78,7 +78,7 @@
                         <span key="t-dashboards">Perbaikan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="javascript: void(0);" key="t-saas"><s>IPSRS</s></a></li>
+                        <li><a href="{{ route('ipsrs.index') }}" key="t-saas">IPSRS</a></li>
                         <li><a href="javascript: void(0);" key="t-default"><s>IT</s></a></li>
                     </ul>
                 </li>
@@ -95,7 +95,7 @@
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"> {{-- {{ route('antigen.index') }} --}}
                         <i class="fas fa-hand-lizard" style="font-size: 0.9rem"></i>
-                        <span key="t-chat">Surat Antigen</span>
+                        <span key="t-chat"><s>Surat Antigen</s></span>
                     </a>
                 </li>
 
