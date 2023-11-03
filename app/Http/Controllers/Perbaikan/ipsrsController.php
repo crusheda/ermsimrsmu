@@ -11,6 +11,7 @@ use App\Models\perbaikan_ipsrs_catatan;
 use App\Models\role_has_permissions;
 use App\Models\unit;
 use App\Models\users;
+use App\Models\users_foto;
 use Carbon\Carbon;
 use Auth;
 use Storage;
@@ -31,6 +32,7 @@ class ipsrsController extends Controller
 
         if (Auth::user()->getManyRole(['ipsrs','it','sekretaris-direktur'])) {
             $show = perbaikan_ipsrs::where('tgl_selesai', null)->orderBy('tgl_pengaduan','DESC')->get();
+            $fotouser = users_foto::where('id',$user_id)->first();
             $total = perbaikan_ipsrs::count();
             $totalMasukPengaduan = perbaikan_ipsrs::whereNotNull('tgl_pengaduan')->where('tgl_diterima', null)->where('tgl_dikerjakan', null)->where('tgl_selesai', null)->where('ket_penolakan', null)->count();
             $totalDiverifikasi = perbaikan_ipsrs::whereNotNull('tgl_diterima')->where('tgl_dikerjakan', null)->where('tgl_selesai', null)->where('ket_penolakan', null)->count();
@@ -40,6 +42,7 @@ class ipsrsController extends Controller
 
             $data = [
                 'show' => $show,
+                'fotouser' => $fotouser,
                 'total' => $total,
                 'totalmasukpengaduan' => $totalMasukPengaduan,
                 'totaldiverifikasi' => $totalDiverifikasi,
@@ -204,7 +207,7 @@ class ipsrsController extends Controller
      */
     public function destroy($id)
     {
-        $now = Carbon::now()->isoFormat('YYYY-MM-D');;
+        $now = Carbon::now()->isoFormat('YYYY-MM-D');
 
         $gettgl = perbaikan_ipsrs::where('id',$id)->first();
         $tgl = Carbon::parse($gettgl->tgl_pengaduan)->isoFormat('YYYY-MM-D');
@@ -251,28 +254,23 @@ class ipsrsController extends Controller
     public function verif(Request $request)
     {
         $now = Carbon::now();
-        $user = Auth::user();
-        $name = $user->name;
-        $user_id = $user->id;
+        $nowpush = Carbon::now()->isoFormat('YYYY-MM-D');
 
         $data = perbaikan_ipsrs::find($request->id);
-        $data->verifikator_id = $user_id;
+        $data->verifikator_id = $request->user_id;
         $data->tgl_diterima = $now;
         $data->ket_diterima = $request->ket;
         $data->save();
 
-        return response()->json($name);
+        return response()->json($nowpush);
     }
 
     public function unverif(Request $request)
     {
         $now = Carbon::now();
-        $user = Auth::user();
-        $name = $user->name;
-        $user_id = $user->id;
 
         $data = perbaikan_ipsrs::find($request->id);
-        $data->verifikator_id = $user_id;
+        $data->verifikator_id = $request->user_id;
         $data->tgl_selesai = $now;
         $data->ket_penolakan = $request->ket;
         $data->save();
@@ -288,9 +286,7 @@ class ipsrsController extends Controller
     public function process(Request $request)
     {
         $now = Carbon::now();
-        $user = Auth::user();
-        $name = $user->name;
-        $user_id = $user->id;
+        $nowpush = Carbon::now()->isoFormat('YYYY-MM-D');
 
         $data = perbaikan_ipsrs::find($request->id);
         $data->tgl_dikerjakan = $now;
@@ -300,15 +296,12 @@ class ipsrsController extends Controller
         }
         $data->save();
 
-        return response()->json($name);
+        return response()->json($nowpush);
     }
 
     public function finish(Request $request)
     {
         $now = Carbon::now();
-        $user = Auth::user();
-        $name = $user->name;
-        $user_id = $user->id;
 
         $data = perbaikan_ipsrs::find($request->id);
         $data->tgl_selesai = $now;

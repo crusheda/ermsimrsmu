@@ -110,12 +110,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // PENGADUAN
         // IPSRS
         Route::get('perbaikan/ipsrs/lokasi', '\App\Http\Controllers\Perbaikan\ipsrsController@autocompleteLokasi')->name('ipsrs.ac.lokasi');
-        Route::post('perbaikan//ipsrs/verif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@verif')->name('ipsrs.verif');
-        Route::post('perbaikan//ipsrs/unverif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@unverif')->name('ipsrs.unverif');
-        Route::post('perbaikan//ipsrs/process/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@process')->name('ipsrs.process');
-        Route::post('perbaikan//ipsrs/finish/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@finish')->name('ipsrs.finish');
-        Route::get('perbaikan//ipsrs/result/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@result')->name('ipsrs.result');
-        Route::post('perbaikan//ipsrs/filter', '\App\Http\Controllers\Perbaikan\ipsrsController@filter')->name('ipsrs.filter');
+        Route::post('perbaikan/ipsrs/verif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@verif')->name('ipsrs.verif');
+        Route::post('perbaikan/ipsrs/unverif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@unverif')->name('ipsrs.unverif');
+        Route::post('perbaikan/ipsrs/process/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@process')->name('ipsrs.process');
+        Route::post('perbaikan/ipsrs/finish/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@finish')->name('ipsrs.finish');
+        Route::get('perbaikan/ipsrs/result/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@result')->name('ipsrs.result');
+        Route::post('perbaikan/ipsrs/filter', '\App\Http\Controllers\Perbaikan\ipsrsController@filter')->name('ipsrs.filter');
 
     // PELAYANAN
         // SKL

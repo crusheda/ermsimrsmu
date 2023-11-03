@@ -69,6 +69,12 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="bx bxs-cart"></i>
+                        <span key="t-chat"><s>Pengadaan</s></span>
+                    </a>
+                </li>
 
                 <li class="menu-title" key="t-menu">Pengaduan</li>
 
@@ -97,6 +103,20 @@
                         <i class="fas fa-hand-lizard" style="font-size: 0.9rem"></i>
                         <span key="t-chat"><s>Surat Antigen</s></span>
                     </a>
+                </li>
+
+                <li class="menu-title" key="t-menu">Akreditasi</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-walk"></i>
+                        <span key="t-dashboards">MFK</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        {{-- <li><a href="javascript: void(0);" key="t-saas"></a></li> --}}
+                        <li><a href="javascript: void(0);" key="t-saas"><s>Kecelakaan Kerja</s></a></li>
+                        <li><a href="javascript: void(0);" key="t-default"><s>Manajemen Risiko</s></a></li>
+                    </ul>
                 </li>
 
                 {{-- <li class="menu-title" key="t-menu">Menu</li>

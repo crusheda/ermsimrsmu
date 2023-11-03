@@ -115,7 +115,7 @@
                                     <center>
                                         <div class="card" style="width: 18rem;margin-top:20px">
                                             <a class="image-popup-vertical-fit" id="blah_a" href="">
-                                                <img class="card-img-top" id="blah" src="#"
+                                                <img class="card-img-top" id="blah" src="{{ asset('images/no-image.png') }}"
                                                     alt="Tidak ada lampiran">
                                             </a>
                                         </div>
@@ -178,9 +178,9 @@
                                                             <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem">
                                                         </a>
                                                         {{-- <img src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}"
-                                                            class="avatar-md h-auto d-block rounded" alt="Image Request" style="width:6.5rem"/> <!-- height="62" width="62"  --> --}}
+                                                        class="avatar-md h-auto d-block rounded" alt="Image Request" style="width:6.5rem"/> <!-- height="62" width="62"  --> --}}
                                                     @else
-                                                        <img src="assets/images/small/img-2.jpg" alt="" class="avatar-md h-auto d-block rounded">
+                                                        <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:6.5rem">
                                                     @endif
                                                 </div>
 
@@ -757,7 +757,7 @@
             $("#clr_pengaduan").val('');
             $("#imgInp").val('');
             $('#blah_a').attr('href', '');
-            document.getElementById("blah").src = '';
+            document.getElementById("blah").src = '{{ url("images/no-image.png") }}';
             iziToast.success({
                 title: 'Yeayy!',
                 message: 'Form Tambah berhasil dibersihkan',
