@@ -70,6 +70,9 @@
     <!-- typeahead css -->
     <link rel="stylesheet" href="{{ asset('libs/typeahead-js/typeahead.css') }}" />
 
+    <!-- ION Slider -->
+    <link href="{{ asset('libs/ion-rangeslider/css/ion.rangeSlider.min.css') }}" rel="stylesheet" type="text/css"/>
+
     <!-- End Addon css -->
 
 </head>
@@ -219,6 +222,9 @@
 
     <!-- Typeahead -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+
+    <!-- ION Slider -->
+    <script src="{{ asset('libs/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
 
     <!-- End Addon js -->
 

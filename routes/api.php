@@ -107,6 +107,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post('suratkeluar/ubah', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@ubah')->name('suratkeluar.ubah');
         Route::delete('suratkeluar/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@hapus');
 
+    // PENGADAAN
+    Route::get('pengadaan/data/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@dataPengadaan');
+    Route::get('pengadaan/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@loadMore');
+
     // PENGADUAN
         // IPSRS
         Route::get('perbaikan/ipsrs/lokasi', '\App\Http\Controllers\Perbaikan\ipsrsController@autocompleteLokasi')->name('ipsrs.ac.lokasi');

@@ -70,9 +70,9 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a href="{{ route('pengadaan.index') }}" class="waves-effect">
                         <i class="bx bxs-cart"></i>
-                        <span key="t-chat"><s>Pengadaan</s></span>
+                        <span key="t-chat">Pengadaan</span>
                     </a>
                 </li>
 
