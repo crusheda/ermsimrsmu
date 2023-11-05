@@ -117,6 +117,25 @@ class PengadaanController extends Controller
         return response()->json($data, 200);
     }
 
+    function riwayatPengadaan($id)
+    {
+        $pengadaan = pengadaan::join('users','users.id','=','pengadaan.id_user')
+                                ->where('pengadaan.id', $id)
+                                ->select('pengadaan.*','users.nama as nama_user')
+                                ->first();
+        $detail = pengadaan_detail::join('pengadaan_barang','pengadaan_barang.id','=','pengadaan_detail.id_barang')
+                                ->where('pengadaan_detail.id_pengadaan', $id)
+                                ->select('pengadaan_detail.*','pengadaan_barang.nama as nama_barang','pengadaan_barang.satuan','pengadaan_barang.harga')
+                                ->get();
+
+        $data = [
+            'pengadaan' => $pengadaan,
+            'detail' => $detail
+        ];
+
+        return response()->json($data, 200);
+    }
+
     function dataBarang()
     {
         $barang = pengadaan_barang::orderBy('nama','asc')->get();
@@ -139,20 +158,20 @@ class PengadaanController extends Controller
 		// return view('pages.pengadaan.index',compact('barang'));
     }
 
-    function acbarang(Request $request)
-    {
-        $getData = pengadaan_barang::select("nama")
-                ->where("nama","LIKE","%{$request->caribarang}%")
-                ->groupBy ('nama')
-                ->get();
+    // function acbarang(Request $request)
+    // {
+    //     $getData = pengadaan_barang::select("nama")
+    //             ->where("nama","LIKE","%{$request->caribarang}%")
+    //             ->groupBy ('nama')
+    //             ->get();
 
-        foreach ($getData as $item)
-        {
-            $data[] = $item->nama;
-        }
+    //     foreach ($getData as $item)
+    //     {
+    //         $data[] = $item->nama;
+    //     }
 
-        return response()->json($data);
-    }
+    //     return response()->json($data);
+    // }
 
     function getacbarang(Request $request)
     {

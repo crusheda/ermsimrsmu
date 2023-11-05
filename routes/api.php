@@ -109,9 +109,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
     // PENGADAAN
     Route::get('pengadaan/data/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@dataPengadaan')->name('pengadaan.data');
+    Route::get('pengadaan/riwayat/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@riwayatPengadaan')->name('pengadaan.riwayat');
     Route::get('pengadaan/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@loadMore')->name('pengadaan.loadmore');
     Route::get('pengadaan/caribarang', '\App\Http\Controllers\Pengadaan\PengadaanController@getacbarang')->name('pengadaan.getacbarang');
-    Route::get('pengadaan/autocomplete/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@acbarang')->name('pengadaan.acbarang');
+    // Route::get('pengadaan/autocomplete/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@acbarang')->name('pengadaan.acbarang');
 
     // PENGADUAN
         // IPSRS
