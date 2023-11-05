@@ -50,7 +50,7 @@
                                 <tbody id="tampil-tbody">
                                     <tr>
                                         <td colspan="9">
-                                            <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                            <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -70,27 +70,28 @@
                     </div>
                 </div>
                 <div class="col-lg-8 col-sm-6">
-                    <form class="mt-4 mt-sm-0 float-sm-end d-sm-flex align-items-center">
+                    <div class="mt-4 mt-sm-0 float-sm-end d-sm-flex align-items-center">
                         <div class="search-box me-2">
                             <div class="position-relative">
-                                <input type="text" class="form-control border-0" id="searchProductList"
-                                    autocomplete="off" placeholder="Cari Barang...">
+                                <input type="text" class="form-control border-0 typeahead" id="caribarang"
+                                    autocomplete="off" placeholder="Cari Barang..." data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                    data-bs-placement="bottom" data-bs-html="true" title="Tekan ENTER untuk Submit">
                                 <i class="bx bx-search-alt search-icon"></i>
                             </div>
                         </div>
                         <ul class="nav nav-pills product-view-nav justify-content-end mt-3 mt-sm-0">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                <button class="nav-link active" onclick="" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                     data-bs-placement="bottom" data-bs-html="true" title="Tampilkan Keranjang"><i
-                                        class="bx bx-cart align-middle"></i></a>
+                                        class="bx bx-cart align-middle"></i></button>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link bg-warning text-white" href="#" data-bs-toggle="tooltip"
+                                <button class="nav-link bg-warning text-white" onclick="refresh()" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh"><i
-                                        class="bx bx-sync align-middle"></i></a>
+                                        class="bx bx-sync align-middle"></i></button>
                             </li>
                         </ul>
-                    </form>
+                    </div>
                 </div>
             </div>
             <div class="row" id="daftar-barang">
@@ -121,8 +122,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center mt-2 mb-5">
-                        <a href="javascript:void(0);" class="text-success" id="ajax-loading" style="display: none"><i
-                                class="bx bx-loader bx-spin font-size-18 align-middle me-2"></i> Memproses Data Barang </a>
+                        <a href="javascript:void(0);" class="text-dark" id="ajax-pending" style="display: none"><i class="bx bx-caret-down font-size-18 align-middle me-2"></i> Gulir ke bawah untuk melanjutkan <i class="bx bx-caret-down font-size-18 align-middle me-2"></i> </a>
+                        <a href="javascript:void(0);" class="text-dark" id="ajax-loading"><i
+                                class="bx bx-loader bx-spin font-size-18 align-middle me-2"></i> Memuat Data...</a>
                     </div>
                 </div>
             </div>
@@ -167,20 +169,72 @@
                     })
                 }
             });
-            var site_url = "{{ url('/') }}";
-            var page = 1;
 
+            // AUTOCOMPLETE CARI BARANG
+            // var path = "{{ route('pengadaan.getacbarang') }}";
+            // $('.typeahead').typeahead({
+            //     source: function(query, process) {
+            //         return $.get(path, {
+            //             barang: query
+            //         }, function(data) {
+            //             return process(data);
+            //         });
+            //     }
+            // });
+
+            // var site_url = "{{ url('/') }}";
+            var page = 1;
+            var pagecari = 1;
+
+            $('#ajax-loading').show();
             load_more(page);
 
-            $(window).scroll(function() {
-                if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
-                    page++;
+            // AUTO SHOW CARI BARANG
+            $("#caribarang").keyup(function(){
+                var val_barang = $("#caribarang").val();
+                if (val_barang.length === 0 ) {
+                    page = 1;
                     load_more(page);
                 }
             });
+            $("#caribarang").on('keypress',function(e) {
+                if(e.which == 13) {
+                    var val_barang = $("#caribarang").val();
+                    $('#ajax-pending').hide();
+                    $('#ajax-loading').show();
+                    pagecari = 1;
+                    load_more_cari(val_barang,pagecari);
+                }
+            });
+
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                    $('#ajax-pending').hide();
+                    $('#ajax-loading').show();
+                    var val_barang = $("#caribarang").val();
+                    if (val_barang.length === 0 ) {
+                        page++;
+                        load_more(page);
+                    } else {
+                        pagecari++;
+                        load_more_cari(val_barang,pagecari);
+                    }
+                }
+            });
+
         })
 
         // FUNCTION AREA
+        function refresh() {
+            load_more(1);
+            $("#caribarang").val('');
+            iziToast.success({
+                title: 'Pesan Sukses!',
+                message: 'Daftar Barang Pembelanjaan berhasil disegarkan',
+                position: 'topRight'
+            });
+        }
+
         /* Fungsi formatRupiah */
         function formatRupiah(angka, prefix) {
             var number_string = angka.toString(),
@@ -200,46 +254,102 @@
         }
 
         function load_more(page) {
+            if (page === 1) {
+                $("#daftar-barang").empty();
+            }
             $.ajax({
                 url: "/api/pengadaan/barang?page=" + page,
                 type: "get",
                 datatype: "html",
                 beforeSend: function() {
+                    $('#ajax-pending').hide();
                     $('#ajax-loading').show();
                 }
             })
             .done(function(res) {
-                if (res.length == 0) {
+                if (res.data.length === 0) {
+                    $('#ajax-pending').hide();
                     $('#ajax-loading').empty();
                     $('#ajax-loading').append("<center>Seluruh Barang ditampilkan</center>");
                     return;
-                }
-                $('#ajax-loading').hide();
-                res.data.forEach(item => {
-                    content =   `<div class="col-xl-3 col-sm-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="product-img position-relative">
-                                                <img class="img-fluid mx-auto d-block " alt=""
-                                                    src="{{ asset('images/no-img.png') }}" width="150">
-                                            </div>
-                                            <div class="mt-4 text-center">
-                                                <h5 class="mb-3 text-truncate"><a href="javascript: void(0);" class="text-dark">`+item.nama+`</a></h5>
-                                                <h5 class="my-0 mb-3"><b class="text-success">`+formatRupiah(item.harga,'Rp ')+`</b> <span class="text-muted me-2">/ `+item.satuan+`</span></h5>
-                                                <a href="javascript:void(0);" onclick="masukKeranjang(`+item.id+`)" class="btn btn-outline-light btn-sm text-dark">
-                                                    <i class="mdi mdi-cart-arrow-right me-1"></i> Masukkan keranjang </a>
+                } else {
+                    res.data.forEach(item => {
+                        content =   `<div class="col-xl-3 col-sm-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="product-img position-relative">
+                                                    <img class="img-fluid mx-auto d-block " alt=""
+                                                        src="{{ asset('images/no-img.png') }}" width="150">
+                                                </div>
+                                                <div class="mt-4 text-center">
+                                                    <h5 class="mb-3 text-truncate"><a href="javascript: void(0);" class="text-dark">`+item.nama+`</a></h5>
+                                                    <h5 class="my-0 mb-3"><b class="text-success">`+formatRupiah(item.harga,'Rp ')+`</b> <span class="text-muted me-2">/ `+item.satuan+`</span></h5>
+                                                    <a href="javascript:void(0);" onclick="masukKeranjang(`+item.id+`)" class="btn btn-outline-light btn-sm text-dark">
+                                                        <i class="mdi mdi-cart-arrow-right me-1"></i> Masukkan keranjang </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>`;
-                    $("#daftar-barang").append(content);
-                })
-                console.log(res);
+                                    </div>`;
+                        $("#daftar-barang").append(content);
+                    })
+                    $('#ajax-pending').show();
+                }
+                $('#ajax-loading').hide();
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 alert('No response from server');
             });
         }
+
+        function load_more_cari(barang,page) {
+            if (page === 1) {
+                $("#daftar-barang").empty();
+            }
+            setTimeout(function() {
+                var val_barang = $("#caribarang").val();
+                $.ajax({
+                    url: "/api/pengadaan/caribarang?barang="+val_barang+"&page=" + page,
+                    type: "get",
+                    datatype: "html",
+                    beforeSend: function() {
+                        $('#ajax-pending').hide();
+                        $('#ajax-loading').show();
+                    }
+                })
+                .done(function(res) {
+                    if (res.data.length == 0) {
+                        $('#ajax-pending').hide();
+                        $('#ajax-loading').empty();
+                        $('#ajax-loading').append("<center>Seluruh Barang ditampilkan</center>");
+                        return;
+                    } else {
+                        res.data.forEach(item => {
+                            content =   `<div class="col-xl-3 col-sm-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="product-img position-relative">
+                                                        <img class="img-fluid mx-auto d-block " alt=""
+                                                            src="{{ asset('images/no-img.png') }}" width="150">
+                                                    </div>
+                                                    <div class="mt-4 text-center">
+                                                        <h5 class="mb-3 text-truncate"><a href="javascript: void(0);" class="text-dark">`+item.nama+`</a></h5>
+                                                        <h5 class="my-0 mb-3"><b class="text-success">`+formatRupiah(item.harga,'Rp ')+`</b> <span class="text-muted me-2">/ `+item.satuan+`</span></h5>
+                                                        <a href="javascript:void(0);" onclick="masukKeranjang(`+item.id+`)" class="btn btn-outline-light btn-sm text-dark">
+                                                            <i class="mdi mdi-cart-arrow-right me-1"></i> Masukkan keranjang </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                            $("#daftar-barang").append(content);
+                        })
+                        $('#ajax-pending').show();
+                    }
+                    $('#ajax-loading').hide();
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    alert('No response from server');
+                });
+            }, 1000);
+        }
     </script>
-    {{-- <script src="{{ asset('js/pages/product-list.init.js') }}"></script> --}}
 @endsection

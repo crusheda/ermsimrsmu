@@ -674,11 +674,11 @@
                 }
             });
 
-            $('.zoom').hover(function() {
-                $(this).addClass('transisi');
-            }, function() {
-                $(this).removeClass('transisi');
-            });
+            // $('.zoom').hover(function() {
+            //     $(this).addClass('transisi');
+            // }, function() {
+            //     $(this).removeClass('transisi');
+            // });
 
             var table = $('#dttable').DataTable({
                 order: [

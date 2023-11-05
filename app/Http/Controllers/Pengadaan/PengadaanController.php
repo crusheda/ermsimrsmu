@@ -138,4 +138,30 @@ class PengadaanController extends Controller
         return response()->json($barang, 200);
 		// return view('pages.pengadaan.index',compact('barang'));
     }
+
+    function acbarang(Request $request)
+    {
+        $getData = pengadaan_barang::select("nama")
+                ->where("nama","LIKE","%{$request->caribarang}%")
+                ->groupBy ('nama')
+                ->get();
+
+        foreach ($getData as $item)
+        {
+            $data[] = $item->nama;
+        }
+
+        return response()->json($data);
+    }
+
+    function getacbarang(Request $request)
+    {
+        $barang = pengadaan_barang::where("nama","LIKE","%{$request->barang}%")->orderBy('nama','asc')->paginate(12);
+
+        // print_r($barang);
+        // die();
+
+        return response()->json($barang, 200);
+		// return view('pages.pengadaan.index',compact('barang'));
+    }
 }
