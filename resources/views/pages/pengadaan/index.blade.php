@@ -509,29 +509,26 @@
                                 trigger: 'hover'
                             })
 
-                            $("#jml_set"+item.id).on("keydown change", function(e) {
+                            $("#jml_set"+item.id).on("keyup change", function(e) {
                                 var get_id = e.currentTarget.id.substring(7, 10);
                                 var tot_hrg = $("#tot"+get_id).val();
                                 var get_hrg = $("#hrg"+get_id).val();
                                 var total_seluruh = parseInt($("#ttl_getSeluruh").val());
-                                var total_smt = parseInt($(this).val()) * get_hrg;
+                                var total_smt = parseInt($("#jml_set"+item.id).val()) * get_hrg;
                                 $("#ttl"+get_id).text(formatRupiah(total_smt, 'Rp '));
-                                console.log(total_seluruh+" / "+get_hrg+" / "+tot_hrg+" / "+total_smt);
-                                $("#ttl_seluruh").text(formatRupiah(total_seluruh - (tot_hrg - total_smt), 'Rp '));
-                                // if (total_smt < tot_hrg) {
-                                //     $("#ttl_seluruh").text(formatRupiah(total_seluruh - (tot_hrg - total_smt), 'Rp '));
-                                //     $("#ttl_getSeluruh").val(total_seluruh - (tot_hrg - total_smt));
-                                // } else {
-                                //     if (total_smt > tot_hrg) {
-                                //         $("#ttl_seluruh").text(formatRupiah(total_seluruh + (total_smt - tot_hrg), 'Rp '));
-                                //         $("#ttl_getSeluruh").val(total_seluruh + (total_smt - tot_hrg));
-                                //     } else {
-                                //         $("#ttl_seluruh").text('Perhitungan Error!');
-                                //     }
-                                // }
+                                $("#tot"+get_id).val(total_smt);
+                                var jumlah = 0;
+                                for (let index = 1; index <= res.keranjang.length; index++) {
+                                    jumlah += parseInt($("#tot"+index).val());
+                                }
+                                $("#ttl_seluruh").text(formatRupiah(jumlah, 'Rp '));
                             })
 
                             tot += item.total_barang;
+                            $("#jml_set"+item.id).TouchSpin({
+                                verticalbuttons: true
+                            });
+                            $("#jml_set"+item.id).trigger("touchspin.updatesettings", {max: 1000,min: 1});
                         })
                         content2 = `<tr>
                                         <th colspan="4">Total Keseluruhan</th>
@@ -540,9 +537,6 @@
                                     </tr>`;
                         $('#tampil-keranjang').append(content2);
                         $('#keranjang').modal('show');
-                        $(".input-quantity").TouchSpin({
-                            verticalbuttons: true
-                        });
                     } else {
                         iziToast.warning({
                             title: 'Pesan Ambigu!',
