@@ -73,6 +73,7 @@
     <!-- ION Slider -->
     <link href="{{ asset('libs/ion-rangeslider/css/ion.rangeSlider.min.css') }}" rel="stylesheet" type="text/css"/>
 
+    <link href="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
     <!-- End Addon css -->
 
 </head>
@@ -226,6 +227,7 @@
     <!-- ION Slider -->
     <script src="{{ asset('libs/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
 
+    <script src="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
     <!-- End Addon js -->
 
     {{-- JS INIT --}}

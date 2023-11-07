@@ -93,9 +93,7 @@
                         <div class="search-box me-2">
                             <div class="position-relative">
                                 <input type="text" class="form-control border-0 typeahead" id="caribarang"
-                                    autocomplete="off" placeholder="Cari Barang..." data-bs-toggle="tooltip"
-                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Tekan ENTER untuk Submit">
+                                    autocomplete="off" placeholder="Cari Barang..." data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tekan ENTER untuk Submit">
                                 <i class="bx bx-search-alt search-icon"></i>
                             </div>
                         </div>
@@ -153,31 +151,79 @@
         </div>
     </div>
 
+    <!--TAMBAH KERANJANG -->
+    <div class="modal fade" tabindex="-1" id="addKeranjang" role="dialog" data-bs-backdrop="static" aria-labelledby="orderdetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah ke keranjang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" id="get_id_barang" class="form-control" hidden>
+                        <div class="col-md-6" id="showBarangKeranjang"></div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label>Jumlah Permintaan <a class="text-danger">*</a></label>
+                                <input type="text" id="jml_k" value="0" class="input-quantity form-control" width="100%">
+                            </div>
+                            <div class="form-group">
+                                <label>Keterangan</label>
+                                <textarea class="form-control" id="ket_k" rows="3" width="100%" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                        class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
+                    <button class="btn btn-info" onclick="masukKeranjang()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="top" data-bs-html="true" title="Barang akan dimasukkan ke keranjang"><i
+                            class="bx bxs-plus-square"></i>&nbsp;&nbsp;Tambah</button>
+                    <button class="btn btn-primary" onclick="showKeranjang()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="top" data-bs-html="true" title="Lihat Keranjang"><i class="bx bx-cart align-middle"></i>&nbsp;&nbsp;Keranjang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TAMPIL KERANJANG -->
     <div class="modal fade" tabindex="-1" id="keranjang" role="dialog" aria-labelledby="orderdetailsModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Order Details</h5>
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Keranjang Belanja</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="orderlist-overview">
-                        <p class="mb-2">Product id: <span class="list-id text-primary">#SK2540</span></p>
-                        <p class="mb-4">Billing Name: <span class="orderlist-customer text-primary">Neal Matthews</span>
+                        <p class="mb-2">Nama : <span class="list-id text-primary" id="nama_k"></span></p>
+                        <p class="mb-4">Diperbarui : <span class="orderlist-customer text-primary" id="tgl_k"></span>
                         </p>
 
                         <div class="table-responsive" style="border: 0px">
-                            <table class="table align-middle table-nowrap">
+                            <table id="table-keranjang" class="table align-middle table-hover table-nowrap">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Product Name</th>
-                                        <th scope="col">Price</th>
+                                        <th scope="col">Gambar</th>
+                                        <th scope="col">Barang</th>
+                                        <th scope="col">Harga</th>
+                                        <th scope="col">Jumlah</th>
+                                        <th scope="col">Total</th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tampil-keranjang">
+                                    <tr>
+                                        <td colspan="9">
+                                            <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {{-- <tbody>
                                     <tr>
                                         <th scope="row">
                                             <div>
@@ -188,53 +234,26 @@
                                         <td>
                                             <div>
                                                 <h5 class="text-truncate font-size-14">Wireless Headphone (Black)</h5>
-                                                <p class="text-muted mb-0">$ 225 x 1</p>
+                                                <p class="mb-0">Color : <span class="fw-medium">Maroon</span></p>
                                             </div>
                                         </td>
                                         <td>$ 255</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <div>
-                                                <img src="{{ asset('images/product/img-4.png') }}" alt=""
-                                                    class="avatar-sm">
-                                            </div>
-                                        </th>
                                         <td>
-                                            <div>
-                                                <h5 class="text-truncate font-size-14">Hoodie (Blue)</h5>
-                                                <p class="text-muted mb-0">$ 145 x 1</p>
+                                            <div class="me-3" style="width: 120px;">
+                                                <input type="text" value="02" class="product-quantity" name="demo_vertical">
                                             </div>
                                         </td>
-                                        <td>$ 145</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <h6 class="m-0 text-right">Sub Total:</h6>
-                                        </td>
+                                        <td>$ 9000</td>
                                         <td>
-                                            $ 400
+                                            <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove">
+                                                <a href="#removeItemModal" data-bs-toggle="modal" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                            </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <h6 class="m-0 text-right">Shipping:</h6>
-                                        </td>
-                                        <td>
-                                            Free
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <h6 class="m-0 text-right">Total:</h6>
-                                        </td>
-                                        <td>
-                                            $ 400
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                </tbody> --}}
                             </table>
                         </div>
+                        <p>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 25 setiap bulannya</p>
                     </div>
 
                 </div>
@@ -301,9 +320,20 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
+                    var date = new Date().toISOString().split('T')[0]; // 2022-05-23
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->hasRole('sekretaris-direktur|it') }}";
+                    var suID = "{{ Auth::user()->hasRole('it') }}";
+                    var tgl = date.substring(8,10);
+                    var bln = date.substring(5,7);
+                    var thn = date.substring(0,4);
                     // Tampil Result setelah Selesai Laporan
                     $("#tampil-tbody").empty();
                     res.pengadaan.forEach(item => {
+                        // var updet = item.updated_at.substring(0, 10);
+                        var tglUpload = item.updated_at.substring(8, 10);
+                        var blnUpload = item.updated_at.substring(5, 7);
+                        var thnUpload = item.updated_at.substring(0, 4);
                         content = `<tr id="pengadaan` + item.id + `">
                                     <td style="width: 50px;">
                                         <span class="badge bg-primary">ID : ` + item.id + `</span>
@@ -317,18 +347,38 @@
                                         <div>
                                             <ul class="list-inline mb-0 font-size-16">
                                                 <li class="list-inline-item">
-                                                    <a href="javascript: void(0);" onclick="showRiwayat(`+item.id+`)" class="text-primary p-1"><i
+                                                    <a href="javascript: void(0);" onclick="showRiwayat(`+item.id+`)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
                                                             class="bx bx-shopping-bag"></i></a>
                                                 </li>
-                                                <li class="list-inline-item">
-                                                    <a href="javascript: void(0);" class="text-danger p-1"><i
-                                                            class="bx bxs-trash"></i></a>
-                                                </li>
+                                                <li class="list-inline-item">`;
+                                    if (adminID) {
+                                        content += `<a href="javascript: void(0);" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
+                                    } else {
+                                        if (thnUpload == thn) { // TAHUN SAMA
+                                            if (blnUpload == bln) { // BULAN SAMA
+                                                if (tgl >= 1 && tgl <= 25) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 25 (Tgl 1-25)
+                                                    content += `<a href="javascript: void(0);" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
+                                                } else {
+                                                    content += `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
+                                                }
+                                            } else {
+                                                content += `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
+                                            }
+                                        } else {
+                                            content += `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
+                                        }
+                                    }
+                                    content += `</li>
                                             </ul>
                                         </div>
                                     </td>
                                 </tr>`;
                         $('#tampil-tbody').append(content);
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
                     })
                 }
             });
@@ -385,21 +435,199 @@
                 }
             });
 
+            $(".input-quantity").TouchSpin({
+                verticalbuttons: true
+            });
         })
 
         // FUNCTION AREA
         function refresh() {
+            $('.modal').modal('hide');
             load_more(1);
             $("#caribarang").val('');
-            iziToast.success({
-                title: 'Pesan Sukses!',
-                message: 'Daftar Barang Pembelanjaan berhasil disegarkan',
-                position: 'topRight'
+            // iziToast.success({
+            //     title: 'Pesan Sukses!',
+            //     message: 'Daftar Barang Pembelanjaan berhasil disegarkan',
+            //     position: 'topRight'
+            // });
+        }
+
+        // Menampilkan Modal Lihat Keranjang Saat Ini
+        function showKeranjang() {
+            $('.modal').modal('hide');
+            $.ajax({
+                url: "/api/pengadaan/keranjang/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-keranjang").empty();
+                    // console.log(res.keranjang);
+                    if(res.keranjang != ''){
+                        var tot = 0;
+                        res.keranjang.forEach(item => {
+                            if (item.ket) {
+                                ket = item.ket;
+                            } else {
+                                ket = '';
+                            }
+                            content =   `<tr>
+                                            <th scope="row">
+                                                <div>
+                                                    <img src="{{ asset('images/no-img.png') }}" alt=""
+                                                        class="avatar-sm">
+                                                </div>
+                                            </th>
+                                            <td>
+                                                <div>
+                                                    <h5 class="text-truncate font-size-14">`+item.nama_barang+`</h5>
+                                                    <small><p class="mb-0">Keterangan : <span class="fw-medium">`+ket+`</span></p></small>
+                                                </div>
+                                            </td>
+                                            <td>`+formatRupiah(item.harga_barang, 'Rp ')+`</td>
+                                            <td>
+                                                <div class="me-3" style="width: 120px;">
+                                                    <input type="text" value="`+item.jml_permintaan+`" id="jml_set`+item.id+`" class="input-quantity form-control" name="demo_vertical">
+                                                </div>
+                                            </td>
+                                            <td id="ttl`+item.id+`">`+formatRupiah(item.total_barang, 'Rp ')+`</td>
+                                            <td>
+                                                <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove">
+                                                    <a href="#removeItemModal" data-bs-toggle="modal" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                </div>
+                                            </td>
+                                            <td hidden>
+                                                <input type="number" id="hrg`+item.id+`" value="`+item.harga_barang+`" class="form-control">
+                                                <input type="number" id="tot`+item.id+`" value="`+item.total_barang+`" class="form-control">
+                                            </td>
+                                        </tr>`;
+                            $('#tampil-keranjang').append(content);
+                            $("#nama_k").text(res.keranjang[0].nama_user);
+                            $("#tgl_k").text(res.keranjang[0].updated_at.substring(0, 19).replace('T', ' '));
+
+                            // Showing Tooltip
+                            $('[data-bs-toggle="tooltip"]').tooltip({
+                                trigger: 'hover'
+                            })
+
+                            $("#jml_set"+item.id).on("keydown change", function(e) {
+                                var get_id = e.currentTarget.id.substring(7, 10);
+                                var tot_hrg = $("#tot"+get_id).val();
+                                var get_hrg = $("#hrg"+get_id).val();
+                                var total_seluruh = parseInt($("#ttl_getSeluruh").val());
+                                var total_smt = parseInt($(this).val()) * get_hrg;
+                                $("#ttl"+get_id).text(formatRupiah(total_smt, 'Rp '));
+                                console.log(total_seluruh+" / "+get_hrg+" / "+tot_hrg+" / "+total_smt);
+                                $("#ttl_seluruh").text(formatRupiah(total_seluruh - (tot_hrg - total_smt), 'Rp '));
+                                // if (total_smt < tot_hrg) {
+                                //     $("#ttl_seluruh").text(formatRupiah(total_seluruh - (tot_hrg - total_smt), 'Rp '));
+                                //     $("#ttl_getSeluruh").val(total_seluruh - (tot_hrg - total_smt));
+                                // } else {
+                                //     if (total_smt > tot_hrg) {
+                                //         $("#ttl_seluruh").text(formatRupiah(total_seluruh + (total_smt - tot_hrg), 'Rp '));
+                                //         $("#ttl_getSeluruh").val(total_seluruh + (total_smt - tot_hrg));
+                                //     } else {
+                                //         $("#ttl_seluruh").text('Perhitungan Error!');
+                                //     }
+                                // }
+                            })
+
+                            tot += item.total_barang;
+                        })
+                        content2 = `<tr>
+                                        <th colspan="4">Total Keseluruhan</th>
+                                        <td colspan="2" id="ttl_seluruh">`+formatRupiah(tot, 'Rp ')+`</td>
+                                        <td hidden><input type="number" id="ttl_getSeluruh" value="`+tot+`" class="form-control" hidden></td>
+                                    </tr>`;
+                        $('#tampil-keranjang').append(content2);
+                        $('#keranjang').modal('show');
+                        $(".input-quantity").TouchSpin({
+                            verticalbuttons: true
+                        });
+                    } else {
+                        iziToast.warning({
+                            title: 'Pesan Ambigu!',
+                            message: 'Anda belum menambahkan barang ke keranjang',
+                            position: 'topRight'
+                        });
+                    }
+                }
             });
         }
 
-        function showKeranjang() {
-            $('#keranjang').modal('show');
+        // Menampilkan Modal Tambah Barang Ke Keranjang
+        function addKeranjang(id) {
+            $("#get_id_barang").val(id);
+            $("#jml_k").val(1).trigger("touchspin.updatesettings", {max: 1000,min: 1});
+            $("#ket_k").text('');
+            $.ajax({
+                url: "/api/pengadaan/keranjang/"+id+"/tampil",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#showBarangKeranjang").empty();
+                    content =   `<div class="product-img position-relative">
+                                    <img class="img-fluid mx-auto d-block " alt=""
+                                        src="{{ asset('images/no-img.png') }}" width="80">
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <h6 class="mb-3"><a href="javascript: void(0);" class="text-dark">` +
+                                        res.nama + `</a></h6>
+                                    <h5 class="my-0 mb-3"><b class="text-success">` + formatRupiah(res.harga, 'Rp ') + `</b> <span class="text-muted me-2">/ ` + res.satuan + `</span></h5>
+                                </div>`;
+                    $('#showBarangKeranjang').append(content);
+                }
+            });
+            // Showing Tooltip
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            })
+            $('#addKeranjang').modal('show');
+        }
+
+        // Memasukkan Barang Ke Keranjang
+        function masukKeranjang() {
+            var id_barang = $("#get_id_barang").val();
+            var jml = $("#jml_k").val();
+            var ket = $("#ket_k").val();
+            var id_user = '{{ Auth::user()->id }}';
+
+            if (jml == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi jumlah permintaan',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/pengadaan/keranjang/tambah',
+                    dataType: 'json',
+                    data: {
+                        id_barang: id_barang,
+                        jml: jml,
+                        ket: ket,
+                        id_user: id_user,
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Tambah barang ke keranjang berhasil pada '+ res,
+                            position: 'topRight'
+                        });
+                        refresh();
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
         }
 
         function showRiwayat(id) {
@@ -511,7 +739,7 @@
                             item.nama + `</a></h6>
                                                 <h5 class="my-0 mb-3"><b class="text-success">` + formatRupiah(item
                                 .harga, 'Rp ') + `</b> <span class="text-muted me-2">/ ` + item.satuan + `</span></h5>
-                                                <a href="javascript:void(0);" onclick="masukKeranjang(` + item.id + `)" class="btn btn-outline-light btn-sm text-dark">
+                                                <a href="javascript:void(0);" onclick="addKeranjang(` + item.id + `)" class="btn btn-outline-light btn-sm text-dark">
                                                     <i class="mdi mdi-cart-arrow-right me-1"></i> Masukkan keranjang </a>
                                             </div>
                                         </div>
@@ -564,7 +792,7 @@
                                                         <h5 class="my-0 mb-3"><b class="text-success">` + formatRupiah(
                                         item.harga, 'Rp ') + `</b> <span class="text-muted me-2">/ ` +
                                     item.satuan + `</span></h5>
-                                                        <a href="javascript:void(0);" onclick="masukKeranjang(` + item
+                                                        <a href="javascript:void(0);" onclick="addKeranjang(` + item
                                     .id + `)" class="btn btn-outline-light btn-sm text-dark">
                                                             <i class="mdi mdi-cart-arrow-right me-1"></i> Masukkan keranjang </a>
                                                     </div>

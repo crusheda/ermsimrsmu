@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use App\Models\pengadaan;
+use App\Models\pengadaan_keranjang;
 use App\Models\pengadaan_barang;
 use App\Models\pengadaan_detail;
 use App\Models\pengadaan_ref;
@@ -134,6 +135,47 @@ class PengadaanController extends Controller
         ];
 
         return response()->json($data, 200);
+    }
+
+    function tampilTambahKeranjang($id)
+    {
+        $barang = pengadaan_barang::where('id',$id)->first();
+
+        return response()->json($barang, 200);
+    }
+
+    function tampilKeranjang($id)
+    {
+        $keranjang = pengadaan_keranjang::join('users','users.id','=','pengadaan_keranjang.id_user')
+                                        ->join('pengadaan_barang','pengadaan_barang.id','=','pengadaan_keranjang.id_barang')
+                                        ->where('pengadaan_keranjang.id_user', $id)
+                                        ->select('pengadaan_keranjang.*','users.nama as nama_user','pengadaan_barang.nama as nama_barang','pengadaan_barang.satuan','pengadaan_barang.harga','pengadaan_barang.filename')
+                                        ->orderBy('pengadaan_keranjang.updated_at','desc')
+                                        ->get();
+
+        $data = [
+            'keranjang' => $keranjang,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tambahKeranjang(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $getBarang = pengadaan_barang::where('id',$request->id_barang)->first();
+
+        $data = new pengadaan_keranjang;
+        $data->id_user = $request->id_user;
+        $data->id_barang = $request->id_barang;
+        $data->jml_permintaan = $request->jml;
+        $data->harga_barang = $getBarang->harga;
+        $data->total_barang = $request->jml * $getBarang->harga;
+        $data->ket = $request->ket;
+        $data->save();
+
+        return response()->json($tgl, 200);
     }
 
     function dataBarang()
