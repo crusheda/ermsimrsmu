@@ -15,7 +15,7 @@
         <div class="card-body">
             <h4 class="card-title">
                 <button class="btn btn-outline-secondary"
-                    onclick="window.location.href='{{ route('datakaryawan.index') }}'"><i
+                    onclick="window.location.href='{{ route('akunpengguna.index') }}'"><i
                         class="bx bx-chevron-left"></i>&nbsp;&nbsp;Kembali</button>
             </h4>
             <hr>

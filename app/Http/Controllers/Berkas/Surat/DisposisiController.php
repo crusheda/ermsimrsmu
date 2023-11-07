@@ -54,7 +54,7 @@ class DisposisiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => ['max:20000|mimes:pdf'],
+            // 'file' => ['max:20000|mimes:pdf'],
         ]);
 
         $uploadedFile = $request->file('file');
