@@ -121,7 +121,7 @@ class PengadaanController extends Controller
     function riwayatPengadaan($id)
     {
         $pengadaan = pengadaan::join('users','users.id','=','pengadaan.id_user')
-                                ->where('pengadaan.id', $id)
+                                ->where('pengadaan.id_pengadaan', $id)
                                 ->select('pengadaan.*','users.nama as nama_user')
                                 ->first();
         $detail = pengadaan_detail::join('pengadaan_barang','pengadaan_barang.id','=','pengadaan_detail.id_barang')
@@ -174,6 +174,16 @@ class PengadaanController extends Controller
         $data->total_barang = $request->jml * $getBarang->harga;
         $data->ket = $request->ket;
         $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function hapusKeranjang($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = pengadaan_keranjang::find($id);
+        $data->delete();
 
         return response()->json($tgl, 200);
     }

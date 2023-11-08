@@ -177,8 +177,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                        class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
                     <button class="btn btn-info" onclick="masukKeranjang()" data-bs-toggle="tooltip" data-bs-offset="0,4"
                         data-bs-placement="top" data-bs-html="true" title="Barang akan dimasukkan ke keranjang"><i
                             class="bx bxs-plus-square"></i>&nbsp;&nbsp;Tambah</button>
@@ -223,42 +222,24 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                {{-- <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <div>
-                                                <img src="{{ asset('images/product/img-7.png') }}" alt=""
-                                                    class="avatar-sm">
-                                            </div>
-                                        </th>
-                                        <td>
-                                            <div>
-                                                <h5 class="text-truncate font-size-14">Wireless Headphone (Black)</h5>
-                                                <p class="mb-0">Color : <span class="fw-medium">Maroon</span></p>
-                                            </div>
-                                        </td>
-                                        <td>$ 255</td>
-                                        <td>
-                                            <div class="me-3" style="width: 120px;">
-                                                <input type="text" value="02" class="product-quantity" name="demo_vertical">
-                                            </div>
-                                        </td>
-                                        <td>$ 9000</td>
-                                        <td>
-                                            <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove">
-                                                <a href="#removeItemModal" data-bs-toggle="modal" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody> --}}
                             </table>
                         </div>
-                        <p>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 25 setiap bulannya</p>
+                        <div class="shadow-lg p-3 bg-body rounded" role="alert">
+                            <h5 class="alert-heading fw-bold mb-2"><i class="bx bxs-right-arrow-circle font-size-15 bx-fade-right text-primary"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perhatian!</h5>
+                            <span>
+                                <ul>
+                                    <li>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 25 setiap bulannya</li>
+                                </ul>
+                            </span>
+                        </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-danger" onclick="checkout()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="top" data-bs-html="true" title="Ajukan Barang Pengadaan"><i
+                            class="mdi mdi-truck-fast me-1"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
         </div>
@@ -287,6 +268,7 @@
                                         <th scope="col">Gambar</th>
                                         <th scope="col">Barang</th>
                                         <th scope="col">Harga</th>
+                                        <th scope="col" class="text-wrap">Keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tampil-riwayat">
@@ -302,7 +284,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
         </div>
@@ -347,7 +329,7 @@
                                         <div>
                                             <ul class="list-inline mb-0 font-size-16">
                                                 <li class="list-inline-item">
-                                                    <a href="javascript: void(0);" onclick="showRiwayat(`+item.id+`)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
+                                                    <a href="javascript: void(0);" onclick="showRiwayat(`+item.id_pengadaan+`)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
                                                             class="bx bx-shopping-bag"></i></a>
                                                 </li>
                                                 <li class="list-inline-item">`;
@@ -477,10 +459,10 @@
                                                         class="avatar-sm">
                                                 </div>
                                             </th>
-                                            <td>
+                                            <td style="word-wrap: break-word" class="text-wrap">
                                                 <div>
                                                     <h5 class="text-truncate font-size-14">`+item.nama_barang+`</h5>
-                                                    <small><p class="mb-0">Keterangan : <span class="fw-medium">`+ket+`</span></p></small>
+                                                    <small><p class="mb-0">Keterangan : <span class="fw-medium text-primary">`+ket+`</span></p></small>
                                                 </div>
                                             </td>
                                             <td>`+formatRupiah(item.harga_barang, 'Rp ')+`</td>
@@ -491,8 +473,8 @@
                                             </td>
                                             <td id="ttl`+item.id+`">`+formatRupiah(item.total_barang, 'Rp ')+`</td>
                                             <td>
-                                                <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove">
-                                                    <a href="#removeItemModal" data-bs-toggle="modal" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus `+item.nama_barang+`">
+                                                    <a href="javascript: void(0);" onclick="hapusBarangKeranjang(`+item.id+`)" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
                                                 </div>
                                             </td>
                                             <td hidden>
@@ -624,6 +606,93 @@
             }
         }
 
+        // Checkout/Ajukan Barang di Keranjang
+        function masukKeranjang() {
+            var id_barang = $("#get_id_barang").val();
+            var jml = $("#jml_k").val();
+            var ket = $("#ket_k").val();
+            var id_user = '{{ Auth::user()->id }}';
+
+            if (jml == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi jumlah permintaan',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/pengadaan/keranjang/tambah',
+                    dataType: 'json',
+                    data: {
+                        id_barang: id_barang,
+                        jml: jml,
+                        ket: ket,
+                        id_user: id_user,
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Tambah barang ke keranjang berhasil pada '+ res,
+                            position: 'topRight'
+                        });
+                        refresh();
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
+        // Hapus Barang di Keranjang
+        function hapusBarangKeranjang(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Hapus Barang ID : ' + id + ' dari keranjang',
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/pengadaan/keranjang/" + id + "/hapus",
+                        type: 'DELETE',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Hapus Barang dari keranjang berhasil pada ' + res,
+                                position: 'topRight'
+                            });
+                            showKeranjang();
+                        },
+                        error: function(res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            })
+        }
+
         function showRiwayat(id) {
             $.ajax({
                 url: "/api/pengadaan/riwayat/"+id,
@@ -634,6 +703,11 @@
                     $("#tampil-riwayat").empty();
                     // $("#total_r").empty();
                     res.detail.forEach(item => {
+                        if (item.ket) {
+                            ket = item.ket;
+                        } else {
+                            ket = '';
+                        }
                         content =   `<tr>
                                         <th scope="row">
                                             <div>
@@ -648,14 +722,15 @@
                                             </div>
                                         </td>
                                         <td>` + formatRupiah(item.total, 'Rp ') + `</td>
+                                        <td style="word-wrap: break-word" class="text-wrap">`+ket+`</td>
                                     </tr>`;
                         $('#tampil-riwayat').append(content);
                     })
                     content_total = `<tr>
                                         <td colspan="2">
-                                            <h6 class="m-0 text-right">Total:</h6>
+                                            <h6 class="m-0 text-right">Total Keseluruhan</h6>
                                         </td>
-                                        <td><b>`+formatRupiah(res.pengadaan.total, 'Rp ')+`</b></td>
+                                        <td colspan="2"><b>`+formatRupiah(res.pengadaan.total, 'Rp ')+`</b></td>
                                     </tr>`;
                     $('#tampil-riwayat').append(content_total);
                     $("#show_id").text("#"+res.pengadaan.id_pengadaan);

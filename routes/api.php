@@ -113,6 +113,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('pengadaan/keranjang/{id}/tampil', '\App\Http\Controllers\Pengadaan\PengadaanController@tampilTambahKeranjang')->name('pengadaan.tampiltambah-keranjang');
     Route::get('pengadaan/keranjang/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@tampilKeranjang')->name('pengadaan.keranjang');
     Route::post('pengadaan/keranjang/tambah', '\App\Http\Controllers\Pengadaan\PengadaanController@tambahKeranjang')->name('pengadaan.tambah-keranjang');
+    Route::delete('pengadaan/keranjang/{id}/hapus', '\App\Http\Controllers\Pengadaan\PengadaanController@hapusKeranjang')->name('pengadaan.hapus-keranjang');
     Route::get('pengadaan/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@loadMore')->name('pengadaan.loadmore');
     Route::get('pengadaan/caribarang', '\App\Http\Controllers\Pengadaan\PengadaanController@getacbarang')->name('pengadaan.getacbarang');
     // Route::get('pengadaan/autocomplete/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@acbarang')->name('pengadaan.acbarang');
