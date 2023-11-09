@@ -96,22 +96,22 @@ Route::group(['middleware' => ['auth'], 'prefix' => '', 'as' => ''], function ()
     Route::get('pengadaan', '\App\Http\Controllers\pengadaan\PengadaanController@index')->name('pengadaan.index');
 
     // OLD
-    Route::get('pengadaan/api/data', 'publik\pengadaan\pengadaanController@getPengadaan')->name('pengadaan.api.data');
-    Route::get('pengadaan/api/data/{id}', 'publik\pengadaan\pengadaanController@detailPengadaan')->name('pengadaan.api.detailData');
-    Route::get('pengadaan/api/data/hapus/{id}', 'publik\pengadaan\pengadaanController@hapusPengadaan')->name('pengadaan.api.hapus');
-    Route::get('pengadaan/tambah/api/barang/detail/{id}', 'publik\pengadaan\pengadaanController@getBarangDetail')->name('pengadaan.api.barangDetail');
-    Route::get('pengadaan/tambah/api/barang/{id}', 'publik\pengadaan\pengadaanController@getBarang')->name('pengadaan.api.barang');
-    Route::post('pengadaan/tambah', 'publik\pengadaan\pengadaanController@create')->name('pengadaan.create');
-    Route::post('pengadaan', 'publik\pengadaan\pengadaanController@store')->name('pengadaan.store');
-    Route::get('pengadaan/api/barang', 'publik\pengadaan\barangPengadaanController@apiGet')->name('barang.api.get');
-    Route::get('pengadaan/api/barang/hapus/{id}', 'publik\pengadaan\barangPengadaanController@apiHapus')->name('barang.api.hapus');
-    Route::resource('pengadaan/barang', 'publik\pengadaan\barangPengadaanController');
+    // Route::get('pengadaan/api/data', 'publik\pengadaan\pengadaanController@getPengadaan')->name('pengadaan.api.data');
+    // Route::get('pengadaan/api/data/{id}', 'publik\pengadaan\pengadaanController@detailPengadaan')->name('pengadaan.api.detailData');
+    // Route::get('pengadaan/api/data/hapus/{id}', 'publik\pengadaan\pengadaanController@hapusPengadaan')->name('pengadaan.api.hapus');
+    // Route::get('pengadaan/tambah/api/barang/detail/{id}', 'publik\pengadaan\pengadaanController@getBarangDetail')->name('pengadaan.api.barangDetail');
+    // Route::get('pengadaan/tambah/api/barang/{id}', 'publik\pengadaan\pengadaanController@getBarang')->name('pengadaan.api.barang');
+    // Route::post('pengadaan/tambah', 'publik\pengadaan\pengadaanController@create')->name('pengadaan.create');
+    // Route::post('pengadaan', 'publik\pengadaan\pengadaanController@store')->name('pengadaan.store');
+    // Route::get('pengadaan/api/barang', 'publik\pengadaan\barangPengadaanController@apiGet')->name('barang.api.get');
+    // Route::get('pengadaan/api/barang/hapus/{id}', 'publik\pengadaan\barangPengadaanController@apiHapus')->name('barang.api.hapus');
+    // Route::resource('pengadaan/barang', 'publik\pengadaan\barangPengadaanController');
 
-        // Rekap Pengadaan
-        Route::get('pengadaan/rekap', 'publik\pengadaan\pengadaanController@indexRekap')->name('rekap.index');
-        Route::get('pengadaan/rekap/all', 'publik\pengadaan\pengadaanController@RekapAll')->name('rekapAll.index');
-        Route::get('pengadaan/rekap/api/data/bulan/{bulan}/tahun/{tahun}', 'publik\pengadaan\pengadaanController@getRekap')->name('rekap.api.data');
-        Route::get('pengadaan/rekap/api/data/barang/addfield/{barang}', 'publik\pengadaan\pengadaanController@addField')->name('rekap.api.dataBarangAddField');
+    //     // Rekap Pengadaan
+    //     Route::get('pengadaan/rekap', 'publik\pengadaan\pengadaanController@indexRekap')->name('rekap.index');
+    //     Route::get('pengadaan/rekap/all', 'publik\pengadaan\pengadaanController@RekapAll')->name('rekapAll.index');
+    //     Route::get('pengadaan/rekap/api/data/bulan/{bulan}/tahun/{tahun}', 'publik\pengadaan\pengadaanController@getRekap')->name('rekap.api.data');
+    //     Route::get('pengadaan/rekap/api/data/barang/addfield/{barang}', 'publik\pengadaan\pengadaanController@addField')->name('rekap.api.dataBarangAddField');
 });
 
 // PENGADUAN

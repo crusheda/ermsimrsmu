@@ -37,8 +37,15 @@
                             <h4 class="card-title mb-3">Digital Pengadaan</h4>
                             <p class="text-muted">Semua data terintegrasi menjadi satu dengan tampilan yang baru hanya di
                                 Simrsmu</p>
-                            <div>
+                            <div class="btn-group">
                                 <a href="javascript:void(0);" class="btn btn-primary btn-sm"><i class='bx bx-info-circle align-middle'></i> Baca Panduan</a>
+                                <a class="btn btn-dark btn-sm" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Menu&nbsp;&nbsp;<i class='bx bx-caret-down align-middle'></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="javascript:void(0);"><s>Tambah Barang</s></a>
+                                    <a class="dropdown-item" href="javascript:void(0);"><s>Rekap Pengadaan</s></a>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -52,7 +59,8 @@
                     <div class="d-flex justify-content-between">
                         <h4 class="card-title mb-4"><i class="bx bx-sort-down"></i> Riwayat Pengadaan</h4>
                         <div class="dropdown ms-2 dropend">
-                            <a class="text-muted" href="#" role="button" data-bs-toggle="dropdown"
+                            <a onclick="refreshRiwayat()" class="text-warning" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Refresh Data Riwayat Pengadaan"><i class='fa-fw fas fa-sync nav-icon'></i></a>
+                            {{-- <a class="text-muted" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
                                 <i class="mdi mdi-dots-horizontal font-size-18"></i>
                             </a>
@@ -60,7 +68,7 @@
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="#">Lihat Keranjang</a>
                                 <a class="dropdown-item" href="#">Hapus Isi Keranjang</a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div data-simplebar style="max-height: 500px;">
@@ -105,7 +113,7 @@
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link bg-warning text-white" onclick="refresh()" data-bs-toggle="tooltip"
-                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh"><i
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Data Pembelanjaan"><i
                                         class="bx bx-sync align-middle"></i></button>
                             </li>
                         </ul>
@@ -236,9 +244,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger" onclick="checkout()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                    <button class="btn btn-danger" onclick="checkoutKeranjang()" id="btn-ajukan" data-bs-toggle="tooltip" data-bs-offset="0,4"
                         data-bs-placement="top" data-bs-html="true" title="Ajukan Barang Pengadaan"><i
-                            class="mdi mdi-truck-fast me-1"></i>&nbsp;&nbsp;Ajukan</button>
+                            class="bx bx-check-double"></i>&nbsp;&nbsp;Ajukan</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -316,9 +324,9 @@
                         var tglUpload = item.updated_at.substring(8, 10);
                         var blnUpload = item.updated_at.substring(5, 7);
                         var thnUpload = item.updated_at.substring(0, 4);
-                        content = `<tr id="pengadaan` + item.id + `">
+                        content = `<tr id="pengadaan` + item.id_pengadaan + `">
                                     <td style="width: 50px;">
-                                        <span class="badge bg-primary">ID : ` + item.id + `</span>
+                                        <span class="badge bg-primary">ID : ` + item.id_pengadaan + `</span>
                                     </td>
                                     <td>
                                         <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);"
@@ -334,12 +342,12 @@
                                                 </li>
                                                 <li class="list-inline-item">`;
                                     if (adminID) {
-                                        content += `<a href="javascript: void(0);" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
+                                        content += `<a href="javascript: void(0);" onclick="hapusRiwayat(`+item.id_pengadaan+`)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
                                     } else {
                                         if (thnUpload == thn) { // TAHUN SAMA
                                             if (blnUpload == bln) { // BULAN SAMA
                                                 if (tgl >= 1 && tgl <= 25) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 25 (Tgl 1-25)
-                                                    content += `<a href="javascript: void(0);" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
+                                                    content += `<a href="javascript: void(0);" onclick="hapusRiwayat(`+item.id_pengadaan+`)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
                                                 } else {
                                                     content += `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
                                                 }
@@ -434,9 +442,82 @@
             // });
         }
 
+        function refreshRiwayat() {
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/pengadaan/data/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    var date = new Date().toISOString().split('T')[0]; // 2022-05-23
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->hasRole('sekretaris-direktur|it') }}";
+                    var suID = "{{ Auth::user()->hasRole('it') }}";
+                    var tgl = date.substring(8,10);
+                    var bln = date.substring(5,7);
+                    var thn = date.substring(0,4);
+                    // Tampil Result setelah Selesai Laporan
+                    $("#tampil-tbody").empty();
+                    res.pengadaan.forEach(item => {
+                        // var updet = item.updated_at.substring(0, 10);
+                        var tglUpload = item.updated_at.substring(8, 10);
+                        var blnUpload = item.updated_at.substring(5, 7);
+                        var thnUpload = item.updated_at.substring(0, 4);
+                        content = `<tr id="pengadaan` + item.id_pengadaan + `">
+                                    <td style="width: 50px;">
+                                        <span class="badge bg-primary">ID : ` + item.id_pengadaan + `</span>
+                                    </td>
+                                    <td>
+                                        <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);"
+                                                class="text-dark">` + formatRupiah(item.total, 'Rp ') + ` ,-</a></h5>
+                                        <p class="text-muted mb-0">` + item.tgl_pengadaan + `</p>
+                                    </td>
+                                    <td style="width: 90px;">
+                                        <div>
+                                            <ul class="list-inline mb-0 font-size-16">
+                                                <li class="list-inline-item">
+                                                    <a href="javascript: void(0);" onclick="showRiwayat(`+item.id_pengadaan+`)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
+                                                            class="bx bx-shopping-bag"></i></a>
+                                                </li>
+                                                <li class="list-inline-item">`;
+                                    if (adminID) {
+                                        content += `<a href="javascript: void(0);" onclick="hapusRiwayat(`+item.id_pengadaan+`)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
+                                    } else {
+                                        if (thnUpload == thn) { // TAHUN SAMA
+                                            if (blnUpload == bln) { // BULAN SAMA
+                                                if (tgl >= 1 && tgl <= 25) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 25 (Tgl 1-25)
+                                                    content += `<a href="javascript: void(0);" onclick="hapusRiwayat(`+item.id_pengadaan+`)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
+                                                } else {
+                                                    content += `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
+                                                }
+                                            } else {
+                                                content += `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
+                                            }
+                                        } else {
+                                            content += `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
+                                        }
+                                    }
+                                    content += `</li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                        $('#tampil-tbody').append(content);
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    })
+                }
+            });
+        }
+
         // Menampilkan Modal Lihat Keranjang Saat Ini
         function showKeranjang() {
-            $('.modal').modal('hide');
+            // $('.modal').modal('hide');
             $.ajax({
                 url: "/api/pengadaan/keranjang/{{ Auth::user()->id }}",
                 type: 'GET',
@@ -446,6 +527,7 @@
                     // console.log(res.keranjang);
                     if(res.keranjang != ''){
                         var tot = 0;
+                        var urutan = 1;
                         res.keranjang.forEach(item => {
                             if (item.ket) {
                                 ket = item.ket;
@@ -468,7 +550,7 @@
                                             <td>`+formatRupiah(item.harga_barang, 'Rp ')+`</td>
                                             <td>
                                                 <div class="me-3" style="width: 120px;">
-                                                    <input type="text" value="`+item.jml_permintaan+`" id="jml_set`+item.id+`" class="input-quantity form-control" name="demo_vertical">
+                                                    <input type="text" value="`+item.jml_permintaan+`" id="jml_set`+item.id+`" class="input-quantity form-control idJumlah`+urutan+`" name="demo_vertical">
                                                 </div>
                                             </td>
                                             <td id="ttl`+item.id+`">`+formatRupiah(item.total_barang, 'Rp ')+`</td>
@@ -478,8 +560,13 @@
                                                 </div>
                                             </td>
                                             <td hidden>
+                                                <input type="number" id="totalKeranjang" value="`+item.total_barang+`" class="form-control">
+                                                <input type="number" id="urutan" value="`+res.keranjang.length+`" class="form-control">
+                                                <input type="number" id="idBarang`+urutan+`" value="`+item.id_barang+`" class="form-control">
+                                                <input type="number" id="ket`+urutan+`" value="`+ket+`" class="form-control">
+
                                                 <input type="number" id="hrg`+item.id+`" value="`+item.harga_barang+`" class="form-control">
-                                                <input type="number" id="tot`+item.id+`" value="`+item.total_barang+`" class="form-control">
+                                                <input type="number" id="tot`+item.id+`" value="`+item.total_barang+`" class="form-control total`+urutan+`">
                                             </td>
                                         </tr>`;
                             $('#tampil-keranjang').append(content);
@@ -499,14 +586,19 @@
                                 var total_smt = parseInt($("#jml_set"+item.id).val()) * get_hrg;
                                 $("#ttl"+get_id).text(formatRupiah(total_smt, 'Rp '));
                                 $("#tot"+get_id).val(total_smt);
+                                // console.log(res.keranjang.length);
+                                // console.log(total_smt);
                                 var jumlah = 0;
                                 for (let index = 1; index <= res.keranjang.length; index++) {
-                                    jumlah += parseInt($("#tot"+index).val());
+                                    jumlah += parseInt($(".total"+index).val());
+                                    // console.log($(".total"+index).val());
                                 }
                                 $("#ttl_seluruh").text(formatRupiah(jumlah, 'Rp '));
+                                $("#totalKeranjang").val(jumlah);
                             })
 
                             tot += item.total_barang;
+                            urutan++;
                             $("#jml_set"+item.id).TouchSpin({
                                 verticalbuttons: true
                             });
@@ -515,7 +607,10 @@
                         content2 = `<tr>
                                         <th colspan="4">Total Keseluruhan</th>
                                         <td colspan="2" id="ttl_seluruh">`+formatRupiah(tot, 'Rp ')+`</td>
-                                        <td hidden><input type="number" id="ttl_getSeluruh" value="`+tot+`" class="form-control" hidden></td>
+                                        <td hidden>
+                                            <input type="number" id="ttl_getSeluruh" value="`+tot+`" class="form-control" hidden>
+                                            <input type="number" id="totalKeranjang" value="`+tot+`" class="form-control" hidden>
+                                        </td>
                                     </tr>`;
                         $('#tampil-keranjang').append(content2);
                         $('#keranjang').modal('show');
@@ -589,7 +684,7 @@
                     },
                     success: function(res) {
                         iziToast.success({
-                            title: 'Sukses!',
+                            title: 'Pesan Sukses!',
                             message: 'Tambah barang ke keranjang berhasil pada '+ res,
                             position: 'topRight'
                         });
@@ -604,53 +699,105 @@
                     }
                 });
             }
+        }
+
+        // Checkout Keranjang / Ajukan Barang Pengadaan
+        function checkoutKeranjang() {
+            $('#btn-ajukan').prop('disabled', true);
+            $('#btn-ajukan').find('i').removeClass('bx-check-double').addClass('bx-loader bx-spin');
+            var urutan = $("#urutan").val();
+            var total = $("#totalKeranjang").val();
+            var id_barang = [];
+            var id_jumlah = [];
+            var id_ket = [];
+            for (let i = 0; i < urutan; i++) {
+                id_barang[i] = $("#idBarang"+(i+1)).val();
+                id_jumlah[i] = $(".idJumlah"+(i+1)).val();
+                id_ket[i] = $("#ket"+(i+1)).val();
+            }
+            var id_user = '{{ Auth::user()->id }}';
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: '/api/pengadaan/keranjang/checkout',
+                dataType: 'json',
+                data: {
+                    urutan: urutan,
+                    id_barang: id_barang,
+                    id_jumlah: id_jumlah,
+                    id_ket: id_ket,
+                    total: total,
+                    id_user: id_user,
+                },
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: 'Pengajuan Pengadaan telah berhasil pada '+ res,
+                        position: 'topRight'
+                    });
+                    refresh();
+                    refreshRiwayat();
+                },
+                error: function (res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+            $('#btn-ajukan').find('i').removeClass('bx-loader bx-spin').addClass('bx-check-double');
+            $('#btn-ajukan').prop('disabled', false);
         }
 
         // Checkout/Ajukan Barang di Keranjang
-        function masukKeranjang() {
-            var id_barang = $("#get_id_barang").val();
-            var jml = $("#jml_k").val();
-            var ket = $("#ket_k").val();
-            var id_user = '{{ Auth::user()->id }}';
+        // function masukKeranjang() {
+        //     var id_barang = $("#get_id_barang").val();
+        //     var jml = $("#jml_k").val();
+        //     var ket = $("#ket_k").val();
+        //     var id_user = '{{ Auth::user()->id }}';
 
-            if (jml == "") {
-                iziToast.warning({
-                    title: 'Pesan Ambigu!',
-                    message: 'Pastikan Anda tidak mengosongi jumlah permintaan',
-                    position: 'topRight'
-                });
-            } else {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: 'POST',
-                    url: '/api/pengadaan/keranjang/tambah',
-                    dataType: 'json',
-                    data: {
-                        id_barang: id_barang,
-                        jml: jml,
-                        ket: ket,
-                        id_user: id_user,
-                    },
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Sukses!',
-                            message: 'Tambah barang ke keranjang berhasil pada '+ res,
-                            position: 'topRight'
-                        });
-                        refresh();
-                    },
-                    error: function (res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
-                            position: 'topRight'
-                        });
-                    }
-                });
-            }
-        }
+        //     if (jml == "") {
+        //         iziToast.warning({
+        //             title: 'Pesan Ambigu!',
+        //             message: 'Pastikan Anda tidak mengosongi jumlah permintaan',
+        //             position: 'topRight'
+        //         });
+        //     } else {
+        //         $.ajax({
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             method: 'POST',
+        //             url: '/api/pengadaan/keranjang/tambah',
+        //             dataType: 'json',
+        //             data: {
+        //                 id_barang: id_barang,
+        //                 jml: jml,
+        //                 ket: ket,
+        //                 id_user: id_user,
+        //             },
+        //             success: function(res) {
+        //                 iziToast.success({
+        //                     title: 'Sukses!',
+        //                     message: 'Tambah barang ke keranjang berhasil pada '+ res,
+        //                     position: 'topRight'
+        //                 });
+        //                 refresh();
+        //             },
+        //             error: function (res) {
+        //                 iziToast.error({
+        //                     title: 'Pesan Galat!',
+        //                     message: res.responseJSON.error,
+        //                     position: 'topRight'
+        //                 });
+        //             }
+        //         });
+        //     }
+        // }
 
         // Hapus Barang di Keranjang
         function hapusBarangKeranjang(id) {
@@ -674,12 +821,14 @@
                         type: 'DELETE',
                         dataType: 'json', // added data type
                         success: function(res) {
+                            $('#keranjang').modal('hide');
                             iziToast.success({
                                 title: 'Pesan Sukses!',
                                 message: 'Hapus Barang dari keranjang berhasil pada ' + res,
                                 position: 'topRight'
                             });
-                            showKeranjang();
+                            // setTimeout(function() {$('.modal').modal('hide')},1000);
+                            // showKeranjang();
                         },
                         error: function(res) {
                             iziToast.error({
@@ -740,6 +889,47 @@
                 }
             });
             $('#riwayat').modal('show');
+        }
+
+        // Hapus Riwayat
+        function hapusRiwayat(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Hapus Riwayat ID : ' + id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/pengadaan/riwayat/" + id + "/hapus",
+                        type: 'DELETE',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Hapus Riwayat berhasil pada ' + res,
+                                position: 'topRight'
+                            });
+                            refreshRiwayat();
+                        },
+                        error: function(res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            })
         }
 
         function scrollFunction() {

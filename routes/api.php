@@ -110,9 +110,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // PENGADAAN
     Route::get('pengadaan/data/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@dataPengadaan')->name('pengadaan.data');
     Route::get('pengadaan/riwayat/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@riwayatPengadaan')->name('pengadaan.riwayat');
+    Route::delete('pengadaan/riwayat/{id}/hapus', '\App\Http\Controllers\Pengadaan\PengadaanController@hapusRiwayatPengadaan')->name('pengadaan.hapusriwayat');
     Route::get('pengadaan/keranjang/{id}/tampil', '\App\Http\Controllers\Pengadaan\PengadaanController@tampilTambahKeranjang')->name('pengadaan.tampiltambah-keranjang');
     Route::get('pengadaan/keranjang/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@tampilKeranjang')->name('pengadaan.keranjang');
     Route::post('pengadaan/keranjang/tambah', '\App\Http\Controllers\Pengadaan\PengadaanController@tambahKeranjang')->name('pengadaan.tambah-keranjang');
+    Route::post('pengadaan/keranjang/checkout', '\App\Http\Controllers\Pengadaan\PengadaanController@checkoutKeranjang')->name('pengadaan.checkout-keranjang');
     Route::delete('pengadaan/keranjang/{id}/hapus', '\App\Http\Controllers\Pengadaan\PengadaanController@hapusKeranjang')->name('pengadaan.hapus-keranjang');
     Route::get('pengadaan/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@loadMore')->name('pengadaan.loadmore');
     Route::get('pengadaan/caribarang', '\App\Http\Controllers\Pengadaan\PengadaanController@getacbarang')->name('pengadaan.getacbarang');
