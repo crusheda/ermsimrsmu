@@ -93,6 +93,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
 // PENGADAAN
 Route::group(['middleware' => ['auth'], 'prefix' => '', 'as' => ''], function () {
     // NEW
+    Route::get('pengadaan/rekap/bulan/{bulan}/tahun/{tahun}', '\App\Http\Controllers\pengadaan\PengadaanRekapController@index')->name('pengadaanrekap.index');
     Route::get('pengadaan', '\App\Http\Controllers\pengadaan\PengadaanController@index')->name('pengadaan.index');
 
     // OLD
