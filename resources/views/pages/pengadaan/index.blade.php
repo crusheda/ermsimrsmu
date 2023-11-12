@@ -327,7 +327,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{-- <form action="{{ route('pengadaanrekap.index') }}" method="GET"> --}}
+                    <form action="{{ route('pengadaanrekap.index') }}" name="formRekap" method="POST">
+                        @csrf
                         <div class="row">
                             <div class="col">
                                 <div class="form-group" style="width: 100%">
@@ -364,9 +365,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary text-white" id="submit_filterAll" disabled><i
+                    <button class="btn btn-secondary text-white" id="submit_filterAll" onclick="saveData()" disabled><i
                             class="fa-fw fas fa-filter nav-icon text-white"></i> Submit</button>
-                    {{-- </form> --}}
+                    </form>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
@@ -1196,64 +1197,87 @@
             }
         }
 
-        function cari() {
-            var bulan = $("#bulan").val();
-            var tahun = $("#tahun").val();
-            $("#tampil-rekap").empty();
-            $("#tampil-rekap").append(
-
-            );
-            $.ajax({
-                url: "/api/pengadaan/rekap/bulan/" + bulan + "/tahun/" + tahun,
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res)
-                {
-                    // TABLE HEAD
-                    contenthead = '<tr>' +
-                        '<th rowspan="2">IDB</th>' +
-                        '<th rowspan="2">BARANG</th>' +
-                        '<th rowspan="2">HARGA</th>' +
-                        '<th rowspan="2">SATUAN</th>';
-                    res.unit.forEach(key => {
-                        contenthead += '<th colspan="2">' + JSON.parse(key.unit) + '</th>';
+        function saveData() {
+            $("#rekap").one('submit', function() {
+                //stop submitting the form to see the disabled button effect
+                let x = document.forms["formRekap"]["bulan"].value;
+                let y = document.forms["formRekap"]["tahun"].value;
+                if (x == "" || y == "") {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Mohon isi tanggal rapat',
+                        position: 'topRight'
                     });
-                    contenthead += "</tr><tr>";
-                    res.unit.forEach(key => {
-                        contenthead += "<th>JML</th><th>NOM</th>";
-                    });
-                    contenthead += "</tr>";
-                    $('#tampil-thead').append(contenthead);
-                    // TABLE BODY
-                    contentbody = "";
-                    res.barang.forEach(item => {
-                        contentbody += "<tr><td>" +
-                            item.id_barang + "</td><td>" +
-                            item.nama_barang + "</td><td>" +
-                            item.harga_barang + "</td><td>" +
-                            item.satuan_barang + "</td>";
-
-                        res.unit.forEach(key => {
-                            res.show.forEach(val => {
-                                if (val.unit == key.unit) {
-                                    // if (item.id_barang == val.id_barang) {
-                                    // if (key.unit == val.unit) {
-                                    if (item.id_barang == val.id_barang) {
-                                        contentbody += "<td>" + val.jumlah +
-                                            "</td><td>" + val.total + "</td>";
-                                    }
-                                    // else {
-                                    //   contentbody += '<td></td>';
-                                    // }
-                                }
-                            });
-                        });
-                        contentbody += "</tr>";
-                    });
-                    $('#tampil-tbody').append(contentbody);
-
+                    return false;
+                } else {
+                    $("#submit_filterAll").attr('disabled','disabled');
+                    $("#submit_filterAll").find("i").removeClass("fa-filter").addClass("fa-sync fa-spin");
+                    return true;
                 }
             });
         }
+
+        // $('#btn-ajukan').prop('disabled', true);
+        //     $('#btn-ajukan').find('i').removeClass('bx-check-double').addClass('bx-loader bx-spin');
+
+        // function cari() {
+        //     var bulan = $("#bulan").val();
+        //     var tahun = $("#tahun").val();
+        //     $("#tampil-rekap").empty();
+        //     $("#tampil-rekap").append(
+
+        //     );
+        //     $.ajax({
+        //         url: "/api/pengadaan/rekap/bulan/" + bulan + "/tahun/" + tahun,
+        //         type: 'GET',
+        //         dataType: 'json', // added data type
+        //         success: function(res)
+        //         {
+        //             // TABLE HEAD
+        //             contenthead = '<tr>' +
+        //                 '<th rowspan="2">IDB</th>' +
+        //                 '<th rowspan="2">BARANG</th>' +
+        //                 '<th rowspan="2">HARGA</th>' +
+        //                 '<th rowspan="2">SATUAN</th>';
+        //             res.unit.forEach(key => {
+        //                 contenthead += '<th colspan="2">' + JSON.parse(key.unit) + '</th>';
+        //             });
+        //             contenthead += "</tr><tr>";
+        //             res.unit.forEach(key => {
+        //                 contenthead += "<th>JML</th><th>NOM</th>";
+        //             });
+        //             contenthead += "</tr>";
+        //             $('#tampil-thead').append(contenthead);
+        //             // TABLE BODY
+        //             contentbody = "";
+        //             res.barang.forEach(item => {
+        //                 contentbody += "<tr><td>" +
+        //                     item.id_barang + "</td><td>" +
+        //                     item.nama_barang + "</td><td>" +
+        //                     item.harga_barang + "</td><td>" +
+        //                     item.satuan_barang + "</td>";
+
+        //                 res.unit.forEach(key => {
+        //                     res.show.forEach(val => {
+        //                         if (val.unit == key.unit) {
+        //                             // if (item.id_barang == val.id_barang) {
+        //                             // if (key.unit == val.unit) {
+        //                             if (item.id_barang == val.id_barang) {
+        //                                 contentbody += "<td>" + val.jumlah +
+        //                                     "</td><td>" + val.total + "</td>";
+        //                             }
+        //                             // else {
+        //                             //   contentbody += '<td></td>';
+        //                             // }
+        //                         }
+        //                     });
+        //                 });
+        //                 contentbody += "</tr>";
+        //             });
+        //             $('#tampil-tbody').append(contentbody);
+
+        //         }
+        //     });
+        // }
     </script>
 @endsection
