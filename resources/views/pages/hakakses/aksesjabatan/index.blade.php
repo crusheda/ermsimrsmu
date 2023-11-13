@@ -20,7 +20,9 @@
         <h4 class="card-title">
             <div class="d-flex">
                 <div class="btn-group">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formSync"><i
+                    {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formSync"><i
+                            class="bx bxs-magnet"></i>&nbsp;&nbsp;Sinkronisasi <span class="badge bg-light">Jabatan x Akses</span></button> --}}
+                    <button class="btn btn-primary" onclick="syncJabatanAkses(true)" id="btn-tampil-sync"><i
                             class="bx bxs-magnet"></i>&nbsp;&nbsp;Sinkronisasi <span class="badge bg-light">Jabatan x Akses</span></button>
                     <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#info" disabled><i
                             class="bx bxs-info-circle"></i>&nbsp;&nbsp;Kamus Akses</button>
@@ -50,6 +52,49 @@
                 </div>
             </div>
         </h4>
+        <div class="collapse" id="formSync">
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="">Pilih Salah Satu <b>Jabatan</b></label>
+                        <br>
+                        <select class="select2 form-control" id="aksesjabatan-jabatan" style="width: 100%" data-bs-auto-close="outside" required>
+                            {{-- <option value="">Pilih</option> --}}
+                            @if (count($list['role']) > 0)
+                                @foreach ($list['role'] as $key => $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <br>
+                        <small>Refresh browser apabila tidak ditemukan <kbd>Jabatan</kbd> yang baru saja ditambahkan.</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
+                        <br>
+                        <select id="aksesjabatan-akses" class="select2 form-control" data-bs-auto-close="outside"
+                            required multiple="multiple" style="width: 100%">
+                            @if (count($list['permissions']) > 0)
+                                @foreach ($list['permissions'] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <br>
+                        <small>Refresh browser apabila tidak ditemukan <kbd>Akses</kbd> yang baru saja ditambahkan.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="btn-simpan-sync" onclick="tambahAksesJabatan()"><i
+                        class="fa-fw fas fa-save nav-icon"></i> Tambah</button>
+                <button class="btn btn-outline-dark" onclick="syncJabatanAkses(false)"><i
+                        class="fa-fw fas fa-times nav-icon"></i> Sembunyikan</button>
+            </div>
+        </div>
     </div>
 
     <div class="row">
@@ -136,7 +181,7 @@
     </div>
 
     {{-- TAMBAH SYNC AKSES --}}
-    <div class="modal fade animate__animated animate__jackInTheBox" id="formSync" tabindex="-1" aria-hidden="true">
+    {{-- <div class="modal fade animate__animated animate__jackInTheBox" id="formSync" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -148,8 +193,7 @@
                 <div class="modal-body">
                     <div class="form-group mb-3">
                         <label for="">Pilih Salah Satu <b>Jabatan</b></label>
-                        <select class="select2 form-control" id="aksesjabatan-jabatan" style="width: 100%" required>
-                            <option value="">Pilih</option>
+                        <select class="select2 form-control" id="aksesjabatan-jabatan" style="width: 100%" data-bs-auto-close="outside" required>
                             @if (count($list['role']) > 0)
                                 @foreach ($list['role'] as $key => $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -178,7 +222,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- DAFTAR AKSES --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="daftarAkses" tabindex="-1" aria-hidden="true">
@@ -338,6 +382,23 @@
                 allowClear: true
             }).val('').trigger('change');
         })
+
+        function syncJabatanAkses(params) {
+            if (params == true) {
+                $('#btn-tampil-sync').prop("disabled",true);
+                $('#btn-tampil-sync').toggleClass('btn-primary btn-secondary');
+                $(".select2").select2({
+                    placeholder: "",
+                    allowClear: true
+                }).val('').trigger('change');
+                $("#formSync").collapse("show");
+                // console.log($("#formSync").collapse());
+            } else {
+                $('#btn-tampil-sync').toggleClass('btn-secondary btn-primary');
+                $('#btn-tampil-sync').prop("disabled",false);
+                $("#formSync").collapse("hide");
+            }
+        }
 
         function refresh() {
             $("#tampil-tbody").empty().append(
