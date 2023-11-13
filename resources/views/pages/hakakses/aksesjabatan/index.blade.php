@@ -110,7 +110,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-body table-responsive">
+            <div class="card card-body table-responsive" style="overflow: visible;">
                 <table id="dttable" class="table dt-responsive table-hover display w-100">
                     <thead>
                         <tr>
@@ -377,6 +377,11 @@
                         order: [
                             [0, "asc"]
                         ],
+                        columnDefs: [
+                            { width: "20%", targets: 0 },
+                            { width: "70%", targets: 1 },
+                            { width: "10%", targets: 2 },
+                        ],
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
@@ -450,6 +455,11 @@
                     var table = $('#dttable').DataTable({
                         order: [
                             [0, "asc"]
+                        ],
+                        columnDefs: [
+                            { width: "20%", targets: 0 },
+                            { width: "70%", targets: 1 },
+                            { width: "10%", targets: 2 },
                         ],
                         displayLength: 7,
                         lengthChange: true,

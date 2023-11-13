@@ -42,15 +42,17 @@
                             <div class="btn-group">
                                 <a href="javascript:void(0);" class="btn btn-primary btn-sm"><i
                                         class='bx bx-info-circle align-middle'></i> Baca Panduan</a>
-                                <a class="btn btn-dark btn-sm" href="javascript:void(0);" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Menu&nbsp;&nbsp;<i class='bx bx-caret-down align-middle'></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a class="dropdown-item" href="javascript:void(0);"><s>Tambah Barang</s></a>
-                                    <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                                        data-bs-target="#rekap">Rekap Pengadaan</a>
-                                </div>
+                                @if (Auth::user()->getPermission('admin_pengadaan'))
+                                    <a class="btn btn-dark btn-sm" href="javascript:void(0);" role="button"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Menu&nbsp;&nbsp;<i class='bx bx-caret-down align-middle'></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="javascript:void(0);"><s>Tambah Barang</s></a>
+                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
+                                            data-bs-target="#rekap">Rekap Pengadaan</a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div>
