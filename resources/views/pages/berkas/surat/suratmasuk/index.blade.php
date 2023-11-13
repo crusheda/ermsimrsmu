@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="card card-body table-responsive text-nowrap" style="overflow: visible;">
+    <div class="card card-body table-responsive" style="overflow: visible;">
         <h4 classs="card-title">
             <div class="btn-group">
                 <a class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#tambah" value="animate__jackInTheBox">
@@ -23,7 +23,7 @@
             </div>
         </h4>
         <hr>
-        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
             <thead>
                 <tr>
                     <th class="cell-fit">

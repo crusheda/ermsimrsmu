@@ -463,9 +463,9 @@
                         </div>
                         {{ Form::close() }}
                         <hr>
-                            <h6><i class="mdi mdi-arrow-right text-primary"></i> Daftar Catatan</h6>
+                        <h6><i class="mdi mdi-arrow-right text-primary"></i> Daftar Catatan</h6>
                         <div class="table-responsive" style="border: 0px">
-                            <table id="dikerjakan" class="table dt-responsive table-striped table-hover nowrap w-100 align-middle">
+                            <table id="dikerjakan" class="table dt-responsive table-striped table-hover w-100 align-middle">
                                 <thead>
                                     <tr>
                                         <th>Keterangan</th>

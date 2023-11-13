@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="card card-body table-responsive text-nowrap" style="overflow: visible;">
+    <div class="card card-body table-responsive" style="overflow: visible;">
         <h4 classs="card-title">
             <div class="btn-group">
                 <a class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#tambah" value="animate__jackInTheBox">
@@ -23,43 +23,45 @@
             </div>
         </h4>
         <hr>
-        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
-            <thead>
-                <tr>
-                    <th class="cell-fit">
-                        <center></center>
-                    </th>
-                    <th class="cell-fit">NO</th>
-                    <th>TGL</th>
-                    <th>NO. SURAT</th>
-                    <th>ISI RINGKASAN</th>
-                    <th>DITUJUKAN KEPADA</th>
-                    <th>UPDATE</th>
-                    <th>USER</th>
-                </tr>
-            </thead>
-            <tbody id="tampil-tbody">
-                <tr>
-                    <td colspan="9">
-                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot class="bg-whitesmoke">
-                <tr>
-                    <th class="cell-fit">
-                        <center></center>
-                    </th>
-                    <th class="cell-fit">NO</th>
-                    <th>TGL</th>
-                    <th>NO. SURAT</th>
-                    <th>ISI RINGKASAN</th>
-                    <th>DITUJUKAN KEPADA</th>
-                    <th>UPDATE</th>
-                    <th>USER</th>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="table-responsive">
+            <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
+                <thead>
+                    <tr>
+                        <th class="cell-fit">
+                            <center></center>
+                        </th>
+                        <th class="cell-fit">NO</th>
+                        <th>TGL</th>
+                        <th>NO. SURAT</th>
+                        <th>ISI RINGKASAN</th>
+                        <th>DITUJUKAN KEPADA</th>
+                        <th>UPDATE</th>
+                        <th>USER</th>
+                    </tr>
+                </thead>
+                <tbody id="tampil-tbody">
+                    <tr>
+                        <td colspan="9">
+                            <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot class="bg-whitesmoke">
+                    <tr>
+                        <th class="cell-fit">
+                            <center></center>
+                        </th>
+                        <th class="cell-fit">NO</th>
+                        <th>TGL</th>
+                        <th>NO. SURAT</th>
+                        <th>ISI RINGKASAN</th>
+                        <th>DITUJUKAN KEPADA</th>
+                        <th>UPDATE</th>
+                        <th>USER</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 
     {{-- MODAL TAMBAH --}}

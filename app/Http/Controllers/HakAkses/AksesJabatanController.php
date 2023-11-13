@@ -40,11 +40,11 @@ class AksesJabatanController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Validate
-        foreach ($request->akses as $key => $value) {
-            if ($request->jabatan == $value) {
-                return response()->json(['error' => 'Nama Jabatan tidak boleh ikut/sama dengan Nama Akses'], 400);
-            }
-        }
+        // foreach ($request->akses as $key => $value) {
+        //     if ($request->jabatan == $value) {
+        //         return response()->json(['error' => 'Nama Jabatan tidak boleh ikut/sama dengan Nama Akses'], 400);
+        //     }
+        // }
 
         // SAVING
         // foreach ($request->akses as $key => $value) {

@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="card card-body table-responsive text-nowrap" style="overflow: visible;">
+    <div class="card card-body table-responsive" style="overflow: visible;">
         <h4 classs="card-title">
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -22,7 +22,7 @@
             </div>
         </h4>
         <hr>
-        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
             <thead>
                 <tr>
                     <th class="cell-fit"></th>

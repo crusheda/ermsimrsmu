@@ -110,8 +110,8 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-body text-nowrap">
-                <table id="dttable" class="table dt-responsive table-hover display nowrap w-100">
+            <div class="card card-body table-responsive">
+                <table id="dttable" class="table dt-responsive table-hover display w-100">
                     <thead>
                         <tr>
                             <th class="cell-fit">JABATAN</th>
@@ -376,13 +376,6 @@
                     var table = $('#dttable').DataTable({
                         order: [
                             [0, "asc"]
-                        ],
-                        // columnDefs: [{ width: 200, targets: 1 }],
-                        columnDefs: [
-                            {
-                                targets: 'no-sort',
-                                orderable: false
-                            }
                         ],
                         displayLength: 7,
                         lengthChange: true,
