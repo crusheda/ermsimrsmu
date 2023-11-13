@@ -110,12 +110,12 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-body table-responsive" style="overflow: visible;">
+            <div class="card card-body table-responsive">
                 <table id="dttable" class="table dt-responsive table-hover display w-100">
                     <thead>
                         <tr>
                             <th class="cell-fit">JABATAN</th>
-                            <th data-orderable="false">AKSES</th>
+                            <th>AKSES</th>
                             <th class="cell-fit">
                                 <center>#</center>
                             </th>
@@ -131,7 +131,7 @@
                     <tfoot>
                         <tr>
                             <th class="cell-fit">JABATAN</th>
-                            <th data-orderable="false">AKSES</th>
+                            <th>AKSES</th>
                             <th class="cell-fit">
                                 <center>#</center>
                             </th>
@@ -363,8 +363,8 @@
                         content = `<tr><td>` + item.name + `</td><td>`;
                         res.selection.forEach(val => {
                             if (val.id_role == item.role_id) {
-                                content += `<kbd>` + val.name_permission +
-                                    `</kbd>&nbsp;`;
+                                content += `<span class="badge bg-dark">` + val.name_permission +
+                                    `</span>&nbsp;`;
                             }
                         })
                         content +=
@@ -422,9 +422,15 @@
                 $("#formSync").collapse("show");
                 // console.log($("#formSync").collapse());
             } else {
-                $('#btn-tampil-sync').toggleClass('btn-secondary btn-primary');
-                $('#btn-tampil-sync').prop("disabled",false);
-                $("#formSync").collapse("hide");
+                if (params == false) {
+                    $('#btn-tampil-sync').toggleClass('btn-secondary btn-primary');
+                    $('#btn-tampil-sync').prop("disabled",false);
+                    $("#formSync").collapse("hide");
+                } else {
+                    $('#btn-tampil-sync').removeClass('btn-secondary btn-primary').addClass('btn-primary');
+                    $('#btn-tampil-sync').prop("disabled",false);
+                    $("#formSync").collapse("hide");
+                }
             }
         }
 
@@ -443,7 +449,7 @@
                         content = `<tr><td>` + item.name + `</td><td>`;
                         res.selection.forEach(val => {
                             if (val.id_role == item.role_id) {
-                                content += `<kbd>` + val.name_permission + `</kbd>&nbsp;`;
+                                content += `<span class="badge bg-dark">` + val.name_permission + `</span>&nbsp;`;
                             }
                         })
                         content +=
@@ -726,6 +732,7 @@
         }
 
         function showDaftarAkses() {
+            syncJabatanAkses();
             $('#daftarAkses').modal('show');
             $.ajax({
                 url: "/api/hakakses/akses/data",
@@ -769,6 +776,7 @@
         }
 
         function showDaftarJabatan() {
+            syncJabatanAkses();
             $('#daftarJabatan').modal('show');
             $.ajax({
                 url: "/api/hakakses/jabatan/data",
