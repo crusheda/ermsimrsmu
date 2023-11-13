@@ -50,6 +50,16 @@ class LaporanBulananController extends Controller
     // Validasi User boleh Upload atau tidak
     public function formUpload($id)
     {
+        // $cek = struktur_organisasi::where('id_user',$id)->first();
+
+        // if (!empty($cek->nama_user)) {
+        //     $res = 1;
+        //     return response()->json($res, 200);
+        // } else {
+        //     $res = 0;
+        //     return response()->json($res, 200);
+        // }
+
         $user = $this->userUpload($id);
 
         if ($user == 1) {
@@ -640,82 +650,82 @@ class LaporanBulananController extends Controller
 
     // }
 
-    // public function userUpload($id)
-    // {
-    //     $roles = [
-    //         'kabag-perencanaan',
-    //         'kabag-keuangan',
-    //         'kabag-rumah-tangga',
-    //         'kabag-kepegawaian',
-    //         'kabag-umum',
-    //         'kabag-penunjang',
-    //         'kabag-keperawatan',
-    //         'kabag-pelayanan-medik',
-    //         'kasubag-perencanaan-it',
-    //         'kasubag-diklat',
-    //         'kasubag-marketing',
-    //         'kasubag-perbendaharaan',
-    //         'kasubag-verifikasi-akuntansi-pajak',
-    //         'kasubag-aset-gudang',
-    //         'kasubag-ipsrs',
-    //         'kasubag-kesling-k3',
-    //         'kasubag-kepegawaian',
-    //         'kepegawaian',
-    //         'kasubag-aik',
-    //         'kasubag-tata-usaha',
-    //         'kasubag-humas',
-    //         'kasubag-penunjang-operasional',
-    //         'kasubag-penunjang-medik',
-    //         'kasubag-penunjang-nonmedik',
-    //         'kasubag-keperawatan-rajal-gadar',
-    //         'kasubag-keperawatan-ranap',
-    //         'kasubag-rajal-gadar',
-    //         'kasubag-ranap',
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'perinatologi',
-    //         'karu-igd',
-    //         'karu-poli',
-    //         'karu-gizi',
-    //         'karu-laundry',
-    //         'karu-cssd',
-    //         'karu-binroh',
-    //         'karu-lab',
-    //         'karu-rm-informasi',
-    //         'karu-radiologi',
-    //         'karu-rehab',
-    //         'karu-farmasi',
-    //         'karu-driver',
-    //         'karu-cs',
-    //         'karu-security',
-    //         'karu-kasir',
-    //         'karu-it',
-    //         'staf-marketing',
-    //         'spv',
-    //         'mpp',
-    //         'pmkp',
-    //         'pkrs',
-    //         'ppi',
-    //         'spi',
-    //         'asuransi',
-    //         'komite-keperawatan',
-    //         'komite-medik',
-    //     ];
+    public function userUpload($id)
+    {
+        $roles = [
+            'kabag-perencanaan',
+            'kabag-keuangan',
+            'kabag-rumah-tangga',
+            'kabag-kepegawaian',
+            'kabag-umum',
+            'kabag-penunjang',
+            'kabag-keperawatan',
+            'kabag-pelayanan-medik',
+            'kasubag-perencanaan-it',
+            'kasubag-diklat',
+            'kasubag-marketing',
+            'kasubag-perbendaharaan',
+            'kasubag-verifikasi-akuntansi-pajak',
+            'kasubag-aset-gudang',
+            'kasubag-ipsrs',
+            'kasubag-kesling-k3',
+            'kasubag-kepegawaian',
+            'kepegawaian',
+            'kasubag-aik',
+            'kasubag-tata-usaha',
+            'kasubag-humas',
+            'kasubag-penunjang-operasional',
+            'kasubag-penunjang-medik',
+            'kasubag-penunjang-nonmedik',
+            'kasubag-keperawatan-rajal-gadar',
+            'kasubag-keperawatan-ranap',
+            'kasubag-rajal-gadar',
+            'kasubag-ranap',
+            'karu-icu',
+            'karu-ibs',
+            'karu-bangsal3',
+            'karu-bangsal4',
+            'karu-kebidanan',
+            'perinatologi',
+            'karu-igd',
+            'karu-poli',
+            'karu-gizi',
+            'karu-laundry',
+            'karu-cssd',
+            'karu-binroh',
+            'karu-lab',
+            'karu-rm-informasi',
+            'karu-radiologi',
+            'karu-rehab',
+            'karu-farmasi',
+            'karu-driver',
+            'karu-cs',
+            'karu-security',
+            'karu-kasir',
+            'karu-it',
+            'staf-marketing',
+            'spv',
+            'mpp',
+            'pmkp',
+            'pkrs',
+            'ppi',
+            'spi',
+            'asuransi',
+            'komite-keperawatan',
+            'komite-medik',
+        ];
 
-    //     $user = users::join('model_has_roles','model_has_roles.model_id','=','users.id')
-    //             ->join('roles','roles.id','=','model_has_roles.role_id')
-    //             ->whereIn('roles.name', $roles)
-    //             ->where('model_has_roles.model_id', $id)
-    //             ->select('users.name')
-    //             ->first();
+        $user = users::join('model_has_roles','model_has_roles.model_id','=','users.id')
+                ->join('roles','roles.id','=','model_has_roles.role_id')
+                ->whereIn('roles.name', $roles)
+                ->where('model_has_roles.model_id', $id)
+                ->select('users.name')
+                ->first();
 
-    //     if (!empty($user->name)) {
-    //         return 1;
-    //     } else {
-    //         return 0;
-    //     }
-    // }
+        if (!empty($user->name)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
