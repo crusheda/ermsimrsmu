@@ -10,13 +10,13 @@
         </div>
     </div>
 
-    <div class="card card-body table-responsive text-nowrap">
+    <div class="card card-body table-responsive">
         <h4 classs="card-title">
             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i
                     class="tf-icon bx bx-upload"></i>&nbsp;&nbsp;Upload Berkas</button>
         </h4>
         <hr>
-        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
             <thead>
                 <tr>
                     <th>ID</th>

@@ -93,8 +93,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
 // PENGADAAN
 Route::group(['middleware' => ['auth'], 'prefix' => '', 'as' => ''], function () {
     // NEW
-    Route::post('pengadaan/rekap', '\App\Http\Controllers\pengadaan\PengadaanRekapController@index')->name('pengadaanrekap.index');
-    Route::get('pengadaan', '\App\Http\Controllers\pengadaan\PengadaanController@index')->name('pengadaan.index');
+    Route::post('pengadaan/rekap', '\App\Http\Controllers\Pengadaan\PengadaanRekapController@index')->name('pengadaanrekap.index');
+    Route::get('pengadaan', '\App\Http\Controllers\Pengadaan\PengadaanController@index')->name('pengadaan.index');
 
     // OLD
     // Route::get('pengadaan/api/data', 'publik\pengadaan\pengadaanController@getPengadaan')->name('pengadaan.api.data');

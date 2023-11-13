@@ -89,8 +89,8 @@
                     <h5 class="card-title mt-1 mb-0">Daftar Pengaduan</h5>
                 </div>
                 <div class="hstack gap-3 ms-auto">
-                    <div class="btn-group">
-                        <a class="btn btn-outline-primary btn-sm" href="{{ route('ipsrs.riwayat') }}" data-bs-toggle="tooltip"
+                    <div class="btn-group"> {{-- {{ route('ipsrs.riwayat') }} --}}
+                        <a class="btn btn-outline-primary btn-sm" href="javascript:void(0);" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Menampilkan Semua Data Pengaduan IPSRS">
                             <i class="bx bx-history scaleX-n1-rtl"></i>

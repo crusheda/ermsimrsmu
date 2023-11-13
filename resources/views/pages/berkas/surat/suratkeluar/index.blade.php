@@ -23,45 +23,43 @@
             </div>
         </h4>
         <hr>
-        <div class="table-responsive">
-            <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
-                <thead>
-                    <tr>
-                        <th class="cell-fit">
-                            <center></center>
-                        </th>
-                        <th class="cell-fit">NO</th>
-                        <th>TGL</th>
-                        <th>NO. SURAT</th>
-                        <th>ISI RINGKASAN</th>
-                        <th>DITUJUKAN KEPADA</th>
-                        <th>UPDATE</th>
-                        <th>USER</th>
-                    </tr>
-                </thead>
-                <tbody id="tampil-tbody">
-                    <tr>
-                        <td colspan="9">
-                            <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot class="bg-whitesmoke">
-                    <tr>
-                        <th class="cell-fit">
-                            <center></center>
-                        </th>
-                        <th class="cell-fit">NO</th>
-                        <th>TGL</th>
-                        <th>NO. SURAT</th>
-                        <th>ISI RINGKASAN</th>
-                        <th>DITUJUKAN KEPADA</th>
-                        <th>UPDATE</th>
-                        <th>USER</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
+            <thead>
+                <tr>
+                    <th class="cell-fit">
+                        <center></center>
+                    </th>
+                    <th class="cell-fit">NO</th>
+                    <th>TGL</th>
+                    <th>NO. SURAT</th>
+                    <th>ISI RINGKASAN</th>
+                    <th>DITUJUKAN KEPADA</th>
+                    <th>UPDATE</th>
+                    <th>USER</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="9">
+                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot class="bg-whitesmoke">
+                <tr>
+                    <th class="cell-fit">
+                        <center></center>
+                    </th>
+                    <th class="cell-fit">NO</th>
+                    <th>TGL</th>
+                    <th>NO. SURAT</th>
+                    <th>ISI RINGKASAN</th>
+                    <th>DITUJUKAN KEPADA</th>
+                    <th>UPDATE</th>
+                    <th>USER</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
     {{-- MODAL TAMBAH --}}
@@ -365,6 +363,10 @@
                             order: [
                                 [6, "desc"]
                             ],
+                            columnDefs: [
+                                { width: "40%", targets: 4 },
+                                { width: "20%", targets: 5 },
+                            ],
                             displayLength: 7,
                             lengthChange: true,
                             lengthMenu: [7, 10, 25, 50, 75, 100],
@@ -467,6 +469,10 @@
                         var table = $('#dttable').DataTable({
                             order: [
                                 [6, "desc"]
+                            ],
+                            columnDefs: [
+                                { width: "40%", targets: 4 },
+                                { width: "20%", targets: 5 },
                             ],
                             displayLength: 7,
                             lengthChange: true,
