@@ -14,6 +14,7 @@ use App\Models\model_has_roles;
 use App\Models\role_has_permissions;
 use Redirect;
 use Carbon\Carbon;
+use Auth;
 
 class AksesJabatanController extends Controller
 {
