@@ -19,27 +19,31 @@ class SuratKeluarController extends Controller
 {
     public function index()
     {
-        $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
-        $kode = kode_surat_keluar::orderBy('nama','ASC')->get();
-        $year = Carbon::now()->isoFormat('YYYY');
+        if (Auth::user()->getPermission('surat_keluar') == true) {
+            $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
+            $kode = kode_surat_keluar::orderBy('nama','ASC')->get();
+            $year = Carbon::now()->isoFormat('YYYY');
 
-        $getUrutan = surat_keluar::orderBy('urutan','DESC')->first();
-        if (empty($getUrutan->urutan)) {
-            // $urutan = 1;
-            $urutan = sprintf("%03d", 1);
+            $getUrutan = surat_keluar::orderBy('urutan','DESC')->first();
+            if (empty($getUrutan->urutan)) {
+                // $urutan = 1;
+                $urutan = sprintf("%03d", 1);
+            } else {
+                // $urutan = $getUrutan->urutan + 1;
+                $urutan = sprintf("%03d", $getUrutan->urutan + 1);
+            }
+
+            $data = [
+                'users' => $users,
+                'kode' => $kode,
+                'urutan' => $urutan,
+                'year' => $year,
+            ];
+
+            return view('pages.berkas.surat.suratkeluar.index')->with('list', $data);
         } else {
-            // $urutan = $getUrutan->urutan + 1;
-            $urutan = sprintf("%03d", $getUrutan->urutan + 1);
+            return redirect()->back();
         }
-
-        $data = [
-            'users' => $users,
-            'kode' => $kode,
-            'urutan' => $urutan,
-            'year' => $year,
-        ];
-
-        return view('pages.berkas.surat.suratkeluar.index')->with('list', $data);
     }
 
     public function apiKode($id)

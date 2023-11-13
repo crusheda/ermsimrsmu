@@ -17,17 +17,21 @@ class StrukturOrganisasiController extends Controller
 {
     function index()
     {
-        $user  = users::where('status',null)->get();
-        $roles  = roles::get();
-        $struktur_organisasi  = struktur_organisasi::orderBy('updated_at','desc')->get();
+        if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('it') == true) {
+            $user  = users::where('status',null)->get();
+            $roles  = roles::get();
+            $struktur_organisasi  = struktur_organisasi::orderBy('updated_at','desc')->get();
 
-        $data = [
-            'user' => $user,
-            'roles' => $roles,
-            'struktur_organisasi' => $struktur_organisasi,
-        ];
+            $data = [
+                'user' => $user,
+                'roles' => $roles,
+                'struktur_organisasi' => $struktur_organisasi,
+            ];
 
-        return view('pages.strukturorganisasi.index')->with('list', $data);
+            return view('pages.strukturorganisasi.index')->with('list', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     function create()

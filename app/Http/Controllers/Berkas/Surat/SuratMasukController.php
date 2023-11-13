@@ -19,13 +19,11 @@ class SuratMasukController extends Controller
 {
     public function index()
     {
-        // $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
-
-        $data = [
-            // 'now' => $now,
-        ];
-
-        return view('pages.berkas.surat.suratmasuk.index')->with('list', $data);
+        if (Auth::user()->getPermission('surat_masuk') == true) {
+            return view('pages.berkas.surat.suratmasuk.index')->with('list', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function store(Request $request)

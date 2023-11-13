@@ -18,34 +18,56 @@
                     </a>
                 </li>
 
-                <li class="menu-title" key="t-menu">Atur Pengguna</li>
+                @if (
+                        Auth::user()->getPermission('akses_jabatan') == true ||
+                        Auth::user()->getPermission('akun_pengguna') == true ||
+                        Auth::user()->getPermission('struktur_organisasi') == true ||
+                        Auth::user()->getPermission('profil_karyawan') == true ||
+                        Auth::user()->getRole('it') == true
+                    )
+                    <li class="menu-title" key="t-menu">Atur Pengguna</li>
+                @endif
 
+                @if (
+                        Auth::user()->getPermission('akses_jabatan') == true ||
+                        Auth::user()->getPermission('akun_pengguna') == true ||
+                        Auth::user()->getPermission('struktur_organisasi') == true ||
+                        Auth::user()->getPermission('profil_karyawan') == true ||
+                        Auth::user()->getRole('it') == true
+                    )
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="bx bxs-user-detail"></i>
                         <span key="t-dashboards">Hak Akses</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{ route('aksesjabatan.index') }}" key="t-saas">Akses Jabatan</a></li>
-                        <li><a href="{{ route('akunpengguna.index') }}" key="t-crypto">Akun Pengguna</a></li>
+                        @if (Auth::user()->getPermission('akses_jabatan') == true || Auth::user()->getRole('it') == true)
+                            <li><a href="{{ route('aksesjabatan.index') }}" key="t-saas">Akses Jabatan</a></li>
+                        @endif
+                        @if (Auth::user()->getPermission('akun_pengguna') == true || Auth::user()->getRole('it') == true)
+                            <li><a href="{{ route('akunpengguna.index') }}" key="t-crypto">Akun Pengguna</a></li>
+                        @endif
                     </ul>
                 </li>
+                @endif
 
+                @if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('it') == true)
                 <li>
                     <a href="{{ route('strukturorganisasi.index') }}" class="waves-effect">
                         <i class="bx bx-sitemap"></i>
                         <span key="t-chat">Struktur Organisasi</span>
                     </a>
                 </li>
+                @endif
 
-                {{-- @if (Auth::user()->getPermission('profilkaryawan') == true) --}}
+                @if (Auth::user()->getPermission('profil_karyawan') == true || Auth::user()->getRole('it') == true)
                 <li>
                     <a href="{{ route('profilkaryawan.index') }}" class="waves-effect">
                         <i class="bx bxs-user-badge"></i>
                         <span key="t-chat">Profil Karyawan</span>
                     </a>
                 </li>
-                {{-- @endif --}}
+                @endif
 
                 <li class="menu-title" key="t-menu">Administrasi</li>
 
@@ -59,54 +81,86 @@
                         <li><a href="{{ route('rapat.index') }}" key="t-default">Rapat</a></li>
                         <li><a href="{{ route('rka.index') }}" key="t-crypto">RKA</a></li>
                         <li><a href="{{ route('regulasi.index') }}" key="t-crypto">Regulasi</a></li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow" key="t-level-1-2">Surat</a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="{{ route('disposisi.index') }}" key="t-level-2-1">Disposisi</a></li>
-                                <li><a href="{{ route('suratmasuk.index') }}" key="t-level-2-1">Surat Masuk</a></li>
-                                <li><a href="{{ route('suratkeluar.index') }}" key="t-level-2-2">Surat Keluar</a></li>
-                            </ul>
-                        </li>
+                        @if (
+                                Auth::user()->getPermission('disposisi') == true ||
+                                Auth::user()->getPermission('surat_masuk') == true ||
+                                Auth::user()->getPermission('surat_keluar') == true
+                            )
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow" key="t-level-1-2">Surat</a>
+                                <ul class="sub-menu" aria-expanded="true">
+                                    @if (Auth::user()->getPermission('disposisi') == true)
+                                        <li><a href="{{ route('disposisi.index') }}" key="t-level-2-1">Disposisi</a></li>
+                                    @endif
+                                    @if (Auth::user()->getPermission('surat_masuk') == true)
+                                        <li><a href="{{ route('suratmasuk.index') }}" key="t-level-2-1">Surat Masuk</a></li>
+                                    @endif
+                                    @if (Auth::user()->getPermission('surat_keluar') == true)
+                                        <li><a href="{{ route('suratkeluar.index') }}" key="t-level-2-2">Surat Keluar</a></li>
+                                    @endif
+                                </ul>
+                            </li>
+                        @endif
                     </ul>
                 </li>
+
+                @if (Auth::user()->getPermission('pengadaan') == true)
                 <li>
                     <a href="{{ route('pengadaan.index') }}" class="waves-effect">
                         <i class="bx bxs-cart"></i>
                         <span key="t-chat">Pengadaan</span>
                     </a>
                 </li>
+                @endif
 
-                <li class="menu-title" key="t-menu">Pengaduan</li>
+                @if (Auth::user()->getPermission('perbaikan_ipsrs') == true || Auth::user()->getPermission('perbaikan_it') == true)
+                    <li class="menu-title" key="t-menu">Pengaduan</li>
+                @endif
 
+                @if (Auth::user()->getPermission('perbaikan_ipsrs') == true || Auth::user()->getPermission('perbaikan_it') == true)
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="bx bxs-wrench"></i>
                         <span key="t-dashboards">Perbaikan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{ route('ipsrs.index') }}" key="t-saas">IPSRS</a></li>
-                        <li><a href="javascript: void(0);" key="t-default"><s>IT</s></a></li>
+                        @if (Auth::user()->getPermission('perbaikan_ipsrs') == true)
+                            <li><a href="{{ route('ipsrs.index') }}" key="t-saas">IPSRS</a></li>
+                        @endif
+                        @if (Auth::user()->getPermission('perbaikan_it') == true)
+                            <li><a href="javascript: void(0);" key="t-default"><s>IT</s></a></li>
+                        @endif
                     </ul>
                 </li>
+                @endif
 
-                <li class="menu-title" key="t-menu">Pelayanan</li>
+                @if (Auth::user()->getPermission('skl') == true || Auth::user()->getPermission('antigen') == true)
+                    <li class="menu-title" key="t-menu">Pelayanan</li>
+                @endif
 
+                @if (Auth::user()->getPermission('skl') == true)
                 <li>
                     <a href="{{ route('skl.index') }}" class="waves-effect">
                         <i class="fas fa-baby" style="font-size: 1rem"></i>
                         <span key="t-chat">Surat Keterangan Lahir</span>
                     </a>
                 </li>
+                @endif
 
+                @if (Auth::user()->getPermission('antigen') == true)
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"> {{-- {{ route('antigen.index') }} --}}
                         <i class="fas fa-hand-lizard" style="font-size: 0.9rem"></i>
                         <span key="t-chat"><s>Surat Antigen</s></span>
                     </a>
                 </li>
+                @endif
 
-                <li class="menu-title" key="t-menu">Akreditasi</li>
+                @if (Auth::user()->getPermission('kecelakaan_kerja') == true || Auth::user()->getPermission('manajemen_risiko') == true)
+                    <li class="menu-title" key="t-menu">Akreditasi</li>
+                @endif
 
+                @if (Auth::user()->getPermission('kecelakaan_kerja') == true || Auth::user()->getPermission('manajemen_risiko') == true)
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="bx bx-walk"></i>
@@ -114,10 +168,15 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         {{-- <li><a href="javascript: void(0);" key="t-saas"></a></li> --}}
-                        <li><a href="javascript: void(0);" key="t-saas"><s>Kecelakaan Kerja</s></a></li>
-                        <li><a href="javascript: void(0);" key="t-default"><s>Manajemen Risiko</s></a></li>
+                        @if (Auth::user()->getPermission('kecelakaan_kerja') == true)
+                            <li><a href="javascript: void(0);" key="t-saas"><s>Kecelakaan Kerja</s></a></li>
+                        @endif
+                        @if (Auth::user()->getPermission('manajemen_risiko') == true)
+                            <li><a href="javascript: void(0);" key="t-default"><s>Manajemen Risiko</s></a></li>
+                        @endif
                     </ul>
                 </li>
+                @endif
 
                 {{-- <li class="menu-title" key="t-menu">Menu</li>
 

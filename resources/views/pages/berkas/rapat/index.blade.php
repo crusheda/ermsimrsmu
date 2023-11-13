@@ -296,7 +296,7 @@
                     $("#tampil-tbody").empty();
                     var date = new Date().toISOString().split('T')[0];
                     var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->hasRole('it') }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_rapat') }}";
                     var date = getDateTime();
                     res.show.forEach(item => {
                         var updet = item.updated_at.substring(0, 10);
@@ -315,11 +315,14 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-end'>`;
-                        if (adminID) {
+                        if (adminID == true) {
                             content +=
                                 `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
                                 item.id +
                                 `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                                            <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
+                                item.id +
+                                `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                                             <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                                 item.id +
                                 `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;

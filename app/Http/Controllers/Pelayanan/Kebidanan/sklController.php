@@ -20,26 +20,30 @@ class sklController extends Controller
      */
     public function index()
     {
-        // $show = skl::limit(100)->orderBy('no_surat', 'DESC')->get();
+        if (Auth::user()->getPermission('skl') == true) {
+            // $show = skl::limit(100)->orderBy('no_surat', 'DESC')->get();
 
-        $query = skl::orderBy('no_surat', 'DESC')->first();
-        if ($query != null) {
-            $nomer = $query->no_surat + 1;
+            $query = skl::orderBy('no_surat', 'DESC')->first();
+            if ($query != null) {
+                $nomer = $query->no_surat + 1;
+            } else {
+                $nomer = 1;
+            }
+
+            $data = [
+                // 'show' => $show,
+                'nomer' => $nomer
+            ];
+
+            // print_r($data);
+            // die();
+
+            // return view('pages.kebidanan.skl')->with('list', $data);
+            // return view('pages.new.kebidanan.skl')->with('list', $data);
+            return view('pages.pelayanan.kebidanan.skl.index')->with('list', $data);
         } else {
-            $nomer = 1;
+            return redirect()->back();
         }
-
-        $data = [
-            // 'show' => $show,
-            'nomer' => $nomer
-        ];
-
-        // print_r($data);
-        // die();
-
-        // return view('pages.kebidanan.skl')->with('list', $data);
-        // return view('pages.new.kebidanan.skl')->with('list', $data);
-        return view('pages.pelayanan.kebidanan.skl.index')->with('list', $data);
     }
 
     /**

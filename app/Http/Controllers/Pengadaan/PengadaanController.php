@@ -25,15 +25,19 @@ class PengadaanController extends Controller
      */
     public function index()
     {
-        $show = pengadaan::get();
+        if (Auth::user()->getPermission('pengadaan') == true) {
+            $show = pengadaan::get();
 
-        $data = [
-            'show' => $show
-        ];
-        // print_r($data);
-        // die();
+            $data = [
+                'show' => $show
+            ];
+            // print_r($data);
+            // die();
 
-        return view('pages.pengadaan.index')->with('list', $data);
+            return view('pages.pengadaan.index')->with('list', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**

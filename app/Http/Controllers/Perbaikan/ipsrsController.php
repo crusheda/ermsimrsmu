@@ -30,7 +30,8 @@ class ipsrsController extends Controller
         $user = Auth::user();
         $user_id = $user->id;
 
-        if (Auth::user()->getManyRole(['ipsrs','it','sekretaris-direktur'])) {
+        // if (Auth::user()->getManyRole(['ipsrs','it','sekretaris-direktur'])) {
+        if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true) {
             $show = perbaikan_ipsrs::where('tgl_selesai', null)->orderBy('tgl_pengaduan','DESC')->get();
             $fotouser = users_foto::where('id',$user_id)->first();
             $total = perbaikan_ipsrs::count();

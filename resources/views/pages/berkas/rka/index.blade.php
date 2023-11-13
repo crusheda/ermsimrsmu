@@ -161,9 +161,8 @@
                     $("#tampil-tbody").empty();
                     var date = getDateTime();
                     var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->hasRole('administrator') }}";
-                    var downloader =
-                        "{{ Auth::user()->hasRole('it|kabag-perencanaan|kasubag-perencanaan-it') }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_rka') }}";
+                    var downloader = "{{ Auth::user()->getManyRole(['it','kabag-perencanaan','kasubag-perencanaan-it']) }}";
                     res.forEach(item => {
                         if (item.unit) {
                             try {
@@ -211,12 +210,12 @@
                         content += `<td>` + item.title +
                             `&nbsp;&nbsp;<span class="badge bg-dark rounded-pill">RKA ` +
                             tahunrka + `</span></td>`;
-                        content += `<td>` + item.updated_at + `</td>`;
+                        content += `<td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td>`;
                         content += `<td>
                         <div class="d-flex align-items-center">
                           <div class="dropdown"><a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                             <div class="dropdown-menu dropdown-menu-end">`;
-                        if (downloader) {
+                        if (downloader == true) {
                             content += `<a href="./rka/` + item.id +
                                 `" class="dropdown-item text-info">Download</a>`;
                             if (item.id_user == userID) {
@@ -233,7 +232,7 @@
                                     `<a href="javascript:;" class="dropdown-item disabled">Hapus</a>`;
                             }
                         } else {
-                            if (adminID) {
+                            if (adminID == true) {
                                 content += `<a href="./rka/` + item.id + `" class="dropdown-item text-info">Download</a>
                                             <a href="javascript:;" onclick="showHapus(` + item.id +
                                     `)" class="dropdown-item text-danger">Hapus</a>`;
@@ -263,7 +262,7 @@
                         $('#tampil-tbody').append(content);
                     });
 
-                    $('#dttable').DataTable({
+                    var table = $('#dttable').DataTable({
                         order: [
                             [3, "desc"]
                         ],

@@ -25,36 +25,40 @@ class antigenController extends Controller
      */
     public function index()
     {
-        $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
-        $tgl = Carbon::now()->isoFormat('DD');
-        $bln = Carbon::now()->isoFormat('MM');
-        $thn = Carbon::now()->isoFormat('YYYY');
+        if (Auth::user()->getPermission('antigen') == true) {
+            $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+            $tgl = Carbon::now()->isoFormat('DD');
+            $bln = Carbon::now()->isoFormat('MM');
+            $thn = Carbon::now()->isoFormat('YYYY');
 
-        $dokter = dokter::get();
+            $dokter = dokter::get();
 
-        // $query_string1 = "SELECT hasil,count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND DAY(tgl) = $tgl AND hasil = 'POSITIF' AND deleted_at IS NULL GROUP BY hasil";
-        // $getpos = DB::select($query_string1);
+            // $query_string1 = "SELECT hasil,count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND DAY(tgl) = $tgl AND hasil = 'POSITIF' AND deleted_at IS NULL GROUP BY hasil";
+            // $getpos = DB::select($query_string1);
 
-        // $query_string2 = "SELECT hasil,count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND DAY(tgl) = $tgl AND hasil = 'NEGATIF' AND deleted_at IS NULL GROUP BY hasil";
-        // $getneg = DB::select($query_string2);
+            // $query_string2 = "SELECT hasil,count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND DAY(tgl) = $tgl AND hasil = 'NEGATIF' AND deleted_at IS NULL GROUP BY hasil";
+            // $getneg = DB::select($query_string2);
 
-        // $query_string3 = "SELECT count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND DAY(tgl) = $tgl AND deleted_at IS NULL";
-        // $gettoday = DB::select($query_string3);
+            // $query_string3 = "SELECT count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND DAY(tgl) = $tgl AND deleted_at IS NULL";
+            // $gettoday = DB::select($query_string3);
 
-        // $query_string4 = "SELECT count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND deleted_at IS NULL";
-        // $getmont = DB::select($query_string4);
+            // $query_string4 = "SELECT count(hasil) as jumlah FROM antigen WHERE YEAR(tgl) = $thn AND MONTH(tgl) = $bln AND deleted_at IS NULL";
+            // $getmont = DB::select($query_string4);
 
-        $data = [
-            'now' => $now,
-            'dokter' => $dokter,
-            // 'getpos' => $getpos,
-            // 'getneg' => $getneg,
-            // 'gettoday' => $gettoday,
-            // 'getmont' => $getmont
-        ];
+            $data = [
+                'now' => $now,
+                'dokter' => $dokter,
+                // 'getpos' => $getpos,
+                // 'getneg' => $getneg,
+                // 'gettoday' => $gettoday,
+                // 'getmont' => $getmont
+            ];
 
-        // return view('pages.new.lab.antigen')->with('list', $data);
-        return view('pages.pelayanan.lab.antigen.index')->with('list', $data);
+            // return view('pages.new.lab.antigen')->with('list', $data);
+            return view('pages.pelayanan.lab.antigen.index')->with('list', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**

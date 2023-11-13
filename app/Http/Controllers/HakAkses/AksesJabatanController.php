@@ -19,15 +19,19 @@ class AksesJabatanController extends Controller
 {
     function index()
     {
-        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        $permissions = permissions::orderBy('updated_at','desc')->get();
+        if (Auth::user()->getPermission('akses_jabatan') == true || Auth::user()->getRole('it') == true) {
+            $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+            $permissions = permissions::orderBy('updated_at','desc')->get();
 
-        $data = [
-            'role' => $role,
-            'permissions' => $permissions,
-        ];
+            $data = [
+                'role' => $role,
+                'permissions' => $permissions,
+            ];
 
-        return view('pages.hakakses.aksesjabatan.index')->with('list',$data);
+            return view('pages.hakakses.aksesjabatan.index')->with('list',$data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     function store(Request $request)

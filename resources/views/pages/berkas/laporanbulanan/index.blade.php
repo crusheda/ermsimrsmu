@@ -164,7 +164,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Ubah Laporan Bulanan&nbsp;<kbd><a id="show_edit"></a></kbd>
+                        Ubah Laporan Bulanan&nbsp;<span class="badge bg-dark"><a id="show_edit"></a></span>
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
@@ -369,7 +369,7 @@
                     } else {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Mohon maaf, Anda tidak mempunyai HAK untuk menambah Laporan Bulanan',
+                            message: 'Hak Akses Tambah Laporan Bulanan tidak ditemukan, silakan hubungi IT',
                             position: 'topRight'
                         });
                     }
@@ -393,7 +393,7 @@
                     } else {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Mohon maaf, Anda tidak mempunyai HAK untuk menambah Laporan Bulanan',
+                            message: 'Akses Laporan Bawahan tidak ditemukan, silakan hubungi IT',
                             position: 'topRight'
                         });
                     }

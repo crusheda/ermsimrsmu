@@ -25,14 +25,18 @@ class DisposisiController extends Controller
      */
     public function index()
     {
-        // $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
-        $roles = roles::orderBy('name','ASC')->get();
+        if (Auth::user()->getPermission('disposisi') == true) {
+            // $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
+            $roles = roles::orderBy('name','ASC')->get();
 
-        $data = [
-            'roles' => $roles,
-        ];
+            $data = [
+                'roles' => $roles,
+            ];
 
-        return view('pages.berkas.surat.disposisi.index')->with('list', $data);
+            return view('pages.berkas.surat.disposisi.index')->with('list', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**

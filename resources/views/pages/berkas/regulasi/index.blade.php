@@ -20,7 +20,7 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    @if (Auth::user()->getManyRole(['karu-it','sekretaris-direktur','administrator']))
+                    @if (Auth::user()->getPermission('admin_regulasi'))
                         <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Regulasi</a>
                         <div class="dropdown-divider"></div>
                     @endif
@@ -506,8 +506,8 @@
                         pembuat: pembuat,
                     },
                     success: function(res) {
-                        var editorID = "{{ Auth::user()->getManyRole(['karu-it','sekretaris-direktur','administrator']) }}";
-                        var adminID = "{{ Auth::user()->getRole('administrator') }}";
+                        // var editorID = "{{ Auth::user()->getManyRole(['karu-it','sekretaris-direktur','administrator']) }}";
+                        var adminID = "{{ Auth::user()->getPermission('admin_regulasi') }}";
                         iziToast.success({
                             title: 'Pesan Sukses!',
                             message: res.count+' data pencarian ditemukan',
@@ -522,7 +522,7 @@
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="mdi mdi-dots-horizontal"></i></a><div class='dropdown-menu'>`
                                     + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/regulasi/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a>`;
-                                    if (editorID) {
+                                    if (adminID == true) {
                                         content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>`
                                                 + `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>`;
                                     }
@@ -541,7 +541,7 @@
                                                 content += res.unit[i].nama;
                                             }
                                         }
-                            content += "</td><td>" + item.updated_at + "</td></tr>";
+                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
