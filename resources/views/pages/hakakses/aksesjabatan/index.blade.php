@@ -5,7 +5,10 @@
     <style>
         .select2-container{
             z-index:100000;
+            width:100%!important;
         }
+        .select2-selection { overflow: hidden; }
+        .select2-selection__rendered { white-space: normal; word-break: break-all; }
     </style>
     <!-- start page title -->
     <div class="row">
@@ -72,8 +75,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAll()">Select All</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="deselectAll()">Deselect All</button>
                         <br>
                         <select id="aksesjabatan-akses" class="select2 form-control" data-bs-auto-close="outside"
                             required multiple="multiple" style="width: 100%">
@@ -381,7 +386,19 @@
                 placeholder: "",
                 allowClear: true
             }).val('').trigger('change');
+
         })
+
+        // Select & Deselect All Select2
+        function selectAll() {
+            $("#aksesjabatan-akses > option").prop("selected", true);
+            $("#aksesjabatan-akses").trigger("change");
+        }
+
+        function deselectAll() {
+            $("#aksesjabatan-akses > option").prop("selected", false);
+            $("#aksesjabatan-akses").trigger("change");
+        }
 
         function syncJabatanAkses(params) {
             if (params == true) {
