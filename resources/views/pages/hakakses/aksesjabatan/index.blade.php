@@ -681,9 +681,9 @@
                             position: 'topRight'
                         });
                         if (res) {
-                            $('.modal').modal('hide');
+                            // $('.modal').modal('hide');
                             $("#aksesjabatan-jabatan").val('').change();
-                            $("#aksesjabatan-akses").val('').change();
+                            // $("#aksesjabatan-akses").val('').change();
                             refresh();
                         }
                     },
