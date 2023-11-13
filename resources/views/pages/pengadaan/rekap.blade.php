@@ -23,7 +23,7 @@
             <hr>
             <div class="table-responsive" style="border: 0px">
                 <table id="dttable" class="table table-bordered display"
-                    style="font-size: 13px;width: 100%;/* white-space: nowrap;*/ /* word-break: break-word; */">
+                    style="font-size: 13px;width: 100%;/* white-space: nowrap;word-break: break-word; */">
                     <thead>
                         <tr>
                             <th rowspan="2">IDB</th>

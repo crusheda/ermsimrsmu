@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\kode_surat_keluar;
 use App\Models\surat_keluar;
-use App\Models\user;
+use App\Models\User;
 use Carbon\Carbon;
 use Validator,Redirect,Response,File;
 use Exception;

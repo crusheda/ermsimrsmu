@@ -9,6 +9,12 @@
         }
         .select2-selection { overflow: hidden; }
         .select2-selection__rendered { white-space: normal; word-break: break-all; }
+        .btn-group-sm>.btn,.btn-sm {
+            --bs-btn-padding-y: 0.05rem;
+            --bs-btn-padding-x: 0.5rem;
+            --bs-btn-font-size: 0.7109375rem;
+            --bs-btn-border-radius: var(--bs-border-radius-sm)
+        }
     </style>
     <!-- start page title -->
     <div class="row">
@@ -104,12 +110,12 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-body table-responsive text-nowrap">
-                <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
+            <div class="card card-body text-nowrap">
+                <table id="dttable" class="table dt-responsive table-hover display nowrap w-100">
                     <thead>
                         <tr>
                             <th class="cell-fit">JABATAN</th>
-                            <th class="cell-fit">AKSES</th>
+                            <th data-orderable="false">AKSES</th>
                             <th class="cell-fit">
                                 <center>#</center>
                             </th>
@@ -125,7 +131,7 @@
                     <tfoot>
                         <tr>
                             <th class="cell-fit">JABATAN</th>
-                            <th class="cell-fit">AKSES</th>
+                            <th data-orderable="false">AKSES</th>
                             <th class="cell-fit">
                                 <center>#</center>
                             </th>
@@ -362,14 +368,21 @@
                             }
                         })
                         content +=
-                            `</td><td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAksesJabatan(` +
+                            `</td><td><center><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAksesJabatan(` +
                             item.role_id +
-                            `)"><i class="fa-fw fas fa-undo nav-icon"></i> Reset</a></td></tr>`;
+                            `)"><i class="fa-fw fas fa-undo nav-icon"></i> Reset</a></center></td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
                     var table = $('#dttable').DataTable({
                         order: [
                             [0, "asc"]
+                        ],
+                        // columnDefs: [{ width: 200, targets: 1 }],
+                        columnDefs: [
+                            {
+                                targets: 'no-sort',
+                                orderable: false
+                            }
                         ],
                         displayLength: 7,
                         lengthChange: true,
@@ -436,9 +449,9 @@
                             }
                         })
                         content +=
-                            `</td><td><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAksesJabatan(` +
+                            `</td><td><center><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusAksesJabatan(` +
                             item.role_id +
-                            `)"><i class="fa-fw fas fa-undo nav-icon"></i> Reset</a></td></tr>`;
+                            `)"><i class="fa-fw fas fa-undo nav-icon"></i> Reset</a></center></td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
                     var table = $('#dttable').DataTable({
@@ -682,7 +695,7 @@
                         });
                         if (res) {
                             // $('.modal').modal('hide');
-                            $("#aksesjabatan-jabatan").val('').change();
+                            // $("#aksesjabatan-jabatan").val('').change();
                             // $("#aksesjabatan-akses").val('').change();
                             refresh();
                         }

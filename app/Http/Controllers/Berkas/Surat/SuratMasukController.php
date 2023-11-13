@@ -20,7 +20,7 @@ class SuratMasukController extends Controller
     public function index()
     {
         if (Auth::user()->getPermission('surat_masuk') == true) {
-            return view('pages.berkas.surat.suratmasuk.index')->with('list', $data);
+            return view('pages.berkas.surat.suratmasuk.index'); // ->with('list', $data)
         } else {
             return redirect()->back();
         }
