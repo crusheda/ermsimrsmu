@@ -66,7 +66,11 @@
                         </div>
                         <h4 class="mt-5">Sistem Informasi Rumah sakit PKU Muhammadiyah Sukoharjo</h4>
                         <p class="text-muted">Tahun baru 2024 dengan tampilan dan pengalaman yang baru.</p>
-
+                        @auth
+                            <a type="button" class="btn btn-primary" href="{{ route('dashboard') }}"><i class="fas fa-home"></i>&nbsp;&nbsp;Dashboard</a>
+                        @else
+                            <a type="button" class="btn btn-primary" href="{{ route('login') }}">Login&nbsp;&nbsp;<i class="fas fa-sign-in-alt"></i></a>
+                        @endauth
                         <div class="row justify-content-center mt-5">
                             <div class="col-md-8">
                                 <div data-countdown="2024/01/01" class="counter-number"></div>
