@@ -14,11 +14,11 @@
 
                 <a href="{{ route('portal') }}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{ asset('images/logo/logo_rs_dark.png') }}" alt="" height="10">
+                        <img src="{{ asset('images/logo/logo_new_light.png') }}" alt="" height="25">
                         {{-- <img src="{{ asset('images/pku/pku_brand.png') }}" alt="" height="30"> --}}
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('images/logo/logo_simrsmu.png') }}" alt="" height="20">
+                        <img src="{{ asset('images/logo/logo_new_simrsmu_light.png') }}" alt="" height="25">
                         {{-- <img src="{{ asset('images/logo/logo_simrs_v3.png') }}" alt="" height="30"> --}}
                     </span>
                 </a>
@@ -426,7 +426,7 @@
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect">
-                    <i class="bx bx-cog bx-spin"></i>
+                    <i class="bx bx-cog bx-spin text-secondary"></i>
                 </button>
                 {{-- <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
                     <i class="bx bx-cog bx-spin"></i>

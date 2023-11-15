@@ -14,9 +14,9 @@
     <meta name="author" content="Yussuf Faisal" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('images/logo/logo_yf_dark.png') }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_yf_dark.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_yf_dark.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_new_light.png') }}">
     <!-- Bootstrap Css -->
     <link href="{{ asset('css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -53,7 +53,7 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <a href="{{ route('portal') }}" class="d-block auth-logo">
-                            <img src="{{ asset('images/logo/logo_simrs_v3_dark.png') }}" alt="" height="30"
+                            <img src="{{ asset('images/logo/logo_simrsmu_new_kop.png') }}" alt="" height="50"
                                 class="auth-logo-dark mx-auto">
                         </a>
                         <div class="row justify-content-center mt-5">

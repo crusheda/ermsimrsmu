@@ -14,9 +14,9 @@
     <meta name="author" content="Yussuf Faisal" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('images/logo/logo_rs_dark_square.png') }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_rs_dark_square.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_rs_dark_square.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_new_light.png') }}">
     <!-- Bootstrap Css -->
     <link href="{{ asset('css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
