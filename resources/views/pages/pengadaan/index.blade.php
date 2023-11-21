@@ -721,7 +721,7 @@
                                         <td colspan="2" id="ttl_seluruh">` + formatRupiah(tot, 'Rp ') + `</td>
                                         <td hidden>
                                             <input type="number" id="ttl_getSeluruh" value="` + tot + `" class="form-control" hidden>
-                                            <input type="number" id="totalKeranjang" value="` + tot + `" class="form-control" hidden>
+                                            <input type="number" id="totalKeranjangAll" value="` + tot + `" class="form-control" hidden>
                                         </td>
                                     </tr>`;
                         $('#tampil-keranjang').append(content2);
@@ -822,7 +822,7 @@
             $('#btn-ajukan').prop('disabled', true);
             $('#btn-ajukan').find('i').removeClass('bx-check-double').addClass('bx-loader bx-spin');
             var urutan = $("#urutan").val();
-            var total = $("#totalKeranjang").val();
+            var total = $("#totalKeranjangAll").val();
             var id_barang = [];
             var id_jumlah = [];
             var id_ket = [];

@@ -216,10 +216,10 @@ class PengadaanController extends Controller
             $getQueue = $queue->id_pengadaan + 1;
         }
 
+        // print_r($request->all());
+        // die();
         pengadaan_keranjang::where('id_user',$request->id_user)->delete();
         // print_r($getQueue);
-        // die();
-        // print_r($request->satuan);
         // die();
         for ($i=0; $i < $request->urutan; $i++) {
             $data = new pengadaan_detail;
