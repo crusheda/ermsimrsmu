@@ -134,6 +134,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], fu
         // Route::get('ipsrs/history', '\App\Http\Controllers\Perbaikan\ipsrsController@history')->name('ipsrs.history');
 });
 
+// INVENTARIS
+Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], function () {
+    Route::get('aset','\App\Http\Controllers\Inventaris\Aset\BarangController@index')->name('aset.index');
+
+});
+
 // PELAYANAN
 Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], function () {
     // Kebidanan

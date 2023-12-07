@@ -104,6 +104,21 @@
                     </ul>
                 </li>
 
+                <li class="menu-title" key="t-menu">Inventaris</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-cube"></i>
+                        <span key="t-dashboards">Aset & Gudang</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ route('aset.index') }}" key="t-saas">Daftar Barang</a></li>
+                        {{-- <li><a href="{{ route('rapat.index') }}" key="t-default">Rapat</a></li>
+                        <li><a href="{{ route('rka.index') }}" key="t-crypto">RKA</a></li>
+                        <li><a href="{{ route('regulasi.index') }}" key="t-crypto">Regulasi</a></li> --}}
+                    </ul>
+                </li>
+
                 @if (Auth::user()->getPermission('pengadaan') == true)
                 <li>
                     <a href="{{ route('pengadaan.index') }}" class="waves-effect">
