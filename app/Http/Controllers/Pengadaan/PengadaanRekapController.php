@@ -24,10 +24,10 @@ class PengadaanRekapController extends Controller
             $bln = Carbon::create()->month($bulan)->isoFormat('MMMM');
 
             $unit = pengadaan::join('users','pengadaan.id_user','=','users.id')
-                            ->select('users.id as id_user','users.nama','pengadaan.id_pengadaan','pengadaan.unit','pengadaan.created_at')
+                            ->select('users.id as id_user','users.nama','pengadaan.id_pengadaan','pengadaan.unit','pengadaan.tgl_pengadaan')
                             ->whereYear('pengadaan.tgl_pengadaan', $tahun)
                             ->whereMonth('pengadaan.tgl_pengadaan', $bulan)
-                            ->groupBy('users.id','users.nama','pengadaan.id_pengadaan','pengadaan.unit','pengadaan.created_at')
+                            ->groupBy('users.id','users.nama','pengadaan.id_pengadaan','pengadaan.unit','pengadaan.tgl_pengadaan')
                             ->orderBy('pengadaan.unit','ASC')
                             ->get();
 

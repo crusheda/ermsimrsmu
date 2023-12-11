@@ -292,7 +292,7 @@
                               <div class='btn-group'>
                                 <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                 <ul class='dropdown-menu dropdown-menu-end'>
-                                  <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('v2/laporan/bulanan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
+                                  <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
                         if (item.ket_verif != null) {
                             content +=
                                 `<li><a href="javascript:void(0); class='dropdown-item text-info' onclick="ketLihat(` +
@@ -369,7 +369,7 @@
                     } else {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Hak Akses Tambah Laporan Bulanan tidak ditemukan, silakan hubungi IT',
+                            message: 'Anda tidak memiliki Hak Akses Tambah Laporan Bulanan, silakan hubungi IT',
                             position: 'topRight'
                         });
                     }

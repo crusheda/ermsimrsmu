@@ -32,7 +32,7 @@
                             <th rowspan="2">SATUAN</th>
                             @foreach ($list['unit'] as $item)
                                 <th colspan="2" style="text-transform:uppercase">
-                                    {{ str_replace('","', ' , ', str_replace('-', ' ', str_replace(['["', '"]'], '', $item->unit))) }}
+                                    {{ str_replace('","', ' , ', str_replace('-', ' ', str_replace(['["', '"]'], '', $item->unit))) }}<br>(<a class="text-danger">{{ $item->tgl_pengadaan }}</a>)
                                 </th>
                             @endforeach
                         </tr>
