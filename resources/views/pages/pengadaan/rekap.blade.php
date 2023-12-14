@@ -32,7 +32,9 @@
                             <th rowspan="2">SATUAN</th>
                             @foreach ($list['unit'] as $item)
                                 <th colspan="2" style="text-transform:uppercase">
-                                    {{ str_replace('","', ' , ', str_replace('-', ' ', str_replace(['["', '"]'], '', $item->unit))) }}<br>(<a class="text-danger">{{ $item->tgl_pengadaan }}</a>)
+                                    {{ str_replace('","', ' , ', str_replace('-', ' ', str_replace(['["', '"]'], '', $item->unit))) }}<br>(<a class="text-danger" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                                    title="Tanggal Pengadaan">{{ \Carbon\Carbon::parse($item->tgl_pengadaan)->isoFormat('D MMM Y') }}</a>)
                                 </th>
                             @endforeach
                         </tr>

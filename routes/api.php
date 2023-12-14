@@ -130,6 +130,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('perbaikan/ipsrs/result/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@result')->name('ipsrs.result');
         Route::post('perbaikan/ipsrs/filter', '\App\Http\Controllers\Perbaikan\ipsrsController@filter')->name('ipsrs.filter');
 
+    // INVENTARIS
+        // ASET
+        Route::get('inventaris/aset/ruangan', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@table')->name('aset_ruangan.table');
+        Route::post('inventaris/aset/ruangan/store', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@store')->name('aset_ruangan.simpan');
+
     // PELAYANAN
         // SKL
         Route::get('kebidanan/skl/get','\App\Http\Controllers\Pelayanan\Kebidanan\sklController@apiGet');
