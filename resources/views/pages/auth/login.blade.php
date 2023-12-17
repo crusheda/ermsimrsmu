@@ -29,17 +29,20 @@
                             </div>
 
                             <div class="mb-3" data-validate="Password is required">
-                                @if (Route::has('password.request'))
+                                <div class="float-end">
+                                    <a href="javascript:void(0);" onclick="forgotPassword()" class="text-muted">Forgot password?</a>
+                                </div>
+                                {{-- @if (Route::has('password.request'))
                                     <div class="float-end">
                                         <a href="{{ route('password.request') }}" class="text-muted">Forgot password?</a>
                                     </div>
-                                @endif
+                                @endif --}}
                                 <label class="form-label">Password</label>
                                 <div class="input-group auth-pass-inputgroup">
                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
                                         placeholder="Enter password" aria-label="Password" aria-describedby="password-addon"
                                         id="password" name="password" required autocomplete="current-password">
-                                    <button class="btn btn-light " type="button" id="open-password"><i
+                                    <button class="btn btn-outline-secondary " type="button" id="open-password" style="border-color: #ced4da"><i
                                             class="mdi mdi-eye-outline"></i></button>
                                 </div>
                                 @error('password')
@@ -57,8 +60,15 @@
                                 </label>
                             </div>
 
-                            <div class="mt-3 mb-3 d-grid">
-                                <button class="btn btn-primary waves-effect waves-light" type="submit">Log In</button>
+                            <div class="mt-3 mb-3">
+                                {{-- <center>
+                                    <div class="btn-group">
+                                        <a class="btn btn-outline-secondary" href="{{ route('portal') }}" data-bs-toggle="tooltip"
+                                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Kembali ke Portal Utama"><i  class="bx bx-chevron-left"></i></a>
+                                    </div>
+                                </center> --}}
+                                <button class="btn btn-primary" style="width:100%;box-sizing: border-box" type="submit">Log In</button>
                             </div>
 
 
@@ -89,8 +99,7 @@
 
                         </form>
                         <div class="text-center">
-                            <p>Belum mempunyai akun ? <a href="javascript: void(0);" class="fw-medium text-primary"> Silakan
-                                    hubungi IT </a> </p>
+                            <p>Belum mempunyai akun ? <a href="javascript: void(0);" onclick="hubungiIT()" class="fw-medium text-primary"> Hubungi ITRS </a> </p>
                         </div>
                     </div>
                 </div>
@@ -102,7 +111,8 @@
             <script>
                 document.write(new Date().getFullYear())
             </script> © Made with <i class="mdi mdi-heart text-danger"></i> by
-            Yussuf Faisal
+            <a href="{{ url('https://instagram.com/hiyussuf') }}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+            title="Lihat Profil Developer">Yussuf Faisal</a>
         </p>
     </div>
     <script>
@@ -116,5 +126,21 @@
                 }
             });
         })
+
+        function forgotPassword() {
+            iziToast.error({
+                title: 'Mohon maaf!',
+                message: 'Sistem sedang dalam perbaikan fitur, silakan hubungi IT',
+                position: 'topRight'
+            });
+        }
+
+        function hubungiIT() {
+            iziToast.warning({
+                title: 'Pesan Developer!',
+                message: 'Hubungi IT dengan menelepon 102 (No.Telp Internal RS)',
+                position: 'topRight'
+            });
+        }
     </script>
 @endsection

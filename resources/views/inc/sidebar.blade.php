@@ -144,7 +144,7 @@
                             <li><a href="{{ route('ipsrs.index') }}" key="t-saas">IPSRS</a></li>
                         @endif
                         @if (Auth::user()->getPermission('perbaikan_it') == true)
-                            <li><a href="javascript: void(0);" key="t-default"><s>IT</s></a></li>
+                            <li><a href="javascript: void(0);" key="t-default" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sistem sedang dalam proses pengerjaan"><s>IT</s></a></li>
                         @endif
                     </ul>
                 </li>
@@ -165,7 +165,7 @@
 
                 @if (Auth::user()->getPermission('antigen') == true)
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"> {{-- {{ route('antigen.index') }} --}}
+                    <a href="javascript:void(0);" class="waves-effect" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sistem sedang dalam proses pengerjaan"> {{-- {{ route('antigen.index') }} --}}
                         <i class="fas fa-hand-lizard" style="font-size: 0.9rem"></i>
                         <span key="t-chat"><s>Surat Antigen</s></span>
                     </a>
@@ -178,7 +178,7 @@
 
                 @if (Auth::user()->getPermission('kecelakaan_kerja') == true || Auth::user()->getPermission('manajemen_risiko') == true)
                 <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <a href="javascript: void(0);" class="has-arrow waves-effect" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sistem sedang dalam proses pengerjaan">
                         <i class="bx bx-walk"></i>
                         <span key="t-dashboards">MFK</span>
                     </a>

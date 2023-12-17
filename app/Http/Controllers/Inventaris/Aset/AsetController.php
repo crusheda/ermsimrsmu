@@ -23,15 +23,36 @@ class AsetController extends Controller
     function index()
     {
         $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+        $month = Carbon::now()->isoFormat('MM');
         $year = Carbon::now()->isoFormat('YYYY');
         $ruangan = aset_ruangan::get();
 
         $data = [
             'role' => $role,
+            'month' => $month,
             'year' => $year,
             'ruangan' => $ruangan,
         ];
 
         return view('pages.inventaris.aset.index')->with('list',$data);
+    }
+
+    function getRuangan($id)
+    {
+        $query = aset_ruangan::where('id', $id)->first();
+
+        return response()->json($query, 200);
+    }
+
+    function getLastAset()
+    {
+        $query = aset::orderBy('created_at','desc')->first();
+        if (!empty($query)) {
+            $data = $query->urutan + 1;
+        } else {
+            $data = '1';
+        }
+
+        return response()->json($data, 200);
     }
 }

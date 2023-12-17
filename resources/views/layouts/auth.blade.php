@@ -22,6 +22,7 @@
     <!-- Icons Css -->
     <link href="{{ asset('css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
+    <link rel="stylesheet" href="{{ asset('css/iziToast.css') }}" />
     <link href="{{ asset('css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <!-- App js -->
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
@@ -55,6 +56,7 @@
     <script src="{{ asset('libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('libs/node-waves/waves.min.js') }}"></script>
     <!-- App js -->
+    <script src="{{ asset('js/iziToast.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
