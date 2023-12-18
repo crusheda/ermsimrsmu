@@ -68,25 +68,25 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label">Kode Inventaris</label>
+                                    <label class="form-label">Kode Inventaris <a class="text-danger">*</a></label>
                                     <input type="text" id="kode" class="form-control" placeholder="e.g. 2.2.1.1">
                                 </div>
                             </div>
                             <div class="col-md-8 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label">Nama Ruangan</label>
+                                    <label class="form-label">Nama Ruangan <a class="text-danger">*</a></label>
                                     <input type="text" id="ruangan" class="form-control" placeholder="e.g. Poliklinik">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
-                                    <label class="form-label">Lokasi</label>
+                                    <label class="form-label">Lokasi <a class="text-danger">*</a></label>
                                     <input type="text" id="lokasi" class="form-control" placeholder="e.g. Ruang Jaga Perawat">
                                 </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <label class="form-label">Unit Terkait</label>
+                                    <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
                                     <select class="select2unit form-control" id="unit" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple">
                                         {{-- <option value="">Pilih</option> --}}
                                         @if (count($list['role']) > 0)
@@ -111,6 +111,53 @@
                         {{-- <button class="btn btn-primary" onclick="showKeranjang()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Keranjang"><i
                                 class="bx bx-cart align-middle"></i>&nbsp;&nbsp;Keranjang</button> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--UBAH RUANGAN -->
+        <div class="modal fade" tabindex="-1" id="modalUbah" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderdetailsModalLabel">Ubah Ruangan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="id_edit" hidden>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Kode Inventaris <a class="text-danger">*</a></label>
+                                    <input type="text" id="kode_edit" class="form-control" placeholder="e.g. 2.2.1.1">
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Nama Ruangan <a class="text-danger">*</a></label>
+                                    <input type="text" id="ruangan_edit" class="form-control" placeholder="e.g. Poliklinik">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Lokasi <a class="text-danger">*</a></label>
+                                    <input type="text" id="lokasi_edit" class="form-control" placeholder="e.g. Ruang Jaga Perawat">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
+                                    <select class="select2unit form-control" id="unit_edit" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple"></select>
+                                    <small>Para karyawan akan dapat melihat asetnya masing-masing menyesuaikan unit yang dipilih</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="btn-ubah" onclick="ubah()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                     </div>
                 </div>
             </div>
@@ -307,6 +354,65 @@
                     })
                 }
             })
+        }
+
+        function showUbah(id) {
+            $("#id_edit").val("");
+            $("#kode_edit").val("");
+            $("#ruangan_edit").val("");
+            $("#lokasi_edit").val("");
+            $("#unit_edit").val("");
+            $.ajax(
+            {
+                url: "/api/inventaris/aset/ruangan/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#modalUbah').modal('show');
+                    var un = JSON.parse(res.show.unit);
+                    // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
+                    var dt = moment(res.show.tgl).format('Y-MM-DD HH:mm');
+
+                    $("#id_edit").val(res.show.id);
+                    $("#kode_edit").text(res.show.kode);
+                    $("#ruangan_edit").text(res.show.ruangan);
+                    $("#lokasi_edit").text(res.show.lokasi);
+                    $("#unit_edit").find('option').remove();
+                    res.show.unit.forEach(pounch => {
+                        $("#unit_edit").append(`
+                            <option value="${pounch.id}">${pounch.nama}</option>
+                        `);
+                    });
+                    $("#unit_edit").val(un).change();
+                    }
+                    $("#isi_edit").val(res.show.isi);
+                    $("#kode_edit").find('option').remove();
+                    res.refkode.forEach(item => {
+                        $("#kode_edit").append(`
+                            <option value="${item.id}" ${item.id == res.show.kode? "selected":""}>${item.nama}</option>
+                        `);
+                    });
+                    $('#kode_edit').change(function() {
+                        $.ajax(
+                        {
+                            url: "/api/suratkeluar/getkode/"+$(this).val(),
+                            type: 'GET',
+                            dataType: 'json', // added data type
+                            success: function(bowl) {
+                                $('#push_kode').text(bowl);
+                            }
+                        })
+                    });
+                    $("#user").find('option').remove();
+                    $("#user").append(`
+                        <option value="84" ${res.show.user == '84' ? "selected":""}>Sri Suryani, Amd</option>
+                        <option value="293" ${res.show.user == '293' ? "selected":""}>Zia Nuswantara pahlawan, S.H</option>
+                        <option value="88" ${res.show.user == '88' ? "selected":""}>Siti Dewi Sholikhah</option>
+                        <option value="82" ${res.show.user == '82' ? "selected":""}>Salis Annisa Hafiz, Amd.Kom</option>
+                    `);
+                }
+            }
+            );
         }
     </script>
 @endsection
