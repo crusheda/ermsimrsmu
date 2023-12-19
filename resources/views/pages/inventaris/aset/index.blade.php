@@ -167,13 +167,13 @@
                             <div class="col-md-4 mb-3 show_medis_add" hidden>
                                 <div class="form-group">
                                     <label class="form-label">Kalibrasi <a class="text-danger">*</a></label>
-                                    <input type="text" id="kalibrasi_add" class="form-control" placeholder="e.g. Hotel Syariah Surakarta">
+                                    <input type="text" id="kalibrasi_add" class="form-control" placeholder="e.g. xxx">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3 show_medis_add" hidden>
                                 <div class="form-group">
                                     <label class="form-label">No. Kalibrasi <a class="text-danger">*</a></label>
-                                    <input type="text" id="no_kalibrasi_add" class="form-control" placeholder="e.g. Hotel Syariah Surakarta">
+                                    <input type="text" id="no_kalibrasi_add" class="form-control" placeholder="e.g. xxx">
                                 </div>
                             </div>
                             <div class="col-md-4 show_medis_add" hidden>
@@ -192,25 +192,25 @@
                             <div class="col-md-9 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Nama Sarana <a class="text-danger">*</a></label>
-                                    <input type="text" id="sarana_add" class="form-control" placeholder="e.g. Hotel Syariah Surakarta" autofocus>
+                                    <input type="text" id="sarana_add" class="form-control" placeholder="e.g. xxx" autofocus>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Merk <a class="text-danger">*</a></label>
-                                    <input type="text" id="merk_add" class="form-control" placeholder="e.g. Hotel Syariah Surakarta">
+                                    <input type="text" id="merk_add" class="form-control" placeholder="e.g. xxx">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Tipe <a class="text-danger">*</a></label>
-                                    <input type="text" id="tipe_add" class="form-control" placeholder="e.g. Hotel Syariah Surakarta">
+                                    <input type="text" id="tipe_add" class="form-control" placeholder="e.g. xxx">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-label">No. Seri <a class="text-danger">*</a></label>
-                                    <input type="text" id="no_seri_add" class="form-control" placeholder="e.g. Hotel Syariah Surakarta">
+                                    <input type="text" id="no_seri_add" class="form-control" placeholder="e.g. xxx">
                                 </div>
                             </div>
                             <hr>
@@ -234,7 +234,7 @@
                             <div class="col-md-3 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Nilai Perolehan <a class="text-danger">*</a></label>
-                                    <input type="text" id="nilai_perolehan_add" class="form-control" onclick="$(this).val('')" placeholder="Rp. xxx.xxx" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Masukkan Hanya Angka">
+                                    <input type="text" id="nilai_perolehan_add" class="form-control" onclick="$(this).val('')" placeholder="Rp. xxx.xxx" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Masukkan Hanya Angka Tanpa Titik (.) / Koma (,) /dsb">
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -298,7 +298,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                                 class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
-                        <button class="btn btn-info" onclick="masukKeranjang()" data-bs-toggle="tooltip"
+                        <button class="btn btn-info" onclick="simpan()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                             title="Simpan Data Aset Barang"><i
                                 class="bx bxs-save"></i>&nbsp;&nbsp;Submit</button>
@@ -414,6 +414,90 @@
             $('#modalTambah').modal('show');
         }
 
+        function simpan() {
+            // Definisi
+            var save = new FormData();
+            save.append('ruangan',$("#ruangan_add").val());
+            save.append('jenis',$("#jenis_add").val());
+            save.append('kalibrasi',$("#kalibrasi_add").val());
+            save.append('no_kalibrasi',$("#no_kalibrasi_add").val());
+            save.append('tgl_berlaku',$("#tgl_berlaku_add").val());
+            save.append('tgl_perolehan',$("#tgl_perolehan_add").val());
+            save.append('sarana',$("#sarana_add").val());
+            save.append('merk',$("#merk_add").val());
+            save.append('tipe',$("#tipe_add").val());
+            save.append('no_seri',$("#no_seri_add").val());
+            save.append('tgl_operasi',$("#tgl_operasi_add").val());
+            save.append('asal_perolehan',$("#asal_perolehan_add").val());
+            save.append('nilai_perolehan',$("#nilai_perolehan_add").val());
+            save.append('kondisi',$("#kondisi_add").val());
+            save.append('keterangan',$("#keterangan_add").val());
+            save.append('golongan',$("#golongan_add").val());
+            save.append('umur',$("#umur_add").val());
+            save.append('tarif',$("#tarif_add").val());
+            save.append('penyusutan',$("#penyusutan_add").val());
+            save.append('user','{{ Auth::user()->id }}');
+
+            // Get the selected file
+            var files = $('#file_add')[0].files;
+            save.append('file',files[0]);
+
+            if (
+                save.get('ruangan') == "" ||
+                save.get('jenis') == "" ||
+                save.get('kalibrasi') == "" ||
+                save.get('no_kalibrasi') == "" ||
+                save.get('tgl_berlaku') == "" ||
+                save.get('tgl_perolehan') == "" ||
+                save.get('sarana') == "" ||
+                save.get('merk') == "" ||
+                save.get('tipe') == "" ||
+                save.get('no_seri') == "" ||
+                save.get('tgl_operasi') == "" ||
+                save.get('asal_perolehan') == "" ||
+                save.get('nilai_perolehan') == "" ||
+                save.get('kondisi') == "" ||
+                save.get('golongan') == "" ||
+                save.get('umur') == "" ||
+                save.get('tarif') == "" ||
+                save.get('penyusutan') == ""
+            ) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/inventaris/aset/store',
+                    dataType: 'json',
+                    data: save,
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Tambah Sarana berhasil pada '+ res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            $('.modal').modal('hide');
+                            refresh();
+                        }
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
         function refresh() {
             $('.modal').modal('hide');
         }
@@ -434,6 +518,11 @@
 
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        function reloadBrowser() {
+            $('.modal').modal('hide');
+            window.location.reload();
         }
     </script>
 @endsection

@@ -57,4 +57,42 @@ class AsetRuanganController extends Controller
 
         return response()->json($tgl, 200);
     }
+
+    function getRuangan($id)
+    {
+        $show = aset_ruangan::where('id',$id)->first();
+        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+
+        $data = [
+            'show' => $show,
+            'role' => $role,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function update(Request $request) {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = aset_ruangan::find($request->id);
+        $data->id_user_ruangan = $request->user;
+        $data->kode = $request->kode;
+        $data->ruangan = $request->ruangan;
+        $data->lokasi = $request->lokasi;
+        $data->unit = "[".str_replace(',','","',json_encode($request->unit))."]";
+
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function destroy($id) {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $hapusData = aset_ruangan::find($id);
+        $hapusData->delete();
+
+        return response()->json($tgl, 200);
+    }
 }

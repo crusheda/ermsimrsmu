@@ -56,9 +56,9 @@
             <!-- end table responsive -->
         </div>
 
-        <!--TAMBAH RUANGAN -->
+        <!-- MODAL TAMBAH -->
         <div class="modal fade" tabindex="-1" id="modalTambah" role="dialog">
-            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="orderdetailsModalLabel">Tambah Ruangan</h5>
@@ -95,7 +95,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <small>Para karyawan akan dapat melihat asetnya masing-masing menyesuaikan unit yang dipilih</small>
+                                    <small>Unit akan dapat melihat seluruh sarana yang berada di ruangan tersebut</small>
                                 </div>
                             </div>
                         </div>
@@ -116,9 +116,9 @@
             </div>
         </div>
 
-        <!--UBAH RUANGAN -->
+        <!-- MODAL UBAH -->
         <div class="modal fade" tabindex="-1" id="modalUbah" role="dialog">
-            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="orderdetailsModalLabel">Ubah Ruangan</h5>
@@ -149,15 +149,44 @@
                                 <div class="form-group">
                                     <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
                                     <select class="select2unit form-control" id="unit_edit" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple"></select>
-                                    <small>Para karyawan akan dapat melihat asetnya masing-masing menyesuaikan unit yang dipilih</small>
+                                    <small>Unit akan dapat melihat seluruh sarana yang berada di ruangan tersebut</small>
                                 </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="btn-ubah" onclick="ubah()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
+                        <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- MODAL HAPUS --}}
+        <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Form Hapus&nbsp;&nbsp;&nbsp;
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="id_hapus" hidden>
+                        <p style="text-align: justify;">Anda akan menghapus Ruangan tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                        <label class="switch">
+                            <input type="checkbox" class="switch-input" id="setujuhapus">
+                            <span class="switch-toggle-slider">
+                            <span class="switch-on"></span>
+                            <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label">Anda siap menerima Risiko</span>
+                        </label>
+                    </div>
+                    <div class="col-12 text-center mb-4">
+                        <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
                     </div>
                 </div>
             </div>
@@ -356,7 +385,7 @@
             })
         }
 
-        function showUbah(id) {
+        function ubah(id) {
             $("#id_edit").val("");
             $("#kode_edit").val("");
             $("#ruangan_edit").val("");
@@ -368,51 +397,115 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    $('#modalUbah').modal('show');
                     var un = JSON.parse(res.show.unit);
                     // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
                     var dt = moment(res.show.tgl).format('Y-MM-DD HH:mm');
 
                     $("#id_edit").val(res.show.id);
-                    $("#kode_edit").text(res.show.kode);
-                    $("#ruangan_edit").text(res.show.ruangan);
-                    $("#lokasi_edit").text(res.show.lokasi);
+                    $("#kode_edit").val(res.show.kode);
+                    $("#ruangan_edit").val(res.show.ruangan);
+                    $("#lokasi_edit").val(res.show.lokasi);
                     $("#unit_edit").find('option').remove();
-                    res.show.unit.forEach(pounch => {
-                        $("#unit_edit").append(`
-                            <option value="${pounch.id}">${pounch.nama}</option>
-                        `);
-                    });
-                    $("#unit_edit").val(un).change();
-                    }
-                    $("#isi_edit").val(res.show.isi);
-                    $("#kode_edit").find('option').remove();
-                    res.refkode.forEach(item => {
-                        $("#kode_edit").append(`
-                            <option value="${item.id}" ${item.id == res.show.kode? "selected":""}>${item.nama}</option>
-                        `);
-                    });
-                    $('#kode_edit').change(function() {
-                        $.ajax(
-                        {
-                            url: "/api/suratkeluar/getkode/"+$(this).val(),
-                            type: 'GET',
-                            dataType: 'json', // added data type
-                            success: function(bowl) {
-                                $('#push_kode').text(bowl);
+                    // var opt = ``;
+                    res.role.forEach(poke => {
+                        var opt = `<option value="${poke.id}"`;
+                        un.forEach(pounch => {
+                            if (poke.id == pounch) {
+                                opt += `selected`;
                             }
-                        })
+                        });
+                        opt += `>${poke.name}</option>`;
+                        $("#unit_edit").append(opt);
                     });
-                    $("#user").find('option').remove();
-                    $("#user").append(`
-                        <option value="84" ${res.show.user == '84' ? "selected":""}>Sri Suryani, Amd</option>
-                        <option value="293" ${res.show.user == '293' ? "selected":""}>Zia Nuswantara pahlawan, S.H</option>
-                        <option value="88" ${res.show.user == '88' ? "selected":""}>Siti Dewi Sholikhah</option>
-                        <option value="82" ${res.show.user == '82' ? "selected":""}>Salis Annisa Hafiz, Amd.Kom</option>
-                    `);
+                    $('#modalUbah').modal('show');
                 }
+            });
+        }
+
+        function prosesUbah() {
+            $("#btn-ubah").prop('disabled', true);
+            $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var fd = new FormData();
+            fd.append('id',$("#id_edit").val());
+            fd.append('kode',$("#kode_edit").val());
+            fd.append('ruangan',$("#ruangan_edit").val());
+            fd.append('lokasi',$("#lokasi_edit").val());
+            fd.append('unit',$("#unit_edit").val());
+            fd.append('user','{{ Auth::user()->id }}');
+
+            // AJAX request
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('aset_ruangan.ubah') }}",
+                method: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res){
+                    iziToast.success({
+                        title: 'Pesan Sukses! ID : '+fd.get('id'),
+                        message: 'Ruangan berhasil diperbarui pada '+res,
+                        position: 'topRight'
+                    });
+                    if (res) {
+                        $('#ubah').modal('hide');
+                        refresh();
+                    }
+                },
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                }
+            });
+
+            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-ubah").prop('disabled', false);
+        }
+
+        function hapus(id) {
+            $("#id_hapus").val(id);
+            var inputs = document.getElementById('setujuhapus');
+            inputs.checked = false;
+            $('#hapus').modal('show');
+        }
+
+        function prosesHapus() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan baris tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus").val();
+                $.ajax({
+                    url: "/api/inventaris/aset/ruangan/hapus/"+id,
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Ruangan telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#hapus').modal('hide');
+                        refresh();
+                        // window.location.reload();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Ruangan gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
             }
-            );
         }
     </script>
 @endsection

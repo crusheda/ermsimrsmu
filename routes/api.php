@@ -133,10 +133,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // INVENTARIS
         // ASET
             // ASET
+                Route::post('inventaris/aset/store', '\App\Http\Controllers\Inventaris\Aset\AsetController@store')->name('aset.simpan');
             // ASET RUANGAN
                 Route::get('inventaris/aset/ruangan', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@table')->name('aset_ruangan.table');
                 Route::get('inventaris/aset/ruangan/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@getRuangan')->name('aset_ruangan.getRuangan');
                 Route::post('inventaris/aset/ruangan/store', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@store')->name('aset_ruangan.simpan');
+                Route::post('inventaris/aset/ruangan/ubah', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@update')->name('aset_ruangan.ubah');
+                Route::delete('inventaris/aset/ruangan/hapus/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@destroy')->name('aset_ruangan.hapus');
             // ADDON
                 Route::get('inventaris/aset/getlastaset', '\App\Http\Controllers\Inventaris\Aset\AsetController@getLastAset')->name('aset.getlastaset');
                 Route::get('inventaris/aset/getruangan/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getRuangan')->name('aset.getruangan');
