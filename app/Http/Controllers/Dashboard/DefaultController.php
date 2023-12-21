@@ -88,4 +88,15 @@ class DefaultController extends Controller
     {
         //
     }
+
+    function clearCache()
+    {
+        // \Artisan::call('route:cache');
+        // \Artisan::call('config:cache');
+        \Artisan::call('cache:clear');
+        \Artisan::call('view:clear');
+        \Artisan::call('clear-compiled');
+        \Artisan::call('optimize:clear');
+        return redirect()->back()->with('message','Cache berhasil dibersihkan!');
+    }
 }

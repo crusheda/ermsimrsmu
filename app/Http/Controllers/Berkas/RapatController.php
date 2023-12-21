@@ -85,6 +85,8 @@ class RapatController extends Controller
         $data->tanggal = $request->tanggal;
         $data->lokasi = $request->lokasi;
 
+        print_r($request->hasFile('file2'));
+        die();
             if ($request->hasFile('file2')) {
                 foreach ($uploadedFile2 as $file) {
                     $array_filename2[] = $file->store('public/files/rapat/'.$user_id);

@@ -425,8 +425,8 @@
             </div>
 
             <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item noti-icon waves-effect">
-                    <i class="bx bx-cog bx-spin text-secondary"></i>
+                <button type="button" class="btn header-item noti-icon waves-effect" onclick="window.location='{{ route('clearcache') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Bersihkan Sampah!">
+                    <i class="bx bx-cog bx-spin text-secondary bx-sm"></i>
                 </button>
                 {{-- <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
                     <i class="bx bx-cog bx-spin"></i>

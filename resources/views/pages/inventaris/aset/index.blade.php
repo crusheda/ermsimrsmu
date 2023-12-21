@@ -23,7 +23,7 @@
                             title="Menambahkan Aset / Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
                             <button class="btn btn-light" onclick="refresh()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Refresh Tabel Sarana"><i class="mdi mdi-refresh"></i></button>
+                            title="Refresh Tabel Sarana" id="btn-refresh"><i class="fas fa-sync fa-fw nav-icon"></i></button>
                         </div>
                         <div class="vr"></div>
                         <div class="dropdown d-inline-block">
@@ -113,6 +113,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <form action="javascript:void(0);" class="form-auth-small" id="formTambah" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -133,7 +134,7 @@
                                     <div class="text-muted">
                                         <p class="mb-1"><strong>Keterangan Pengisian :</strong></p>
                                         <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Periksa No. Inventaris sebelum Submit</p>
-                                        <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input wajib diisi</p>
+                                        <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input <strong>Wajib</strong> diisi</p>
                                         <p class="mb-0"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Pastikan tidak berpindah halaman saat proses Submit berjalan</p>
                                     </div>
                                 </div>
@@ -142,6 +143,7 @@
                             <div class="col-md-8 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="window.location='{{ route('aset_ruangan.index') }}'" style="--bs-btn-padding-y: 0.09rem;--bs-btn-padding-x: 0.3rem;" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Daftar Ruangan">Tidak menemukan ruangan ?</button>
                                     <div class="select2-dark">
                                         <select class="select2 form-select" id="ruangan_add" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                                             <option value="">Pilih</option>
@@ -167,7 +169,7 @@
                             <div class="col-md-4 mb-3 show_medis_add" hidden>
                                 <div class="form-group">
                                     <label class="form-label">Kalibrasi <a class="text-danger">*</a></label>
-                                    <input type="text" id="kalibrasi_add" class="form-control" placeholder="e.g. xxx">
+                                    <input type="number" id="kalibrasi_add" class="form-control" placeholder="e.g. xxx">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3 show_medis_add" hidden>
@@ -179,20 +181,20 @@
                             <div class="col-md-4 show_medis_add" hidden>
                                 <div class="form-group">
                                     <label class="form-label">Tgl. Berlaku <a class="text-danger">*</a></label>
-                                    <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tgl_berlaku_add"/>
+                                    <input type="text" id="tgl_berlaku_add" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
                                 </div>
                             </div>
                             <hr>
                             <div class="col-md-3 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Tgl. Perolehan <a class="text-danger">*</a></label>
-                                    <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tgl_perolehan_add" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= 2 hari"/>
+                                    <input type="text" id="tgl_perolehan_add" class="form-control flatpickr" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= 2 hari"/>
                                 </div>
                             </div>
                             <div class="col-md-9 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Nama Sarana <a class="text-danger">*</a></label>
-                                    <input type="text" id="sarana_add" class="form-control" placeholder="e.g. xxx" autofocus>
+                                    <input type="text" id="sarana_add" class="form-control" placeholder="e.g. xxx">
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -217,7 +219,7 @@
                             <div class="col-md-3 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Tgl. Operasi <a class="text-danger">*</a></label>
-                                    <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tgl_operasi_add" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan"/>
+                                    <input type="text" id="tgl_operasi_add" class="form-control flatpickr" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan"/>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -251,34 +253,34 @@
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Keterangan</label>
-                                    <textarea rows="3" class="form-control" id="keterangan_add" placeholder="Optional"></textarea>
+                                    <textarea rows="3" id="keterangan_add" class="form-control" placeholder="Optional"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-5 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Golongan <a class="text-danger">*</a></label>
-                                    <input type="number" id="golongan_add" class="form-control" maxlength="1" placeholder="e.g. 1 / 2 / 3 / 4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                    <input type="number" id="golongan_add" class="form-control" maxlength="1" max="4" placeholder="e.g. 1 / 2 / 3 / 4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 </div>
                             </div>
                             <div class="col-md-2 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Umur <a class="text-danger">*</a></label>
                                     <input type="text" class="form-control" id="umur_add" hidden>
-                                    <input type="number" id="umur_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari golongan" disabled>
+                                    <input type="number" id="umur_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari golongan" placeholder="Otomatis" disabled>
                                 </div>
                             </div>
                             <div class="col-md-2 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Tarif <a class="text-danger">*</a></label>
                                     <input type="text" class="form-control" id="tarif_add" hidden>
-                                    <input type="number" id="tarif_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari umur" disabled>
+                                    <input type="number" id="tarif_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari umur" placeholder="Otomatis" disabled>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="form-label">Penyusutan Per Bulan <a class="text-danger">*</a></label>
                                     <input type="text" class="form-control" id="penyusutan_add" hidden>
-                                    <input type="number" id="penyusutan_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari tarif" disabled>
+                                    <input type="number" id="penyusutan_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari tarif" placeholder="Otomatis" disabled>
                                 </div>
                             </div>
                             <hr>
@@ -287,21 +289,21 @@
                                     <label class="form-label">Upload <a class="text-danger">*</a></label>
                                     <input type="file" class="form-control mb-2" id="file_add" accept=".jpg,.jpeg,.png" multiple>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Gambar<br>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum Semua File Gambar adalah <strong>10 mb</strong><br>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> File gambar akan disimpan ke dalam file berformat <strong>RAR</strong><br>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Gunakan aplikasi WinRAR untuk membuka file Upload
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum Semua File Gambar adalah <strong>10 mb</strong>
+                                    {{-- <i class="fa-fw fas fa-caret-right nav-icon"></i> File gambar akan disimpan ke dalam file berformat <strong>RAR</strong><br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Gunakan aplikasi WinRAR untuk membuka file Upload --}}
                                 </div>
                             </div>
                         </div>
-
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                                 class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
                         <button class="btn btn-info" onclick="simpan()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                            title="Simpan Data Aset Barang"><i
-                                class="bx bxs-save"></i>&nbsp;&nbsp;Submit</button>
+                            title="Simpan Data Aset Barang" id="btn-simpan"><i
+                                class="fa-fw fas fa-save nav-icon"></i>&nbsp;&nbsp;Submit</button>
                         {{-- <button class="btn btn-primary" onclick="showKeranjang()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Keranjang"><i
                                 class="bx bx-cart align-middle"></i>&nbsp;&nbsp;Keranjang</button> --}}
@@ -415,6 +417,8 @@
         }
 
         function simpan() {
+            $("#btn-simpan").prop('disabled', true);
+            $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
             // Definisi
             var save = new FormData();
             save.append('ruangan',$("#ruangan_add").val());
@@ -439,8 +443,16 @@
             save.append('user','{{ Auth::user()->id }}');
 
             // Get the selected file
-            var files = $('#file_add')[0].files;
-            save.append('file',files[0]);
+            var filesAdded = $('#file_add')[0].files;
+            for (let i = 0; i < filesAdded.length; i++) {
+                save.append('file[]',filesAdded[i]);
+            }
+            // save.append('file2',filesAdded[1]);
+            // save.append('file3',filesAdded);
+            console.log(filesAdded);
+            // console.log(filesAdded[0]);
+            // console.log(filesAdded[1]);
+            // console.log(filesAdded[2]);
 
             if (
                 save.get('ruangan') == "" ||
@@ -458,9 +470,10 @@
                 save.get('nilai_perolehan') == "" ||
                 save.get('kondisi') == "" ||
                 save.get('golongan') == "" ||
-                save.get('umur') == "" ||
-                save.get('tarif') == "" ||
-                save.get('penyusutan') == ""
+                // save.get('umur') == "" ||
+                // save.get('tarif') == "" ||
+                // save.get('penyusutan') == ""
+                filesAdded.length == 0
             ) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
@@ -468,12 +481,15 @@
                     position: 'topRight'
                 });
             } else {
+                // console.log(save)
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     method: 'POST',
                     url: '/api/inventaris/aset/store',
+                    contentType: false,
+                    processData: false,
                     dataType: 'json',
                     data: save,
                     success: function(res) {
@@ -483,7 +499,6 @@
                             position: 'topRight'
                         });
                         if (res) {
-                            $('.modal').modal('hide');
                             refresh();
                         }
                     },
@@ -496,10 +511,29 @@
                     }
                 });
             }
+
+            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-simpan").prop('disabled', false);
         }
 
         function refresh() {
+            // $("#btn-refresh").prop('disabled', true);
+            $("#btn-refresh").find("i").toggleClass("fa-spin");
             $('.modal').modal('hide');
+
+            // Clear Pilihan Select2
+            $(".select2").val('').change();
+
+            // Clear Input Form
+            document.getElementById("formTambah").reset();
+
+            // Clear No. Inventaris
+            $('#kd_ruangan_add').text(' . . ');
+            $('#kd_jenis_add').text(' . . ');
+            $('#kd_sarana_add').text(' . . ');
+
+            $("#btn-refresh").find("i").removeClass("fa-spin");
+            // $("#btn-refresh").prop('disabled', false);
         }
 
         /* Fungsi formatRupiah */

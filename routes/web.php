@@ -25,6 +25,7 @@ Route::get('/', function () {
 Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->name('auth.login');
 
 Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
+Route::get('/clear-cache', [App\Http\Controllers\Dashboard\DefaultController::class, 'clearCache'])->name('clearcache');
 
 Route::group(['middleware' => ['auth']], function () {
     // PROFIL
