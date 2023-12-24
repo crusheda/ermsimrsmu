@@ -115,8 +115,8 @@
                             <input type="file" class="form-control mb-2" name="file2[]" id="file2" multiple required>
                             <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen dan bisa
                             lebih dari satu file<br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah
-                            <strong>20 mb</strong>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap file adalah
+                            <strong>5 mb</strong>
                         </div>
                 </div>
                 <div class="modal-footer">

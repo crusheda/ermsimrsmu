@@ -66,6 +66,8 @@
                     <button type="button" class="btn btn-secondary w-100" onclick="" disabled><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
                 </div>
             </div>
+            
+        {!! DNS2D::getBarcodeHTML('https://simrsmu.com', 'QRCODE') !!}
         </div>
         <div class="card-body" style="overflow: visible;">
             <div class="table-responsive" style="border: 0px">
@@ -103,6 +105,7 @@
             </div>
             <!-- end table responsive -->
         </div>
+        
 
         <!--TAMBAH ASET -->
         <div class="modal fade" tabindex="-1" id="modalTambah" role="dialog">
@@ -289,7 +292,7 @@
                                     <label class="form-label">Upload <a class="text-danger">*</a></label>
                                     <input type="file" class="form-control mb-2" id="file_add" accept=".jpg,.jpeg,.png" multiple>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Gambar<br>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum Semua File Gambar adalah <strong>10 mb</strong>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap File Gambar adalah <strong>5 mb</strong>
                                     {{-- <i class="fa-fw fas fa-caret-right nav-icon"></i> File gambar akan disimpan ke dalam file berformat <strong>RAR</strong><br>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Gunakan aplikasi WinRAR untuk membuka file Upload --}}
                                 </div>

@@ -64,19 +64,14 @@ class AsetController extends Controller
         $month = $carbon->isoFormat('MM');
         $year = $carbon->isoFormat('YYYY');
 
-        $request->validate([
-            'file.*' => ['required','mimes:jpg,png,jpeg','max:10000'],
+        $validator = Validator::make($request->all(), [
+            'file.*' => 'required|mimes:jpg,png,jpeg|max:5000',
         ]);
-        // $validator = Validator::make($request->all(), [
-        //     'file.*' => ['max:10000','mimes:jpeg,jpg,png'],
-        // ]);
-        // print_r($validator);
-        // die();
 
-        // if ($validator->fails()) {
-        //     $error = 'File tidak sesuai ketentuan!';
-        //     return response()->json($error, 400);
-        // } else {
+        if ($validator->fails()) {
+            $arr = json_encode($validator->errors());
+            return redirect()->back()->with('error',$arr);
+        } else {
             $getRuangan = aset_ruangan::where('id',$request->ruangan)->first();
             $getUrutan = aset::orderBy('created_at','desc')->first();
             if (!empty($getUrutan)) {
@@ -149,6 +144,6 @@ class AsetController extends Controller
             $data->save();
 
             return response()->json($tgl, 200);
-        // }
+        }
     }
 }

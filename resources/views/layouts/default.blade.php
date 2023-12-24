@@ -102,11 +102,7 @@
                 <div class="container-fluid">
 
                     <!-- start toart notification -->
-
-                    {{-- <button type="button" class="btn btn-primary" onclick="message({{ session('message') }})">Show live toast</button> --}}
-                    {{-- @if (session('message'))
-                        {{ message({{ session('message') }}); }}
-                    @endif --}}
+                    {{-- IF HAS MESSAGE SUCCESS --}}
                     <div class="d-flex flex-wrap gap-2">
                         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1005">
                             <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -118,6 +114,22 @@
                                 </div>
                                 <div class="toast-body">
                                     <p id="message"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- IF HAS MESSAGE ERRORS --}}
+                    <div class="d-flex flex-wrap gap-2">
+                        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1005">
+                            <div id="liveToastError" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <img src="{{ asset('images/logo.svg') }}" alt="" class="me-2" height="18">
+                                    <strong class="me-auto">Pesan Error dari Sistem</strong>
+                                    <small>Baru saja</small>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body">
+                                    <p id="errorMessage"></p>
                                 </div>
                             </div>
                         </div>
@@ -235,18 +247,32 @@
         $(document).ready(function() {
             if ("{{ session('message') }}") {
                 message("{{ session('message') }}");
-                // alert('berhasil');
+            }
+            if ("{{ session('error') }}") {
+                error("{{ session('error') }}");
             }
         })
 
         // ALL FUNCTION BELOW
         function message(message) {
             //  Bootstrap Toast Message
-            var toastme = document.getElementById('liveToast')
+            var toastme = document.getElementById('liveToast');
             $('#message').text(message);
-            var toast = new bootstrap.Toast(toastme)
+            var toast = new bootstrap.Toast(toastme);
 
-            toast.show()
+            toast.show();
+        }
+
+        function error(error) {
+            //  Bootstrap Toast Message
+            var toastme = document.getElementById('liveToastError');
+            // for (let index = 0; index < error.length; index++) {
+            //     $('#errorMessage').append(error[index]);
+            // }
+            $('#errorMessage').html(error);
+            var toast = new bootstrap.Toast(toastme);
+
+            toast.show();
         }
 
         function closeModal() {

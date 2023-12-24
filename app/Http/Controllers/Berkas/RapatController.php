@@ -58,52 +58,47 @@ class RapatController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+            'file2.*' => 'required|mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,gif,png,jpeg|max:5000',
             'keterangan' => 'nullable',
-            // 'file2' => 'required',
-            'file2.*' => ['required','mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,gif,png,jpeg','max:20000'],
-            ]);
-        // request()->validate([
-        //     'file' => 'required',
-        //     'file.*' => 'mimes:doc,pdf,docx,txt,zip,jpeg,jpg,png'
-        // ]);
-        // print_r($request->file2);
-        // die();
-        // $this->validate($request,['file2' => ['required','mimes:doc,docx,xls,xlsx,ppt,pptx,pdf','max:50000']]);
+        ]);
 
-        $user = Auth::user();
-        $user_id = $user->id;
-        $user_nama = $user->nama;
+        if ($validator->fails()) {
+            $arr = json_encode($validator->errors());
+            return redirect()->back()->with('error',$arr);
+        } else {
+            $user = Auth::user();
+            $user_id = $user->id;
+            $user_nama = $user->nama;
 
-        $uploadedFile2 = $request->file('file2');
+            $uploadedFile2 = $request->file('file2');
 
-        $data = new berkas_rapat;
-        $data->id_user = $user_id;
-        $data->nama_user = $user_nama;
-        $data->nama = $request->nama;
-        $data->kepala = $request->kepala;
-        $data->tanggal = $request->tanggal;
-        $data->lokasi = $request->lokasi;
+            $data = new berkas_rapat;
+            $data->id_user = $user_id;
+            $data->nama_user = $user_nama;
+            $data->nama = $request->nama;
+            $data->kepala = $request->kepala;
+            $data->tanggal = $request->tanggal;
+            $data->lokasi = $request->lokasi;
 
-        print_r($request->hasFile('file2'));
-        die();
-            if ($request->hasFile('file2')) {
-                foreach ($uploadedFile2 as $file) {
-                    $array_filename2[] = $file->store('public/files/rapat/'.$user_id);
-                    $array_title2[] = $file->getClientOriginalName();
+                if ($request->hasFile('file2')) {
+                    foreach ($uploadedFile2 as $file) {
+                        $array_filename2[] = $file->store('public/files/rapat/'.$user_id);
+                        $array_title2[] = $file->getClientOriginalName();
+                    }
                 }
-            }
-            $data->title2 = json_encode($array_title2);
-            $data->filename2 = json_encode($array_filename2);
+                $data->title2 = json_encode($array_title2);
+                $data->filename2 = json_encode($array_filename2);
 
-        $data->keterangan = $request->keterangan;
-        $data->user_id = $user_id;
-        // print_r($id);
-        // die();
+            $data->keterangan = $request->keterangan;
+            $data->user_id = $user_id;
+            // print_r($id);
+            // die();
 
-        $data->save();
+            $data->save();
 
-        return redirect()->back()->with('message','Tambah Berkas Rapat Berhasil');
+            return redirect()->back()->with('message','Tambah Berkas Rapat Berhasil');
+        }
     }
 
     /**
