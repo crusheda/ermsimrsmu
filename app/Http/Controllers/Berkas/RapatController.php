@@ -269,7 +269,7 @@ class RapatController extends Controller
 
     public function detailRapat($id)
     {
-        $show = berkas_rapat::join('users','berkas_rapat.user_id','=','users.id')->select('users.nama as user_nama','berkas_rapat.*')->where('users.status',null)->where('berkas_rapat.id',$id)->first();
+        $show = berkas_rapat::join('users','berkas_rapat.user_id','=','users.id')->select('users.nama as user_nama','berkas_rapat.*')->where('berkas_rapat.id',$id)->first();
         $kepala = users::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
 
         $data = [
