@@ -38,6 +38,17 @@ class AsetController extends Controller
         return view('pages.inventaris.aset.index')->with('list',$data);
     }
 
+    function detail($id)
+    {
+        $show = aset::where('id',$id)->first();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return view('pages.inventaris.aset.detail')->with('list',$data);
+    }
+
     function getRuangan($id)
     {
         $query = aset_ruangan::where('id', $id)->first();
@@ -145,5 +156,24 @@ class AsetController extends Controller
 
             return response()->json($tgl, 200);
         }
+    }
+
+    function filter(Request $request) {
+        $show = aset::select('aset.*','aset_ruangan.ruangan','aset_ruangan.lokasi')
+                    ->join('aset_ruangan','aset_ruangan.id','=','aset.id_ruangan')
+                    ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function qrcode($id)
+    {
+        $show = aset::where('id',$id)->first();
+        $data = str_replace('.','',$show->no_inventaris);
+        return response()->json($data, 200);
     }
 }

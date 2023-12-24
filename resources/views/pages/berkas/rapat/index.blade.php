@@ -400,8 +400,8 @@
                 success: function(res) {
                     $('#ubah').modal('show');
                     // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
+                    console.log(res.show.tanggal);
                     var dt = moment(res.show.tanggal).format('Y-MM-DD HH:mm');
-                    console.log(dt);
                     document.getElementById('show_edit').innerHTML = "ID : " + res.show.id;
                     document.getElementById('user_edit').innerHTML = res.show.user_nama;
                     $("#id_edit").val(res.show.id);

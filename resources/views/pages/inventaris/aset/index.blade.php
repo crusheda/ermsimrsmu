@@ -63,49 +63,36 @@
                     </div><!-- input-group -->
                 </div>
                 <div class="col-xxl-2 col-lg-4">
-                    <button type="button" class="btn btn-secondary w-100" onclick="" disabled><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
+                    <button type="button" class="btn btn-info w-100" onclick="filter()"><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
                 </div>
             </div>
-            
-        {!! DNS2D::getBarcodeHTML('https://simrsmu.com', 'QRCODE') !!}
+
         </div>
-        <div class="card-body" style="overflow: visible;">
+        <div class="card-body" style="overflow: visible;" id="show-table">
             <div class="table-responsive" style="border: 0px">
-                <table class="table align-middle dt-responsive w-100 table-check" id="job-list">
+                <table class="table align-middle dt-responsive w-100 table-check" id="dttable">
                     <thead>
                         <tr>
                             <th scope="col">#ID</th>
-                            <th scope="col"></th>
                             <th scope="col">No Inventaris</th>
-                            <th scope="col">Nama</th>
-                            <th scope="col">Merk</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">No Seri</th>
-                            <th scope="col">Lokasi/Ruang</th>
-                            <th scope="col">Jenis</th>
-                            {{-- <th scope="col">Kalibrasi</th>
-                            <th scope="col">No Kalibrasi</th>
+                            <th scope="col">Sarana</th>
+                            <th scope="col">Ruangan</th>
+                            <th scope="col">Kalibrasi</th>
+                            <th scope="col">Perolehan</th>
                             <th scope="col">Tgl Berlaku</th>
                             <th scope="col">Tgl Operasi</th>
-                            <th scope="col">Tgl Perolehan</th>
-                            <th scope="col">Asal Perolehan</th>
-                            <th scope="col">Nilai Perolehan</th>
-                            <th scope="col">Kondisi</th>
-                            <th scope="col">Foto</th>
-                            <th scope="col">Golongan</th>
-                            <th scope="col">Umur</th>
-                            <th scope="col">Tarif</th>
                             <th scope="col">Penyusutan Per Bulan</th>
-                            <th scope="col">Keterangan</th> --}}
-                            <th scope="col">Tgl Input</th>
+                            <th scope="col">Keterangan</th>
+                            <th scope="col">Dibuat</th>
+                            <th scope="col">Diperbarui</th>
                         </tr>
                     </thead>
+                    <tbody id="tampil-tbody"></tbody>
                 </table>
                 <!-- end table -->
             </div>
             <!-- end table responsive -->
         </div>
-        
 
         <!--TAMBAH ASET -->
         <div class="modal fade" tabindex="-1" id="modalTambah" role="dialog">
@@ -315,6 +302,20 @@
             </div>
         </div>
 
+        <div class="modal fade" tabindex="-1" id="qrcode" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderdetailsModalLabel">QR Code</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="show-qrcode">
+                        {{-- {!! DNS2D::getBarcodeHTML('https://simrsmu.com'+, 'QRCODE') !!} --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script>
         $(document).ready(function() {
@@ -405,7 +406,132 @@
 
         })
 
+        // ----------------------------------------------------------------------------------------
         // FUNCTION AREA
+        function filter() {
+            // $("#show-table").prop('hidden', false);
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="8"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/inventaris/aset/filter",
+                type: 'POST',
+                dataType: 'json', // added data type
+                data: {
+                    // regulasi: regulasi,
+                    // waktu: waktu,
+                    // pembuat: pembuat,
+                },
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+
+                    // content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                    //                     <div class='d-flex justify-content-start align-items-center'>
+                    //                         <div class='d-flex flex-column'>
+                    //                             <h6 class='mb-0'></h6>
+                    //                             <small class='text-truncate text-muted'></small>
+                    //                         </div>
+                    //                     </div>
+                    //                 </td>`;
+                    res.show.forEach(item => {
+                        content = `<tr id='`+item.id+`'>`;
+                        content += `<td><div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <a href="javascript:;" class="btn btn-outline-light dropdown-toggle hide-arrow text-body btn-sm btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="javascript:;" onclick="window.open('/inventaris/aset/`+item.id+`')" class="dropdown-item text-info"><i class='bx bx-barcode scaleX-n1-rtl'></i> Detail</a>
+                                                <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                            </div>
+                                        </div>
+                                    </div></td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a href='javascript:void(0);'><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>`+item.sarana+`</h6>
+                                                <h6 class='mb-0'>`+item.no_seri+`</h6>
+                                                <small class='text-truncate text-muted'>`+item.merk+` - `+item.type+`</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>`+item.ruangan+` - `+item.lokasi+`</h6>
+                                                <small class='text-truncate text-muted'>Jenis : `+item.jenis+`</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>`+item.no_kalibrasi+`</h6>
+                                                <small class='text-truncate text-muted'>Kondisi : `+item.kondisi+`</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>`+item.asal_perolehan+`</h6>
+                                                <h6 class='mb-0'>`+formatRupiah(item.nilai_perolehan,'Rp. ')+`</h6>
+                                                <small class='text-truncate text-muted'>Diperoleh : `+item.tgl_perolehan+`</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td>`+item.tgl_berlaku+`</td>`;
+                        content += `<td>`+item.tgl_operasi+`</td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>Golongan `+item.golongan+`</h6>
+                                                <small class='text-truncate text-muted'>`+item.umur+` Bulan - `+item.tarif+` - `+item.penyusutan+`</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td>`+item.keterangan+`</td>`;
+                        content += `<td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td>`;
+                        content += `<td>`+item.tgl_input+`</td><tr>`;
+                        $('#tampil-tbody').append(content);
+                    })
+
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [10, "desc"]
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '25%' },
+                        //     { sWidth: '10%' },
+                        // ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
         function tambah() {
             $.ajax(
             {

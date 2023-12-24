@@ -134,6 +134,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // ASET
             // ASET
                 Route::post('inventaris/aset/store', '\App\Http\Controllers\Inventaris\Aset\AsetController@store')->name('aset.simpan');
+                Route::post('inventaris/aset/filter', '\App\Http\Controllers\Inventaris\Aset\AsetController@filter')->name('aset.filter');
+                Route::get('inventaris/aset/qrcode/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@qrcode')->name('aset.qrcode');
             // ASET RUANGAN
                 Route::get('inventaris/aset/ruangan', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@table')->name('aset_ruangan.table');
                 Route::get('inventaris/aset/ruangan/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@getRuangan')->name('aset_ruangan.getRuangan');
