@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="fw-semibold text-center">SCAN QR CODE</h5>
-                        <div class="mb-3"><center>{!! DNS2D::getBarcodeHTML('https://simrsmu.com/inventaris/aset/'.$list['show']->id, 'QRCODE') !!}</center></div>
+                        <div class="mb-3"><center>{!! DNS2D::getBarcodeHTML('https://simrsmu.com/inventaris/aset/'.$list['show']->token, 'QRCODE',5,5) !!}</center></div>
                     {{-- <div class="table-responsive">
                         <table class="table">
                             <tbody>
@@ -51,8 +51,9 @@
                         </table>
                     </div> --}}
                     <div class="hstack gap-2">
-                        <button class="btn btn-soft-primary w-100">Download</button>
-                        <button class="btn btn-soft-warning w-100">Cetak</button>
+                        <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
+                        <button class="btn btn-soft-primary w-100"><i class="bx bx-download scaleX-n1-rtl"></i> Download</button>
+                        <button class="btn btn-soft-warning w-100"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
                     </div>
                 </div>
             </div>
@@ -116,23 +117,36 @@
                     <div class="d-flex">
                         {{-- <img src="assets/images/companies/wechat.svg" alt="" height="50"> --}}
                         <div class="flex-grow-1">
-                            <h5 class="fw-semibold">No. Inventaris : <a href="javascript:void(0);">{{ $list['show']->no_inventaris }}</a></h5>
-                            <h6>{{ $list['show']->sarana }}</h6>
-                            {{-- <ul class="list-unstyled hstack gap-2 mb-0">
+                            <h5 class="fw-semibold">{{ $list['show']->sarana }}</h5>
+                            <h6>No. Inventaris : <a href="javascript:void(0);">{{ $list['show']->no_inventaris }}</a></h6>
+                            <ul class="list-unstyled hstack gap-2 mb-0">
                                 <li>
                                     <i class="bx bx-building-house"></i> <span class="text-muted">Themesbrand</span>
                                 </li>
                                 <li>
                                     <i class="bx bx-map"></i> <span class="text-muted">California</span>
                                 </li>
-                            </ul> --}}
+                            </ul>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div id="carouselExampleControls" class="carousel slide mb-3" data-bs-ride="carousel">
+                    <div id="carouselExampleControls" class="carousel carousel-dark slide mb-3" data-bs-ride="carousel">
                         <div class="carousel-inner" role="listbox">
-                            <div class="carousel-item active">
+                            @php
+                                $lampiran = json_decode($list['show']->filename);
+                            @endphp
+                            @for ($i = 0; $i < count($lampiran); $i++)
+                                <div class="carousel-item @if ($i == 0) active @endif">
+                                    <center><img class="d-block img-fluid" style="max-height: 600px" src="{{ url('storage/'.substr($lampiran[$i],7,1000)) }}"></center>
+                                </div>
+                            @endfor
+                            {{-- @foreach (json_decode($list['show']->filename) as $item)
+                                <div class="carousel-item active">
+                                    <img class="d-block img-fluid" src="{{ url('storage/'.substr($item,7,1000)) }}">
+                                </div>
+                            @endforeach --}}
+                            {{-- <div class="carousel-item active">
                                 <img class="d-block img-fluid" width="100%" src="{{ asset('/images/small/img-4.jpg') }}" alt="First slide">
                             </div>
                             <div class="carousel-item">
@@ -140,10 +154,10 @@
                             </div>
                             <div class="carousel-item">
                                 <img class="d-block img-fluid" width="100%" src="{{ asset('/images/small/img-6.jpg') }}" alt="Third slide">
-                            </div>
+                            </div> --}}
                         </div>
                         <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
                             <span class="sr-only">Sebelumnya</span>
                         </a>
                         <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">

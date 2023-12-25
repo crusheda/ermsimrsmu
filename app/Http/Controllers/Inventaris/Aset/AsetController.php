@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Inventaris\Aset;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\aset;
 use App\Models\aset_ruangan;
 use App\Models\aset_mutasi;
@@ -15,6 +16,7 @@ use App\Models\aset_pemeliharaan;
 use App\Models\roles;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Storage;
 use Auth;
 use \PDF;
 use Validator,Redirect,Response,File;
@@ -38,9 +40,9 @@ class AsetController extends Controller
         return view('pages.inventaris.aset.index')->with('list',$data);
     }
 
-    function detail($id)
+    function detail($token)
     {
-        $show = aset::where('id',$id)->first();
+        $show = aset::where('token',$token)->first();
 
         $data = [
             'show' => $show,
@@ -97,8 +99,10 @@ class AsetController extends Controller
                 $jenis = 'B';
             }
 
+            $no_inventaris = '00.03.27.'.$getRuangan->kode.'.'.$jenis.'.'.$urutan.'.'.$month.'.'.$year;
 
             $data = new aset;
+            $data->token = Crypt::encryptString($no_inventaris); // decryptString to Decrypt
             $data->urutan = $urutan;
             $data->id_user_aset = $request->user;
             $data->id_ruangan = $request->ruangan;
@@ -107,7 +111,7 @@ class AsetController extends Controller
             $data->no_kalibrasi = $request->no_kalibrasi;
             $data->tgl_berlaku = $request->tgl_berlaku;
             $data->tgl_perolehan = $request->tgl_perolehan;
-            $data->no_inventaris = '00.03.27.'.$getRuangan->kode.'.'.$jenis.'.'.$urutan.'.'.$month.'.'.$year;
+            $data->no_inventaris = $no_inventaris;
             $data->sarana = $request->sarana;
             $data->merk = $request->merk;
             $data->tipe = $request->tipe;
@@ -170,10 +174,29 @@ class AsetController extends Controller
         return response()->json($data, 200);
     }
 
-    function qrcode($id)
+    function hapus($id)
     {
-        $show = aset::where('id',$id)->first();
-        $data = str_replace('.','',$show->no_inventaris);
-        return response()->json($data, 200);
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = aset::find($id);
+
+        // Proses Hapus Lampiran
+        $file = $data->filename;
+        foreach (json_decode($file) as $key => $value) {
+            Storage::delete($value);
+        }
+
+        // Proses Hapus Data dari DB
+        $data->delete();
+
+        return response()->json($tgl, 200);
     }
+
+    // function qrcode($id)
+    // {
+    //     $show = aset::where('id',$id)->first();
+    //     // $data = str_replace('.','',$show->no_inventaris);
+    //     return response()->json($show->token, 200);
+    // }
 }

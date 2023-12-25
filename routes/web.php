@@ -139,7 +139,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], fu
 Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], function () {
     // ASET
     Route::get('aset','\App\Http\Controllers\Inventaris\Aset\AsetController@index')->name('aset.index');
-    Route::get('aset/{id}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail')->name('aset.detail');
+    Route::get('aset/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail')->name('aset.detail');
 
         // ASET RUANGAN
         Route::get('aset/ruangan','\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@index')->name('aset_ruangan.index');

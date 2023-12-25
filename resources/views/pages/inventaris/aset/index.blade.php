@@ -68,7 +68,7 @@
             </div>
 
         </div>
-        <div class="card-body" style="overflow: visible;" id="show-table">
+        <div class="card-body" style="overflow: visible;" id="show-table" hidden>
             <div class="table-responsive" style="border: 0px">
                 <table class="table align-middle dt-responsive w-100 table-check" id="dttable">
                     <thead>
@@ -94,7 +94,7 @@
             <!-- end table responsive -->
         </div>
 
-        <!--TAMBAH ASET -->
+        <!-- MODAL TAMBAH -->
         <div class="modal fade" tabindex="-1" id="modalTambah" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                 <div class="modal-content">
@@ -302,15 +302,30 @@
             </div>
         </div>
 
-        <div class="modal fade" tabindex="-1" id="qrcode" role="dialog">
-            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        {{-- MODAL HAPUS --}}
+        <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="orderdetailsModalLabel">QR Code</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title">
+                            Hapus Aset&nbsp;&nbsp;&nbsp;
+                        </h4>
                     </div>
-                    <div class="modal-body" id="show-qrcode">
-                        {{-- {!! DNS2D::getBarcodeHTML('https://simrsmu.com'+, 'QRCODE') !!} --}}
+                    <div class="modal-body">
+                        <input type="text" id="id_hapus" hidden>
+                        <p style="text-align: justify;">Anda akan menghapus Aset <kbd>ID :<strong><a id="show_id_hapus"></a></strong></kbd> tersebut. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                        <label class="switch">
+                            <input type="checkbox" class="switch-input" id="setujuhapus">
+                            <span class="switch-toggle-slider">
+                            <span class="switch-on"></span>
+                            <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label">Anda siap menerima Risiko</span>
+                        </label>
+                    </div>
+                    <div class="col-12 text-center mb-4">
+                        <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
                     </div>
                 </div>
             </div>
@@ -409,9 +424,9 @@
         // ----------------------------------------------------------------------------------------
         // FUNCTION AREA
         function filter() {
-            // $("#show-table").prop('hidden', false);
+            $("#show-table").prop('hidden', false);
             $("#tampil-tbody").empty().append(
-                `<tr><td colspan="8"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             $.ajax({
                 url: "/api/inventaris/aset/filter",
@@ -440,7 +455,7 @@
                                         <div class="dropdown">
                                             <a href="javascript:;" class="btn btn-outline-light dropdown-toggle hide-arrow text-body btn-sm btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="javascript:;" onclick="window.open('/inventaris/aset/`+item.id+`')" class="dropdown-item text-info"><i class='bx bx-barcode scaleX-n1-rtl'></i> Detail</a>
+                                                <a href="javascript:;" onclick="location.href='/inventaris/aset/`+item.token+`'" class="dropdown-item text-info"><i class='bx bx-barcode scaleX-n1-rtl'></i> Detail</a>
                                                 <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
                                                 <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                             </div>
@@ -458,7 +473,7 @@
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>`+item.sarana+`</h6>
                                                 <h6 class='mb-0'>`+item.no_seri+`</h6>
-                                                <small class='text-truncate text-muted'>`+item.merk+` - `+item.type+`</small>
+                                                <small class='text-truncate text-muted'>`+item.merk+` - `+item.tipe+`</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -499,7 +514,7 @@
                                     </td>`;
                         content += `<td>`+item.keterangan+`</td>`;
                         content += `<td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td>`;
-                        content += `<td>`+item.tgl_input+`</td><tr>`;
+                        content += `<td>`+item.tgl_input+`</td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
 
@@ -663,6 +678,48 @@
 
             $("#btn-refresh").find("i").removeClass("fa-spin");
             // $("#btn-refresh").prop('disabled', false);
+        }
+
+        function hapus(id) {
+            $('#show_id_hapus').text(id);
+            $("#id_hapus").val(id);
+            $('#hapus').modal('show');
+        }
+
+        function prosesHapus() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan Aset',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus").val();
+                $.ajax({
+                    url: "/api/inventaris/aset/hapus/"+id,
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Aset telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#hapus').modal('hide');
+                        refresh();
+                        // window.location.reload();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Aset gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
         }
 
         /* Fungsi formatRupiah */
