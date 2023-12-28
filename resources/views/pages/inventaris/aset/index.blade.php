@@ -348,6 +348,7 @@
                     </div>
                     <div class="col-12 text-center mb-4">
                         <button class="btn btn-primary me-sm-3 me-1" onclick="scan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
+                        <button class="btn btn-info me-sm-3 me-1" onclick="nextScan()" id="resume-scan" hidden><i class="fa fa-play"></i>&nbsp;&nbsp;Lanjut Scan</button>
                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                     </div>
                 </div>
@@ -788,13 +789,15 @@
             };
 
             let html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false); // /* verbose= */ false
-            html5QrcodeScanner.render(onScanSuccess,onScanFailure); //onScanFailure
+            html5QrcodeScanner.render(onScanSuccess); //onScanFailure
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             // handle the scanned code as you like, for example:
             // console.log(`Code matched = ${decodedText}`, decodedResult);
             var lastResult, countResults = 0;
+            let shouldPauseVideo = true;
+            let showPausedBanner = false;
             if (decodedText !== lastResult) {
                 ++countResults;
                 lastResult = decodedText;
@@ -807,18 +810,25 @@
                 // html5QrcodeScanner.start();
                 // html5QrcodeScanner.clear();
             }
+            html5QrcodeScanner.pause(shouldPauseVideo, showPausedBanner);
+            $("#resume-scan").prop('hidden', false);
             // scan();
         }
 
-        function onScanFailure(error) {
-            // handle scan failure, usually better to ignore and keep scanning.
-            // for example:
-            // console.warn(`Code scan error = ${error}`);
-            iziToast.error({
-                title: 'Scan gagal!',
-                message: 'Mohon arahkan pada QR-Code yang valid',
-                position: 'topRight'
-            });
+        function nextScan() {
+            $("#resume-scan").prop('hidden', true);
+            html5QrcodeScanner.resume();
         }
+
+        // function onScanFailure(error) {
+        //     // handle scan failure, usually better to ignore and keep scanning.
+        //     // for example:
+        //     console.warn(`Code scan error = ${error}`);
+        //     iziToast.error({
+        //         title: 'Scan gagal!',
+        //         message: 'Mohon arahkan pada QR-Code yang valid',
+        //         position: 'topRight'
+        //     });
+        // }
     </script>
 @endsection
