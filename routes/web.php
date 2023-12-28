@@ -137,13 +137,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], fu
 
 // INVENTARIS
 Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], function () {
+    // ASET RUANGAN
+    Route::get('aset/ruangan','\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@index')->name('aset_ruangan.index');
+
     // ASET
     Route::get('aset','\App\Http\Controllers\Inventaris\Aset\AsetController@index')->name('aset.index');
+    Route::get('aset/scan','\App\Http\Controllers\Inventaris\Aset\AsetScanController@index')->name('aset.scan');
     Route::get('aset/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail')->name('aset.detail');
-
-        // ASET RUANGAN
-        Route::get('aset/ruangan','\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@index')->name('aset_ruangan.index');
-
 });
 
 // PELAYANAN
