@@ -443,9 +443,6 @@
                 })
             });
 
-            // for Scanning Definition
-            var lastResult, countResults = 0;
-
         })
 
         // ----------------------------------------------------------------------------------------
@@ -789,24 +786,28 @@
                 ],
                 formatsToSupport: formatsToSupport
             };
-            let html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false);
-            html5QrcodeScanner.render(onScanSuccess); // onScanFailure
+
+            let html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false); // /* verbose= */ false
+            html5QrcodeScanner.render(onScanSuccess,onScanFailure); //onScanFailure
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             // handle the scanned code as you like, for example:
             // console.log(`Code matched = ${decodedText}`, decodedResult);
+            var lastResult, countResults = 0;
             if (decodedText !== lastResult) {
                 ++countResults;
                 lastResult = decodedText;
                 iziToast.success({
-                    title: 'Sukses!',
-                    message: 'QR-Code : '+ decodedText,
+                    title: 'QR-Code Valid!',
+                    message: decodedText,
                     position: 'topRight'
                 });
-                html5QrcodeScanner.stop();
-                html5QrcodeScanner.clear();
+                // html5QrcodeScanner.stop();
+                // html5QrcodeScanner.start();
+                // html5QrcodeScanner.clear();
             }
+            // scan();
         }
 
         function onScanFailure(error) {
@@ -814,8 +815,8 @@
             // for example:
             // console.warn(`Code scan error = ${error}`);
             iziToast.error({
-                title: 'Pesan Galat!',
-                message: error,
+                title: 'Scan gagal!',
+                message: 'Mohon arahkan pada QR-Code yang valid',
                 position: 'topRight'
             });
         }

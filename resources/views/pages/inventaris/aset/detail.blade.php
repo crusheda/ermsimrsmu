@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="fw-semibold text-center">SCAN QR CODE</h5>
-                        <div class="mb-3"><center>{!! DNS2D::getBarcodeHTML('https://simrsmu.com/inventaris/aset/'.$list['show']->token, 'QRCODE',5,5) !!}</center></div>
+                        <div class="mb-3"><center>{!! DNS2D::getBarcodeHTML($list['show']->token, 'QRCODE',5,5) !!}</center></div>
                     {{-- <div class="table-responsive">
                         <table class="table">
                             <tbody>
