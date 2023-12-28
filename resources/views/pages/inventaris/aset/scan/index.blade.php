@@ -20,16 +20,37 @@
         })
         function onScanSuccess(decodedText, decodedResult) {
             // handle the scanned code as you like, for example:
-            console.log(`Code matched = ${decodedText}`, decodedResult);
+            // console.log(`Code matched = ${decodedText}`, decodedResult);
+            iziToast.success({
+                title: 'Sukses!',
+                message: 'QR-Code : '+ decodedText +' - '+ decodedResult,
+                position: 'topRight'
+            });
         }
 
         function onScanFailure(error) {
             // handle scan failure, usually better to ignore and keep scanning.
             // for example:
-            console.warn(`Code scan error = ${error}`);
+            // console.warn(`Code scan error = ${error}`);
+            iziToast.error({
+                title: 'Pesan Galat!',
+                message: error,
+                position: 'topRight'
+            });
         }
-
-        let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 250} }, /* verbose= */ false);
+        const formatsToSupport = [
+            Html5QrcodeSupportedFormats.QR_CODE,
+            // Html5QrcodeSupportedFormats.UPC_A,
+        ];
+        let config = {
+            fps: 10,
+            qrbox: {width: 100, height: 100},
+            rememberLastUsedCamera: true,
+            // Only support camera scan type.
+            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+            formatsToSupport: formatsToSupport
+        };
+        let html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false);
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
     </script>
 @endsection
