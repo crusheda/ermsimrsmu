@@ -24,6 +24,9 @@
                             <button class="btn btn-light" onclick="refresh()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Refresh Tabel Sarana" id="btn-refresh"><i class="fas fa-sync fa-fw nav-icon"></i></button>
+                            <button class="btn btn-dark" onclick="scan()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Scan QR-Code Aset"><i class="fas fa-qrcode fa-fw nav-icon"></i></button>
                         </div>
                         <div class="vr"></div>
                         <div class="dropdown d-inline-block">
@@ -332,7 +335,28 @@
             </div>
         </div>
 
+        {{-- MODAL SCAN --}}
+        <div class="modal fade" id="modalScan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Scan QR-Code Aset&nbsp;&nbsp;&nbsp;
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="reader" width="300px"></div>
+                    </div>
+                    <div class="col-12 text-center mb-4">
+                        <button class="btn btn-primary me-sm-3 me-1" onclick="scan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script>
         $(document).ready(function() {
             // SELECT2
@@ -419,6 +443,9 @@
                     }
                 })
             });
+
+            // for Scanning Definition
+            var lastResult, countResults = 0;
 
         })
 
@@ -744,6 +771,54 @@
         function reloadBrowser() {
             $('.modal').modal('hide');
             window.location.reload();
+        }
+
+        function scan() {
+            $('#modalScan').modal('show');
+            const formatsToSupport = [
+                Html5QrcodeSupportedFormats.QR_CODE,
+                // Html5QrcodeSupportedFormats.UPC_A,
+            ];
+            let config = {
+                fps: 10,
+                qrbox: {width: 250, height: 250},
+                rememberLastUsedCamera: true,
+                // Only support camera scan type.
+                supportedScanTypes: [
+                    Html5QrcodeScanType.SCAN_TYPE_CAMERA,
+                    Html5QrcodeScanType.SCAN_TYPE_FILE
+                ],
+                formatsToSupport: formatsToSupport
+            };
+            let html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false);
+            html5QrcodeScanner.render(onScanSuccess); // onScanFailure
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // handle the scanned code as you like, for example:
+            // console.log(`Code matched = ${decodedText}`, decodedResult);
+            if (decodedText !== lastResult) {
+                ++countResults;
+                lastResult = decodedText;
+                iziToast.success({
+                    title: 'Sukses!',
+                    message: 'QR-Code : '+ decodedText,
+                    position: 'topRight'
+                });
+                html5QrcodeScanner.stop();
+                html5QrcodeScanner.clear();
+            }
+        }
+
+        function onScanFailure(error) {
+            // handle scan failure, usually better to ignore and keep scanning.
+            // for example:
+            // console.warn(`Code scan error = ${error}`);
+            iziToast.error({
+                title: 'Pesan Galat!',
+                message: error,
+                position: 'topRight'
+            });
         }
     </script>
 @endsection

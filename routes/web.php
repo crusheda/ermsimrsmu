@@ -142,7 +142,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], f
 
     // ASET
     Route::get('aset','\App\Http\Controllers\Inventaris\Aset\AsetController@index')->name('aset.index');
-    Route::get('aset/scan','\App\Http\Controllers\Inventaris\Aset\AsetScanController@index')->name('aset.scan');
     Route::get('aset/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail')->name('aset.detail');
 });
 
