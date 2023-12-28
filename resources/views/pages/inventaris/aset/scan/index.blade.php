@@ -18,19 +18,20 @@
         $(document).ready(function() {
 
         })
+        var lastResult, countResults = 0;
         function onScanSuccess(decodedText, decodedResult) {
             // handle the scanned code as you like, for example:
             // console.log(`Code matched = ${decodedText}`, decodedResult);
-            iziToast.success({
-                title: 'Sukses!',
-                message: 'QR-Code : '+ decodedText +' - '+ decodedResult,
-                position: 'topRight'
-            });
-            html5QrcodeScanner.stop().then((ignore) => {
-                // QR Code scanning is stopped.
-            }).catch((err) => {
-                // Stop failed, handle it.
-            });
+            if (decodedText !== lastResult) {
+                ++countResults;
+                lastResult = decodedText;
+                iziToast.success({
+                    title: 'Sukses!',
+                    message: 'QR-Code : '+ decodedText,
+                    position: 'topRight'
+                });
+                html5QrcodeScanner.clear();
+            }
         }
 
         function onScanFailure(error) {
@@ -42,11 +43,6 @@
                 message: error,
                 position: 'topRight'
             });
-            html5QrcodeScanner.stop().then((ignore) => {
-                // QR Code scanning is stopped.
-            }).catch((err) => {
-                // Stop failed, handle it.
-            });
         }
         const formatsToSupport = [
             Html5QrcodeSupportedFormats.QR_CODE,
@@ -54,13 +50,17 @@
         ];
         let config = {
             fps: 10,
-            qrbox: {width: 100, height: 100},
+            qrbox: {width: 250, height: 250},
             rememberLastUsedCamera: true,
             // Only support camera scan type.
-            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+            supportedScanTypes: [
+                Html5QrcodeScanType.SCAN_TYPE_FILE,
+                Html5QrcodeScanType.SCAN_TYPE_CAMERA
+            ],
             formatsToSupport: formatsToSupport
         };
         let html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false);
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        html5QrcodeScanner.render(onScanSuccess); // onScanFailure
+
     </script>
 @endsection
