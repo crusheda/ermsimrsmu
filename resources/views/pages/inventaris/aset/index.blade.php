@@ -348,7 +348,26 @@
                     </div>
                     <div class="col-12 text-center mb-4">
                         <button class="btn btn-primary me-sm-3 me-1" onclick="scan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
-                        <button class="btn btn-info me-sm-3 me-1" onclick="nextScan()" id="resume-scan" hidden><i class="fa fa-play"></i>&nbsp;&nbsp;Lanjut Scan</button>
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- MODAL HASIL SCAN --}}
+        <div class="modal fade" id="modalResultScan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Aset <kbd>ID:</kbd>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="col-12 text-center mb-4">
+                        <button class="btn btn-primary me-sm-3 me-1" onclick="scan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                     </div>
                 </div>
@@ -356,7 +375,8 @@
         </div>
 
     </div>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="{{ asset('js/html5-qrcode.js') }}"></script>
+    {{-- <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> --}}
     <script>
         $(document).ready(function() {
             // SELECT2
@@ -771,6 +791,7 @@
         }
 
         function scan() {
+            $('#modalResultScan').modal('hide');
             $('#modalScan').modal('show');
             const formatsToSupport = [
                 Html5QrcodeSupportedFormats.QR_CODE,
@@ -808,16 +829,12 @@
                 });
                 // html5QrcodeScanner.stop();
                 // html5QrcodeScanner.start();
-                // html5QrcodeScanner.clear();
             }
-            html5QrcodeScanner.pause(shouldPauseVideo, showPausedBanner);
-            $("#resume-scan").prop('hidden', false);
+            $('#modalScan').modal('hide');
+            showResultQRCode(decodedText);
+            html5QrcodeScanner.clear();
+            // html5QrcodeScanner.pause(shouldPauseVideo, showPausedBanner);
             // scan();
-        }
-
-        function nextScan() {
-            $("#resume-scan").prop('hidden', true);
-            html5QrcodeScanner.resume();
         }
 
         // function onScanFailure(error) {
@@ -830,5 +847,14 @@
         //         position: 'topRight'
         //     });
         // }
+
+        function showResultQRCode(token) {
+            $('#modalResultScan').modal('show');
+            iziToast.warning({
+                title: 'Show Result!',
+                message: 'For = '+decodedText,
+                position: 'topRight'
+            });
+        }
     </script>
 @endsection
