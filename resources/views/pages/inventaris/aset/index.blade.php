@@ -345,9 +345,10 @@
                     </div>
                     <div class="modal-body">
                         <div id="reader" width="300px"></div>
+                        <div id="result" hidden>ini hasil dari qr-code</div>
                     </div>
                     <div class="col-12 text-center mb-4">
-                        <button class="btn btn-primary me-sm-3 me-1" onclick="scan()" hidden><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
+                        <button class="btn btn-primary me-sm-3 me-1" id="reload-scan" onclick="reloadScan()" hidden><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                     </div>
                 </div>
@@ -355,7 +356,7 @@
         </div>
 
         {{-- MODAL HASIL SCAN --}}
-        <div class="modal fade" id="modalResultScan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        {{-- <div class="modal fade" id="modalResultScan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -367,12 +368,12 @@
 
                     </div>
                     <div class="col-12 text-center mb-4">
-                        <button class="btn btn-primary me-sm-3 me-1" id="reload-scan" onclick="reloadScan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
+                        <button class="btn btn-primary me-sm-3 me-1"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </div>
     <script src="{{ asset('js/html5-qrcode.js') }}"></script>
@@ -822,6 +823,7 @@
                 $("#reload-scan").prop('hidden', false);
                 $("#html5-qrcode-button-camera-stop").trigger("click");
                 $("#reader").prop('hidden',true);
+                $("#result").prop('hidden',false);
                 iziToast.success({
                     title: 'QR-Code Valid!',
                     message: decodedText,
