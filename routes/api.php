@@ -133,6 +133,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // INVENTARIS
         // ASET
             // ASET
+                Route::get('inventaris/aset/{token}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getAsetToken')->name('aset.getAsetToken');
                 Route::post('inventaris/aset/store', '\App\Http\Controllers\Inventaris\Aset\AsetController@store')->name('aset.simpan');
                 Route::post('inventaris/aset/filter', '\App\Http\Controllers\Inventaris\Aset\AsetController@filter')->name('aset.filter');
                 Route::delete('inventaris/aset/hapus/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@hapus')->name('aset.hapus');

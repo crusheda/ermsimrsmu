@@ -199,4 +199,18 @@ class AsetController extends Controller
     //     // $data = str_replace('.','',$show->no_inventaris);
     //     return response()->json($show->token, 200);
     // }
+
+    function getAsetToken($token)
+    {
+        $show = aset::select('aset.*','aset_ruangan.ruangan','aset_ruangan.lokasi')
+                    ->join('aset_ruangan','aset_ruangan.id','=','aset.id_ruangan')
+                    ->where('token',$token)
+                    ->first();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
 }

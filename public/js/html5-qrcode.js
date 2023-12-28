@@ -10792,7 +10792,7 @@ var __Html5QrcodeLibrary__;
                                 if (t instanceof cr)
                                     continue
                             }
-                        throw new D("No MultiFormat Readers were able to detect the code.")
+                        throw new D("Barcode tidak valid.")
                     }
                 }
                 var hr;
@@ -12785,15 +12785,15 @@ var __Html5QrcodeLibrary__;
             }
             ,
             t.cameraPermissionTitle = function() {
-                return "Request Camera Permissions"
+                return "Permintaan Izin Kamera"
             }
             ,
             t.cameraPermissionRequesting = function() {
-                return "Requesting camera permissions..."
+                return "Memproses Izin Kamera..."
             }
             ,
             t.noCameraFound = function() {
-                return "No camera found"
+                return "Kamera tidak ditemukan"
             }
             ,
             t.scanButtonStopScanningText = function() {
@@ -12825,27 +12825,27 @@ var __Html5QrcodeLibrary__;
             }
             ,
             t.textIfCameraScanSelected = function() {
-                return "Scan an Image File"
+                return "Scan dari Gambar"
             }
             ,
             t.textIfFileScanSelected = function() {
-                return "Scan using camera directly"
+                return "Scan dari Kamera langsung"
             }
             ,
             t.selectCamera = function() {
-                return "Select Camera"
+                return "Pilih Kamera"
             }
             ,
             t.fileSelectionChooseImage = function() {
-                return "Choose Image"
+                return "Pilih Gambar"
             }
             ,
             t.fileSelectionChooseAnother = function() {
-                return "Choose Another"
+                return "Pilih lainnya"
             }
             ,
             t.fileSelectionNoImageSelected = function() {
-                return "No image choosen"
+                return "Upload"
             }
             ,
             t.anonymousCameraPrefix = function() {
@@ -12853,11 +12853,11 @@ var __Html5QrcodeLibrary__;
             }
             ,
             t.dragAndDropMessage = function() {
-                return "Or drop an image to scan"
+                return "Atau drag Gambar ke kotak ini"
             }
             ,
             t.dragAndDropMessageOnlyImages = function() {
-                return "Or drop an image to scan (other files not supported)"
+                return "Atau drag Gambar ke kotak ini (Hanya file Gambar saja)"
             }
             ,
             t.zoom = function() {
@@ -12865,7 +12865,7 @@ var __Html5QrcodeLibrary__;
             }
             ,
             t.loadingImage = function() {
-                return "Loading image..."
+                return "Loading..."
             }
             ,
             t.cameraScanAltText = function() {

@@ -21,7 +21,7 @@
                             <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Menambahkan Aset / Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
-                            <button class="btn btn-light" onclick="refresh()" data-bs-toggle="tooltip"
+                            <button class="btn btn-warning" onclick="refresh()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Refresh Tabel Sarana" id="btn-refresh"><i class="fas fa-sync fa-fw nav-icon"></i></button>
                             <button class="btn btn-dark" onclick="scan()" data-bs-toggle="tooltip"
@@ -345,10 +345,10 @@
                     </div>
                     <div class="modal-body">
                         <div id="reader" width="300px"></div>
-                        <div id="result" hidden>ini hasil dari qr-code</div>
+                        <div id="result" hidden></div>
                     </div>
                     <div class="col-12 text-center mb-4">
-                        <button class="btn btn-primary me-sm-3 me-1" id="reload-scan" onclick="reloadScan()" hidden><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
+                        <button class="btn btn-primary me-sm-3 me-1" id="reload-scan" onclick="reloadScan()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ulangi Scan</button>
                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                     </div>
                 </div>
@@ -792,6 +792,8 @@
         }
 
         function scan() {
+            $("#reload-scan").prop('hidden', true);
+            $("#result").prop('hidden',true);
             $("#reader").prop('hidden',false);
             // $('#modalResultScan').modal('hide');
             $('#modalScan').modal('show');
@@ -828,6 +830,25 @@
                     title: 'QR-Code Valid!',
                     message: decodedText,
                     position: 'topRight'
+                });
+                $.ajax({
+                    url: "/api/inventaris/aset/"+decodedText,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        console.log(res)
+                        $('#result').html(res.show);
+                        res.show.forEach(item => {
+
+                        })
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Aset gagal ditampilkan',
+                            position: 'topRight'
+                        });
+                    }
                 });
             }
         }
