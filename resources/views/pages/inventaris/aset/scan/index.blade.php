@@ -30,7 +30,8 @@
                     message: 'QR-Code : '+ decodedText,
                     position: 'topRight'
                 });
-                html5QrcodeScanner.clear();
+                html5QrcodeScanner.stop();
+                // html5QrcodeScanner.clear();
             }
         }
 
@@ -54,8 +55,8 @@
             rememberLastUsedCamera: true,
             // Only support camera scan type.
             supportedScanTypes: [
-                Html5QrcodeScanType.SCAN_TYPE_FILE,
-                Html5QrcodeScanType.SCAN_TYPE_CAMERA
+                Html5QrcodeScanType.SCAN_TYPE_CAMERA,
+                Html5QrcodeScanType.SCAN_TYPE_FILE
             ],
             formatsToSupport: formatsToSupport
         };
