@@ -26,6 +26,11 @@
                 message: 'QR-Code : '+ decodedText +' - '+ decodedResult,
                 position: 'topRight'
             });
+            html5QrcodeScanner.stop().then((ignore) => {
+                // QR Code scanning is stopped.
+            }).catch((err) => {
+                // Stop failed, handle it.
+            });
         }
 
         function onScanFailure(error) {
@@ -36,6 +41,11 @@
                 title: 'Pesan Galat!',
                 message: error,
                 position: 'topRight'
+            });
+            html5QrcodeScanner.stop().then((ignore) => {
+                // QR Code scanning is stopped.
+            }).catch((err) => {
+                // Stop failed, handle it.
             });
         }
         const formatsToSupport = [
