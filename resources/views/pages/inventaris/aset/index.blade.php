@@ -347,7 +347,7 @@
                         <div id="reader" width="300px"></div>
                     </div>
                     <div class="col-12 text-center mb-4">
-                        <button class="btn btn-primary me-sm-3 me-1" onclick="scan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
+                        <button class="btn btn-primary me-sm-3 me-1" onclick="scan()" hidden><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                     </div>
                 </div>
@@ -367,7 +367,7 @@
 
                     </div>
                     <div class="col-12 text-center mb-4">
-                        <button class="btn btn-primary me-sm-3 me-1" onclick="scan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
+                        <button class="btn btn-primary me-sm-3 me-1" id="reload-scan" onclick="reloadScan()"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                     </div>
                 </div>
@@ -791,7 +791,8 @@
         }
 
         function scan() {
-            $('#modalResultScan').modal('hide');
+            $("#reader").prop('hidden',false);
+            // $('#modalResultScan').modal('hide');
             $('#modalScan').modal('show');
             const formatsToSupport = [
                 Html5QrcodeSupportedFormats.QR_CODE,
@@ -813,28 +814,26 @@
             html5QrcodeScanner.render(onScanSuccess); //onScanFailure
         }
 
+        var lastResult, countResults = 0;
         function onScanSuccess(decodedText, decodedResult) {
-            // handle the scanned code as you like, for example:
-            // console.log(`Code matched = ${decodedText}`, decodedResult);
-            var lastResult, countResults = 0;
-            let shouldPauseVideo = true;
-            let showPausedBanner = false;
             if (decodedText !== lastResult) {
                 ++countResults;
                 lastResult = decodedText;
+                $("#reload-scan").prop('hidden', false);
+                $("#html5-qrcode-button-camera-stop").trigger("click");
+                $("#reader").prop('hidden',true);
                 iziToast.success({
                     title: 'QR-Code Valid!',
                     message: decodedText,
                     position: 'topRight'
                 });
-                // html5QrcodeScanner.stop();
-                // html5QrcodeScanner.start();
             }
-            $('#modalScan').modal('hide');
-            showResultQRCode(decodedText);
-            html5QrcodeScanner.clear();
-            // html5QrcodeScanner.pause(shouldPauseVideo, showPausedBanner);
-            // scan();
+        }
+
+        function reloadScan() {
+            $("#reload-scan").prop('hidden', true);
+            lastResult = null;
+            scan();
         }
 
         // function onScanFailure(error) {
