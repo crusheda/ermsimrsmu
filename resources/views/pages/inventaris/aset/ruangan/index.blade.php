@@ -203,6 +203,7 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
+                    console.log(res);
                     res.show.forEach(item => {
                         var unit = JSON.parse(item.unit.replace(/"/g,""));
                         content = `<tr><td><div class="d-flex align-items-center">

@@ -803,7 +803,7 @@
             ];
             let config = {
                 fps: 10,
-                qrbox: {width: 250, height: 250},
+                qrbox: {width: 630, height: 450},
                 rememberLastUsedCamera: true,
                 // Only support camera scan type.
                 supportedScanTypes: [
