@@ -53,9 +53,21 @@ class AsetController extends Controller
 
     function getRuangan($id)
     {
-        $query = aset_ruangan::where('id', $id)->first();
+        $ruangan = aset_ruangan::where('id', $id)->first();
 
-        return response()->json($query, 200);
+        $last = aset::orderBy('created_at','desc')->where('id_ruangan',$id)->first();
+        if (!empty($last)) {
+            $kodeSarana = $last->urutan + 1;
+        } else {
+            $kodeSarana = '1';
+        }
+
+        $data = [
+            'kodesarana' => $kodeSarana,
+            'ruangan' => $ruangan->kode,
+        ];
+
+        return response()->json($data, 200);
     }
 
     function getLastAset()

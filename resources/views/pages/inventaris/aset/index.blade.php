@@ -116,7 +116,7 @@
                                             {{-- <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="tgl_surat" readonly/> --}}
 
                                                 <h5 class="mb-1" id="no_inventaris_add">
-                                                    <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_add" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_add" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_add" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"></a>.<a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Bulan & Tahun Aset">{{ $list['month'].'.'.$list['year'] }}</a>
+                                                    <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_add" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_add" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_add" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Bulan & Tahun Aset">{{ $list['month'].'.'.$list['year'] }}</a>
                                                 </h5>
                                             <small>Apabila nomor Inventaris tidak sesuai, silakan klik <a href="javascript:void(0);" onclick="reloadBrowser()"><kbd>REFRESH</kbd></a></small>
                                             {{-- <input type="text" class="form-control" id="no_inventaris" hidden> --}}
@@ -452,19 +452,6 @@
                 }
             });
 
-            // KODE RUANGAN CHANGE
-            $('#ruangan_add').change(function() {
-                $.ajax(
-                {
-                    url: "/api/inventaris/aset/getruangan/"+$(this).val(),
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        $('#kd_ruangan_add').text(res.kode);
-                    }
-                })
-            });
-
         })
 
         // ----------------------------------------------------------------------------------------
@@ -594,15 +581,28 @@
         }
 
         function tambah() {
-            $.ajax(
-            {
-                url: "/api/inventaris/aset/getlastaset",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $('#kd_sarana_add').text(res);
-                }
-            })
+            // $.ajax(
+            // {
+            //     url: "/api/inventaris/aset/getlastaset",
+            //     type: 'GET',
+            //     dataType: 'json', // added data type
+            //     success: function(res) {
+            //         $('#kd_sarana_add').text(res);
+            //     }
+            // })
+            // KODE RUANGAN CHANGE
+            $('#ruangan_add').change(function() {
+                $.ajax(
+                {
+                    url: "/api/inventaris/aset/getruangan/"+$(this).val(),
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $('#kd_sarana_add').text(res.kodesarana);
+                        $('#kd_ruangan_add').text(res.ruangan);
+                    }
+                })
+            });
             $('#modalTambah').modal('show');
         }
 

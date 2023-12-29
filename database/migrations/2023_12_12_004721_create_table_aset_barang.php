@@ -28,7 +28,7 @@ class CreateTableAsetBarang extends Migration
             $table->string('sarana')->nullable();
             $table->string('merk')->nullable();
             $table->string('tipe')->nullable();
-            $table->bigInteger('no_seri')->nullable();
+            $table->string('no_seri')->nullable();
             $table->date('tgl_operasi')->nullable();
             $table->integer('asal_perolehan')->nullable();
             $table->bigInteger('nilai_perolehan')->nullable();
