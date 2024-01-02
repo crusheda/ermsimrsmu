@@ -836,7 +836,7 @@
                     type: 'GET',
                     dataType: 'json', // added data type
                     success: function(res) {
-                        console.log(res)
+                        console.log(res.show)
                         $('#result').html(res.show);
                         res.show.forEach(item => {
 

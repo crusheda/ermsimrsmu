@@ -29,8 +29,11 @@ class SuratKeluarController extends Controller
                 // $urutan = 1;
                 $urutan = sprintf("%03d", 1);
             } else {
-                // $urutan = $getUrutan->urutan + 1;
-                $urutan = sprintf("%03d", $getUrutan->urutan + 1);
+                if (Carbon::parse($getUrutan->created_at)->isoFormat('YYYY') !== $year) {
+                    $urutan = sprintf("%03d", 1);
+                } else {
+                    $urutan = sprintf("%03d", $getUrutan->urutan + 1);
+                }
             }
 
             $data = [

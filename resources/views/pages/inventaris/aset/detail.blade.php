@@ -61,10 +61,28 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center">
-                        <img src="{{ asset('/images/companies/adobe-photoshop.svg') }}" alt="" height="50" class="mx-auto d-block">
-                        <h5 class="mt-3 mb-1"></h5>
-                        <h6 class="mb-1"></h6>
-                        <p class="text-muted mb-0">Since July 2017</p>
+                        <div class="avatar-md mx-auto mb-3">
+                            <div class="avatar-title bg-light rounded-circle text-primary h1">
+                                <i class="mdi mdi-email-open"></i>
+                            </div>
+                        </div>
+                        <p class="text-primary mb-0"><b>Kondisi Baik</b></p>
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="mt-3">
+                                    <p class="text-muted mb-1">Today</p>
+                                    <h5>1024</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="mt-3">
+                                    <p class="text-muted mb-1">This Month</p>
+                                    <h5>12356 <span class="text-success font-size-13">0.2 % <i class="mdi mdi-arrow-up ms-1"></i></span></h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <ul class="list-unstyled mt-4">
