@@ -159,6 +159,20 @@ class SuratKeluarController extends Controller
         return response()->json($data, 200);
     }
 
+    function getFilterSurat($id)
+    {
+        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')->where('berkas_surat_keluar.kode',$id)->get();
+        $getUser = user::select('id','nama')->get();
+        $user = json_encode($getUser);
+
+        $data = [
+            'show' => $show,
+            'user' => $user,
+        ];
+
+        return response()->json($data, 200);
+    }
+
     public function download($id)
     {
         $data = surat_keluar::find($id);
