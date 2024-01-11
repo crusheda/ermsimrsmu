@@ -164,7 +164,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="form-label">Upload</label>
+                                    <label class="form-label">Upload Berkas Surat (Optional)</label>
                                     <input type="file" class="form-control mb-2" name="file" accept="application/pdf">
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
@@ -418,6 +418,7 @@
             $("#btnGantiTahun").prop('hidden', true);
             $("#tahunlalu").val(1);
             $("#tglinp").flatpickr().clear();
+            $("#tglinp").flatpickr().open();
         }
 
         function ubahTujuan1() {
@@ -628,7 +629,7 @@
         function ubahFile(id) {
             $('#linksurat').empty();
             document.getElementById('uploadFileSusulan').innerHTML = `
-            <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>
+            <label class='form-label'>Berkas Surat Anda</label>
             <input type='file' id="filex`+id+`" name='filex`+id+`' class="form-control mb-2" accept="application/pdf">
             <input type="text" class="form-control" id="verifberkas`+id+`" hidden>
             <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
@@ -668,7 +669,7 @@
                         $("#verifberkas"+res.show.id).val(0);
                     } else {
                         document.getElementById('linksurat').innerHTML = `
-                        <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>
+                        <label class='form-label'>Berkas Surat Anda</label>
                         <input type='file' id="filex`+res.show.id+`" name='filex`+res.show.id+`' class="form-control mb-2" accept="application/pdf">
                         <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>
                         <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
