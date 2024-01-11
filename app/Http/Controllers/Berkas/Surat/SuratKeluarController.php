@@ -23,24 +23,35 @@ class SuratKeluarController extends Controller
             $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
             $kode = kode_surat_keluar::orderBy('nama','ASC')->get();
             $year = Carbon::now()->isoFormat('YYYY');
+            $lastyear = Carbon::now()->subYear()->isoFormat('YYYY');
 
-            $getUrutan = surat_keluar::orderBy('urutan','DESC')->first();
+            $getUrutan = surat_keluar::where( DB::raw('YEAR(tgl)'), '=', $year )->orderBy('urutan','DESC')->first();
+
             if (empty($getUrutan->urutan)) {
                 // $urutan = 1;
                 $urutan = sprintf("%03d", 1);
+                $urutanLastYear = sprintf("%03d", 1);
             } else {
                 if (Carbon::parse($getUrutan->created_at)->isoFormat('YYYY') !== $year) {
                     $urutan = sprintf("%03d", 1);
                 } else {
                     $urutan = sprintf("%03d", $getUrutan->urutan + 1);
                 }
+                // $getUrutanLastYear = surat_keluar::orderBy('urutan','DESC')->where( DB::raw('YEAR(tgl)'), '=', $lastyear )->first();
+                // $urutanLastYear = sprintf("%03d", $getUrutanLastYear->urutan);
+                $query_string = "SELECT * FROM berkas_surat_keluar WHERE YEAR(tgl) = $lastyear AND deleted_at IS NULL ORDER BY urutan DESC";
+                $urutanLastYear = sprintf("%03d", ((DB::select($query_string))[0]->urutan + 1));
             }
+            // print_r(DB::select($query_string));
+            // die();
 
             $data = [
                 'users' => $users,
                 'kode' => $kode,
                 'urutan' => $urutan,
+                'urutanlastyear' => $urutanLastYear,
                 'year' => $year,
+                'lastyear' => $lastyear,
             ];
 
             return view('pages.berkas.surat.suratkeluar.index')->with('list', $data);
@@ -66,6 +77,37 @@ class SuratKeluarController extends Controller
             'user' => 'required'
         ]);
 
+        $tahunNow = Carbon::now()->isoFormat('YYYY');
+        $lastyear = Carbon::now()->subYear()->isoFormat('YYYY');
+        $getJenis = kode_surat_keluar::where('id',$request->kode)->first();
+        $checkData = surat_keluar::get();
+        $checkTgl = Carbon::parse($request->tgl)->isoFormat('YYYY');
+
+        if (empty($checkData)) {
+            $urutan = 1;
+            $tahun = $tahunNow;
+        } else {
+            if ($request->tahunlalu == '1') {
+                if ($checkTgl != $lastyear) {
+                    return redirect()->back()->withErrors('Maaf, tanggal yang Anda masukkan tidak cocok. Mohon sesuaikan tanggal dan tahun Surat');
+                } else {
+                    // $getUrutanLastYear = surat_keluar::orderBy('urutan','DESC')->where( DB::raw('YEAR(tgl)'), '=', $lastyear )->first();
+                    $query_string = "SELECT * FROM berkas_surat_keluar WHERE YEAR(tgl) = $lastyear AND deleted_at IS NULL ORDER BY urutan DESC";
+                    $getUrutan = DB::select($query_string);
+                    $urutan = $getUrutan[0]->urutan + 1;
+                    $tahun = $lastyear;
+                }
+            } else {
+                if ($checkTgl != $tahunNow) {
+                    return redirect()->back()->withErrors('Maaf, tanggal yang Anda masukkan tidak cocok. Mohon sesuaikan tanggal dan tahun Surat');
+                } else {
+                    $getUrutan = surat_keluar::where( DB::raw('YEAR(tgl)'), '=', $tahunNow )->orderBy('urutan','DESC')->first();
+                    $urutan = $getUrutan->urutan + 1;
+                    $tahun = $tahunNow;
+                }
+            }
+        }
+
         $getFile = $request->file('file');
         if ($getFile == null) {
             $path = null;
@@ -82,15 +124,6 @@ class SuratKeluarController extends Controller
             }
         }
 
-        $tahunNow = Carbon::now()->isoFormat('YYYY');
-        $getJenis = kode_surat_keluar::where('id',$request->kode)->first();
-        $getUrutan = surat_keluar::orderBy('urutan','DESC')->first();
-        if (empty($getUrutan->urutan)) {
-            $urutan = 1;
-        } else {
-            $urutan = $getUrutan->urutan + 1;
-        }
-
         $data               = new surat_keluar;
         $data->urutan       = $urutan;
         $data->kode         = $request->kode;
@@ -100,7 +133,7 @@ class SuratKeluarController extends Controller
         } else {
             $data->tujuan   = json_encode($request->tujuan);
         }
-        $data->nomor        = sprintf("%03d", $urutan)."/".$getJenis->kode."/DIR/III.6.AU/PKUSKH/".$tahunNow;
+        $data->nomor        = sprintf("%03d", $urutan)."/".$getJenis->kode."/DIR/III.6.AU/PKUSKH/".$tahun;
         $data->jenis        = $getJenis->nama;
         $data->isi          = $request->isi;
         $data->title        = $title;

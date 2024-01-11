@@ -84,13 +84,15 @@
                 </div>
                 <div class="modal-body">
                         @csrf
+                        <input type="text" class="form-control" id="tahunlalu" name="tahunlalu" value="0" hidden>
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label mb-2">Nomor Surat</label>
                                     {{-- <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="tgl_surat" readonly/> --}}
-                                    <h5 class="mb-1">{{ $list['urutan'] }}/<a id="kd_get" class="text-danger"> . . . </a>/DIR/III.6.AU/PKUSKH/{{ $list['year'] }}</h5>
-                                    <small>Apabila nomor surat tidak sesuai, silakan klik <a href="javascript:void(0);" onclick="reloadBrowser()"><kbd>REFRESH</kbd></a></small>
+                                    <h5 class="mb-1"><a href="javascript:void(0);" id="urutanNow">{{ $list['urutan'] }}</a><a href="javascript:void(0);" id="urutanLast" hidden>{{ $list['urutanlastyear'] }}</a>/<a id="kd_get" class="text-danger"> . . . </a>/DIR/III.6.AU/PKUSKH/<a href="javascript:void(0);" id="yearNow">{{ $list['year'] }}</a><a href="javascript:void(0);" id="yearLast" hidden>{{ $list['lastyear'] }}</a></h5>
+                                    <small>Apabila nomor surat tidak sesuai, silakan klik <a href="javascript:void(0);" onclick="reloadBrowser()"><kbd>REFRESH</kbd></a></small><br>
+                                    <small id="btnGantiTahun">Klik <a href="javascript:void(0);" onclick="gantiTahun()"><kbd style="color: white;background-color: darkred">DISINI</kbd></a> untuk mengganti ke tahun sebelumnya</small>
                                 </div>
                             </div>
                             <hr>
@@ -112,7 +114,7 @@
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Tanggal <a class="text-danger">*</a></label>
-                                    <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" name="tgl" required/>
+                                    <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tglinp" name="tgl" required/>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
@@ -364,6 +366,7 @@
                                 [6, "desc"]
                             ],
                             columnDefs: [
+                                { width: "8%", targets: 2 },
                                 { width: "40%", targets: 4 },
                                 { width: "20%", targets: 5 },
                             ],
@@ -386,6 +389,16 @@
         });
 
         // FUNCTION-FUNCTION
+        function gantiTahun() {
+            $("#urutanNow").prop('hidden', true);
+            $("#urutanLast").prop('hidden', false);
+            $("#yearNow").prop('hidden', true);
+            $("#yearLast").prop('hidden', false);
+            $("#btnGantiTahun").prop('hidden', true);
+            $("#tahunlalu").val(1);
+            $("#tglinp").flatpickr().clear();
+        }
+
         function ubahTujuan1() {
             $("#btn-manual1").prop('hidden', true);
             $("#btn-manual2").prop('hidden', false);

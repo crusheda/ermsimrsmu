@@ -118,6 +118,13 @@
                             </div>
                         </div>
                     </div>
+                    @if(session('message'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="mdi mdi-check-all me-2"></i>
+                        {{ session('message') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    @endif
                     {{-- IF HAS MESSAGE ERRORS --}}
                     <div class="d-flex flex-wrap gap-2">
                         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1005">
@@ -134,6 +141,16 @@
                             </div>
                         </div>
                     </div>
+                    @if($errors->count() > 0)
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    @endif
                     <!-- end toart notification -->
 
                     @yield('content') <!-- ALL CONTENT HERE -->
