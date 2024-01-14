@@ -27,6 +27,7 @@
     <script src="{{ asset('js/plugin.js') }}"></script>
     <!-- Initialize js -->
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script> --}}
 
     <!-- Start Addon css -->
     <!-- Flat Pickr css -->
@@ -74,6 +75,11 @@
     <link href="{{ asset('libs/ion-rangeslider/css/ion.rangeSlider.min.css') }}" rel="stylesheet" type="text/css"/>
 
     <link href="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
+
+    <!-- BLOB js -->
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
     <!-- End Addon css -->
 
 </head>
@@ -256,7 +262,9 @@
     <!-- ION Slider -->
     <script src="{{ asset('libs/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
 
+    <!-- Touchspin js -->
     <script src="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
+
     <!-- End Addon js -->
 
     {{-- JS INIT --}}

@@ -14,8 +14,13 @@
         <div class="col-xl-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="fw-semibold text-center">SCAN QR CODE</h5>
-                        <div class="mb-3"><center>{!! DNS2D::getBarcodeHTML($list['show']->token, 'QRCODE',5,5) !!}</center></div>
+                    <h5 class="fw-semibold text-center">SCAN - <b>QR CODE</b></h5>
+                        <center><div class="mb-3" id="qr"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses QR Code...</div></center>
+                        {{-- <div class="mb-3">
+                            <center>
+                                {!! DNS2D::getBarcodeHTML($list['show']->token, 'QRCODE',5,5) !!}
+                            </center>
+                        </div> --}}
                     {{-- <div class="table-responsive">
                         <table class="table">
                             <tbody>
@@ -53,7 +58,7 @@
                     <div class="hstack gap-2">
                         <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
                         <button class="btn btn-soft-primary w-100"><i class="bx bx-download scaleX-n1-rtl"></i> Download</button>
-                        <button class="btn btn-soft-warning w-100"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
+                        <button class="btn btn-soft-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
                     </div>
                 </div>
             </div>
@@ -174,6 +179,7 @@
                                 <img class="d-block img-fluid" width="100%" src="{{ asset('/images/small/img-6.jpg') }}" alt="Third slide">
                             </div> --}}
                         </div>
+                        <br><img src="" alt="" srcset="" id="pdf_preview">
                         <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
                             <span class="sr-only">Sebelumnya</span>
@@ -306,7 +312,31 @@
 
     <script>
         $(document).ready(function() {
-
+            $('#qr').text('') ;
+            var qrcode = new QRCode("qr", {
+                text: "{{ $list['show']->token }}",
+                width: 300,
+                height: 300,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            $("img").on("contextmenu",function(){
+                return false;
+            });
         })
+
+        function cetak() {
+            var pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: [120, 120]
+            });
+
+            let base64Image = $('#qr img').attr('src');
+            pdf.addImage(base64Image, 'png', 10, 10, 100, 100);
+            var base64string = pdf.output('bloburl');
+            window.open(base64string,'_blank', 'width=500,height=550');
+        }
     </script>
 @endsection

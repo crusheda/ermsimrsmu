@@ -33,8 +33,6 @@
                             <button type="menu" class="btn btn-success" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i> Menu</button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item" href="{{ route('aset_ruangan.index') }}">Daftar Ruangan</a></li>
-                                {{-- <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
                             </ul>
                         </div>
                     </div>
@@ -534,7 +532,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a href='javascript:void(0);'><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
+                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
                                             </div>
                                         </div>
                                     </td>`;
@@ -867,7 +865,7 @@
                     Html5QrcodeScanType.SCAN_TYPE_CAMERA,
                     Html5QrcodeScanType.SCAN_TYPE_FILE
                 ],
-                formatsToSupport: formatsToSupport
+                // formatsToSupport: formatsToSupport
             };
 
             let html5QrcodeScanner = new Html5QrcodeScanner("reader", config, /* verbose= */ false); // /* verbose= */ false
@@ -894,10 +892,10 @@
                     dataType: 'json', // added data type
                     success: function(res) {
                         console.log(res.show)
-                        $('#result').html(res.show);
-                        res.show.forEach(item => {
-
-                        })
+                        $('#result').append(res.show);
+                        // res.show.forEach(item => {
+                        //     console.log(res.show)
+                        // })
                     },
                     error: function(res) {
                         iziToast.error({
