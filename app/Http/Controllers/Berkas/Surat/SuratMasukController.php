@@ -20,7 +20,11 @@ class SuratMasukController extends Controller
     public function index()
     {
         if (Auth::user()->getPermission('surat_masuk') == true) {
-            return view('pages.berkas.surat.suratmasuk.index'); // ->with('list', $data)
+            $year = Carbon::now()->isoFormat('YYYY');
+            $data = [
+                'year' => $year,
+            ];
+            return view('pages.berkas.surat.suratmasuk.index')->with('list', $data); //
         } else {
             return redirect()->back();
         }
@@ -94,6 +98,35 @@ class SuratMasukController extends Controller
 
     // API
     public function apiGet()
+    {
+        $show = surat_masuk::orderBy('created_at','DESC')->limit(100)->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function getFilterSurat($bulan, $tahun)
+    {
+        $show = surat_masuk::orderBy('tgl_diterima','DESC');
+                If($bulan != "0"){
+                    $show->whereMonth('tgl_diterima', '=', $bulan);
+                }
+                If($tahun != "0"){
+                    $show->whereYear('tgl_diterima', '=', $tahun);
+                }
+        $show = $show->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function apiGetAll()
     {
         $show = surat_masuk::get();
 

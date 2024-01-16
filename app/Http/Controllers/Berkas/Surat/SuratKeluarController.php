@@ -182,9 +182,21 @@ class SuratKeluarController extends Controller
         return response()->json($data, 200);
     }
 
-    function getFilterSurat($id)
+    function getFilterSurat($surat,$bulan,$tahun)
     {
-        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')->where('berkas_surat_keluar.kode',$id)->get();
+        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')
+                ->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*');
+                If($surat != "0"){
+                    $show->where('berkas_surat_keluar.kode',$surat);
+                }
+                If($bulan != "0"){
+                    $show->whereMonth('tgl', '=', $bulan);
+                }
+                If($tahun != "0"){
+                    $show->whereYear('tgl', '=', $tahun);
+                }
+        $show = $show->get();
+
         $getUser = user::select('id','nama')->get();
         $user = json_encode($getUser);
 

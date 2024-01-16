@@ -86,12 +86,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
         // DISPOSISI
         Route::get('disposisi/data', '\App\Http\Controllers\Berkas\Surat\DisposisiController@apiGet')->name('disposisi.data');
+        Route::get('disposisi/data/all', '\App\Http\Controllers\Berkas\Surat\DisposisiController@apiGetAll')->name('disposisi.dataAll');
         Route::get('disposisi/data/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGetDisposisi')->name('disposisi.detail');
         Route::post('disposisi/simpan', '\App\Http\Controllers\Berkas\Surat\DisposisiController@store')->name('disposisi.simpan');
         Route::delete('disposisi/{id}', '\App\Http\Controllers\Berkas\Surat\DisposisiController@hapus')->name('disposisi.hapus');
 
         // SURAT MASUK
         Route::get('suratmasuk/data', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGet');
+        Route::get('suratmasuk/filter/{bulan}/{tahun}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@getFilterSurat');
+        Route::get('suratmasuk/data/all', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGetAll');
         Route::get('suratmasuk/data/disposisi/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGetDisposisi');
         Route::get('suratmasuk/data/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@showChange');
         Route::post('suratmasuk/ubah', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@ubah')->name('suratmasuk.ubah');
@@ -102,7 +105,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
         // SURAT KELUAR
         Route::get('suratkeluar/getkode/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@apiKode');
-        Route::get('suratkeluar/filter/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@getFilterSurat');
+        // Route::get('suratkeluar/filter/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@getFilterSurat');
+        Route::get('suratkeluar/filter/{surat}/{bulan}/{tahun}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@getFilterSurat');
         Route::get('suratkeluar/data', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@apiGet');
         Route::get('suratkeluar/data/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@showChange');
         Route::post('suratkeluar/ubah', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@ubah')->name('suratkeluar.ubah');

@@ -145,6 +145,19 @@ class DisposisiController extends Controller
     // API
     public function apiGet()
     {
+        $show = surat_masuk::orderBy('created_at','DESC')->limit(100)->get();
+        $disposisi = disposisi::get();
+
+        $data = [
+            'show' => $show,
+            'disposisi' => $disposisi,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function apiGetAll()
+    {
         $show = surat_masuk::get();
         $disposisi = disposisi::get();
 

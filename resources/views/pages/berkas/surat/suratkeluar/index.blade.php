@@ -24,16 +24,31 @@
                 </div>
             </h4>
             <div class="ms-auto flex-grow-0">
-                <div class="float-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Filter Jenis Surat">
-                    {{-- <select class="form-select form-select-sm ms-2">
-                        <option value="" selected>Pilih</option>
-                        <option value="MA" selected>March</option>
-                        <option value="FE">February</option>
-                        <option value="JA">January</option>
-                        <option value="DE">December</option>
-                    </select> --}}
-                    <select class="form-control select2" id="kd_filter" onchange="getSurat(this)">
-                        <option value="" selected>Pilih</option>
+                <div class="btn-group">
+                    <h6 style="margin-top: 10px">Filter</h6>
+                    <select class="form-select form-control ms-2" id="kd_bulan" onchange="getSurat()">
+                        <option value="0">Pilih Bulan</option>
+                        <?php
+                            $bulan=array("","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
+                            $jml_bln=count($bulan);
+                            for($c=1 ; $c < $jml_bln ; $c+=1){
+                                echo"<option value=$c> $bulan[$c] </option>";
+                            }
+                        ?>
+                    </select>
+                    <select class="form-select form-control ms-2" id="kd_tahun" onchange="getSurat()">
+                        <option value="0">Pilih Tahun</option>
+                        @php
+                            for ($i=2023; $i <= $list['year']; $i++) {
+                                echo"<option value=$i> $i </option>";
+                            }
+
+                        @endphp
+                    </select>
+                </div>
+                <div class="float-end ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Filter Jenis Surat">
+                    <select class="form-control select2" id="kd_surat" onchange="getSurat()">
+                        <option value="0" selected>Pilih</option>
                         @if(count($list['kode']) > 0)
                             @foreach($list['kode'] as $item)
                                 <option value="{{ $item->id }}"><b>{{ $item->nama }}</b></option>
@@ -440,7 +455,9 @@
         }
 
         function refresh() {
-            $("#kd_filter").val("").change();
+            $("#kd_surat").val("0").change();
+            $("#kd_bulan").val("0").change();
+            $("#kd_tahun").val("0").change();
             $("#tujuan2_edit").val("");
             $("#tujuan1_editselect").val("");
             $("#isi_edit").val("");
@@ -529,12 +546,15 @@
             $('[data-bs-toggle="tooltip"]').tooltip('hide'); // Remove tooltip after this process have done
         }
 
-        function getSurat(pilihan) {
+        function getSurat() {
             $('[data-bs-toggle="tooltip"]').tooltip('hide');
             $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            var surat = $("#kd_surat").val();
+            var bulan = $("#kd_bulan").val();
+            var tahun = $("#kd_tahun").val();
             $.ajax(
                 {
-                    url: "/api/suratkeluar/filter/"+pilihan.value,
+                    url: "/api/suratkeluar/filter/"+surat+"/"+bulan+"/"+tahun,
                     type: 'GET',
                     dataType: 'json', // added data type
                     success: function(res) {
