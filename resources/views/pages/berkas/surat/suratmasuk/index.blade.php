@@ -505,9 +505,6 @@
 
         // FUNCTION-FUNCTION
         function refresh() {
-            // fresh();
-            $("#kd_bulan").val("0").change();
-            $("#kd_tahun").val("0").change();
             $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
                 {
@@ -692,9 +689,6 @@
         }
 
         function showAll() {
-            // fresh();
-            $("#kd_bulan").val("0").change();
-            $("#kd_tahun").val("0").change();
             $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
                 {

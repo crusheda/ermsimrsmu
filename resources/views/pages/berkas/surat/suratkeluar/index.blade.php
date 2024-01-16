@@ -455,9 +455,9 @@
         }
 
         function refresh() {
-            $("#kd_surat").val("0").change();
-            $("#kd_bulan").val("0").change();
-            $("#kd_tahun").val("0").change();
+            // $("#kd_surat").val("0").change();
+            // $("#kd_bulan").val("0").change();
+            // $("#kd_tahun").val("0").change();
             $("#tujuan2_edit").val("");
             $("#tujuan1_editselect").val("");
             $("#isi_edit").val("");
