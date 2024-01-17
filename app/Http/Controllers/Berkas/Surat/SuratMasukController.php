@@ -35,6 +35,7 @@ class SuratMasukController extends Controller
         $request->validate([
             'file' => ['max:20000','mimes:pdf'],
             'tgl_diterima' => 'required',
+            'no_surat' => 'required',
             'asal' => 'required',
             'nomor' => 'required',
             'user' => 'required'
@@ -79,7 +80,7 @@ class SuratMasukController extends Controller
         }
 
         $data               = new surat_masuk;
-        $data->urutan       = $urutan;
+        $data->urutan       = $request->no_surat;
         $data->tgl_surat    = $request->tgl_surat;
         $data->tgl_diterima = $request->tgl_diterima;
         $data->asal         = $request->asal;
@@ -100,6 +101,24 @@ class SuratMasukController extends Controller
     public function apiGet()
     {
         $show = surat_masuk::orderBy('created_at','DESC')->limit(100)->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function formTambah()
+    {
+        $tahun = Carbon::now()->isoFormat('YYYY');
+        $show = surat_masuk::orderBy('urutan','DESC')->whereYear('tgl_diterima', '=', $tahun)->first();
+
+        if ($show == null) {
+            $show = 1;
+        } else {
+            $show = $show->urutan + 1;
+        }
 
         $data = [
             'show' => $show,

@@ -93,6 +93,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
         // SURAT MASUK
         Route::get('suratmasuk/data', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGet');
+        Route::get('suratmasuk/tambah', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@formTambah');
         Route::get('suratmasuk/filter/{bulan}/{tahun}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@getFilterSurat');
         Route::get('suratmasuk/data/all', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGetAll');
         Route::get('suratmasuk/data/disposisi/{id}', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@apiGetDisposisi');

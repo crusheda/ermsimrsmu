@@ -14,7 +14,8 @@
         <div class="d-flex">
             <h4 classs="card-title flex-grow-1">
                 <div class="btn-group">
-                    <a class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#tambah" value="animate__jackInTheBox">
+                    <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
                         <i class="bx bx-upload scaleX-n1-rtl"></i>
                         <span class="align-middle">Upload</span>
                     </a>
@@ -120,6 +121,13 @@
                 <div class="modal-body">
                         @csrf
                         <div class="row">
+                            <div class="col-md-2 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">No. Urut Surat <a class="text-danger">*</a></label>
+                                    <input type="text" class="form-control" placeholder="Wajib Diisi" id="no_surat" name="no_surat" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                    data-bs-placement="bottom" data-bs-html="true" title="<span>No. Urut Surat berdasarkan tahun <b>Tgl Diterima</b> surat masuk terakhir diupload</span>"/>
+                                </div>
+                            </div>
                             <div class="col-md-3 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Tgl. Surat</label>
@@ -132,7 +140,7 @@
                                     <input type="text" class="form-control flatpickrNull" placeholder="YYYY-MM-DD" name="tgl_diterima" required/>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Nomor Surat <a class="text-danger">*</a></label>
                                     <input type="text" name="nomor" class="form-control" placeholder=". . . / . . . / . . ." autofocus required/>
@@ -778,6 +786,21 @@
                 }
             );
         }
+
+        function modalTambah() {
+            $('#tambah').modal('show');
+
+            $.ajax(
+            {
+                url: "/api/suratmasuk/tambah",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#no_surat').val(res.show);
+                }
+            })
+        }
+
         function getDateTime() {
             var now     = new Date();
             var year    = now.getFullYear();
