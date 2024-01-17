@@ -113,7 +113,7 @@
                                         {{-- <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="tgl_surat" readonly/> --}}
 
                                             <h5 class="mb-1" id="no_inventaris_add">
-                                                <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_add" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_add" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_add" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Bulan & Tahun Aset">{{ $list['month'].'.'.$list['year'] }}</a>
+                                                <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_add" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_add" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_add" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a id="kd_thbln_add" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Bulan & Tahun Aset">{{ $list['month'].'.'.$list['year'] }}</a></a>
                                             </h5>
                                         <small>Apabila nomor Inventaris tidak sesuai, silakan klik <a href="javascript:void(0);" onclick="reloadBrowser()"><kbd>REFRESH</kbd></a></small>
                                         {{-- <input type="text" class="form-control" id="no_inventaris" hidden> --}}
@@ -130,7 +130,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="col-md-8 mb-3">
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
                                 <button class="btn btn-sm btn-outline-secondary" type="button" onclick="window.location='{{ route('aset_ruangan.index') }}'" style="--bs-btn-padding-y: 0.09rem;--bs-btn-padding-x: 0.3rem;" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Daftar Ruangan">Tidak menemukan ruangan ?</button>
@@ -146,7 +146,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Aset <a class="text-danger">*</a></label>
                                 <select class="form-select" id="jenis_add" required>
@@ -156,21 +156,30 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Bulan & Tahun Pengadaan <a class="text-danger">*</a></label>
+                                <div class="position-relative" id="datepicker4">
+                                    <input type="text" class="form-control" data-date-container='#datepicker4' data-provide="datepicker"
+                                    data-date-format="mm-yyyy" data-date-min-view-mode="1" id="thbln_add">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-4 mb-3 show_medis_add" hidden>
                             <div class="form-group">
-                                <label class="form-label">Kalibrasi <a class="text-danger">*</a></label>
+                                <label class="form-label">Kalibrasi</label>
                                 <input type="number" id="kalibrasi_add" class="form-control" placeholder="e.g. xxx">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3 show_medis_add" hidden>
                             <div class="form-group">
-                                <label class="form-label">No. Kalibrasi <a class="text-danger">*</a></label>
+                                <label class="form-label">No. Kalibrasi</label>
                                 <input type="text" id="no_kalibrasi_add" class="form-control" placeholder="e.g. xxx">
                             </div>
                         </div>
                         <div class="col-md-4 show_medis_add" hidden>
                             <div class="form-group">
-                                <label class="form-label">Tgl. Berlaku <a class="text-danger">*</a></label>
+                                <label class="form-label">Tgl. Berlaku</label>
                                 <input type="text" id="tgl_berlaku_add" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
                             </div>
                         </div>
@@ -201,7 +210,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="form-label">No. Seri <a class="text-danger">*</a></label>
+                                <label class="form-label">No. Seri</label>
                                 <input type="text" id="no_seri_add" class="form-control" placeholder="e.g. xxx">
                             </div>
                         </div>
@@ -247,42 +256,42 @@
                             </div>
                         </div>
                         <hr>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Upload <a class="text-danger">*</a></label>
+                                <input type="file" class="form-control mb-2" id="file_add" accept=".jpg,.jpeg,.png" multiple>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Gambar<br>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Dapat upload gambar lebih dari satu<br>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap File Gambar adalah <strong>5 mb</strong>
+                                {{-- <i class="fa-fw fas fa-caret-right nav-icon"></i> Gunakan aplikasi WinRAR untuk membuka file Upload --}}
+                            </div>
+                        </div>
+                        <hr>
                         <div class="col-md-5 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Golongan <a class="text-danger">*</a></label>
+                                <label class="form-label">Golongan</label>
                                 <input type="number" id="golongan_add" class="form-control" maxlength="1" max="4" placeholder="e.g. 1 / 2 / 3 / 4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                             </div>
                         </div>
                         <div class="col-md-2 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Umur <a class="text-danger">*</a></label>
+                                <label class="form-label">Umur</label>
                                 <input type="text" class="form-control" id="umur_add" hidden>
                                 <input type="number" id="umur_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari golongan" placeholder="Otomatis" disabled>
                             </div>
                         </div>
                         <div class="col-md-2 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Tarif <a class="text-danger">*</a></label>
+                                <label class="form-label">Tarif</label>
                                 <input type="text" class="form-control" id="tarif_add" hidden>
                                 <input type="number" id="tarif_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari umur" placeholder="Otomatis" disabled>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-label">Penyusutan Per Bulan <a class="text-danger">*</a></label>
+                                <label class="form-label">Penyusutan Per Bulan</label>
                                 <input type="text" class="form-control" id="penyusutan_add" hidden>
                                 <input type="number" id="penyusutan_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari tarif" placeholder="Otomatis" disabled>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Upload <a class="text-danger">*</a></label>
-                                <input type="file" class="form-control mb-2" id="file_add" accept=".jpg,.jpeg,.png" multiple>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Gambar<br>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap File Gambar adalah <strong>5 mb</strong>
-                                {{-- <i class="fa-fw fas fa-caret-right nav-icon"></i> File gambar akan disimpan ke dalam file berformat <strong>RAR</strong><br>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Gunakan aplikasi WinRAR untuk membuka file Upload --}}
                             </div>
                         </div>
                     </div>
@@ -445,6 +454,10 @@
                     to: next.toISOString().split("T")[0]
                 }]
             })
+            $('#datepicker4').datepicker({
+                    "setDate": new Date(),
+                    "autoclose": true
+            });
 
             // NILAI PEROLEHAN KEYUP
             var rupiah = document.getElementById('nilai_perolehan_add');
@@ -532,7 +545,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
+                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Detail Sarana"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
                                             </div>
                                         </div>
                                     </td>`;
@@ -616,15 +629,19 @@
         }
 
         function tambah() {
-            // $.ajax(
-            // {
-            //     url: "/api/inventaris/aset/getlastaset",
-            //     type: 'GET',
-            //     dataType: 'json', // added data type
-            //     success: function(res) {
-            //         $('#kd_sarana_add').text(res);
-            //     }
-            // })
+            $.ajax(
+            {
+                url: "/api/inventaris/aset/getTahunBulanPengadaan",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#thbln_add').val(res.month+'-'+res.year);
+                }
+            })
+            $('#thbln_add').change(function() {
+                var thnbln = $('#thbln_add').val();
+                $('#kd_thbln_add').text(thnbln.substring(0,2)+'.'+thnbln.substring(3,7));
+            })
             // KODE RUANGAN CHANGE
             $('#ruangan_add').change(function() {
                 $.ajax(
@@ -646,6 +663,7 @@
             $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
             // Definisi
             var save = new FormData();
+            save.append('thbln',$("#thbln_add").val());
             save.append('ruangan',$("#ruangan_add").val());
             save.append('jenis',$("#jenis_add").val());
             save.append('kalibrasi',$("#kalibrasi_add").val());
@@ -680,21 +698,22 @@
             // console.log(filesAdded[2]);
 
             if (
+                save.get('thbln') == "" ||
                 save.get('ruangan') == "" ||
                 save.get('jenis') == "" ||
-                save.get('kalibrasi') == "" ||
-                save.get('no_kalibrasi') == "" ||
-                save.get('tgl_berlaku') == "" ||
+                // save.get('kalibrasi') == "" ||
+                // save.get('no_kalibrasi') == "" ||
+                // save.get('tgl_berlaku') == "" ||
                 save.get('tgl_perolehan') == "" ||
                 save.get('sarana') == "" ||
                 save.get('merk') == "" ||
                 save.get('tipe') == "" ||
-                save.get('no_seri') == "" ||
+                // save.get('no_seri') == "" ||
                 save.get('tgl_operasi') == "" ||
                 save.get('asal_perolehan') == "" ||
                 save.get('nilai_perolehan') == "" ||
                 save.get('kondisi') == "" ||
-                save.get('golongan') == "" ||
+                // save.get('golongan') == "" ||
                 // save.get('umur') == "" ||
                 // save.get('tarif') == "" ||
                 // save.get('penyusutan') == ""
@@ -706,7 +725,6 @@
                     position: 'topRight'
                 });
             } else {
-                // console.log(save)
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

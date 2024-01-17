@@ -144,7 +144,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::post('inventaris/aset/ruangan/ubah', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@update')->name('aset_ruangan.ubah');
             Route::delete('inventaris/aset/ruangan/hapus/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@destroy')->name('aset_ruangan.hapus');
         // ADDON
-            Route::get('inventaris/aset/getlastaset', '\App\Http\Controllers\Inventaris\Aset\AsetController@getLastAset')->name('aset.getlastaset');
+            Route::get('inventaris/aset/getTahunBulanPengadaan', '\App\Http\Controllers\Inventaris\Aset\AsetController@getTahunBulanPengadaan')->name('aset.getTahunBulanPengadaan');
             Route::get('inventaris/aset/getruangan/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getRuangan')->name('aset.getruangan');
         // ASET
             Route::get('inventaris/aset/{token}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getAsetToken')->name('aset.getAsetToken');

@@ -70,14 +70,21 @@ class AsetController extends Controller
         return response()->json($data, 200);
     }
 
-    function getLastAset()
+    function getTahunBulanPengadaan()
     {
-        $query = aset::orderBy('created_at','desc')->first();
-        if (!empty($query)) {
-            $data = $query->urutan + 1;
-        } else {
-            $data = '1';
-        }
+        $month = Carbon::now()->isoFormat('MM');
+        $year = Carbon::now()->isoFormat('YYYY');
+        // $query = aset::orderBy('created_at','desc')->first();
+        // if (!empty($query)) {
+        //     $data = $query->urutan + 1;
+        // } else {
+        //     $data = '1';
+        // }
+
+        $data = [
+            'month' => $month,
+            'year' => $year,
+        ];
 
         return response()->json($data, 200);
     }
@@ -86,8 +93,13 @@ class AsetController extends Controller
     {
         $carbon = Carbon::now();
         $tgl = $carbon->isoFormat('dddd, D MMMM Y, HH:mm a');
-        $month = $carbon->isoFormat('MM');
-        $year = $carbon->isoFormat('YYYY');
+        if ($request->thbln == null) {
+            $month = $carbon->isoFormat('MM');
+            $year = $carbon->isoFormat('YYYY');
+        } else {
+            $month = substr($request->thbln,0,2);
+            $year = substr($request->thbln,3,7);
+        }
 
         $validator = Validator::make($request->all(), [
             'file.*' => 'required|mimes:jpg,png,jpeg|max:5000',
