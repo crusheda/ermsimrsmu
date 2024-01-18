@@ -8,7 +8,7 @@
                     <div class="w-100">
                         <h5 class="text-primary">Selamat Datang! 👋</h5>
                         <p class="text-muted">Silakan masuk terlebih dahulu.</p>
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('login') }}" id="submitForm">
                             @csrf
 
                             <div class="mb-3" data-validate="Username is required">
@@ -63,10 +63,19 @@
                             <hr>
 
                             <div class="mb-3">
-                                <label for="">Google Captcha v3</label>
-                                {!! NoCaptcha::renderJs() !!}
-                                {{-- <div id="captcha"></div> --}}
-                                {!! NoCaptcha::display() !!}
+                                <center><label for="">Selesaikan Captcha</label></center>
+                                {{-- {!! Captcha::img('math') !!} --}}
+                                <div id="reloadedCaptcha" class="mb-2 text-center"><span>{!! captcha_img('math') !!}</span></div>
+                                <div class="input-group auth-pass-inputgroup">
+                                    <input type="text" class="form-control" name="captcha" placeholder="Tulis hasil penjumlahan dari angka di atas">
+                                    <a class="btn btn-outline-secondary" id="btn-reload-captcha" onclick="reloadCaptcha()" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                                    title="1x Refresh Captcha"><i class="fas fa-sync"></i></a>
+                                </div>
+                                @error('captcha')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
                             <div class="mt-3 mb-3">
@@ -135,6 +144,26 @@
                 }
             });
         })
+
+        function reloadCaptcha() {
+            $.ajax({
+                url: "/captcha/api/math",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    // $('#reloadedCaptcha span').html('');
+                    $('#reloadedCaptcha span').html('{!! captcha_img("math") !!}');
+                    $('#btn-reload-captcha').prop('hidden',true);
+                },
+                error: function (res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
 
         function forgotPassword() {
             iziToast.error({
