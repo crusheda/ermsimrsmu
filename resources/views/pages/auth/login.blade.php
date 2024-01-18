@@ -60,6 +60,15 @@
                                 </label>
                             </div>
 
+                            <hr>
+
+                            <div class="mb-3">
+                                <label for="">Google Captcha v3</label>
+                                {!! NoCaptcha::renderJs() !!}
+                                {{-- <div id="captcha"></div> --}}
+                                {!! NoCaptcha::display() !!}
+                            </div>
+
                             <div class="mt-3 mb-3">
                                 {{-- <center>
                                     <div class="btn-group">
