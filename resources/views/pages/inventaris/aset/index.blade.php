@@ -392,7 +392,54 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Peminjaman <a class="text-danger">*</a></label>
+                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Pengembalian</label>
+                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Sarana <a class="text-danger">*</a></label>
+                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nama Penanggungjawab <a class="text-danger">*</a></label>
+                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kelengkapan Sarana <a class="text-danger">*</a></label>
+                                <textarea rows="2" id="" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Keterangan</label>
+                                <textarea rows="3" id="" class="form-control" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
