@@ -67,7 +67,7 @@
                                 {{-- {!! Captcha::img('math') !!} --}}
                                 <div id="reloadedCaptcha" class="mb-2 text-center"><span>{!! captcha_img('math') !!}</span></div>
                                 <div class="input-group auth-pass-inputgroup">
-                                    <input type="text" class="form-control" name="captcha" placeholder="Tulis hasil penjumlahan dari angka di atas">
+                                    <input type="number" class="form-control" name="captcha" min="0" max="99" onKeyUp="if(this.value>99){this.value='';alert('Masukkan 2 digit hasil penjumlahan Captcha!')}else if(this.value<0){this.value='0';}" placeholder="Tulis hasil penjumlahan dari angka di atas">
                                     <a class="btn btn-outline-secondary" id="btn-reload-captcha" onclick="reloadCaptcha()" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                                     title="1x Refresh Captcha"><i class="fas fa-sync"></i></a>
                                 </div>

@@ -161,6 +161,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
         Route::resource('/lab/antigen', '\App\Http\Controllers\Pelayanan\Lab\antigenController');
 });
 
+// MFK
+Route::group(['middleware' => ['auth'], 'prefix' => 'mfk', 'as' => ''], function () {
+    // Kebidanan
+        Route::get('manrisk','\App\Http\Controllers\K3\ManriskController@index')->name('manrisk.index');
+});
+
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
 // CATATAN
 

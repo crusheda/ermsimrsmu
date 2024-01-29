@@ -178,17 +178,18 @@
 
                 @if (Auth::user()->getPermission('kecelakaan_kerja') == true || Auth::user()->getPermission('manajemen_risiko') == true)
                 <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sistem sedang dalam proses pengerjaan">
+                    <a href="javascript: void(0);" class="{{-- has-arrow --}} waves-effect">
                         <i class="bx bx-walk"></i>
+                        <span class="badge rounded-pill bg-danger float-end">new</span>
                         <span key="t-dashboards">MFK</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         {{-- <li><a href="javascript: void(0);" key="t-saas"></a></li> --}}
                         @if (Auth::user()->getPermission('kecelakaan_kerja') == true)
-                            <li><a href="javascript: void(0);" key="t-saas"><s>Kecelakaan Kerja</s></a></li>
+                            <li><a href="javascript: void(0);" key="t-saas" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sistem sedang dalam proses pengerjaan"><s>Kecelakaan Kerja</s></a></li>
                         @endif
                         @if (Auth::user()->getPermission('manajemen_risiko') == true)
-                            <li><a href="javascript: void(0);" key="t-default"><s>Manajemen Risiko</s></a></li>
+                            <li><a href="{{ route('manrisk.index') }}" key="t-default">Manajemen Risiko</a></li>
                         @endif
                     </ul>
                 </li>
