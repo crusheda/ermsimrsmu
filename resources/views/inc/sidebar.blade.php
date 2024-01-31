@@ -199,10 +199,9 @@
                         <span key="t-dashboards">Mutu</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        {{-- <li><a href="javascript: void(0);" key="t-saas"></a></li> --}}
-                        @if (Auth::user()->getPermission('manajemen_risiko') == true)
+                        {{-- @if (Auth::user()->getPermission('manajemen_risiko') == true)
                             <li><a href="javascript: void(0);" key="t-default"><s>Indikator Mutu Unit</s></a></li>
-                        @endif
+                        @endif --}}
                         @if (Auth::user()->getPermission('manajemen_risiko') == true)
                             <li><a href="{{ route('manrisk.index') }}" key="t-default">Manajemen Risiko</a></li>
                         @endif
