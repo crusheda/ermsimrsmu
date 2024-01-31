@@ -161,10 +161,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
         Route::resource('/lab/antigen', '\App\Http\Controllers\Pelayanan\Lab\antigenController');
 });
 
-// MFK
-Route::group(['middleware' => ['auth'], 'prefix' => 'mfk', 'as' => ''], function () {
-    // Kebidanan
-        Route::get('manrisk','\App\Http\Controllers\K3\ManriskController@index')->name('manrisk.index');
+// Mutu
+Route::group(['middleware' => ['auth'], 'prefix' => 'mutu', 'as' => ''], function () {
+    // Manajemen Risiko
+        Route::get('manrisk','\App\Http\Controllers\Mutu\ManriskController@index')->name('manrisk.index');
+        Route::post('manrisk', [App\Http\Controllers\Mutu\ManriskController::class, 'store'])->name('manrisk.store');
+        Route::get('manrisk/{id}/download', '\App\Http\Controllers\Mutu\ManriskController@download');
 });
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------

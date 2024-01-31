@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class k3_manrisk extends Model
+class mutu_manrisk extends Model
 {
     use HasFactory;
-    protected $table = 'k3_manrisk';
+    protected $table = 'mutu_manrisk';
     public $timestamps = true;
     use SoftDeletes;
 }

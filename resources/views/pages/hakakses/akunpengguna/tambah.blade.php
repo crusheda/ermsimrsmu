@@ -21,6 +21,13 @@
                 enctype="multipart/form-data">
                 @csrf
                 <div class="row">
+                    <h5 class="font-size-14">
+                        <i class="mdi mdi-arrow-right text-primary"></i> Username/Password tidak boleh menggunakan <b>SPASI</b><br>
+                        <i class="mdi mdi-arrow-right text-primary"></i> Disarankan untuk menggunakan kombinasi Huruf & Angka<br>
+                        <i class="mdi mdi-arrow-right text-primary"></i> Buat password seunik mungkin agar tidak mudah terbaca oleh orang lain<br>
+                        <i class="mdi mdi-arrow-right text-primary"></i> Password akan dienkripsi menggunakan Laravel Bcrypt Hash
+                    </h5>
+                    <hr>
                     <div class="col-md-6 mb-4">
                         <div class="form-group">
                             <label for="defaultFormControlInput" class="form-label">Username</label>
@@ -82,8 +89,9 @@
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between">
-                        <h5 class="font-size-14"><i class="mdi mdi-arrow-right text-primary"></i> Password will be Encrypted
-                            with Laravel Bcrypt Hash </h5>
+                        <h5 class="font-size-14">
+                            Dimohon untuk membaca syarat & ketentuan pembuatan Akun Pengguna!
+                        </h5>
                         <button class="btn btn-primary" id="btn-simpan" onclick="saveData()" disabled>
                             <i class="fas fa-save fa-md"></i>&nbsp;&nbsp;
                             <span class="align-middle d-sm-inline-block d-none me-sm-1">Simpan</span>

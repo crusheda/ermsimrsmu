@@ -174,4 +174,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('antigen/getubah/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getubah')->name('antigen.getubah');
         Route::get('antigen/hapus/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@hapus')->name('antigen.hapus');
         Route::get('antigen/getpasien/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getPasien');
+
+    // MUTU
+        // MANAJEMEN RISIKO
+        Route::get('manrisk/data','\App\Http\Controllers\Mutu\ManriskController@table');
+        Route::get('manrisk/hapus/{id}', '\App\Http\Controllers\Mutu\ManriskController@hapus');
 // });

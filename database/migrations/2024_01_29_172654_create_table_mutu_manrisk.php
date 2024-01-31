@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableK3Manrisk extends Migration
+class CreateTableMutuManrisk extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTableK3Manrisk extends Migration
      */
     public function up()
     {
-        Schema::create('k3_manrisk', function (Blueprint $table) {
+        Schema::create('mutu_manrisk', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_user')->nullable();
             $table->string('unit')->nullable();
@@ -35,6 +35,6 @@ class CreateTableK3Manrisk extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('k3_manrisk');
+        Schema::dropIfExists('mutu_manrisk');
     }
 }
