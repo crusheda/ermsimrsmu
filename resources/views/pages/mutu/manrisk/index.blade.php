@@ -207,6 +207,7 @@
                     $("#tampil-tbody").empty();
                     var date = new Date().toISOString().split('T')[0];
                     var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getManyRole(['k3','it']) }}";
                     var date = getDateTime();
                     res.show.forEach(item => {
                         if (item.unit) {
@@ -228,20 +229,26 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-right dropend'>`;
-                        if (item.id_user == userID) {
-                            if (updet == date) {
-                                content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                        if (adminID == true) {
+                            content +=
+                                `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                        } else {
+                            if (item.id_user == userID) {
+                                if (updet == date) {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                } else {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                }
                             } else {
                                 content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                    `<li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
                                     <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                             }
-                        } else {
-                            content +=
-                                `<li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                         }
                         content += "</div></center></td><td>" +
                             item.id +
@@ -286,6 +293,7 @@
                     $('#dttable').DataTable().clear().destroy();
                     var date = new Date().toISOString().split('T')[0];
                     var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getManyRole(['k3','it']) }}";
                     var date = getDateTime();
                     res.show.forEach(item => {
                         if (item.unit) {
@@ -307,20 +315,26 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-right dropend'>`;
-                        if (item.id_user == userID) {
-                            if (updet == date) {
-                                content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                        if (adminID == true) {
+                            content +=
+                                `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                        } else {
+                            if (item.id_user == userID) {
+                                if (updet == date) {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                } else {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                }
                             } else {
                                 content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="window.open('/mutu/manrisk/`+item.id+`/download')"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                    `<li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
                                     <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                             }
-                        } else {
-                            content +=
-                                `<li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                         }
                         content += "</div></center></td><td>" +
                             item.id +
