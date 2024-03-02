@@ -113,7 +113,7 @@
                                         {{-- <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="tgl_surat" readonly/> --}}
 
                                             <h5 class="mb-1" id="no_inventaris_add">
-                                                <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_add" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_add" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_add" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a id="kd_thbln_add" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Bulan & Tahun Aset">{{ $list['month'].'.'.$list['year'] }}</a></a>
+                                                <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_add" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_add" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_add" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a id="kd_th_add" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tahun Perolehan Aset">{{ $list['year'] }}</a></a>
                                             </h5>
                                         <small>Apabila nomor Inventaris tidak sesuai, silakan klik <a href="javascript:void(0);" onclick="reloadBrowser()"><kbd>REFRESH</kbd></a></small>
                                         {{-- <input type="text" class="form-control" id="no_inventaris" hidden> --}}
@@ -158,39 +158,24 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Bulan & Tahun Pengadaan <a class="text-danger">*</a></label>
-                                <div class="position-relative" id="datepicker4">
-                                    <input type="text" class="form-control" data-date-container='#datepicker4' data-provide="datepicker"
-                                    data-date-format="mm-yyyy" data-date-min-view-mode="1" id="thbln_add">
-                                </div>
+                                <label class="form-label">Tgl. Perolehan</label>
+                                <input type="text" id="tgl_perolehan_add" class="form-control flatpickrnow" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= hari ini"/>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3 show_medis_add" hidden>
-                            <div class="form-group">
-                                <label class="form-label">Kalibrasi</label>
-                                <input type="number" id="kalibrasi_add" class="form-control" placeholder="e.g. xxx">
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3 show_medis_add" hidden>
+                        <div class="col-md-6 mb-3 show_medis_add" hidden>
                             <div class="form-group">
                                 <label class="form-label">No. Kalibrasi</label>
                                 <input type="text" id="no_kalibrasi_add" class="form-control" placeholder="e.g. xxx">
                             </div>
                         </div>
-                        <div class="col-md-4 show_medis_add" hidden>
+                        <div class="col-md-6 show_medis_add" hidden>
                             <div class="form-group">
                                 <label class="form-label">Tgl. Berlaku</label>
-                                <input type="text" id="tgl_berlaku_add" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
+                                <input type="text" id="tgl_berlaku_add" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/>
                             </div>
                         </div>
                         <hr>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Tgl. Perolehan <a class="text-danger">*</a></label>
-                                <input type="text" id="tgl_perolehan_add" class="form-control flatpickr" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= 2 hari"/>
-                            </div>
-                        </div>
-                        <div class="col-md-9 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Sarana <a class="text-danger">*</a></label>
                                 <input type="text" id="sarana_add" class="form-control" placeholder="e.g. xxx">
@@ -204,7 +189,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Tipe <a class="text-danger">*</a></label>
+                                <label class="form-label">Tipe</label>
                                 <input type="text" id="tipe_add" class="form-control" placeholder="e.g. xxx">
                             </div>
                         </div>
@@ -214,11 +199,10 @@
                                 <input type="text" id="no_seri_add" class="form-control" placeholder="e.g. xxx">
                             </div>
                         </div>
-                        <hr>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Operasi <a class="text-danger">*</a></label>
-                                <input type="text" id="tgl_operasi_add" class="form-control flatpickr" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan"/>
+                                <input type="text" id="tgl_operasi_add" class="form-control flatpickr" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -226,7 +210,7 @@
                                 <label class="form-label">Asal Perolehan <a class="text-danger">*</a></label>
                                 <select class="form-select" id="asal_perolehan_add" required>
                                     <option value="" hidden>Pilih</option>
-                                    <option value="1">Beli</option>
+                                    <option value="1" selected>Beli</option>
                                     <option value="2">Hibah</option>
                                     <option value="3">Wakaf</option>
                                 </select>
@@ -258,7 +242,7 @@
                         <hr>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Upload <a class="text-danger">*</a></label>
+                                <label class="form-label">Upload</label>
                                 <input type="file" class="form-control mb-2" id="file_add" accept=".jpg,.jpeg,.png" multiple>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Gambar<br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Dapat upload gambar lebih dari satu<br>
@@ -467,11 +451,12 @@
             // DATE
             const today = new Date();
             var tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 2);
+            tomorrow.setDate(tomorrow.getDate() + 1);
             var next = new Date(today);
             next.setDate(next.getDate() + 999999);
             const l = $('.flatpickr');
-            const ln = $('.flatpickrNull');
+            const ln = $('.flatpickrnow');
+            const lun = $('.flatpickrunl');
             // const dates = new Date(Date.now());
             // const tomorow = dates.getTime();
             // const m = new Date(Date.now());
@@ -496,10 +481,21 @@
                 defaultDate: now,
                 minuteIncrement: 1,
                 time_24hr: true,
+                defaultMinute: "today",
                 disable: [{
                     from: tomorrow.toISOString().split("T")[0],
                     to: next.toISOString().split("T")[0]
                 }]
+            })
+            lun.flatpickr({
+                enableTime: 0,
+                minuteIncrement: 1,
+                time_24hr: true,
+                // defaultMinute: "today",
+                // disable: [{
+                //     from: tomorrow.toISOString().split("T")[0],
+                //     to: next.toISOString().split("T")[0]
+                // }]
             })
             $('#datepicker4').datepicker({
                     "setDate": new Date(),
@@ -676,18 +672,18 @@
         }
 
         function tambah() {
-            $.ajax(
-            {
-                url: "/api/inventaris/aset/getTahunBulanPengadaan",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $('#thbln_add').val(res.month+'-'+res.year);
-                }
-            })
-            $('#thbln_add').change(function() {
-                var thnbln = $('#thbln_add').val();
-                $('#kd_thbln_add').text(thnbln.substring(0,2)+'.'+thnbln.substring(3,7));
+            // $.ajax(
+            // {
+            //     url: "/api/inventaris/aset/getTahunBulanPengadaan",
+            //     type: 'GET',
+            //     dataType: 'json', // added data type
+            //     success: function(res) {
+            //         $('#thbln_add').val(res.month+'-'+res.year);
+            //     }
+            // })
+            $('#tgl_perolehan_add').change(function() {
+                var thn = $('#tgl_perolehan_add').val();
+                $('#kd_th_add').text(thn.substring(0,4));
             })
             // KODE RUANGAN CHANGE
             $('#ruangan_add').change(function() {
@@ -751,10 +747,10 @@
                 // save.get('kalibrasi') == "" ||
                 // save.get('no_kalibrasi') == "" ||
                 // save.get('tgl_berlaku') == "" ||
-                save.get('tgl_perolehan') == "" ||
+                // save.get('tgl_perolehan') == "" ||
                 save.get('sarana') == "" ||
                 save.get('merk') == "" ||
-                save.get('tipe') == "" ||
+                // save.get('tipe') == "" ||
                 // save.get('no_seri') == "" ||
                 save.get('tgl_operasi') == "" ||
                 save.get('asal_perolehan') == "" ||

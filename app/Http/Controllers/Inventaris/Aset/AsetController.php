@@ -42,10 +42,29 @@ class AsetController extends Controller
 
     function detail($token)
     {
-        $show = aset::where('token',$token)->first();
+        $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')
+                ->where('aset.token',$token)
+                ->first();
+
+        // Menentukan Kondisi
+        if ($show->kondisi == 1) {
+            $kondisi = 'Baik';
+        } else {
+            if ($show->kondisi == 2) {
+                $kondisi = 'Cukup';
+            } else {
+                if ($show->kondisi == 3) {
+                    $kondisi = 'Buruk';
+                }
+            }
+        }
+
+        // Menentukan Isi QR-Code
+        $qr = $show->sarana.' | '.$show->merk.' | '.$show->tipe.' | '.$show->ruangan.' | '.$kondisi;
 
         $data = [
             'show' => $show,
+            'qr' => $qr,
         ];
 
         return view('pages.inventaris.aset.detail')->with('list',$data);
@@ -93,12 +112,10 @@ class AsetController extends Controller
     {
         $carbon = Carbon::now();
         $tgl = $carbon->isoFormat('dddd, D MMMM Y, HH:mm a');
-        if ($request->thbln == null) {
-            $month = $carbon->isoFormat('MM');
+        if ($request->tgl_perolehan == null) {
             $year = $carbon->isoFormat('YYYY');
         } else {
-            $month = substr($request->thbln,0,2);
-            $year = substr($request->thbln,3,7);
+            $year = substr($request->tgl_perolehan,0,4);
         }
 
         $validator = Validator::make($request->all(), [
@@ -123,7 +140,7 @@ class AsetController extends Controller
                 $jenis = 'B';
             }
 
-            $no_inventaris = '00.03.27.'.$getRuangan->kode.'.'.$jenis.'.'.$urutan.'.'.$month.'.'.$year;
+            $no_inventaris = '00.03.27.'.$getRuangan->kode.'.'.$jenis.'.'.$urutan.'.'.$year;
 
             $data = new aset;
             $data->token = Crypt::encryptString($no_inventaris); // decryptString to Decrypt
@@ -131,7 +148,7 @@ class AsetController extends Controller
             $data->id_user_aset = $request->user;
             $data->id_ruangan = $request->ruangan;
             $data->jenis = $request->jenis;
-            $data->kalibrasi = $request->kalibrasi;
+            // $data->kalibrasi = $request->kalibrasi;
             $data->no_kalibrasi = $request->no_kalibrasi;
             $data->tgl_berlaku = $request->tgl_berlaku;
             $data->tgl_perolehan = $request->tgl_perolehan;

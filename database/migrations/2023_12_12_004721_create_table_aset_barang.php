@@ -21,7 +21,7 @@ class CreateTableAsetBarang extends Migration
             $table->integer('id_ruangan')->nullable();
             $table->integer('jenis')->nullable();
             $table->string('no_kalibrasi')->nullable();
-            $table->integer('kalibrasi')->nullable();
+            //$table->integer('kalibrasi')->nullable();
             $table->date('tgl_berlaku')->nullable();
             $table->date('tgl_perolehan')->nullable();
             $table->longText('no_inventaris')->nullable();

@@ -314,7 +314,7 @@
         $(document).ready(function() {
             $('#qr').text('') ;
             var qrcode = new QRCode("qr", {
-                text: "{{ $list['show']->token }}",
+                text: "{{ $list['qr'] }}",
                 width: 300,
                 height: 300,
                 colorDark : "#000000",
