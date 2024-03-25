@@ -75,16 +75,14 @@
         <table class="table align-middle dt-responsive w-100 table-check" id="dttable">
             <thead>
                 <tr>
-                    <th scope="col">#ID</th>
-                    <th scope="col">No Inventaris</th>
+                    <th scope="col"><center>#ID</center></th>
+                    <th scope="col">No. Inventaris</th>
                     <th scope="col">Sarana</th>
                     <th scope="col">Ruangan</th>
-                    <th scope="col">Kalibrasi</th>
-                    <th scope="col">Perolehan</th>
-                    <th scope="col">Tgl Berlaku</th>
-                    <th scope="col">Tgl Operasi</th>
-                    <th scope="col">Penyusutan Per Bulan</th>
-                    <th scope="col">Keterangan</th>
+                    <th scope="col">Merk</th>
+                    <th scope="col">Tipe</th>
+                    <th scope="col">No. Seri</th>
+                    <th scope="col">Kondisi</th>
                     <th scope="col">Dibuat</th>
                     <th scope="col">Diperbarui</th>
                 </tr>
@@ -555,6 +553,18 @@
                     //                         </div>
                     //                     </div>
                     //                 </td>`;
+
+                    // <th scope="col">#ID</th>
+                    // <th scope="col">No. Inventaris</th>
+                    // <th scope="col">Sarana</th>
+                    // <th scope="col">Merk</th>
+                    // <th scope="col">Tipe</th>
+                    // <th scope="col">No. Seri</th>
+                    // <th scope="col">Ruangan</th>
+                    // <th scope="col">Kondisi</th>
+                    // <th scope="col">Dibuat</th>
+                    // <th scope="col">Diperbarui</th>
+
                     res.show.forEach(item => {
                         content = `<tr id='`+item.id+`'>`;
                         // content += `<td><div class="d-flex align-items-center">
@@ -596,55 +606,42 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>`+item.sarana+`</h6>
-                                                <h6 class='mb-0'>`+item.no_seri+`</h6>
-                                                <small class='text-truncate text-muted'>`+item.merk+` - `+item.tipe+`</small>
+                                                <h6 class='mb-0'><small class='text-truncate text-muted'>Tgl. Operasi : `+item.tgl_operasi+`</small></h6>
                                             </div>
                                         </div>
                                     </td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>`+item.ruangan+` - `+item.lokasi+`</h6>
-                                                <small class='text-truncate text-muted'>Jenis : `+item.jenis+`</small>
+                                                <h6 class='mb-0'>`+item.ruangan+`</h6>
+                                                <small class='text-truncate text-muted'>`+item.lokasi+`</small>
                                             </div>
                                         </div>
                                     </td>`;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>`+item.no_kalibrasi+`</h6>
-                                                <small class='text-truncate text-muted'>Kondisi : `+item.kondisi+`</small>
-                                            </div>
-                                        </div>
-                                    </td>`;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>`+item.asal_perolehan+`</h6>
-                                                <h6 class='mb-0'>`+formatRupiah(item.nilai_perolehan,'Rp. ')+`</h6>
-                                                <small class='text-truncate text-muted'>Diperoleh : `+item.tgl_perolehan+`</small>
-                                            </div>
-                                        </div>
-                                    </td>`;
-                        content += `<td>`+item.tgl_berlaku+`</td>`;
-                        content += `<td>`+item.tgl_operasi+`</td>`;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>Golongan `+item.golongan+`</h6>
-                                                <small class='text-truncate text-muted'>`+item.umur+` Bulan - `+item.tarif+` - `+item.penyusutan+`</small>
-                                            </div>
-                                        </div>
-                                    </td>`;
-                        content += `<td>`+item.keterangan+`</td>`;
-                        content += `<td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td>`;
+                        content += `<td>`+item.merk+`</td>`;
+                        content += `<td>`+item.tipe+`</td>`;
+                        content += `<td>`+item.no_seri+`</td>`;
+                            if (item.kondisi == 1) {
+                                content += `<td>Baik</td>`;
+                            } else {
+                                if (item.kondisi == 2) {
+                                    content += `<td>Cukup</td>`;
+                                } else {
+                                    if (item.kondisi == 3) {
+                                        content += `<td>Buruk</td>`;
+                                    } else {
+                                        content += `<td>Tidak Diketahui</td>`;
+                                    }
+                                }
+                            }
+                        content += `<td>`+item.updated_at.substring(0, 10)+`</td>`; // .substring(0, 19).replace('T',' ')
                         content += `<td>`+item.tgl_input+`</td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
 
                     var table = $('#dttable').DataTable({
                         order: [
-                            [10, "desc"]
+                            [9, "desc"]
                         ],
                         // bAutoWidth: false,
                         // aoColumns : [

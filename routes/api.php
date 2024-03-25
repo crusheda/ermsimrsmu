@@ -152,6 +152,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::post('inventaris/aset/filter', '\App\Http\Controllers\Inventaris\Aset\AsetController@filter')->name('aset.filter');
             Route::delete('inventaris/aset/hapus/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@hapus')->name('aset.hapus');
             // Route::get('inventaris/aset/qrcode/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@qrcode')->name('aset.qrcode');
+        // DETAIL ASET
+            Route::get('inventaris/aset/{token}/kondisi/{kondisi}', '\App\Http\Controllers\Inventaris\Aset\AsetController@ubahKondisi')->name('aset_detail.ubahKondisi');
         // PEMINJAMAN ASET
             Route::get('inventaris/aset/peminjaman/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@getPeminjamanAset')->name('aset_peminjaman.getPeminjamanAset');
             Route::get('inventaris/aset/pengembalian/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@getPengembalianAset')->name('aset_peminjaman.getPengembalianAset');

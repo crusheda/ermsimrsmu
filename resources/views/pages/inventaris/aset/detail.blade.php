@@ -71,7 +71,10 @@
                                 <i class="mdi mdi-email-open"></i>
                             </div>
                         </div>
-                        <p class="text-primary mb-0"><b>Kondisi Baik</b></p>
+                        <p class="text-primary mb-0"><b>Kondisi Baik</b></p>kondisi = {{ $list['show']->kondisi }}
+                        <button class="btn btn-warning-outline btn-sm" onclick="showUpdateKondisi({{ $list['show']->kondisi }})" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                        title="Kondisi Sekarang"><i class='bx bx-edit scaleX-n1-rtl'></i> Perbarui Kondisi</button>
                         <hr>
                         <div class="row text-center">
                             <div class="col-6">
@@ -310,6 +313,31 @@
         </div><!--end col-->
     </div><!--end row-->
 
+    {{-- UPDATE KONDISI --}}
+    <div class="modal fade" id="kondisi" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Bagaimana Kondisi Sarana Sekarang?
+                    </h4>
+                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="id_kondisi" hidden>
+                    <label for="">Pilih Kondisi</label>
+                    <select class="form-select" id="pilihan_kondisi" required></select>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-simpan-kondisi" onclick="updateKondisi()"><i
+                            class="fa-fw fas fa-save nav-icon"></i> Simpan</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             $('#qr').text('') ;
@@ -326,6 +354,43 @@
             });
         })
 
+        // SHOWING MODAL
+        function showUpdateKondisi(kondisi) {
+            $('#kondisi').modal('show');
+            $("#id_kondisi").val({{ $list['show']->id }});
+            $("#pilihan_kondisi").find('option').remove();
+            $("#pilihan_kondisi").append(`
+                <option value="1" ${kondisi == '1' ? "selected":""}>Baik</option>
+                <option value="2" ${kondisi == '2' ? "selected":""}>Cukup</option>
+                <option value="3" ${kondisi == '3' ? "selected":""}>Buruk</option>
+            `);
+        }
+
+        function updateKondisi() {
+            var kondisi = $("#pilihan_kondisi").val();
+
+            $.ajax({
+                url: "/api/inventaris/aset/{{ $list['show']->token }}/kondisi/"+kondisi,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res){
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: 'Kondisi sarana berhasil diperbarui pada '+res,
+                        position: 'topRight'
+                    });
+                    if (res) {
+                        $('#kondisi').modal('hide');
+                        // refresh();
+                        window.location.reload();
+                    }
+                },
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                }
+            });
+        }
+
         function cetak() {
             var pdf = new jsPDF({
                 orientation: "portrait",
@@ -338,5 +403,6 @@
             var base64string = pdf.output('bloburl');
             window.open(base64string,'_blank', 'width=500,height=550');
         }
+
     </script>
 @endsection

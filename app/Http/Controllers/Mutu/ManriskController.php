@@ -41,7 +41,7 @@ class ManriskController extends Controller
         $find = mutu_manrisk::where('id_user',$user_id)->get();
 
         foreach ($find as $key => $value) {
-            if ($value->title == $uploadedFile->getClientOriginalName()) {
+            if ($value->title == $file->getClientOriginalName()) {
                 return redirect()->back()->withErrors('Maaf, Nama file '.$value->title.' sudah pernah diupload oleh seseorang. Mohon Ganti Nama File yang berbeda. Disarankan untuk menambahkan identitas Unit/Bulan/Tahun untuk membuat nama yang unik pada File Anda.');
             }
         }

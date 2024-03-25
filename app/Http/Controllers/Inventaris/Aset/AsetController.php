@@ -70,6 +70,14 @@ class AsetController extends Controller
         return view('pages.inventaris.aset.detail')->with('list',$data);
     }
 
+    function ubahKondisi($token, $kondisi){
+        $data = aset::where('token',$token)->first();
+        $data->kondisi = $kondisi;
+        $data->save();
+
+        return response()->json($data, 200);
+    }
+
     function getRuangan($id)
     {
         $ruangan = aset_ruangan::where('id', $id)->first();
