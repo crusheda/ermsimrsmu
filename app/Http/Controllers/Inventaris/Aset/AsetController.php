@@ -46,6 +46,26 @@ class AsetController extends Controller
                 ->where('aset.token',$token)
                 ->first();
 
+        $mutasi = aset_mutasi::join('aset','aset_mutasi.id_aset','=','aset.id')
+                ->join('aset_ruangan','aset_mutasi.id_ruangan_mutasi','=','aset_ruangan.id')
+                ->join('users','aset_mutasi.id_user_mutasi','=','users.id')
+                ->join('users_foto','aset_mutasi.id_user_mutasi','=','users_foto.user_id')
+                ->where('aset.token',$token)
+                ->get();
+
+        $peminjaman = aset_peminjaman::join('aset','aset_peminjaman.id_aset','=','aset.id')
+                ->join('aset_ruangan','aset_peminjaman.id_ruangan_peminjaman','=','aset_ruangan.id')
+                ->join('users','aset_peminjaman.id_user_peminjaman','=','users.id')
+                ->join('users_foto','aset_peminjaman.id_user_peminjaman','=','users_foto.user_id')
+                ->where('aset.token',$token)
+                ->get();
+
+        $pengembalian = aset_pengembalian::join('aset','aset_pengembalian.id_aset','=','aset.id')
+                ->join('users','aset_pengembalian.id_user_pengembalian','=','users.id')
+                ->join('users_foto','aset_pengembalian.id_user_pengembalian','=','users_foto.user_id')
+                ->where('aset.token',$token)
+                ->get();
+
         // Menentukan Kondisi
         if ($show->kondisi == 1) {
             $kondisi = 'Baik';
@@ -64,6 +84,9 @@ class AsetController extends Controller
 
         $data = [
             'show' => $show,
+            'mutasi' => $mutasi,
+            'peminjaman' => $peminjaman,
+            'pengembalian' => $pengembalian,
             'qr' => $qr,
         ];
 

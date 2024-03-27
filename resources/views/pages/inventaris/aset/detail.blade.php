@@ -1,17 +1,29 @@
 @extends('layouts.default')
 
 @section('content')
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-chase">
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+            </div>
+        </div>
+    </div>
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">ASET & GUDANG - SARANA <kbd>ID : {{ $list['show']->id }}</kbd></h4>
+                <h4 class="mb-sm-0 font-size-18">ASET & GUDANG - SARANA</h4>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xl-3">
+        <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="fw-semibold text-center">SCAN - <b>QR CODE</b></h5>
@@ -59,6 +71,17 @@
                         <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
                         <button class="btn btn-soft-primary w-100"><i class="bx bx-download scaleX-n1-rtl"></i> Download</button>
                         <button class="btn btn-soft-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
+                        <a class="btn btn-soft-success w-100" href="javascript:void(0);" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class='bx bx-caret-down align-middle'></i>&nbsp;&nbsp;Menu
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPemeliharaan()">Pemeliharaan</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalMutasi()">Mutasi</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPeminjaman()">Peminjaman</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPengembalian()">Pengembalian</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPenarikan()">Penarikan</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,12 +89,39 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center">
-                        <div class="avatar-md mx-auto mb-3">
-                            <div class="avatar-title bg-light rounded-circle text-primary h1">
-                                <i class="mdi mdi-email-open"></i>
+                        @if ($list['show']->kondisi == 1)
+                            <div class="avatar-md mx-auto mb-3">
+                                <div class="avatar-title bg-light rounded-circle text-primary h1">
+                                    <i class="fas fa-check"></i>
+                                </div>
                             </div>
-                        </div>
-                        <p class="text-primary mb-0"><b>Kondisi Baik</b></p>kondisi = {{ $list['show']->kondisi }}
+                            <p class="text-primary mb-0"><b>Kondisi Baik</b></p>
+                        @else
+                            @if ($list['show']->kondisi == 2)
+                                <div class="avatar-md mx-auto mb-3">
+                                    <div class="avatar-title bg-warning rounded-circle text-light h1">
+                                        <i class="fas fa-minus"></i>
+                                    </div>
+                                </div>
+                                <p class="text-warning mb-0"><b>Kondisi Cukup</b></p>
+                            @else
+                                @if ($list['show']->kondisi == 3)
+                                    <div class="avatar-md mx-auto mb-3">
+                                        <div class="avatar-title bg-danger rounded-circle text-light h1">
+                                            <i class="fas fa-times"></i>
+                                        </div>
+                                    </div>
+                                    <p class="text-danger mb-0"><b>Kondisi Buruk</b></p>
+                                @else
+                                    <div class="avatar-md mx-auto mb-3">
+                                        <div class="avatar-title bg-dark rounded-circle text-light h1">
+                                            <i class="mdi mdi-email-open"></i>
+                                        </div>
+                                    </div>
+                                    <p class="text-dark mb-0"><b>Kondisi Tidak Terdefinisi</b></p>
+                                @endif
+                            @endif
+                        @endif
                         <button class="btn btn-warning-outline btn-sm" onclick="showUpdateKondisi({{ $list['show']->kondisi }})" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                         title="Kondisi Sekarang"><i class='bx bx-edit scaleX-n1-rtl'></i> Perbarui Kondisi</button>
@@ -92,8 +142,99 @@
                             </div>
                         </div>
                     </div>
-
-                    <ul class="list-unstyled mt-4">
+                    <hr>
+                    <div class="bg-transparent mb-3">
+                        <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#post-mutasi" role="tab">
+                                    Mutasi
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#post-peminjaman" role="tab">
+                                    Peminjaman
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#post-pengembalian" role="tab">
+                                    Pengembalian
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="post-mutasi" role="tabpanel">
+                            <div data-simplebar style="max-height: 376px;">
+                                <ul class="verti-timeline list-unstyled">
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                        </div>
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                @if (!empty($list['mutasi']->filename))
+                                                    <img src="{{ url('storage/' . substr($list['mutasi']->filename, 7, 1000)) }}" alt="" class="avatar-xs rounded-circle">
+                                                @else
+                                                    <img class="avatar-xs rounded-circle" alt="" src="{{ url("images/no-image-person.png") }}">
+                                                @endif
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div>
+                                                    <b>Charles Brown</b> applied for the job <b>Sr.frontend Developer</b>
+                                                    <p class="mb-0 text-muted">3 min ago</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="post-peminjaman" role="tabpanel">
+                            <div data-simplebar style="max-height: 376px;">
+                                <ul class="verti-timeline list-unstyled">
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                        </div>
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="assets/images/users/avatar-5.jpg" alt="" class="avatar-xs rounded-circle">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div>
+                                                    <b>Cdasdasdwn</b> applcxvxcvcxhe job <b>Sr.fronvcbvcbcvbvcvbvvcend Developer</b>
+                                                    <p class="mb-0 text-muted">1 hour ago</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="post-pengembalian" role="tabpanel">
+                            <div data-simplebar style="max-height: 376px;">
+                                <ul class="verti-timeline list-unstyled">
+                                    <li class="event-list">
+                                        <div class="event-timeline-dot">
+                                            <i class="bx bx-right-arrow-circle font-size-18"></i>
+                                        </div>
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="assets/images/users/avatar-5.jpg" alt="" class="avatar-xs rounded-circle">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div>
+                                                    <b>Cdasdasdwn</b>
+                                                    <p class="mb-0 text-muted">6 hour ago</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <ul class="list-unstyled mt-4">
                         <li>
                             <div class="d-flex">
                                 <i class="bx bx-phone text-primary fs-4"></i>
@@ -130,20 +271,20 @@
                                 </div>
                             </div>
                         </li>
-                    </ul>
+                    </ul> --}}
                     <div class="mt-4">
-                        <a href="#!" class="btn btn-soft-primary btn-hover w-100 rounded"><i class="mdi mdi-eye"></i> View Profile</a>
+                        <a href="#!" class="btn btn-soft-primary btn-hover w-100 rounded"><i class="mdi mdi-eye"></i> Tampilkan Semua Riwayat</a>
                     </div>
                 </div>
             </div>
         </div><!--end col-->
-        <div class="col-xl-9">
+        <div class="col-xl-8">
             <div class="card">
                 <div class="card-body border-bottom">
                     <div class="d-flex">
                         {{-- <img src="assets/images/companies/wechat.svg" alt="" height="50"> --}}
                         <div class="flex-grow-1">
-                            <h5 class="fw-semibold">{{ $list['show']->sarana }}</h5>
+                            <h5 class="fw-semibold"><kbd>ID : {{ $list['show']->id }}</kbd>&nbsp;&nbsp;{{ $list['show']->sarana }}</h5>
                             <h6>No. Inventaris : <a href="javascript:void(0);">{{ $list['show']->no_inventaris }}</a></h6>
                             <ul class="list-unstyled hstack gap-2 mb-0">
                                 <li>
@@ -312,6 +453,155 @@
             </div>
         </div><!--end col-->
     </div><!--end row-->
+
+    {{----------------------------------------------------------- MODAL ---------------------------------------------------------------}}
+
+    {{-- MODAL PEMELIHARAAN --}}
+    <div class="modal fade" id="formPemeliharaan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Formulir Pemeliharaan Aset&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-pemeliharaan" onclick="prosesPemeliharaan()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL MUTASI --}}
+    <div class="modal fade" id="formMutasi" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Formulir Mutasi Aset&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Peminjaman <a class="text-danger">*</a></label>
+                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Pengembalian</label>
+                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Sarana <a class="text-danger">*</a></label>
+                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nama Penanggungjawab <a class="text-danger">*</a></label>
+                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kelengkapan Sarana <a class="text-danger">*</a></label>
+                                <textarea rows="2" id="" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Keterangan</label>
+                                <textarea rows="3" id="" class="form-control" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-ajukan" onclick="prosesMutasi()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL PEMINJAMAN --}}
+    <div class="modal fade" id="formPeminjaman" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Formulir Peminjaman Aset&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL PENGEMBALIAN --}}
+    <div class="modal fade" id="formPengembalian" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Formulir Pengembalian Aset&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-pengembalian" onclick="prosesPengembalian()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL PENARIKAN --}}
+    <div class="modal fade" id="formPenarikan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Formulir Penarikan Aset&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-penarikan" onclick="prosesPenarikan()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- UPDATE KONDISI --}}
     <div class="modal fade" id="kondisi" tabindex="-1"
