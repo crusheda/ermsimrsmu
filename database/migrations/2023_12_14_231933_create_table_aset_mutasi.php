@@ -15,11 +15,12 @@ class CreateTableAsetMutasi extends Migration
     {
         Schema::create('aset_mutasi', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_user_mutasi')->nullable();
-            $table->bigInteger('id_aset')->nullable();
-            $table->integer('id_ruangan_mutasi')->nullable();
-            $table->integer('kondisi_mutasi')->nullable();
-            $table->longText('ket_mutasi')->nullable();
+            $table->unsignedBigInteger('id_aset');
+            $table->foreign('id_aset')->references('id')->on('aset');
+            $table->integer('id_user')->nullable();
+            $table->integer('id_ruangan')->nullable();
+            $table->integer('kondisi')->nullable();
+            $table->longText('ket')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

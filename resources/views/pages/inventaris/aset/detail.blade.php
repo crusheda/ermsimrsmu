@@ -69,7 +69,7 @@
                     </div> --}}
                     <div class="hstack gap-2">
                         <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
-                        <button class="btn btn-soft-primary w-100"><i class="bx bx-download scaleX-n1-rtl"></i> Download</button>
+                        <button class="btn btn-soft-primary w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button>
                         <button class="btn btn-soft-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
                         <a class="btn btn-soft-success w-100" href="javascript:void(0);" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -163,6 +163,7 @@
                         </ul>
                     </div>
                     <div class="tab-content">
+                        {{-- MUTASI --}}
                         <div class="tab-pane active" id="post-mutasi" role="tabpanel">
                             <div data-simplebar style="max-height: 376px;">
                                 <ul class="verti-timeline list-unstyled">
@@ -189,6 +190,7 @@
                                 </ul>
                             </div>
                         </div>
+                        {{-- PEMINJAMAN --}}
                         <div class="tab-pane" id="post-peminjaman" role="tabpanel">
                             <div data-simplebar style="max-height: 376px;">
                                 <ul class="verti-timeline list-unstyled">
@@ -211,6 +213,7 @@
                                 </ul>
                             </div>
                         </div>
+                        {{-- PNGEMBALIAN --}}
                         <div class="tab-pane" id="post-pengembalian" role="tabpanel">
                             <div data-simplebar style="max-height: 376px;">
                                 <ul class="verti-timeline list-unstyled">
@@ -457,20 +460,66 @@
     {{----------------------------------------------------------- MODAL ---------------------------------------------------------------}}
 
     {{-- MODAL PEMELIHARAAN --}}
-    <div class="modal fade" id="formPemeliharaan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+    <div class="modal fade" id="formPemeliharaan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Formulir Pemeliharaan Aset&nbsp;&nbsp;&nbsp;
+                        Formulir Pemeliharaan&nbsp;&nbsp;&nbsp;
                     </h4>
                 </div>
                 <div class="modal-body">
-
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Petugas <a class="text-danger">*</a></label>
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="petugas_pemeliharaan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Hasil <a class="text-danger">*</a></label>
+                                <textarea rows="2" id="hasil_pemeliharaan" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Rekomendasi <a class="text-danger">*</a></label>
+                                <textarea rows="2" id="rekomendasi_pemeliharaan" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-pemeliharaan" onclick="prosesPemeliharaan()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                <div class="col-12 text-center mb-3">
+                    <div class="btn-group">
+                        <button class="btn btn-soft-warning btn-rounded" onclick="refreshModalPemeliharaan()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Riwayat Pemeliharaan"><i class="fa fa-sync"></i>&nbsp;&nbsp;Refresh</button>
+                        <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                        <button class="btn btn-soft-primary btn-rounded" onclick="prosesPemeliharaan()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Pemeliharaan Aset"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Submit</button>
+
+                    </div>
+                </div>
+                <hr>
+                <div class="table-responsive text-nowrap" style="border: 0px;margin-left:20px;margin-right:20px">
+                    <h4 class="card-title">Riwayat Pemeliharaan <mark>{{ $list['show']->sarana }}</mark></h4>
+                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <table class="table dt-responsive table-hover nowrap w-100" id="dttable-pemeliharaan">
+                        <thead>
+                            <tr>
+                                <th scope="col"><center>Aksi</center></th>
+                                <th scope="col">Petugas</th>
+                                <th>Hasil</th>
+                                <th>Rekomendasi</th>
+                                <th scope="col">Ditambahkan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tampil-tbody-pemeliharaan"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -630,6 +679,16 @@
 
     <script>
         $(document).ready(function() {
+            // SELECT2
+            var te = $(".select2");
+            te.length && te.each(function() {
+                var es = $(this);
+                es.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: "Pilih",
+                    dropdownParent: es.parent()
+                })
+            });
+
             $('#qr').text('') ;
             var qrcode = new QRCode("qr", {
                 text: "{{ $list['qr'] }}",
@@ -644,7 +703,7 @@
             });
         })
 
-        // SHOWING MODAL
+        // SHOWING MODAL -----------------------------------------------------------------------------------------------------------------------
         function showUpdateKondisi(kondisi) {
             $('#kondisi').modal('show');
             $("#id_kondisi").val({{ $list['show']->id }});
@@ -656,6 +715,179 @@
             `);
         }
 
+        // PEMELIHARAAN
+        function modalPemeliharaan() {
+            $.ajax({
+                url: "/api/inventaris/aset/pemeliharaan",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res){
+                    if (res) {
+                        // TAMPIL USERS DROPDOWN
+                        $("#petugas_pemeliharaan").find('option').remove();
+                        res.users.forEach(item => {
+                            $("#petugas_pemeliharaan").append(`<option value="" hidden>Pilih</option>`);
+                            $("#petugas_pemeliharaan").append(`
+                                <option value="${item.id}">${item.nama}</option>
+                            `);
+                        });
+
+                        // TAMPIL TABEL PEMELIHARAAN
+                        $("#tampil-tbody-pemeliharaan").empty();
+                        $('#dttable-pemeliharaan').DataTable().clear().destroy();
+                        var date = new Date().toLocaleDateString();
+                        res.show.forEach(item => {
+                            var updet = new Date(item.created_at).toLocaleDateString();
+                            content = `<tr id='`+item.id+`'>`;
+                                if (updet == date) {
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id_aset})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                } else {
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                }
+                                content += `<td>${item.nama_petugas}</td>`;
+                                content += `<td>${item.hasil}</td>`;
+                                content += `<td>${item.rekomendasi}</td>`;
+                                content += `<td>${new Date(item.created_at).toLocaleDateString('id-ID',{ year: 'numeric', month: 'long', day: 'numeric' })}</td>`;
+                            content += `</tr>`;
+                            $('#tampil-tbody-pemeliharaan').append(content);
+                        })
+                        var table = $('#dttable-pemeliharaan').DataTable({
+                            order: [
+                                [4, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['excel', 'pdf']
+                        });
+                        table.buttons().container().appendTo('#dttable-pemeliharaan_wrapper .col-md-6:eq(0)');
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+
+                        $('#formPemeliharaan').modal('show');
+                    }
+                },
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        function prosesPemeliharaan() {
+            var petugas = $("#petugas_pemeliharaan").val();
+            var hasil = $("#hasil_pemeliharaan").val();
+            var rekomendasi = $("#rekomendasi_pemeliharaan").val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: '/api/inventaris/aset/pemeliharaan/store',
+                dataType: 'json',
+                data: {
+                    user: "{{ Auth::user()->id }}",
+                    petugas: petugas,
+                    hasil: hasil,
+                    rekomendasi: rekomendasi,
+                    aset: "{{ $list['show']->id }}",
+                },
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: 'Submit Pemeliharaan berhasil pada '+ res,
+                        position: 'topRight'
+                    });
+                    if (res) {
+                        refreshModalPemeliharaan();
+                    }
+                },
+                error: function (res) {
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        // REFRESH -----------------------------------------------------------------------------------------------------------------------
+
+        // REFRESH MODAL PEMELHARAAN
+        function refreshModalPemeliharaan() {
+            $("#tampil-tbody-pemeliharaan").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center></td></tr>`);
+            $.ajax({
+                url: "/api/inventaris/aset/pemeliharaan",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res){
+                    if (res) {
+                        $('#hasil_pemeliharaan').val('');
+                        $('#rekomendasi_pemeliharaan').val('');
+
+                        // TAMPIL USERS DROPDOWN
+                        $("#petugas_pemeliharaan").find('option').remove();
+                        res.users.forEach(item => {
+                            $("#petugas_pemeliharaan").append(`<option value="" hidden>Pilih</option>`);
+                            $("#petugas_pemeliharaan").append(`
+                                <option value="${item.id}">${item.nama}</option>
+                            `);
+                        });
+
+                        // TAMPIL TABEL PEMELIHARAAN
+                        $("#tampil-tbody-pemeliharaan").empty();
+                        $('#dttable-pemeliharaan').DataTable().clear().destroy();
+                        var date = new Date().toLocaleDateString();
+                        res.show.forEach(item => {
+                            var updet = new Date(item.created_at).toLocaleDateString();
+                            content = `<tr id='`+item.id+`'>`;
+                                if (updet == date) {
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id_aset})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                } else {
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                }
+                                content += `<td>${item.nama_petugas}</td>`;
+                                content += `<td>${item.hasil}</td>`;
+                                content += `<td>${item.rekomendasi}</td>`;
+                                content += `<td>${new Date(item.created_at).toLocaleDateString('id-ID',{ year: 'numeric', month: 'long', day: 'numeric' })}</td>`;
+                            content += `</tr>`;
+                            $('#tampil-tbody-pemeliharaan').append(content);
+                        })
+                        var table = $('#dttable-pemeliharaan').DataTable({
+                            order: [
+                                [4, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['excel', 'pdf']
+                        });
+                        table.buttons().container().appendTo('#dttable-pemeliharaan_wrapper .col-md-6:eq(0)');
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    }
+                },
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        // FUNCTION -----------------------------------------------------------------------------------------------------------------------
         function updateKondisi() {
             var kondisi = $("#pilihan_kondisi").val();
 
@@ -694,5 +926,20 @@
             window.open(base64string,'_blank', 'width=500,height=550');
         }
 
+        function getDateTime() {
+            var now = new Date();
+            now.setHours(now.getHours() + 7);
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+            if (month.toString().length == 1) {
+                month = '0' + month;
+            }
+            if (day.toString().length == 1) {
+                day = '0' + day;
+            }
+            var dateTime = year + '-' + month + '-' + day;
+            return dateTime;
+        }
     </script>
 @endsection

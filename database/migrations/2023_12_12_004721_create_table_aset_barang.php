@@ -17,7 +17,7 @@ class CreateTableAsetBarang extends Migration
             $table->id();
             $table->longText('token');
             $table->integer('urutan')->nullable();
-            $table->integer('id_user_aset')->nullable();
+            $table->integer('id_user')->nullable();
             $table->integer('id_ruangan')->nullable();
             $table->integer('jenis')->nullable();
             $table->string('no_kalibrasi')->nullable();

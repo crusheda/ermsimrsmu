@@ -15,11 +15,12 @@ class CreateTableAsetPemeliharaan extends Migration
     {
         Schema::create('aset_pemeliharaan', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_user_pemeliharaan')->nullable();
-            $table->bigInteger('id_aset')->nullable();
-            $table->longText('hasil_pemeliharaan')->nullable();
-            $table->longText('rekomendasi_pemeliharaan')->nullable();
-            $table->integer('petugas_pemeliharaan')->nullable();
+            $table->unsignedBigInteger('id_aset');
+            $table->foreign('id_aset')->references('id')->on('aset');
+            $table->integer('id_user')->nullable();
+            $table->longText('hasil')->nullable();
+            $table->longText('rekomendasi')->nullable();
+            $table->integer('petugas')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

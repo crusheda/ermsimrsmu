@@ -15,16 +15,17 @@ class CreateTableAsetPenarikan extends Migration
     {
         Schema::create('aset_penarikan', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_user_penarikan')->nullable();
-            $table->bigInteger('id_aset')->nullable();
-            $table->dateTime('tgl_penarikan')->nullable();
-            $table->integer('kondisi_penarikan')->nullable();
-            $table->longText('ket_penarikan')->nullable();
+            $table->unsignedBigInteger('id_aset');
+            $table->foreign('id_aset')->references('id')->on('aset');
+            $table->integer('id_user')->nullable();
+            $table->dateTime('tgl')->nullable();
+            $table->integer('kondisi')->nullable();
+            $table->longText('ket')->nullable();
 
-                $table->string('title_penarikan', 200)->nullable();
-                $table->string('filename_penarikan', 200)->nullable();
+                $table->string('title', 200)->nullable();
+                $table->string('filename', 200)->nullable();
 
-            $table->integer('status_penarikan')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

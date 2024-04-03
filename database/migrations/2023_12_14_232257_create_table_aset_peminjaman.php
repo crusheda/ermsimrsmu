@@ -15,17 +15,18 @@ class CreateTableAsetPeminjaman extends Migration
     {
         Schema::create('aset_peminjaman', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_user_peminjaman')->nullable();
-            $table->bigInteger('id_aset')->nullable();
-            $table->integer('id_ruangan_peminjaman')->nullable();
+            $table->unsignedBigInteger('id_aset');
+            $table->foreign('id_aset')->references('id')->on('aset');
+            $table->integer('id_user')->nullable();
+            $table->integer('id_ruangan')->nullable();
             $table->dateTime('tgl_peminjaman')->nullable();
-            $table->date('rencana_tgl_pengembalian_peminjaman')->nullable();
-            $table->integer('penanggungjawab_peminjaman')->nullable();
-            $table->longText('kelengkapan_peminjaman')->nullable();
-            $table->longText('ket_peminjaman')->nullable();
+            $table->date('tgl_pengembalian')->nullable();
+            $table->integer('penanggungjawab')->nullable();
+            $table->longText('kelengkapan')->nullable();
+            $table->longText('ket')->nullable();
 
-                $table->string('title_peminjaman')->nullable();
-                $table->string('filename_peminjaman')->nullable();
+                $table->string('title')->nullable();
+                $table->string('filename')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

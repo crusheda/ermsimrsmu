@@ -15,16 +15,17 @@ class CreateTableAsetPengembalian extends Migration
     {
         Schema::create('aset_pengembalian', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_user_pengembalian')->nullable();
-            $table->bigInteger('id_aset')->nullable();
+            $table->unsignedBigInteger('id_aset');
+            $table->foreign('id_aset')->references('id')->on('aset');
+            $table->integer('id_user')->nullable();
             $table->dateTime('tgl_pengembalian')->nullable();
-            $table->integer('pengantar_pengembalian')->nullable();
-            $table->integer('penerima_pengembalian')->nullable();
-            $table->integer('kondisi_pengembalian')->nullable();
-            $table->longText('ket_pengembalian')->nullable();
+            $table->integer('pengantar')->nullable();
+            $table->integer('penerima')->nullable();
+            $table->integer('kondisi')->nullable();
+            $table->longText('ket')->nullable();
 
-                $table->string('title_pengembalian')->nullable();
-                $table->string('filename_pengembalian')->nullable();
+                $table->string('title')->nullable();
+                $table->string('filename')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

@@ -44,27 +44,28 @@ class AsetController extends Controller
     {
         $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')
                 ->where('aset.token',$token)
+                ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
                 ->first();
 
-        $mutasi = aset_mutasi::join('aset','aset_mutasi.id_aset','=','aset.id')
-                ->join('aset_ruangan','aset_mutasi.id_ruangan_mutasi','=','aset_ruangan.id')
-                ->join('users','aset_mutasi.id_user_mutasi','=','users.id')
-                ->join('users_foto','aset_mutasi.id_user_mutasi','=','users_foto.user_id')
-                ->where('aset.token',$token)
-                ->get();
+        // $mutasi = aset_mutasi::join('aset','aset_mutasi.id_aset','=','aset.id')
+        //         ->join('aset_ruangan','aset_mutasi.id_ruangan_mutasi','=','aset_ruangan.id')
+        //         ->join('users','aset_mutasi.id_user_mutasi','=','users.id')
+        //         ->join('users_foto','aset_mutasi.id_user_mutasi','=','users_foto.user_id')
+        //         ->where('aset.token',$token)
+        //         ->get();
 
-        $peminjaman = aset_peminjaman::join('aset','aset_peminjaman.id_aset','=','aset.id')
-                ->join('aset_ruangan','aset_peminjaman.id_ruangan_peminjaman','=','aset_ruangan.id')
-                ->join('users','aset_peminjaman.id_user_peminjaman','=','users.id')
-                ->join('users_foto','aset_peminjaman.id_user_peminjaman','=','users_foto.user_id')
-                ->where('aset.token',$token)
-                ->get();
+        // $peminjaman = aset_peminjaman::join('aset','aset_peminjaman.id_aset','=','aset.id')
+        //         ->join('aset_ruangan','aset_peminjaman.id_ruangan_peminjaman','=','aset_ruangan.id')
+        //         ->join('users','aset_peminjaman.id_user_peminjaman','=','users.id')
+        //         ->join('users_foto','aset_peminjaman.id_user_peminjaman','=','users_foto.user_id')
+        //         ->where('aset.token',$token)
+        //         ->get();
 
-        $pengembalian = aset_pengembalian::join('aset','aset_pengembalian.id_aset','=','aset.id')
-                ->join('users','aset_pengembalian.id_user_pengembalian','=','users.id')
-                ->join('users_foto','aset_pengembalian.id_user_pengembalian','=','users_foto.user_id')
-                ->where('aset.token',$token)
-                ->get();
+        // $pengembalian = aset_pengembalian::join('aset','aset_pengembalian.id_aset','=','aset.id')
+        //         ->join('users','aset_pengembalian.id_user_pengembalian','=','users.id')
+        //         ->join('users_foto','aset_pengembalian.id_user_pengembalian','=','users_foto.user_id')
+        //         ->where('aset.token',$token)
+        //         ->get();
 
         // Menentukan Kondisi
         if ($show->kondisi == 1) {
@@ -84,9 +85,9 @@ class AsetController extends Controller
 
         $data = [
             'show' => $show,
-            'mutasi' => $mutasi,
-            'peminjaman' => $peminjaman,
-            'pengembalian' => $pengembalian,
+            // 'mutasi' => $mutasi,
+            // 'peminjaman' => $peminjaman,
+            // 'pengembalian' => $pengembalian,
             'qr' => $qr,
         ];
 
@@ -176,7 +177,7 @@ class AsetController extends Controller
             $data = new aset;
             $data->token = Crypt::encryptString($no_inventaris); // decryptString to Decrypt
             $data->urutan = $urutan;
-            $data->id_user_aset = $request->user;
+            $data->id_user = $request->user;
             $data->id_ruangan = $request->ruangan;
             $data->jenis = $request->jenis;
             // $data->kalibrasi = $request->kalibrasi;
