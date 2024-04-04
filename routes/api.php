@@ -142,6 +142,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // PEMELHARAAN ASET
             Route::get('inventaris/aset/pemeliharaan', '\App\Http\Controllers\Inventaris\Aset\AsetPemeliharaanController@index')->name('aset_pemeliharaan.index');
             Route::post('inventaris/aset/pemeliharaan/store', '\App\Http\Controllers\Inventaris\Aset\AsetPemeliharaanController@store')->name('aset_pemeliharaan.store');
+            Route::get('inventaris/aset/pemeliharaan/destroy/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPemeliharaanController@destroy')->name('aset_pemeliharaan.destroy');
+        // MUTASI ASET
+            Route::get('inventaris/aset/mutasi/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetMutasiController@index')->name('aset_mutasi.index');
+            Route::post('inventaris/aset/mutasi/store', '\App\Http\Controllers\Inventaris\Aset\AsetMutasiController@store')->name('aset_mutasi.store');
+            Route::get('inventaris/aset/mutasi/destroy/cariaset/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetMutasiController@cariAsetDestroy')->name('aset_mutasi.cariAsetDestroy');
+            Route::get('inventaris/aset/mutasi/destroy/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetMutasiController@destroy')->name('aset_mutasi.destroy');
         // PEMINJAMAN ASET
             Route::get('inventaris/aset/peminjaman/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@getPeminjamanAset')->name('aset_peminjaman.getPeminjamanAset');
             Route::get('inventaris/aset/pengembalian/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@getPengembalianAset')->name('aset_peminjaman.getPengembalianAset');

@@ -19,8 +19,7 @@ use Validator,Redirect,Response,File;
 
 class AsetPemeliharaanController extends Controller
 {
-    function index()
-    {
+    function index() {
         $users = users::join('model_has_roles','model_has_roles.model_id','=','users.id')
                     ->join('roles','roles.id','=','model_has_roles.role_id')
                     ->whereIn('roles.name', ['it','ipsrs','elektromedis'])
@@ -54,6 +53,15 @@ class AsetPemeliharaanController extends Controller
         $data->rekomendasi = $request->rekomendasi;
         $data->petugas = $request->petugas;
         $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function destroy($id){
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = aset_pemeliharaan::where('id', $id)->first();
+        $data->delete();
 
         return response()->json($tgl, 200);
     }

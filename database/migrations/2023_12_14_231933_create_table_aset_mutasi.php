@@ -18,8 +18,15 @@ class CreateTableAsetMutasi extends Migration
             $table->unsignedBigInteger('id_aset');
             $table->foreign('id_aset')->references('id')->on('aset');
             $table->integer('id_user')->nullable();
-            $table->integer('id_ruangan')->nullable();
+
+            $table->unsignedBigInteger('lokasi_awal');
+            $table->foreign('lokasi_awal')->references('id')->on('aset_ruangan');
+
+            $table->unsignedBigInteger('lokasi_tujuan');
+            $table->foreign('lokasi_tujuan')->references('id')->on('aset_ruangan');
+
             $table->integer('kondisi')->nullable();
+            $table->integer('kondisi_awal');
             $table->longText('ket')->nullable();
 
             $table->timestamps();

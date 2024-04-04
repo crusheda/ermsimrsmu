@@ -15,8 +15,6 @@ class CreateTableAsetRuangan extends Migration
     {
         Schema::create('aset_ruangan', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_aset');
-            $table->foreign('id_aset')->references('id')->on('aset');
             $table->integer('id_user')->nullable();
             $table->string('kode')->nullable();
             $table->string('ruangan')->nullable();

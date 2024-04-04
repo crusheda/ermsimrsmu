@@ -77,7 +77,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                             <a class="dropdown-item" href="javascript:void(0);" onclick="modalPemeliharaan()">Pemeliharaan</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalMutasi()">Mutasi</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalMutasi({{ $list['show']->id }})">Mutasi</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="modalPeminjaman()">Peminjaman</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="modalPengembalian()">Pengembalian</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="modalPenarikan()">Penarikan</a>
@@ -501,20 +501,20 @@
                         <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                         <button class="btn btn-soft-primary btn-rounded" onclick="prosesPemeliharaan()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Pemeliharaan Aset"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Submit</button>
-
                     </div>
                 </div>
                 <hr>
                 <div class="table-responsive text-nowrap" style="border: 0px;margin-left:20px;margin-right:20px">
                     <h4 class="card-title">Riwayat Pemeliharaan <mark>{{ $list['show']->sarana }}</mark></h4>
                     <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Penghapusan <strong>HANYA</strong> dapat dilakukan pada hari yang sama</footer></p>
                     <table class="table dt-responsive table-hover nowrap w-100" id="dttable-pemeliharaan">
                         <thead>
                             <tr>
                                 <th scope="col"><center>Aksi</center></th>
                                 <th scope="col">Petugas</th>
-                                <th>Hasil</th>
-                                <th>Rekomendasi</th>
+                                <th scope="col">Hasil</th>
+                                <th scope="col">Rekomendasi</th>
                                 <th scope="col">Ditambahkan</th>
                             </tr>
                         </thead>
@@ -526,12 +526,87 @@
     </div>
 
     {{-- MODAL MUTASI --}}
-    <div class="modal fade" id="formMutasi" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+    <div class="modal fade" id="formMutasi" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
                         Formulir Mutasi Aset&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Lokasi Awal</label>
+                                <input type="text" id="lokasi_awal" value="" class="form-control" placeholder="" disabled/>
+                            </div>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Lokasi Tujuan (<strong>Ruangan - Lokasi</strong>) <a class="text-danger">*</a></label>
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="lokasi_tujuan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kondisi <a class="text-danger">*</a></label>
+                                <select class="form-select" id="kondisi_mutasi" required></select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Keterangan</label>
+                                <textarea rows="3" id="ket_mutasi" class="form-control" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 text-center mb-3">
+                    <div class="btn-group">
+                        <button class="btn btn-soft-warning btn-rounded" onclick="refreshModalMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Riwayat Mutasi"><i class="fa fa-sync"></i>&nbsp;&nbsp;Refresh</button>
+                        <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                        <button class="btn btn-soft-primary btn-rounded" onclick="prosesMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title=""><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="table-responsive text-nowrap" style="border: 0px;margin-left:20px;margin-right:20px">
+                    <h4 class="card-title">Riwayat Mutasi <mark>{{ $list['show']->sarana }}</mark></h4>
+                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_mutasi"></kbd> - <kbd id="lokasi_sekarang_mutasi"></kbd></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Pembatalan mutasi <strong>HANYA</strong> dapat dilakukan pada hari yang sama</footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Mutasi <mark>lebih dari satu</mark> pada hari yang sama <strong>HANYA</strong> dapat dibatalkan secara berurutan</footer></p>
+                    <table class="table dt-responsive table-hover nowrap w-100" id="dttable-mutasi">
+                        <thead>
+                            <tr>
+                                <th scope="col"><center>Aksi</center></th>
+                                <th scope="col">Tgl Mutasi</th>
+                                <th scope="col">Lokasi Awal</th>
+                                <th scope="col">Lokasi Tujuan</th>
+                                <th scope="col">Keterangan</th>
+                                <th scope="col">Kondisi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tampil-tbody-mutasi"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL PEMINJAMAN --}}
+    <div class="modal fade" id="formPeminjaman" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Formulir Peminjaman Aset&nbsp;&nbsp;&nbsp;
                     </h4>
                 </div>
                 <div class="modal-body">
@@ -583,26 +658,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-ajukan" onclick="prosesMutasi()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- MODAL PEMINJAMAN --}}
-    <div class="modal fade" id="formPeminjaman" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Formulir Peminjaman Aset&nbsp;&nbsp;&nbsp;
-                    </h4>
-                </div>
-                <div class="modal-body">
-
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
@@ -740,20 +795,28 @@
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
                                 if (updet == date) {
-                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id_aset})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 } else {
                                     content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 }
-                                content += `<td>${item.nama_petugas}</td>`;
-                                content += `<td>${item.hasil}</td>`;
-                                content += `<td>${item.rekomendasi}</td>`;
-                                content += `<td>${new Date(item.created_at).toLocaleDateString('id-ID',{ year: 'numeric', month: 'long', day: 'numeric' })}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.nama_petugas}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.hasil}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.rekomendasi}</td>`;
+                                content += `<td>${new Date(item.created_at).toLocaleDateString('sv-SE')}</td>`;
                             content += `</tr>`;
                             $('#tampil-tbody-pemeliharaan').append(content);
                         })
                         var table = $('#dttable-pemeliharaan').DataTable({
                             order: [
                                 [4, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '10%' },
+                                { sWidth: '15%' },
+                                { sWidth: '30%' },
+                                { sWidth: '30%' },
+                                { sWidth: '15%' },
                             ],
                             displayLength: 7,
                             lengthChange: true,
@@ -784,31 +847,298 @@
             var hasil = $("#hasil_pemeliharaan").val();
             var rekomendasi = $("#rekomendasi_pemeliharaan").val();
 
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                method: 'POST',
-                url: '/api/inventaris/aset/pemeliharaan/store',
-                dataType: 'json',
-                data: {
-                    user: "{{ Auth::user()->id }}",
-                    petugas: petugas,
-                    hasil: hasil,
-                    rekomendasi: rekomendasi,
-                    aset: "{{ $list['show']->id }}",
-                },
-                success: function(res) {
-                    iziToast.success({
-                        title: 'Sukses!',
-                        message: 'Submit Pemeliharaan berhasil pada '+ res,
-                        position: 'topRight'
+            if (petugas == "" || hasil == "" || rekomendasi == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/inventaris/aset/pemeliharaan/store',
+                    dataType: 'json',
+                    data: {
+                        user: "{{ Auth::user()->id }}",
+                        petugas: petugas,
+                        hasil: hasil,
+                        rekomendasi: rekomendasi,
+                        aset: "{{ $list['show']->id }}",
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Submit Pemeliharaan berhasil pada '+ res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            refreshModalPemeliharaan();
+                        }
+                    },
+                    error: function (res) {
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
+        function hapusPemeliharaan(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Hapus Pemeliharaan ID : '+id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times"></i> Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/inventaris/aset/pemeliharaan/destroy/" + id,
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Sukses!',
+                                message: 'Hapus Pemeliharaan berhasil pada ' + res,
+                                position: 'topRight'
+                            });
+                            refreshModalPemeliharaan();
+                        },
+                        error: function(res) {
+                            console.log("error : " + JSON.stringify(res) );
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
                     });
+                }
+            })
+        }
+
+        // MUTASI
+        function modalMutasi(aset) {
+            $.ajax({
+                url: "/api/inventaris/aset/mutasi/"+aset,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res){
                     if (res) {
-                        refreshModalPemeliharaan();
+                        // DEFINISI
+                        $("#lokasi_awal").val(res.aset.ruangan);
+                        $("#ruangan_sekarang_mutasi").text(res.aset.ruangan);
+                        $("#lokasi_sekarang_mutasi").text(res.aset.lokasi);
+                        $("#kondisi_mutasi").find('option').remove();
+                        $("#kondisi_mutasi").append(`
+                            <option value="1" ${res.aset.kondisi == '1' ? "selected":""}>Baik</option>
+                            <option value="2" ${res.aset.kondisi == '2' ? "selected":""}>Cukup</option>
+                            <option value="3" ${res.aset.kondisi == '3' ? "selected":""}>Buruk</option>
+                        `);
+
+                        $("#lokasi_tujuan").find('option').remove();
+                        res.ruangan.forEach(item => {
+                            $("#lokasi_tujuan").append(`<option value="" hidden>Pilih</option>`);
+                            $("#lokasi_tujuan").append(`
+                                <option value="${item.id}" ${res.aset.id_ruangan == item.id ? "selected":""}>${item.ruangan} - ${item.lokasi}</option>
+                            `);
+                        });
+
+                        // TABEL
+                        $("#tampil-tbody-mutasi").empty();
+                        $('#dttable-mutasi').DataTable().clear().destroy();
+                        var date = new Date().toLocaleDateString();
+                        res.show.forEach(item => {
+                            var updet = new Date(item.created_at).toLocaleDateString();
+                            content = `<tr id='`+item.id+`'>`;
+                                if (updet == date) {
+                                    content += `<td><center><div class='btn-group'>
+                                        <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                        </div></center></td>`;
+                                } else {
+                                    content += `<td><center><div class='btn-group'>
+                                        <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                        </div></center></td>`;
+                                }
+                                content += `<td>${new Date(item.created_at).toLocaleString('sv-SE')}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>${item.ruangan_awal_aset}</h6><small class='text-truncate text-muted'>${item.lokasi_awal_aset}</small></div></div></td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>${item.ruangan_tujuan_aset}</h6><small class='text-truncate text-muted'>${item.lokasi_tujuan_aset}</small></div></div></td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.ket?item.ket:''}</td>`;
+                                if (item.kondisi == 1) {
+                                    content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
+                                } else {
+                                    if (item.kondisi == 2) {
+                                        content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
+                                    } else {
+                                        if (item.kondisi == 3) {
+                                            content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
+                                        }
+                                    }
+                                }
+                            content += `</tr>`;
+                            $('#tampil-tbody-mutasi').append(content);
+                        })
+                        var table = $('#dttable-mutasi').DataTable({
+                            order: [
+                                [1, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '10%' },
+                                { sWidth: '15%' },
+                                { sWidth: '20%' },
+                                { sWidth: '20%' },
+                                { sWidth: '25%' },
+                                { sWidth: '10%' },
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['excel', 'pdf']
+                        });
+                        table.buttons().container().appendTo('#dttable-mutasi_wrapper .col-md-6:eq(0)');
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+
+                        $('#formMutasi').modal('show');
                     }
                 },
-                error: function (res) {
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        function prosesMutasi() {
+            var lokasi_tujuan = $("#lokasi_tujuan").val();
+            var kondisi = $("#kondisi_mutasi").val();
+            var ket = $("#ket_mutasi").val();
+
+            if (lokasi_tujuan == "" || kondisi == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
+                    position: 'topRight'
+                });
+            } else {
+                if (lokasi_tujuan == "{{ $list['show']->id_ruangan }}") {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Pastikan Anda memilih ruangan tujuan mutasi dengan benar / tidak sama dengan ruangan awal',
+                        position: 'topRight'
+                    });
+                } else {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: '/api/inventaris/aset/mutasi/store',
+                        dataType: 'json',
+                        data: {
+                            user: "{{ Auth::user()->id }}",
+                            lokasi_tujuan: lokasi_tujuan,
+                            kondisi: kondisi,
+                            ket: ket,
+                            aset: "{{ $list['show']->id }}",
+                        },
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Sukses!',
+                                message: 'Mutasi Aset berhasil pada '+ res,
+                                position: 'topRight'
+                            });
+                            refreshModalMutasi("{{ $list['show']->id }}");
+                        },
+                        error: function (res) {
+                            console.log("error : " + JSON.stringify(res) );
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+        function batalMutasi(id) {
+            $.ajax({
+                url: "/api/inventaris/aset/mutasi/destroy/cariaset/{{ $list['show']->id }}",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    console.log(id);
+                    console.log(res.id);
+                    if (res.id != id) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Lakukan pembatalan secara berurutan!',
+                            position: 'topRight'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Batal Mutasi Aset ID : '+id+' ?',
+                            text: 'Ruangan dan Kondisi aset sekarang akan dikembalikan seperti keadaan semula',
+                            icon: 'warning',
+                            reverseButtons: false,
+                            showDenyButton: false,
+                            showCloseButton: false,
+                            showCancelButton: true,
+                            focusCancel: true,
+                            confirmButtonColor: '#FF4845',
+                            confirmButtonText: `<i class="fa fa-history"></i> Batalkan Mutasi`,
+                            cancelButtonText: `<i class="fa fa-times"></i> Tutup`,
+                            backdrop: `rgba(26,27,41,0.8)`,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: "/api/inventaris/aset/mutasi/destroy/" + id,
+                                    type: 'GET',
+                                    dataType: 'json', // added data type
+                                    success: function(res) {
+                                        iziToast.success({
+                                            title: 'Sukses!',
+                                            message: 'Pembatalan mutasi aset berhasil pada ' + res,
+                                            position: 'topRight'
+                                        });
+                                        refreshModalMutasi("{{ $list['show']->id }}");
+                                    },
+                                    error: function(res) {
+                                        console.log("error : " + JSON.stringify(res) );
+                                        iziToast.error({
+                                            title: 'Pesan Galat!',
+                                            message: res.responseJSON.error,
+                                            position: 'topRight'
+                                        });
+                                    }
+                                });
+                            }
+                        })
+                    }
+                },
+                error: function(res) {
                     console.log("error : " + JSON.stringify(res) );
                     iziToast.error({
                         title: 'Pesan Galat!',
@@ -833,7 +1163,7 @@
                         $('#hasil_pemeliharaan').val('');
                         $('#rekomendasi_pemeliharaan').val('');
 
-                        // TAMPIL USERS DROPDOWN
+                        // DEFINISI
                         $("#petugas_pemeliharaan").find('option').remove();
                         res.users.forEach(item => {
                             $("#petugas_pemeliharaan").append(`<option value="" hidden>Pilih</option>`);
@@ -842,7 +1172,7 @@
                             `);
                         });
 
-                        // TAMPIL TABEL PEMELIHARAAN
+                        // TABEL
                         $("#tampil-tbody-pemeliharaan").empty();
                         $('#dttable-pemeliharaan').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
@@ -850,14 +1180,14 @@
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
                                 if (updet == date) {
-                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id_aset})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 } else {
                                     content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 }
-                                content += `<td>${item.nama_petugas}</td>`;
-                                content += `<td>${item.hasil}</td>`;
-                                content += `<td>${item.rekomendasi}</td>`;
-                                content += `<td>${new Date(item.created_at).toLocaleDateString('id-ID',{ year: 'numeric', month: 'long', day: 'numeric' })}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.nama_petugas}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.hasil}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.rekomendasi}</td>`;
+                                content += `<td>${new Date(item.created_at).toLocaleDateString('sv-SE')}</td>`;
                             content += `</tr>`;
                             $('#tampil-tbody-pemeliharaan').append(content);
                         })
@@ -865,12 +1195,116 @@
                             order: [
                                 [4, "desc"]
                             ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '10%' },
+                                { sWidth: '15%' },
+                                { sWidth: '30%' },
+                                { sWidth: '30%' },
+                                { sWidth: '15%' },
+                            ],
                             displayLength: 7,
                             lengthChange: true,
                             lengthMenu: [7, 10, 25, 50, 75, 100],
                             buttons: ['excel', 'pdf']
                         });
                         table.buttons().container().appendTo('#dttable-pemeliharaan_wrapper .col-md-6:eq(0)');
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    }
+                },
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        function refreshModalMutasi(aset) {
+            $("#tampil-tbody-mutasi").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center></td></tr>`);
+            $.ajax({
+                url: "/api/inventaris/aset/mutasi/"+aset,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res){
+                    if (res) {
+                        // DEFINISI
+                        // $("#lokasi_awal").val(res.aset.ruangan);
+                        $("#ruangan_sekarang_mutasi").text(res.aset.ruangan);
+                        $("#lokasi_sekarang_mutasi").text(res.aset.lokasi);
+                        $("#kondisi_mutasi").find('option').remove();
+                        $("#kondisi_mutasi").append(`
+                            <option value="1" ${res.aset.kondisi == '1' ? "selected":""}>Baik</option>
+                            <option value="2" ${res.aset.kondisi == '2' ? "selected":""}>Cukup</option>
+                            <option value="3" ${res.aset.kondisi == '3' ? "selected":""}>Buruk</option>
+                        `);
+
+                        $("#lokasi_tujuan").find('option').remove();
+                        res.ruangan.forEach(item => {
+                            $("#lokasi_tujuan").append(`<option value="" hidden>Pilih</option>`);
+                            $("#lokasi_tujuan").append(`
+                                <option value="${item.id}" ${res.aset.id_ruangan == item.id ? "selected":""}>${item.ruangan} - ${item.lokasi}</option>
+                            `);
+                        });
+
+                        // TABEL
+                        $("#tampil-tbody-mutasi").empty();
+                        $('#dttable-mutasi').DataTable().clear().destroy();
+                        var date = new Date().toLocaleDateString();
+                        res.show.forEach(item => {
+                            var updet = new Date(item.created_at).toLocaleDateString();
+                            content = `<tr id='`+item.id+`'>`;
+                                if (updet == date) {
+                                    content += `<td><center><div class='btn-group'>
+                                        <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                        </div></center></td>`;
+                                } else {
+                                    content += `<td><center><div class='btn-group'>
+                                        <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                        </div></center></td>`;
+                                }
+                                content += `<td>${new Date(item.created_at).toLocaleString('sv-SE')}</td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>${item.ruangan_awal_aset}</h6><small class='text-truncate text-muted'>${item.lokasi_awal_aset}</small></div></div></td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>${item.ruangan_tujuan_aset}</h6><small class='text-truncate text-muted'>${item.lokasi_tujuan_aset}</small></div></div></td>`;
+                                content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.ket?item.ket:''}</td>`;
+                                if (item.kondisi == 1) {
+                                    content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
+                                } else {
+                                    if (item.kondisi == 2) {
+                                        content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
+                                    } else {
+                                        if (item.kondisi == 3) {
+                                            content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
+                                        }
+                                    }
+                                }
+                            content += `</tr>`;
+                            $('#tampil-tbody-mutasi').append(content);
+                        })
+                        var table = $('#dttable-mutasi').DataTable({
+                            order: [
+                                [1, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '10%' },
+                                { sWidth: '15%' },
+                                { sWidth: '20%' },
+                                { sWidth: '20%' },
+                                { sWidth: '25%' },
+                                { sWidth: '10%' },
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['excel', 'pdf']
+                        });
+                        table.buttons().container().appendTo('#dttable-mutasi_wrapper .col-md-6:eq(0)');
                         $('[data-bs-toggle="tooltip"]').tooltip({
                             trigger: 'hover'
                         })
