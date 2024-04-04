@@ -205,10 +205,9 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody").empty();
-                    var date = new Date().toISOString().split('T')[0];
                     var userID = "{{ Auth::user()->id }}";
                     var adminID = "{{ Auth::user()->getManyRole(['k3','it']) }}";
-                    var date = getDateTime();
+                    var date = new Date().toLocaleDateString();
                     res.show.forEach(item => {
                         if (item.unit) {
                             try {
@@ -222,7 +221,7 @@
                         } else {
                             un = '';
                         }
-                        var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleDateString();
 
                         content = "<tr id='data" + item.id + "'>";
 
@@ -252,22 +251,32 @@
                         }
                         content += "</div></center></td><td>" +
                             item.id +
-                            "</td><td>" +
+                            "</td><td style='white-space: normal !important;word-wrap: break-word;'>" +
                             "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.judul + "</h6><small class='text-truncate text-muted'>" + un + "</small></div></div>" +
                             "</td><td>" +
                             item.bln + "</td><td>" +
-                            item.thn + "</td><td>";
+                            item.thn + "</td><td style='white-space: normal !important;word-wrap: break-word;'>";
                         if (item.keterangan != null) {
                             content += item.keterangan;
                         }
                         content += '</td><td>' +
-                            item.updated_at.substring(0, 10) + '</td>';
+                            new Date(item.updated_at).toLocaleString('sv-SE') + '</td>';
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [0, "desc"]
+                            [6, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '5%' },
+                            { sWidth: '32%' },
+                            { sWidth: '8%' },
+                            { sWidth: '8%' },
+                            { sWidth: '32%' },
+                            { sWidth: '10%' },
                         ],
                         displayLength: 7,
                         lengthChange: true,
@@ -291,10 +300,9 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
-                    var date = new Date().toISOString().split('T')[0];
                     var userID = "{{ Auth::user()->id }}";
                     var adminID = "{{ Auth::user()->getManyRole(['k3','it']) }}";
-                    var date = getDateTime();
+                    var date = new Date().toLocaleDateString();
                     res.show.forEach(item => {
                         if (item.unit) {
                             try {
@@ -308,7 +316,7 @@
                         } else {
                             un = '';
                         }
-                        var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleDateString();
 
                         content = "<tr id='data" + item.id + "'>";
 
@@ -338,22 +346,22 @@
                         }
                         content += "</div></center></td><td>" +
                             item.id +
-                            "</td><td>" +
+                            "</td><td style='white-space: normal !important;word-wrap: break-word;'>" +
                             "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.judul + "</h6><small class='text-truncate text-muted'>" + un + "</small></div></div>" +
                             "</td><td>" +
                             item.bln + "</td><td>" +
-                            item.thn + "</td><td>";
+                            item.thn + "</td><td style='white-space: normal !important;word-wrap: break-word;'>";
                         if (item.keterangan != null) {
                             content += item.keterangan;
                         }
                         content += '</td><td>' +
-                            item.updated_at.substring(0, 10) + '</td>';
+                            new Date(item.updated_at).toLocaleString('sv-SE') + '</td>';
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [0, "desc"]
+                            [6, "desc"]
                         ],
                         displayLength: 7,
                         lengthChange: true,
