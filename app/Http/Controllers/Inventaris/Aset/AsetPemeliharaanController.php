@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\aset;
 use App\Models\aset_pemeliharaan;
+use App\Models\aset_penarikan;
 use App\Models\roles;
 use App\Models\users;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ use Validator,Redirect,Response,File;
 
 class AsetPemeliharaanController extends Controller
 {
-    function index() {
+    function index($id) {
         $users = users::join('model_has_roles','model_has_roles.model_id','=','users.id')
                     ->join('roles','roles.id','=','model_has_roles.role_id')
                     ->whereIn('roles.name', ['it','ipsrs','elektromedis'])
@@ -34,10 +35,12 @@ class AsetPemeliharaanController extends Controller
                     ->join('users','users.id','=','aset_pemeliharaan.petugas')
                     ->select('aset.sarana','users.nama as nama_petugas','aset_pemeliharaan.*')
                     ->get();
+        $validasi_penarikan = aset_penarikan::where('id_aset',$id)->first();
 
         $data = [
             'show' => $show,
             'users' => $users,
+            'penarikan' => $validasi_penarikan,
         ];
 
         return response()->json($data, 200);

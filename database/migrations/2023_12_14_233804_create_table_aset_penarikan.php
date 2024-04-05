@@ -18,8 +18,9 @@ class CreateTableAsetPenarikan extends Migration
             $table->unsignedBigInteger('id_aset');
             $table->foreign('id_aset')->references('id')->on('aset');
             $table->integer('id_user')->nullable();
-            $table->dateTime('tgl')->nullable();
             $table->integer('kondisi')->nullable();
+            $table->integer('kondisi_awal')->nullable();
+            $table->integer('lokasi_awal')->nullable();
             $table->longText('ket')->nullable();
 
                 $table->string('title', 200)->nullable();

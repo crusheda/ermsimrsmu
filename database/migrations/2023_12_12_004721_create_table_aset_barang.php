@@ -44,6 +44,8 @@ class CreateTableAsetBarang extends Migration
             $table->integer('penyusutan')->nullable();
             $table->date('tgl_input')->nullable();
 
+            $table->integer('status')->nullable()->comment('Null: Aset Ready; 1: Aset dalam Peminjaman; 2: Aset Ditarik ke Gudang; 3: Aset Dimusnahkan');
+
             $table->timestamps();
             $table->softDeletes();
         });

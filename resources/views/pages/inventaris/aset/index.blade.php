@@ -72,7 +72,7 @@
     </div>
 
     <div class="card card-body table-responsive" style="overflow: visible;" id="show-table" style="border: 0px" hidden>
-        <table class="table align-middle dt-responsive w-100 table-check" id="dttable">
+        <table class="table align-middle dt-responsive w-100 table-check table-hover" id="dttable">
             <thead>
                 <tr>
                     <th scope="col"><center>#ID</center></th>
@@ -365,7 +365,7 @@
     </div> --}}
 
     {{-- MODAL PEMINJAMAN --}}
-    <div class="modal fade" id="peminjaman" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    {{-- <div class="modal fade" id="peminjaman" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -429,7 +429,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <script src="{{ asset('js/html5-qrcode.js') }}"></script>
     {{-- <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> --}}
@@ -584,14 +584,10 @@
                                             + `<div class="dropdown-header noti-title">`
                                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                             + `</div>`
+                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="lihatStatus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-check-double scaleX-n1-rtl'></i> Status</a></li>`
                                             + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
                                             + `<div class="dropdown-divider"></div>`
-                                            + `<div class="dropdown-header noti-title">`
-                                                + `<h5 class="font-size-13 text-muted text-truncate mn-0">Peminjaman Aset</h5>`
-                                            + `</div>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="peminjaman(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Formulir</a></li>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="riwayatPeminjaman(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Riwayat</a></li>`
+                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
                                         + `</ul>`
                                     + `</div>`;
                         content += `</div></center></td>`;

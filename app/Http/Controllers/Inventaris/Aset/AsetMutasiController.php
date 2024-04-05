@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Models\aset;
 use App\Models\aset_ruangan;
 use App\Models\aset_mutasi;
+use App\Models\aset_penarikan;
 use App\Models\roles;
 use App\Models\users;
 use Illuminate\Http\Request;
@@ -33,11 +34,13 @@ class AsetMutasiController extends Controller
                     ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
                     ->where('aset.id',$id)
                     ->first();
+        $validasi_penarikan = aset_penarikan::where('id_aset',$id)->first();
 
         $data = [
             'ruangan' => $ruangan,
             'show' => $show,
             'aset' => $aset,
+            'penarikan' => $validasi_penarikan,
         ];
 
         return response()->json($data, 200);
@@ -60,7 +63,11 @@ class AsetMutasiController extends Controller
 
         $aset->id_ruangan = $request->lokasi_tujuan;
         $aset->kondisi = $request->kondisi;
+        $aset->status = false;
         $aset->save();
+
+        $reset = aset_penarikan::where('id_aset', $request->aset)->first();
+        $reset->delete();
 
         return response()->json($tgl, 200);
     }

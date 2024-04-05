@@ -94,6 +94,14 @@ class AsetController extends Controller
         return view('pages.inventaris.aset.detail')->with('list',$data);
     }
 
+    function fresh($token){
+        $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')
+                ->where('aset.token',$token)
+                ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
+                ->first();
+        return response()->json($show, 200);
+    }
+
     function ubahKondisi($token, $kondisi){
         $data = aset::where('token',$token)->first();
         $data->kondisi = $kondisi;
