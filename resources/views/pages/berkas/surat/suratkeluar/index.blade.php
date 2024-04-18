@@ -116,6 +116,13 @@
                         <option value="82">Salis Annisa Hafiz, Amd.Kom</option>
                       </select>
                     </div>
+                    <div class="card-title-elements" style="margin-left: 10px">
+                      <select class="form-select form-select-sm" name="sesuai" required>
+                        <option value="" hidden>Pilih Kesesuaian</option>
+                        <option value="0">Tidak Sesuai</option>
+                        <option value="1">Sesuai</option>
+                      </select>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -172,6 +179,9 @@
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
+                                <input type="text" name="pembuat" id="pembuat_add" class="form-control" placeholder="e.g. Tn. Wat Sit To Yaa">
+                            </div>
+                            <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Isi Surat</label>
                                     <textarea rows="3" class="form-control" name="isi" placeholder="Optional"></textarea>
@@ -210,6 +220,9 @@
                     <div class="card-title-elements">
                       <select class="form-select form-select-sm" id="user" required></select>
                     </div>
+                    <div class="card-title-elements" style="margin-left: 10px">
+                      <select class="form-select form-select-sm" id="sesuai" required></select>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -245,6 +258,9 @@
                                 </div>
                                 <input type="text" name="tujuan2" id="tujuan2_edit" class="form-control" placeholder="e.g. Universitas Islam Negeri Sunan Kalijaga Yogyakarta" hidden required>
                             </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <input type="text" name="pembuat" id="pembuat_edit" class="form-control" placeholder="e.g. Tn. Wat Sit To Yaa" required>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -370,7 +386,7 @@
                             content += `</ul></center></td><td>`;
                             content += item.urutan + "</td><td>"
                                         + item.tgl + "</td><td>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + item.pembuat + "</small></div></div></td><td>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
