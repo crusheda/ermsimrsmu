@@ -53,17 +53,10 @@ class AsetPenarikanController extends Controller
         $data->status = $request->status;
         $data->save();
 
-        if ($request->status == 3) {
-            $aset->id_ruangan = 1;
-            $aset->kondisi = $request->kondisi;
-            $aset->status = true;
-            $aset->save();
-        } else {
-            $aset->id_ruangan = 1;
-            $aset->kondisi = $request->kondisi;
-            $aset->status = false;
-            $aset->save();
-        }
+        $aset->id_ruangan = 1;
+        $aset->kondisi = $request->kondisi;
+        $aset->status = $request->status;
+        $aset->save();
 
         return response()->json($tgl, 200);
     }

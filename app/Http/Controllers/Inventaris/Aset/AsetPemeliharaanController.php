@@ -42,6 +42,8 @@ class AsetPemeliharaanController extends Controller
             'users' => $users,
             'penarikan' => $validasi_penarikan,
         ];
+        // print_r($show);
+        // die();
 
         return response()->json($data, 200);
     }

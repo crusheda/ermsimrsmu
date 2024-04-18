@@ -78,8 +78,8 @@
                         <div class="dropdown-menu dropdown-menu-end">
                             <a class="dropdown-item" href="javascript:void(0);" onclick="modalPemeliharaan({{ $list['show']->id }})">Pemeliharaan</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="modalMutasi({{ $list['show']->id }})">Mutasi</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPeminjaman()">Peminjaman</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPengembalian()">Pengembalian</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPeminjaman({{ $list['show']->id }})">Peminjaman</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPengembalian({{ $list['show']->id }})">Pengembalian</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="modalPenarikan({{ $list['show']->id }})">Penarikan</a>
                         </div>
                     </div>
@@ -503,7 +503,7 @@
                 </div>
                 <div class="col-12 text-center mb-3">
                     <div class="btn-group">
-                        <button class="btn btn-soft-warning btn-rounded" onclick="refreshModalPemeliharaan()" data-bs-toggle="tooltip"
+                        <button class="btn btn-soft-warning btn-rounded" onclick="refreshModalPemeliharaan({{ $list['show']->id }})" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Riwayat Pemeliharaan"><i class="fa fa-sync"></i>&nbsp;&nbsp;Refresh</button>
                         <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                         <button class="btn btn-soft-primary btn-rounded" onclick="prosesPemeliharaan()" data-bs-toggle="tooltip"
@@ -609,67 +609,64 @@
     </div>
 
     {{-- MODAL PEMINJAMAN --}}
-    <div class="modal fade" id="formPeminjaman" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="formPeminjaman" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Formulir Peminjaman Aset&nbsp;&nbsp;&nbsp;
+                        Formulir Peminjaman Aset <mark>{{ $list['show']->sarana }}</mark>
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_peminjaman"></kbd> - <kbd id="lokasi_sekarang_peminjaman"></kbd></footer></p>
+                    <hr>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Peminjaman <a class="text-danger">*</a></label>
-                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
+                                <input type="text" id="tgl_peminjaman" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Pengembalian</label>
-                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
+                                <input type="text" id="tgl_pengembalian_pengembalian" class="form-control flatpickrtom" placeholder="YYYY-MM-DD"/>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Sarana <a class="text-danger">*</a></label>
-                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Penanggungjawab <a class="text-danger">*</a></label>
-                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
+                                <input type="text" id="pj_peminjaman" class="form-control" placeholder="e.g. xxx">
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
                                 <div class="select2-dark">
-                                    <select class="select2 form-select" id="" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                    <select class="select2 form-select" id="lokasi_peminjaman" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                                         <option value="">Pilih</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Kelengkapan Sarana <a class="text-danger">*</a></label>
-                                <textarea rows="2" id="" class="form-control"></textarea>
+                                <textarea rows="2" id="ket_sarana_peminjaman" class="form-control" placeholder="Wajib Diisi"></textarea>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Keterangan</label>
-                                <textarea rows="3" id="" class="form-control" placeholder="Optional"></textarea>
+                                <textarea rows="2" id="ket_peminjaman" class="form-control" placeholder="Optional"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()"><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -677,17 +674,68 @@
     </div>
 
     {{-- MODAL PENGEMBALIAN --}}
-    <div class="modal fade" id="formPengembalian" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="formPengembalian" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Formulir Pengembalian Aset&nbsp;&nbsp;&nbsp;
+                        Formulir Pengembalian Aset <mark>{{ $list['show']->sarana }}</mark>
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_pengembalian"></kbd> - <kbd id="lokasi_sekarang_pengembalian"></kbd></footer></p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kelengkapan Sarana <a class="text-danger">*</a></label>
+                                <textarea rows="2" id="ket_sarana_pengembalian" class="form-control" placeholder="" disabled></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Keterangan</label>
+                                <textarea rows="2" id="ket_pengembalian" class="form-control" placeholder="" disabled></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Pengembalian</label>
+                                <input type="text" id="tgl_pengembalian" class="form-control flatpickrtom" placeholder="YYYY-MM-DD"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kondisi <a class="text-danger">*</a></label>
+                                <select class="form-select" id="kondisi_pengembalian" required>
+                                    <option value="" hidden>Pilih</option>
+                                    <option value="1">Baik</option>
+                                    <option value="2">Cukup</option>
+                                    <option value="3">Buruk</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nama Pengantar Barang <a class="text-danger">*</a></label>
+                                <input type="text" id="pengantar_pengembalian" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nama Penerima Barang <a class="text-danger">*</a></label>
+                                <input type="text" id="penerima_pengembalian" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Catatan Pengembalian</label>
+                                <textarea rows="2" id="catatan_pengembalian" class="form-control" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button class="btn btn-primary me-sm-3 me-1" id="btn-pengembalian" onclick="prosesPengembalian()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
@@ -796,6 +844,68 @@
                 })
             });
 
+            // DATE
+            const today = new Date();
+            var tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            var next = new Date(today);
+            next.setDate(next.getDate() + 999999);
+            const l = $('.flatpickr');
+            const ln = $('.flatpickrnow');
+            const lun = $('.flatpickrunl');
+            const ltom = $('.flatpickrtom');
+            // const dates = new Date(Date.now());
+            // const tomorow = dates.getTime();
+            const m = new Date(Date.now());
+            // const c = new Date(Date.now() + 1728e5); // 3 hari kedepan
+            var now = moment().locale('id').format('YYYY-MM-DD HH:mm');
+            l.flatpickr({
+                enableTime: 0,
+                minuteIncrement: 1,
+                // monthSelectorType: "static",
+                // inline: true,
+                // defaultHour: 12,
+                // defaultMinute: "today",
+                time_24hr: true,
+                // dateFormat: "Y-m-d H:m",
+                disable: [{
+                    from: tomorrow.toISOString().split("T")[0],
+                    to: next.toISOString().split("T")[0]
+                }]
+            })
+            ln.flatpickr({
+                enableTime: 0,
+                defaultDate: now,
+                minuteIncrement: 1,
+                time_24hr: true,
+                disable: [{
+                    from: tomorrow.toISOString().split("T")[0],
+                    to: next.toISOString().split("T")[0]
+                }]
+            })
+            lun.flatpickr({
+                enableTime: 0,
+                minuteIncrement: 1,
+                time_24hr: true,
+                // defaultMinute: "today",
+                // disable: [{
+                //     from: tomorrow.toISOString().split("T")[0],
+                //     to: next.toISOString().split("T")[0]
+                // }]
+            })
+            ltom.flatpickr({
+                enableTime: 0,
+                minuteIncrement: 1,
+                time_24hr: true,
+                // defaultMinute: "today",
+                minDate: "today",
+                maxDate: "01.01.3000"
+                // disable: [{
+                //     from: tomorrow.toISOString().split("T")[0],
+                //     to: today
+                // }]
+            })
+
             $('#qr').text('') ;
             var qrcode = new QRCode("qr", {
                 text: "{{ $list['qr'] }}",
@@ -837,12 +947,20 @@
                                 message: 'Aset telah <i>DIMUSNAHKAN</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
                                 position: 'topRight'
                             });
+                        } else {
+                            if (res.penarikan.status == 2) {
+                                iziToast.warning({
+                                    title: 'Pesan Ambigu!',
+                                    message: 'Aset telah <i>DIKEMBALIKAN KE GUDANG</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
+                                    position: 'topRight'
+                                });
+                            }
                         }
                     } else {
                         // TAMPIL USERS DROPDOWN
                         $("#petugas_pemeliharaan").find('option').remove();
+                        $("#petugas_pemeliharaan").append(`<option value="" hidden>Pilih</option>`);
                         res.users.forEach(item => {
-                            $("#petugas_pemeliharaan").append(`<option value="" hidden>Pilih</option>`);
                             $("#petugas_pemeliharaan").append(`
                                 <option value="${item.id}">${item.nama}</option>
                             `);
@@ -1220,6 +1338,97 @@
             });
         }
 
+        // PEMINJAMAN
+        function modalPeminjaman(aset) {
+            $.ajax({
+                url: "/api/inventaris/aset/peminjaman/"+aset,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res){
+                    if (res.penarikan != null) {
+                        if (res.penarikan.status == 3) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Aset telah <i>DIMUSNAHKAN</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
+                                position: 'topRight'
+                            });
+                        } else {
+                            if (res.penarikan.status == 2) {
+                                iziToast.warning({
+                                    title: 'Pesan Ambigu!',
+                                    message: 'Aset telah <i>DIKEMBALIKAN KE GUDANG</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    } else {
+                        // DEFINISI
+                        $('#ruangan_sekarang_peminjaman').text(res.show.ruangan);
+                        $('#lokasi_sekarang_peminjaman').text(res.show.lokasi);
+                        $("#lokasi_peminjaman").find('option').remove();
+                        $("#lokasi_peminjaman").append(`<option value="" hidden>Pilih</option>`);
+                        res.ruangan.forEach(item => {
+                            $("#lokasi_peminjaman").append(`
+                                <option value="${item.id}" ${res.show.id_ruangan == item.id ? "selected":""}>${item.ruangan} - ${item.lokasi}</option>
+                            `);
+                        });
+
+                        $('#formPeminjaman').modal('show');
+                    }
+                },
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        // PEMINJAMAN
+        function modalPengembalian(aset) {
+            $.ajax({
+                url: "/api/inventaris/aset/pengembalian/"+aset,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res){
+                    if (res.penarikan != null) {
+                        if (res.penarikan.status == 3) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Aset telah <i>DIMUSNAHKAN</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
+                                position: 'topRight'
+                            });
+                        } else {
+                            if (res.penarikan.status == 2) {
+                                iziToast.warning({
+                                    title: 'Pesan Ambigu!',
+                                    message: 'Aset telah <i>DIKEMBALIKAN KE GUDANG</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    } else {
+                        // DEFINISI
+                        $('#ruangan_sekarang_pengembalian').text(res.show.ruangan);
+                        $('#lokasi_sekarang_pengembalian').text(res.show.lokasi);
+
+                        $('#formPengembalian').modal('show');
+                    }
+                },
+                error: function(res){
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
         // PENARIKAN
         function modalPenarikan(aset) {
             $.ajax({
@@ -1365,10 +1574,20 @@
 
                         // FRESH STATUS
                         $('#status_aset').empty();
-                        if (res.status == false) {
+                        if (res.status == 0) {
                             $('#status_aset').append(`<div class="badge bg-primary">Tersedia</div>`);
                         } else {
-                            $('#status_aset').append(`<div class="badge bg-danger">Dimusnahkan</div>`);
+                            if (res.status == 1) {
+                                $('#status_aset').append(`<div class="badge bg-success">Dalam Peminjaman</div>`);
+                            } else {
+                                if (res.status == 2) {
+                                    $('#status_aset').append(`<div class="badge bg-warning">Dikembalikan ke Gudang</div>`);
+                                } else {
+                                    if (res.status == 3) {
+                                        $('#status_aset').append(`<div class="badge bg-danger">Dimusnahkan</div>`);
+                                    }
+                                }
+                            }
                         }
 
                         // FRESH KONDISI
@@ -1428,10 +1647,10 @@
         }
 
         // REFRESH MODAL PEMELHARAAN
-        function refreshModalPemeliharaan() {
+        function refreshModalPemeliharaan(aset) {
             $("#tampil-tbody-pemeliharaan").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center></td></tr>`);
             $.ajax({
-                url: "/api/inventaris/aset/pemeliharaan",
+                url: "/api/inventaris/aset/pemeliharaan/"+aset,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res){
@@ -1441,11 +1660,9 @@
 
                         // DEFINISI
                         $("#petugas_pemeliharaan").find('option').remove();
+                        $("#petugas_pemeliharaan").append(`<option value="" hidden>Pilih</option>`);
                         res.users.forEach(item => {
-                            $("#petugas_pemeliharaan").append(`<option value="" hidden>Pilih</option>`);
-                            $("#petugas_pemeliharaan").append(`
-                                <option value="${item.id}">${item.nama}</option>
-                            `);
+                            $("#petugas_pemeliharaan").append(`<option value="${item.id}">${item.nama}</option>`);
                         });
 
                         // TABEL
