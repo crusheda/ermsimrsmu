@@ -222,11 +222,7 @@ class SuratKeluarController extends Controller
         $refKode = kode_surat_keluar::get();
 
         $kode = $getKode->kode;
-        if (strlen($show->nomor) == 32) {
-            $year = substr($show->nomor,28);
-        } else {
-            $year = substr($show->nomor,29);
-        }
+        $year = substr($show->nomor,-4);
         $urutan = sprintf("%03d", $show->urutan);
 
         $data = [
@@ -250,6 +246,7 @@ class SuratKeluarController extends Controller
         $getJenis = kode_surat_keluar::where('id', $request->kode)->first();
 
         $data           = surat_keluar::find($request->id_edit);
+        $data->nomor    = sprintf("%03d", $data->urutan)."/".$getJenis->kode."/DIR/III.6.AU/PKUSKH/".substr($data->nomor,-4);
         $data->kode     = $request->kode;
         $data->tgl      = $request->tgl;
         if ($request->tujuan2 != null) {
