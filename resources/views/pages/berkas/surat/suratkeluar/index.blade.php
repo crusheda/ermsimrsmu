@@ -179,7 +179,10 @@
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <input type="text" name="pembuat" id="pembuat_add" class="form-control" placeholder="e.g. Tn. Wat Sit To Yaa">
+                                <div class="form-group">
+                                    <label class="form-label">Pembuat Surat <a class="text-danger">*</a></label>
+                                    <input type="text" name="pembuat" id="pembuat_add" class="form-control" placeholder="e.g. Tn. Wat Sit To Yaa" required>
+                                </div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
@@ -228,9 +231,9 @@
                 <div class="modal-body">
                     <input type="text" id="id_edit" hidden>
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-12 mb-2">
                             <div class="form-group">
-                                <label class="form-label mb-2">Nomor Surat</label>
+                                <label class="form-label">Nomor Surat</label>
                                 {{-- <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="tgl_surat" readonly/> --}}
                                 <h5><a id="push_urutan"></a>/<a id="push_kode" class="text-danger"> . . . </a>/DIR/III.6.AU/PKUSKH/<a id="push_year"></a></h5>
                             </div>
@@ -260,7 +263,10 @@
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <input type="text" name="pembuat" id="pembuat_edit" class="form-control" placeholder="e.g. Tn. Wat Sit To Yaa" required>
+                            <div class="form-group">
+                                <label class="form-label">Pembuat Surat <a class="text-danger">*</a></label>
+                                <input type="text" name="pembuat" id="pembuat_edit" class="form-control" placeholder="e.g. Tn. Wat Sit To Yaa" required>
+                            </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -374,8 +380,18 @@
                             // VALIDASI TUJUAN FROM JSON
                             var us = JSON.parse(res.user);
                             // var updet = item.updated_at.substring(0, 10);
+                            // WARNA BUTTON
+                            if (item.sesuai == '0') {
+                                btnColor = 'btn-outline-danger';
+                            } else {
+                                if (item.sesuai == '1') {
+                                    btnColor = 'btn-outline-primary';
+                                } else {
+                                    btnColor = 'btn-outline-dark';
+                                }
+                            }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
@@ -384,9 +400,14 @@
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
                                     // }
                             content += `</ul></center></td><td>`;
+                                        if (item.pembuat) {
+                                            pembuat = item.pembuat;
+                                        } else {
+                                            pembuat = '-';
+                                        }
                             content += item.urutan + "</td><td>"
                                         + item.tgl + "</td><td>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + item.pembuat + "</small></div></div></td><td>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -493,11 +514,20 @@
                         $("#tampil-tbody").empty();
                         $('#dttable').DataTable().clear().destroy();
                         res.show.forEach(item => {
-                            // VALIDASI TUJUAN FROM JSON
                             var us = JSON.parse(res.user);
                             // var updet = item.updated_at.substring(0, 10);
+                            // WARNA BUTTON
+                            if (item.sesuai == '0') {
+                                btnColor = 'btn-outline-danger';
+                            } else {
+                                if (item.sesuai == '1') {
+                                    btnColor = 'btn-outline-primary';
+                                } else {
+                                    btnColor = 'btn-outline-dark';
+                                }
+                            }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
@@ -506,9 +536,14 @@
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
                                     // }
                             content += `</ul></center></td><td>`;
+                                        if (item.pembuat) {
+                                            pembuat = item.pembuat;
+                                        } else {
+                                            pembuat = '-';
+                                        }
                             content += item.urutan + "</td><td>"
                                         + item.tgl + "</td><td>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'>" + item.kode_jenis + "&nbsp;-&nbsp;" + item.jenis + "</small></div></div></td><td>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -678,6 +713,7 @@
         function showUbah(id) {
             $("#tujuan2_edit").val("");
             $("#tujuan1_editselect").val("");
+            $("#pembuat_edit").val("");
             $("#isi_edit").val("");
             $("#kode_edit").val("");
             $("#tgl_edit").val("");
@@ -743,6 +779,7 @@
                         });
                         $("#tujuan1_editselect").val(un).change();
                     }
+                    $("#pembuat_edit").val(res.show.pembuat);
                     $("#isi_edit").val(res.show.isi);
                     $("#kode_edit").find('option').remove();
                     res.refkode.forEach(item => {
@@ -768,6 +805,12 @@
                         <option value="88" ${res.show.user == '88' ? "selected":""}>Siti Dewi Sholikhah</option>
                         <option value="82" ${res.show.user == '82' ? "selected":""}>Salis Annisa Hafiz, Amd.Kom</option>
                     `);
+                    $("#sesuai").find('option').remove();
+                    $("#sesuai").append(`
+                        <option value="" ${res.show.sesuai == null ? "selected":""} hidden>Pilih Kesesuaian</option>
+                        <option value="0" ${res.show.sesuai == '0' ? "selected":""}>Tidak Sesuai</option>
+                        <option value="1" ${res.show.sesuai == '1' ? "selected":""}>Sesuai</option>
+                    `);
                 }
             }
             );
@@ -790,6 +833,7 @@
             fd.append('kode',$("#kode_edit").val());
             fd.append('tujuan2',$("#tujuan2_edit").val());
             fd.append('tujuan',$("#tujuan1_editselect").val());
+            fd.append('pembuat',$("#pembuat_edit").val());
             // if ($("#tujuan2_edit").val() != null) {
             // } else {
             // }

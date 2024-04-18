@@ -159,6 +159,8 @@ class SuratKeluarController extends Controller
         $data->nomor        = sprintf("%03d", $urutan)."/".$getJenis->kode."/DIR/III.6.AU/PKUSKH/".$tahun;
         $data->jenis        = $getJenis->nama;
         $data->isi          = $request->isi;
+        $data->pembuat      = $request->pembuat;
+        $data->sesuai       = $request->sesuai;
         $data->title        = $title;
         $data->filename     = $path;
         $data->user         = $request->user;
@@ -260,6 +262,8 @@ class SuratKeluarController extends Controller
         }
         $data->jenis    = $getJenis->nama;
         $data->isi      = $request->isi;
+        $data->pembuat  = $request->pembuat;
+        $data->sesuai   = $request->sesuai;
         $data->user     = $request->user;
 
         if ($data->filename == null) {

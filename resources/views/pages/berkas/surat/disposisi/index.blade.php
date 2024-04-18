@@ -31,7 +31,7 @@
             <thead>
                 <tr>
                     <th class="cell-fit"></th>
-                    <th class="cell-fit">NO SURAT MASUK</th>
+                    <th class="cell-fit">NO.SURAT</th>
                     <th class="cell-fit">TGL SURAT</th>
                     <th>ASAL/NO.SRT</th>
                     <th>DESKRIPSI</th>
@@ -49,7 +49,7 @@
             <tfoot class="bg-whitesmoke">
                 <tr>
                     <th class="cell-fit"></th>
-                    <th class="cell-fit">NO SURAT MASUK</th>
+                    <th class="cell-fit">NO.SURAT</th>
                     <th class="cell-fit">TGL SURAT</th>
                     <th>ASAL/NO.SRT</th>
                     <th>DESKRIPSI</th>
@@ -345,6 +345,16 @@
                             order: [
                                 [6, "desc"]
                             ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '8%' },
+                                { sWidth: '10%' },
+                                { sWidth: '20%' },
+                                { sWidth: '32%' },
+                                { sWidth: '15%' },
+                                { sWidth: '10%' },
+                            ],
                             displayLength: 10,
                             lengthChange: true,
                             lengthMenu: [10, 25, 50, 75, 100],
@@ -438,6 +448,16 @@
                         var table = $('#dttable').DataTable({
                             order: [
                                 [6, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '8%' },
+                                { sWidth: '10%' },
+                                { sWidth: '20%' },
+                                { sWidth: '32%' },
+                                { sWidth: '15%' },
+                                { sWidth: '10%' },
                             ],
                             displayLength: 10,
                             lengthChange: true,
