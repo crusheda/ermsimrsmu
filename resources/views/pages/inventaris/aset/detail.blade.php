@@ -69,7 +69,7 @@
                     </div> --}}
                     <div class="hstack gap-2">
                         <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
-                        <button class="btn btn-soft-info w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button>
+                        {{-- <button class="btn btn-soft-info w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button> --}}
                         <button class="btn btn-soft-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
                         <a class="btn btn-soft-success w-100" href="javascript:void(0);" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -148,7 +148,8 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
+                    {{-- SEDANG DALAM PROSES DEVELOPMENT----------------------------------------------------------------------------------------------------------- --}}
+                    {{-- <hr>
                     <div class="bg-transparent mb-3">
                         <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
                             <li class="nav-item">
@@ -169,7 +170,7 @@
                         </ul>
                     </div>
                     <div class="tab-content">
-                        {{-- MUTASI --}}
+                        MUTASI
                         <div class="tab-pane active" id="post-mutasi" role="tabpanel">
                             <div data-simplebar style="max-height: 376px;">
                                 <ul class="verti-timeline list-unstyled">
@@ -182,8 +183,8 @@
                                                 @if (!empty($list['mutasi']->filename))
                                                     <img src="{{ url('storage/' . substr($list['mutasi']->filename, 7, 1000)) }}" alt="" class="avatar-xs rounded-circle">
                                                 @else
-                                                    <img class="avatar-xs rounded-circle" alt="" src="{{ url("images/no-image-person.png") }}">
                                                 @endif
+                                                <img class="avatar-xs rounded-circle" alt="" src="{{ url("images/no-image-person.png") }}">
                                             </div>
                                             <div class="flex-grow-1">
                                                 <div>
@@ -196,7 +197,7 @@
                                 </ul>
                             </div>
                         </div>
-                        {{-- PEMINJAMAN --}}
+                        PEMINJAMAN
                         <div class="tab-pane" id="post-peminjaman" role="tabpanel">
                             <div data-simplebar style="max-height: 376px;">
                                 <ul class="verti-timeline list-unstyled">
@@ -219,7 +220,7 @@
                                 </ul>
                             </div>
                         </div>
-                        {{-- PENGEMBALIAN --}}
+                        PENGEMBALIAN
                         <div class="tab-pane" id="post-pengembalian" role="tabpanel">
                             <div data-simplebar style="max-height: 376px;">
                                 <ul class="verti-timeline list-unstyled">
@@ -243,7 +244,8 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <ul class="list-unstyled mt-4">
+
+                    <ul class="list-unstyled mt-4">
                         <li>
                             <div class="d-flex">
                                 <i class="bx bx-phone text-primary fs-4"></i>
@@ -280,10 +282,11 @@
                                 </div>
                             </div>
                         </li>
-                    </ul> --}}
+                    </ul>
                     <div class="mt-4">
                         <a href="#!" class="btn btn-soft-primary btn-hover w-100 rounded"><i class="mdi mdi-eye"></i> Tampilkan Semua Riwayat</a>
-                    </div>
+                    </div> --}}
+                    {{-- SEDANG DALAM PROSES DEVELOPMENT----------------------------------------------------------------------------------------------------------- --}}
                 </div>
             </div>
         </div><!--end col-->
@@ -293,13 +296,16 @@
                     <div class="d-flex">
                         {{-- <img src="assets/images/companies/wechat.svg" alt="" height="50"> --}}
                         <div class="flex-grow-1">
-                            <h5 class="fw-semibold"><kbd>ID : {{ $list['show']->id }}</kbd>&nbsp;&nbsp;{{ $list['show']->sarana }}</h5>
+                            <h5 class="fw-semibold"><kbd>ID : {{ $list['show']->id }}</kbd>&nbsp;&nbsp;<a class="text-dark" href="javascript:void(0);" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Aset">{{ $list['show']->sarana }}</a></h5>
                             <h6>No. Inventaris : <a href="javascript:void(0);">{{ $list['show']->no_inventaris }}</a></h6>
                             <ul class="list-unstyled hstack gap-2 mb-0">
-                                <li>
+                                <li data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Seri">
                                     <i class="fas fa-barcode"></i> <span class="text-muted">{{ $list['show']->no_seri }}</span>
                                 </li>
-                                <li>
+                                <li data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Ruangan - Lokasi Sekarang">
                                     <i class="bx bx-map"></i> <span class="text-muted" id="ruangan_aset">{{ $list['show']->ruangan.' - '.$list['show']->lokasi }}</span>
                                 </li>
                             </ul>
@@ -307,7 +313,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div id="carouselExampleControls" class="carousel carousel-dark slide mb-3" data-bs-ride="carousel">
+                    <div id="carouselExampleControls" class="carousel carousel-dark slide mb-1" data-bs-ride="carousel">
                         <div class="carousel-inner" role="listbox">
                             @php
                                 $lampiran = json_decode($list['show']->filename);
@@ -343,79 +349,99 @@
                         </a>
                     </div>
 
-                    <h5 class="fw-semibold mb-3">Description</h5>
-                    <p class="text-muted">We are looking to hire a skilled Magento developer to build and maintain eCommerce websites for our clients. As a Magento developer, you will be responsible for liaising with the design team, setting up Magento 1x and 2x sites, building modules and customizing extensions, testing the performance of each site, and maintaining security and feature updates after the installation is complete.</p>
+                    <div class="text-center">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div>
+                                    <p class="text-muted mb-2">Tgl. Input Aset</p>
+                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->created_at)->isoFormat('d MMM Y, HH.mm A') }}</h5>
+                                    <small class="text-success">Oleh {{ $list['user']->nama?$list['user']->nama:'...' }}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mt-4 mt-sm-0">
+                                    <p class="text-muted mb-2">Tgl. Perolehan</p>
+                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_perolehan)->isoFormat('d MMM Y') }}</h5>
+                                    <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_perolehan)->diffForHumans() }}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mt-4 mt-sm-0">
+                                    <p class="text-muted mb-2">Tgl. Berlaku</p>
+                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_berlaku)->isoFormat('d MMM Y') }}</h5>
+                                    <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_berlaku)->diffForHumans() }}</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="mt-4 mt-sm-0">
+                                    <p class="text-muted mb-2">Tgl. Beroperasi</p>
+                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->isoFormat('d MMM Y') }}</h5>
+                                    <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->diffForHumans() }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
 
-                    <h5 class="fw-semibold mb-3">Responsibilities:</h5>
-                    <ul class="vstack gap-3">
-                        <li>
-                            Meeting with the design team to discuss the needs of the company.
-                        </li>
-                        <li>
-                            Building and configuring Magento 1x and 2x eCommerce websites.
-                        </li>
-                        <li>
-                            Coding of the Magento templates.
-                        </li>
-                        <li>
-                            Developing Magento modules in PHP using best practices.
-                        </li>
-                        <li>
-                            Designing themes and interfaces.
-                        </li>
-                        <li>
-                            Setting performance tasks and goals.
-                        </li>
-                        <li>
-                            Updating website features and security patches.
-                        </li>
-                    </ul>
+                    <h5 class="fw-semibold mb-3">Keterangan&nbsp;
+                        @if ($list['show']->jenis == 1)
+                            <a href="javascript: void(0);" class="badge bg-danger font-size-12">
+                                <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Medis
+                            </a>
+                        @else
+                            <a href="javascript: void(0);" class="badge bg-warning font-size-12">
+                                <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Non Medis
+                            </a>
+                        @endif
+                    </h5>
+                    <p class="text-muted">{{ $list['show']->keterangan }}</p>
 
-                    <h5 class="fw-semibold mb-3">Requirements:</h5>
-                    <ul class="vstack gap-3">
-                        <li>
-                            Bachelor’s degree in computer science or related field.
-                        </li>
-                        <li>
-                            Advanced knowledge of Magento, JavaScript, HTML, PHP, CSS, and MySQL.
-                        </li>
-                        <li>
-                            Experience with complete eCommerce lifecycle development.
-                        </li>
-                        <li>
-                            Understanding of modern UI/UX trends.
-                        </li>
-                        <li>
-                            Knowledge of Google Tag Manager, SEO, Google Analytics, PPC, and A/B Testing.
-                        </li>
-                        <li>
-                            Good working knowledge of Adobe Photoshop and Adobe Illustrator.
-                        </li>
-                        <li>
-                            Strong attention to detail.
-                        </li>
-                        <li>
-                            Ability to project-manage and work to strict deadlines.
-                        </li>
-                        <li>
-                            Ability to work in a team environment.
-                        </li>
-                    </ul>
+                    <h5 class="fw-semibold mb-3">Spesifikasi</h5>
+                    {{-- <p class="text-muted mb-4"></p> --}}
+                    <div class="table-responsive" style="border: 0px">
+                        <table class="table table-nowrap mb-0">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Merk :</th>
+                                    <td>{{ $list['show']->merk }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Tipe :</th>
+                                    <td>{{ $list['show']->tipe }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">No. Seri :</th>
+                                    <td>{{ $list['show']->no_seri }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">No. Kalibrasi :</th>
+                                    <td>{{ $list['show']->no_kalibrasi }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <h5 class="fw-semibold mb-3">Qualification:</h5>
-                    <ul class="vstack gap-3">
-                        <li>
-                            B.C.A / M.C.A under National University course complete.
-                        </li>
-                        <li>
-                            3 or more years of professional design experience
-                        </li>
-                        <li>
-                            Advanced degree or equivalent experience in graphic and web design
-                        </li>
-                    </ul>
+                    <h5 class="fw-semibold mb-3">Nilai Aset</h5>
+                    <div class="text-right">
+                        <h4><mark id="show_nilai_perolehan"></mark></h4>
+                        <p class="text-muted mt-3">Asal Perolehan <i class="fa-fw fas fa-caret-right nav-icon"></i>
+                            @if ($list['show']->asal_perolehan == 1)
+                                Beli
+                            @else
+                                @if ($list['show']->asal_perolehan == 2)
+                                    Hibah
+                                @else
+                                    @if ($list['show']->asal_perolehan == 3)
+                                        Wakaf
+                                    @else
+                                        -
+                                    @endif
+                                @endif
+                            @endif
+                        </p>
+                    </div>
 
-                    <h5 class="fw-semibold mb-3">Skill & Experience:</h5>
+                    {{-- <h5 class="fw-semibold mb-3">Skill & Experience:</h5>
                     <ul class="vstack gap-3 mb-0">
                         <li>
                             Understanding of key Design Principal
@@ -432,17 +458,17 @@
                         <li>
                             web designing: 1 year (Preferred)
                         </li>
-                    </ul>
+                    </ul> --}}
 
-                    <div class="mt-4">
+                    {{-- <div class="mt-4">
                         <span class="badge badge-soft-warning">PHP</span>
                         <span class="badge badge-soft-warning">Magento</span>
                         <span class="badge badge-soft-warning">Marketing</span>
                         <span class="badge badge-soft-warning">WordPress</span>
                         <span class="badge badge-soft-warning">Bootstrap</span>
-                    </div>
+                    </div> --}}
 
-                    <div class="mt-4">
+                    {{-- <div class="mt-4">
                         <ul class="list-inline mb-0">
                             <li class="list-inline-item mt-1">
                                 Share this job:
@@ -457,7 +483,7 @@
                                 <a href="javascript:void(0)" class="btn btn-outline-success btn-hover"><i class="uil uil-linkedin-alt"></i> linkedin</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div><!--end col-->
@@ -580,7 +606,9 @@
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Riwayat Mutasi"><i class="fa fa-sync"></i>&nbsp;&nbsp;Refresh</button>
                         <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                         <button class="btn btn-soft-primary btn-rounded" onclick="prosesMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title=""><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Proses Mutasi Sekarang" id="btn-mutasi-aktif"><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
+                        <button class="btn btn-secondary btn-rounded" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Aset Sedang Dalam peminjama" id="btn-mutasi-nonaktif" disabled hidden><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
                     </div>
                 </div>
                 <hr>
@@ -621,6 +649,7 @@
                 <div class="modal-body">
                     <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_peminjaman"></kbd> - <kbd id="lokasi_sekarang_peminjaman"></kbd></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Riwayat penarikan yang sudah ada akan terhapus dan kondisi akan tetap sama dengan yang sebelumnya</p>
                     <hr>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -638,7 +667,11 @@
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Penanggungjawab <a class="text-danger">*</a></label>
-                                <input type="text" id="pj_peminjaman" class="form-control" placeholder="e.g. xxx">
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="pj_peminjaman" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
@@ -654,7 +687,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Kelengkapan Sarana <a class="text-danger">*</a></label>
-                                <textarea rows="2" id="ket_sarana_peminjaman" class="form-control" placeholder="Wajib Diisi"></textarea>
+                                <textarea rows="2" id="kelengkapan_peminjaman" class="form-control" placeholder="Wajib Diisi"></textarea>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -686,12 +719,13 @@
                 <div class="modal-body">
                     <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_pengembalian"></kbd> - <kbd id="lokasi_sekarang_pengembalian"></kbd></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Aset akan dikembalikan ke Gudang Aset setelah proses pengembalian</p>
                     <hr>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Kelengkapan Sarana <a class="text-danger">*</a></label>
-                                <textarea rows="2" id="ket_sarana_pengembalian" class="form-control" placeholder="" disabled></textarea>
+                                <label class="form-label">Kelengkapan Sarana</label>
+                                <textarea rows="2" id="kelengkapan_pengembalian" class="form-control" placeholder="" disabled></textarea>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -702,8 +736,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Tgl. Pengembalian</label>
-                                <input type="text" id="tgl_pengembalian" class="form-control flatpickrtom" placeholder="YYYY-MM-DD"/>
+                                <label class="form-label">Tgl. Pengembalian <a class="text-danger">*</a></label>
+                                <input type="text" id="tgl_pengembalian" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -711,22 +745,27 @@
                                 <label class="form-label">Kondisi <a class="text-danger">*</a></label>
                                 <select class="form-select" id="kondisi_pengembalian" required>
                                     <option value="" hidden>Pilih</option>
-                                    <option value="1">Baik</option>
-                                    <option value="2">Cukup</option>
-                                    <option value="3">Buruk</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Pengantar Barang <a class="text-danger">*</a></label>
-                                <input type="text" id="pengantar_pengembalian" class="form-control" placeholder="e.g. xxx">
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="pengantar_pengembalian" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Penerima Barang <a class="text-danger">*</a></label>
-                                <input type="text" id="penerima_pengembalian" class="form-control" placeholder="e.g. xxx">
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="penerima_pengembalian" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
@@ -738,7 +777,7 @@
                     </div>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-pengembalian" onclick="prosesPengembalian()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-pengembalian" onclick="prosesPengembalian()"><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan Pengembalian</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -834,6 +873,8 @@
 
     <script>
         $(document).ready(function() {
+            $('#show_nilai_perolehan').text(formatRupiah("{{ $list['show']->nilai_perolehan }}",'Rp. '));
+
             // SELECT2
             var te = $(".select2");
             te.length && te.each(function() {
@@ -1147,6 +1188,16 @@
                             `);
                         });
 
+                        if (res.peminjaman != null) {
+                            if (res.peminjaman.status == 1) {
+                                $("#btn-mutasi-aktif").prop('hidden', true);
+                                $("#btn-mutasi-nonaktif").prop('hidden', false);
+                            } else {
+                                $("#btn-mutasi-aktif").prop('hidden', false);
+                                $("#btn-mutasi-nonaktif").prop('hidden', true);
+                            }
+                        }
+
                         // TABEL
                         $("#tampil-tbody-mutasi").empty();
                         $('#dttable-mutasi').DataTable().clear().destroy();
@@ -1155,9 +1206,17 @@
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
                                 if (updet == date) {
-                                    content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
-                                        </div></center></td>`;
+                                    if (res.peminjaman != null) {
+                                        if (res.peminjaman.status == 1) {
+                                            content += `<td><center><div class='btn-group'>
+                                                <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                </div></center></td>`;
+                                        } else {
+                                            content += `<td><center><div class='btn-group'>
+                                                <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                </div></center></td>`;
+                                        }
+                                    }
                                 } else {
                                     content += `<td><center><div class='btn-group'>
                                         <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
@@ -1362,18 +1421,33 @@
                             }
                         }
                     } else {
-                        // DEFINISI
-                        $('#ruangan_sekarang_peminjaman').text(res.show.ruangan);
-                        $('#lokasi_sekarang_peminjaman').text(res.show.lokasi);
-                        $("#lokasi_peminjaman").find('option').remove();
-                        $("#lokasi_peminjaman").append(`<option value="" hidden>Pilih</option>`);
-                        res.ruangan.forEach(item => {
-                            $("#lokasi_peminjaman").append(`
-                                <option value="${item.id}" ${res.show.id_ruangan == item.id ? "selected":""}>${item.ruangan} - ${item.lokasi}</option>
-                            `);
-                        });
+                        if (res.peminjaman != null) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Aset sedang dalam <i>PEMINJAMAN</i>. Silakan melakukan pengembalian aset apabila diperlukan',
+                                position: 'topRight'
+                            });
+                        } else {
+                            // DEFINISI
+                            $('#ruangan_sekarang_peminjaman').text(res.show.ruangan);
+                            $('#lokasi_sekarang_peminjaman').text(res.show.lokasi);
+                            $("#pj_peminjaman").find('option').remove();
+                            $("#pj_peminjaman").append(`<option value="" hidden>Pilih</option>`);
+                            res.users.forEach(item => {
+                                $("#pj_peminjaman").append(`
+                                    <option value="${item.id}">${item.nama}</option>
+                                `);
+                            });
+                            $("#lokasi_peminjaman").find('option').remove();
+                            $("#lokasi_peminjaman").append(`<option value="" hidden>Pilih</option>`);
+                            res.ruangan.forEach(item => {
+                                $("#lokasi_peminjaman").append(`
+                                    <option value="${item.id}" ${res.show.id_ruangan == item.id ? "selected":""}>${item.ruangan} - ${item.lokasi}</option>
+                                `);
+                            });
 
-                        $('#formPeminjaman').modal('show');
+                            $('#formPeminjaman').modal('show');
+                        }
                     }
                 },
                 error: function(res){
@@ -1387,7 +1461,134 @@
             });
         }
 
-        // PEMINJAMAN
+        function prosesPeminjaman() {
+            var tgl_peminjaman = $("#tgl_peminjaman").val();
+            var tgl_pengembalian = $("#tgl_pengembalian_pengembalian").val();
+            var pj = $("#pj_peminjaman").val();
+            var lokasi = $("#lokasi_peminjaman").val();
+            var kelengkapan = $("#kelengkapan_peminjaman").val();
+            var ket = $("#ket_peminjaman").val();
+
+            if (tgl_peminjaman == "" || pj == "" || lokasi == "" || kelengkapan == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
+                    position: 'topRight'
+                });
+            } else {
+                if (lokasi == "{{ $list['show']->id_ruangan }}") {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Pastikan Anda memilih ruangan tujuan Peminjaman dengan benar / tidak sama dengan ruangan awal. Silakan refresh browser apabila pernyataan ini tidak benar.',
+                        position: 'topRight'
+                    });
+                } else {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: '/api/inventaris/aset/peminjaman/store',
+                        dataType: 'json',
+                        data: {
+                            user: "{{ Auth::user()->id }}",
+                            tgl_peminjaman: tgl_peminjaman,
+                            tgl_pengembalian: tgl_pengembalian,
+                            pj: pj,
+                            lokasi: lokasi,
+                            kelengkapan: kelengkapan,
+                            ket: ket,
+                            aset: "{{ $list['show']->id }}",
+                        },
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Sukses!',
+                                message: 'Peminjaman Aset berhasil pada '+ res,
+                                position: 'topRight'
+                            });
+                            // refreshModalPeminjaman("{{ $list['show']->id }}");
+                            $('#formPeminjaman').modal('hide');
+                            fresh();
+                        },
+                        error: function (res) {
+                            console.log("error : " + JSON.stringify(res) );
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+        // function batalPeminjaman(id) {
+        //     $.ajax({
+        //         url: "/api/inventaris/aset/mutasi/destroy/cariaset/{{ $list['show']->id }}",
+        //         type: 'GET',
+        //         dataType: 'json', // added data type
+        //         success: function(res) {
+        //             if (res.id != id) {
+        //                 iziToast.error({
+        //                     title: 'Pesan Galat!',
+        //                     message: 'Lakukan pembatalan secara berurutan!',
+        //                     position: 'topRight'
+        //                 });
+        //             } else {
+        //                 Swal.fire({
+        //                     title: 'Batal Mutasi Aset ID : '+id+' ?',
+        //                     text: 'Ruangan dan Kondisi aset sekarang akan dikembalikan seperti keadaan semula',
+        //                     icon: 'warning',
+        //                     reverseButtons: false,
+        //                     showDenyButton: false,
+        //                     showCloseButton: false,
+        //                     showCancelButton: true,
+        //                     focusCancel: true,
+        //                     confirmButtonColor: '#FF4845',
+        //                     confirmButtonText: `<i class="fa fa-history"></i> Batalkan Mutasi`,
+        //                     cancelButtonText: `<i class="fa fa-times"></i> Tutup`,
+        //                     backdrop: `rgba(26,27,41,0.8)`,
+        //                 }).then((result) => {
+        //                     if (result.isConfirmed) {
+        //                         $.ajax({
+        //                             url: "/api/inventaris/aset/mutasi/destroy/" + id,
+        //                             type: 'GET',
+        //                             dataType: 'json', // added data type
+        //                             success: function(res) {
+        //                                 iziToast.success({
+        //                                     title: 'Sukses!',
+        //                                     message: 'Pembatalan mutasi aset berhasil pada ' + res,
+        //                                     position: 'topRight'
+        //                                 });
+        //                                 refreshModalMutasi("{{ $list['show']->id }}");
+        //                                 fresh();
+        //                             },
+        //                             error: function(res) {
+        //                                 console.log("error : " + JSON.stringify(res) );
+        //                                 iziToast.error({
+        //                                     title: 'Pesan Galat!',
+        //                                     message: res.responseJSON.error,
+        //                                     position: 'topRight'
+        //                                 });
+        //                             }
+        //                         });
+        //                     }
+        //                 })
+        //             }
+        //         },
+        //         error: function(res) {
+        //             console.log("error : " + JSON.stringify(res) );
+        //             iziToast.error({
+        //                 title: 'Pesan Galat!',
+        //                 message: res.responseJSON.error,
+        //                 position: 'topRight'
+        //             });
+        //         }
+        //     });
+        // }
+
+        // PENGEMBALIAN
         function modalPengembalian(aset) {
             $.ajax({
                 url: "/api/inventaris/aset/pengembalian/"+aset,
@@ -1411,11 +1612,43 @@
                             }
                         }
                     } else {
-                        // DEFINISI
-                        $('#ruangan_sekarang_pengembalian').text(res.show.ruangan);
-                        $('#lokasi_sekarang_pengembalian').text(res.show.lokasi);
+                        if (res.peminjaman != null) {
+                            // DEFINISI
+                            $('#ruangan_sekarang_pengembalian').text(res.show.ruangan);
+                            $('#lokasi_sekarang_pengembalian').text(res.show.lokasi);
+                            $('#kelengkapan_pengembalian').val(res.peminjaman.kelengkapan);
+                            $('#ket_pengembalian').val(res.peminjaman.ket);
+                            $("#kondisi_pengembalian").find('option').remove();
+                            $("#kondisi_pengembalian").append(`
+                                <option value="1" ${res.show.kondisi == '1' ? "selected":""}>Baik</option>
+                                <option value="2" ${res.show.kondisi == '2' ? "selected":""}>Cukup</option>
+                                <option value="3" ${res.show.kondisi == '3' ? "selected":""}>Buruk</option>
+                            `);
 
-                        $('#formPengembalian').modal('show');
+                            $("#pengantar_pengembalian").find('option').remove();
+                            $("#pengantar_pengembalian").append(`<option value="" hidden>Pilih</option>`);
+                            res.users.forEach(item => {
+                                $("#pengantar_pengembalian").append(`
+                                    <option value="${item.id}">${item.nama}</option>
+                                `);
+                            });
+
+                            $("#penerima_pengembalian").find('option').remove();
+                            $("#penerima_pengembalian").append(`<option value="" hidden>Pilih</option>`);
+                            res.users.forEach(item => {
+                                $("#penerima_pengembalian").append(`
+                                    <option value="${item.id}">${item.nama}</option>
+                                `);
+                            });
+
+                            $('#formPengembalian').modal('show');
+                        } else {
+                            iziToast.warning({
+                                title: 'Pesan Ambigu!',
+                                message: 'Aset tidak sedang dalam <i>PEMINJAMAN</i>. Silakan melakukan Peminjaman Aset terlebih dahulu sebelum melakukan proses Pengembalian Aset',
+                                position: 'topRight'
+                            });
+                        }
                     }
                 },
                 error: function(res){
@@ -1429,6 +1662,57 @@
             });
         }
 
+        function prosesPengembalian() {
+            var tgl_pengembalian = $("#tgl_pengembalian").val();
+            var kondisi = $("#kondisi_pengembalian").val();
+            var pengantar = $("#pengantar_pengembalian").val();
+            var penerima = $('#penerima_pengembalian').val();
+            var ket = $('#catatan_pengembalian').val();
+
+            if (tgl_pengembalian == "" || kondisi == "" || pengantar == "" || penerima == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/inventaris/aset/pengembalian/store',
+                    dataType: 'json',
+                    data: {
+                        user: "{{ Auth::user()->id }}",
+                        tgl_pengembalian: tgl_pengembalian,
+                        kondisi: kondisi,
+                        pengantar: pengantar,
+                        penerima: penerima,
+                        ket: ket,
+                        aset: "{{ $list['show']->id }}",
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Pengembalian Aset berhasil pada '+ res,
+                            position: 'topRight'
+                        });
+                        $('#formPengembalian').modal('hide');
+                        fresh();
+                    },
+                    error: function (res) {
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
         // PENARIKAN
         function modalPenarikan(aset) {
             $.ajax({
@@ -1440,7 +1724,11 @@
                         batalPenarikan(res.validasi1.id);
                     } else {
                         if (res.validasi2) {
-                            console.log('Aset sedang dalam peminjamn / belum dikembalikan');
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Aset sedang dalam <i>PEMINJAMAN</i>. Silakan melakukan pengembalian aset apabila diperlukan',
+                                position: 'topRight'
+                            });
                         } else {
                             $('#validasi_ruangan_penarikan').val(res.show.id_ruangan);
                             $('#ruangan_sekarang_penarikan').text(res.show.ruangan);
@@ -1867,6 +2155,22 @@
             }
             var dateTime = year + '-' + month + '-' + day;
             return dateTime;
+        }
+        function formatRupiah(angka, prefix)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split    = number_string.split(','),
+                sisa     = split[0].length % 3,
+                rupiah     = split[0].substr(0, sisa),
+                ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
     </script>
 @endsection

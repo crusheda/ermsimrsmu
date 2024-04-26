@@ -193,9 +193,9 @@
 
                 @if (Auth::user()->getPermission('manajemen_risiko') == true)
                 <li>
-                    <a href="javascript: void(0);" class="{{-- has-arrow --}} waves-effect">
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="fas fa-balance-scale" style="font-size: 1rem"></i>
-                        <span class="badge rounded-pill bg-danger float-end">new</span>
+                        {{-- <span class="badge rounded-pill bg-danger float-end">new</span> --}}
                         <span key="t-dashboards">Mutu</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">

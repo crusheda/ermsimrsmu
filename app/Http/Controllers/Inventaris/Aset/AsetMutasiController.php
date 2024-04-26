@@ -10,6 +10,7 @@ use App\Models\aset;
 use App\Models\aset_ruangan;
 use App\Models\aset_mutasi;
 use App\Models\aset_penarikan;
+use App\Models\aset_peminjaman;
 use App\Models\roles;
 use App\Models\users;
 use Illuminate\Http\Request;
@@ -35,12 +36,14 @@ class AsetMutasiController extends Controller
                     ->where('aset.id',$id)
                     ->first();
         $validasi_penarikan = aset_penarikan::where('id_aset',$id)->first();
+        $validasi_peminjaman = aset_peminjaman::where('id_aset',$id)->where('status',true)->first();
 
         $data = [
             'ruangan' => $ruangan,
             'show' => $show,
             'aset' => $aset,
             'penarikan' => $validasi_penarikan,
+            'peminjaman' => $validasi_peminjaman,
         ];
 
         return response()->json($data, 200);

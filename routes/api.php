@@ -151,7 +151,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('inventaris/aset/mutasi/destroy/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetMutasiController@destroy')->name('aset_mutasi.destroy');
         // PEMINJAMAN - PENGEMBALIAN ASET
             Route::get('inventaris/aset/peminjaman/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@getPeminjamanAset')->name('aset_peminjaman.getPeminjamanAset');
-            Route::get('inventaris/aset/pengembalian/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@getPengembalianAset')->name('aset_peminjaman.getPengembalianAset');
+            Route::post('inventaris/aset/peminjaman/store', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@storePeminjaman')->name('aset_peminjaman.store');
+            Route::post('inventaris/aset/pengembalian/store', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@storePengembalian')->name('aset_pengembalian.store');
+            Route::get('inventaris/aset/pengembalian/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPeminjamanPengembalianController@getPengembalianAset')->name('aset_pengembalian.getPengembalianAset');
         // PENARIKAN ASET
             Route::get('inventaris/aset/penarikan/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPenarikanController@index')->name('aset_penarikan.index');
             Route::post('inventaris/aset/penarikan/store', '\App\Http\Controllers\Inventaris\Aset\AsetPenarikanController@store')->name('aset_penarikan.store');

@@ -26,7 +26,7 @@ class CreateTableAsetPenarikan extends Migration
                 $table->string('title', 200)->nullable();
                 $table->string('filename', 200)->nullable();
 
-            $table->integer('status')->nullable();
+            $table->integer('status')->nullable()->comment('Null: Aset Ready; 1: Aset dalam Peminjaman; 2: Aset Ditarik ke Gudang; 3: Aset Dimusnahkan');
             $table->timestamps();
             $table->softDeletes();
         });

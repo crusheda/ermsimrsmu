@@ -14,6 +14,7 @@ use App\Models\aset_pengembalian;
 use App\Models\aset_penarikan;
 use App\Models\aset_pemeliharaan;
 use App\Models\roles;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Storage;
@@ -46,6 +47,8 @@ class AsetController extends Controller
                 ->where('aset.token',$token)
                 ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
                 ->first();
+
+        $user = User::whereNotNull('nik')->where('id',$show->id_user)->select('nama')->first();
 
         // $mutasi = aset_mutasi::join('aset','aset_mutasi.id_aset','=','aset.id')
         //         ->join('aset_ruangan','aset_mutasi.id_ruangan_mutasi','=','aset_ruangan.id')
@@ -89,6 +92,7 @@ class AsetController extends Controller
             // 'peminjaman' => $peminjaman,
             // 'pengembalian' => $pengembalian,
             'qr' => $qr,
+            'user' => $user,
         ];
 
         return view('pages.inventaris.aset.detail')->with('list',$data);

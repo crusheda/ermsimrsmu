@@ -28,7 +28,7 @@ class CreateTableAsetPeminjaman extends Migration
                 $table->string('title')->nullable();
                 $table->string('filename')->nullable();
 
-            $table->integer('status')->nullable();
+            $table->tinyInteger('status')->nullable()->comment('0: Aset Ready/telah dikembalikan; 1: Aset dalam Peminjaman;');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -23,7 +23,7 @@
                             title="Menambahkan Aset / Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
                             <button class="btn btn-warning" onclick="refresh()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Refresh Tabel Sarana" id="btn-refresh"><i class="fas fa-sync fa-fw nav-icon"></i></button>
+                            title="Refresh Tabel Sarana" id="btn-refresh" disabled><i class="fas fa-sync fa-fw nav-icon"></i></button>
                             <button class="btn btn-dark" onclick="scan()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Scan QR-Code Aset"><i class="fas fa-qrcode fa-fw nav-icon"></i></button>
@@ -529,6 +529,7 @@
         // FUNCTION AREA
         function filter() {
             $("#show-table").prop('hidden', false);
+            $("#btn-refresh").prop('disabled', false);
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -545,38 +546,8 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
 
-                    // content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                    //                     <div class='d-flex justify-content-start align-items-center'>
-                    //                         <div class='d-flex flex-column'>
-                    //                             <h6 class='mb-0'></h6>
-                    //                             <small class='text-truncate text-muted'></small>
-                    //                         </div>
-                    //                     </div>
-                    //                 </td>`;
-
-                    // <th scope="col">#ID</th>
-                    // <th scope="col">No. Inventaris</th>
-                    // <th scope="col">Sarana</th>
-                    // <th scope="col">Merk</th>
-                    // <th scope="col">Tipe</th>
-                    // <th scope="col">No. Seri</th>
-                    // <th scope="col">Ruangan</th>
-                    // <th scope="col">Kondisi</th>
-                    // <th scope="col">Dibuat</th>
-                    // <th scope="col">Diperbarui</th>
-
                     res.show.forEach(item => {
                         content = `<tr id='`+item.id+`'>`;
-                        // content += `<td><div class="d-flex align-items-center">
-                        //                 <div class="dropdown">
-                        //                     <a href="javascript:;" class="btn btn-outline-light dropdown-toggle hide-arrow text-body btn-sm btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</a>
-                        //                     <div class="dropdown-menu dropdown-menu-right">
-                        //                         <a href="javascript:;" onclick="location.href='/inventaris/aset/`+item.token+`'" class="dropdown-item text-info"><i class='bx bx-barcode scaleX-n1-rtl'></i> Detail</a>
-                        //                         <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                        //                         <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
-                        //                     </div>
-                        //                 </div>
-                        //             </div>`;
                         content += `<td><center>`
                                     + `<div class='btn-group'>`
                                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
@@ -810,6 +781,110 @@
             $('#kd_ruangan_add').text(' . . ');
             $('#kd_jenis_add').text(' . . ');
             $('#kd_sarana_add').text(' . . ');
+
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/inventaris/aset/filter",
+                type: 'POST',
+                dataType: 'json', // added data type
+                data: {
+                    // regulasi: regulasi,
+                    // waktu: waktu,
+                    // pembuat: pembuat,
+                },
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+
+                    res.show.forEach(item => {
+                        content = `<tr id='`+item.id+`'>`;
+                        content += `<td><center>`
+                                    + `<div class='btn-group'>`
+                                        + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                        + `<ul class='dropdown-menu dropdown-menu-right'>`
+                                            + `<div class="dropdown-header noti-title">`
+                                                + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                                            + `</div>`
+                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="lihatStatus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-check-double scaleX-n1-rtl'></i> Status</a></li>`
+                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
+                                            + `<div class="dropdown-divider"></div>`
+                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                        + `</ul>`
+                                    + `</div>`;
+                        content += `</div></center></td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Detail Sarana"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>`+item.sarana+`</h6>
+                                                <h6 class='mb-0'><small class='text-truncate text-muted'>Tgl. Operasi : `+item.tgl_operasi+`</small></h6>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>`+item.ruangan+`</h6>
+                                                <small class='text-truncate text-muted'>`+item.lokasi+`</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += `<td>`+item.merk+`</td>`;
+                        content += `<td>`+item.tipe+`</td>`;
+                        content += `<td>`+item.no_seri+`</td>`;
+                            if (item.kondisi == 1) {
+                                content += `<td>Baik</td>`;
+                            } else {
+                                if (item.kondisi == 2) {
+                                    content += `<td>Cukup</td>`;
+                                } else {
+                                    if (item.kondisi == 3) {
+                                        content += `<td>Buruk</td>`;
+                                    } else {
+                                        content += `<td>Tidak Diketahui</td>`;
+                                    }
+                                }
+                            }
+                        content += `<td>`+item.updated_at.substring(0, 10)+`</td>`; // .substring(0, 19).replace('T',' ')
+                        content += `<td>`+item.tgl_input+`</td></tr>`;
+                        $('#tampil-tbody').append(content);
+                    })
+
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [9, "desc"]
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '25%' },
+                        //     { sWidth: '10%' },
+                        // ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
 
             $("#btn-refresh").find("i").removeClass("fa-spin");
             // $("#btn-refresh").prop('disabled', false);
