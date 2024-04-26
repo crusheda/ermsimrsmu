@@ -47,7 +47,7 @@ class AsetRuanganController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $data = new aset_ruangan;
-        $data->id_user_ruangan = $request->user;
+        $data->id_user = $request->user;
         $data->kode = $request->kode;
         $data->ruangan = $request->ruangan;
         $data->lokasi = $request->lokasi;
@@ -75,7 +75,7 @@ class AsetRuanganController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $data = aset_ruangan::find($request->id);
-        $data->id_user_ruangan = $request->user;
+        $data->id_user = $request->user;
         $data->kode = $request->kode;
         $data->ruangan = $request->ruangan;
         $data->lokasi = $request->lokasi;
