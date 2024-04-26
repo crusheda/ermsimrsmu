@@ -200,7 +200,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Operasi <a class="text-danger">*</a></label>
-                                <input type="text" id="tgl_operasi_add" class="form-control flatpickr" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
+                                <input type="text" id="tgl_operasi_add" class="form-control flatpickrtom" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -455,6 +455,7 @@
             const l = $('.flatpickr');
             const ln = $('.flatpickrnow');
             const lun = $('.flatpickrunl');
+            const ltom = $('.flatpickrtom');
             // const dates = new Date(Date.now());
             // const tomorow = dates.getTime();
             // const m = new Date(Date.now());
@@ -495,6 +496,19 @@
                 //     to: next.toISOString().split("T")[0]
                 // }]
             })
+            ltom.flatpickr({
+                enableTime: 0,
+                minuteIncrement: 1,
+                time_24hr: true,
+                // defaultMinute: "today",
+                minDate: "today",
+                maxDate: "01.01.3000"
+                // disable: [{
+                //     from: tomorrow.toISOString().split("T")[0],
+                //     to: today
+                // }]
+            })
+
             $('#datepicker4').datepicker({
                     "setDate": new Date(),
                     "autoclose": true
