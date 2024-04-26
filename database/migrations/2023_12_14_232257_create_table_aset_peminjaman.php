@@ -28,6 +28,7 @@ class CreateTableAsetPeminjaman extends Migration
                 $table->string('title')->nullable();
                 $table->string('filename')->nullable();
 
+            $table->integer('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
