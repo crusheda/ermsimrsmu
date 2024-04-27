@@ -185,7 +185,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         @if (Auth::user()->getPermission('kecelakaan_kerja') == true)
-                            <li><a href="javascript: void(0);" key="t-saas" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sistem sedang dalam proses pengerjaan"><s>Kecelakaan Kerja</s></a></li>
+                            <li><a href="{{ route('accidentreport.index') }}" key="t-saas" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sistem Pelaporan Kecelakaan Kerja">Kecelakaan Kerja</a></li>
                         @endif
                     </ul>
                 </li>

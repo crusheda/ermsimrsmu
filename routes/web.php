@@ -161,6 +161,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
         Route::resource('/lab/antigen', '\App\Http\Controllers\Pelayanan\Lab\antigenController');
 });
 
+// MFK
+Route::group(['middleware' => ['auth'], 'prefix' => 'mfk', 'as' => ''], function () {
+    // Accident Report - Kecelakan Kerja
+        Route::get('kecelakaankerja','\App\Http\Controllers\MFK\AccidentReportController@index')->name('accidentreport.index');
+});
+
 // Mutu
 Route::group(['middleware' => ['auth'], 'prefix' => 'mutu', 'as' => ''], function () {
     // Manajemen Risiko
