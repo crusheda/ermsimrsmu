@@ -16,7 +16,7 @@ class AsetRuanganController extends Controller
 {
     function index()
     {
-        if (Auth::user()->getRole('kasubag-aset') == true || Auth::user()->getRole('it') == true) {
+        if (Auth::user()->getRole('kasubag-aset-gudang') == true || Auth::user()->getRole('it') == true) {
             $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
 
             $data = [

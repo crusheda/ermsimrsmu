@@ -355,7 +355,7 @@
                                 <div>
                                     <p class="text-muted mb-2">Tgl. Input Aset</p>
                                     <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->created_at)->isoFormat('d MMM Y, HH.mm A') }}</h5>
-                                    <small class="text-success">Oleh {{ $list['user']->nama?$list['user']->nama:'...' }}</small>
+                                    <small class="text-success">Oleh {{ $list['user']->nama }}</small>
                                 </div>
                             </div>
                             <div class="col-sm-3">
