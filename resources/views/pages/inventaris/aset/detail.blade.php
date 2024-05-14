@@ -313,41 +313,29 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div id="carouselExampleControls" class="carousel carousel-dark slide mb-1" data-bs-ride="carousel">
-                        <div class="carousel-inner" role="listbox">
-                            @php
-                                $lampiran = json_decode($list['show']->filename);
-                            @endphp
-                            @for ($i = 0; $i < count($lampiran); $i++)
+                    @php
+                        $lampiran = json_decode($list['show']->filename);
+                    @endphp
+                    @if (!empty($lampiran))
+                        @for ($i = 0; $i < count($lampiran); $i++)
+                        <div id="carouselExampleControls" class="carousel carousel-dark slide mb-1" data-bs-ride="carousel">
+                            <div class="carousel-inner" role="listbox">
                                 <div class="carousel-item @if ($i == 0) active @endif">
                                     <center><img class="d-block img-fluid" style="max-height: 600px" src="{{ url('storage/'.substr($lampiran[$i],7,1000)) }}"></center>
                                 </div>
-                            @endfor
-                            {{-- @foreach (json_decode($list['show']->filename) as $item)
-                                <div class="carousel-item active">
-                                    <img class="d-block img-fluid" src="{{ url('storage/'.substr($item,7,1000)) }}">
-                                </div>
-                            @endforeach --}}
-                            {{-- <div class="carousel-item active">
-                                <img class="d-block img-fluid" width="100%" src="{{ asset('/images/small/img-4.jpg') }}" alt="First slide">
                             </div>
-                            <div class="carousel-item">
-                                <img class="d-block img-fluid" width="100%" src="{{ asset('/images/small/img-5.jpg') }}" alt="Second slide">
-                            </div>
-                            <div class="carousel-item">
-                                <img class="d-block img-fluid" width="100%" src="{{ asset('/images/small/img-6.jpg') }}" alt="Third slide">
-                            </div> --}}
+                            <br><img src="" alt="" srcset="" id="pdf_preview">
+                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
+                                <span class="sr-only">Sebelumnya</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Selanjutnya</span>
+                            </a>
                         </div>
-                        <br><img src="" alt="" srcset="" id="pdf_preview">
-                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
-                            <span class="sr-only">Sebelumnya</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Selanjutnya</span>
-                        </a>
-                    </div>
+                        @endfor
+                    @endif
 
                     <div class="text-center">
                         <div class="row">
@@ -399,23 +387,23 @@
                     <h5 class="fw-semibold mb-3">Spesifikasi</h5>
                     {{-- <p class="text-muted mb-4"></p> --}}
                     <div class="table-responsive" style="border: 0px">
-                        <table class="table table-nowrap mb-0">
+                        <table class="table table-nowrap mb-0" style="width:100%">
                             <tbody>
                                 <tr>
-                                    <th scope="row">Merk :</th>
-                                    <td>{{ $list['show']->merk }}</td>
+                                    <th scope="row" style="width:15%">Merk</th>
+                                    <td>:&nbsp;&nbsp;{{ $list['show']->merk }}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Tipe :</th>
-                                    <td>{{ $list['show']->tipe }}</td>
+                                    <th scope="row" style="width:15%">Tipe</th>
+                                    <td>:&nbsp;&nbsp;{{ $list['show']->tipe }}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">No. Seri :</th>
-                                    <td>{{ $list['show']->no_seri }}</td>
+                                    <th scope="row" style="width:15%">No. Seri</th>
+                                    <td>:&nbsp;&nbsp;{{ $list['show']->no_seri }}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">No. Kalibrasi :</th>
-                                    <td>{{ $list['show']->no_kalibrasi }}</td>
+                                    <th scope="row" style="width:15%">No. Kalibrasi</th>
+                                    <td>:&nbsp;&nbsp;{{ $list['show']->no_kalibrasi }}</td>
                                 </tr>
                             </tbody>
                         </table>

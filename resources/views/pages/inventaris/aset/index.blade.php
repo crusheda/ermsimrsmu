@@ -216,7 +216,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nilai Perolehan <a class="text-danger">*</a></label>
+                                <label class="form-label">Nilai Perolehan</label>
                                 <input type="text" id="nilai_perolehan_add" class="form-control" onclick="$(this).val('')" placeholder="Rp. xxx.xxx" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Masukkan Hanya Angka Tanpa Titik (.) / Koma (,) /dsb">
                             </div>
                         </div>
@@ -248,32 +248,35 @@
                                 {{-- <i class="fa-fw fas fa-caret-right nav-icon"></i> Gunakan aplikasi WinRAR untuk membuka file Upload --}}
                             </div>
                         </div>
-                        <hr>
-                        <div class="col-md-5 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Golongan</label>
-                                <input type="number" id="golongan_add" class="form-control" maxlength="1" max="4" placeholder="e.g. 1 / 2 / 3 / 4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                        {{-- MASIH MENUNGGU PIHAK KEUANGAN UNTUK PENGAJUAN PEMBUATAN SISTEM BARU --}}
+                        <div hidden>
+                            <hr>
+                            <div class="col-md-5 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Golongan</label>
+                                    <input type="number" id="golongan_add" class="form-control" maxlength="1" max="4" placeholder="e.g. 1 / 2 / 3 / 4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Umur</label>
-                                <input type="text" class="form-control" id="umur_add" hidden>
-                                <input type="number" id="umur_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari golongan" placeholder="Otomatis" disabled>
+                            <div class="col-md-2 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Umur</label>
+                                    <input type="text" class="form-control" id="umur_add" hidden>
+                                    <input type="number" id="umur_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari golongan" placeholder="Otomatis" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Tarif</label>
-                                <input type="text" class="form-control" id="tarif_add" hidden>
-                                <input type="number" id="tarif_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari umur" placeholder="Otomatis" disabled>
+                            <div class="col-md-2 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Tarif</label>
+                                    <input type="text" class="form-control" id="tarif_add" hidden>
+                                    <input type="number" id="tarif_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari umur" placeholder="Otomatis" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label">Penyusutan Per Bulan</label>
-                                <input type="text" class="form-control" id="penyusutan_add" hidden>
-                                <input type="number" id="penyusutan_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari tarif" placeholder="Otomatis" disabled>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">Penyusutan Per Bulan</label>
+                                    <input type="text" class="form-control" id="penyusutan_add" hidden>
+                                    <input type="number" id="penyusutan_add_show" class="form-control" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Rumus dari tarif" placeholder="Otomatis" disabled>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -599,9 +602,19 @@
                                             </div>
                                         </div>
                                     </td>`;
-                        content += `<td>`+item.merk+`</td>`;
-                        content += `<td>`+item.tipe+`</td>`;
-                        content += `<td>`+item.no_seri+`</td>`;
+                        content += `<td>`+item.merk+`</td><td>`;
+                                if (item.tipe) {
+                                    content += item.tipe;
+                                } else {
+                                    content += `-`;
+                                }
+                        content += `</td><td>`;
+                                if (item.no_seri) {
+                                    content += item.no_seri;
+                                } else {
+                                    content += `-`;
+                                }
+                        content += `</td>`;
                             if (item.kondisi == 1) {
                                 content += `<td>Baik</td>`;
                             } else {
@@ -732,13 +745,13 @@
                 // save.get('no_seri') == "" ||
                 save.get('tgl_operasi') == "" ||
                 save.get('asal_perolehan') == "" ||
-                save.get('nilai_perolehan') == "" ||
-                save.get('kondisi') == "" ||
+                // save.get('nilai_perolehan') == "" ||
+                save.get('kondisi') == ""
                 // save.get('golongan') == "" ||
                 // save.get('umur') == "" ||
                 // save.get('tarif') == "" ||
                 // save.get('penyusutan') == ""
-                filesAdded.length == 0
+                // filesAdded.length == 0 (Jika Tidak Ada Gambar Yang Diupload)
             ) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
@@ -851,9 +864,19 @@
                                             </div>
                                         </div>
                                     </td>`;
-                        content += `<td>`+item.merk+`</td>`;
-                        content += `<td>`+item.tipe+`</td>`;
-                        content += `<td>`+item.no_seri+`</td>`;
+                        content += `<td>`+item.merk+`</td><td>`;
+                                if (item.tipe) {
+                                    content += item.tipe;
+                                } else {
+                                    content += `-`;
+                                }
+                        content += `</td><td>`;
+                                if (item.no_seri) {
+                                    content += item.no_seri;
+                                } else {
+                                    content += `-`;
+                                }
+                        content += `</td>`;
                             if (item.kondisi == 1) {
                                 content += `<td>Baik</td>`;
                             } else {

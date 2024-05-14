@@ -70,6 +70,8 @@
                     <th>NO. SURAT</th>
                     <th>ISI RINGKASAN</th>
                     <th>DITUJUKAN KEPADA</th>
+                    <th>PEMBUAT SURAT</th>
+                    <th>KESESUAIAN</th>
                     <th>UPDATE</th>
                     <th>USER</th>
                 </tr>
@@ -91,6 +93,8 @@
                     <th>NO. SURAT</th>
                     <th>ISI RINGKASAN</th>
                     <th>DITUJUKAN KEPADA</th>
+                    <th>PEMBUAT SURAT</th>
+                    <th>KES ESUAIAN</th>
                     <th>UPDATE</th>
                     <th>USER</th>
                 </tr>
@@ -426,7 +430,23 @@
                                                 }
                                             }
                                         }
-                            content += "</ul></td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                            content += "</ul></td><td>";
+                                if (item.pembuat) {
+                                    content += item.pembuat;
+                                } else {
+                                    content += "-";
+                                }
+                            content += "</td><td>";
+                                if (item.sesuai == 1) {
+                                    content += "Sesuai";
+                                } else {
+                                    if (item.sesuai == 0) {
+                                        content += "Tidak Sesuai";
+                                    } else {
+                                        content += "-";
+                                    }
+                                }
+                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -436,12 +456,13 @@
                         });
                         var table = $('#dttable').DataTable({
                             order: [
-                                [6, "desc"]
+                                [8, "desc"]
                             ],
                             columnDefs: [
                                 { width: "8%", targets: 2 },
                                 { width: "40%", targets: 4 },
                                 { width: "20%", targets: 5 },
+                                { visible: false, targets: [6,7] },
                             ],
                             displayLength: 7,
                             lengthChange: true,
@@ -562,7 +583,23 @@
                                                 }
                                             }
                                         }
-                            content += "</ul></td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                            content += "</ul></td><td>";
+                                if (item.pembuat) {
+                                    content += item.pembuat;
+                                } else {
+                                    content += "-";
+                                }
+                            content += "</td><td>";
+                                if (item.sesuai == 1) {
+                                    content += "Sesuai";
+                                } else {
+                                    if (item.sesuai == 0) {
+                                        content += "Tidak Sesuai";
+                                    } else {
+                                        content += "-";
+                                    }
+                                }
+                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -572,11 +609,13 @@
                         });
                         var table = $('#dttable').DataTable({
                             order: [
-                                [6, "desc"]
+                                [8, "desc"]
                             ],
                             columnDefs: [
+                                { width: "8%", targets: 2 },
                                 { width: "40%", targets: 4 },
                                 { width: "20%", targets: 5 },
+                                { visible: false, targets: [6,7] },
                             ],
                             displayLength: 7,
                             lengthChange: true,
@@ -647,7 +686,23 @@
                                                 }
                                             }
                                         }
-                            content += "</ul></td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                            content += "</ul></td><td>";
+                                if (item.pembuat) {
+                                    content += item.pembuat;
+                                } else {
+                                    content += "-";
+                                }
+                            content += "</td><td>";
+                                if (item.sesuai == 1) {
+                                    content += "Sesuai";
+                                } else {
+                                    if (item.sesuai == 0) {
+                                        content += "Tidak Sesuai";
+                                    } else {
+                                        content += "-";
+                                    }
+                                }
+                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -657,11 +712,13 @@
                         });
                         var table = $('#dttable').DataTable({
                             order: [
-                                [6, "desc"]
+                                [8, "desc"]
                             ],
                             columnDefs: [
+                                { width: "8%", targets: 2 },
                                 { width: "40%", targets: 4 },
                                 { width: "20%", targets: 5 },
+                                { visible: false, targets: [6,7] },
                             ],
                             displayLength: 7,
                             lengthChange: true,
@@ -834,6 +891,7 @@
             fd.append('tujuan2',$("#tujuan2_edit").val());
             fd.append('tujuan',$("#tujuan1_editselect").val());
             fd.append('pembuat',$("#pembuat_edit").val());
+            fd.append('sesuai',$("#sesuai").val());
             // if ($("#tujuan2_edit").val() != null) {
             // } else {
             // }
