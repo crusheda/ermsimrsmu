@@ -70,7 +70,9 @@ class AsetMutasiController extends Controller
         $aset->save();
 
         $reset = aset_penarikan::where('id_aset', $request->aset)->first();
-        $reset->delete();
+        if(!empty($reset)){
+            $reset->delete();
+        }
 
         return response()->json($tgl, 200);
     }

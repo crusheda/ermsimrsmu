@@ -1167,6 +1167,14 @@
                                 message: 'Aset telah <i>DIMUSNAHKAN</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
                                 position: 'topRight'
                             });
+                        } else {
+                            if (res.penarikan.status == 2) {
+                                iziToast.warning({
+                                    title: 'Pesan Ambigu!',
+                                    message: 'Aset telah <i>DIKEMBALIKAN KE GUDANG</i>. Silakan melakukan pembatalan penarikan aset apabila diperlukan',
+                                    position: 'topRight'
+                                });
+                            }
                         }
                     } else {
                         // DEFINISI
@@ -1199,28 +1207,40 @@
                         }
 
                         // TABEL
+                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                        console.log(adminID);
                         $("#tampil-tbody-mutasi").empty();
                         $('#dttable-mutasi').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
                         res.show.forEach(item => {
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
-                                if (updet == date) {
-                                    if (res.peminjaman != null) {
-                                        if (res.peminjaman.status == 1) {
+                                if (adminID == true) {
+                                    content += `<td><center><div class='btn-group'>
+                                        <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                        </div></center></td>`;
+                                } else {
+                                    if (updet == date) {
+                                        if (res.peminjaman != null) {
+                                            if (res.peminjaman.status == 1) {
+                                                content += `<td><center><div class='btn-group'>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    </div></center></td>`;
+                                            } else {
+                                                content += `<td><center><div class='btn-group'>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    </div></center></td>`;
+                                            }
+                                        } else {
                                             content += `<td><center><div class='btn-group'>
                                                 <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                                 </div></center></td>`;
-                                        } else {
-                                            content += `<td><center><div class='btn-group'>
-                                                <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
-                                                </div></center></td>`;
                                         }
+                                    } else {
+                                        content += `<td><center><div class='btn-group'>
+                                            <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                            </div></center></td>`;
                                     }
-                                } else {
-                                    content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
-                                        </div></center></td>`;
                                 }
                                 content += `<td>${new Date(item.created_at).toLocaleString('sv-SE')}</td>`;
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>${item.ruangan_awal_aset}</h6><small class='text-truncate text-muted'>${item.lokasi_awal_aset}</small></div></div></td>`;
@@ -1862,7 +1882,7 @@
 
                         // FRESH STATUS
                         $('#status_aset').empty();
-                        if (res.status == 0) {
+                        if (res.status == 0 || res.status == null) {
                             $('#status_aset').append(`<div class="badge bg-primary">Tersedia</div>`);
                         } else {
                             if (res.status == 1) {

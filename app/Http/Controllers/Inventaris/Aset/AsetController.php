@@ -171,7 +171,7 @@ class AsetController extends Controller
             return redirect()->back()->with('error',$arr);
         } else {
             $getRuangan = aset_ruangan::where('id',$request->ruangan)->first();
-            $getUrutan = aset::orderBy('created_at','desc')->first();
+            $getUrutan = aset::where('id_ruangan',$request->ruangan)->orderBy('urutan','desc')->first();
             if (!empty($getUrutan)) {
                 $urutan = $getUrutan->urutan + 1;
             } else {
