@@ -289,7 +289,21 @@ class AsetController extends Controller
     {
         $show = aset::select('aset.*','aset_ruangan.ruangan','aset_ruangan.lokasi')
                     ->join('aset_ruangan','aset_ruangan.id','=','aset.id_ruangan')
-                    ->where('token',$token)
+                    ->where('aset.token',$token)
+                    ->first();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function getUbahAset($id)
+    {
+        $show = aset::select('aset.*','aset_ruangan.ruangan','aset_ruangan.lokasi')
+                    ->join('aset_ruangan','aset_ruangan.id','=','aset.id_ruangan')
+                    ->where('aset.id',$id)
                     ->first();
 
         $data = [

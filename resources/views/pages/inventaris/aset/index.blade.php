@@ -23,10 +23,10 @@
                             title="Menambahkan Aset / Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
                             <button class="btn btn-warning" onclick="refresh()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Refresh Tabel Sarana" id="btn-refresh" disabled><i class="fas fa-sync fa-fw nav-icon"></i></button>
+                            title="Refresh Tabel Sarana" id="btn-refresh" disabled><i class="fas fa-sync fa-fw nav-icon"></i> Segarkan</button>
                             <button class="btn btn-dark" onclick="scan()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Scan QR-Code Aset"><i class="fas fa-qrcode fa-fw nav-icon"></i></button>
+                            title="Scan QR-Code Aset" hidden><i class="fas fa-qrcode fa-fw nav-icon"></i></button>
                         </div>
                         <div class="vr"></div>
                         <div class="dropdown d-inline-block">
@@ -297,6 +297,173 @@
         </div>
     </div>
 
+    <!-- MODAL UBAH -->
+    <div class="modal fade" tabindex="-1" id="modalUbah" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Ubah Sarana <kbd>ID : <a href="javascript:void(0);" id="show_id_edit" class="text-white"></a></kbd></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="javascript:void(0);" class="form-auth-small" id="formUbah" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="shadow-lg p-3 bg-body rounded">
+                                    <div class="form-group">
+                                        <label class="form-label mb-2">Nomor Inventaris</label>
+                                        <h5 class="mb-1" id="no_inventaris_edit">
+                                            <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_edit" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_edit" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_edit" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a id="kd_th_edit" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tahun Perolehan Aset"></a></a>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="text-muted">
+                                    <p class="mb-1"><strong>Keterangan :</strong></p>
+                                    <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Periksa No. Inventaris sebelum Simpan</p>
+                                    <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input <strong>Wajib</strong> diisi</p>
+                                    <p class="mb-0"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Pastikan tidak berpindah halaman saat proses Simpan berjalan</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
+                                <button class="btn btn-sm btn-outline-secondary" type="button" onclick="window.location='{{ route('aset_ruangan.index') }}'" style="--bs-btn-padding-y: 0.09rem;--bs-btn-padding-x: 0.3rem;" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Daftar Ruangan">Tidak menemukan ruangan ?</button>
+                                <div class="select2-dark">
+                                    <select class="select2 form-select" id="ruangan_edit" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                        <option value="">Pilih</option>
+                                        @if(count($list['ruangan']) > 0)
+                                            @foreach($list['ruangan'] as $item)
+                                                <option value="{{ $item->id }}">{{ $item->ruangan }} - {{ $item->lokasi }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenis Aset <a class="text-danger">*</a></label>
+                                <select class="form-select" id="jenis_edit" required>
+                                    <option value="" hidden>Pilih</option>
+                                    <option value="1">Medis</option>
+                                    <option value="2">Non Medis</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Perolehan</label>
+                                <input type="text" id="tgl_perolehan_edit" class="form-control flatpickrnow" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= hari ini"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 show_medis_edit" hidden>
+                            <div class="form-group">
+                                <label class="form-label">No. Kalibrasi</label>
+                                <input type="text" id="no_kalibrasi_edit" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-6 show_medis_edit" hidden>
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Berlaku</label>
+                                <input type="text" id="tgl_berlaku_edit" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nama Sarana <a class="text-danger">*</a></label>
+                                <input type="text" id="sarana_edit" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Merk <a class="text-danger">*</a></label>
+                                <input type="text" id="merk_edit" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tipe</label>
+                                <input type="text" id="tipe_edit" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">No. Seri</label>
+                                <input type="text" id="no_seri_edit" class="form-control" placeholder="e.g. xxx">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Operasi <a class="text-danger">*</a></label>
+                                <input type="text" id="tgl_operasi_edit" class="form-control flatpickrtom" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Asal Perolehan <a class="text-danger">*</a></label>
+                                <select class="form-select" id="asal_perolehan_edit" required>
+                                    <option value="" hidden>Pilih</option>
+                                    <option value="1" selected>Beli</option>
+                                    <option value="2">Hibah</option>
+                                    <option value="3">Wakaf</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nilai Perolehan</label>
+                                <input type="text" id="nilai_perolehan_edit" class="form-control" onclick="$(this).val('')" placeholder="Rp. xxx.xxx" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Masukkan Hanya Angka Tanpa Titik (.) / Koma (,) /dsb">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kondisi <a class="text-danger">*</a></label>
+                                <select class="form-select" id="kondisi_edit" required>
+                                    <option value="" hidden>Pilih</option>
+                                    <option value="1" selected>Baik</option>
+                                    <option value="2">Cukup</option>
+                                    <option value="3">Buruk</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Keterangan</label>
+                                <textarea rows="3" id="keterangan_edit" class="form-control" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Upload</label>
+                                <input type="file" class="form-control mb-2" id="file_edit" accept=".jpg,.jpeg,.png" multiple>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Gambar<br>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Dapat upload gambar lebih dari satu<br>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap File Gambar adalah <strong>5 mb</strong>
+                                {{-- <i class="fa-fw fas fa-caret-right nav-icon"></i> Gunakan aplikasi WinRAR untuk membuka file Upload --}}
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                        class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
+                    <button class="btn btn-info" onclick="simpan()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                        title="Simpan Perubahan Data Aset Barang" id="btn-ubah"><i
+                        class="fa-fw fas fa-save nav-icon"></i>&nbsp;&nbsp;Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- MODAL HAPUS --}}
     <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
@@ -346,93 +513,6 @@
             </div>
         </div>
     </div>
-
-    {{-- MODAL HASIL SCAN --}}
-    {{-- <div class="modal fade" id="modalResultScan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Aset <kbd>ID:</kbd>
-                    </h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1"><i class="fa fa-sync"></i>&nbsp;&nbsp;Ulangi Scan</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    {{-- MODAL PEMINJAMAN --}}
-    {{-- <div class="modal fade" id="peminjaman" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Formulir Peminjaman Aset&nbsp;&nbsp;&nbsp;
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Tgl. Peminjaman <a class="text-danger">*</a></label>
-                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Tgl. Pengembalian</label>
-                                <input type="text" id="" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Sarana <a class="text-danger">*</a></label>
-                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Penanggungjawab <a class="text-danger">*</a></label>
-                                <input type="text" id="" class="form-control" placeholder="e.g. xxx">
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
-                                <div class="select2-dark">
-                                    <select class="select2 form-select" id="" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                                        <option value="">Pilih</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kelengkapan Sarana <a class="text-danger">*</a></label>
-                                <textarea rows="2" id="" class="form-control"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Keterangan</label>
-                                <textarea rows="3" id="" class="form-control" placeholder="Optional"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()" hidden><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     <script src="{{ asset('js/html5-qrcode.js') }}"></script>
     {{-- <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> --}}
@@ -572,7 +652,6 @@
                                             + `<div class="dropdown-header noti-title">`
                                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                             + `</div>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="lihatStatus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-check-double scaleX-n1-rtl'></i> Status</a></li>`
                                             + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
                                             + `<div class="dropdown-divider"></div>`
                                             + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
@@ -690,6 +769,20 @@
                 })
             });
             $('#modalTambah').modal('show');
+        }
+
+        function ubah(id) {
+            $('#show_id_edit').text(id);
+            $.ajax(
+            {
+                url: "/api/inventaris/aset/ubah/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    console.log(res);
+                    $('#modalUbah').modal('show');
+                }
+            })
         }
 
         function simpan() {
@@ -834,7 +927,6 @@
                                             + `<div class="dropdown-header noti-title">`
                                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                             + `</div>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="lihatStatus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-check-double scaleX-n1-rtl'></i> Status</a></li>`
                                             + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
                                             + `<div class="dropdown-divider"></div>`
                                             + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
