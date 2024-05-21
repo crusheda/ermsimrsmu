@@ -25,7 +25,7 @@ class AsetRuanganController extends Controller
 
             return view('pages.inventaris.aset.ruangan.index')->with('list',$data);
         } else {
-            return redirect()->back();
+            return redirect()->back()->withErrors('Maaf, Anda tidak memiliki akses daftar ruangan');
         }
     }
 

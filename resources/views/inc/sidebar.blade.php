@@ -107,13 +107,14 @@
                 <li class="menu-title" key="t-menu">Inventaris</li>
 
                 <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <a href="javascript: void(0);" class=" {{-- has-arrow --}} waves-effect">
+                        <span class="badge rounded-pill bg-primary float-end">new</span>
                         <i class="bx bx-cube"></i>
                         <span key="t-dashboards">Aset & Gudang</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         {{-- <li><a href="{{ route('aset.index') }}" key="t-saas">Daftar Sarana</a></li> --}}
-                        <li><a href="javascript: void(0);" key="t-saas"><s>Daftar Barang</s></a></li>
+                        <li><a href="{{ route('aset.index') }}" key="t-saas">Daftar Aset</a></li>
                         {{-- <li><a href="{{ route('rapat.index') }}" key="t-default">Rapat</a></li>
                         <li><a href="{{ route('rka.index') }}" key="t-crypto">RKA</a></li>
                         <li><a href="{{ route('regulasi.index') }}" key="t-crypto">Regulasi</a></li> --}}

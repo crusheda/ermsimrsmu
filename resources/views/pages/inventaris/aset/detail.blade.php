@@ -75,12 +75,12 @@
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class='bx bx-caret-down align-middle'></i>&nbsp;&nbsp;Menu
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPemeliharaan({{ $list['show']->id }})">Pemeliharaan</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalMutasi({{ $list['show']->id }})">Mutasi</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPeminjaman({{ $list['show']->id }})">Peminjaman</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPengembalian({{ $list['show']->id }})">Pengembalian</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="modalPenarikan({{ $list['show']->id }})">Penarikan</a>
+                        <div class="dropdown-menu dropdown-menu-end tombol-menu">
+                            <a class="dropdown-item menu-pemeliharaan" href="javascript:void(0);" onclick="modalPemeliharaan({{ $list['show']->id }})">Pemeliharaan</a>
+                            <a class="dropdown-item menu-mutasi" href="javascript:void(0);" onclick="modalMutasi({{ $list['show']->id }})">Mutasi</a>
+                            <a class="dropdown-item menu-peminjaman" href="javascript:void(0);" onclick="modalPeminjaman({{ $list['show']->id }})">Peminjaman</a>
+                            <a class="dropdown-item menu-pengembalian" href="javascript:void(0);" onclick="modalPengembalian({{ $list['show']->id }})">Pengembalian</a>
+                            <a class="dropdown-item menu-penarikan" href="javascript:void(0);" onclick="modalPenarikan({{ $list['show']->id }})">Penarikan</a>
                         </div>
                     </div>
                 </div>
@@ -863,6 +863,53 @@
         $(document).ready(function() {
             $('#show_nilai_perolehan').text(formatRupiah("{{ $list['show']->nilai_perolehan }}",'Rp. '));
 
+            // PENENTUAN MENU AKSES
+            var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+            var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";
+            var aksesPIC = "{{ Auth::user()->getRole('pic-sarpras') }}";
+            var aksesIPSRS = "{{ Auth::user()->getManyRole(['ipsrs','kasubag-ipsrs']) }}";
+            // console.log(aksesAdmin+' - '+aksesElektromedis+' - '+aksesIPSRS+' - '+aksesPIC);
+            // VALIDASI AKSES
+            if (aksesAdmin == true) { // ALL ACCESS
+                $(".menu-pemeliharaan").prop('hidden', false);
+                $(".menu-mutasi").prop('hidden', false);
+                $(".menu-peminjaman").prop('hidden', false);
+                $(".menu-pengembalian").prop('hidden', false);
+                $(".menu-penarikan").prop('hidden', false);
+            } else {
+                if (aksesElektromedis == true) {
+                    $(".menu-pemeliharaan").prop('hidden', false);
+                    $(".menu-mutasi").prop('hidden', true);
+                    $(".menu-peminjaman").prop('hidden', false);
+                    $(".menu-pengembalian").prop('hidden', false);
+                    $(".menu-penarikan").prop('hidden', false);
+                } else {
+                    if (aksesPIC == true) {
+                        $(".menu-pemeliharaan").prop('hidden', true);
+                        $(".menu-mutasi").prop('hidden', true);
+                        $(".menu-peminjaman").prop('hidden', false);
+                        $(".menu-pengembalian").prop('hidden', false);
+                        $(".menu-penarikan").prop('hidden', true);
+                    } else {
+                        if (aksesIPSRS == true) {
+                            $(".menu-pemeliharaan").prop('hidden', false);
+                            $(".menu-mutasi").prop('hidden', true);
+                            $(".menu-peminjaman").prop('hidden', true);
+                            $(".menu-pengembalian").prop('hidden', true);
+                            $(".menu-penarikan").prop('hidden', true);
+                        } else {
+                            $(".tombol-menu").prop('hidden', true);
+                            $(".menu-pemeliharaan").prop('hidden', true);
+                            $(".menu-mutasi").prop('hidden', true);
+                            $(".menu-peminjaman").prop('hidden', true);
+                            $(".menu-pengembalian").prop('hidden', true);
+                            $(".menu-penarikan").prop('hidden', true);
+                        }
+                    }
+                }
+            }
+
+
             // SELECT2
             var te = $(".select2");
             te.length && te.each(function() {
@@ -996,16 +1043,21 @@
                         });
 
                         // TAMPIL TABEL PEMELIHARAAN
+                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
                         $("#tampil-tbody-pemeliharaan").empty();
                         $('#dttable-pemeliharaan').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
                         res.show.forEach(item => {
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
-                                if (updet == date) {
+                                if (adminID == true) {
                                     content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 } else {
-                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    if (updet == date) {
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    } else {
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    }
                                 }
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.nama_petugas}</td>`;
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.hasil}</td>`;

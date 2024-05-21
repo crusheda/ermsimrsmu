@@ -18,7 +18,7 @@
                 <div class="flex-shrink-0">
                     <div class="hstack gap-3 ms-auto">
                         <div class="btn-group">
-                            <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
+                            <button class="btn btn-primary tombol-tambah" onclick="tambah()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Menambahkan Aset / Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
                             <button class="btn btn-warning" onclick="refresh()" data-bs-toggle="tooltip"
@@ -42,17 +42,17 @@
         <div class="card-body border-bottom">
             <div class="row g-3">
                 <div class="col-xxl-4 col-lg-6">
-                    <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana ...">
+                    <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana ..." disabled>
                 </div>
                 <div class="col-xxl-2 col-lg-6">
-                    <select class="form-select" id="idStatus" aria-label="Default select example">
+                    <select class="form-select" id="idStatus" aria-label="Default select example" disabled>
                         <option value="" selected hidden>Jenis Sarana</option>
                         <option value="1">Medis</option>
                         <option value="2">Non Medis</option>
                     </select>
                 </div>
                 <div class="col-xxl-2 col-lg-4">
-                    <select class="form-select" id="idType" aria-label="Default select example">
+                    <select class="form-select" id="idType" aria-label="Default select example" disabled>
                         <option value="" selected hidden>Pilih Lokasi</option>
                         <option value="Full Time">Full Time</option>
                         <option value="Part Time">Part Time</option>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="col-xxl-2 col-lg-4">
                     <div id="datepicker1">
-                        <input type="text" class="form-control flatpickr" placeholder="Tanggal Aset">
+                        <input type="text" class="form-control flatpickr" placeholder="Tanggal Aset" disabled>
                     </div><!-- input-group -->
                 </div>
                 <div class="col-xxl-2 col-lg-4">
@@ -518,6 +518,31 @@
     {{-- <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> --}}
     <script>
         $(document).ready(function() {
+            // PENENTUAN MENU AKSES
+            var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+            var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";
+            var aksesPIC = "{{ Auth::user()->getRole('pic-sarpras') }}";
+            var aksesIPSRS = "{{ Auth::user()->getManyRole(['ipsrs','kasubag-ipsrs']) }}";
+            // console.log(aksesAdmin+' - '+aksesElektromedis+' - '+aksesIPSRS+' - '+aksesPIC);
+            // VALIDASI AKSES
+            if (aksesAdmin == true) { // ALL ACCESS
+                $(".tombol-tambah").prop('hidden', false);
+            } else {
+                if (aksesElektromedis == true) {
+                    $(".tombol-tambah").prop('hidden', false);
+                } else {
+                    if (aksesPIC == true) {
+                        $(".tombol-tambah").prop('hidden', false);
+                    } else {
+                        if (aksesIPSRS == true) {
+                            $(".tombol-tambah").prop('hidden', true);
+                        } else {
+                            $(".tombol-tambah").prop('hidden', true);
+                        }
+                    }
+                }
+            }
+
             // SELECT2
             var te = $(".select2");
             te.length && te.each(function() {
@@ -642,22 +667,73 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
-
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                    var date = new Date().toLocaleDateString();
                     res.show.forEach(item => {
+                        var updet = new Date(item.created_at).toLocaleDateString();
                         content = `<tr id='`+item.id+`'>`;
-                        content += `<td><center>`
-                                    + `<div class='btn-group'>`
-                                        + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                                        + `<ul class='dropdown-menu dropdown-menu-right'>`
-                                            + `<div class="dropdown-header noti-title">`
-                                                + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                        if (adminID == true) {
+                            content += `<td><center>`
+                                        + `<div class='btn-group'>`
+                                            + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                            + `<ul class='dropdown-menu dropdown-menu-right'>`
+                                                + `<div class="dropdown-header noti-title">`
+                                                    + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                                                + `</div>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
+                                                + `<div class="dropdown-divider"></div>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                            + `</ul>`
+                                        + `</div>`
+                                    + `</center></td>`;
+                        } else {
+                            if (userID == item.id_user) {
+                                if (updet == date) {
+                                    content += `<td><center>`
+                                                + `<div class='btn-group'>`
+                                                    + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                                    + `<ul class='dropdown-menu dropdown-menu-right'>`
+                                                        + `<div class="dropdown-header noti-title">`
+                                                            + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                                                        + `</div>`
+                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
+                                                        + `<div class="dropdown-divider"></div>`
+                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                                    + `</ul>`
+                                                + `</div>`
+                                            + `</center></td>`;
+                                } else {
+                                    content += `<td><center>`
+                                                + `<div class='btn-group'>`
+                                                    + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                                    + `<ul class='dropdown-menu dropdown-menu-right'>`
+                                                        + `<div class="dropdown-header noti-title">`
+                                                            + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                                                        + `</div>`
+                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
+                                                        + `<div class="dropdown-divider"></div>`
+                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
+                                                    + `</ul>`
+                                                + `</div>`
+                                            + `</center></td>`;
+                                }
+                            } else {
+                                content += `<td><center>`
+                                            + `<div class='btn-group'>`
+                                                + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                                + `<ul class='dropdown-menu dropdown-menu-right'>`
+                                                    + `<div class="dropdown-header noti-title">`
+                                                        + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                                                    + `</div>`
+                                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
+                                                    + `<div class="dropdown-divider"></div>`
+                                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
+                                                + `</ul>`
                                             + `</div>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                            + `<div class="dropdown-divider"></div>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
-                                        + `</ul>`
-                                    + `</div>`;
-                        content += `</div></center></td>`;
+                                        + `</center></td>`;
+                            }
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
