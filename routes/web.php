@@ -135,6 +135,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], fu
         // Route::get('ipsrs/history', '\App\Http\Controllers\Perbaikan\ipsrsController@history')->name('ipsrs.history');
 });
 
+// E-RUANG
+Route::group(['middleware' => ['auth'], 'prefix' => 'eruang', 'as' => ''], function () {
+    // Accident Report - Kecelakan Kerja
+        Route::get('/', [App\Http\Controllers\ERuang\ERuangController::class, 'index'])->name('eruang.index');
+});
+
 // INVENTARIS
 Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], function () {
     // ASET RUANGAN

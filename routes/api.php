@@ -136,6 +136,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('perbaikan/ipsrs/result/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@result')->name('ipsrs.result');
         Route::post('perbaikan/ipsrs/filter', '\App\Http\Controllers\Perbaikan\ipsrsController@filter')->name('ipsrs.filter');
 
+    // E-RUANG
+        Route::post('eruang/store', 'App\Http\Controllers\ERuang\ERuangController@store')->name('eruang.store');
+
     // INVENTARIS
         // DETAIL ASET
             Route::get('inventaris/aset/{token}/fresh', '\App\Http\Controllers\Inventaris\Aset\AsetController@fresh')->name('aset_detail.fresh');
