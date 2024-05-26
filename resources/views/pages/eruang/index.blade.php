@@ -65,7 +65,7 @@
                                 <div class="mb-4">
                                     <label><mark>Ketentuan</mark></label><br>
                                     <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai</small><br>
-                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Apabila peminjaman hanya untuk 1 hari, masukkan Tanggal yang sama pada input tanggal <kbd>Mulai</kbd> dan <kbd>Selesai</kbd></small>
+                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pada pemilihan Jam & Menit tidak boleh sama</small>
                                 </div>
 
                                 <div class="mb-2">
@@ -102,45 +102,30 @@
 
                                 <div class="mb-3">
                                     <label>Pilih Tanggal Acara <a class="text-danger">*</a></label>
-
-                                    <div class="row">
-                                        <div class="input-daterange input-group" id="datepicker6" data-date-format="dd-mm-yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker6'>
-                                            <div class="col-sm-6">
-                                                <div class="input-group mb-2 currency-value">
-                                                    <span class="input-group-text">Mulai</span>
-
-                                                    <input type="text" id="tgl_mulai" class="form-control" placeholder="dd-mm-yyyy" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal mulai acara"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <div class="input-group mb-2">
-                                                    <input type="text" id="tgl_selesai" class="form-control" placeholder="dd-mm-yyyy" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal selesai acara"/>
-
-                                                    <span class="input-group-text">Selesai</span>
-
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="input-daterange input-group" id="datepicker6" data-date-format="dd-mm-yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker6'>
+                                        <input type="text" id="tgl" class="form-control" placeholder="dd-mm-yyyy" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
                                     </div>
                                 </div>
 
-                                <div class="mb-2">
-                                    <div class="row">
-                                        <div class="col-sm-6 mb-3">
-                                            <label>Waktu Mulai Acara <a class="text-danger">*</a></label>
-                                            <div class="input-group" id="timepicker-input-group1">
-                                                <span class="input-group-text"><i class="mdi mdi-clock-fast"></i></span>
-                                                <input id="jam_mulai" type="text" class="form-control" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam mulai acara">
+                                <div class="mb-3">
+                                    <label>Pilih Waktu Acara <a class="text-danger">*</a></label>
+
+                                    <div class="row" style="text-align: center">
+                                        {{-- <div class="input-daterange input-group" id="datepicker6" data-date-format="dd-mm-yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker6'> --}}
+                                            <div class="col-sm-6">
+                                                <div class="input-daterange input-group clock-value" id="timepicker-input-group1">
+                                                    <span class="input-group-text">Mulai</span>
+                                                    <input id="jam_mulai" type="text" class="form-control" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam mulai acara">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label>Waktu Selesai Acara <a class="text-danger">*</a></label>
-                                            <div class="input-group" id="timepicker-input-group2">
-                                                <span class="input-group-text"><i class="mdi mdi-clock-check-outline"></i></span>
-                                                <input id="jam_selesai" type="text" class="form-control" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam selesai acara">
+
+                                            <div class="col-sm-6">
+                                                <div class="input-daterange input-group" id="timepicker-input-group2">
+                                                    <input id="jam_selesai" type="text" class="form-control" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam selesai acara">
+                                                    <span class="input-group-text">Selesai</span>
+                                                </div>
                                             </div>
-                                        </div>
+                                        {{-- </div> --}}
                                     </div>
                                 </div>
 
@@ -293,69 +278,67 @@
 
     // FUNCTION-FUNCTION
     function prosesSimpan() {
-        // $("#btn-simpan").prop('disabled', true);
-        // $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
+        $("#btn-simpan").prop('disabled', true);
+        $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
 
-        // // Definisi
-        // var save = new FormData();
-        // save.append('ruangan',$('input[name="ruangan"]:checked').val());
-        // save.append('tgl_mulai',$("#tgl_mulai").val());
-        // save.append('tgl_selesai',$("#tgl_selesai").val());
-        // save.append('jam_mulai',$("#jam_mulai").val());
-        // save.append('jam_selesai',$("#jam_selesai").val());
-        // save.append('gizi',$("#gizi").val());
-        // save.append('user','{{ Auth::user()->id }}');
+        // Definisi
+        var save = new FormData();
+        save.append('ruangan',$('input[name="ruangan"]:checked').val());
+        save.append('tgl',$("#tgl").val());
+        save.append('jam_mulai',$("#jam_mulai").val());
+        save.append('jam_selesai',$("#jam_selesai").val());
+        save.append('gizi',$("#gizi").val());
+        save.append('user','{{ Auth::user()->id }}');
 
-        // if (
-        //     save.get('ruangan') == "" ||
-        //     save.get('tgl_mulai') == "" ||
-        //     save.get('tgl_selesai') == "" ||
-        //     save.get('jam_mulai') == "" ||
-        //     save.get('jam_selesai') == ""
-        // ) {
-        //     iziToast.warning({
-        //         title: 'Pesan Ambigu!',
-        //         message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
-        //         position: 'topRight'
-        //     });
-        // } else {
-        //     $.ajax({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         method: 'POST',
-        //         url: '/api/eruang/store',
-        //         contentType: false,
-        //         processData: false,
-        //         dataType: 'json',
-        //         data: save,
-        //         success: function(res) {
-        //             iziToast.success({
-        //                 title: 'Sukses!',
-        //                 message: 'Tambah Sarana berhasil pada '+ res,
-        //                 position: 'topRight'
-        //             });
-        //             if (res) {
-        //                 // refresh();
-        //             }
-        //         },
-        //         error: function (res) {
-        //             iziToast.error({
-        //                 title: 'Pesan Galat!',
-        //                 message: res.responseJSON.error,
-        //                 position: 'topRight'
-        //             });
-        //         }
-        //     });
-        // }
+        if (
+            save.get('ruangan') == "" ||
+            save.get('tgl') == "" ||
+            save.get('jam_mulai') == "" ||
+            save.get('jam_selesai') == ""
+        ) {
+            iziToast.warning({
+                title: 'Pesan Ambigu!',
+                message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                position: 'topRight'
+            });
+        } else {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: '/api/eruang/store',
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                data: save,
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: 'Tambah Sarana berhasil pada '+ res,
+                        position: 'topRight'
+                    });
+                    if (res) {
+                        // refresh();
+                    }
+                },
+                error: function (res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
 
-        // $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
-        // $("#btn-simpan").prop('disabled', false);
-        iziToast.error({
-            title: 'Pesan Developer!',
-            message: 'Sistem sedang dalam pengembangan',
-            position: 'topRight'
-        });
+        $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+        $("#btn-simpan").prop('disabled', false);
+        // iziToast.error({
+        //     title: 'Pesan Developer!',
+        //     message: 'Sistem sedang dalam pengembangan',
+        //     position: 'topRight'
+        // });
     }
 </script>
 @endsection
