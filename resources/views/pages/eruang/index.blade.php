@@ -293,64 +293,69 @@
 
     // FUNCTION-FUNCTION
     function prosesSimpan() {
-        $("#btn-simpan").prop('disabled', true);
-        $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
+        // $("#btn-simpan").prop('disabled', true);
+        // $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
 
-        // Definisi
-        var save = new FormData();
-        save.append('ruangan',$('input[name="ruangan"]:checked').val());
-        save.append('tgl_mulai',$("#tgl_mulai").val());
-        save.append('tgl_selesai',$("#tgl_selesai").val());
-        save.append('jam_mulai',$("#jam_mulai").val());
-        save.append('jam_selesai',$("#jam_selesai").val());
-        save.append('gizi',$("#gizi").val());
-        save.append('user','{{ Auth::user()->id }}');
+        // // Definisi
+        // var save = new FormData();
+        // save.append('ruangan',$('input[name="ruangan"]:checked').val());
+        // save.append('tgl_mulai',$("#tgl_mulai").val());
+        // save.append('tgl_selesai',$("#tgl_selesai").val());
+        // save.append('jam_mulai',$("#jam_mulai").val());
+        // save.append('jam_selesai',$("#jam_selesai").val());
+        // save.append('gizi',$("#gizi").val());
+        // save.append('user','{{ Auth::user()->id }}');
 
-        if (
-            save.get('ruangan') == "" ||
-            save.get('tgl_mulai') == "" ||
-            save.get('tgl_selesai') == "" ||
-            save.get('jam_mulai') == "" ||
-            save.get('jam_selesai') == ""
-        ) {
-            iziToast.warning({
-                title: 'Pesan Ambigu!',
-                message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
-                position: 'topRight'
-            });
-        } else {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                method: 'POST',
-                url: '/api/eruang/store',
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                data: save,
-                success: function(res) {
-                    iziToast.success({
-                        title: 'Sukses!',
-                        message: 'Tambah Sarana berhasil pada '+ res,
-                        position: 'topRight'
-                    });
-                    if (res) {
-                        // refresh();
-                    }
-                },
-                error: function (res) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: res.responseJSON.error,
-                        position: 'topRight'
-                    });
-                }
-            });
-        }
+        // if (
+        //     save.get('ruangan') == "" ||
+        //     save.get('tgl_mulai') == "" ||
+        //     save.get('tgl_selesai') == "" ||
+        //     save.get('jam_mulai') == "" ||
+        //     save.get('jam_selesai') == ""
+        // ) {
+        //     iziToast.warning({
+        //         title: 'Pesan Ambigu!',
+        //         message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+        //         position: 'topRight'
+        //     });
+        // } else {
+        //     $.ajax({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         method: 'POST',
+        //         url: '/api/eruang/store',
+        //         contentType: false,
+        //         processData: false,
+        //         dataType: 'json',
+        //         data: save,
+        //         success: function(res) {
+        //             iziToast.success({
+        //                 title: 'Sukses!',
+        //                 message: 'Tambah Sarana berhasil pada '+ res,
+        //                 position: 'topRight'
+        //             });
+        //             if (res) {
+        //                 // refresh();
+        //             }
+        //         },
+        //         error: function (res) {
+        //             iziToast.error({
+        //                 title: 'Pesan Galat!',
+        //                 message: res.responseJSON.error,
+        //                 position: 'topRight'
+        //             });
+        //         }
+        //     });
+        // }
 
-        $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
-        $("#btn-simpan").prop('disabled', false);
+        // $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+        // $("#btn-simpan").prop('disabled', false);
+        iziToast.error({
+            title: 'Pesan Developer!',
+            message: 'Sistem sedang dalam pengembangan',
+            position: 'topRight'
+        });
     }
 </script>
 @endsection
