@@ -12,11 +12,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-body">
-                {{-- <div class="float-end">
+            <div class="card-body" style="overflow: visible;">
+                <div class="float-end" id="btn_link_pengajuan">
                     <div class="dropdown">
-                        <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-wallet me-1"></i> <span class="d-none d-sm-inline-block">Wallet Balance <i class="mdi mdi-chevron-down"></i></span></button>
-                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
+                        <button type="button" class="btn btn-soft-dark" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block">Informasi <i class="mdi mdi-chevron-down"></i></span></button>
+                        {{-- <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
                             <div class="dropdown-item-text">
                                 <div>
                                     <p class="text-muted mb-2">Available Balance</p>
@@ -38,27 +38,42 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item text-primary text-center" href="#">
+                            <a class="dropdown-item text-primary text-center" href="#" onclick="refreshWithOpenRiwayat()">
                                 Learn more
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
-                </div> --}}
+                </div>
+                <div class="float-end" id="btn_link_riwayat" hidden>
+                    <div class="input-daterange input-group bg-light rounded">
+                        <input type="text" name="filter_tgl" class="form-control bg-transparent border-0 flatpickrunl" placeholder="Filter Tanggal Acara" aria-label="" aria-describedby="button-addon2">
+
+                        <button class="btn btn-primary" type="button" id="button-addon2" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                        title="Cari data berdasarkan tanggal acara"><i class="bx bxs-paper-plane"></i></button>
+                        <button type="button" class="btn btn-warning" onclick="riwayat()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                        title="Refresh Tabel Peminjaman Ruangan"><i class="fas fa-sync fa-fw nav-icon"></i></button>
+                    </div>
+                </div>
+                <div class="float-end" id="btn_link_display" hidden>
+
+                </div>
                 <h4 class="card-title mb-4">Peminjaman Ruangan</h4>
                 <div class="crypto-buy-sell-nav">
                     <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#pengajuan" role="tab">
+                            <a class="nav-link active" id="link_pengajuan" data-bs-toggle="tab" href="#pengajuan" role="tab">
                                 Pengajuan
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#riwayat" role="tab">
+                            <a class="nav-link" id="link_riwayat" data-bs-toggle="tab" href="#riwayat" role="tab">
                                 Daftar Riwayat
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#display" role="tab">
+                            <a class="nav-link" id="link_display" data-bs-toggle="tab" href="#display" role="tab">
                                 Display Gizi
                             </a>
                         </li>
@@ -74,26 +89,24 @@
                                     <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pada pemilihan Jam & Menit tidak boleh sama</small>
                                 </div>
 
-                                <div class="mb-2">
+                                <div class="mb-3">
                                     <label>Pilih Ruangan <a class="text-danger">*</a></label>
 
                                     <div class="row">
                                         @if (!empty($list['ruangan']))
                                             @foreach ($list['ruangan'] as $item)
                                                 <div class="col-xl-2 col-sm-4">
-                                                    <div class="mb-3">
-                                                        <label class="card-radio-label mb-2">
-                                                            <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input">
+                                                    <label class="card-radio-label mb-2">
+                                                        <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input">
 
-                                                            <div class="card-radio">
-                                                                <div>
-                                                                    {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
-                                                                    <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
-                                                                    <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
-                                                                </div>
+                                                        <div class="card-radio">
+                                                            <div>
+                                                                {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
+                                                                <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
+                                                                <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
                                                             </div>
-                                                        </label>
-                                                    </div>
+                                                        </div>
+                                                    </label>
                                                 </div>
                                             @endforeach
                                         @endif
@@ -103,7 +116,7 @@
                                             <h5 class="font-size-16"></h5>
                                         </div> --}}
                                     </div>
-
+                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Klik salah satu ruangan di atas</small>
                                 </div>
 
                                 <div>
@@ -152,7 +165,7 @@
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <label>Pesan Tambahan Untuk Bagian Gizi</label>
-                                            <textarea rows="2" class="form-control" id="gizi" placeholder="e.g. Tolong siapkan snack untuk 10 peserta pelatihan terima kasih"></textarea>
+                                            <textarea rows="2" class="form-control" id="gizi" placeholder="e.g. Tolong siapkan snack untuk 10 peserta pelatihan terima kasih" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pesan ini akan tersampaikan ke bagian Gizi"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -163,23 +176,21 @@
                             </form>
                         </div>
 
-                        <div class="tab-pane" id="riwayat" role="tabpanel">
-                            <div class=" table-responsive" style="overflow: visible;" id="show-table" style="border: 0px">
-                                <table class="table align-middle dt-responsive w-100 table-check table-hover" id="dttable">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"><center>Aksi</center></th>
-                                            <th scope="col">Nama Ruangan</th>
-                                            <th scope="col">Peminjam</th>
-                                            <th scope="col">Tanggal Acara</th>
-                                            <th scope="col">Waktu Acara</th>
-                                            <th scope="col">Keterangan</th>
-                                            <th scope="col">Diperbarui</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tampil-tbody"></tbody>
-                                </table>
-                            </div>
+                        <div class="tab-pane table-responsive" id="riwayat" role="tabpanel" style="border: 0px !important">
+                            <table class="table align-middle dt-responsive w-100 table-check table-hover" id="dttable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><center>Aksi</center></th>
+                                        <th scope="col">Nama Ruangan</th>
+                                        <th scope="col">Peminjam</th>
+                                        <th scope="col">Tanggal Acara</th>
+                                        <th scope="col">Waktu Acara</th>
+                                        <th scope="col">Keterangan</th>
+                                        <th scope="col">Diperbarui</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tampil-tbody"></tbody>
+                            </table>
                         </div>
 
                         <div class="tab-pane" id="display" role="tabpanel">
@@ -303,7 +314,27 @@
             // defaultTime: add(30, 'minutes'),
             appendWidgetTo: "#timepicker-input-group2"
         });
-
+        $('.nav-link').on('click', function() {
+            if ($(this).attr('id') == 'link_pengajuan') {
+                $("#btn_link_pengajuan").prop('hidden', false);
+                $("#btn_link_riwayat").prop('hidden', true);
+                $("#btn_link_display").prop('hidden', true);
+            } else {
+                if ($(this).attr('id') == 'link_riwayat') {
+                    $("#btn_link_pengajuan").prop('hidden', true);
+                    $("#btn_link_riwayat").prop('hidden', false);
+                    $("#btn_link_display").prop('hidden', true);
+                } else {
+                    if ($(this).attr('id') == 'link_display') {
+                        $("#btn_link_pengajuan").prop('hidden', true);
+                        $("#btn_link_riwayat").prop('hidden', true);
+                        $("#btn_link_display").prop('hidden', false);
+                    } else {
+                        alert('Sistem gagal memuat halaman, silakan refresh browser');
+                    }
+                }
+            }
+        });
 
         // <th scope="col"><center>Aksi</center></th>
         // <th scope="col">Nama Ruangan</th>
@@ -313,16 +344,31 @@
         // <th scope="col">Keterangan</th>
         // <th scope="col">Diperbarui</th>
 
+        // INITIALIZE PAGE
+        riwayat();
     })
 
     // FUNCTION-FUNCTION
     // ----------------------------------------------------------------------------------------
+    function refreshWithOpenRiwayat() {
+        // reload table
+        riwayat();
+        // change active menu
+        $("#link_pengajuan").removeClass("active");
+        $("#link_display").removeClass("active");
+        $("#link_riwayat").removeClass("active").addClass("active");
+        // change nav page
+        $("#pengajuan").removeClass("active");
+        $("#display").removeClass("active");
+        $("#riwayat").removeClass("active").addClass("active");
+    }
+
     function riwayat() {
         $("#tampil-tbody").empty().append(
             `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
         );
         $.ajax({
-            url: "/api/eruang/table",
+            url: "/api/eruang",
             type: 'GET',
             dataType: 'json',
             success: function(res) {
@@ -341,7 +387,7 @@
                             }
                         }
                     }
-                    content = `<tr><td><div class="d-flex align-items-center">
+                    content = `<tr><center><td><div class="d-flex align-items-center">
                                         <div class="dropdown">
                                             <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -349,8 +395,7 @@
                                                 <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                             </div>
                                         </div>
-                                    </div></td>`;
-                    content += `<td></td>`;
+                                    </div></td></center>`;
                     content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                     <div class='d-flex justify-content-start align-items-center'>
                                         <div class='d-flex flex-column'>
@@ -363,14 +408,12 @@
                                     <div class='d-flex justify-content-start align-items-center'>
                                         <div class='d-flex flex-column'>
                                             <h6 class='mb-0'>`+item.nama_user+`</h6>
-                                            <h6 class='mb-0'><small class='text-truncate text-muted'>`+item.unit+`</small></h6>
                                             <h6 class='mb-0'><small class='text-truncate text-muted'>`+item.no_hp+`</small></h6>
                                         </div>
                                     </div>
                                 </td>`;
                     content += `<td>`+item.tgl+`</td>`;
-                    content += `<td>`+item.tgl+`</td>`;
-                    content += `<td>`+item.jam_mulai+` - `+item.jam_selesai+` WIB</td>`;
+                    content += `<td>`+item.jam_mulai.substring(0, 5)+` - `+item.jam_selesai.substring(0, 5)+` WIB</td>`;
                     content += `<td>`+item.ket+`</td>`;
                     // unit.forEach(val => {
                     //     res.role.forEach(pus => {
@@ -388,14 +431,16 @@
                     order: [
                         [6, "desc"]
                     ],
-                    // bAutoWidth: false,
-                    // aoColumns : [
-                    //     { sWidth: '5%' },
-                    //     { sWidth: '20%' },
-                    //     { sWidth: '20%' },
-                    //     { sWidth: '25%' },
-                    //     { sWidth: '10%' },
-                    // ],
+                    bAutoWidth: false,
+                    aoColumns : [
+                        { sWidth: '5%' },
+                        { sWidth: '17%' },
+                        { sWidth: '20%' },
+                        { sWidth: '11%' },
+                        { sWidth: '18%' },
+                        { sWidth: '20%' },
+                        { sWidth: '10%' },
+                    ],
                     displayLength: 7,
                     lengthChange: true,
                     lengthMenu: [7, 10, 25, 50, 75, 100],
@@ -513,6 +558,7 @@
                                 ]
                             ]
                         });
+                        refreshWithOpenRiwayat();
                     }
                     // iziToast.success({
                     //     title: 'Sukses!',

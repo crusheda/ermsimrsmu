@@ -248,7 +248,7 @@ class ERuangController extends Controller
     function table()
     {
         $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        $show = eruang::select('eruang.*','users.nama as nama_user','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
+        $show = eruang::select('eruang.*','users.nama as nama_user','users.no_hp','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
                     ->join('users','users.id','=','eruang.id_user')
                     ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
                     ->orderBy('eruang.updated_at','DESC')
@@ -261,6 +261,6 @@ class ERuangController extends Controller
             // 'ruangan' => $ruangan,
         ];
 
-        return view('pages.eruang.index')->with('list',$data);
+        return response()->json($data);
     }
 }
