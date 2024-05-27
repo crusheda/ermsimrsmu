@@ -137,6 +137,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post('perbaikan/ipsrs/filter', '\App\Http\Controllers\Perbaikan\ipsrsController@filter')->name('ipsrs.filter');
 
     // E-RUANG
+        Route::get('eruang', 'App\Http\Controllers\ERuang\ERuangController@table')->name('eruang.table');
         Route::post('eruang/store', 'App\Http\Controllers\ERuang\ERuangController@store')->name('eruang.store');
 
     // INVENTARIS
