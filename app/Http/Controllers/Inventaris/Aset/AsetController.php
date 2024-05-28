@@ -103,7 +103,29 @@ class AsetController extends Controller
                 ->where('aset.token',$token)
                 ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
                 ->first();
-        return response()->json($show, 200);
+
+        // Menentukan Kondisi
+        if ($show->kondisi == 1) {
+            $kondisi = 'Baik';
+        } else {
+            if ($show->kondisi == 2) {
+                $kondisi = 'Cukup';
+            } else {
+                if ($show->kondisi == 3) {
+                    $kondisi = 'Buruk';
+                }
+            }
+        }
+
+        // Menentukan Isi QR-Code
+        $qr = $show->sarana.' | '.$show->merk.' | '.$show->tipe.' | '.$show->ruangan.' | '.$kondisi;
+
+        $data = [
+            'show' => $show,
+            'qr' => $qr,
+        ];
+
+        return response()->json($data, 200);
     }
 
     function ubahKondisi($token, $kondisi){
@@ -163,7 +185,7 @@ class AsetController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'file.*' => 'required|mimes:jpg,png,jpeg|max:5000',
+            'file.*' => 'mimes:jpg,png,jpeg|max:5000', // required
         ]);
 
         if ($validator->fails()) {
@@ -203,7 +225,9 @@ class AsetController extends Controller
             $data->no_seri = $request->no_seri;
             $data->tgl_operasi = $request->tgl_operasi;
             $data->asal_perolehan = $request->asal_perolehan;
-            $data->nilai_perolehan = str_replace('.','',str_replace('Rp. ','',$request->nilai_perolehan));
+            if ($request->nilai_perolehan != null) {
+                $data->nilai_perolehan = str_replace('.','',str_replace('Rp. ','',$request->nilai_perolehan));
+            }
             $data->keterangan = $request->keterangan;
             $data->kondisi = $request->kondisi;
             $data->golongan = $request->golongan;
@@ -305,11 +329,64 @@ class AsetController extends Controller
                     ->join('aset_ruangan','aset_ruangan.id','=','aset.id_ruangan')
                     ->where('aset.id',$id)
                     ->first();
+        $ruangan = aset_ruangan::get();
 
         $data = [
             'show' => $show,
+            'ruangan' => $ruangan,
         ];
 
         return response()->json($data, 200);
+    }
+
+    function update(Request $request)
+    {
+        $carbon = Carbon::now();
+        $tgl = $carbon->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $validator = Validator::make($request->all(), [
+            'file.*' => 'mimes:jpg,png,jpeg|max:5000',
+        ]);
+
+        if ($validator->fails()) {
+            $arr = json_encode($validator->errors());
+            return redirect()->back()->with('error',$arr);
+        } else {
+            $data = aset::find($request->id);
+            $data->id_user = $request->user;
+            $data->no_kalibrasi = $request->no_kalibrasi;
+            $data->tgl_berlaku = $request->tgl_berlaku;
+            $data->sarana = $request->sarana;
+            $data->merk = $request->merk;
+            $data->tipe = $request->tipe;
+            $data->no_seri = $request->no_seri;
+            $data->tgl_operasi = $request->tgl_operasi;
+            $data->asal_perolehan = $request->asal_perolehan;
+            if ($request->nilai_perolehan != null) {
+                $data->nilai_perolehan = str_replace('.','',str_replace('Rp. ','',$request->nilai_perolehan));
+            } else {
+                $data->nilai_perolehan = null;
+            }
+            $data->keterangan = $request->keterangan;
+            $data->kondisi = $request->kondisi;
+
+            $file_upload = $request->file('file');
+            if ($request->hasFile('file')) {
+                foreach ($file_upload as $getFile) {
+                    // $request->validate([
+                    //     'file' => ['max:10000','mimes:jpeg,jpg,png'],
+                    // ]);
+                    // print_r($getFile->getClientOriginalName());
+                    $array_filename[] = $getFile->store('public/files/inventaris/aset/sarana/'.$request->ruangan);
+                    $array_title[] = $getFile->getClientOriginalName();
+                }
+                $data->filename = json_encode($array_filename);
+                $data->title = json_encode($array_title);
+            }
+
+            $data->save();
+
+            return response()->json($tgl, 200);
+        }
     }
 }

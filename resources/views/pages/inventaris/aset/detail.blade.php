@@ -606,6 +606,7 @@
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_mutasi"></kbd> - <kbd id="lokasi_sekarang_mutasi"></kbd></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Pembatalan mutasi <strong>HANYA</strong> dapat dilakukan pada hari yang sama</footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Mutasi <mark>lebih dari satu</mark> pada hari yang sama <strong>HANYA</strong> dapat dibatalkan secara berurutan</footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Aset <strong>TIDAK DAPAT</strong> dimutasi apabila sedang dalam peminjaman maupun sudah dilakukan penarikan</footer></p>
                     <table class="table dt-responsive table-hover nowrap w-100" id="dttable-mutasi">
                         <thead>
                             <tr>
@@ -861,7 +862,11 @@
 
     <script>
         $(document).ready(function() {
-            $('#show_nilai_perolehan').text(formatRupiah("{{ $list['show']->nilai_perolehan }}",'Rp. '));
+            if ("{{ $list['show']->nilai_perolehan }}" != '') {
+                $('#show_nilai_perolehan').text(formatRupiah("{{ $list['show']->nilai_perolehan }}",'Rp. '));
+            } else {
+                $('#show_nilai_perolehan').text(formatRupiah("0",'Rp. '));
+            }
 
             // PENENTUAN MENU AKSES
             var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
@@ -1918,20 +1923,20 @@
                 success: function(res){
                     if (res) {
                         // FRESH RUANGAN
-                        $('#ruangan_aset').text(res.ruangan+" - "+res.lokasi);
+                        $('#ruangan_aset').text(res.show.ruangan+" - "+res.show.lokasi);
 
                         // FRESH STATUS
                         $('#status_aset').empty();
-                        if (res.status == 0 || res.status == null) {
+                        if (res.show.status == 0 || res.show.status == null) {
                             $('#status_aset').append(`<div class="badge bg-primary">Tersedia</div>`);
                         } else {
-                            if (res.status == 1) {
+                            if (res.show.status == 1) {
                                 $('#status_aset').append(`<div class="badge bg-success">Dalam Peminjaman</div>`);
                             } else {
-                                if (res.status == 2) {
+                                if (res.show.status == 2) {
                                     $('#status_aset').append(`<div class="badge bg-warning">Dikembalikan ke Gudang</div>`);
                                 } else {
-                                    if (res.status == 3) {
+                                    if (res.show.status == 3) {
                                         $('#status_aset').append(`<div class="badge bg-danger">Dimusnahkan</div>`);
                                     }
                                 }
@@ -1940,7 +1945,7 @@
 
                         // FRESH KONDISI
                         $('#kondisi_aset').empty();
-                        if (res.kondisi == 1) {
+                        if (res.show.kondisi == 1) {
                             $('#kondisi_aset').append(`
                                 <div class="avatar-md mx-auto mb-3">
                                     <div class="avatar-title bg-light rounded-circle text-primary h1">
@@ -1950,7 +1955,7 @@
                                 <p class="text-primary mb-0"><b>Kondisi Baik</b></p>
                             `);
                         } else {
-                            if (res.kondisi == 2) {
+                            if (res.show.kondisi == 2) {
                                 $('#kondisi_aset').append(`
                                     <div class="avatar-md mx-auto mb-3">
                                         <div class="avatar-title bg-warning rounded-circle text-light h1">
@@ -1960,7 +1965,7 @@
                                     <p class="text-warning mb-0"><b>Kondisi Cukup</b></p>
                                 `);
                             } else {
-                                if (res.kondisi == 3) {
+                                if (res.show.kondisi == 3) {
                                     $('#kondisi_aset').append(`
                                         <div class="avatar-md mx-auto mb-3">
                                             <div class="avatar-title bg-danger rounded-circle text-light h1">
@@ -1981,6 +1986,15 @@
                                 }
                             }
                         }
+                        $('#qr').text('') ;
+                        var qrcode = new QRCode("qr", {
+                            text: res.qr,
+                            width: 300,
+                            height: 300,
+                            colorDark : "#000000",
+                            colorLight : "#ffffff",
+                            correctLevel : QRCode.CorrectLevel.H
+                        });
                     }
                 },
                 error: function(res){
@@ -2094,20 +2108,40 @@
                         });
 
                         // TABEL
+                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                        console.log(adminID);
                         $("#tampil-tbody-mutasi").empty();
                         $('#dttable-mutasi').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
                         res.show.forEach(item => {
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
-                                if (updet == date) {
+                                if (adminID == true) {
                                     content += `<td><center><div class='btn-group'>
                                         <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                         </div></center></td>`;
                                 } else {
-                                    content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
-                                        </div></center></td>`;
+                                    if (updet == date) {
+                                        if (res.peminjaman != null) {
+                                            if (res.peminjaman.status == 1) {
+                                                content += `<td><center><div class='btn-group'>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    </div></center></td>`;
+                                            } else {
+                                                content += `<td><center><div class='btn-group'>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    </div></center></td>`;
+                                            }
+                                        } else {
+                                            content += `<td><center><div class='btn-group'>
+                                                <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                </div></center></td>`;
+                                        }
+                                    } else {
+                                        content += `<td><center><div class='btn-group'>
+                                            <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                            </div></center></td>`;
+                                    }
                                 }
                                 content += `<td>${new Date(item.created_at).toLocaleString('sv-SE')}</td>`;
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>${item.ruangan_awal_aset}</h6><small class='text-truncate text-muted'>${item.lokasi_awal_aset}</small></div></div></td>`;

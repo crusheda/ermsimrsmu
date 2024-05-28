@@ -215,7 +215,7 @@
                                                 </div>
                                             </div>
                                         </div></td>`;
-                        content += `<td><span class="badge bg-secondary">`+item.kode+`</span> <u>`+item.ruangan+`</u></td>`;
+                        content += `<td><span class="badge bg-secondary">`+item.kode+`</span> <u>`+item.ruangan+`</u>  ${item.id==1?'<span class="badge bg-danger">UTAMA</span>':''}</td>`;
                         content += `<td>`+item.lokasi+`</td><td>`;
                         unit.forEach(val => {
                             res.role.forEach(pus => {

@@ -307,52 +307,45 @@
                 </div>
                 <div class="modal-body">
                     <form action="javascript:void(0);" class="form-auth-small" id="formUbah" method="post" enctype="multipart/form-data">
+                    <input type="text" class="form-control" id="id_edit" hidden>
                     <div class="row">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-5 mb-3">
                                 <div class="shadow-lg p-3 bg-body rounded">
                                     <div class="form-group">
-                                        <label class="form-label mb-2">Nomor Inventaris</label>
-                                        <h5 class="mb-1" id="no_inventaris_edit">
-                                            <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_edit" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_edit" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_edit" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a id="kd_th_edit" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tahun Perolehan Aset"></a></a>
+                                        <label class="form-label mb-2">Nomor Inventaris <a id="badge_jenis_edit"></a></label>
+                                        <h5 class="mb-1">
+                                            <a id="no_inventaris_edit" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Inventaris"></a>
                                         </h5>
+                                        {{-- <h5 class="mb-1" id="no_inventaris_edit">
+                                            <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Baku Inventaris">00.03.27</a>.<a id="kd_ruangan_edit" class="text-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Ruangan"> . . </a>.<a id="kd_jenis_edit" class="text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kode Jenis"> . . </a>.<a id="kd_sarana_edit" class="text-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="No. Urut Sarana"> . . </a>.<a id="kd_th_edit" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tahun Perolehan Aset"></a></a>
+                                        </h5> --}}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-7 mb-3">
                                 <div class="text-muted">
                                     <p class="mb-1"><strong>Keterangan :</strong></p>
-                                    <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Periksa No. Inventaris sebelum Simpan</p>
                                     <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input <strong>Wajib</strong> diisi</p>
+                                    <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> No. Inventaris sudah <mark><strong>TIDAK DAPAT</strong></mark> diubah, Hapus aset apabila diperlukan</p>
                                     <p class="mb-0"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Pastikan tidak berpindah halaman saat proses Simpan berjalan</p>
                                 </div>
                             </div>
                         </div>
                         <hr>
-                        <div class="col-md-6 mb-3">
+                        {{-- <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
                                 <button class="btn btn-sm btn-outline-secondary" type="button" onclick="window.location='{{ route('aset_ruangan.index') }}'" style="--bs-btn-padding-y: 0.09rem;--bs-btn-padding-x: 0.3rem;" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Daftar Ruangan">Tidak menemukan ruangan ?</button>
                                 <div class="select2-dark">
-                                    <select class="select2 form-select" id="ruangan_edit" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                                        <option value="">Pilih</option>
-                                        @if(count($list['ruangan']) > 0)
-                                            @foreach($list['ruangan'] as $item)
-                                                <option value="{{ $item->id }}">{{ $item->ruangan }} - {{ $item->lokasi }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    <select class="select2 form-select" id="ruangan_edit" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required></select>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Aset <a class="text-danger">*</a></label>
-                                <select class="form-select" id="jenis_edit" required>
-                                    <option value="" hidden>Pilih</option>
-                                    <option value="1">Medis</option>
-                                    <option value="2">Non Medis</option>
-                                </select>
+                                <select class="form-select" id="jenis_edit" required></select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -360,7 +353,7 @@
                                 <label class="form-label">Tgl. Perolehan</label>
                                 <input type="text" id="tgl_perolehan_edit" class="form-control flatpickrnow" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= hari ini"/>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-6 mb-3 show_medis_edit" hidden>
                             <div class="form-group">
                                 <label class="form-label">No. Kalibrasi</label>
@@ -407,12 +400,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Asal Perolehan <a class="text-danger">*</a></label>
-                                <select class="form-select" id="asal_perolehan_edit" required>
-                                    <option value="" hidden>Pilih</option>
-                                    <option value="1" selected>Beli</option>
-                                    <option value="2">Hibah</option>
-                                    <option value="3">Wakaf</option>
-                                </select>
+                                <select class="form-select" id="asal_perolehan_edit" required></select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -424,12 +412,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Kondisi <a class="text-danger">*</a></label>
-                                <select class="form-select" id="kondisi_edit" required>
-                                    <option value="" hidden>Pilih</option>
-                                    <option value="1" selected>Baik</option>
-                                    <option value="2">Cukup</option>
-                                    <option value="3">Buruk</option>
-                                </select>
+                                <select class="form-select" id="kondisi_edit" required></select>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
@@ -439,7 +422,8 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-12" id="show_img_upload"></div>
+                        <div class="col-md-12" id="ubah_img_upload" hidden>
                             <div class="form-group">
                                 <label class="form-label">Upload</label>
                                 <input type="file" class="form-control mb-2" id="file_edit" accept=".jpg,.jpeg,.png" multiple>
@@ -455,10 +439,10 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                         class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
-                    <button class="btn btn-info" onclick="simpan()" data-bs-toggle="tooltip"
+                    <button class="btn btn-warning" onclick="prosesUbah()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                         title="Simpan Perubahan Data Aset Barang" id="btn-ubah"><i
-                        class="fa-fw fas fa-save nav-icon"></i>&nbsp;&nbsp;Submit</button>
+                        class="fa-fw fas fa-edit nav-icon"></i>&nbsp;&nbsp;Submit</button>
                 </div>
             </div>
         </div>
@@ -638,7 +622,6 @@
                 }
                 if ($(this).val() == 2) {
                     $('#kd_jenis_add').text('B');
-                    $('#kalibrasi_add').val('');
                     $('#no_kalibrasi_add').val('');
                     $('#tgl_berlaku_add').val('');
                     $('.show_medis_add').prop('hidden',true);
@@ -771,15 +754,15 @@
                                 }
                         content += `</td>`;
                             if (item.kondisi == 1) {
-                                content += `<td>Baik</td>`;
+                                content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
                             } else {
                                 if (item.kondisi == 2) {
-                                    content += `<td>Cukup</td>`;
+                                    content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
                                 } else {
                                     if (item.kondisi == 3) {
-                                        content += `<td>Buruk</td>`;
+                                        content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
                                     } else {
-                                        content += `<td>Tidak Diketahui</td>`;
+                                        content += `<td><kbd class='text-dark' style='background-color:#d6d6d6'>Tidak Diketahui</kbd></td>`;
                                     }
                                 }
                             }
@@ -849,16 +832,157 @@
 
         function ubah(id) {
             $('#show_id_edit').text(id);
+            $('#id_edit').val(id);
             $.ajax(
             {
                 url: "/api/inventaris/aset/ubah/"+id,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    console.log(res);
+                    // console.log(res);
+                    if (res.show.jenis != 1) {
+                        $("#badge_jenis_edit").empty().append(`
+                            <a href="javascript: void(0);" class="badge bg-warning font-size-12">
+                                <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Non Medis
+                            </a>
+                        `);
+                        $(".show_medis_edit").prop('hidden', true);
+                    } else {
+                        $("#badge_jenis_edit").empty().append(`
+                            <a href="javascript: void(0);" class="badge bg-danger font-size-12">
+                                <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Medis
+                            </a>
+                        `);
+                        $(".show_medis_edit").prop('hidden', false);
+                    }
+                    $('#no_inventaris_edit').text(res.show.no_inventaris);
+                    $('#no_kalibrasi_edit').val(res.show.no_kalibrasi);
+                    $('#tgl_berlaku_edit').val(res.show.tgl_berlaku);
+                    $('#sarana_edit').val(res.show.sarana);
+                    $('#merk_edit').val(res.show.merk);
+                    $('#tipe_edit').val(res.show.tipe);
+                    $('#no_seri_edit').val(res.show.no_seri);
+                    $('#tgl_operasi_edit').val(res.show.tgl_operasi);
+                    $("#asal_perolehan_edit").find('option').remove();
+                    $("#asal_perolehan_edit").append(`
+                        <option value="1" ${res.show.asal_perolehan == 1? "selected":""}>Beli</option>
+                        <option value="2" ${res.show.asal_perolehan == 2? "selected":""}>Hibah</option>
+                        <option value="3" ${res.show.asal_perolehan == 3? "selected":""}>Wakaf</option>
+                    `);
+                    $('#nilai_perolehan_edit').val(formatRupiah(parseInt(res.show.nilai_perolehan), 'Rp. '));
+                    $("#kondisi_edit").find('option').remove();
+                    $("#kondisi_edit").append(`
+                        <option value="1" ${res.show.kondisi == 1? "selected":""}>Baik</option>
+                        <option value="2" ${res.show.kondisi == 2? "selected":""}>Cukup</option>
+                        <option value="3" ${res.show.kondisi == 3? "selected":""}>Buruk</option>
+                    `);
+                    $('#keterangan_edit').val(res.show.keterangan);
+                    if (res.show.filename != null) {
+                        $("#show_img_upload").empty().prop('hidden', false);
+                        img = `<p>
+                                <label class="form-label">Nama File Gambar : </label><br>
+                                <ul>`;
+                        JSON.parse(res.show.title).forEach(item => {
+                            img += `<li>${item}</li>`;
+                        });
+                        img += `</ul></p><button class="btn btn-sm btn-outline-danger" type="button" onclick="ubahGambarAset()" data-bs-placement="bottom" data-bs-html="true" title="Ubah Gambar">Ingin mengubah gambar sarana?</button>`;
+                        $("#show_img_upload").append(img);
+                        $("#ubah_img_upload").prop('hidden', true);
+                    } else {
+                        $("#show_img_upload").prop('hidden', true);
+                        $("#ubah_img_upload").prop('hidden', false);
+                    }
+                    // FORMAT RUPIAH NILAI PEROLEHAN
+                    var rupiah_edit = document.getElementById('nilai_perolehan_edit');
+                    rupiah_edit.addEventListener('change', function(e){
+                        // tambahkan 'Rp.' pada saat form di ketik
+                        // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+                        rupiah_edit.value = formatRupiah(parseInt(this.value), 'Rp. ');
+                    });
                     $('#modalUbah').modal('show');
                 }
             })
+        }
+
+        function ubahGambarAset() {
+            // Sudah ada gambar Aset dan ingin merubahnya / Upload ulang gambar baru
+            $("#show_img_upload").prop('hidden', true);
+            $("#ubah_img_upload").prop('hidden', false);
+        }
+
+        function prosesUbah() {
+            $("#btn-ubah").prop('disabled', true);
+            $("#btn-ubah").find("i").toggleClass("fa-edit fa-sync fa-spin");
+
+            // Definisi
+            var save = new FormData();
+            save.append('id',$("#id_edit").val());
+            save.append('no_kalibrasi',$("#no_kalibrasi_edit").val());
+            save.append('tgl_berlaku',$("#tgl_berlaku_edit").val());
+            save.append('sarana',$("#sarana_edit").val());
+            save.append('merk',$("#merk_edit").val());
+            save.append('tipe',$("#tipe_edit").val());
+            save.append('no_seri',$("#no_seri_edit").val());
+            save.append('tgl_operasi',$("#tgl_operasi_edit").val());
+            save.append('asal_perolehan',$("#asal_perolehan_edit").val());
+            save.append('nilai_perolehan',$("#nilai_perolehan_edit").val());
+            save.append('kondisi',$("#kondisi_edit").val());
+            save.append('keterangan',$("#keterangan_edit").val());
+            save.append('user','{{ Auth::user()->id }}');
+
+            // Get the selected file
+            var filesAdded = $('#file_edit')[0].files;
+            if (filesAdded.length != 0) {
+                for (let i = 0; i < filesAdded.length; i++) {
+                    save.append('file[]',filesAdded[i]);
+                }
+            }
+
+            if (
+                save.get('sarana') == "" ||
+                save.get('merk') == "" ||
+                save.get('tgl_operasi') == "" ||
+                save.get('asal_perolehan') == "" ||
+                save.get('kondisi') == ""
+            ) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: '/api/inventaris/aset/update',
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    data: save,
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Ubah Sarana berhasil pada '+ res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            refresh();
+                        }
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+
+            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+            $("#btn-ubah").prop('disabled', false);
         }
 
         function simpan() {
@@ -869,7 +993,6 @@
             save.append('thbln',$("#thbln_add").val());
             save.append('ruangan',$("#ruangan_add").val());
             save.append('jenis',$("#jenis_add").val());
-            save.append('kalibrasi',$("#kalibrasi_add").val());
             save.append('no_kalibrasi',$("#no_kalibrasi_add").val());
             save.append('tgl_berlaku',$("#tgl_berlaku_add").val());
             save.append('tgl_perolehan',$("#tgl_perolehan_add").val());
@@ -904,7 +1027,6 @@
                 save.get('thbln') == "" ||
                 save.get('ruangan') == "" ||
                 save.get('jenis') == "" ||
-                // save.get('kalibrasi') == "" ||
                 // save.get('no_kalibrasi') == "" ||
                 // save.get('tgl_berlaku') == "" ||
                 // save.get('tgl_perolehan') == "" ||
