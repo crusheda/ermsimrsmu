@@ -263,4 +263,69 @@ class ERuangController extends Controller
 
         return response()->json($data);
     }
+
+    function getUbah($id)
+    {
+        $show = eruang::select('eruang.*','users.nama as nama_user','eruang_ref.id as id_ruangan_ref','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
+                    ->join('users','users.id','=','eruang.id_user')
+                    ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
+                    ->where('eruang.id',$id)
+                    ->orderBy('eruang.updated_at','DESC')
+                    ->first();
+
+        $ruangan = eruang_ref::orderBy('nama','ASC')->get();
+
+        $data = [
+            'show' => $show,
+            'ruangan' => $ruangan,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function ubah(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = eruang::find($request->id);
+        $data->id_user = $request->user;
+        $data->id_ruangan = $request->ruangan;
+        $data->agenda = $request->agenda;
+        $data->tgl = $request->tgl;
+        $data->ket = $request->ket;
+        $data->gizi = $request->gizi;
+
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function hapus($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = eruang::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
+    }
+
+    function display()
+    {
+        $show = eruang::select('eruang.*','users.nama as nama_user','users.no_hp','users_foto.filename as foto_profil','eruang_ref.id as id_ruangan_ref','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
+                    ->join('users','users.id','=','eruang.id_user')
+                    ->join('users_foto','users.id','=','users_foto.user_id')
+                    ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
+                    ->orderBy('eruang.jam_mulai','asc')
+                    ->limit(6)->get();
+        $now = Carbon::now()->isoFormat('HH:mm:ss');
+
+        $data = [
+            'show' => $show,
+            'now' => $now,
+        ];
+
+        return response()->json($data, 200);
+    }
 }

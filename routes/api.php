@@ -139,6 +139,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // E-RUANG
         Route::get('eruang', 'App\Http\Controllers\ERuang\ERuangController@table')->name('eruang.table');
         Route::post('eruang/store', 'App\Http\Controllers\ERuang\ERuangController@store')->name('eruang.store');
+        Route::get('eruang/ubah/{id}', 'App\Http\Controllers\ERuang\ERuangController@getUbah')->name('eruang.getUbah');
+        Route::post('eruang/ubah/{id}/proses', 'App\Http\Controllers\ERuang\ERuangController@ubah')->name('eruang.ubah');
+        Route::delete('eruang/hapus/{id}', 'App\Http\Controllers\ERuang\ERuangController@hapus')->name('eruang.hapus');
+        Route::get('eruang/display', 'App\Http\Controllers\ERuang\ERuangController@display')->name('eruang.display');
 
     // INVENTARIS
         // DETAIL ASET
