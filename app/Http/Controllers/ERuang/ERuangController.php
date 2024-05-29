@@ -57,8 +57,10 @@ class ERuangController extends Controller
         $getData = eruang::select('eruang.*','users.nama as nama_user','eruang_ref.nama as nama_ruangan')
                             ->where('eruang.tgl',$tgl)
                             ->where('eruang.id_ruangan',$request->ruangan)
+                            ->where('eruang.status_penolakan',null)
                             ->join('users','users.id','=','eruang.id_user')
                             ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
+                            ->orderBy('eruang.jam_mulai', 'ASC')
                             ->first();
         $getJamMulai = Carbon::parse($request->jam_mulai)->isoFormat('HH');
         $getJamSelesai = Carbon::parse($request->jam_selesai)->isoFormat('HH');
@@ -104,7 +106,7 @@ class ERuangController extends Controller
                             $data->jam_selesai  = $request->jam_selesai;
                             $data->ket          = $request->ket;
                             $data->gizi         = $request->gizi;
-                            // $data->save();
+                            $data->save();
                             return Response::json(array(
                                 'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
                                 'code' => 200,
@@ -143,7 +145,7 @@ class ERuangController extends Controller
                             $data->jam_selesai  = $request->jam_selesai;
                             $data->ket          = $request->ket;
                             $data->gizi         = $request->gizi;
-                            // $data->save();
+                            $data->save();
                             return Response::json(array(
                                 'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
                                 'code' => 200,
@@ -199,7 +201,7 @@ class ERuangController extends Controller
                         $data->jam_selesai  = $request->jam_selesai;
                         $data->ket          = $request->ket;
                         $data->gizi         = $request->gizi;
-                        // $data->save();
+                        $data->save();
                         return Response::json(array(
                             'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
                             'code' => 200,
@@ -223,7 +225,7 @@ class ERuangController extends Controller
                     $data->jam_selesai  = $request->jam_selesai;
                     $data->ket          = $request->ket;
                     $data->gizi         = $request->gizi;
-                    // $data->save();
+                    $data->save();
                     return Response::json(array(
                         'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
                         'code' => 200,
@@ -311,14 +313,43 @@ class ERuangController extends Controller
         return response()->json($tgl, 200);
     }
 
-    function display()
+    function tolak(Request $request){
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        // print_r($request->id);
+        // die();
+        // Inisialisasi
+        $data = eruang::find($request->id);
+        if ($data->gizi_verif != null) {
+            return response()->json('Peminjaman Ruangan sudah diverifikasi oleh Gizi sehingga tidak dapat ditolak', 400);
+        } else {
+            $data->status_penolakan = true;
+            $data->alasan_penolakan = $request->alasan;
+            $data->save();
+            return response()->json($tgl, 200);
+        }
+    }
+
+    function display(Request $request)
     {
+        // print_r("ini ruangan ".$request->ruangan.", dan tgl ".$request->tgl);
+        // die();
+        $input1 = $request->tgl;
+        $input2 = $request->ruangan;
         $show = eruang::select('eruang.*','users.nama as nama_user','users.no_hp','users_foto.filename as foto_profil','eruang_ref.id as id_ruangan_ref','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
-                    ->join('users','users.id','=','eruang.id_user')
-                    ->join('users_foto','users.id','=','users_foto.user_id')
-                    ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
-                    ->orderBy('eruang.jam_mulai','asc')
-                    ->limit(6)->get();
+                ->leftJoin('users','users.id','=','eruang.id_user')
+                ->leftJoin('users_foto','users.id','=','users_foto.user_id')
+                ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
+                ->when($input1 != null, function ($q) use ($input1) {
+                    $q->where('eruang.tgl',$input1);
+                })
+                ->when($input2 != null, function ($q) use ($input2) {
+                    $q->where('eruang.id_ruangan',$input2);
+                })
+                ->where('status_penolakan',null)
+                ->orderBy('eruang.tgl','asc')
+                ->orderBy('eruang.jam_mulai','asc')
+                ->limit(6)
+                ->get();
         $now = Carbon::now()->isoFormat('HH:mm:ss');
 
         $data = [
@@ -327,5 +358,16 @@ class ERuangController extends Controller
         ];
 
         return response()->json($data, 200);
+    }
+
+    function verifGizi($id){
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = eruang::find($id);
+        $data->gizi_verif = true;
+        $data->save();
+
+        return response()->json($tgl, 200);
     }
 }

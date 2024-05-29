@@ -160,8 +160,8 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Tgl. Perolehan</label>
-                                <input type="text" id="tgl_perolehan_add" class="form-control flatpickrnow" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= hari ini"/>
+                                <label class="form-label">Tgl. Perolehan <a class="text-danger">*</a></label>
+                                <input type="text" id="tgl_perolehan_add" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= hari ini"/>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3 show_medis_add" hidden>
@@ -172,7 +172,7 @@
                         </div>
                         <div class="col-md-6 show_medis_add" hidden>
                             <div class="form-group">
-                                <label class="form-label">Tgl. Berlaku</label>
+                                <label class="form-label">Tgl. Kalibrasi</label>
                                 <input type="text" id="tgl_berlaku_add" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/>
                             </div>
                         </div>
@@ -204,7 +204,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Operasi <a class="text-danger">*</a></label>
-                                <input type="text" id="tgl_operasi_add" class="form-control flatpickrtom" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
+                                <input type="text" id="tgl_operasi_add" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -366,7 +366,7 @@
                         </div>
                         <div class="col-md-6 show_medis_edit" hidden>
                             <div class="form-group">
-                                <label class="form-label">Tgl. Berlaku</label>
+                                <label class="form-label">Tgl. Kalibrasi</label>
                                 <input type="text" id="tgl_berlaku_edit" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/>
                             </div>
                         </div>
@@ -398,7 +398,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Operasi <a class="text-danger">*</a></label>
-                                <input type="text" id="tgl_operasi_edit" class="form-control flatpickrtom" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
+                                <input type="text" id="tgl_operasi_edit" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tgl mulai digunakan / diserahkan (>= hari ini)"/>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
@@ -770,8 +770,8 @@
                                     }
                                 }
                             }
-                        content += `<td>`+item.updated_at.substring(0, 10)+`</td>`; // .substring(0, 19).replace('T',' ')
-                        content += `<td>`+item.tgl_input+`</td></tr>`;
+                            content += `<td>`+item.tgl_input+`</td>`;
+                            content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`; // .substring(0, 19).replace('T',' ')
                         $('#tampil-tbody').append(content);
                     })
 
@@ -1033,7 +1033,7 @@
                 save.get('jenis') == "" ||
                 // save.get('no_kalibrasi') == "" ||
                 // save.get('tgl_berlaku') == "" ||
-                // save.get('tgl_perolehan') == "" ||
+                save.get('tgl_perolehan') == "" ||
                 save.get('sarana') == "" ||
                 save.get('merk') == "" ||
                 // save.get('tipe') == "" ||
@@ -1184,8 +1184,8 @@
                                     }
                                 }
                             }
-                        content += `<td>`+item.updated_at.substring(0, 10)+`</td>`; // .substring(0, 19).replace('T',' ')
-                        content += `<td>`+item.tgl_input+`</td></tr>`;
+                            content += `<td>`+item.tgl_input+`</td>`;
+                            content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`; // .substring(0, 19).replace('T',' ')
                         $('#tampil-tbody').append(content);
                     })
 

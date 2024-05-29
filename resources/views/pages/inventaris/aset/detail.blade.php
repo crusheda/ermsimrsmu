@@ -342,29 +342,36 @@
                             <div class="col-sm-3">
                                 <div>
                                     <p class="text-muted mb-2">Tgl. Input Aset</p>
-                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->created_at)->isoFormat('d MMM Y, HH.mm A') }}</h5>
+                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->created_at)->isoFormat('D MMM Y, HH.mm A') }}</h5>
                                     <small class="text-success">Oleh {{ $list['user']->nama }}</small>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="mt-4 mt-sm-0">
                                     <p class="text-muted mb-2">Tgl. Perolehan</p>
-                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_perolehan)->isoFormat('d MMM Y') }}</h5>
-                                    <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_perolehan)->diffForHumans() }}</small>
+                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_perolehan)->isoFormat('D MMM Y') }}</h5>
+                                    <small class="text-success">{{ \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($list['show']->tgl_perolehan))->diffInDays(now(), false) }} hari yang lalu</small>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="mt-4 mt-sm-0">
-                                    <p class="text-muted mb-2">Tgl. Berlaku</p>
-                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_berlaku)->isoFormat('d MMM Y') }}</h5>
-                                    <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_berlaku)->diffForHumans() }}</small>
+                                    <p class="text-muted mb-2">Tgl. Kalibrasi</p>
+                                    @if ($list['show']->tgl_berlaku != null)
+                                    <h5 class="font-size-15">
+                                            {{ Carbon\Carbon::parse($list['show']->tgl_berlaku)->isoFormat('D MMM Y') }}
+                                    </h5>
+                                    <small class="text-success">{{ \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($list['show']->tgl_berlaku))->diffInDays(now(), false) }} hari yang lalu</small>
+                                    @else
+                                    <h5 class="font-size-15">-</h5>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="mt-4 mt-sm-0">
                                     <p class="text-muted mb-2">Tgl. Beroperasi</p>
-                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->isoFormat('d MMM Y') }}</h5>
-                                    <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->diffForHumans() }}</small>
+                                    <h5 class="font-size-15">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->isoFormat('D MMM Y') }}</h5>
+                                    <small class="text-success">{{ \Illuminate\Support\Carbon::createFromTimeStamp(strtotime($list['show']->tgl_operasi))->diffInDays(now(), false) }} hari yang lalu</small>
+                                    {{-- <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->diffInDays() }}</small> --}}
                                 </div>
                             </div>
                         </div>
@@ -1067,7 +1074,7 @@
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.nama_petugas}</td>`;
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.hasil}</td>`;
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.rekomendasi}</td>`;
-                                content += `<td>${new Date(item.created_at).toLocaleDateString('sv-SE')}</td>`;
+                                content += `<td>${new Date(item.created_at).toLocaleString('sv-SE')}</td>`;
                             content += `</tr>`;
                             $('#tampil-tbody-pemeliharaan').append(content);
                         })

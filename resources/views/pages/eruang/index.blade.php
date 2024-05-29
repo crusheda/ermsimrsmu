@@ -83,10 +83,17 @@
                         <div class="tab-pane active" id="pengajuan" role="tabpanel">
                             <form>
                                 <div class="mb-4">
-                                    <label><mark>Ketentuan</mark></label><br>
-                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai</small><br>
-                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan data hanya dapat dilakukan <kbd>H-1</kbd> Acara dan maksimal sebelum <kbd>Jam 12:00 WIB</kbd></small><br>
-                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pada pemilihan Jam & Menit tidak boleh sama</small>
+                                    <div class="row">
+                                        <label><mark>Ketentuan</mark></label><br>
+                                        <div class="col-md-6">
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai</small><br>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan data hanya dapat dilakukan sampai <kbd>H-1</kbd> Acara dan maksimal sebelum <kbd>Jam 12:00 WIB</kbd></small><br>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pada pemilihan Jam & Menit tidak boleh sama</small>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Apabila sudah diverifikasi oleh bagian Gizi, maka peminjaman ruangan tidak dapat dihapus, akan tetapi Anda masih dapat mengubahnya dengan sepengetahuan bagian Gizi (Konfirmasi terlebih dahulu)</small>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
@@ -193,7 +200,7 @@
                             </table>
                         </div>
 
-                        <div class="tab-pane" id="display" role="tabpanel">
+                        <div class="tab-pane" id="display" role="tabpanel" style="height:auto">
 
                             <div class="row g-3 mb-4">
                                 <div class="col-xxl-5 col-lg-4">
@@ -211,19 +218,36 @@
                                 <div class="col-xxl-5 col-lg-6">
                                     <div class="position-relative">
                                         <div id="datepicker1">
-                                            <input type="text" class="form-control" id="tampil_gizi_tgl" placeholder="Pilih Tanggal" data-date-format="dd M, yyyy" data-date-container='#datepicker1' data-date-autoclose="true" data-provide="datepicker" required>
+                                            <input type="text" class="form-control" id="tampil_gizi_tgl" placeholder="Pilih Tanggal" data-date-format="yyyy-mm-dd" data-date-container='#datepicker1' data-date-autoclose="true" data-provide="datepicker" required>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xxl-2 col-lg-6">
+                                <div class="col-xxl-2 col-lg-6" id="start-display">
                                     <div class="position-relative h-100 hstack gap-3">
-                                        <button type="submit" class="btn btn-primary h-100 w-100" id="btn-tampil-gizi" onclick="showDisplay()"><i class="bx bx-search-alt align-middle"></i> Tampilkan Display</button>
+                                        <button type="submit" class="btn btn-primary h-100 w-100" id="btn-tampil-gizi" onclick="showDisplay()"><i class="bx bx-tv align-middle"></i> Tampilkan Display</button>
+                                    </div>
+                                </div>
+                                <div class="col-xxl-2 col-lg-6" id="stop-display" hidden>
+                                    <div class="position-relative h-100 hstack gap-3">
+                                        <button type="submit" class="btn btn-danger h-100 w-100" id="btn-tampil-gizi" onclick="stopDisplay()"><i class="bx bx-plug align-middle"></i> Berhenti</button>
                                     </div>
                                 </div>
                             </div>
 
                             {{-- START DISPLAY --}}
-                            <div class="row" id="show_tampil_display"></div>
+                            <div class="row" id="show_tampil_display">
+                                <div class="row justify-content-center mt-lg-5">
+                                    <div class="col-xl-5 col-sm-8">
+                                        <div class="text-center">
+                                            <div class="row justify-content-center mt-2 mb-2">
+                                                <div class="col-sm-6 col-8">
+                                                    <img src="{{ asset('images/verification-img.png') }}" alt="" class="img-fluid">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- END DISPLAY -->
 
                         </div>
@@ -269,11 +293,11 @@
                     </div>
                     <div class="col-sm-6 mb-3">
                         <label>Keterangan</label>
-                        <textarea rows="2" class="form-control" id="ket_edit" placeholder="Optional"></textarea>
+                        <textarea rows="4" class="form-control" id="ket_edit" placeholder="Optional"></textarea>
                     </div>
                     <div class="col-sm-6">
                         <label>Pesan Tambahan Untuk Bagian Gizi</label>
-                        <textarea rows="2" class="form-control" id="gizi_edit" placeholder="e.g. Tolong siapkan snack untuk 10 peserta pelatihan terima kasih"></textarea>
+                        <textarea rows="4" class="form-control" id="gizi_edit" placeholder="e.g. Tolong siapkan snack untuk 10 peserta pelatihan terima kasih"></textarea>
                     </div>
                 </div>
 
@@ -309,6 +333,31 @@
             </div>
             <div class="col-12 text-center mb-4">
                 <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash"></i> Hapus</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- MODAL TOLAK --}}
+<div class="modal animate__animated animate__rubberBand fade" id="modalTolak" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Form Penolakan Peminjaman Ruangan&nbsp;&nbsp;&nbsp;
+                </h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="id_tolak" hidden>
+                <div class="form-group">
+                    <label for="">Tuliskan Alasan Penolakan <a class="text-danger">*</a></label>
+                    <textarea rows="2" class="form-control" id="alasan_penolakan" placeholder="e.g. Pada Tanggal dan Jam tersebut Ruangan akan direnovasi"></textarea>
+                </div>
+                <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Penolakan akan gagal apabila sudah diverifikasi oleh bagian Gizi</small>
+            </div>
+            <div class="col-12 text-center mb-4">
+                <button type="submit" id="btn-hapus" class="btn btn-dark me-sm-3 me-1" onclick="prosesTolak()"><i class="bx bx-calendar-x"></i> Tolak</button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
             </div>
         </div>
@@ -493,27 +542,108 @@
                 var date = new Date().toLocaleDateString();
                 res.show.forEach(item => {
                     var updet = new Date(item.created_at).toLocaleDateString();
-                    // var unit = JSON.parse(item.unit.replace(/"/g,""));
+
+                    // JIKA ADMIN
                     if (adminID == true) {
+                        if (item.gizi_verif == null) {
+                            if (item.status_penolakan == null) {
+                                content = `<tr><center><td><div class="d-flex align-items-center">
+                                                <div class="dropdown">
+                                                    <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a href="javascript:;" onclick="tolak(` + item.id + `)" class="dropdown-item text-info"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Tolak</a>
+                                                        <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                        <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                    </div>
+                                                </div>
+                                            </div></td></center>`;
+                            } else {
+                                content = `<tr><center><td><div class="d-flex align-items-center">
+                                                <div class="dropdown">
+                                                    <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                        <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                    </div>
+                                                </div>
+                                            </div></td></center>`;
+                            }
+                        } else {
+                            content = `<tr><center><td><div class="d-flex align-items-center">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                    <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                </div>
+                                            </div>
+                                        </div></td></center>`;
+                        }
+                    // JIKA USER
                     } else {
                         if (userID == item.id_user) {
                             if (updet == date) {
+                                if (item.gizi_verif == null) {
+                                    if (item.status_penolakan == null) {
+                                        content = `<tr><center><td><div class="d-flex align-items-center">
+                                                        <div class="dropdown">
+                                                            <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                                <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                            </div>
+                                                        </div>
+                                                    </div></td></center>`;
+                                    } else {
+                                        content = `<tr><center><td><div class="d-flex align-items-center">
+                                                        <div class="dropdown">
+                                                            <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                            </div>
+                                                        </div>
+                                                    </div></td></center>`;
+                                    }
+                                } else {
+                                    content = `<tr><center><td><div class="d-flex align-items-center">
+                                                    <div class="dropdown">
+                                                        <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                            <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                        </div>
+                                                    </div>
+                                                </div></td></center>`;
+                                }
+                            } else {
+                                content = `<tr><center><td><div class="d-flex align-items-center">
+                                                <div class="dropdown">
+                                                    <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                        <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                    </div>
+                                                </div>
+                                            </div></td></center>`;
                             }
+                        } else {
+                            content = `<tr><center><td><div class="d-flex align-items-center">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                    <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                </div>
+                                            </div>
+                                        </div></td></center>`;
                         }
                     }
-                    content = `<tr><center><td><div class="d-flex align-items-center">
-                                        <div class="dropdown">
-                                            <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
-                                            </div>
-                                        </div>
-                                    </div></td></center>`;
+                    // LANJUT CONTENT
                     content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                     <div class='d-flex justify-content-start align-items-center'>
                                         <div class='d-flex flex-column'>
-                                            <h6 class='mb-0'><span class="badge bg-secondary">`+item.kapasitas+` P</span> <u>`+item.nama_ruangan+`</u></h6>
+                                            <h6 class='mb-0'><span class="badge bg-secondary">`+item.kapasitas+` P</span> <u>`+item.nama_ruangan+`</u> ${item.status_penolakan?'<i class="bx bxs-x-square h5 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Ditolak oleh Admin"></i>':''} ${item.gizi_verif?'<i class="bx bxs-badge-check h5 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Telah Diverifikasi oleh Gizi"></i>':''}</h6>
                                             <h6 class='mb-0'><small class='text-truncate text-muted'>`+item.agenda+`</small></h6>
                                         </div>
                                     </div>
@@ -537,7 +667,8 @@
                     //         }
                     //     })
                     // })
-                    content += `<td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
+                    // content += `<td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
+                    content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`;
                     $('#tampil-tbody').append(content);
                 })
 
@@ -743,14 +874,14 @@
         $("#btn-ubah").prop('disabled', true);
         $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
 
-        var fd = new FormData();
-        fd.append('id',$("#id_edit").val());
-        fd.append('ruangan',$("#ruangan_edit").val());
-        fd.append('agenda',$("#agenda_edit").val());
-        fd.append('tgl',$("#tgl_edit").val());
-        fd.append('ket',$("#ket_edit").val());
-        fd.append('gizi',$("#gizi_edit").val());
-        fd.append('user','{{ Auth::user()->id }}');
+        var save = new FormData();
+        save.append('id',$("#id_edit").val());
+        save.append('ruangan',$("#ruangan_edit").val());
+        save.append('agenda',$("#agenda_edit").val());
+        save.append('tgl',$("#tgl_edit").val());
+        save.append('ket',$("#ket_edit").val());
+        save.append('gizi',$("#gizi_edit").val());
+        save.append('user','{{ Auth::user()->id }}');
 
         if (
             save.get('ruangan') == "" ||
@@ -768,15 +899,15 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: "/api/eruang/ubah/"+fd.get('id')+"/proses",
+                url: "/api/eruang/ubah/"+save.get('id')+"/proses",
                 method: 'post',
-                data: fd,
+                data: save,
                 contentType: false,
                 processData: false,
                 dataType: 'json',
                 success: function(res){
                     iziToast.success({
-                        title: 'Pesan Sukses! ID : '+fd.get('id'),
+                        title: 'Pesan Sukses! ID : '+save.get('id'),
                         message: 'Pengajuan Peminjaman Ruangan berhasil diperbarui pada '+res,
                         position: 'topRight'
                     });
@@ -837,6 +968,52 @@
         }
     }
 
+    function tolak(id) {
+        $("#id_tolak").val(id);
+        $('#modalTolak').modal('show');
+    }
+
+    function prosesTolak() {
+        var id = $("#id_tolak").val();
+        var alasan = $("#alasan_penolakan").val();
+        if (alasan == "") {
+            iziToast.error({
+                title: 'Pesan Galat!',
+                message: 'Alasan Penolakan wajib diisi',
+                position: 'topRight'
+            });
+        } else {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/api/eruang/tolak/"+id,
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    id: id,
+                    alasan: alasan,
+                },
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: 'Penolakan Peminjaman Ruangan telah berhasil pada '+res,
+                        position: 'topRight'
+                    });
+                    $('#modalTolak').modal('hide');
+                    refreshWithOpenRiwayat();
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+    }
+
     // TAMPILAN GIZI =============================================================================
     function showDisplay() {
         // clearInterval(interval);
@@ -845,59 +1022,110 @@
             display();
         }, 300000); // 1000 = 1 detik
         $("#btn-tampil-gizi").prop('disabled', true);
+        $("#stop-display").prop('hidden', false);
+        $("#start-display").prop('hidden', true);
         // setInterval(function() {
         //     display();
         // }, 8000);
         // setTimeout(display(), 10000);
     }
 
+    function stopDisplay() {
+        clearInterval();
+        $('#show_tampil_display').empty();
+        $('#show_tampil_display').append(`
+            <div class="row justify-content-center mt-lg-5">
+                <div class="col-xl-5 col-sm-8">
+                    <div class="text-center">
+                        <div class="row justify-content-center mt-2 mb-2">
+                            <div class="col-sm-6 col-8">
+                                <img src="{{ asset('images/verification-img.png') }}" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+        $("#detik").empty();
+        $("#btn-tampil-gizi").prop('disabled', false);
+        $("#stop-display").prop('hidden', true);
+        $("#start-display").prop('hidden', false);
+    }
+
+    function verifGizi(id) {
+        $.ajax({
+            url: "/api/eruang/gizi/verif/"+id,
+            type: 'get',
+            success: function(res) {
+                iziToast.success({
+                    title: 'Pesan Sukses!',
+                    message: 'Status Gizi dengan ID : '+id+' Berhasil di verifikasi',
+                    position: 'topRight'
+                });
+                stopDisplay();
+                showDisplay();
+            },
+            error: function(res) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Verifikasi gagal dilakukan',
+                    position: 'topRight'
+                });
+            }
+        });
+    }
+
     function display() {
         $("#show_tampil_display").empty().append(
             `<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`
         );
-        // $("#detik").text('');
+        $getInputRuangan = $("#tampil_gizi_ruangan").val();
+        $getInputTgl = $("#tampil_gizi_tgl").val();
         $.ajax({
-            url: "/api/eruang/display",
+            url: "/api/eruang/display?ruangan="+$getInputRuangan+"&tgl="+$getInputTgl,
             type: 'GET',
             dataType: 'json',
             success: function(res) {
                 $("#show_tampil_display").empty();
                 res.show.forEach(item => {
                     content = ``;
-                    content += `<div class="col-xl-4 col-sm-6">
-                                <div class="card border border-primary">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0 me-4">
-                                                <div class="avatar-md">
-                                                    <span class="avatar-title rounded-circle bg-light text-danger font-size-16">
-                                                        <img src="${item.foto_profil?'/storage/'+item.foto_profil.substr(7,1000):'/images/pku/user.png'}" alt="" height="30">
-                                                    </span>
+                    content += `<div class="col-xl-4 col-sm-6 d-flex align-items-stretch">
+                                    <div class="card border ${item.gizi_verif?'border-danger':'border-primary'}" style="width:100%">
+                                        <div class="card-body">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-4">
+                                                    <div class="avatar-md">
+                                                        <span class="avatar-title rounded-circle bg-light text-danger font-size-16">
+                                                            <img src="${item.foto_profil?'/storage/'+item.foto_profil.substr(7,1000):'/images/pku/user.png'}" alt="" height="60">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h4 class="text-truncate font-size-20"><a href="javascript: void(0);" class="text-dark"><mark>${item.gizi_verif?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</mark></a></h4>
+                                                    <p class="text-muted mb-0 mt-1">
+                                                        <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>Agenda :</b> ${item.agenda}<br>
+                                                        <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>User :</b> ${item.nama_user?item.nama_user:'Tidak Ada Nama'} (${item.no_hp?item.no_hp:'-'})<br>
+                                                        <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>Pesanan Gizi :</b>
+                                                        <p style="white-space: pre-line">${item.gizi?item.gizi:''}</p>
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h4 class="text-truncate font-size-20"><a href="javascript: void(0);" class="text-dark"><mark>${item.nama_ruangan}</mark></a></h4>
-                                                <p class="text-muted mb-0 mt-1">
-                                                    <b>Agenda :</b> ${item.agenda}<br>
-                                                    <b>User :</b> ${item.nama_user} (${item.no_hp})<br>
-                                                    <b>Pesanan Gizi :</b><br>
-                                                    ${item.gizi?item.gizi:''}
-                                                </p>
-                                            </div>
+                                        </div>
+                                        <div class="px-4 py-3 border-top">
+                                            <ul class="list-inline mb-0">
+                                                <li class="list-inline-item me-3">
+                                                    <i class= "bx bx-calendar me-1"></i> ${item.tgl}
+                                                </li>
+                                                <li class="list-inline-item me-3">
+                                                    <i class= "bx bx-time-five me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
+                                                </li>
+                                                <div class="float-end">
+                                                    <button class="btn btn-sm ${item.gizi_verif?'btn-soft-secondary':'btn-soft-primary'}" onclick="${item.gizi_verif?'':'verifGizi('+item.id+')'}" ${item.gizi_verif?'disabled':''}><i class="bx bx-check"></i></button>
+                                                </div>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div class="px-4 py-3 border-top">
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item me-3">
-                                                <i class= "bx bx-calendar me-1"></i> ${item.tgl}
-                                            </li>
-                                            <li class="list-inline-item me-3">
-                                                <i class= "bx bx-time-five me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>`;
+                                </div>`;
                     $('#show_tampil_display').append(content);
                 })
 
@@ -907,7 +1135,7 @@
                 })
 
                 // UPDATED
-                $("#detik").html('Pukul <mark>'+res.now+'</mark> (5 Menit)');
+                $("#detik").html('Pukul <mark>'+res.now+'</mark> (Per 5 Menit)');
             }
         })
     }
