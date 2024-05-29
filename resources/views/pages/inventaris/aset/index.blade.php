@@ -20,7 +20,7 @@
                         <div class="btn-group">
                             <button class="btn btn-primary tombol-tambah" onclick="tambah()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Menambahkan Aset / Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
+                            title="Menambahkan Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
                             <button class="btn btn-warning" onclick="refresh()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Refresh Tabel Sarana" id="btn-refresh" disabled><i class="fas fa-sync fa-fw nav-icon"></i> Segarkan</button>
@@ -32,7 +32,9 @@
                         <div class="dropdown d-inline-block">
                             <button type="menu" class="btn btn-success" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i> Menu</button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="{{ route('aset_ruangan.index') }}">Daftar Ruangan</a></li>
+                                <li><a class="dropdown-item" href="{{ route('aset_ruangan.index') }}" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Daftar Ruangan Sarana">Daftar Ruangan</a></li>
                             </ul>
                         </div>
                     </div>
@@ -64,7 +66,9 @@
                     </div><!-- input-group -->
                 </div>
                 <div class="col-xxl-2 col-lg-4">
-                    <button type="button" class="btn btn-info w-100" onclick="filter()"><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
+                    <button type="button" class="btn btn-info w-100" onclick="filter()" data-bs-toggle="tooltip"
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Menampilkan Daftar Aset Sekarang"><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
                 </div>
             </div>
 

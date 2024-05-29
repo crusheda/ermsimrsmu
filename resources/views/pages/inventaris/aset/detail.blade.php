@@ -317,12 +317,13 @@
                         $lampiran = json_decode($list['show']->filename);
                     @endphp
                     @if (!empty($lampiran))
-                        @for ($i = 0; $i < count($lampiran); $i++)
                         <div id="carouselExampleControls" class="carousel carousel-dark slide mb-1" data-bs-ride="carousel">
                             <div class="carousel-inner" role="listbox">
-                                <div class="carousel-item @if ($i == 0) active @endif">
-                                    <center><img class="d-block img-fluid" style="max-height: 600px" src="{{ url('storage/'.substr($lampiran[$i],7,1000)) }}"></center>
-                                </div>
+                                @for ($i = 0; $i < count($lampiran); $i++)
+                                    <div class="carousel-item @if ($i == 0) active @endif" data-bs-interval="10000">
+                                        <center><img class="d-block img-fluid" style="max-height: 600px" src="{{ url('storage/'.substr($lampiran[$i],7,1000)) }}"></center>
+                                    </div>
+                                @endfor
                             </div>
                             <br><img src="" alt="" srcset="" id="pdf_preview">
                             <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
@@ -334,7 +335,6 @@
                                 <span class="sr-only">Selanjutnya</span>
                             </a>
                         </div>
-                        @endfor
                     @endif
 
                     <div class="text-center">
@@ -414,15 +414,15 @@
                         <h4><mark id="show_nilai_perolehan"></mark></h4>
                         <p class="text-muted mt-3">Asal Perolehan <i class="fa-fw fas fa-caret-right nav-icon"></i>
                             @if ($list['show']->asal_perolehan == 1)
-                                Beli
+                                <b>Beli</b>
                             @else
                                 @if ($list['show']->asal_perolehan == 2)
-                                    Hibah
+                                    <b>Hibah</b>
                                 @else
                                     @if ($list['show']->asal_perolehan == 3)
-                                        Wakaf
+                                        <b>Wakaf</b>
                                     @else
-                                        -
+                                        <b>-</b>
                                     @endif
                                 @endif
                             @endif
