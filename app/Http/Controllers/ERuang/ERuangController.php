@@ -52,6 +52,18 @@ class ERuangController extends Controller
         // die();
 
         // INITIALIZE
+        // print_r("Snack : ".$request->snack);
+        // die();
+        $gizi = '';
+        if ($request->snack != 0) {
+            $gizi .= "Snack : ".$request->snack."\n";
+        }
+        if ($request->makan != 0) {
+            $gizi .= "Makan : ".$request->makan."\n";
+        }
+        if ($request->minum != 0) {
+            $gizi .= "Minum : ".$request->minum;
+        }
 
         // VALIDASI TANGGAL
         $getData = eruang::select('eruang.*','users.nama as nama_user','eruang_ref.nama as nama_ruangan')
@@ -105,7 +117,7 @@ class ERuangController extends Controller
                             $data->jam_mulai    = $request->jam_mulai;
                             $data->jam_selesai  = $request->jam_selesai;
                             $data->ket          = $request->ket;
-                            $data->gizi         = $request->gizi;
+                            $data->gizi         = $gizi;
                             $data->save();
                             return Response::json(array(
                                 'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
@@ -144,7 +156,7 @@ class ERuangController extends Controller
                             $data->jam_mulai    = $request->jam_mulai;
                             $data->jam_selesai  = $request->jam_selesai;
                             $data->ket          = $request->ket;
-                            $data->gizi         = $request->gizi;
+                            $data->gizi         = $gizi;
                             $data->save();
                             return Response::json(array(
                                 'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
@@ -200,7 +212,7 @@ class ERuangController extends Controller
                         $data->jam_mulai    = $request->jam_mulai;
                         $data->jam_selesai  = $request->jam_selesai;
                         $data->ket          = $request->ket;
-                        $data->gizi         = $request->gizi;
+                        $data->gizi         = $gizi;
                         $data->save();
                         return Response::json(array(
                             'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
@@ -224,7 +236,7 @@ class ERuangController extends Controller
                     $data->jam_mulai    = $request->jam_mulai;
                     $data->jam_selesai  = $request->jam_selesai;
                     $data->ket          = $request->ket;
-                    $data->gizi         = $request->gizi;
+                    $data->gizi         = $gizi;
                     $data->save();
                     return Response::json(array(
                         'message' => 'Peminjaman Ruangan Berhasil pada '.$push,

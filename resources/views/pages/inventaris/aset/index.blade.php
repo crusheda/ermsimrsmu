@@ -506,6 +506,12 @@
     {{-- <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> --}}
     <script>
         $(document).ready(function() {
+            // PESAN AWAL
+            iziToast.warning({
+                title: 'Pesan Admin!',
+                message: 'Sistem ini sedang dalam tahap Ujicoba, semua data masukan akan direset dikemudian hari setelah tahap ini selesai',
+                position: 'topRight'
+            });
             // PENENTUAN MENU AKSES
             var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
             var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";

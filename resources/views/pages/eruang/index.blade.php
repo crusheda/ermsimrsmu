@@ -15,7 +15,7 @@
             <div class="card-body" style="overflow: visible;">
                 <div class="float-end" id="btn_link_pengajuan">
                     <div class="dropdown">
-                        <button type="button" class="btn btn-soft-dark" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block">Informasi <i class="mdi mdi-chevron-down"></i></span></button>
+                        <button type="button" class="btn btn-soft-dark" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block">Informasi <i class="mdi mdi-chevron-down"></i></span></button>
                         {{-- <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
                             <div class="dropdown-item-text">
                                 <div>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="float-end" id="btn_link_riwayat" hidden>
                     <div class="input-daterange input-group bg-light rounded">
-                        <input type="text" name="filter_tgl" class="form-control bg-transparent border-0 flatpickrunl" placeholder="Filter Tanggal Acara" aria-label="" aria-describedby="button-addon2">
+                        <input type="text" name="filter_tgl" class="form-control bg-transparent border-0 flatpickrunl" placeholder="Filter Tanggal Acara" aria-label="" aria-describedby="button-addon2" disabled>
 
                         <button class="btn btn-primary" type="button" id="button-addon2" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -72,26 +72,29 @@
                                 Daftar Riwayat
                             </a>
                         </li>
+                        @if (Auth::user()->getManyRole(['tu','it','gizi']))
                         <li class="nav-item">
                             <a class="nav-link" id="link_display" data-bs-toggle="tab" href="#display" role="tab">
                                 Display Gizi
                             </a>
                         </li>
+                        @endif
                     </ul>
 
                     <div class="tab-content crypto-buy-sell-nav-content p-4">
                         <div class="tab-pane active" id="pengajuan" role="tabpanel">
                             <form>
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <div class="row">
                                         <label><mark>Ketentuan</mark></label><br>
                                         <div class="col-md-6">
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai</small><br>
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan data hanya dapat dilakukan sampai <kbd>H-1</kbd> Acara dan maksimal sebelum <kbd>Jam 12:00 WIB</kbd></small><br>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan data hanya dapat dilakukan sampai <kbd>H-1 Acara</kbd></small><br> {{--  dan maksimal sebelum <kbd>Jam 12:00 WIB</kbd> --}}
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pada pemilihan Jam & Menit tidak boleh sama</small>
                                         </div>
                                         <div class="col-md-6">
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Apabila sudah diverifikasi oleh bagian Gizi, maka peminjaman ruangan tidak dapat dihapus, akan tetapi Anda masih dapat mengubahnya dengan sepengetahuan bagian Gizi (Konfirmasi terlebih dahulu)</small>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Apabila sudah diverifikasi oleh bagian Gizi, maka peminjaman ruangan tidak dapat dihapus, akan tetapi Anda masih dapat mengubahnya dengan sepengetahuan bagian Gizi (Konfirmasi terlebih dahulu)</small><br>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Admin memiliki kuasa sepenuhnya untuk melakukan penolakan maupun penghapusan pengajuan apabila pada tgl dan jam tersebut bertepatan dengan acara yang lebih dipentingkan</small>
                                         </div>
                                     </div>
                                 </div>
@@ -135,28 +138,28 @@
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <label>Pilih Tanggal Acara <a class="text-danger">*</a></label>
-                                            <div class="input-daterange input-group" data-date-format="dd-mm-yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker6'>
-                                                <input type="text" id="tgl" class="form-control" placeholder="dd-mm-yyyy" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
+                                            <div class="input-daterange input-group">
+                                                <input type="text" id="tgl" class="form-control flatpickrunl" placeholder="yyyy-mm-dd" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label>Pilih Waktu Acara <a class="text-danger">*</a></label>
+                                    <label>Pilih Waktu Acara (<u>Format 24h</u>) <a class="text-danger">*</a></label>
 
                                     <div class="row" style="text-align: center">
                                         {{-- <div class="input-daterange input-group" id="datepicker6" data-date-format="dd-mm-yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker6'> --}}
                                             <div class="col-sm-6 mb-3">
-                                                <div class="input-daterange input-group clock-value" id="timepicker-input-group1">
+                                                <div class="input-daterange input-group clock-value">
                                                     <span class="input-group-text">Mulai</span>
-                                                    <input id="jam_mulai" type="text" class="form-control" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam mulai acara">
+                                                    <input id="jam_mulai" type="text" class="form-control flatpickrtime" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam mulai acara">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6 mb-3">
-                                                <div class="input-daterange input-group" id="timepicker-input-group2">
-                                                    <input id="jam_selesai" type="text" class="form-control" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam selesai acara">
+                                                <div class="input-daterange input-group">
+                                                    <input id="jam_selesai" type="text" class="form-control flatpickrtimenext" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam selesai acara">
                                                     <span class="input-group-text">Selesai</span>
                                                 </div>
                                             </div>
@@ -167,18 +170,26 @@
                                 <div>
                                     <div class="row">
                                         <div class="col-sm-6 mb-3">
-                                            <label>Keterangan</label>
-                                            <textarea rows="2" class="form-control" id="ket" placeholder="Optional"></textarea>
+                                            <label>Keterangan Acara</label>
+                                            <textarea rows="1" class="form-control" id="ket" placeholder="Optional"></textarea>
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <label>Pesan Tambahan Untuk Bagian Gizi</label>
-                                            <textarea rows="2" class="form-control" id="gizi" placeholder="e.g. Tolong siapkan snack untuk 10 peserta pelatihan terima kasih" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pesan ini akan tersampaikan ke bagian Gizi"></textarea>
+                                            <label>Pesan Tambahan Untuk Bagian Gizi (isi nilai 0 apabila tidak diperlukan)</label>
+                                            <div class="input-daterange input-group">
+                                                <span class="input-group-text">Snack</span>
+                                                <input id="snack" type="number" class="form-control" value="0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Permintaan Snack">
+                                                <span class="input-group-text">Makan</span>
+                                                <input id="makan" type="number" class="form-control" value="0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Permintaan Makanan">
+                                                <span class="input-group-text">Minum</span>
+                                                <input id="minum" type="number" class="form-control" value="0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Permintaan Minuman">
+                                            </div>
+                                            {{-- <textarea rows="2" class="form-control" id="gizi" placeholder="e.g. Tolong siapkan snack untuk 10 peserta pelatihan terima kasih" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pesan ini akan tersampaikan ke bagian Gizi"></textarea> --}}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="text-center mt-4">
-                                    <button type="button" class="btn btn-success" id="btn-simpan" onclick="prosesSimpan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Ajukan untuk melanjutkan proses Verifikasi Jadwal"><i class="fas fa-stamp"></i> Ajukan</button>
+                                    <button type="button" class="btn btn-success" id="btn-simpan" onclick="prosesSimpan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Ajukan untuk melanjutkan proses Verifikasi Jadwal"><i class="fas fa-stamp"></i>&nbsp;&nbsp;Ajukan Sekarang</button>
                                 </div>
                             </form>
                         </div>
@@ -193,6 +204,8 @@
                                         <th scope="col">Tanggal Acara</th>
                                         <th scope="col">Waktu Acara</th>
                                         <th scope="col">Keterangan</th>
+                                        <th scope="col">Pesanan Gizi</th>
+                                        <th scope="col">Alasan Penolakan</th>
                                         <th scope="col">Diperbarui</th>
                                     </tr>
                                 </thead>
@@ -288,7 +301,8 @@
                     <div class="col-md-2 mb-3">
                         <div class="form-group">
                             <label class="form-label">Tanggal Acara <a class="text-danger">*</a></label>
-                            <input type="text" id="tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
+                            <input type="text" id="show_tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara" disabled/>
+                            <input type="text" id="tgl_edit" class="form-control" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara" hidden/>
                         </div>
                     </div>
                     <div class="col-sm-6 mb-3">
@@ -377,9 +391,9 @@
         });
 
         // DATEPICKER
-        $('#tgl').datepicker({
-            autoclose: true,format:'yyyy-mm-dd',
-        }).datepicker("setDate",'now');
+        // $('#tgl').datepicker({
+        //     autoclose: true,format:'yyyy-mm-dd',
+        // }).datepicker("setDate",'now');
 
         // DATE
         const today = new Date();
@@ -392,6 +406,8 @@
         const lun = $('.flatpickrunl');
         const ltom = $('.flatpickrtom');
         const rang = $('.flatpickrrange');
+        const time = $('.flatpickrtime');
+        const timenext = $('.flatpickrtimenext');
         // const dates = new Date(Date.now());
         // const tomorow = dates.getTime();
         // const m = new Date(Date.now());
@@ -459,23 +475,38 @@
             // dateFormat: "Y-MM-DD HH:mm",
             time_24hr: true
         })
-        $('#jam_mulai').timepicker({
-            showMeridian: false,
-            icons: {
-                up: 'mdi mdi-chevron-up',
-                down: 'mdi mdi-chevron-down'
-            },
-            appendWidgetTo: "#timepicker-input-group1"
-        });
-        $('#jam_selesai').timepicker({
-            showMeridian: false,
-            icons: {
-                up: 'mdi mdi-chevron-up',
-                down: 'mdi mdi-chevron-down'
-            },
-            // defaultTime: add(30, 'minutes'),
-            appendWidgetTo: "#timepicker-input-group2"
-        });
+        time.flatpickr({
+            defaultDate: now,
+            enableTime: true,
+            noCalendar: true,
+            time_24hr: true,
+            dateFormat: "H:i",
+        })
+        timenext.flatpickr({
+            // defaultDate: now,
+            enableTime: true,
+            noCalendar: true,
+            time_24hr: true,
+            dateFormat: "H:i",
+        })
+
+        // $('#jam_mulai').timepicker({
+        //     showMeridian: false,
+        //     icons: {
+        //         up: 'mdi mdi-chevron-up',
+        //         down: 'mdi mdi-chevron-down'
+        //     },
+        //     appendWidgetTo: "#timepicker-input-group1"
+        // });
+        // $('#jam_selesai').timepicker({
+        //     showMeridian: false,
+        //     icons: {
+        //         up: 'mdi mdi-chevron-up',
+        //         down: 'mdi mdi-chevron-down'
+        //     },
+        //     // defaultTime: add(30, 'minutes'),
+        //     appendWidgetTo: "#timepicker-input-group2"
+        // });
         $('.nav-link').on('click', function() {
             if ($(this).attr('id') == 'link_pengajuan') {
                 $("#btn_link_pengajuan").prop('hidden', false);
@@ -539,9 +570,13 @@
                 $('#dttable').DataTable().clear().destroy();
                 var userID = "{{ Auth::user()->id }}";
                 var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-tata-usaha']) }}";
-                var date = new Date().toLocaleDateString();
+                var date = new Date().toLocaleDateString('en-ZA');
+                // console.log('ini tgl sekarang : '+date);
                 res.show.forEach(item => {
-                    var updet = new Date(item.created_at).toLocaleDateString();
+                    var input = new Date(item.tgl).toLocaleDateString('en-ZA');
+                    var updet = new Date(item.created_at).toLocaleDateString('en-ZA');
+
+                    // console.log('ini tgl input : '+input);
 
                     // JIKA ADMIN
                     if (adminID == true) {
@@ -582,7 +617,8 @@
                     // JIKA USER
                     } else {
                         if (userID == item.id_user) {
-                            if (updet == date) {
+                            // if (updet == date) {
+                            if (date <= input) {
                                 if (item.gizi_verif == null) {
                                     if (item.status_penolakan == null) {
                                         content = `<tr><center><td><div class="d-flex align-items-center">
@@ -659,6 +695,8 @@
                     content += `<td>`+item.tgl+`</td>`;
                     content += `<td>`+item.jam_mulai.substring(0, 5)+` - `+item.jam_selesai.substring(0, 5)+` WIB</td>`;
                     content += `<td>${item.ket?item.ket:''}</td>`;
+                    content += `<td style="white-space: pre-line">${item.gizi?item.gizi:''}</td>`;
+                    content += `<td>${item.alasan_penolakan?item.alasan_penolakan:''}</td>`;
                     // unit.forEach(val => {
                     //     res.role.forEach(pus => {
                     //         if (val == pus.id) {
@@ -674,17 +712,22 @@
 
                 var table = $('#dttable').DataTable({
                     order: [
-                        [6, "desc"]
+                        [8, "desc"]
                     ],
                     bAutoWidth: false,
                     aoColumns : [
                         { sWidth: '5%' },
                         { sWidth: '17%' },
-                        { sWidth: '20%' },
-                        { sWidth: '11%' },
-                        { sWidth: '18%' },
-                        { sWidth: '20%' },
+                        { sWidth: '13%' },
                         { sWidth: '10%' },
+                        { sWidth: '10%' },
+                        { sWidth: '14%' },
+                        { sWidth: '10%' },
+                        { sWidth: '13%' },
+                        { sWidth: '8%' },
+                    ],
+                    columnDefs: [
+                        { visible: false, targets: [7] },
                     ],
                     displayLength: 7,
                     lengthChange: true,
@@ -715,7 +758,10 @@
         save.append('jam_mulai',$("#jam_mulai").val());
         save.append('jam_selesai',$("#jam_selesai").val());
         save.append('ket',$("#ket").val());
-        save.append('gizi',$("#gizi").val());
+        // save.append('gizi',$("#gizi").val());
+        save.append('snack',$("#snack").val());
+        save.append('makan',$("#makan").val());
+        save.append('minum',$("#minum").val());
         save.append('user','{{ Auth::user()->id }}');
 
         console.log(save.get('ruangan'));
@@ -846,6 +892,7 @@
             type: 'GET',
             dataType: 'json', // added data type
             success: function(res) {
+                $("#show_tgl_edit").val(res.show.tgl);
                 var a = document.querySelector("#tgl_edit");
                 a.flatpickr({
                     enableTime: 0,

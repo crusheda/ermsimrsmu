@@ -103,12 +103,19 @@
                         @endif
                     </ul>
                 </li>
+                <li>
+                    <a href="{{ route('eruang.index') }}" class="waves-effect">
+                        <span class="badge rounded-pill bg-primary float-end">new</span>
+                        <i class="bx bx-key"></i>
+                        <span key="t-chat">E-Ruang</span>
+                    </a>
+                </li>
 
                 <li class="menu-title" key="t-menu">Inventaris</li>
 
                 <li>
                     <a href="javascript: void(0);" class=" {{-- has-arrow --}} waves-effect">
-                        <span class="badge rounded-pill bg-primary float-end">new</span>
+                        <span class="badge rounded-pill bg-warning float-end">new</span>
                         <i class="bx bx-cube"></i>
                         <span key="t-dashboards">Aset & Gudang</span>
                     </a>
