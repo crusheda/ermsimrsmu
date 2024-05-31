@@ -88,10 +88,9 @@
                                     <div class="row">
                                         <label><mark>Ketentuan</mark></label><br>
                                         <div class="col-md-6">
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan dan penghapusan data hanya dapat dilakukan sampai <kbd>H-1 Acara</kbd> & maksimal kurang dari <kbd>Jam 12:00 WIB</kbd>, tidak dalam kondisi ditolak oleh Admin, dan apabila sudah diverifikasi oleh bagian Gizi</small><br>
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai</small><br>
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Request pesanan gizi dapat dilakukan dengan cara mengubah data setelah pengajuan</small><br>
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pada pemilihan Jam & Menit tidak boleh sama</small>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai dan pemilihan Jam & Menit tidak boleh sama</small><br>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan dan penghapusan data hanya dapat dilakukan sampai H-1 Acara & maksimal kurang dari Jam 12:00 WIB, tidak dalam kondisi ditolak oleh Admin, dan apabila sudah diverifikasi oleh bagian Gizi</small><br>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Request pesanan gizi dapat dilakukan dengan cara mengubah data setelah pengajuan</small>
                                         </div>
                                         <div class="col-md-6">
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Apabila sudah diverifikasi oleh bagian Gizi, maka peminjaman ruangan tidak dapat dihapus, akan tetapi Anda masih dapat mengubahnya dengan sepengetahuan bagian Gizi (Konfirmasi terlebih dahulu)</small><br>
