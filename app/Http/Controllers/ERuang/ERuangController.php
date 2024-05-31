@@ -347,6 +347,11 @@ class ERuangController extends Controller
         // die();
         $input1 = $request->tgl;
         $input2 = $request->ruangan;
+        $input3 = $request->status;
+        if ($request->status != 1) {
+            $input3 = null;
+        }
+
         $show = eruang::select('eruang.*','users.nama as nama_user','users.no_hp','users_foto.filename as foto_profil','eruang_ref.id as id_ruangan_ref','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
                 ->leftJoin('users','users.id','=','eruang.id_user')
                 ->leftJoin('users_foto','users.id','=','users_foto.user_id')
@@ -357,6 +362,7 @@ class ERuangController extends Controller
                 ->when($input2 != null, function ($q) use ($input2) {
                     $q->where('eruang.id_ruangan',$input2);
                 })
+                ->where('gizi_verif',$input3)
                 ->where('status_penolakan',null)
                 ->orderBy('eruang.tgl','asc')
                 ->orderBy('eruang.jam_mulai','asc')

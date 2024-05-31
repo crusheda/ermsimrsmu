@@ -50,7 +50,7 @@
 
                         <button class="btn btn-primary" type="button" id="button-addon2" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Cari data berdasarkan tanggal acara"><i class="bx bx-search-alt align-middle"></i> </button>
+                        title="Cari data berdasarkan tanggal acara" disabled><i class="bx bx-search-alt align-middle"></i> </button>
                         <button type="button" class="btn btn-warning" onclick="riwayat()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                         title="Refresh Tabel Peminjaman Ruangan"><i class="fas fa-sync fa-fw nav-icon"></i></button>
@@ -72,7 +72,7 @@
                                 Daftar Riwayat
                             </a>
                         </li>
-                        @if (Auth::user()->getManyRole(['tu','it','gizi']))
+                        @if (Auth::user()->getManyRole(['kasubag-tata-usaha','it','gizi']))
                         <li class="nav-item">
                             <a class="nav-link" id="link_display" data-bs-toggle="tab" href="#display" role="tab">
                                 Display Gizi
@@ -88,8 +88,9 @@
                                     <div class="row">
                                         <label><mark>Ketentuan</mark></label><br>
                                         <div class="col-md-6">
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan dan penghapusan data hanya dapat dilakukan sampai <kbd>H-1 Acara</kbd> & maksimal kurang dari <kbd>Jam 12:00 WIB</kbd>, tidak dalam kondisi ditolak oleh Admin, dan apabila sudah diverifikasi oleh bagian Gizi</small><br>
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai</small><br>
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan data hanya dapat dilakukan sampai <kbd>H-1 Acara</kbd></small><br> {{--  dan maksimal sebelum <kbd>Jam 12:00 WIB</kbd> --}}
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Request pesanan gizi dapat dilakukan dengan cara mengubah data setelah pengajuan</small><br>
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pada pemilihan Jam & Menit tidak boleh sama</small>
                                         </div>
                                         <div class="col-md-6">
@@ -107,7 +108,7 @@
                                             @foreach ($list['ruangan'] as $item)
                                                 <div class="col-xl-2 col-sm-4">
                                                     <label class="card-radio-label mb-2">
-                                                        <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input">
+                                                        <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input validasiTgl">
 
                                                         <div class="card-radio">
                                                             <div>
@@ -133,33 +134,33 @@
                                     <div class="row">
                                         <div class="col-sm-6 mb-3">
                                             <label>Agenda Acara <a class="text-danger">*</a></label>
-                                            <input type="text" id="agenda" class="form-control" placeholder="e.g. Rapat Rutin Bagian **" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tuliskan nama acara"/>
+                                            <input type="text" id="agenda" class="form-control validasiTgl" placeholder="e.g. Rapat Paripurna Bagian **" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tuliskan nama acara"/>
 
                                         </div>
                                         <div class="col-sm-6 mb-3">
                                             <label>Pilih Tanggal Acara <a class="text-danger">*</a></label>
                                             <div class="input-daterange input-group">
-                                                <input type="text" id="tgl" class="form-control flatpickrunl" placeholder="yyyy-mm-dd" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
+                                                <input type="text" id="tgl" class="form-control flatpickrunl" onchange="verifSnackGiziTgl(this.value)" placeholder="yyyy-mm-dd" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tanggal acara"/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label>Pilih Waktu Acara (<u>Format 24h</u>) <a class="text-danger">*</a></label>
+                                    <label>Pilih Waktu Acara (<mark>Format 24h</mark>) <a class="text-danger">*</a></label>
 
                                     <div class="row" style="text-align: center">
                                         {{-- <div class="input-daterange input-group" id="datepicker6" data-date-format="dd-mm-yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker6'> --}}
                                             <div class="col-sm-6 mb-3">
                                                 <div class="input-daterange input-group clock-value">
                                                     <span class="input-group-text">Mulai</span>
-                                                    <input id="jam_mulai" type="text" class="form-control flatpickrtime" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam mulai acara">
+                                                    <input id="jam_mulai" type="text" class="form-control flatpickrtime validasiTgl" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam mulai acara">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6 mb-3">
                                                 <div class="input-daterange input-group">
-                                                    <input id="jam_selesai" type="text" class="form-control flatpickrtimenext" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam selesai acara">
+                                                    <input id="jam_selesai" type="text" class="form-control flatpickrtimenext validasiTgl" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam selesai acara">
                                                     <span class="input-group-text">Selesai</span>
                                                 </div>
                                             </div>
@@ -171,13 +172,21 @@
                                     <div class="row">
                                         <div class="col-sm-6 mb-3">
                                             <label>Keterangan Acara</label>
-                                            <textarea rows="1" class="form-control" id="ket" placeholder="Optional"></textarea>
+                                            <textarea rows="1" class="form-control validasiTgl" id="ket" placeholder="Optional"></textarea>
                                         </div>
                                         <div class="col-sm-6 mb-3">
-                                            <label>Pesan Tambahan Untuk Bagian Gizi (isi nilai 0 apabila tidak diperlukan)</label>
-                                            <div class="input-daterange input-group">
+                                            <label>Pesan Tambahan Untuk Bagian Gizi (<mark>isi nilai 0 apabila tidak diperlukan</mark>)</label>
+                                            <div class="input-daterange input-group" id="show_gizi1">
                                                 <span class="input-group-text">Snack</span>
-                                                <input id="snack" type="number" class="form-control" value="0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Permintaan Snack">
+                                                <input type="number" class="form-control" disabled>
+                                                <span class="input-group-text">Makan</span>
+                                                <input type="number" class="form-control" disabled>
+                                                <span class="input-group-text">Minum</span>
+                                                <input type="number" class="form-control" disabled>
+                                            </div>
+                                            <div class="input-daterange input-group" id="show_gizi2" hidden>
+                                                <span class="input-group-text pilih_snack">Snack</span>
+                                                <input id="snack" type="number" class="form-control pilih_snack" value="0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Permintaan Snack">
                                                 <span class="input-group-text">Makan</span>
                                                 <input id="makan" type="number" class="form-control" value="0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Permintaan Makanan">
                                                 <span class="input-group-text">Minum</span>
@@ -189,7 +198,7 @@
                                 </div>
 
                                 <div class="text-center mt-4">
-                                    <button type="button" class="btn btn-success" id="btn-simpan" onclick="prosesSimpan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Ajukan untuk melanjutkan proses Verifikasi Jadwal"><i class="fas fa-stamp"></i>&nbsp;&nbsp;Ajukan Sekarang</button>
+                                    <button type="button" class="btn btn-success validasiTgl" id="btn-simpan" onclick="prosesSimpan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Ajukan untuk melanjutkan proses Verifikasi Jadwal"><i class="fas fa-stamp"></i>&nbsp;&nbsp;Ajukan Sekarang</button>
                                 </div>
                             </form>
                         </div>
@@ -218,7 +227,7 @@
                             <div class="row g-3 mb-4">
                                 <div class="col-xxl-5 col-lg-4">
                                     <div class="position-relative">
-                                        <select class="select2 form-control" id="tampil_gizi_ruangan" style="width: 100%" data-bs-auto-close="outside" required>
+                                        <select class="select2 form-control validasiTgl" id="tampil_gizi_ruangan" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih salah satu/Kosongi untuk menampilkan semua Ruangan">
                                             <option value="" selected hidden>Pilih Ruangan</option>
                                             @if (!empty($list['ruangan']))
                                                 @foreach ($list['ruangan'] as $item)
@@ -228,11 +237,19 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xxl-5 col-lg-6">
+                                <div class="col-xxl-2 col-lg-6">
                                     <div class="position-relative">
                                         <div id="datepicker1">
                                             <input type="text" class="form-control" id="tampil_gizi_tgl" placeholder="Pilih Tanggal" data-date-format="yyyy-mm-dd" data-date-container='#datepicker1' data-date-autoclose="true" data-provide="datepicker" required>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-xxl-3 col-lg-6">
+                                    <div class="position-relative">
+                                        <select class="select2 form-control" id="tampil_gizi_status" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih Status Verifikasi">
+                                            <option value="0" selected>Belum Diverifikasi</option>
+                                            <option value="1">Sudah Diverifikasi</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-xxl-2 col-lg-6" id="start-display">
@@ -288,8 +305,9 @@
                     <div class="col-md-5 mb-3">
                         <div class="form-group">
                             <label class="form-label">Ruangan <a class="text-danger">*</a></label>
-                            <select class="select2 form-control" id="ruangan_edit" style="width: 100%" data-bs-auto-close="outside" required></select>
-                            {{-- <small></small> --}}
+                            <input type="text" class="form-control" id="show_ruangan_edit" disabled>
+                            {{-- <select class="select2 form-control" id="ruangan_edit" style="width: 100%" data-bs-auto-close="outside" hidden></select> --}}
+                            <input type="text" class="form-control" id="ruangan_edit" hidden>
                         </div>
                     </div>
                     <div class="col-md-5 mb-3">
@@ -881,8 +899,10 @@
     function ubah(id) {
         $("#id_edit").val("");
         $("#ruangan_edit").val("");
+        $("#show_ruangan_edit").val("");
         $("#agenda_edit").val("");
         $("#tgl_edit").val("");
+        $("#show_tgl_edit").val("");
         $("#ket_edit").val("");
         $("#gizi_edit").val("");
 
@@ -906,12 +926,20 @@
                 // $("#tgl_edit").val(res.show.tgl);
                 $("#ket_edit").val(res.show.ket);
                 $("#gizi_edit").val(res.show.gizi);
-                $("#ruangan_edit").find('option').remove();
+                $("#show_ruangan_edit").find('option').remove();
                 res.ruangan.forEach(item => {
-                    $("#ruangan_edit").append(`
-                        <option value="${item.id}" ${item.id == res.show.id_ruangan_ref? "selected":""}>${item.nama} (${item.kapasitas} Peserta)</option>
-                    `);
+                    if (item.id == res.show.id_ruangan_ref) {
+                        $("#show_ruangan_edit").val(item.nama+' ('+item.kapasitas+' Peserta)');
+                        $("#ruangan_edit").val(item.id);
+                    }
                 });
+                // BACKUP RUANGAN ASLI ------------------------
+                // $("#ruangan_edit").find('option').remove();
+                // res.ruangan.forEach(item => {
+                //     $("#ruangan_edit").append(`
+                //         <option value="${item.id}" ${item.id == res.show.id_ruangan_ref? "selected":""}>${item.nama} (${item.kapasitas} Peserta)</option>
+                //     `);
+                // });
                 $('#modalUbah').modal('show');
             }
         });
@@ -1062,6 +1090,72 @@
     }
 
     // TAMPILAN GIZI =============================================================================
+    function verifSnackGiziTgl(val) {
+        var date = new Date();
+        var tgl = new Date(val);
+        tgl.setDate(tgl.getDate()-1);
+        var hmin1 = tgl.toLocaleDateString("sv-SE");
+        var harih = new Date(val).toLocaleDateString("sv-SE");
+        var hariini = new Date().toLocaleDateString("sv-SE");
+        var jamSekarang = date.getHours();
+
+        // console.log(hariini);
+        // console.log(hmin1);
+        // console.log(jamSekarang);
+        // console.log(jamMulai);
+        if (hmin1 > hariini) {
+            $("#show_gizi1").prop('hidden',true);
+            $("#show_gizi2").prop('hidden',false);
+            $(".pilih_snack").prop('hidden',false);
+            $(".validasiTgl").prop('disabled',false);
+            iziToast.warning({
+                title: 'Pesan Admin!',
+                message: 'Silakan menyesuaikan Jam Mulai dan Selesai',
+                position: 'topRight'
+            });
+        } else {
+            if (hmin1 == hariini) {
+                $("#show_gizi1").prop('hidden',true);
+                $("#show_gizi2").prop('hidden',false);
+                $(".validasiTgl").prop('disabled',false);
+                if (jamSekarang < 12) {
+                    $(".pilih_snack").prop('hidden',false);
+                    iziToast.warning({
+                        title: 'Pesan Admin!',
+                        message: 'Silakan menyesuaikan Jam Mulai dan Selesai',
+                        position: 'topRight'
+                    });
+                } else {
+                    $(".pilih_snack").prop('hidden',true);
+                    iziToast.warning({
+                        title: 'Pesan Admin!',
+                        message: 'Silakan menyesuaikan Jam Mulai dan Selesai. Tidak bisa menambahkan Snack karena sudah melebihi Pukul 12:00 WIB',
+                        position: 'topRight'
+                    });
+                }
+            } else {
+                $("#show_gizi1").prop('hidden',false);
+                $("#show_gizi2").prop('hidden',true);
+                $(".pilih_snack").prop('hidden',true);
+                if (harih == hariini) {
+                    $(".validasiTgl").prop('disabled',false);
+                    iziToast.warning({
+                        title: 'Pesan Admin!',
+                        message: 'Pengajuan masih berlaku tetapi tidak bisa memesan Snack/Makan/Minum ke bagian Gizi',
+                        position: 'topRight'
+                    });
+                } else {
+                    $(".validasiTgl").prop('disabled',true);
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
+                        position: 'topRight'
+                    });
+                }
+            }
+        }
+    }
+
     function showDisplay() {
         // clearInterval(interval);
         display();
@@ -1128,8 +1222,9 @@
         );
         $getInputRuangan = $("#tampil_gizi_ruangan").val();
         $getInputTgl = $("#tampil_gizi_tgl").val();
+        $getInputStatus = $("#tampil_gizi_status").val();
         $.ajax({
-            url: "/api/eruang/display?ruangan="+$getInputRuangan+"&tgl="+$getInputTgl,
+            url: "/api/eruang/display?ruangan="+$getInputRuangan+"&tgl="+$getInputTgl+"&status="+$getInputStatus,
             type: 'GET',
             dataType: 'json',
             success: function(res) {
@@ -1167,7 +1262,7 @@
                                                     <i class= "bx bx-time-five me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
                                                 </li>
                                                 <div class="float-end">
-                                                    <button class="btn btn-sm ${item.gizi_verif?'btn-soft-secondary':'btn-soft-primary'}" onclick="${item.gizi_verif?'':'verifGizi('+item.id+')'}" ${item.gizi_verif?'disabled':''}><i class="bx bx-check"></i></button>
+                                                    <button class="btn btn-sm ${item.gizi_verif?'btn-soft-secondary':'btn-soft-primary'}" onclick="${item.gizi_verif?'':'verifGizi('+item.id+')'}" ${item.gizi_verif?'disabled':''} data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi"><i class="bx bx-check"></i></button>
                                                 </div>
                                             </ul>
                                         </div>
