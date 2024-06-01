@@ -388,4 +388,10 @@ class ERuangController extends Controller
 
         return response()->json($tgl, 200);
     }
+
+    function verifEditHapus($id){
+        // Inisialisasi
+        $data = eruang::find($id);
+        return response()->json($data, 200);
+    }
 }

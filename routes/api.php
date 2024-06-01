@@ -143,6 +143,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post('eruang/tolak/{id}', 'App\Http\Controllers\ERuang\ERuangController@tolak')->name('eruang.tolak');
         Route::get('eruang/ubah/{id}', 'App\Http\Controllers\ERuang\ERuangController@getUbah')->name('eruang.getUbah');
         Route::get('eruang/gizi/verif/{id}', 'App\Http\Controllers\ERuang\ERuangController@verifGizi')->name('eruang.verifGizi');
+        Route::get('eruang/gizi/verif/edithapus/{id}', 'App\Http\Controllers\ERuang\ERuangController@verifEditHapus')->name('eruang.verifEditHapus');
         Route::delete('eruang/hapus/{id}', 'App\Http\Controllers\ERuang\ERuangController@hapus')->name('eruang.hapus');
         Route::get('eruang/display', 'App\Http\Controllers\ERuang\ERuangController@display')->name('eruang.display');
 

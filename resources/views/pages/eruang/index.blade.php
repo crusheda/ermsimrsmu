@@ -105,19 +105,37 @@
                                     <div class="row">
                                         @if (!empty($list['ruangan']))
                                             @foreach ($list['ruangan'] as $item)
-                                                <div class="col-xl-2 col-sm-4">
-                                                    <label class="card-radio-label mb-2">
-                                                        <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input validasiTgl">
+                                                @if (Auth::user()->id == 82 || Auth::user()->id == 294 || Auth::user()->id == 2)
+                                                    <div class="col-xl-2 col-sm-4">
+                                                        <label class="card-radio-label mb-2">
+                                                            <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input validasiTgl">
 
-                                                        <div class="card-radio">
-                                                            <div>
-                                                                {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
-                                                                <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
-                                                                <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
+                                                            <div class="card-radio">
+                                                                <div>
+                                                                    {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
+                                                                    <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
+                                                                    <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
+                                                                </div>
                                                             </div>
+                                                        </label>
+                                                    </div>
+                                                @else
+                                                    @if ($item->nama != 'Ruang Direksi')
+                                                        <div class="col-xl-2 col-sm-4">
+                                                            <label class="card-radio-label mb-2">
+                                                                <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input validasiTgl">
+
+                                                                <div class="card-radio">
+                                                                    <div>
+                                                                        {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
+                                                                        <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
+                                                                        <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
+                                                                    </div>
+                                                                </div>
+                                                            </label>
                                                         </div>
-                                                    </label>
-                                                </div>
+                                                    @endif
+                                                @endif
                                             @endforeach
                                         @endif
 
@@ -224,6 +242,9 @@
                         <div class="tab-pane" id="display" role="tabpanel" style="height:auto">
 
                             <div class="row g-3 mb-4">
+                                <div class="col-xxl-12">
+                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pengajuan Peminjaman Ruangan dapat diverifikasi oleh Bagian Gizi Mulai dari <kbd>H-1 Acara setelah Pukul 12:00 WIB</kbd> sampai <kbd>Hari H Acara Pukul 23:59 WIB</kbd></small>
+                                </div>
                                 <div class="col-xxl-5 col-lg-4">
                                     <div class="position-relative">
                                         <select class="select2 form-control validasiTgl" id="tampil_gizi_ruangan" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih salah satu/Kosongi untuk menampilkan semua Ruangan">
@@ -347,7 +368,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
-                    Form Hapus Peminjaman Ruangan&nbsp;&nbsp;&nbsp;
+                    Form Hapus Peminjaman Ruangan
                 </h4>
             </div>
             <div class="modal-body">
@@ -376,7 +397,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
-                    Form Penolakan Peminjaman Ruangan&nbsp;&nbsp;&nbsp;
+                    Form Penolakan Peminjaman Ruangan
                 </h4>
             </div>
             <div class="modal-body">
@@ -390,6 +411,25 @@
             <div class="col-12 text-center mb-4">
                 <button type="submit" id="btn-hapus" class="btn btn-dark me-sm-3 me-1" onclick="prosesTolak()"><i class="bx bx-calendar-x"></i> Tolak</button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal animate__animated animate__rubberBand fade" id="modalAlasanPenolakan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Alasan Penolakan
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <textarea rows="4" class="form-control" id="show_alasan_penolakan" disabled></textarea>
+                </div>
+            </div>
+            <div class="col-12 text-center mb-4">
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i> Tutup</button>
             </div>
         </div>
     </div>
@@ -493,7 +533,7 @@
             time_24hr: true
         })
         time.flatpickr({
-            defaultDate: now,
+            defaultDate: "08:00", // now
             enableTime: true,
             noCalendar: true,
             time_24hr: true,
@@ -603,9 +643,9 @@
                                                 <div class="dropdown">
                                                     <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="javascript:;" onclick="tolak(` + item.id + `)" class="dropdown-item text-info"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Tolak</a>
-                                                        <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                        <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                        <a href="javascript:;" onclick="verifTolakTgl(` + item.id + `)" class="dropdown-item text-info"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Tolak</a>
+                                                        <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                        <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                                     </div>
                                                 </div>
                                             </div></td></center>`;
@@ -614,8 +654,9 @@
                                                 <div class="dropdown">
                                                     <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                        <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                        <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
+                                                        <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                        <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                                     </div>
                                                 </div>
                                             </div></td></center>`;
@@ -625,8 +666,9 @@
                                             <div class="dropdown">
                                                 <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                    <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                    <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
+                                                    <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                    <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                                 </div>
                                             </div>
                                         </div></td></center>`;
@@ -635,35 +677,24 @@
                     } else {
                         if (userID == item.id_user) {
                             // if (updet == date) {
-                            if (date <= input) {
-                                if (item.gizi_verif == null) {
-                                    if (item.status_penolakan == null) {
-                                        content = `<tr><center><td><div class="d-flex align-items-center">
-                                                        <div class="dropdown">
-                                                            <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                                <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
-                                                            </div>
+                            if (item.gizi_verif == null) {
+                                if (item.status_penolakan == null) {
+                                    content = `<tr><center><td><div class="d-flex align-items-center">
+                                                    <div class="dropdown">
+                                                        <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                                         </div>
-                                                    </div></td></center>`;
-                                    } else {
-                                        content = `<tr><center><td><div class="d-flex align-items-center">
-                                                        <div class="dropdown">
-                                                            <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
-                                                            </div>
-                                                        </div>
-                                                    </div></td></center>`;
-                                    }
+                                                    </div>
+                                                </div></td></center>`;
                                 } else {
                                     content = `<tr><center><td><div class="d-flex align-items-center">
                                                     <div class="dropdown">
                                                         <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                            <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
+                                                            <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
                                                             <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                                         </div>
                                                     </div>
@@ -927,6 +958,13 @@
                 $("#gizi_edit").val(res.show.gizi);
                 $("#show_ruangan_edit").find('option').remove();
                 res.ruangan.forEach(item => {
+                    // if ('{{ Auth::user()->id == 82 || Auth::user()->id == 294 || Auth::user()->id == 2 }}') {
+                    //     if (item.id == res.show.id_ruangan_ref) {
+                    //         $("#show_ruangan_edit").val(item.nama+' ('+item.kapasitas+' Peserta)');
+                    //         $("#ruangan_edit").val(item.id);
+                    //     }
+                    // } else {
+                    // }
                     if (item.id == res.show.id_ruangan_ref) {
                         $("#show_ruangan_edit").val(item.nama+' ('+item.kapasitas+' Peserta)');
                         $("#ruangan_edit").val(item.id);
@@ -1088,7 +1126,25 @@
         }
     }
 
-    // TAMPILAN GIZI =============================================================================
+    function lihatPenolakan(id) {
+            $.ajax({
+                url: "/api/eruang/gizi/verif/edithapus/"+id,
+                type: 'get',
+                success: function(res) {
+                    $('#show_alasan_penolakan').val(res.alasan_penolakan);
+                    $('#modalAlasanPenolakan').modal('show');
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+    }
+
+    // VERIFIKASI GIZI ====================================================================================================================
     function verifSnackGiziTgl(val) {
         var date = new Date();
         var tgl = new Date(val);
@@ -1155,12 +1211,219 @@
         }
     }
 
+    function verifTolakTgl(id) {
+        $.ajax({
+            url: "/api/eruang/gizi/verif/edithapus/"+id,
+            type: 'get',
+            success: function(res) {
+                var val = res.tgl;
+                var date = new Date();
+                var tgl = new Date(val);
+                tgl.setDate(tgl.getDate()-1);
+                var hmin1 = tgl.toLocaleDateString("sv-SE");
+                var harih = new Date(val).toLocaleDateString("sv-SE");
+                var hariini = new Date().toLocaleDateString("sv-SE");
+                var jamSekarang = date.getHours();
+
+                if (hmin1 > hariini) {
+                    tolak(res.id);
+                } else {
+                    if (hmin1 == hariini) {
+                        if (jamSekarang < 12) {
+                            tolak(res.id);
+                        } else {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Penolakan pengajuan sudah melewati batas waktu yang telah ditentukan',
+                                position: 'topRight'
+                            });
+                        }
+                    } else {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Penolakan pengajuan sudah melewati batas waktu yang telah ditentukan',
+                            position: 'topRight'
+                        });
+                        // if (harih == hariini) {
+
+                        // } else {
+                        //     iziToast.error({
+                        //         title: 'Pesan Galat!',
+                        //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
+                        //         position: 'topRight'
+                        //     });
+                        // }
+                    }
+                }
+            },
+            error: function(res) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Verifikasi gagal dilakukan',
+                    position: 'topRight'
+                });
+            }
+        });
+    }
+
+    function verifEditTgl(id) {
+        $.ajax({
+            url: "/api/eruang/gizi/verif/edithapus/"+id,
+            type: 'get',
+            success: function(res) {
+                var val = res.tgl;
+                var date = new Date();
+                var tgl = new Date(val);
+                tgl.setDate(tgl.getDate()-1);
+                var hmin1 = tgl.toLocaleDateString("sv-SE");
+                var harih = new Date(val).toLocaleDateString("sv-SE");
+                var hariini = new Date().toLocaleDateString("sv-SE");
+                var jamSekarang = date.getHours();
+
+                if (hmin1 > hariini) {
+                    ubah(res.id);
+                } else {
+                    if (hmin1 == hariini) {
+                        if (jamSekarang < 12) {
+                            ubah(res.id);
+                        } else {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Perubahan data sudah melewati batas waktu yang telah ditentukan',
+                                position: 'topRight'
+                            });
+                        }
+                    } else {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Perubahan data sudah melewati batas waktu yang telah ditentukan',
+                            position: 'topRight'
+                        });
+                        // if (harih == hariini) {
+
+                        // } else {
+                        //     iziToast.error({
+                        //         title: 'Pesan Galat!',
+                        //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
+                        //         position: 'topRight'
+                        //     });
+                        // }
+                    }
+                }
+            },
+            error: function(res) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Verifikasi gagal dilakukan',
+                    position: 'topRight'
+                });
+            }
+        });
+    }
+
+    function verifHapusTgl(id) {
+        $.ajax({
+            url: "/api/eruang/gizi/verif/edithapus/"+id,
+            type: 'get',
+            success: function(res) {
+                var val = res.tgl;
+                var date = new Date();
+                var tgl = new Date(val);
+                tgl.setDate(tgl.getDate()-1);
+                var hmin1 = tgl.toLocaleDateString("sv-SE");
+                var harih = new Date(val).toLocaleDateString("sv-SE");
+                var hariini = new Date().toLocaleDateString("sv-SE");
+                var jamSekarang = date.getHours();
+
+                if (hmin1 > hariini) {
+                    hapus(res.id);
+                } else {
+                    if (hmin1 == hariini) {
+                        if (jamSekarang < 12) {
+                            hapus(res.id);
+                        } else {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Penghapusan data sudah melewati batas waktu yang telah ditentukan',
+                                position: 'topRight'
+                            });
+                        }
+                    } else {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Penghapusan data sudah melewati batas waktu yang telah ditentukan',
+                            position: 'topRight'
+                        });
+                        // if (harih == hariini) {
+
+                        // } else {
+                        //     iziToast.error({
+                        //         title: 'Pesan Galat!',
+                        //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
+                        //         position: 'topRight'
+                        //     });
+                        // }
+                    }
+                }
+            },
+            error: function(res) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Verifikasi gagal dilakukan',
+                    position: 'topRight'
+                });
+            }
+        });
+    }
+
+    function verifGiziTgl(id) {
+        $.ajax({
+            url: "/api/eruang/gizi/verif/edithapus/"+id,
+            type: 'get',
+            success: function(res) {
+                var val = res.tgl;
+                var date = new Date();
+                var tgl = new Date(val);
+                tgl.setDate(tgl.getDate()-1);
+                var hmin1 = tgl.toLocaleDateString("sv-SE");
+                var harih = new Date(val).toLocaleDateString("sv-SE");
+                var hariini = new Date().toLocaleDateString("sv-SE");
+                var jamSekarang = date.getHours();
+
+                if (hmin1 == hariini) {
+                    if (jamSekarang >= 12) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    if (harih == hariini) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            },
+            error: function(res) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Verifikasi gagal dilakukan',
+                    position: 'topRight'
+                });
+            }
+        });
+    }
+
+    // TAMPILAN GIZI =====================================================================================================
     function showDisplay() {
         // clearInterval(interval);
         display();
         setInterval(function() {
             display();
         }, 300000); // 1000 = 1 detik
+        $("#tampil_gizi_ruangan").prop('disabled', true);
+        $("#tampil_gizi_tgl").prop('disabled', true);
+        $("#tampil_gizi_status").prop('disabled', true);
         $("#btn-tampil-gizi").prop('disabled', true);
         $("#stop-display").prop('hidden', false);
         $("#start-display").prop('hidden', true);
@@ -1187,6 +1450,9 @@
             </div>
         `);
         $("#detik").empty();
+        $("#tampil_gizi_ruangan").prop('disabled', false);
+        $("#tampil_gizi_tgl").prop('disabled', false);
+        $("#tampil_gizi_status").prop('disabled', false);
         $("#btn-tampil-gizi").prop('disabled', false);
         $("#stop-display").prop('hidden', true);
         $("#start-display").prop('hidden', false);
@@ -1219,56 +1485,74 @@
         $("#show_tampil_display").empty().append(
             `<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`
         );
-        $getInputRuangan = $("#tampil_gizi_ruangan").val();
-        $getInputTgl = $("#tampil_gizi_tgl").val();
-        $getInputStatus = $("#tampil_gizi_status").val();
+        var getInputRuangan = $("#tampil_gizi_ruangan").val();
+        var getInputTgl = $("#tampil_gizi_tgl").val();
+        var getInputStatus = $("#tampil_gizi_status").val();
         $.ajax({
-            url: "/api/eruang/display?ruangan="+$getInputRuangan+"&tgl="+$getInputTgl+"&status="+$getInputStatus,
+            url: "/api/eruang/display?ruangan="+getInputRuangan+"&tgl="+getInputTgl+"&status="+getInputStatus,
             type: 'GET',
             dataType: 'json',
             success: function(res) {
                 $("#show_tampil_display").empty();
-                res.show.forEach(item => {
-                    content = ``;
-                    content += `<div class="col-xl-4 col-sm-6 d-flex align-items-stretch">
-                                    <div class="card border ${item.gizi_verif?'border-danger':'border-primary'}" style="width:100%">
-                                        <div class="card-body">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0 me-4">
-                                                    <div class="avatar-md">
-                                                        <span class="avatar-title rounded-circle bg-light text-danger font-size-16">
-                                                            <img src="${item.foto_profil?'/storage/'+item.foto_profil.substr(7,1000):'/images/pku/user.png'}" alt="" height="60">
-                                                        </span>
+                if (res.show == '') {
+                    $('#show_tampil_display').append(`<br><center><h5>Data Peminjaman Ruangan Tidak Ada Pada Tanggal <mark>`+getInputTgl+`</mark></h5></center>`);
+                } else {
+                    res.show.forEach(item => {
+                        var harih = new Date(item.tgl).toLocaleDateString("sv-SE");
+                        var hariini = new Date().toLocaleDateString("sv-SE");
+                        content = ``;
+                        content += `<div class="col-xl-4 col-sm-6 d-flex align-items-stretch">`;
+                                    if (item.gizi_verif == null) {
+                                        if (harih < hariini) {
+                                            content += `<div class="card border border-secondary" style="width:100%">`;
+                                        } else {
+                                            content += `<div class="card border border-primary" style="width:100%">`;
+                                        }
+                                    } else {
+                                        content += `<div class="card border border-danger" style="width:100%">`;
+                                    }
+                                content += `<div class="card-body">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-4">
+                                                        <div class="avatar-md">
+                                                            <span class="avatar-title rounded-circle bg-light text-danger font-size-16">
+                                                                <img src="${item.foto_profil?'/storage/'+item.foto_profil.substr(7,1000):'/images/pku/user.png'}" alt="" height="60">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <h4 class="text-truncate font-size-20"><a href="javascript: void(0);" class="text-dark"><mark>${item.gizi_verif?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</mark></a></h4>
+                                                        <p class="text-muted mb-0 mt-1">
+                                                            <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>Agenda :</b> ${item.agenda}<br>
+                                                            <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>User :</b> ${item.nama_user?item.nama_user:'Tidak Ada Nama'} (${item.no_hp?item.no_hp:'-'})<br>
+                                                            <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>Pesanan Gizi :</b>
+                                                            <p style="white-space: pre-line">${item.gizi?item.gizi:''}</p>
+                                                        </p>
                                                     </div>
                                                 </div>
-                                                <div class="flex-grow-1 overflow-hidden">
-                                                    <h4 class="text-truncate font-size-20"><a href="javascript: void(0);" class="text-dark"><mark>${item.gizi_verif?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</mark></a></h4>
-                                                    <p class="text-muted mb-0 mt-1">
-                                                        <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>Agenda :</b> ${item.agenda}<br>
-                                                        <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>User :</b> ${item.nama_user?item.nama_user:'Tidak Ada Nama'} (${item.no_hp?item.no_hp:'-'})<br>
-                                                        <i class="mdi mdi-arrow-right text-primary me-1"></i> <b>Pesanan Gizi :</b>
-                                                        <p style="white-space: pre-line">${item.gizi?item.gizi:''}</p>
-                                                    </p>
-                                                </div>
+                                            </div>
+                                            <div class="px-4 py-3 border-top">
+                                                <ul class="list-inline mb-0">
+                                                    <li class="list-inline-item me-3">
+                                                        <i class= "bx bx-calendar me-1"></i> ${item.tgl}
+                                                    </li>
+                                                    <li class="list-inline-item me-3">
+                                                        <i class= "bx bx-time-five me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
+                                                    </li>
+                                                    <div class="float-end">`;
+                                                        if (verifGiziTgl(item.id) == true) {
+                                                            content += `<button class="btn btn-sm btn-primary" onclick="${verifGizi(item.id)}" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi"><i class="bx bx-check"></i></button>`;
+                                                        } else {
+                                                            content += `<button class="btn btn-sm btn-soft-secondary" disabled><i class="bx bx-check"></i></button>`;
+                                                        }
+                                        content += `</div>
+                                                </ul>
                                             </div>
                                         </div>
-                                        <div class="px-4 py-3 border-top">
-                                            <ul class="list-inline mb-0">
-                                                <li class="list-inline-item me-3">
-                                                    <i class= "bx bx-calendar me-1"></i> ${item.tgl}
-                                                </li>
-                                                <li class="list-inline-item me-3">
-                                                    <i class= "bx bx-time-five me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
-                                                </li>
-                                                <div class="float-end">
-                                                    <button class="btn btn-sm ${item.gizi_verif?'btn-soft-secondary':'btn-soft-primary'}" onclick="${item.gizi_verif?'':'verifGizi('+item.id+')'}" ${item.gizi_verif?'disabled':''} data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi"><i class="bx bx-check"></i></button>
-                                                </div>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>`;
-                    $('#show_tampil_display').append(content);
-                })
+                                    </div>`;
+                        $('#show_tampil_display').append(content);
+                    })
+                }
 
                 // Showing Tooltip
                 $('[data-bs-toggle="tooltip"]').tooltip({
