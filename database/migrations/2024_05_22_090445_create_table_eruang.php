@@ -18,7 +18,7 @@ class CreateTableEruang extends Migration
             $table->integer('id_user')->nullable();
             $table->unsignedBigInteger('id_ruangan');
             $table->foreign('id_ruangan')->references('id')->on('eruang_ref');
-            $table->date('tgl_mulai');
+            $table->date('tgl_mulai')->nullable();
             $table->date('tgl_selesai')->nullable();
             $table->time('jam_mulai');
             $table->time('jam_selesai')->nullable();

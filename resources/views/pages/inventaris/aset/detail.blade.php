@@ -298,7 +298,7 @@
                         <div class="flex-grow-1">
                             <h5 class="fw-semibold"><kbd>ID : {{ $list['show']->id }}</kbd>&nbsp;&nbsp;<a class="text-dark" href="javascript:void(0);" data-bs-toggle="tooltip"
                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Aset">{{ $list['show']->sarana }}</a></h5>
-                            <h6>No. Inventaris : <a href="javascript:void(0);">{{ $list['show']->no_inventaris }}</a></h6>
+                            <h6>No. Inventaris : <a href="javascript:void(0);" id="show_no_inventaris">{{ $list['show']->no_inventaris }}</a></h6>
                             <ul class="list-unstyled hstack gap-2 mb-0">
                                 <li data-bs-toggle="tooltip"
                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Seri">
@@ -575,7 +575,8 @@
                             <div class="form-group">
                                 <label class="form-label">Lokasi Tujuan (<strong>Ruangan - Lokasi</strong>) <a class="text-danger">*</a></label>
                                 <div class="select2-dark">
-                                    <select class="select2 form-select" id="lokasi_tujuan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                    <select class="select2 form-select" id="lokasi_tujuan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="PERHATIAN!! Mutasi Sarana ke berbeda ruangan dapat mengubah NO INVENTARIS yang ada saat ini" required>
                                         <option value="">Pilih</option>
                                     </select>
                                 </div>
@@ -609,7 +610,7 @@
                 <hr>
                 <div class="table-responsive text-nowrap" style="border: 0px;margin-left:20px;margin-right:20px">
                     <h4 class="card-title">Riwayat Mutasi <mark>{{ $list['show']->sarana }}</mark></h4>
-                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer"><strong>No. Inventaris akan berubah mengikuti Ruangan yang dipilih saat ini</strong></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_mutasi"></kbd> - <kbd id="lokasi_sekarang_mutasi"></kbd></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Pembatalan mutasi <strong>HANYA</strong> dapat dilakukan pada hari yang sama</footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Mutasi <mark>lebih dari satu</mark> pada hari yang sama <strong>HANYA</strong> dapat dibatalkan secara berurutan</footer></p>
@@ -619,8 +620,8 @@
                             <tr>
                                 <th scope="col"><center>Aksi</center></th>
                                 <th scope="col">Tgl Mutasi</th>
-                                <th scope="col">Lokasi Awal</th>
-                                <th scope="col">Lokasi Tujuan</th>
+                                <th scope="col">Awal/Lama</th>
+                                <th scope="col">Tujuan/Baru</th>
                                 <th scope="col">Keterangan</th>
                                 <th scope="col">Kondisi</th>
                             </tr>
@@ -648,16 +649,24 @@
                     <p class="card-title-desc"><footer class="blockquote-footer">Riwayat penarikan yang sudah ada akan terhapus dan kondisi akan tetap sama dengan yang sebelumnya</p>
                     <hr>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Peminjaman <a class="text-danger">*</a></label>
                                 <input type="text" id="tgl_peminjaman" class="form-control flatpickr" placeholder="YYYY-MM-DD"/>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Pengembalian</label>
                                 <input type="text" id="tgl_pengembalian_pengembalian" class="form-control flatpickrtom" placeholder="YYYY-MM-DD"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Kondisi <a class="text-danger">*</a></label>
+                                <select class="form-select" id="kondisi_peminjaman" required>
+                                    <option value="" hidden>Pilih</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
@@ -674,7 +683,8 @@
                             <div class="form-group">
                                 <label class="form-label">Ruangan - Lokasi <a class="text-danger">*</a></label>
                                 <div class="select2-dark">
-                                    <select class="select2 form-select" id="lokasi_peminjaman" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                    <select class="select2 form-select" id="lokasi_peminjaman" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pemilihan ruangan peminjaman tidak akan berpengaruh pada No.Inventaris" required>
                                         <option value="">Pilih</option>
                                     </select>
                                 </div>
@@ -1006,7 +1016,7 @@
             $("img").on("contextmenu",function(){
                 return false;
             });
-            fresh();
+            fresh("{{ $list['show']->token }}");
         })
 
         // SHOWING MODAL -----------------------------------------------------------------------------------------------------------------------
@@ -1143,12 +1153,12 @@
                     success: function(res) {
                         iziToast.success({
                             title: 'Sukses!',
-                            message: 'Submit Pemeliharaan berhasil pada '+ res,
+                            message: 'Submit Pemeliharaan berhasil pada '+ res.tgl,
                             position: 'topRight'
                         });
                         if (res) {
                             refreshModalPemeliharaan();
-                            fresh();
+                            fresh(res.token);
                         }
                     },
                     error: function (res) {
@@ -1186,7 +1196,7 @@
                         success: function(res) {
                             iziToast.success({
                                 title: 'Sukses!',
-                                message: 'Hapus Pemeliharaan berhasil pada ' + res,
+                                message: 'Hapus Pemeliharaan berhasil pada ' + res.tgl,
                                 position: 'topRight'
                             });
                             refreshModalPemeliharaan();
@@ -1503,6 +1513,12 @@
                             // DEFINISI
                             $('#ruangan_sekarang_peminjaman').text(res.show.ruangan);
                             $('#lokasi_sekarang_peminjaman').text(res.show.lokasi);
+                            $("#kondisi_peminjaman").find('option').remove();
+                            $("#kondisi_peminjaman").append(`
+                                <option value="1" ${res.show.kondisi == '1' ? "selected":""}>Baik</option>
+                                <option value="2" ${res.show.kondisi == '2' ? "selected":""}>Cukup</option>
+                                <option value="3" ${res.show.kondisi == '3' ? "selected":""}>Buruk</option>
+                            `);
                             $("#pj_peminjaman").find('option').remove();
                             $("#pj_peminjaman").append(`<option value="" hidden>Pilih</option>`);
                             res.users.forEach(item => {
@@ -1536,12 +1552,13 @@
         function prosesPeminjaman() {
             var tgl_peminjaman = $("#tgl_peminjaman").val();
             var tgl_pengembalian = $("#tgl_pengembalian_pengembalian").val();
+            var kondisi = $("#kondisi_peminjamann").val();
             var pj = $("#pj_peminjaman").val();
             var lokasi = $("#lokasi_peminjaman").val();
             var kelengkapan = $("#kelengkapan_peminjaman").val();
             var ket = $("#ket_peminjaman").val();
 
-            if (tgl_peminjaman == "" || pj == "" || lokasi == "" || kelengkapan == "") {
+            if (tgl_peminjaman == "" || kondisi == "" || pj == "" || lokasi == "" || kelengkapan == "") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
@@ -1566,6 +1583,7 @@
                             user: "{{ Auth::user()->id }}",
                             tgl_peminjaman: tgl_peminjaman,
                             tgl_pengembalian: tgl_pengembalian,
+                            kondisi: kondisi,
                             pj: pj,
                             lokasi: lokasi,
                             kelengkapan: kelengkapan,
@@ -1929,6 +1947,9 @@
                 dataType: 'json', // added data type
                 success: function(res){
                     if (res) {
+                        // FRESH NO.INVENTARIS
+                        $('#show_no_inventaris').text(res.show.no_inventaris);
+
                         // FRESH RUANGAN
                         $('#ruangan_aset').text(res.show.ruangan+" - "+res.show.lokasi);
 
@@ -2035,21 +2056,26 @@
                         });
 
                         // TABEL
+                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
                         $("#tampil-tbody-pemeliharaan").empty();
                         $('#dttable-pemeliharaan').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
                         res.show.forEach(item => {
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
-                                if (updet == date) {
+                                if (adminID == true) {
                                     content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 } else {
-                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    if (updet == date) {
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    } else {
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    }
                                 }
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.nama_petugas}</td>`;
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.hasil}</td>`;
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.rekomendasi}</td>`;
-                                content += `<td>${new Date(item.created_at).toLocaleDateString('sv-SE')}</td>`;
+                                content += `<td>${new Date(item.created_at).toLocaleString('sv-SE')}</td>`;
                             content += `</tr>`;
                             $('#tampil-tbody-pemeliharaan').append(content);
                         })

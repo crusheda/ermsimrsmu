@@ -18,9 +18,11 @@
                 <div class="flex-shrink-0">
                     <div class="hstack gap-3 ms-auto">
                         <div class="btn-group">
-                            <button class="btn btn-primary tombol-tambah" onclick="tambah()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Menambahkan Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
+                            @if (Auth::user()->getManyRole(['it','kasubag-aset-gudang']) == true)
+                                <button class="btn btn-primary tombol-tambah" onclick="tambah()" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Menambahkan Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
+                            @endif
                             <button class="btn btn-warning" onclick="refresh()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Refresh Tabel Sarana" id="btn-refresh" disabled><i class="fas fa-sync fa-fw nav-icon"></i> Segarkan</button>
@@ -28,15 +30,17 @@
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Scan QR-Code Aset" hidden><i class="fas fa-qrcode fa-fw nav-icon"></i></button>
                         </div>
-                        <div class="vr"></div>
-                        <div class="dropdown d-inline-block">
-                            <button type="menu" class="btn btn-success" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i> Menu</button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" href="{{ route('aset_ruangan.index') }}" data-bs-toggle="tooltip"
-                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Daftar Ruangan Sarana">Daftar Ruangan</a></li>
-                            </ul>
-                        </div>
+                        @if (Auth::user()->getManyRole(['it','kasubag-aset-gudang']) == true)
+                            <div class="vr"></div>
+                            <div class="dropdown d-inline-block">
+                                <button type="menu" class="btn btn-success" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i> Menu</button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="{{ route('aset_ruangan.index') }}" data-bs-toggle="tooltip"
+                                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Daftar Ruangan Sarana">Daftar Ruangan</a></li>
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -86,6 +90,7 @@
                     <th scope="col">Merk</th>
                     <th scope="col">Tipe</th>
                     <th scope="col">No. Seri</th>
+                    <th scope="col">Kalibrasi</th>
                     <th scope="col">Kondisi</th>
                     <th scope="col">Dibuat</th>
                     <th scope="col">Diperbarui</th>
@@ -512,30 +517,29 @@
                 message: 'Sistem ini sedang dalam tahap Ujicoba, semua data masukan akan direset dikemudian hari setelah tahap ini selesai',
                 position: 'topRight'
             });
+
             // PENENTUAN MENU AKSES
-            var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
-            var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";
-            var aksesPIC = "{{ Auth::user()->getRole('pic-sarpras') }}";
-            var aksesIPSRS = "{{ Auth::user()->getManyRole(['ipsrs','kasubag-ipsrs']) }}";
-            // console.log(aksesAdmin+' - '+aksesElektromedis+' - '+aksesIPSRS+' - '+aksesPIC);
-            // VALIDASI AKSES
-            if (aksesAdmin == true) { // ALL ACCESS
-                $(".tombol-tambah").prop('hidden', false);
-            } else {
-                if (aksesElektromedis == true) {
-                    $(".tombol-tambah").prop('hidden', false);
-                } else {
-                    if (aksesPIC == true) {
-                        $(".tombol-tambah").prop('hidden', false);
-                    } else {
-                        if (aksesIPSRS == true) {
-                            $(".tombol-tambah").prop('hidden', true);
-                        } else {
-                            $(".tombol-tambah").prop('hidden', true);
-                        }
-                    }
-                }
-            }
+            // var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+            // var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";
+            // var aksesPIC = "{{ Auth::user()->getRole('pic-sarpras') }}";
+            // var aksesIPSRS = "{{ Auth::user()->getManyRole(['ipsrs','kasubag-ipsrs']) }}";
+            // if (aksesAdmin == true) { // ALL ACCESS
+            //     $(".tombol-tambah").prop('hidden', false);
+            // } else {
+            //     if (aksesElektromedis == true) {
+            //         $(".tombol-tambah").prop('hidden', false);
+            //     } else {
+            //         if (aksesPIC == true) {
+            //             $(".tombol-tambah").prop('hidden', false);
+            //         } else {
+            //             if (aksesIPSRS == true) {
+            //                 $(".tombol-tambah").prop('hidden', true);
+            //             } else {
+            //                 $(".tombol-tambah").prop('hidden', true);
+            //             }
+            //         }
+            //     }
+            // }
 
             // SELECT2
             var te = $(".select2");
@@ -680,52 +684,54 @@
                                             + `</ul>`
                                         + `</div>`
                                     + `</center></td>`;
-                        } else {
-                            if (userID == item.id_user) {
-                                if (updet == date) {
-                                    content += `<td><center>`
-                                                + `<div class='btn-group'>`
-                                                    + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                                                    + `<ul class='dropdown-menu dropdown-menu-right'>`
-                                                        + `<div class="dropdown-header noti-title">`
-                                                            + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                                                        + `</div>`
-                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                                        + `<div class="dropdown-divider"></div>`
-                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
-                                                    + `</ul>`
-                                                + `</div>`
-                                            + `</center></td>`;
-                                } else {
-                                    content += `<td><center>`
-                                                + `<div class='btn-group'>`
-                                                    + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                                                    + `<ul class='dropdown-menu dropdown-menu-right'>`
-                                                        + `<div class="dropdown-header noti-title">`
-                                                            + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                                                        + `</div>`
-                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
-                                                        + `<div class="dropdown-divider"></div>`
-                                                        + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
-                                                    + `</ul>`
-                                                + `</div>`
-                                            + `</center></td>`;
-                                }
-                            } else {
-                                content += `<td><center>`
-                                            + `<div class='btn-group'>`
-                                                + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                                                + `<ul class='dropdown-menu dropdown-menu-right'>`
-                                                    + `<div class="dropdown-header noti-title">`
-                                                        + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                                                    + `</div>`
-                                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
-                                                    + `<div class="dropdown-divider"></div>`
-                                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
-                                                + `</ul>`
-                                            + `</div>`
-                                        + `</center></td>`;
-                            }
+                        }
+                        else {
+                            content += `<td><center>`+item.id+`</center></td>`
+                            // if (userID == item.id_user) {
+                            //     if (updet == date) {
+                            //         content += `<td><center>`
+                            //                     + `<div class='btn-group'>`
+                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
+                            //                             + `<div class="dropdown-header noti-title">`
+                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                            //                             + `</div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
+                            //                             + `<div class="dropdown-divider"></div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                            //                         + `</ul>`
+                            //                     + `</div>`
+                            //                 + `</center></td>`;
+                            //     } else {
+                            //         content += `<td><center>`
+                            //                     + `<div class='btn-group'>`
+                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
+                            //                             + `<div class="dropdown-header noti-title">`
+                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                            //                             + `</div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
+                            //                             + `<div class="dropdown-divider"></div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
+                            //                         + `</ul>`
+                            //                     + `</div>`
+                            //                 + `</center></td>`;
+                            //     }
+                            // } else {
+                            //     content += `<td><center>`
+                            //                 + `<div class='btn-group'>`
+                            //                     + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                            //                     + `<ul class='dropdown-menu dropdown-menu-right'>`
+                            //                         + `<div class="dropdown-header noti-title">`
+                            //                             + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                            //                         + `</div>`
+                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
+                            //                         + `<div class="dropdown-divider"></div>`
+                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
+                            //                     + `</ul>`
+                            //                 + `</div>`
+                            //             + `</center></td>`;
+                            // }
                         }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
@@ -763,6 +769,14 @@
                                     content += `-`;
                                 }
                         content += `</td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>${item.no_kalibrasi?item.no_kalibrasi:'-'}</h6>
+                                                <small class='text-truncate text-muted'>${item.tgl_berlaku?item.tgl_berlaku:''}</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
                             if (item.kondisi == 1) {
                                 content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
                             } else {
@@ -783,7 +797,7 @@
 
                     var table = $('#dttable').DataTable({
                         order: [
-                            [9, "desc"]
+                            [10, "desc"]
                         ],
                         // bAutoWidth: false,
                         // aoColumns : [

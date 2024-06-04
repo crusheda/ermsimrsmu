@@ -84,6 +84,7 @@ class AsetPeminjamanPengembalianController extends Controller
                 $data->id_aset = $request->aset;
                 $data->tgl_peminjaman = $request->tgl_peminjaman;
                 $data->tgl_pengembalian = $request->tgl_pengembalian;
+                $data->kondisi = $request->kondisi;
                 $data->penanggungjawab = $request->pj;
                 $data->id_ruangan = $request->lokasi;
                 $data->kelengkapan = $request->kelengkapan;
@@ -93,6 +94,7 @@ class AsetPeminjamanPengembalianController extends Controller
 
                 // SAVE TO ASET
                 $aset->id_ruangan = $request->lokasi;
+                $aset->kondisi = $request->kondisi;
                 $aset->status = true;
                 $aset->save();
 
@@ -105,6 +107,7 @@ class AsetPeminjamanPengembalianController extends Controller
             $data->id_aset = $request->aset;
             $data->tgl_peminjaman = $request->tgl_peminjaman;
             $data->tgl_pengembalian = $request->tgl_pengembalian;
+            $data->kondisi = $request->kondisi;
             $data->penanggungjawab = $request->pj;
             $data->id_ruangan = $request->lokasi;
             $data->kelengkapan = $request->kelengkapan;
@@ -115,6 +118,7 @@ class AsetPeminjamanPengembalianController extends Controller
 
             // SAVE TO ASET
             $aset->id_ruangan = $request->lokasi;
+            $aset->kondisi = $request->kondisi;
             $aset->status = true;
             $aset->save();
         }

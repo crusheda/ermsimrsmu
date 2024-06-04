@@ -43,12 +43,17 @@ class AsetController extends Controller
 
     function detail($token)
     {
+        // print_r($token);
+        // die();
         $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')
                 ->where('aset.token',$token)
                 ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
                 ->first();
 
-        $user = User::whereNotNull('nik')->where('id',$show->id_user)->select('nama')->first();
+        // print_r($token);
+        // die();
+
+        $user = User::where('id',$show->id_user)->select('nama')->first(); // whereNotNull('nik')
 
         // $mutasi = aset_mutasi::join('aset','aset_mutasi.id_aset','=','aset.id')
         //         ->join('aset_ruangan','aset_mutasi.id_ruangan_mutasi','=','aset_ruangan.id')
