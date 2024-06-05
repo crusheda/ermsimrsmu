@@ -366,7 +366,7 @@ class ERuangController extends Controller
                 ->where('status_penolakan',null)
                 ->orderBy('eruang.tgl','asc')
                 ->orderBy('eruang.jam_mulai','asc')
-                ->limit(6)
+                ->limit(9)
                 ->get();
         $now = Carbon::now()->isoFormat('HH:mm:ss');
 

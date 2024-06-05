@@ -243,7 +243,9 @@
 
                             <div class="row g-3 mb-4">
                                 <div class="col-xxl-12">
-                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pengajuan Peminjaman Ruangan dapat diverifikasi oleh Bagian Gizi Mulai dari <kbd>H-1 Acara setelah Pukul 12:00 WIB</kbd> sampai <kbd>Hari H Acara Pukul 23:59 WIB</kbd></small>
+                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Pengajuan Peminjaman Ruangan dapat diverifikasi oleh Bagian Gizi Mulai dari <kbd>H-1 Acara setelah Pukul 12:00 WIB</kbd> sampai <kbd>Hari H Acara Pukul 23:59 WIB</kbd></small><br>
+                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Data yang ditampilkan diurutkan berdasarkan <mark>Tanggal Terdekat</mark> lalu berdasarkan <mark>Jam dari yang paling Awal</mark></small><br>
+                                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Display diperbarui secara otomatis per 5 menit sekali dengan tampilan yang dibatasi (<strong>5 Antrean</strong>)</small>
                                 </div>
                                 <div class="col-xxl-5 col-lg-4">
                                     <div class="position-relative">
