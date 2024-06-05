@@ -127,6 +127,8 @@ class AsetMutasiController extends Controller
 
             $aset = aset::where('id', $data->id_aset)->first();
             $aset->id_ruangan = $data->lokasi_awal;
+            $aset->token = Crypt::encryptString($data->no_inventaris_lama); // decryptString to Decrypt
+            $aset->urutan = $data->urutan_lama;
             $aset->no_inventaris = $data->no_inventaris_lama;
             $aset->kondisi = $data->kondisi_awal;
             $aset->save();

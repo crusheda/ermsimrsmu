@@ -1376,43 +1376,43 @@
         });
     }
 
-    function verifGiziTgl(id) {
-        $.ajax({
-            url: "/api/eruang/gizi/verif/edithapus/"+id,
-            type: 'get',
-            success: function(res) {
-                var val = res.tgl;
-                var date = new Date();
-                var tgl = new Date(val);
-                tgl.setDate(tgl.getDate()-1);
-                var hmin1 = tgl.toLocaleDateString("sv-SE");
-                var harih = new Date(val).toLocaleDateString("sv-SE");
-                var hariini = new Date().toLocaleDateString("sv-SE");
-                var jamSekarang = date.getHours();
+    // function verifGiziTgl(id) {
+    //     $.ajax({
+    //         url: "/api/eruang/gizi/verif/edithapus/"+id,
+    //         type: 'get',
+    //         success: function(res) {
+    //             var val = res.tgl;
+    //             var date = new Date();
+    //             var tgl = new Date(val);
+    //             tgl.setDate(tgl.getDate()-1);
+    //             var hmin1 = tgl.toLocaleDateString("sv-SE");
+    //             var harih = new Date(val).toLocaleDateString("sv-SE");
+    //             var hariini = new Date().toLocaleDateString("sv-SE");
+    //             var jamSekarang = date.getHours();
 
-                if (hmin1 == hariini) {
-                    if (jamSekarang >= 12) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if (harih == hariini) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            },
-            error: function(res) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Verifikasi gagal dilakukan',
-                    position: 'topRight'
-                });
-            }
-        });
-    }
+    //             if (hmin1 == hariini) {
+    //                 if (jamSekarang >= 12) {
+    //                     return true;
+    //                 } else {
+    //                     return false;
+    //                 }
+    //             } else {
+    //                 if (harih == hariini) {
+    //                     return true;
+    //                 } else {
+    //                     return false;
+    //                 }
+    //             }
+    //         },
+    //         error: function(res) {
+    //             iziToast.error({
+    //                 title: 'Pesan Galat!',
+    //                 message: 'Verifikasi gagal dilakukan',
+    //                 position: 'topRight'
+    //             });
+    //         }
+    //     });
+    // }
 
     // TAMPILAN GIZI =====================================================================================================
     function showDisplay() {
@@ -1482,6 +1482,7 @@
     }
 
     function display() {
+        console.log(new Date().getHours());
         $("#show_tampil_display").empty().append(
             `<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`
         );
@@ -1498,8 +1499,26 @@
                     $('#show_tampil_display').append(`<br><center><h5>Data Peminjaman Ruangan Tidak Ada Pada Tanggal <mark>`+getInputTgl+`</mark></h5></center>`);
                 } else {
                     res.show.forEach(item => {
-                        var harih = new Date(item.tgl).toLocaleDateString("sv-SE");
+                        var val = item.tgl;
+                        var date = new Date();
+                        var tgl = new Date(val);
+                        tgl.setDate(tgl.getDate()-1);
+                        var hmin1 = tgl.toLocaleDateString("sv-SE");
+                        var harih = new Date(val).toLocaleDateString("sv-SE");
                         var hariini = new Date().toLocaleDateString("sv-SE");
+                        var jamSekarang = date.getHours();
+
+                        var valid = 0;
+                        if (hmin1 == hariini) {
+                            if (jamSekarang >= 12) {
+                                valid = 1;
+                            }
+                        } else {
+                            if (harih == hariini) {
+                                valid = 1;
+                            }
+                        }
+
                         content = ``;
                         content += `<div class="col-xl-4 col-sm-6 d-flex align-items-stretch">`;
                                     if (item.gizi_verif == null) {
@@ -1540,8 +1559,8 @@
                                                         <i class= "bx bx-time-five me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
                                                     </li>
                                                     <div class="float-end">`;
-                                                        if (verifGiziTgl(item.id) == true) {
-                                                            content += `<button class="btn btn-sm btn-primary" onclick="${verifGizi(item.id)}" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi"><i class="bx bx-check"></i></button>`;
+                                                        if (valid == 1) {
+                                                            content += `<button class="btn btn-sm btn-primary" onclick="verifGizi(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi"><i class="bx bx-check"></i></button>`;
                                                         } else {
                                                             content += `<button class="btn btn-sm btn-soft-secondary" disabled><i class="bx bx-check"></i></button>`;
                                                         }

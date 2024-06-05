@@ -53,59 +53,55 @@ class AsetController extends Controller
         // print_r($token);
         // die();
 
-        $user = User::where('id',$show->id_user)->select('nama')->first(); // whereNotNull('nik')
+        if (empty($show)) { // JIKA DATA TIDAK DITEMUKAN
+            $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+            $month = Carbon::now()->isoFormat('MM');
+            $year = Carbon::now()->isoFormat('YYYY');
+            $ruangan = aset_ruangan::get();
 
-        // $mutasi = aset_mutasi::join('aset','aset_mutasi.id_aset','=','aset.id')
-        //         ->join('aset_ruangan','aset_mutasi.id_ruangan_mutasi','=','aset_ruangan.id')
-        //         ->join('users','aset_mutasi.id_user_mutasi','=','users.id')
-        //         ->join('users_foto','aset_mutasi.id_user_mutasi','=','users_foto.user_id')
-        //         ->where('aset.token',$token)
-        //         ->get();
+            $data = [
+                'role' => $role,
+                'month' => $month,
+                'year' => $year,
+                'ruangan' => $ruangan,
+            ];
 
-        // $peminjaman = aset_peminjaman::join('aset','aset_peminjaman.id_aset','=','aset.id')
-        //         ->join('aset_ruangan','aset_peminjaman.id_ruangan_peminjaman','=','aset_ruangan.id')
-        //         ->join('users','aset_peminjaman.id_user_peminjaman','=','users.id')
-        //         ->join('users_foto','aset_peminjaman.id_user_peminjaman','=','users_foto.user_id')
-        //         ->where('aset.token',$token)
-        //         ->get();
+            return Redirect::to('/inventaris/aset')->with('list',$data);
+        } else { // JIKA DATA DITEMUKAN
+            $user = User::where('id',$show->id_user)->select('nama')->first(); // whereNotNull('nik')
 
-        // $pengembalian = aset_pengembalian::join('aset','aset_pengembalian.id_aset','=','aset.id')
-        //         ->join('users','aset_pengembalian.id_user_pengembalian','=','users.id')
-        //         ->join('users_foto','aset_pengembalian.id_user_pengembalian','=','users_foto.user_id')
-        //         ->where('aset.token',$token)
-        //         ->get();
-
-        // Menentukan Kondisi
-        if ($show->kondisi == 1) {
-            $kondisi = 'Baik';
-        } else {
-            if ($show->kondisi == 2) {
-                $kondisi = 'Cukup';
+            if ($show->kondisi == 1) {
+                $kondisi = 'Baik';
             } else {
-                if ($show->kondisi == 3) {
-                    $kondisi = 'Buruk';
+                if ($show->kondisi == 2) {
+                    $kondisi = 'Cukup';
+                } else {
+                    if ($show->kondisi == 3) {
+                        $kondisi = 'Buruk';
+                    }
                 }
             }
+
+            // Menentukan Isi QR-Code
+            $qr = $show->sarana.' | '.$show->merk.' | '.$show->tipe.' | '.$show->ruangan.' | '.$kondisi;
+
+            $data = [
+                'show' => $show,
+                // 'mutasi' => $mutasi,
+                // 'peminjaman' => $peminjaman,
+                // 'pengembalian' => $pengembalian,
+                'qr' => $qr,
+                'user' => $user,
+            ];
+
+            return view('pages.inventaris.aset.detail')->with('list',$data);
         }
 
-        // Menentukan Isi QR-Code
-        $qr = $show->sarana.' | '.$show->merk.' | '.$show->tipe.' | '.$show->ruangan.' | '.$kondisi;
-
-        $data = [
-            'show' => $show,
-            // 'mutasi' => $mutasi,
-            // 'peminjaman' => $peminjaman,
-            // 'pengembalian' => $pengembalian,
-            'qr' => $qr,
-            'user' => $user,
-        ];
-
-        return view('pages.inventaris.aset.detail')->with('list',$data);
     }
 
-    function fresh($token){
+    function fresh($id){
         $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')
-                ->where('aset.token',$token)
+                ->where('aset.id',$id)
                 ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
                 ->first();
 

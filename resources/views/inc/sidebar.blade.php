@@ -115,7 +115,7 @@
 
                 <li>
                     <a href="javascript: void(0);" class=" {{-- has-arrow --}} waves-effect">
-                        <span class="badge rounded-pill bg-warning float-end">new</span>
+                        <span class="badge rounded-pill bg-primary float-end">new</span>
                         <i class="bx bx-cube"></i>
                         <span key="t-dashboards">Aset & Gudang</span>
                     </a>

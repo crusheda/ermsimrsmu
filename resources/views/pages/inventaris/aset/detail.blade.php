@@ -1016,7 +1016,7 @@
             $("img").on("contextmenu",function(){
                 return false;
             });
-            fresh("{{ $list['show']->token }}");
+            fresh();
         })
 
         // SHOWING MODAL -----------------------------------------------------------------------------------------------------------------------
@@ -1158,7 +1158,7 @@
                         });
                         if (res) {
                             refreshModalPemeliharaan();
-                            fresh(res.token);
+                            fresh();
                         }
                     },
                     error: function (res) {
@@ -1398,7 +1398,10 @@
                                 message: 'Mutasi Aset berhasil pada '+ res,
                                 position: 'topRight'
                             });
+                            $("#show_no_inventaris").text('<span class="placeholder col-12"></span>');
                             refreshModalMutasi("{{ $list['show']->id }}");
+                            // $("#show_no_inventaris").html(`<a onclick="window.location.href = '{{ URL::to('inventaris/aset') }}'"><span class="placeholder col-2 bg-dark" width="10%" data-bs-toggle="tooltip"
+                            // data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Klik disini untuk melihat perubahan No.Inventaris"></span></a>`);
                             fresh();
                         },
                         error: function (res) {
@@ -1453,6 +1456,9 @@
                                             position: 'topRight'
                                         });
                                         refreshModalMutasi("{{ $list['show']->id }}");
+                                        // $("#show_no_inventaris").html(`<a onclick="window.location.href = '{{ URL::to('inventaris/aset') }}'"><span class="placeholder col-2 bg-dark" width="10%" data-bs-toggle="tooltip"
+                                        // data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Klik disini untuk melihat perubahan No.Inventaris"></span></a>`);
+                                        // window.location.reload();
                                         fresh();
                                     },
                                     error: function(res) {
@@ -1942,7 +1948,7 @@
         // REFRESH DASHBOARD DETAIL ASET
         function fresh() {
             $.ajax({
-                url: "/api/inventaris/aset/{{ $list['show']->token }}/fresh",
+                url: "/api/inventaris/aset/{{ $list['show']->id }}/fresh",
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res){

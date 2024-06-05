@@ -149,7 +149,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
     // INVENTARIS
         // DETAIL ASET
-            Route::get('inventaris/aset/{token}/fresh', '\App\Http\Controllers\Inventaris\Aset\AsetController@fresh')->name('aset_detail.fresh');
+            Route::get('inventaris/aset/{id}/fresh', '\App\Http\Controllers\Inventaris\Aset\AsetController@fresh')->name('aset_detail.fresh');
             Route::get('inventaris/aset/{token}/kondisi/{kondisi}', '\App\Http\Controllers\Inventaris\Aset\AsetController@ubahKondisi')->name('aset_detail.ubahKondisi');
         // PEMELHARAAN ASET
             Route::get('inventaris/aset/pemeliharaan/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetPemeliharaanController@index')->name('aset_pemeliharaan.index');
