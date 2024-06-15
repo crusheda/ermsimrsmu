@@ -13,7 +13,7 @@ class CreateTableK3AccidentReport extends Migration
      */
     public function up()
     {
-        Schema::create('mfk_accident_report', function (Blueprint $table) {
+        Schema::create('accident_report', function (Blueprint $table) {
             $table->id();
             $table->dateTime('tgl')->nullable();
             $table->string('lokasi')->nullable();
