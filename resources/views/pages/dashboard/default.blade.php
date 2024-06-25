@@ -32,6 +32,63 @@
             </div>
         </div>
     </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card">
+                {{-- <div class="card-header bg-transparent border-bottom">
+                    Quote
+                </div> --}}
+                <div class="card-body">
+                    <blockquote class="card-blockquote mb-0">
+                        <div class="d-flex align-items-center">
+                            {{-- @if (empty($list['foto_user']->filename))
+                                <img src="{{ asset('images/pku/user.png') }}" alt="" class="avatar-sm rounded">
+                            @else
+                                <img src="{{ url('storage/'.substr($list['foto_user']->filename,7,1000)) }}" alt="" class="avatar-sm rounded">
+                            @endif --}}
+                            <div class="ms-3 flex-grow-1">
+                                <h5 class="mb-2 card-title"><i class="bx bxs-right-arrow-circle font-size-12 bx-fade-right"></i>&nbsp;&nbsp;&nbsp; Halo, Selamat {{ $list['waktu'] }} <a class="text-primary">{{ $list['user']->nama ? $list['kelamin'].' '.$list['user']->nama : $list['kelamin'].' '.$list['user']->name }}</a></h5>
+                                <p class="text-muted mb-4">Sudahkan Anda Membaca <mark>Peraturan Kepegawaian</mark> ?</p>
+                                <footer class="blockquote-footer font-size-12">
+                                    Ditetapkan mulai <cite title="Source Title"><strong>1 Juli 2023</strong></cite>
+                                </footer>
+                            </div>
+                            <div class="btn-group">
+                                <a href="#peraturan-kepegawaian" class="btn popup-form btn-soft-primary"><i class="bx bx-search align-middle"></i> Lihat</a>
+                                <a href="/doc/073_PR_PERATURAN_PERUSAHAAN_2024.pdf" class="btn btn-soft-success"><i class="bx bx-download align-middle"></i> Unduh</a>
+                            </div>
+                        </div>
+                    </blockquote>
+                </div>
+            </div>
+        </div><!--end col-->
+    </div>
+
+    <div class="card mfp-hide mfp-popup-form mx-auto" id="peraturan-kepegawaian">
+        <div class="card-body">
+            <h4 class="mb-4">Peraturan Kepegawaian</h4>
+            {{-- <object
+                data='https://drive.google.com/file/d/1ldHUZcZRFY6kuBwsPQAWIpBUSOFtLnd2/view?usp=sharing'
+                type="application/pdf"
+                width="500"
+                height="678"
+            >
+
+                <iframe
+                src='https://drive.google.com/file/d/1ldHUZcZRFY6kuBwsPQAWIpBUSOFtLnd2/view?usp=sharing'
+                width="500"
+                height="678"
+                >
+                <p>This browser does not support PDF!</p>
+                </iframe>
+            </object> --}}
+            {{-- <iframe src="{{ asset('doc/073_PR_PERATURAN_PERUSAHAAN_2024.pdf') }}"
+                style="width:auto; height:500px;" frameborder="0">
+            </iframe> --}}
+            <embed src="/doc/073_PR_PERATURAN_PERUSAHAAN_2024.pdf" type="application/pdf" height="700px" width="100%">
+        </div>
+    </div>
     <!-- end page title -->
     {{-- <div class="row">
         <div class="col-md-4">

@@ -18,18 +18,44 @@ class AccidentReportController extends Controller
 {
     public function index()
     {
+        // $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+        // $show = k3_accident_report::get();
+
+        // $data = [
+        //     'show' => $show,
+        //     'unit' => $unit
+        // ];
+
+        // return view('pages.mfk.accidentreport.index')->with('list', $data);
+        return view('pages.mfk.accidentreport.index');
+    }
+
+    function tambah() {
         $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        $show = k3_accident_report::get();
+        // $show = k3_accident_report::get();
 
         $data = [
-            'show' => $show,
+            // 'show' => $show,
             'unit' => $unit
         ];
 
-        // print_r($data);
-        // die();
+        return view('pages.mfk.accidentreport.tambah')->with('list', $data);
+    }
 
-        return view('pages.mfk.accidentreport.index')->with('list', $data);
+    function ubah() {
+
+    }
+
+    function table() {
+        $show = k3_accident_report::orderBy('tgl','DESC')
+                ->limit('30')
+                ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
     }
 
     /**

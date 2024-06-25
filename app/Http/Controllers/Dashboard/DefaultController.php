@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use Auth;
+use Carbon\Carbon;
+use App\Models\users;
+use App\Models\users_foto;
 use Illuminate\Http\Request;
 
 class DefaultController extends Controller
@@ -14,14 +18,52 @@ class DefaultController extends Controller
      */
     public function index()
     {
-        // $lastVideoYoutube = Youtube::listChannelVideos('@rspkumuhsukoharjo1801', 50, "date");
+        $user = users::where('id',Auth::user()->id)->first();
+        $foto_user = users_foto::where('user_id',Auth::user()->id)->first();
 
-        // $data = [
-        //     'video' => $lastVideoYoutube,
-        // ];
+        $time = Carbon::now()->isoFormat('H');
+        // PENGHITUNGAN WAKTU PAGI / SIANG / SORE / MALAM
+        if ($time < "10") {
+            $waktu = "Pagi";
+        } else {
+            if ($time >= "10" && $time < "15") {
+                $waktu = "Siang";
+            } else {
+                if ($time >= "15" && $time < "19") {
+                    $waktu = "Sore";
+                } else {
+                    if ($time >= "19") {
+                        $waktu = "Malam";
+                    }
+                }
+            }
+        }
 
-        return view('pages.dashboard.default'); // ->with('list', $data)
+        $kelamin = '';
+        if (!empty($user->jns_kelamin)) {
+            if ($user->jns_kelamin == 'LAKI-LAKI') {
+                $kelamin = 'Tn.';
+            } else {
+                if ($user->jns_kelamin == 'PEREMPUAN') {
+                    $kelamin = 'Ny.';
+                }
+            }
+        }
+
+
+        $data = [
+            'user' => $user,
+            'foto_user' => $foto_user,
+            'waktu' => $waktu,
+            'kelamin' => $kelamin,
+        ];
+
+        return view('pages.dashboard.default')->with('list', $data); // ->with('list', $data)
     }
+
+    // function downloadPeraturanKepegawaian() {
+
+    // }
 
     /**
      * Show the form for creating a new resource.

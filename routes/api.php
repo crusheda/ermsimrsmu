@@ -206,8 +206,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('antigen/hapus/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@hapus')->name('antigen.hapus');
         Route::get('antigen/getpasien/{id}', '\App\Http\Controllers\Pelayanan\Lab\antigenController@getPasien');
 
-    // MUTU
-        // MANAJEMEN RISIKO
-        Route::get('manrisk/data','\App\Http\Controllers\Mutu\ManriskController@table');
-        Route::get('manrisk/hapus/{id}', '\App\Http\Controllers\Mutu\ManriskController@hapus');
+    // K3
+        // MFK
+            // KECELAKAAN KERJA
+            Route::get('mfk/kecelakaankerja/data','\App\Http\Controllers\MFK\AccidentReportController@table');
+        // MUTU
+            // MANAJEMEN RISIKO
+            Route::get('manrisk/data','\App\Http\Controllers\Mutu\ManriskController@table');
+            Route::get('manrisk/hapus/{id}', '\App\Http\Controllers\Mutu\ManriskController@hapus');
 // });

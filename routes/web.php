@@ -167,19 +167,23 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
         Route::resource('/lab/antigen', '\App\Http\Controllers\Pelayanan\Lab\antigenController');
 });
 
-// MFK
-Route::group(['middleware' => ['auth'], 'prefix' => 'mfk', 'as' => ''], function () {
-    // Accident Report - Kecelakan Kerja
-        Route::get('kecelakaankerja','\App\Http\Controllers\MFK\AccidentReportController@index')->name('accidentreport.index');
-});
+// K3
+    // MFK
+    Route::group(['middleware' => ['auth'], 'prefix' => 'mfk', 'as' => ''], function () {
+        // Accident Report - Kecelakan Kerja
+            Route::get('kecelakaankerja','\App\Http\Controllers\MFK\AccidentReportController@index')->name('accidentreport.index');
+            Route::get('kecelakaankerja/tambah','\App\Http\Controllers\MFK\AccidentReportController@tambah')->name('accidentreport.tambah');
+            Route::get('kecelakaankerja/simpan','\App\Http\Controllers\MFK\AccidentReportController@store')->name('accidentreport.store');
+            Route::get('kecelakaankerja/ubah','\App\Http\Controllers\MFK\AccidentReportController@update')->name('accidentreport.update');
+    });
 
-// Mutu
-Route::group(['middleware' => ['auth'], 'prefix' => 'mutu', 'as' => ''], function () {
-    // Manajemen Risiko
-        Route::get('manrisk','\App\Http\Controllers\Mutu\ManriskController@index')->name('manrisk.index');
-        Route::post('manrisk', [App\Http\Controllers\Mutu\ManriskController::class, 'store'])->name('manrisk.store');
-        Route::get('manrisk/{id}/download', '\App\Http\Controllers\Mutu\ManriskController@download');
-});
+    // Mutu
+    Route::group(['middleware' => ['auth'], 'prefix' => 'mutu', 'as' => ''], function () {
+        // Manajemen Risiko
+            Route::get('manrisk','\App\Http\Controllers\Mutu\ManriskController@index')->name('manrisk.index');
+            Route::post('manrisk', [App\Http\Controllers\Mutu\ManriskController::class, 'store'])->name('manrisk.store');
+            Route::get('manrisk/{id}/download', '\App\Http\Controllers\Mutu\ManriskController@download');
+    });
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
 // CATATAN
