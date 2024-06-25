@@ -281,13 +281,19 @@ class sklController extends Controller
         $filename = "SKL ";
         // .$data->no_surat." - ".$data->ibu
 
+        if ($data->kelamin == 'unknown') {
+            $kelamin = '';
+        } else {
+            $kelamin = $data->kelamin.' ';
+        }
+
         $templateProcessor->setValues([
             'no_surat' => $data->no_surat,
             'hari' => $data->hari,
             'tgl' => $tgl,
             'thn' => $thn,
             'jam' => $jam,
-            'kelamin' => $data->kelamin,
+            'kelamin' => $kelamin,
             'ibu' => $data->ibu,
             'ayah' => $data->ayah,
             'alamat' => $data->alamat,

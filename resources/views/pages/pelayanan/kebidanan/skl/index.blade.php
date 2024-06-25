@@ -185,6 +185,7 @@
                                     <label>Jenis Kelamin</label>
                                     <select name="kelamin" class="form-control select2" style="width: 100%" required>
                                         <option selected="selected" value="" hidden>Pilih</option>
+                                        <option value="unknown">Belum Diketahui</option>
                                         <option value="laki-laki">Laki-laki (L)</option>
                                         <option value="perempuan">Perempuan (P)</option>
                                     </select>
@@ -405,6 +406,8 @@
                         else
                             content += item.anak;
                         content += "</td><td>";
+                        if (item.kelamin == "unknown")
+                            content += "<kbd style='background-color: #000000'>-</kbd>&nbsp;";
                         if (item.kelamin == "laki-laki")
                             content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                         if (item.kelamin == "perempuan")
@@ -549,6 +552,8 @@
                             else
                                 content += item.anak;
                             content += "</td><td>";
+                            if (item.kelamin == "unknown")
+                                content += "<kbd style='background-color: #000000'>-</kbd>&nbsp;";
                             if (item.kelamin == "laki-laki")
                                 content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                             if (item.kelamin == "perempuan")
@@ -625,6 +630,8 @@
                         else
                             content += item.anak;
                         content += "</td><td>";
+                        if (item.kelamin == "unknown")
+                            content += "<kbd style='background-color: #000000'>-</kbd>&nbsp;";
                         if (item.kelamin == "laki-laki")
                             content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                         if (item.kelamin == "perempuan")
@@ -711,6 +718,8 @@
                         else
                             content += item.anak;
                         content += "</td><td>";
+                        if (item.kelamin == "unknown")
+                            content += "<kbd style='background-color: #000000'>-</kbd>&nbsp;";
                         if (item.kelamin == "laki-laki")
                             content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                         if (item.kelamin == "perempuan")
@@ -788,6 +797,7 @@
                     $("#alamat_edit").val(res.show.alamat);
                     $("#kelamin_edit").find('option').remove();
                     $("#kelamin_edit").append(`
+                        <option value="unknown" ${res.show.kelamin == 'unknown'? "selected":""}>Belum Diketahui</option>
                         <option value="laki-laki" ${res.show.kelamin == 'laki-laki'? "selected":""}>Laki-laki</option>
                         <option value="perempuan" ${res.show.kelamin == 'perempuan'? "selected":""}>Perempuan</option>
                     `);

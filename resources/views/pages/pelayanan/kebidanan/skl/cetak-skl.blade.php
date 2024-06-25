@@ -58,7 +58,7 @@
                 : {{ $list['jam'] }}
             </div>
             <div class="col-md-12">
-                Di Rumah Sakit PKU Muhammadiyah Sukoharjo seorang bayi {{ $list['show']->kelamin }} hidup.
+                Di Rumah Sakit PKU Muhammadiyah Sukoharjo seorang bayi @if($list['show']->kelamin != 'unknown') {{ $list['show']->kelamin }} @endif hidup.
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-3">
