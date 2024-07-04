@@ -1,6 +1,11 @@
 @extends('layouts.default')
 
 @section('content')
+<style>
+    span.select2-container {
+    z-index:10050;
+}
+</style>
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
@@ -45,34 +50,48 @@
                 </div>
             </div>
         </div>
-        <div class="card-body border-bottom">
+        <div class="card-body border-bottom" style="overflow: visible;">
             <div class="row g-3">
-                <div class="col-xxl-4 col-lg-6">
-                    <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana ..." disabled>
+                <input type="text" class="form-control" id="validasiTampil" value="0" hidden>
+                <div class="col-xxl-4 col-lg-6" data-bs-toggle="tooltip"
+                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                title="Cari Nama Aset/Sarana">
+                    <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana (Belum tersedia untuk saat ini)" disabled>
                 </div>
-                <div class="col-xxl-2 col-lg-6">
-                    <select class="form-select" id="idStatus" aria-label="Default select example" disabled>
+                <div class="col-xxl-2 col-lg-6" data-bs-toggle="tooltip"
+                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                title="Pilih Jenis Sarana">
+                    <select class="select2 form-select" id="filterJenis" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                         <option value="" selected hidden>Jenis Sarana</option>
                         <option value="1">Medis</option>
                         <option value="2">Non Medis</option>
                     </select>
                 </div>
-                <div class="col-xxl-2 col-lg-4">
-                    <select class="form-select" id="idType" aria-label="Default select example" disabled>
-                        <option value="" selected hidden>Pilih Lokasi</option>
-                        <option value="Full Time">Full Time</option>
-                        <option value="Part Time">Part Time</option>
-                    </select>
+                <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
+                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                title="Pilih Ruangan / Lokasi">
+                    <div class="select2-dark">
+                        <select class="select2 form-select" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                            <option value="" selected hidden>Pilih Lokasi</option>
+                            @if (!empty($list['ruangan']))
+                                @foreach ($list['ruangan'] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->ruangan }} - {{ $item->lokasi }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
                 </div>
-                <div class="col-xxl-2 col-lg-4">
+                <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
+                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                title="Pilih Tanggal Perolehan Aset">
                     <div id="datepicker1">
-                        <input type="text" class="form-control flatpickr" placeholder="Tanggal Aset" disabled>
+                        <input type="text" id="filterTglPerolehan" class="form-control flatpickr" placeholder="Tanggal Aset">
                     </div><!-- input-group -->
                 </div>
                 <div class="col-xxl-2 col-lg-4">
                     <button type="button" class="btn btn-info w-100" onclick="filter()" data-bs-toggle="tooltip"
                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                    title="Menampilkan Daftar Aset Sekarang"><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
+                    title="Menampilkan Daftar/Filter Aset"><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
                 </div>
             </div>
 
@@ -99,6 +118,31 @@
             <tbody id="tampil-tbody"></tbody>
         </table>
         <!-- end table -->
+    </div>
+
+    <div class="row justify-content-center mt-lg-5" id="show_iklan">
+        <div class="col-xl-5 col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <h4 class="mt-4 fw-semibold">Inventaris Aset & Gudang</h4>
+                                <p class="text-muted mt-3">Akses Data Aset dimanapun dan kapanpun Anda butuhkan</p>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center mt-5 mb-2">
+                            <div class="col-sm-6 col-8">
+                                <div>
+                                    <img src="{{ asset('images/verification-img.png') }}" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL TAMBAH -->
@@ -541,6 +585,8 @@
             //     }
             // }
 
+            // $(".").select2({ dropdownParent: "#modal-container" });
+
             // SELECT2
             var te = $(".select2");
             te.length && te.each(function() {
@@ -549,6 +595,9 @@
                     placeholder: "Pilih",
                     dropdownParent: es.parent()
                 })
+            });
+            $('.select2').on('select2:open', function(e){
+                $('.custom-dropdown').parent().css('z-index', 99999);
             });
 
             // DATEPICKER
@@ -641,12 +690,16 @@
                     $('.show_medis_add').prop('hidden',true);
                 }
             });
-
+            // Showing Tooltip
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            })
         })
 
         // ----------------------------------------------------------------------------------------
         // FUNCTION AREA
         function filter() {
+            $("#show_iklan").prop('hidden', true);
             $("#show-table").prop('hidden', false);
             $("#btn-refresh").prop('disabled', false);
             $("#tampil-tbody").empty().append(
@@ -777,21 +830,21 @@
                                             </div>
                                         </div>
                                     </td>`;
-                            if (item.kondisi == 1) {
-                                content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
-                            } else {
-                                if (item.kondisi == 2) {
-                                    content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
+                                if (item.kondisi == 1) {
+                                    content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
                                 } else {
-                                    if (item.kondisi == 3) {
-                                        content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
+                                    if (item.kondisi == 2) {
+                                        content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
                                     } else {
-                                        content += `<td><kbd class='text-dark' style='background-color:#d6d6d6'>Tidak Diketahui</kbd></td>`;
+                                        if (item.kondisi == 3) {
+                                            content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
+                                        } else {
+                                            content += `<td><kbd class='text-dark' style='background-color:#d6d6d6'>Tidak Diketahui</kbd></td>`;
+                                        }
                                     }
                                 }
-                            }
-                            content += `<td>`+item.tgl_input+`</td>`;
-                            content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`; // .substring(0, 19).replace('T',' ')
+                        content += `<td>`+item.tgl_input+`</td>`;
+                        content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`; // .substring(0, 19).replace('T',' ')
                         $('#tampil-tbody').append(content);
                     })
 
@@ -1139,22 +1192,76 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                    var date = new Date().toLocaleDateString();
 
                     res.show.forEach(item => {
+                        var updet = new Date(item.created_at).toLocaleDateString();
                         content = `<tr id='`+item.id+`'>`;
-                        content += `<td><center>`
-                                    + `<div class='btn-group'>`
-                                        + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                                        + `<ul class='dropdown-menu dropdown-menu-right'>`
-                                            + `<div class="dropdown-header noti-title">`
-                                                + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                                            + `</div>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                            + `<div class="dropdown-divider"></div>`
-                                            + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
-                                        + `</ul>`
-                                    + `</div>`;
-                        content += `</div></center></td>`;
+                        if (adminID == true) {
+                            content += `<td><center>`
+                                        + `<div class='btn-group'>`
+                                            + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                            + `<ul class='dropdown-menu dropdown-menu-right'>`
+                                                + `<div class="dropdown-header noti-title">`
+                                                    + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                                                + `</div>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
+                                                + `<div class="dropdown-divider"></div>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                            + `</ul>`
+                                        + `</div>`
+                                    + `</center></td>`;
+                        }
+                        else {
+                            content += `<td><center>`+item.id+`</center></td>`
+                            // if (userID == item.id_user) {
+                            //     if (updet == date) {
+                            //         content += `<td><center>`
+                            //                     + `<div class='btn-group'>`
+                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
+                            //                             + `<div class="dropdown-header noti-title">`
+                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                            //                             + `</div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
+                            //                             + `<div class="dropdown-divider"></div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                            //                         + `</ul>`
+                            //                     + `</div>`
+                            //                 + `</center></td>`;
+                            //     } else {
+                            //         content += `<td><center>`
+                            //                     + `<div class='btn-group'>`
+                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
+                            //                             + `<div class="dropdown-header noti-title">`
+                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                            //                             + `</div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
+                            //                             + `<div class="dropdown-divider"></div>`
+                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
+                            //                         + `</ul>`
+                            //                     + `</div>`
+                            //                 + `</center></td>`;
+                            //     }
+                            // } else {
+                            //     content += `<td><center>`
+                            //                 + `<div class='btn-group'>`
+                            //                     + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                            //                     + `<ul class='dropdown-menu dropdown-menu-right'>`
+                            //                         + `<div class="dropdown-header noti-title">`
+                            //                             + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
+                            //                         + `</div>`
+                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
+                            //                         + `<div class="dropdown-divider"></div>`
+                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
+                            //                     + `</ul>`
+                            //                 + `</div>`
+                            //             + `</center></td>`;
+                            // }
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
@@ -1191,16 +1298,24 @@
                                     content += `-`;
                                 }
                         content += `</td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>${item.no_kalibrasi?item.no_kalibrasi:'-'}</h6>
+                                                <small class='text-truncate text-muted'>${item.tgl_berlaku?item.tgl_berlaku:''}</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
                             if (item.kondisi == 1) {
-                                content += `<td>Baik</td>`;
+                                content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
                             } else {
                                 if (item.kondisi == 2) {
-                                    content += `<td>Cukup</td>`;
+                                    content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
                                 } else {
                                     if (item.kondisi == 3) {
-                                        content += `<td>Buruk</td>`;
+                                        content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
                                     } else {
-                                        content += `<td>Tidak Diketahui</td>`;
+                                        content += `<td><kbd class='text-dark' style='background-color:#d6d6d6'>Tidak Diketahui</kbd></td>`;
                                     }
                                 }
                             }
@@ -1211,7 +1326,7 @@
 
                     var table = $('#dttable').DataTable({
                         order: [
-                            [9, "desc"]
+                            [10, "desc"]
                         ],
                         // bAutoWidth: false,
                         // aoColumns : [
