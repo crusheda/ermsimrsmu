@@ -1,11 +1,6 @@
 @extends('layouts.default')
 
 @section('content')
-<style>
-    span.select2-container {
-    z-index:10050;
-}
-</style>
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
@@ -50,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body border-bottom" style="overflow: visible;">
+        <div class="card-body border-bottom" id="filterTampil">
             <div class="row g-3">
                 <input type="text" class="form-control" id="validasiTampil" value="0" hidden>
                 <div class="col-xxl-4 col-lg-6" data-bs-toggle="tooltip"
@@ -61,8 +56,8 @@
                 <div class="col-xxl-2 col-lg-6" data-bs-toggle="tooltip"
                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                 title="Pilih Jenis Sarana">
-                    <select class="select2 form-select" id="filterJenis" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                        <option value="" selected hidden>Jenis Sarana</option>
+                    <select class="selectFilter form-select" id="filterJenis" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                        <option value="" selected hidden>Pilih Jenis</option>
                         <option value="1">Medis</option>
                         <option value="2">Non Medis</option>
                     </select>
@@ -71,7 +66,7 @@
                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                 title="Pilih Ruangan / Lokasi">
                     <div class="select2-dark">
-                        <select class="select2 form-select" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                        <select class="selectFilter form-select" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                             <option value="" selected hidden>Pilih Lokasi</option>
                             @if (!empty($list['ruangan']))
                                 @foreach ($list['ruangan'] as $item)
@@ -85,7 +80,7 @@
                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                 title="Pilih Tanggal Perolehan Aset">
                     <div id="datepicker1">
-                        <input type="text" id="filterTglPerolehan" class="form-control flatpickr" placeholder="Tanggal Aset">
+                        <input type="text" id="filterTglPerolehan" class="form-control flatpickr" placeholder="Pilih Tanggal">
                     </div><!-- input-group -->
                 </div>
                 <div class="col-xxl-2 col-lg-4">
@@ -153,7 +148,7 @@
                     <h5 class="modal-title" id="orderdetailsModalLabel">Tambah Sarana</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow: visible;">
                     <form action="javascript:void(0);" class="form-auth-small" id="formTambah" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="row">
@@ -596,9 +591,12 @@
                     dropdownParent: es.parent()
                 })
             });
-            $('.select2').on('select2:open', function(e){
-                $('.custom-dropdown').parent().css('z-index', 99999);
+            $('.selectFilter').select2({
+                dropdownParent: $('#filterTampil')
             });
+            // $('.select2').on('select2:open', function(e){
+            //     $('.custom-dropdown').parent().css('z-index', 99999);
+            // });
 
             // DATEPICKER
             // DATE
@@ -705,14 +703,17 @@
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
+            var filter1 = $("#filterJenis").val();
+            var filter2 = $("#filterLokasi").val();
+            var filter3 = $("#filterTglPerolehan").val();
             $.ajax({
                 url: "/api/inventaris/aset/filter",
                 type: 'POST',
                 dataType: 'json', // added data type
                 data: {
-                    // regulasi: regulasi,
-                    // waktu: waktu,
-                    // pembuat: pembuat,
+                    filter1: filter1,
+                    filter2: filter2,
+                    filter3: filter3,
                 },
                 success: function(res) {
                     $("#tampil-tbody").empty();

@@ -273,10 +273,21 @@ class AsetController extends Controller
     }
 
     function filter(Request $request) {
-        $show = aset::select('aset.*','aset_ruangan.ruangan','aset_ruangan.lokasi')
-                    ->join('aset_ruangan','aset_ruangan.id','=','aset.id_ruangan')
-                    ->get();
+        $initial = aset::query();
+        $show = $initial->select('aset.*','aset_ruangan.ruangan','aset_ruangan.lokasi')->join('aset_ruangan','aset_ruangan.id','=','aset.id_ruangan');
+        if ($request->filter1) {
+            $show = $initial->where('aset.jenis',$request->filter1);
+        }
+        if ($request->filter2) {
+            $show = $initial->where('aset.id_ruangan',$request->filter2);
+        }
+        if ($request->filter3) {
+            $show = $initial->where('aset.tgl_perolehan',$request->filter3);
+        }
+        $show = $initial->get();
 
+        // print_r($request->filter3);
+        // die();
         $data = [
             'show' => $show,
         ];

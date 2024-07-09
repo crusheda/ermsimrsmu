@@ -18,47 +18,51 @@ class DefaultController extends Controller
      */
     public function index()
     {
-        $user = users::where('id',Auth::user()->id)->first();
-        $foto_user = users_foto::where('user_id',Auth::user()->id)->first();
+        if (Auth::check()) {
+            $user = users::where('id',Auth::user()->id)->first();
+            $foto_user = users_foto::where('user_id',Auth::user()->id)->first();
 
-        $time = Carbon::now()->isoFormat('H');
-        // PENGHITUNGAN WAKTU PAGI / SIANG / SORE / MALAM
-        if ($time < "10") {
-            $waktu = "Pagi";
-        } else {
-            if ($time >= "10" && $time < "15") {
-                $waktu = "Siang";
+            $time = Carbon::now()->isoFormat('H');
+            // PENGHITUNGAN WAKTU PAGI / SIANG / SORE / MALAM
+            if ($time < "10") {
+                $waktu = "Pagi";
             } else {
-                if ($time >= "15" && $time < "19") {
-                    $waktu = "Sore";
+                if ($time >= "10" && $time < "15") {
+                    $waktu = "Siang";
                 } else {
-                    if ($time >= "19") {
-                        $waktu = "Malam";
+                    if ($time >= "15" && $time < "19") {
+                        $waktu = "Sore";
+                    } else {
+                        if ($time >= "19") {
+                            $waktu = "Malam";
+                        }
                     }
                 }
             }
-        }
 
-        $kelamin = '';
-        if (!empty($user->jns_kelamin)) {
-            if ($user->jns_kelamin == 'LAKI-LAKI') {
-                $kelamin = 'Tn.';
-            } else {
-                if ($user->jns_kelamin == 'PEREMPUAN') {
-                    $kelamin = 'Ny.';
+            $kelamin = '';
+            if (!empty($user->jns_kelamin)) {
+                if ($user->jns_kelamin == 'LAKI-LAKI') {
+                    $kelamin = 'Tn.';
+                } else {
+                    if ($user->jns_kelamin == 'PEREMPUAN') {
+                        $kelamin = 'Ny.';
+                    }
                 }
             }
+
+
+            $data = [
+                'user' => $user,
+                'foto_user' => $foto_user,
+                'waktu' => $waktu,
+                'kelamin' => $kelamin,
+            ];
+
+            return view('pages.dashboard.default')->with('list', $data); // ->with('list', $data)
+        } else {
+            return redirect()->route('auth.login');
         }
-
-
-        $data = [
-            'user' => $user,
-            'foto_user' => $foto_user,
-            'waktu' => $waktu,
-            'kelamin' => $kelamin,
-        ];
-
-        return view('pages.dashboard.default')->with('list', $data); // ->with('list', $data)
     }
 
     // function downloadPeraturanKepegawaian() {
