@@ -178,6 +178,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // ADDON
             Route::get('inventaris/aset/getTahunBulanPengadaan', '\App\Http\Controllers\Inventaris\Aset\AsetController@getTahunBulanPengadaan')->name('aset.getTahunBulanPengadaan');
             Route::get('inventaris/aset/getruangan/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getRuangan')->name('aset.getruangan');
+            Route::get('inventaris/aset/getkalibrasi/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getKalibrasi')->name('aset.getkalibrasi');
+            Route::get('inventaris/aset/updatekalibrasi', '\App\Http\Controllers\Inventaris\Aset\AsetController@updateKalibrasi')->name('aset.updatekalibrasi');
         // ASET
             Route::get('inventaris/aset/{token}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getAsetToken')->name('aset.getAsetToken');
             Route::get('inventaris/aset/ubah/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getUbahAset')->name('aset.getUbahAset');

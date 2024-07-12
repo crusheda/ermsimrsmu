@@ -528,7 +528,7 @@
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Riwayat Pemeliharaan"><i class="fa fa-sync"></i>&nbsp;&nbsp;Refresh</button>
                         <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                         <button class="btn btn-soft-primary btn-rounded" onclick="prosesPemeliharaan()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Pemeliharaan Aset"><i class="fa fa-wrench"></i>&nbsp;&nbsp;Submit</button>
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Pemeliharaan Aset" id="btn-simpan-pemeliharaan"><i class="fas fa-wrench"></i>&nbsp;&nbsp;Submit</button>
                     </div>
                 </div>
                 <hr>
@@ -604,7 +604,7 @@
                         <button class="btn btn-soft-primary btn-rounded" onclick="prosesMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Proses Mutasi Sekarang" id="btn-mutasi-aktif"><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
                         <button class="btn btn-secondary btn-rounded" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Aset Sedang Dalam peminjama" id="btn-mutasi-nonaktif" disabled hidden><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
+                            title="Aset Sedang Dalam peminjaman" id="btn-mutasi-nonaktif" disabled hidden><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
                     </div>
                 </div>
                 <hr>
@@ -705,7 +705,7 @@
                     </div>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()"><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()"><i class="fas fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -783,7 +783,7 @@
                     </div>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-pengembalian" onclick="prosesPengembalian()"><i class="fa fa-qrcode"></i>&nbsp;&nbsp;Ajukan Pengembalian</button>
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-pengembalian" onclick="prosesPengembalian()"><i class="fas fa-qrcode"></i>&nbsp;&nbsp;Ajukan Pengembalian</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -1125,6 +1125,9 @@
         }
 
         function prosesPemeliharaan() {
+            $("#btn-simpan-pemeliharaan").prop('disabled', true);
+            $("#btn-simpan-pemeliharaan").find("i").toggleClass("fa-wrench fa-sync fa-spin");
+
             var petugas = $("#petugas_pemeliharaan").val();
             var hasil = $("#hasil_pemeliharaan").val();
             var rekomendasi = $("#rekomendasi_pemeliharaan").val();
@@ -1135,6 +1138,8 @@
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
                     position: 'topRight'
                 });
+                $("#btn-simpan-pemeliharaan").find("i").removeClass("fa-sync fa-spin").addClass("fa-wrench");
+                $("#btn-simpan-pemeliharaan").prop('disabled', false);
             } else {
                 $.ajax({
                     headers: {
@@ -1153,12 +1158,14 @@
                     success: function(res) {
                         iziToast.success({
                             title: 'Sukses!',
-                            message: 'Submit Pemeliharaan berhasil pada '+ res.tgl,
+                            message: 'Submit Pemeliharaan berhasil pada '+ res,
                             position: 'topRight'
                         });
                         if (res) {
                             refreshModalPemeliharaan();
                             fresh();
+                            $("#btn-simpan-pemeliharaan").find("i").removeClass("fa-sync fa-spin").addClass("fa-wrench");
+                            $("#btn-simpan-pemeliharaan").prop('disabled', false);
                         }
                     },
                     error: function (res) {
@@ -1168,6 +1175,8 @@
                             message: res.responseJSON.error,
                             position: 'topRight'
                         });
+                        $("#btn-simpan-pemeliharaan").find("i").removeClass("fa-sync fa-spin").addClass("fa-wrench");
+                        $("#btn-simpan-pemeliharaan").prop('disabled', false);
                     }
                 });
             }
@@ -1196,7 +1205,7 @@
                         success: function(res) {
                             iziToast.success({
                                 title: 'Sukses!',
-                                message: 'Hapus Pemeliharaan berhasil pada ' + res.tgl,
+                                message: 'Hapus Pemeliharaan berhasil pada ' + res,
                                 position: 'topRight'
                             });
                             refreshModalPemeliharaan();
@@ -1360,6 +1369,8 @@
         }
 
         function prosesMutasi() {
+            $("#btn-mutasi-aktif").prop('disabled', true);
+            $("#btn-mutasi-aktif").find("i").toggleClass("fa-luggage-cart fa-sync fa-spin");
             var lokasi_tujuan = $("#lokasi_tujuan").val();
             var kondisi = $("#kondisi_mutasi").val();
             var ket = $("#ket_mutasi").val();
@@ -1370,6 +1381,8 @@
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
                     position: 'topRight'
                 });
+                $("#btn-mutasi-aktif").find("i").removeClass("fa-sync fa-spin").addClass("fa-luggage-cart");
+                $("#btn-mutasi-aktif").prop('disabled', false);
             } else {
                 if (lokasi_tujuan == "{{ $list['show']->id_ruangan }}") {
                     iziToast.warning({
@@ -1377,6 +1390,8 @@
                         message: 'Pastikan Anda memilih ruangan tujuan mutasi dengan benar / tidak sama dengan ruangan awal',
                         position: 'topRight'
                     });
+                    $("#btn-mutasi-aktif").find("i").removeClass("fa-sync fa-spin").addClass("fa-luggage-cart");
+                    $("#btn-mutasi-aktif").prop('disabled', false);
                 } else {
                     $.ajax({
                         headers: {
@@ -1403,6 +1418,8 @@
                             // $("#show_no_inventaris").html(`<a onclick="window.location.href = '{{ URL::to('inventaris/aset') }}'"><span class="placeholder col-2 bg-dark" width="10%" data-bs-toggle="tooltip"
                             // data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Klik disini untuk melihat perubahan No.Inventaris"></span></a>`);
                             fresh();
+                            $("#btn-mutasi-aktif").find("i").removeClass("fa-sync fa-spin").addClass("fa-luggage-cart");
+                            $("#btn-mutasi-aktif").prop('disabled', false);
                         },
                         error: function (res) {
                             console.log("error : " + JSON.stringify(res) );
@@ -1411,6 +1428,8 @@
                                 message: res.responseJSON.error,
                                 position: 'topRight'
                             });
+                            $("#btn-mutasi-aktif").find("i").removeClass("fa-sync fa-spin").addClass("fa-luggage-cart");
+                            $("#btn-mutasi-aktif").prop('disabled', false);
                         }
                     });
                 }
@@ -1556,6 +1575,9 @@
         }
 
         function prosesPeminjaman() {
+            $("#btn-peminjaman").prop('disabled', true);
+            $("#btn-peminjaman").find("i").toggleClass("fa-qrcode fa-sync fa-spin");
+
             var tgl_peminjaman = $("#tgl_peminjaman").val();
             var tgl_pengembalian = $("#tgl_pengembalian_pengembalian").val();
             var kondisi = $("#kondisi_peminjamann").val();
@@ -1570,6 +1592,8 @@
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
                     position: 'topRight'
                 });
+                $("#btn-peminjaman").find("i").removeClass("fa-sync fa-spin").addClass("fa-qrcode");
+                $("#btn-peminjaman").prop('disabled', false);
             } else {
                 if (lokasi == "{{ $list['show']->id_ruangan }}") {
                     iziToast.warning({
@@ -1577,6 +1601,8 @@
                         message: 'Pastikan Anda memilih ruangan tujuan Peminjaman dengan benar / tidak sama dengan ruangan awal. Silakan refresh browser apabila pernyataan ini tidak benar.',
                         position: 'topRight'
                     });
+                    $("#btn-peminjaman").find("i").removeClass("fa-sync fa-spin").addClass("fa-qrcode");
+                    $("#btn-peminjaman").prop('disabled', false);
                 } else {
                     $.ajax({
                         headers: {
@@ -1605,6 +1631,8 @@
                             // refreshModalPeminjaman("{{ $list['show']->id }}");
                             $('#formPeminjaman').modal('hide');
                             fresh();
+                            $("#btn-peminjaman").find("i").removeClass("fa-sync fa-spin").addClass("fa-qrcode");
+                            $("#btn-peminjaman").prop('disabled', false);
                         },
                         error: function (res) {
                             console.log("error : " + JSON.stringify(res) );
@@ -1613,6 +1641,8 @@
                                 message: res.responseJSON.error,
                                 position: 'topRight'
                             });
+                            $("#btn-peminjaman").find("i").removeClass("fa-sync fa-spin").addClass("fa-qrcode");
+                            $("#btn-peminjaman").prop('disabled', false);
                         }
                     });
                 }
@@ -1759,6 +1789,8 @@
         }
 
         function prosesPengembalian() {
+            $("#btn-pengembalian").prop('disabled', true);
+            $("#btn-pengembalian").find("i").toggleClass("fa-qrcode fa-sync fa-spin");
             var tgl_pengembalian = $("#tgl_pengembalian").val();
             var kondisi = $("#kondisi_pengembalian").val();
             var pengantar = $("#pengantar_pengembalian").val();
@@ -1771,6 +1803,8 @@
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
                     position: 'topRight'
                 });
+                $("#btn-pengembalian").find("i").removeClass("fa-sync fa-spin").addClass("fa-qrcode");
+                $("#btn-pengembalian").prop('disabled', false);
             } else {
                 $.ajax({
                     headers: {
@@ -1796,6 +1830,8 @@
                         });
                         $('#formPengembalian').modal('hide');
                         fresh();
+                        $("#btn-pengembalian").find("i").removeClass("fa-sync fa-spin").addClass("fa-qrcode");
+                        $("#btn-pengembalian").prop('disabled', false);
                     },
                     error: function (res) {
                         console.log("error : " + JSON.stringify(res) );
@@ -1804,6 +1840,8 @@
                             message: res.responseJSON.error,
                             position: 'topRight'
                         });
+                        $("#btn-pengembalian").find("i").removeClass("fa-sync fa-spin").addClass("fa-qrcode");
+                        $("#btn-pengembalian").prop('disabled', false);
                     }
                 });
             }
@@ -1845,6 +1883,8 @@
         }
 
         function prosesPenarikan() {
+            $("#btn-penarikan").prop('disabled', true);
+            $("#btn-penarikan").find("i").toggleClass("fa-people-carry fa-sync fa-spin");
             var alasan = $("#alasan_penarikan").val();
             var kondisi = $("#kondisi_penarikan").val();
             var status = $("#status_penarikan").val();
@@ -1857,6 +1897,8 @@
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib (<a class="text-danger">*</a>)',
                     position: 'topRight'
                 });
+                $("#btn-penarikan").find("i").removeClass("fa-sync fa-spin").addClass("fa-people-carry");
+                $("#btn-penarikan").prop('disabled', false);
             } else {
                 if (validasi == 1 && kondisi == 2) {
                     iziToast.warning({
@@ -1864,6 +1906,8 @@
                         message: 'Ruangan aset sudah berada di Gudang Aset, tidak memerlukan penarikan aset ke Gudang kembali',
                         position: 'topRight'
                     });
+                    $("#btn-penarikan").find("i").removeClass("fa-sync fa-spin").addClass("fa-people-carry");
+                    $("#btn-penarikan").prop('disabled', false);
                 } else {
                     $.ajax({
                         headers: {
@@ -1887,6 +1931,8 @@
                             });
                             $('.modal').modal('hide');
                             fresh();
+                            $("#btn-penarikan").find("i").removeClass("fa-sync fa-spin").addClass("fa-people-carry");
+                            $("#btn-penarikan").prop('disabled', false);
                         },
                         error: function (res) {
                             console.log("error : " + JSON.stringify(res) );
@@ -1895,6 +1941,8 @@
                                 message: res.responseJSON.error,
                                 position: 'topRight'
                             });
+                            $("#btn-penarikan").find("i").removeClass("fa-sync fa-spin").addClass("fa-people-carry");
+                            $("#btn-penarikan").prop('disabled', false);
                         }
                     });
                 }

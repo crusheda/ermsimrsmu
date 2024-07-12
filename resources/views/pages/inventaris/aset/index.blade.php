@@ -546,6 +546,54 @@
         </div>
     </div>
 
+    {{-- MODAL KALIBRASI --}}
+    <div class="modal fade" id="modalKalibrasi" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Kalibrasi Aset <kbd>ID:<a id="show_id_kalibrasi"></a></kbd>&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="id_kalibrasi" hidden>
+                    <div id="show_kalibrasi" hidden>
+                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> No. Kalibrasi <strong><u><a href="javascript:void(0);" id="riwayat_no_kalibrasi" style="color:#FF0089"></a></u></strong></p>
+                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Telah dikalibrasikan pada tanggal <strong><a id="riwayat_tgl_kalibrasi"></a></strong></p>
+                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Kalibrasi ulang pada tanggal <strong><a id="show_tgl_kalibrasi_ulang"></a></strong> (<i>Kurun waktu ± 1 tahun</i>)</p>
+                        <hr>
+                    </div>
+                    <center><h5><b>Form Pengisian Kalibrasi Baru</b></h5></center>
+                    <div class="table-responsive" style="border: 0px">
+                        <table class="table table-nowrap mb-0" style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <th scope="row" style="width:20%">No Kalibrasi <a class="text-danger">*</a></th>
+                                    <td><input type="text" class="form-control" id="no_kalibrasi_ulang"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" style="width:20%">Tgl Kalibrasi <a class="text-danger">*</a></th>
+                                    <td><input type="text" id="tgl_berlaku_ulang" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" style="width:20%" class="text-danger">Tgl Berakhir Kalibrasi</th>
+                                    <td>
+                                        <input type="text" id="tgl_berakhir_ulang" class="form-control" hidden/>
+                                        <input type="text" id="show_tgl_berakhir_ulang" class="form-control" placeholder="Terisi Otomatis" disabled/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button class="btn btn-primary me-sm-3 me-1" id="btn-proses-kalibrasi" onclick="prosesKalibrasi()"><i class="fa fa-save"></i>&nbsp;&nbsp;Submit</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="{{ asset('js/html5-qrcode.js') }}"></script>
     {{-- <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script> --}}
     <script>
@@ -720,6 +768,7 @@
                     $('#dttable').DataTable().clear().destroy();
                     var userID = "{{ Auth::user()->id }}";
                     var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                    var kalibrasiID = "{{ Auth::user()->getManyRole(['elektromedis']) }}";
                     var date = new Date().toLocaleDateString();
                     res.show.forEach(item => {
                         var updet = new Date(item.created_at).toLocaleDateString();
@@ -733,14 +782,34 @@
                                                     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                                 + `</div>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                                + `<div class="dropdown-divider"></div>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                                + `<div class="dropdown-divider"></div>`
+                                                + `<div class="dropdown-header noti-title">`
+                                                    + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
+                                                + `</div>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
                                             + `</ul>`
                                         + `</div>`
                                     + `</center></td>`;
                         }
                         else {
-                            content += `<td><center>`+item.id+`</center></td>`
+                            if (kalibrasiID == true) {
+                                if (item.jenis == 1) {
+                                    content += `<td><center>`
+                                                + `<div class='btn-group'>`
+                                                    + `<button type="button" class="btn btn-soft-dark waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                + `</div>`
+                                            + `</center></td>`;
+                                } else {
+                                    content += `<td><center>`
+                                                + `<div class='btn-group'>`
+                                                    + `<button type="button" class="btn btn-soft-secondary waves-effect btn-label waves-light" disabled><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                + `</div>`
+                                            + `</center></td>`;
+                                }
+                            } else {
+                                content += `<td><center>`+item.id+`</center></td>`
+                            }
                             // if (userID == item.id_user) {
                             //     if (updet == date) {
                             //         content += `<td><center>`
@@ -790,7 +859,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Detail Sarana"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
+                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Detail Sarana ${item.jenis==1?'Medis':'Non Medis'}" style="color:${item.jenis==1?'#FF0089':'#5a6ee6'}"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
                                             </div>
                                         </div>
                                     </td>`;
@@ -888,6 +957,10 @@
             //         $('#thbln_add').val(res.month+'-'+res.year);
             //     }
             // })
+
+            // $("#btn-simpan-edit").attr('disabled', 'disabled');
+            // $("#btn-simpan-edit").find("i").toggleClass("fa-save fa-spinner fa-spin");
+
             $('#tgl_perolehan_add').change(function() {
                 var thn = $('#tgl_perolehan_add').val();
                 $('#kd_th_add').text(thn.substring(0,4));
@@ -906,6 +979,9 @@
                 })
             });
             $('#modalTambah').modal('show');
+
+            // $("#btn-simpan-edit").prop('disabled',false);
+            // $("#btn-simpan-edit").find("i").toggleClass("fa-save fa-spinner fa-spin");
         }
 
         function ubah(id) {
@@ -1066,6 +1142,7 @@
         function simpan() {
             $("#btn-simpan").prop('disabled', true);
             $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+
             // Definisi
             var save = new FormData();
             save.append('thbln',$("#thbln_add").val());
@@ -1127,6 +1204,8 @@
                     message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
                     position: 'topRight'
                 });
+                $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                $("#btn-simpan").prop('disabled', false);
             } else {
                 $.ajax({
                     headers: {
@@ -1146,7 +1225,10 @@
                         });
                         if (res) {
                             refresh();
-                        }
+                            $('.modal').modal('hide');
+                            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                            $("#btn-simpan").prop('disabled', false);
+                        };
                     },
                     error: function (res) {
                         iziToast.error({
@@ -1154,12 +1236,11 @@
                             message: res.responseJSON.error,
                             position: 'topRight'
                         });
+                        $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        $("#btn-simpan").prop('disabled', false);
                     }
                 });
             }
-
-            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-simpan").prop('disabled', false);
         }
 
         function refresh() {
@@ -1266,7 +1347,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Detail Sarana"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
+                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Detail Sarana ${item.jenis==1?'Medis':'Non Medis'}" style="color:${item.jenis==1?'#FF0089':'#5a6ee6'}"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
                                             </div>
                                         </div>
                                     </td>`;
@@ -1417,6 +1498,83 @@
                     }
                 });
             }
+        }
+
+        function kalibrasi(id) {
+            $('#show_id_kalibrasi').text(id);
+            $('#id_kalibrasi').val(id);
+
+                $.ajax(
+                {
+                    url: "/api/inventaris/aset/getkalibrasi/"+id,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        if (res.no_kalibrasi) {
+                            $('#show_kalibrasi').prop('hidden', false);
+                        } else {
+                            $('#show_kalibrasi').prop('hidden', true);
+                        }
+                        $('#riwayat_no_kalibrasi').text(res.no_kalibrasi);
+                        $('#riwayat_tgl_kalibrasi').text(res.tgl_berlaku);
+                        $('#show_tgl_kalibrasi_ulang').text(res.tgl_berakhir);
+                        // ---------------------------------------------------
+                        $('#no_kalibrasi_ulang').val("");
+                        $('#tgl_berlaku_ulang').val("");
+                        $('#show_tgl_berakhir_ulang').text("belum direncanakan");
+                    }
+                })
+
+            $('#modalKalibrasi').modal('show');
+        }
+
+        function prosesKalibrasi() {
+            $("#btn-proses-kalibrasi").prop('disabled', true);
+            $("#btn-proses-kalibrasi").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var id = $('#id_kalibrasi').val();
+            var no_kalibrasi = $('#no_kalibrasi_ulang').val();
+            var tgl_berlaku = $('#tgl_berlaku_ulang').val();
+            var tgl_berakhir = $('#tgl_berakhir_ulang').val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: '/api/inventaris/aset/updateKalibrasi',
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                data: {
+                        id: id,
+                        no_kalibrasi: no_kalibrasi,
+                        tgl_berlaku: tgl_berlaku,
+                        tgl_berakhir: tgl_berakhir,
+                    },
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: 'Kalibrasi berhasil pada '+ res,
+                        position: 'topRight'
+                    });
+                    if (res) {
+                        refresh();
+                        $('.modal').modal('hide');
+                        $("#btn-proses-kalibrasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        $("#btn-proses-kalibrasi").prop('disabled', false);
+                    };
+                },
+                error: function (res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                    $("#btn-proses-kalibrasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                    $("#btn-proses-kalibrasi").prop('disabled', false);
+                }
+            });
         }
 
         /* Fungsi formatRupiah */

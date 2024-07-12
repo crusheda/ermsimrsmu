@@ -156,6 +156,26 @@ class AsetController extends Controller
         return response()->json($data, 200);
     }
 
+    function getKalibrasi($id)
+    {
+        $data = aset::where('id', $id)->first();
+
+        return response()->json($data, 200);
+    }
+
+    function updateKalibrasi(Request $request)
+    {
+        $tgl = $carbon->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = aset::where('id', $request->id)->first();
+        $data->no_kalibrasi     = $request->no_kalibrasi;
+        $data->tgl_berlaku      = $request->tgl_berlaku;
+        $data->tgl_berakhir     = $request->tgl_berakhir;
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
     function getTahunBulanPengadaan()
     {
         $month = Carbon::now()->isoFormat('MM');
