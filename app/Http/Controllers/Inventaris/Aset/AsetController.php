@@ -163,15 +163,20 @@ class AsetController extends Controller
         return response()->json($data, 200);
     }
 
+    // function updateKalibrasi($id, $no_kalibrasi, $tgl_berlaku, $tgl_berakhir)
     function updateKalibrasi(Request $request)
     {
-        $tgl = $carbon->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $data = aset::where('id', $request->id)->first();
         $data->no_kalibrasi     = $request->no_kalibrasi;
         $data->tgl_berlaku      = $request->tgl_berlaku;
         $data->tgl_berakhir     = $request->tgl_berakhir;
         $data->save();
+
+        // DB::table('aset')
+        //     ->where('id', $request->id)
+        //     ->update(['no_kalibrasi' => $request->no_kalibrasi,'tgl_berlaku' => $request->tgl_berlaku,'tgl_berakhir' => $request->tgl_berakhir]);
 
         return response()->json($tgl, 200);
     }
@@ -303,6 +308,14 @@ class AsetController extends Controller
         }
         if ($request->filter3) {
             $show = $initial->where('aset.tgl_perolehan',$request->filter3);
+        }
+        if ($request->filter4) {
+            // $show = $initial->where( DB::raw('MONTH(tgl_berakhir)'), '=', $request->filter4 )
+            $show = $initial->whereMonth('tgl_berakhir', '=', $request->filter4);
+        }
+        if ($request->filter5) {
+            $show = $initial->where( DB::raw('YEAR(tgl_berakhir)'), '=', $request->filter5 );
+            // $show = $initial->where('aset.tgl_perolehan',$request->filter5);
         }
         $show = $initial->get();
 

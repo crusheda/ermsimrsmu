@@ -71,7 +71,7 @@
                         <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
                         {{-- <button class="btn btn-soft-info w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button> --}}
                         <button class="btn btn-soft-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
-                        <a class="btn btn-soft-success w-100" href="javascript:void(0);" role="button"
+                        <a class="btn btn-soft-success w-100 tombol-menu" href="javascript:void(0);" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class='bx bx-caret-down align-middle'></i>&nbsp;&nbsp;Menu
                         </a>
@@ -429,7 +429,11 @@
                                     @if ($list['show']->asal_perolehan == 3)
                                         <b>Wakaf</b>
                                     @else
-                                        <b>-</b>
+                                        @if ($list['show']->asal_perolehan == 4)
+                                            <b>KSO</b>
+                                        @else
+                                            <b>-</b>
+                                        @endif
                                     @endif
                                 @endif
                             @endif
@@ -646,7 +650,7 @@
                 <div class="modal-body">
                     <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_peminjaman"></kbd> - <kbd id="lokasi_sekarang_peminjaman"></kbd></footer></p>
-                    <p class="card-title-desc"><footer class="blockquote-footer">Riwayat penarikan yang sudah ada akan terhapus dan kondisi akan tetap sama dengan yang sebelumnya</p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">Riwayat penarikan yang sudah ada akan terhapus dan kondisi akan tetap sama dengan yang sebelumnya</p></footer>
                     <hr>
                     <div class="row">
                         <div class="col-md-4 mb-3">
@@ -886,13 +890,15 @@
             }
 
             // PENENTUAN MENU AKSES
-            var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+            var aksesAdmin = "{{ Auth::user()->getManyRole(['karu-it','kasubag-aset-gudang']) }}";
             var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";
             var aksesPIC = "{{ Auth::user()->getRole('pic-sarpras') }}";
             var aksesIPSRS = "{{ Auth::user()->getManyRole(['ipsrs','kasubag-ipsrs']) }}";
+            var aksesIT = "{{ Auth::user()->getManyRole(['it']) }}";
             // console.log(aksesAdmin+' - '+aksesElektromedis+' - '+aksesIPSRS+' - '+aksesPIC);
             // VALIDASI AKSES
             if (aksesAdmin == true) { // ALL ACCESS
+                $(".tombol-menu").prop('hidden', false);
                 $(".menu-pemeliharaan").prop('hidden', false);
                 $(".menu-mutasi").prop('hidden', false);
                 $(".menu-peminjaman").prop('hidden', false);
@@ -900,6 +906,7 @@
                 $(".menu-penarikan").prop('hidden', false);
             } else {
                 if (aksesElektromedis == true) {
+                    $(".tombol-menu").prop('hidden', false);
                     $(".menu-pemeliharaan").prop('hidden', false);
                     $(".menu-mutasi").prop('hidden', true);
                     $(".menu-peminjaman").prop('hidden', false);
@@ -907,6 +914,7 @@
                     $(".menu-penarikan").prop('hidden', false);
                 } else {
                     if (aksesPIC == true) {
+                        $(".tombol-menu").prop('hidden', false);
                         $(".menu-pemeliharaan").prop('hidden', true);
                         $(".menu-mutasi").prop('hidden', true);
                         $(".menu-peminjaman").prop('hidden', false);
@@ -914,18 +922,28 @@
                         $(".menu-penarikan").prop('hidden', true);
                     } else {
                         if (aksesIPSRS == true) {
+                            $(".tombol-menu").prop('hidden', false);
                             $(".menu-pemeliharaan").prop('hidden', false);
                             $(".menu-mutasi").prop('hidden', true);
                             $(".menu-peminjaman").prop('hidden', true);
                             $(".menu-pengembalian").prop('hidden', true);
                             $(".menu-penarikan").prop('hidden', true);
                         } else {
-                            $(".tombol-menu").prop('hidden', true);
-                            $(".menu-pemeliharaan").prop('hidden', true);
-                            $(".menu-mutasi").prop('hidden', true);
-                            $(".menu-peminjaman").prop('hidden', true);
-                            $(".menu-pengembalian").prop('hidden', true);
-                            $(".menu-penarikan").prop('hidden', true);
+                            if (aksesIT == true) {
+                                $(".tombol-menu").prop('hidden', false);
+                                $(".menu-pemeliharaan").prop('hidden', false);
+                                $(".menu-mutasi").prop('hidden', true);
+                                $(".menu-peminjaman").prop('hidden', true);
+                                $(".menu-pengembalian").prop('hidden', true);
+                                $(".menu-penarikan").prop('hidden', true);
+                            } else {
+                                $(".tombol-menu").prop('hidden', true);
+                                $(".menu-pemeliharaan").prop('hidden', true);
+                                $(".menu-mutasi").prop('hidden', true);
+                                $(".menu-peminjaman").prop('hidden', true);
+                                $(".menu-pengembalian").prop('hidden', true);
+                                $(".menu-penarikan").prop('hidden', true);
+                            }
                         }
                     }
                 }

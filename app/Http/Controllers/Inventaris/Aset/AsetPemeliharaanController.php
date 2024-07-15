@@ -23,9 +23,11 @@ class AsetPemeliharaanController extends Controller
     function index($id) {
         $users = users::join('model_has_roles','model_has_roles.model_id','=','users.id')
                     ->join('roles','roles.id','=','model_has_roles.role_id')
-                    ->whereIn('roles.name', ['it','ipsrs','elektromedis'])
+                    ->whereIn('roles.name', ['karu-it','it','kasubag-aset-gudang','kasubag-ipsrs','ipsrs','elektromedis'])
                     ->select('users.id','users.nama')
                     ->distinct()
+                    ->where('users.id','!=',341) // BUDI SATRIJO
+                    ->where('users.id','!=',257) // ERVAN HADI
                     ->whereNotNull('users.nik')
                     ->where('users.status',null)
                     ->orderBy('nama','ASC')

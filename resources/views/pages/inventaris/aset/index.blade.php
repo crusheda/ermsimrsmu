@@ -48,23 +48,14 @@
         <div class="card-body border-bottom" id="filterTampil">
             <div class="row g-3">
                 <input type="text" class="form-control" id="validasiTampil" value="0" hidden>
-                <div class="col-xxl-4 col-lg-6" data-bs-toggle="tooltip"
-                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                title="Cari Nama Aset/Sarana">
-                    <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana (Belum tersedia untuk saat ini)" disabled>
-                </div>
-                <div class="col-xxl-2 col-lg-6" data-bs-toggle="tooltip"
-                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                title="Pilih Jenis Sarana">
-                    <select class="selectFilter form-select" id="filterJenis" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                        <option value="" selected hidden>Pilih Jenis</option>
-                        <option value="1">Medis</option>
-                        <option value="2">Non Medis</option>
-                    </select>
+                <div class="col-xxl-3 col-lg-4" data-bs-toggle="tooltip"
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Cari Nama Aset/Sarana">
+                    <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana ..." disabled>
                 </div>
                 <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
-                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                title="Pilih Ruangan / Lokasi">
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Pilih Ruangan / Lokasi">
                     <div class="select2-dark">
                         <select class="selectFilter form-select" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                             <option value="" selected hidden>Pilih Lokasi</option>
@@ -77,16 +68,52 @@
                     </div>
                 </div>
                 <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
-                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                title="Pilih Tanggal Perolehan Aset">
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Pilih Tanggal Perolehan Aset">
                     <div id="datepicker1">
                         <input type="text" id="filterTglPerolehan" class="form-control flatpickr" placeholder="Pilih Tanggal">
                     </div><!-- input-group -->
                 </div>
+                <div class="col-xxl-1 col-lg-4" data-bs-toggle="tooltip"
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Pilih Jenis Sarana">
+                    <select class="selectFilter form-select" id="filterJenis" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                        <option value="" selected hidden>Pilih Jenis</option>
+                        <option value="1">Medis</option>
+                        <option value="2">Non Medis</option>
+                    </select>
+                </div>
+                <div class="col-xxl-1 col-lg-4" data-bs-toggle="tooltip"
+                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                title="Pilih Bulan Kalibrasi Berakhir">
+                    <select class="form-select selectFilter" id="filterBulanKalibrasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%">
+                        <option value="0">Pilih Bulan</option>
+                        <?php
+                            $bulan=array("","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
+                            $jml_bln=count($bulan);
+                            for($c=1 ; $c < $jml_bln ; $c+=1){
+                                echo"<option value=$c> $bulan[$c] </option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-xxl-1 col-lg-4" data-bs-toggle="tooltip"
+                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                title="Pilih Tahun Kalibrasi Berakhir">
+                    <select class="form-select selectFilter" id="filterTahunKalibrasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%">
+                        <option value="0">Pilih Tahun</option>
+                        @php
+                            for ($i=2023; $i <= $list['year']+1; $i++) {
+                                echo"<option value=$i> $i </option>";
+                            }
+
+                        @endphp
+                    </select>
+                </div>
                 <div class="col-xxl-2 col-lg-4">
                     <button type="button" class="btn btn-info w-100" onclick="filter()" data-bs-toggle="tooltip"
                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                    title="Menampilkan Daftar/Filter Aset"><i class="mdi mdi-filter-outline align-middle"></i> Tampilkan</button>
+                    title="Menampilkan Daftar/Filter Aset" id="tombol-tampilkan" disabled><i class="fas fa-sync fa-spin align-middle"></i> Tampilkan</button>
                 </div>
             </div>
 
@@ -208,7 +235,7 @@
                                 <input type="text" id="tgl_perolehan_add" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= hari ini"/>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3 show_medis_add" hidden>
+                        {{-- <div class="col-md-6 mb-3 show_medis_add" hidden>
                             <div class="form-group">
                                 <label class="form-label">No. Kalibrasi</label>
                                 <input type="text" id="no_kalibrasi_add" class="form-control" placeholder="e.g. xxx">
@@ -219,7 +246,7 @@
                                 <label class="form-label">Tgl. Kalibrasi</label>
                                 <input type="text" id="tgl_berlaku_add" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/>
                             </div>
-                        </div>
+                        </div> --}}
                         <hr>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -259,6 +286,7 @@
                                     <option value="1" selected>Beli</option>
                                     <option value="2">Hibah</option>
                                     <option value="3">Wakaf</option>
+                                    <option value="4">KSO</option>
                                 </select>
                             </div>
                         </div>
@@ -402,7 +430,7 @@
                                 <input type="text" id="tgl_perolehan_edit" class="form-control flatpickrnow" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batas tgl hanya >= hari ini"/>
                             </div>
                         </div> --}}
-                        <div class="col-md-6 mb-3 show_medis_edit" hidden>
+                        {{-- <div class="col-md-6 mb-3 show_medis_edit" hidden>
                             <div class="form-group">
                                 <label class="form-label">No. Kalibrasi</label>
                                 <input type="text" id="no_kalibrasi_edit" class="form-control" placeholder="e.g. xxx">
@@ -413,7 +441,7 @@
                                 <label class="form-label">Tgl. Kalibrasi</label>
                                 <input type="text" id="tgl_berlaku_edit" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/>
                             </div>
-                        </div>
+                        </div> --}}
                         <hr>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -556,15 +584,17 @@
                     </h4>
                 </div>
                 <div class="modal-body">
+                    <form action="javascript:void(0);" class="form-auth-small" id="formUbah" method="post" enctype="multipart/form-data">
                     <input type="text" class="form-control" id="id_kalibrasi" hidden>
                     <div id="show_kalibrasi" hidden>
-                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> No. Kalibrasi <strong><u><a href="javascript:void(0);" id="riwayat_no_kalibrasi" style="color:#FF0089"></a></u></strong></p>
-                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Telah dikalibrasikan pada tanggal <strong><a id="riwayat_tgl_kalibrasi"></a></strong></p>
-                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Kalibrasi ulang pada tanggal <strong><a id="show_tgl_kalibrasi_ulang"></a></strong> (<i>Kurun waktu ± 1 tahun</i>)</p>
-                        <hr>
+                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> No. Kalibrasi Terakhir <strong><u><a href="javascript:void(0);" id="riwayat_no_kalibrasi" style="color:#FF0089"></a></u></strong></p>
+                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Telah dikalibrasikan pada tanggal <strong><mark><a id="riwayat_tgl_kalibrasi"></a></mark></strong></p>
+                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Kalibrasi ulang pada tanggal <strong><mark><a id="show_tgl_kalibrasi_ulang"></a></mark></strong> (<i>Kurun waktu ± 1 tahun</i>)</p>
+                        <p><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Input kalibrasi ulang hanya berlaku mulai <mark>H-1</mark> menyesuaikan jatuh tempo tanggal berakhir kalibrasi</p>
+                        <hr class="show_input_kalibrasi">
                     </div>
-                    <center><h5><b>Form Pengisian Kalibrasi Baru</b></h5></center>
-                    <div class="table-responsive" style="border: 0px">
+                    <center><h5 class="show_input_kalibrasi"><b>Form Pengisian Kalibrasi Baru</b></h5></center>
+                    <div class="table-responsive show_input_kalibrasi" style="border: 0px">
                         <table class="table table-nowrap mb-0" style="width:100%">
                             <tbody>
                                 <tr>
@@ -587,7 +617,9 @@
                     </div>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button class="btn btn-primary me-sm-3 me-1" id="btn-proses-kalibrasi" onclick="prosesKalibrasi()"><i class="fa fa-save"></i>&nbsp;&nbsp;Submit</button>
+                    <button class="btn btn-primary me-sm-3 me-1 show_input_kalibrasi" id="btn-proses-kalibrasi" onclick="prosesKalibrasi()" type="submit"><i class="fa fa-save"></i>&nbsp;&nbsp;Submit</button>
+                    <button class="btn btn-danger me-sm-3 me-1 show_batal_kalibrasi" id="btn-batal-kalibrasi" onclick="batalKalibrasi()" hidden><i class="fa fa-edit"></i>&nbsp;&nbsp;Batal</button>
+                    </form>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -727,19 +759,24 @@
             $('#jenis_add').change(function() {
                 if ($(this).val() == 1) {
                     $('#kd_jenis_add').text('A');
-                    $('.show_medis_add').prop('hidden',false);
+                    // $('.show_medis_add').prop('hidden',false);
                 }
                 if ($(this).val() == 2) {
                     $('#kd_jenis_add').text('B');
                     $('#no_kalibrasi_add').val('');
                     $('#tgl_berlaku_add').val('');
-                    $('.show_medis_add').prop('hidden',true);
+                    // $('.show_medis_add').prop('hidden',true);
                 }
             });
             // Showing Tooltip
             $('[data-bs-toggle="tooltip"]').tooltip({
                 trigger: 'hover'
             })
+
+            // MEMUNCULKAN TOMBOL TAMPILKAN FILTER
+            // $('#tombol-tampilkan').prop('hidden',false);
+            $("#tombol-tampilkan").find("i").removeClass("fas fa-sync fa-spin").addClass("mdi mdi-filter-outline");
+            $("#tombol-tampilkan").prop('disabled', false);
         })
 
         // ----------------------------------------------------------------------------------------
@@ -754,6 +791,8 @@
             var filter1 = $("#filterJenis").val();
             var filter2 = $("#filterLokasi").val();
             var filter3 = $("#filterTglPerolehan").val();
+            var filter4 = $("#filterBulanKalibrasi").val();
+            var filter5 = $("#filterTahunKalibrasi").val();
             $.ajax({
                 url: "/api/inventaris/aset/filter",
                 type: 'POST',
@@ -762,6 +801,8 @@
                     filter1: filter1,
                     filter2: filter2,
                     filter3: filter3,
+                    filter4: filter4,
+                    filter5: filter5,
                 },
                 success: function(res) {
                     $("#tampil-tbody").empty();
@@ -770,6 +811,7 @@
                     var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
                     var kalibrasiID = "{{ Auth::user()->getManyRole(['elektromedis']) }}";
                     var date = new Date().toLocaleDateString();
+
                     res.show.forEach(item => {
                         var updet = new Date(item.created_at).toLocaleDateString();
                         content = `<tr id='`+item.id+`'>`;
@@ -783,11 +825,11 @@
                                                 + `</div>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
-                                                + `<div class="dropdown-divider"></div>`
-                                                + `<div class="dropdown-header noti-title">`
-                                                    + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
-                                                + `</div>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
+                                                // + `<div class="dropdown-divider"></div>`
+                                                // + `<div class="dropdown-header noti-title">`
+                                                //     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
+                                                // + `</div>`
+                                                // + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
                                             + `</ul>`
                                         + `</div>`
                                     + `</center></td>`;
@@ -896,7 +938,7 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>${item.no_kalibrasi?item.no_kalibrasi:'-'}</h6>
-                                                <small class='text-truncate text-muted'>${item.tgl_berlaku?item.tgl_berlaku:''}</small>
+                                                <small class='text-truncate text-muted'>${item.tgl_berlaku?item.tgl_berlaku+"&nbsp;<i class='fas fa-long-arrow-alt-right text-danger'></i>&nbsp;"+item.tgl_berakhir:''}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -1000,14 +1042,14 @@
                                 <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Non Medis
                             </a>
                         `);
-                        $(".show_medis_edit").prop('hidden', true);
+                        // $(".show_medis_edit").prop('hidden', true);
                     } else {
                         $("#badge_jenis_edit").empty().append(`
                             <a href="javascript: void(0);" class="badge bg-danger font-size-12">
                                 <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Medis
                             </a>
                         `);
-                        $(".show_medis_edit").prop('hidden', false);
+                        // $(".show_medis_edit").prop('hidden', false);
                     }
                     $('#no_inventaris_edit').text(res.show.no_inventaris);
                     $('#no_kalibrasi_edit').val(res.show.no_kalibrasi);
@@ -1022,6 +1064,7 @@
                         <option value="1" ${res.show.asal_perolehan == 1? "selected":""}>Beli</option>
                         <option value="2" ${res.show.asal_perolehan == 2? "selected":""}>Hibah</option>
                         <option value="3" ${res.show.asal_perolehan == 3? "selected":""}>Wakaf</option>
+                        <option value="4" ${res.show.asal_perolehan == 4? "selected":""}>KSO</option>
                     `);
                     $('#nilai_perolehan_edit').val(formatRupiah(parseInt(res.show.nilai_perolehan), 'Rp. '));
                     $("#kondisi_edit").find('option').remove();
@@ -1276,6 +1319,7 @@
                     $('#dttable').DataTable().clear().destroy();
                     var userID = "{{ Auth::user()->id }}";
                     var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                    var kalibrasiID = "{{ Auth::user()->getManyRole(['elektromedis']) }}";
                     var date = new Date().toLocaleDateString();
 
                     res.show.forEach(item => {
@@ -1290,14 +1334,34 @@
                                                     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                                 + `</div>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                                + `<div class="dropdown-divider"></div>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                                + `<div class="dropdown-divider"></div>`
+                                                + `<div class="dropdown-header noti-title">`
+                                                    + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
+                                                + `</div>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
                                             + `</ul>`
                                         + `</div>`
                                     + `</center></td>`;
                         }
                         else {
-                            content += `<td><center>`+item.id+`</center></td>`
+                            if (kalibrasiID == true) {
+                                if (item.jenis == 1) {
+                                    content += `<td><center>`
+                                                + `<div class='btn-group'>`
+                                                    + `<button type="button" class="btn btn-soft-dark waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                + `</div>`
+                                            + `</center></td>`;
+                                } else {
+                                    content += `<td><center>`
+                                                + `<div class='btn-group'>`
+                                                    + `<button type="button" class="btn btn-soft-secondary waves-effect btn-label waves-light" disabled><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                + `</div>`
+                                            + `</center></td>`;
+                                }
+                            } else {
+                                content += `<td><center>`+item.id+`</center></td>`
+                            }
                             // if (userID == item.id_user) {
                             //     if (updet == date) {
                             //         content += `<td><center>`
@@ -1384,7 +1448,7 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>${item.no_kalibrasi?item.no_kalibrasi:'-'}</h6>
-                                                <small class='text-truncate text-muted'>${item.tgl_berlaku?item.tgl_berlaku:''}</small>
+                                                <small class='text-truncate text-muted'>${item.tgl_berlaku?item.tgl_berlaku+"&nbsp;<i class='fas fa-long-arrow-alt-right text-danger'></i>&nbsp;"+item.tgl_berakhir:''}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -1503,6 +1567,8 @@
         function kalibrasi(id) {
             $('#show_id_kalibrasi').text(id);
             $('#id_kalibrasi').val(id);
+            // $('.show_input_kalibrasi').prop('hidden', false);
+            // $('.show_batal_kalibrasi').prop('hidden', false);
 
                 $.ajax(
                 {
@@ -1510,22 +1576,53 @@
                     type: 'GET',
                     dataType: 'json', // added data type
                     success: function(res) {
+                        // VALIDASI SUDAH KALIBRASI ATAU BELUM
                         if (res.no_kalibrasi) {
                             $('#show_kalibrasi').prop('hidden', false);
                         } else {
                             $('#show_kalibrasi').prop('hidden', true);
                         }
+
+                        // VALIDASI INPUT ULANG SEBELUM BERAKHIR
+                        if (res.tgl_berakhir != null) {
+                            var date = new Date();
+                            var exp = res.tgl_berakhir;
+                            var tgl = new Date(exp);
+                            tgl.setDate(tgl.getDate()-1);
+                            var hmin1 = tgl.toLocaleDateString("sv-SE");
+                            // var harih = new Date(val).toLocaleDateString("sv-SE");
+                            var hariini = new Date().toLocaleDateString("sv-SE");
+                            if (hariini < hmin1) {
+                                $('.show_input_kalibrasi').prop('hidden', true);
+                                $('.show_batal_kalibrasi').prop('hidden', false);
+                            } else {
+                                $('.show_input_kalibrasi').prop('hidden', false);
+                                $('.show_batal_kalibrasi').prop('hidden', true);
+                            }
+                        } else {
+                            $('.show_input_kalibrasi').prop('hidden', false);
+                            $('.show_batal_kalibrasi').prop('hidden', true);
+                        }
+
                         $('#riwayat_no_kalibrasi').text(res.no_kalibrasi);
                         $('#riwayat_tgl_kalibrasi').text(res.tgl_berlaku);
                         $('#show_tgl_kalibrasi_ulang').text(res.tgl_berakhir);
                         // ---------------------------------------------------
                         $('#no_kalibrasi_ulang').val("");
                         $('#tgl_berlaku_ulang').val("");
-                        $('#show_tgl_berakhir_ulang').text("belum direncanakan");
+                        $('#show_tgl_berakhir_ulang').val("");
+
+                        $('#modalKalibrasi').modal('show');
                     }
                 })
-
-            $('#modalKalibrasi').modal('show');
+                $("#tgl_berlaku_ulang").change(function(){
+                    var a = $(this).val();
+                    var r = moment(a, "YYYY-MM-DD").add('years', 1).format('L');
+                    var nr = new Date(r).toLocaleDateString("sv-SE");
+                    var sr = new Date(r).toLocaleDateString("fr-FR");
+                    $('#tgl_berakhir_ulang').val(nr);
+                    $('#show_tgl_berakhir_ulang').val(sr+' (1 Tahun dari sekarang)');
+                });
         }
 
         function prosesKalibrasi() {
@@ -1537,44 +1634,61 @@
             var tgl_berlaku = $('#tgl_berlaku_ulang').val();
             var tgl_berakhir = $('#tgl_berakhir_ulang').val();
 
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                method: 'POST',
-                url: '/api/inventaris/aset/updateKalibrasi',
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                data: {
-                        id: id,
-                        no_kalibrasi: no_kalibrasi,
-                        tgl_berlaku: tgl_berlaku,
-                        tgl_berakhir: tgl_berakhir,
+            // let token   = $("meta[name='csrf-token']").attr("content");
+
+            if (no_kalibrasi == '' || tgl_berlaku == '') {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Mohon lengkapi semua isian wajib',
+                    position: 'topRight'
+                });
+                $("#btn-proses-kalibrasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                $("#btn-proses-kalibrasi").prop('disabled', false);
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                success: function(res) {
-                    iziToast.success({
-                        title: 'Sukses!',
-                        message: 'Kalibrasi berhasil pada '+ res,
-                        position: 'topRight'
-                    });
-                    if (res) {
-                        refresh();
-                        $('.modal').modal('hide');
+                    type: 'POST',
+                    // cache: false,
+                    dataType: 'json', // added data type
+                    // url: '/api/inventaris/aset/'+id+'/updatekalibrasi/'+no_kalibrasi+'/'+tgl_berlaku+'/'+tgl_berakhir,
+                    url: '/api/inventaris/aset/updatekalibrasi',
+                    data: {
+                            id: id,
+                            no_kalibrasi: no_kalibrasi,
+                            tgl_berlaku: tgl_berlaku,
+                            tgl_berakhir: tgl_berakhir,
+                        },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'Kalibrasi berhasil pada '+ res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            refresh();
+                            $('.modal').modal('hide');
+                            $("#btn-proses-kalibrasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                            $("#btn-proses-kalibrasi").prop('disabled', false);
+                        };
+                    },
+                    error: function (res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
                         $("#btn-proses-kalibrasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
                         $("#btn-proses-kalibrasi").prop('disabled', false);
-                    };
-                },
-                error: function (res) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: res.responseJSON.error,
-                        position: 'topRight'
-                    });
-                    $("#btn-proses-kalibrasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-                    $("#btn-proses-kalibrasi").prop('disabled', false);
-                }
-            });
+                    }
+                });
+            }
+        }
+
+        function batalKalibrasi() {
+            $('.show_batal_kalibrasi').prop('hidden', true);
+            $('.show_input_kalibrasi').prop('hidden', false);
         }
 
         /* Fungsi formatRupiah */
