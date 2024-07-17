@@ -38,9 +38,11 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item text-primary text-center" href="javascript:;" onclick="window.location='{{ route('eruang.ruangan') }}'">
-                                Lihat Daftar Ruangan
-                            </a>
+                            @if (Auth::user()->getManyRole(['kasubag-tata-usaha','it']))
+                                <a class="dropdown-item text-primary text-center" href="javascript:;" onclick="window.location='{{ route('eruang.ruangan') }}'">
+                                    Lihat Daftar Ruangan
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

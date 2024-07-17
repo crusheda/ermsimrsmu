@@ -398,17 +398,21 @@ class ERuangController extends Controller
     ///////////////////////////////////////////////////////// DAFTAR RUANGAN
     function indexRuangan()
     {
-        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        // $show = eruang::get();
-        $ruangan = eruang_ref::orderBy('nama','ASC')->get();
+        if (Auth::user()->getRole('kasubag-tata-usaha') == true || Auth::user()->getRole('it') == true) {
+            $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+            // $show = eruang::get();
+            $ruangan = eruang_ref::orderBy('nama','ASC')->get();
 
-        $data = [
-            'role' => $role,
-            // 'show' => $show,
-            'ruangan' => $ruangan,
-        ];
+            $data = [
+                'role' => $role,
+                // 'show' => $show,
+                'ruangan' => $ruangan,
+            ];
 
-        return view('pages.eruang.ruangan')->with('list',$data);
+            return view('pages.eruang.ruangan')->with('list',$data);
+        } else {
+            return redirect()->back()->withErrors('Maaf, Anda tidak memiliki akses daftar ruangan');
+        }
     }
 
     function getRuangan()
