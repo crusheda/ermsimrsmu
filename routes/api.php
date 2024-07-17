@@ -146,6 +146,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('eruang/gizi/verif/edithapus/{id}', 'App\Http\Controllers\ERuang\ERuangController@verifEditHapus')->name('eruang.verifEditHapus');
         Route::delete('eruang/hapus/{id}', 'App\Http\Controllers\ERuang\ERuangController@hapus')->name('eruang.hapus');
         Route::get('eruang/display', 'App\Http\Controllers\ERuang\ERuangController@display')->name('eruang.display');
+        // DAFTAR RUANGAN
+            Route::get('eruang/ruangan', 'App\Http\Controllers\ERuang\ERuangController@getRuangan')->name('eruang.getRuangan');
+            Route::post('eruang/ruangan/store', 'App\Http\Controllers\ERuang\ERuangController@storeRuangan')->name('eruang.storeRuangan');
+            Route::delete('eruang/ruangan/hapus/{id}', 'App\Http\Controllers\ERuang\ERuangController@destroyRuangan')->name('eruang.destroyRuangan');
+            Route::get('eruang/ruangan/ubah/{id}', 'App\Http\Controllers\ERuang\ERuangController@getUbahRuangan')->name('eruang.getUbahRuangan');
+            Route::post('eruang/ruangan/ubah/proses', 'App\Http\Controllers\ERuang\ERuangController@updateRuangan')->name('eruang.updateRuangan');
 
     // INVENTARIS
         // DETAIL ASET

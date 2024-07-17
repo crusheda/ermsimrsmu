@@ -15,33 +15,33 @@
             <div class="card-body" style="overflow: visible;">
                 <div class="float-end" id="btn_link_pengajuan">
                     <div class="dropdown">
-                        <button type="button" class="btn btn-soft-dark" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block">Informasi <i class="mdi mdi-chevron-down"></i></span></button>
-                        {{-- <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block">Informasi <i class="mdi mdi-chevron-down"></i></span></button>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
                             <div class="dropdown-item-text">
                                 <div>
-                                    <p class="text-muted mb-2">Available Balance</p>
-                                    <h5 class="mb-0">$ 9148.23</h5>
+                                    {{-- <p class="text-muted mb-2"></p> --}}
+                                    <h6 class="mb-0 text-center"><mark>Informasi Pengajuan</mark></h6>
                                 </div>
                             </div>
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" href="#">
-                                BTC : <span class="float-end">1.02356</span>
+                            <a class="dropdown-item" href="javascript:;">
+                                Disetujui : <span class="float-end">♾️</span>
                             </a>
-                            <a class="dropdown-item" href="#">
-                                ETH : <span class="float-end">0.04121</span>
+                            <a class="dropdown-item" href="javascript:;">
+                                Diverifikasi : <span class="float-end">♾️</span>
                             </a>
-                            <a class="dropdown-item" href="#">
-                                LTC : <span class="float-end">0.00356</span>
+                            <a class="dropdown-item" href="javascript:;">
+                                Ditolak : <span class="float-end">♾️</span>
                             </a>
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item text-primary text-center" href="#" onclick="refreshWithOpenRiwayat()">
-                                Learn more
+                            <a class="dropdown-item text-primary text-center" href="javascript:;" onclick="window.location='{{ route('eruang.ruangan') }}'">
+                                Lihat Daftar Ruangan
                             </a>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
                 <div class="float-end" id="btn_link_riwayat" hidden>
@@ -103,16 +103,50 @@
                                     <label>Pilih Ruangan <a class="text-danger">*</a></label>
 
                                     <div class="row">
+
                                         @if (!empty($list['ruangan']))
                                             @foreach ($list['ruangan'] as $item)
-                                                @if (Auth::user()->id == 82 || Auth::user()->id == 294 || Auth::user()->id == 2)
+                                                @if ($item->akses != null)
+                                                    @foreach (json_decode($item->akses) as $val)
+                                                        @foreach ($list['role'] as $rol)
+                                                            @if ($rol->id == $val)
+                                                                @if (Auth::user()->getRole($rol->name) == true)
+                                                                    <div class="col-xl-2 col-sm-4">
+                                                                        <label class="card-radio-label mb-2">
+                                                                            <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input validasiTgl">
+                                                                            <div class="card-radio">
+                                                                                <div>
+                                                                                    <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
+                                                                                    <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
+                                                                                </div>
+                                                                            </div>
+                                                                        </label>
+                                                                    </div>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                @else
+                                                    <div class="col-xl-2 col-sm-4">
+                                                        <label class="card-radio-label mb-2">
+                                                            <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input validasiTgl">
+                                                            <div class="card-radio">
+                                                                <div>
+                                                                    {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
+                                                                    <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
+                                                                    <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                @endif
+                                                {{-- @if (Auth::user()->id == 82 || Auth::user()->id == 294 || Auth::user()->id == 2)
                                                     <div class="col-xl-2 col-sm-4">
                                                         <label class="card-radio-label mb-2">
                                                             <input type="radio" name="ruangan" id="ruangan{{ $item->id }}" value="{{ $item->id }}" class="card-radio-input validasiTgl">
 
                                                             <div class="card-radio">
                                                                 <div>
-                                                                    {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
                                                                     <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
                                                                     <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
                                                                 </div>
@@ -127,7 +161,6 @@
 
                                                                 <div class="card-radio">
                                                                     <div>
-                                                                        {{-- <i class="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2"></i> --}}
                                                                         <h5><i class="bx bx-hash text-primary"></i> {{ $item->nama }}</h5>
                                                                         <h6><small>Kapasitas : <mark>{{ $item->kapasitas }} Peserta</mark></small></h6>
                                                                     </div>
@@ -135,14 +168,10 @@
                                                             </label>
                                                         </div>
                                                     @endif
-                                                @endif
+                                                @endif --}}
                                             @endforeach
                                         @endif
 
-                                        {{-- <div>
-                                            <p class="text-muted mb-1">Kapasitas :</p>
-                                            <h5 class="font-size-16"></h5>
-                                        </div> --}}
                                     </div>
                                     <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Klik salah satu ruangan di atas</small>
                                 </div>

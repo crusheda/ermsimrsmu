@@ -139,6 +139,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], fu
 Route::group(['middleware' => ['auth'], 'prefix' => 'eruang', 'as' => ''], function () {
     // Accident Report - Kecelakan Kerja
         Route::get('/', [App\Http\Controllers\ERuang\ERuangController::class, 'index'])->name('eruang.index');
+        Route::get('/ruangan', [App\Http\Controllers\ERuang\ERuangController::class, 'indexRuangan'])->name('eruang.ruangan');
 });
 
 // INVENTARIS

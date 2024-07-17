@@ -82,6 +82,24 @@ class User extends Authenticatable
         }
     }
 
+    public function getManyRoleId($rolesid)
+    {
+        $getRoles = User::join('model_has_roles','model_has_roles.model_id','=','users.id')
+                    ->join('roles','roles.id','=','model_has_roles.role_id')
+                    ->whereIn('roles.id', $rolesid)
+                    ->where('model_has_roles.model_id', Auth::user()->id)
+                    ->select('users.name')
+                    ->first();
+
+        // print_r($getRoles);
+        // die();
+        if (empty($getRoles->name)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function getManyRole($roles)
     {
         $getRoles = User::join('model_has_roles','model_has_roles.model_id','=','users.id')

@@ -394,4 +394,91 @@ class ERuangController extends Controller
         $data = eruang::find($id);
         return response()->json($data, 200);
     }
+
+    ///////////////////////////////////////////////////////// DAFTAR RUANGAN
+    function indexRuangan()
+    {
+        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+        // $show = eruang::get();
+        $ruangan = eruang_ref::orderBy('nama','ASC')->get();
+
+        $data = [
+            'role' => $role,
+            // 'show' => $show,
+            'ruangan' => $ruangan,
+        ];
+
+        return view('pages.eruang.ruangan')->with('list',$data);
+    }
+
+    function getRuangan()
+    {
+        $show = eruang_ref::get();
+        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+
+        $data = [
+            'role' => $role,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function storeRuangan(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = new eruang_ref;
+        $data->nama = $request->ruangan;
+        $data->deskripsi = $request->deskripsi;
+        $data->kapasitas = $request->kapasitas;
+        $data->fasilitas = $request->fasilitas;
+        $data->akses = json_encode($request->akses);
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function getUbahRuangan($id)
+    {
+        $show = eruang_ref::where('id',$id)->first();
+        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+
+        $data = [
+            'show' => $show,
+            'role' => $role,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function updateRuangan(Request $request) {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = eruang_ref::find($request->id);
+        $data->nama = $request->ruangan;
+        $data->deskripsi = $request->deskripsi;
+        $data->kapasitas = $request->kapasitas;
+        $data->fasilitas = $request->fasilitas;
+        if ($request->akses != '') {
+            $data->akses = "[".str_replace(',','","',json_encode($request->akses))."]";
+        } else {
+            $data->akses = null;
+        }
+
+
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function destroyRuangan($id) {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $hapusData = eruang_ref::find($id);
+        $hapusData->delete();
+
+        return response()->json($tgl, 200);
+    }
 }
