@@ -22,10 +22,6 @@ Route::get('/', function () {
     return view('pages.comingsoon');
 })->name('portal');
 
-Route::get('/starter', function () {
-    return view('pages.starter');
-})->name('starter');
-
 Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->name('auth.login');
 
 Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
@@ -194,3 +190,18 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
 // CATATAN
 
 // Route::get('/kunjungan', 'kunjunganController@index')->name('landing.kunjungan');
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------
+// SIMRSMU V3.1
+Route::get('/dashboardx', [App\Http\Controllers\Dashboard\DefaultController::class, 'index2'])->name('dashboardx');
+Route::group(['middleware' => ['auth']], function () {
+    // PROFIL
+    // Route::get('profil/ubahpassword', [App\Http\Controllers\Setting\UbahPassword\UbahPasswordController::class, 'showChangePasswordForm'])->name('profil.ubahpassword');
+    // Route::patch('profil/ubahpassword', [App\Http\Controllers\Setting\UbahPassword\UbahPasswordController::class, 'changePassword'])->name('auth.change_password');
+    Route::get('profilx', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'index2'])->name('profilx');
+    // Route::put('profil/{id}/ubahfoto', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'storeImg'])->name('profil.ubahfoto');
+});
+// Route::get('/starter', function () {
+//     return view('pages.dashboard.index');
+// })->name('starter');
+

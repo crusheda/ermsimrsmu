@@ -2,23 +2,30 @@
     <div class="footer-wrapper container-fluid">
         <div class="row">
             <div class="col my-1">
-                <p class="m-0">Able Pro &#9829; crafted by Team <a href="https://themeforest.net/user/phoenixcoded"
-                        target="_blank">Phoenixcoded</a></p>
             </div>
             <div class="col-auto my-1">
-                <ul class="list-inline footer-link mb-0">
+                <p class="m-0">Made with <a class="text-danger" href="{{ url('https://instagram.com/hiyussuf') }}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                    title="Lihat Profil Developer">&#9829;</a></p>
+                {{-- <ul class="list-inline footer-link mb-0">
                     <li class="list-inline-item"><a href="../index-2.html">Home</a></li>
                     <li class="list-inline-item"><a href="https://phoenixcoded.gitbook.io/able-pro/"
                             target="_blank">Documentation</a></li>
                     <li class="list-inline-item"><a href="https://phoenixcoded.authordesk.app/"
                             target="_blank">Support</a></li>
-                </ul>
+                </ul> --}}
             </div>
         </div>
     </div>
 </footer>
-<div class="pct-c-btn"><a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas_pc_layout"><i
-            class="ph-duotone ph-gear-six"></i></a></div>
+
+{{-- TOMBOL SETTING PAGE MELAYANG --}}
+{{-- <div class="pct-c-btn">
+    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas_pc_layout">
+        <i class="ph-duotone ph-gear-six"></i>
+    </a>
+</div> --}}
+
+{{-- MODAL SETTING PAGE --}}
 <div class="offcanvas border-0 pct-offcanvas offcanvas-end" tabindex="-1" id="offcanvas_pc_layout">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Settings</h5><button type="button" class="btn btn-icon btn-link-danger ms-auto"
@@ -97,7 +104,7 @@
                                 class="ti ti-checks"></i></a>
                     </div>
                 </li>
-                <li class="list-group-item">
+                {{-- <li class="list-group-item">
                     <h6 class="mb-1">Theme layout</h6>
                     <p class="text-muted text-sm">Choose your layout</p>
                     <div class="theme-main-layout d-flex align-center gap-1 w-100"><a href="#!"
@@ -115,7 +122,7 @@
                         </a><a href="#!" data-bs-toggle="tooltip" title="Tab" data-value="tab"><img
                                 src="{{ asset('images/customizer/tab.svg') }}" alt="img" class="img-fluid"></a>
                     </div>
-                </li>
+                </li> --}}
                 <li class="list-group-item">
                     <h6 class="mb-1">Sidebar Caption</h6>
                     <p class="text-muted text-sm">Sidebar Caption Hide/Show</p>

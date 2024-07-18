@@ -1,16 +1,16 @@
 <html lang="en">
 
 <head>
-    <title>Home | Able Pro Dashboard Template</title><!-- [Meta] -->
+    <title>SIMRSMU V3 - {{ Auth::user()->name }}</title><!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description"
-        content="Able Pro is trending dashboard template made using Bootstrap 5 design framework. Able Pro is available in Bootstrap, React, CodeIgniter, Angular,  and .net Technologies.">
-    <meta name="keywords"
-        content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard">
-    <meta name="author" content="Phoenixcoded"><!-- [Favicon] icon -->
-    <link rel="icon" href="{{ asset('images/favicon.svg') }}" type="image/x-icon"><!-- [Font] Family -->
+    <meta name="description" content="Sistem Manajemen Rumah Sakit PKU Muhammadiyah Sukoharjo" />
+    <meta name="keywords" content="simrs, simrsmu, sim rspkuskh, pkuskh, rspkuskh, sistem pku, sistem informasi majemen rumah sakit">
+    <meta name="author" content="Yussuf Faisal" />
+    <link rel="shortcut icon" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="stylesheet" href="{{ asset('fonts/inter/inter.css') }}" id="main-font-link">
     <!-- [phosphor Icons] https://phosphoricons.com/ -->
     <link rel="stylesheet" href="{{ asset('fonts/phosphor/duotone/style.css') }}">
@@ -34,11 +34,15 @@
     @include('inc.nwnavbar')
     @include('inc.nwheader')
 
-    @yield('content') <!-- ALL CONTENT HERE -->
+    <div class="pc-container">
+        <div class="pc-content">
+            @yield('content') <!-- ALL CONTENT HERE -->
+        </div>
+    </div>
 
     @include('inc.nwfooter')
 
-    {{-- <script data-cfasync="false" src="{{ asset('cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script> --}}
+    <script data-cfasync="false" src="{{ asset('cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script>
     <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
     {{-- <script src="{{ asset('js/pages/dashboard-default.js') }}"></script><!-- [Page Specific JS] end --><!-- Required Js --> --}}
     <script src="{{ asset('js/plugins/popper.min.js') }}"></script>
@@ -47,12 +51,12 @@
     <script src="{{ asset('js/fonts/custom-font.js') }}"></script>
     <script src="{{ asset('js/pcoded.js') }}"></script>
     <script src="{{ asset('js/plugins/feather.min.js') }}"></script>
-    <script>layout_change('light');</script>
+    {{-- <script>layout_change('light');</script>
     <script>change_box_container('false');</script>
     <script>layout_caption_change('true');</script>
     <script>layout_rtl_change('false');</script>
     <script>preset_change('preset-1');</script>
-    <script>main_layout_change('vertical');</script>
+    <script>main_layout_change('vertical');</script> --}}
 </body>
 
 </html>
