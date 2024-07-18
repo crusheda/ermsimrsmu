@@ -22,6 +22,10 @@ Route::get('/', function () {
     return view('pages.comingsoon');
 })->name('portal');
 
+Route::get('/starter', function () {
+    return view('pages.starter');
+})->name('starter');
+
 Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->name('auth.login');
 
 Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
