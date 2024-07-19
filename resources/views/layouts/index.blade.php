@@ -42,6 +42,11 @@
 
     @include('inc.nwfooter')
 
+    <!-- Logout Form -->
+    <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
+
     <script data-cfasync="false" src="{{ asset('cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script>
     <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
     {{-- <script src="{{ asset('js/pages/dashboard-default.js') }}"></script><!-- [Page Specific JS] end --><!-- Required Js --> --}}

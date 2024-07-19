@@ -20,7 +20,7 @@
         </div><!-- [Mobile Media Block end] -->
         <div class="ms-auto">
             <ul class="list-unstyled">
-                <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
+                {{-- <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                         aria-expanded="false"><svg class="pc-icon">
                             <use xlink:href="#custom-sun-1"></use>
@@ -36,14 +36,9 @@
                                 <use xlink:href="#custom-sun-1"></use>
                             </svg> <span>Light</span>
                         </a>
-                        {{-- <a href="#!" class="dropdown-item" onclick="layout_change_default()">
-                            <svg class="pc-icon">
-                                <use xlink:href="#custom-setting-2"></use>
-                            </svg> <span>Default</span>
-                        </a> --}}
                     </div>
-                </li>
-                <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
+                </li> --}}
+                {{-- <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                         aria-expanded="false" disabled><svg class="pc-icon">
                             <use xlink:href="#custom-setting-2"></use>
@@ -62,7 +57,7 @@
                 <li class="pc-h-item"><a href="#" class="pc-head-link me-0" data-bs-toggle="offcanvas"
                         data-bs-target="#announcement" aria-controls="announcement" disabled><svg class="pc-icon">
                             <use xlink:href="#custom-flash"></use>
-                        </svg></a></li>
+                        </svg></a></li> --}}
                 <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                         aria-expanded="false"><svg class="pc-icon">
@@ -163,14 +158,14 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
                         @if (empty($foto_profil->filename))
-                            <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar" style="width: 30px;margin-left: 5px">
+                            <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar" style="width: 30px;height:30px;margin-left: 5px">
                         @else
-                            <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar" style="width: 30px;margin-left: 5px">
+                            <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar" style="width: 30px;height:30px;margin-left: 5px">
                         @endif
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
-                            <h5 class="m-0">Profile</h5>
+                            <h5 class="m-0">Pengaturan</h5>
                         </div>
                         <div class="dropdown-body">
                             <div class="profile-notification-scroll position-relative"
@@ -178,16 +173,15 @@
                                 <div class="d-flex mb-1">
                                     <div class="flex-shrink-0">
                                         @if (empty($foto_profil->filename))
-                                            <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar wid-35">
+                                            <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar wid-40" style="width: 40px;height:40px">
                                         @else
-                                            <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar wid-35">
+                                            <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar wid-40" style="width: 40px;height:40px">
                                         @endif
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-1">{{ Auth::user()->name }} 🖖</h6>
+                                        <h6 class="mb-1">Halo, {{ Auth::user()->name }} 🖖</h6>
                                         <span>
-                                            <a href="../cdn-cgi/l/email-protection.html" class="__cf_email__"
-                                                data-cfemail="71121003021e1f5f15100303181f31121e1c01101f085f181e">[email&#160;protected]</a>
+                                            <a href="#" class="text-dark">{{ Auth::user()->email }}</a>
                                         </span>
                                     </div>
                                 </div>
@@ -205,7 +199,7 @@
                                         </div>
                                     </div>
                                 </div> --}}
-                                <p class="text-span">Pengaturan</p>
+                                {{-- <p class="text-span">Pengaturan</p> --}}
                                 <a href="{{ route('profilx') }}" class="dropdown-item">
                                     <span>
                                         <svg class="pc-icon text-muted me-2">
@@ -260,7 +254,7 @@
                                 </a> --}}
                                 <hr class="border-secondary border-opacity-50">
                                 <div class="d-grid mb-3">
-                                    <button class="btn btn-primary">
+                                    <button class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                                         <svg class="pc-icon me-2">
                                             <use xlink:href="#custom-logout-1-outline"></use>
                                         </svg>Logout

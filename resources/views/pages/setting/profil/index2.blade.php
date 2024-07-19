@@ -17,8 +17,9 @@
                 </div>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end --><!-- [ Main Content ] start -->
-    <div class="row"><!-- [ sample-page ] start -->
+    </div><!-- [ breadcrumb ] end -->
+    <!-- [ Main Content ] start -->
+    <div class="row pt-1"><!-- [ sample-page ] start -->
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body py-0">
@@ -75,61 +76,141 @@
                                     <div class="text-center">
                                         <div class="chat-avtar d-inline-flex mx-auto mb-2">
                                             @if (empty($list['foto']->filename))
-                                                <img class="rounded-circle img-fluid wid-70" src="{{ asset('images/pku/user.png') }}" alt="User image">
+                                                <img class="rounded-circle img-fluid" src="{{ asset('images/pku/user.png') }}" alt="User image" style="height: 100px;width: auto">
                                                 {{-- <a class="image-popup-no-margins" href="{{ asset('images/pku/user.png') }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Tekan untuk memperbesar foto profil">
                                                     <img class="img-fluid avatar-sm rounded-circle img-thumbnail" alt="" src="{{ asset('images/pku/user.png') }}" width="75">
                                                 </a> --}}
                                             @else
-                                                <img class="rounded-circle img-fluid wid-70" src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" alt="User image">
+                                                <img class="rounded-circle img-fluid" src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" alt="User image" style="height: 100px;width: auto">
                                                 {{-- <a class="image-popup-no-margins" href="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Tekan untuk memperbesar foto profil">
                                                     <img class="img-fluid avatar-sm rounded-circle img-thumbnail" alt="" src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" width="75">
                                                 </a> --}}
                                             @endif
                                         </div>
-                                        <h5 class="mb-0">Anshan H.</h5>
-                                        <p class="text-muted text-sm">Project Manager</p>
-                                        <hr class="my-3 border border-secondary-subtle">
-                                        <div class="row g-3">
-                                            <div class="col-4">
-                                                <h5 class="mb-0">86</h5><small class="text-muted">Post</small>
+                                        <h5 class="mb-1">{{ Auth::user()->nama }}</h5>
+                                        <p class="text-muted text-sm">
+                                            @foreach ($list['role'] as $val)
+                                                @if ($list['show']->id == $val->id_user)
+                                                    <span class="badge rounded-pill text-bg-secondary">{{ $val->nama_role }}</span>
+                                                @endif
+                                            @endforeach
+                                        </p>
+                                        <hr class="my-2 border border-secondary-subtle">
+                                        <div class="row">
+                                            <div class="col-6 border border-top-0 border-bottom-0 border-start-0">
+                                                <h6 class="mb-0">Status Pegawai</h6>
+                                                <small class="text-muted">{{ $list['show']->deleted_at == null? 'Aktif':'Non Aktif' }}</small>
                                             </div>
-                                            <div class="col-4 border border-top-0 border-bottom-0">
-                                                <h5 class="mb-0">40</h5><small
-                                                    class="text-muted">Project</small>
+                                            <div class="col-6 border border-top-0 border-bottom-0 border-end-0">
+                                                <h6 class="mb-0">Terakhir Login</h6>
+                                                <small class="text-muted">@if (!empty($list['showlog'][1])) {{ \Carbon\Carbon::parse($list['showlog'][1]->log_date)->diffForHumans() }} @else - @endif</small>
                                             </div>
-                                            <div class="col-4">
-                                                <h5 class="mb-0">4.5K</h5><small
-                                                    class="text-muted">Members</small>
-                                            </div>
+                                            {{-- <div class="col-4">
+                                                <h5 class="mb-0">...</h5>
+                                                <small class="text-muted">x</small>
+                                            </div> --}}
                                         </div>
                                         <hr class="my-3 border border-secondary-subtle">
                                         <div
                                             class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
-                                            <i class="ti ti-mail me-2"></i>
-                                            <p class="mb-0"><a href="../cdn-cgi/l/email-protection.html"
-                                                    class="__cf_email__"
-                                                    data-cfemail="f5949b869d949bb59298949c99db969a98">[email&#160;protected]</a>
+                                            <i class="fas fa-id-card-alt me-3"></i>
+                                            <p class="mb-0">{{ $list['show']->nip }}</p>
+                                        </div>
+                                        <div
+                                            class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
+                                            <i class="fas fa-address-card me-3"></i>
+                                            <p class="mb-0">{{ $list['show']->nik }}</p>
+                                        </div>
+                                        <div
+                                            class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
+                                            <i class="fas fa-envelope me-3"></i>
+                                            <p class="mb-0"><a href="javascript:void(0);"
+                                                    class="text-dark">{{ $list['show']->email }}</a>
                                             </p>
                                         </div>
                                         <div
-                                            class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
-                                            <i class="ti ti-phone me-2"></i>
-                                            <p class="mb-0">(+1-876) 8654 239 581</p>
-                                        </div>
-                                        <div
-                                            class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
-                                            <i class="ti ti-map-pin me-2"></i>
-                                            <p class="mb-0">New York</p>
-                                        </div>
-                                        <div
                                             class="d-inline-flex align-items-center justify-content-start w-100">
-                                            <i class="ti ti-link me-2"></i> <a href="#" class="link-primary">
-                                                <p class="mb-0">https://anshan.dh.url</p>
-                                            </a></div>
+                                            <i class="fab fa-whatsapp-square me-3"></i>
+                                            <p class="mb-0">{{ $list['show']->no_hp }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card">
+                                <div class="card-header">
+                                    <h5>Media Sosial</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <a href="{{ url('https://www.facebook.com/'.$list['show']->fb) }}" class="btn btn-link-secondary d-grid" target="_blank">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-facebook">
+                                                        <i class="fab fa-facebook-f f-16"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-0">Facebook / <mark>{{ $list['show']->fb }}</mark></h6>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="mb-2">
+                                        <a href="{{ url('https://www.instagram.com/'.$list['show']->ig) }}" class="btn btn-link-secondary d-grid" target="_blank">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-instagram">
+                                                        <i class="fab fa-instagram f-16"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-0">Instagram / <mark>{{ $list['show']->ig }}</mark></h6>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="mb-0">
+                                        <a href="{{ url('https://www.youtube.com/@rspkumuhsukoharjo1801') }}" class="btn btn-link-secondary d-grid" target="_blank">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-youtube">
+                                                        <i class="fab fa-youtube f-16"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-0">Youtube / <mark>rspkusukoharjo</mark></h6>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    {{-- <div class="d-flex align-items-center mb-3">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-xs btn-light-facebook"><i
+                                                    class="fab fa-facebook-f f-16"></i></div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Facebook</h6>
+                                        </div>
+                                        <div class="flex-grow-0 ms-3">
+                                            <h6 class="mb-0"><small class="text-muted f-w-400">@ {{ $list['show']->fb }}</small>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-xs btn-light-instagram"><i
+                                                    class="fab fa-instagram f-16"></i></div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0">Instagram</h6>
+                                        </div>
+                                        <div class="flex-grow-0 ms-3">
+                                            <h6 class="mb-0"><small class="text-muted f-w-400">@ {{ $list['show']->ig }}</small></h6>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                            </div>
+                            {{-- <div class="card">
                                 <div class="card-header">
                                     <h5>Skills</h5>
                                 </div>
@@ -237,78 +318,141 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="col-lg-8 col-xxl-9">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>About me</h5>
+                                    <h5>Tentang Saya</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="mb-0">Hello, I’m Anshan Handgun Creative Graphic Designer & User
-                                        Experience Designer based in Website, I create digital Products a more
-                                        Beautiful and usable place. Morbid accusant ipsum. Nam nec tellus at.
-                                    </p>
+                                    <p class="mb-0">{{ $list['show']->pengalaman_kerja }}</p>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Personal Details</h5>
+                                    <h5>Data Diri</h5>
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0 pt-0">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Full Name</p>
-                                                    <p class="mb-0">Anshan Handgun</p>
+                                                    <p class="mb-1 text-muted">Nama Lengkap</p>
+                                                    <p class="mb-0">{{ $list['show']->nama }}</p>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Father Name</p>
-                                                    <p class="mb-0">Mr. Deepen Handgun</p>
+                                                    <p class="mb-1 text-muted">Nama Panggilan</p>
+                                                    <p class="mb-0">{{ $list['show']->nick }}</p>
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Phone</p>
-                                                    <p class="mb-0">(+1-876) 8654 239 581</p>
+                                                    <p class="mb-1 text-muted">Tempat Lahir</p>
+                                                    <p class="mb-0">{{ $list['show']->temp_lahir }}</p>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Country</p>
-                                                    <p class="mb-0">New York</p>
+                                                    <p class="mb-1 text-muted">Tanggal Lahir</p>
+                                                    <p class="mb-0">{{ \Carbon\Carbon::parse($list['show']->tgl_lahir)->isoFormat('D MMMM Y') }}</p>
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Email</p>
-                                                    <p class="mb-0"><a href="../cdn-cgi/l/email-protection.html"
-                                                            class="__cf_email__"
-                                                            data-cfemail="2f4e415c474e41014b47171e6f48424e4643014c4042">[email&#160;protected]</a>
-                                                    </p>
+                                                    <p class="mb-1 text-muted">Jenis Kelamin</p>
+                                                    <p class="mb-0">{{ $list['show']->jns_kelamin }}</p>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Zip Code</p>
-                                                    <p class="mb-0">956 754</p>
+                                                    <p class="mb-1 text-muted">Status Kawin</p>
+                                                    <p class="mb-0">{{ $list['show']->status_kawin }}</p>
                                                 </div>
                                             </div>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <p class="mb-1 text-muted">Alamat Lengkap Sesuai KTP</p>
+                                            <p class="mb-0">{{ $list['show']->alamat_ktp }}</p>
                                         </li>
                                         <li class="list-group-item px-0 pb-0">
-                                            <p class="mb-1 text-muted">Address</p>
-                                            <p class="mb-0">Street 110-B Kalians Bag, Dewan, M.P. New York</p>
+                                            <p class="mb-1 text-muted">Alamat Domisili</p>
+                                            <p class="mb-0">{{ $list['show']->alamat_dom?$list['show']->alamat_dom:'Sama dengan alamat pada KTP' }}</p>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card task-card">
                                 <div class="card-header">
-                                    <h5>Education</h5>
+                                    <h5>Data Pendidikan</h5>
                                 </div>
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush">
+                                <div class="card-body pb-3">
+                                    <ul class="list-unstyled task-list">
+                                        @if (!empty($list['show']->s3))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">S3 - {{ $list['show']->s3 }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s3 }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->s2))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">S2 - {{ $list['show']->s2 }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s2 }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->s1))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">S1 - {{ $list['show']->s1 }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s1 }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->d4))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">D4 - {{ $list['show']->d4 }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d4 }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->d3))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">D3 - {{ $list['show']->d3 }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d3 }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->d2))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">D2 - {{ $list['show']->d2 }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d2 }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->sma))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">{{ $list['show']->sma }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sma }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->smp))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">{{ $list['show']->smp }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_smp }}</p>
+                                        </li>
+                                        @endif
+                                        @if (!empty($list['show']->sd))
+                                        <li>
+                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                            <h5 class="text-muted">{{ $list['show']->sd }}</h5>
+                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sd }}</p>
+                                        </li>
+                                        @endif
+                                    </ul>
+                                    {{-- <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0 pt-0">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -345,54 +489,30 @@
                                                 </div>
                                             </div>
                                         </li>
-                                    </ul>
+                                    </ul> --}}
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Employment</h5>
+                                    <h5>Data Kesehatan</h5>
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0 pt-0">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Senior</p>
-                                                    <p class="mb-0">Senior UI/UX designer (Year)</p>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Job Responsibility</p>
-                                                    <p class="mb-0">Perform task related to project manager with
-                                                        the 100+ team under my observation. Team management is
-                                                        key role in this company.</p>
-                                                </div>
-                                            </div>
+                                            <p class="mb-1 text-muted">Riwayat Penyakit</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit }}</p>
                                         </li>
                                         <li class="list-group-item px-0">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Trainee cum Project Manager
-                                                        (Year)</p>
-                                                    <p class="mb-0">2017-2019</p>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Job Responsibility</p>
-                                                    <p class="mb-0">Team management is key role in this company.
-                                                    </p>
-                                                </div>
-                                            </div>
+                                            <p class="mb-1 text-muted">Riwayat Penyakit Keluarga</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit_keluarga }}</p>
+                                        </li>
+                                        <li class="list-group-item px-0">
+                                            <p class="mb-1 text-muted">Riwayat Penggunaan Obat</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_penggunaan_obat }}</p>
                                         </li>
                                         <li class="list-group-item px-0 pb-0">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">School (Year)</p>
-                                                    <p class="mb-0">2009-2011</p>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Institute</p>
-                                                    <p class="mb-0">School of London, England</p>
-                                                </div>
-                                            </div>
+                                            <p class="mb-1 text-muted">Riwayat Operasi</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_operasi }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -816,7 +936,7 @@
                                             <td><span class="badge bg-primary">Owner</span></td>
                                             <td class="text-end"><span class="badge bg-success">Joined</span>
                                             </td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -838,10 +958,10 @@
                                                 </div>
                                             </td>
                                             <td><span class="badge bg-light-info">Manager</span></td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="btn btn-link-danger">Resend</a> <span
                                                     class="badge bg-light-success">Invited</span></td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -865,7 +985,7 @@
                                             <td><span class="badge bg-light-warning">Staff</span></td>
                                             <td class="text-end"><span class="badge bg-success">Joined</span>
                                             </td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -889,7 +1009,7 @@
                                             <td><span class="badge bg-primary">Owner</span></td>
                                             <td class="text-end"><span class="badge bg-success">Joined</span>
                                             </td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -911,10 +1031,10 @@
                                                 </div>
                                             </td>
                                             <td><span class="badge bg-light-info">Manager</span></td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="btn btn-link-danger">Resend</a> <span
                                                     class="badge bg-light-success">Invited</span></td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -938,7 +1058,7 @@
                                             <td><span class="badge bg-light-warning">Staff</span></td>
                                             <td class="text-end"><span class="badge bg-success">Joined</span>
                                             </td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -962,7 +1082,7 @@
                                             <td><span class="badge bg-primary">Owner</span></td>
                                             <td class="text-end"><span class="badge bg-success">Joined</span>
                                             </td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -984,10 +1104,10 @@
                                                 </div>
                                             </td>
                                             <td><span class="badge bg-light-info">Manager</span></td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="btn btn-link-danger">Resend</a> <span
                                                     class="badge bg-light-success">Invited</span></td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
@@ -1011,7 +1131,7 @@
                                             <td><span class="badge bg-light-warning">Staff</span></td>
                                             <td class="text-end"><span class="badge bg-success">Joined</span>
                                             </td>
-                                            <td class="text-end"><a href="#"
+                                            <td class="text-end"><a href="javascript:void(0);"
                                                     class="avtar avtar-s btn-link-secondary"><i
                                                         class="ti ti-dots f-18"></i></a></td>
                                         </tr>
