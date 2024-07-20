@@ -26,13 +26,13 @@
                     <ul class="nav nav-tabs profile-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="profile-tab-1" data-bs-toggle="tab"
-                                href="#profile-1" role="tab" aria-selected="true">
+                                href="#profil-pengguna" role="tab" aria-selected="true">
                                 <i class="ti ti-user me-2"></i>Profil Pengguna
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-2" data-bs-toggle="tab"
-                                href="#profile-2" role="tab" aria-selected="true">
+                                href="#ubah-profil" role="tab" aria-selected="true">
                                 <i class="ti ti-file-text me-2"></i>Ubah Profil
                             </a>
                         </li>
@@ -44,7 +44,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
-                                href="#profile-4" role="tab" aria-selected="true">
+                                href="#ubah-password" role="tab" aria-selected="true">
                                 <i class="ti ti-lock me-2"></i>Ubah Password
                             </a>
                         </li>
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="tab-content">
-                <div class="tab-pane show active" id="profile-1" role="tabpanel"
+                <div class="tab-pane show active" id="profil-pengguna" role="tabpanel"
                     aria-labelledby="profile-tab-1">
                     <div class="row">
                         <div class="col-lg-4 col-xxl-3">
@@ -81,7 +81,12 @@
                                                     <img class="img-fluid avatar-sm rounded-circle img-thumbnail" alt="" src="{{ asset('images/pku/user.png') }}" width="75">
                                                 </a> --}}
                                             @else
-                                                <img class="rounded-circle img-fluid" src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" alt="User image" style="height: 100px;width: auto">
+                                                <a href="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" data-toggle="lightbox" class="img-post" data-caption="Nama file foto : {{ $list['foto']->title }}">
+                                                    <img class="rounded-circle img-fluid card-img" src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" alt="User image" style="height: 100px;width: auto">
+                                                    <div class="card-img-overlay">
+                                                        <i class="ti ti-eye"></i>
+                                                    </div>
+                                                </a>
                                                 {{-- <a class="image-popup-no-margins" href="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Tekan untuk memperbesar foto profil">
                                                     <img class="img-fluid avatar-sm rounded-circle img-thumbnail" alt="" src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" width="75">
                                                 </a> --}}
@@ -114,7 +119,7 @@
                                         <div
                                             class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-id-card-alt me-3"></i>
-                                            <p class="mb-0">{{ $list['show']->nip }}</p>
+                                            <p class="mb-0">{{ $list['show']->nip?$list['show']->nip:'-' }}</p>
                                         </div>
                                         <div
                                             class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
@@ -326,7 +331,7 @@
                                     <h5>Tentang Saya</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="mb-0">{{ $list['show']->pengalaman_kerja }}</p>
+                                    <p class="mb-0">{{ $list['show']->pengalaman_kerja?$list['show']->pengalaman_kerja:'-' }}</p>
                                 </div>
                             </div>
                             <div class="card">
@@ -520,7 +525,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="profile-2" role="tabpanel" aria-labelledby="profile-tab-2">
+                <div class="tab-pane" id="ubah-profil" role="tabpanel" aria-labelledby="profile-tab-2">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card">
@@ -837,51 +842,79 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 text-end"><button class="btn btn-outline-dark ms-2">Clear</button>
-                            <button class="btn btn-primary">Update Profile</button></div>
+                        <div class="col-12 text-end"><button class="btn btn-outline-dark ms-2">Bersihkan</button>
+                            <button class="btn btn-primary">Perbarui</button></div>
                     </div>
                 </div>
-                <div class="tab-pane" id="profile-4" role="tabpanel" aria-labelledby="profile-tab-4">
+                <div class="tab-pane" id="ubah-password" role="tabpanel" aria-labelledby="profile-tab-4">
                     <div class="card">
-                        <div class="card-header">
-                            <h5>Change Password</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3"><label class="form-label">Old Password</label> <input
-                                            type="password" class="form-control"></div>
-                                    <div class="mb-3"><label class="form-label">New Password</label> <input
-                                            type="password" class="form-control"></div>
-                                    <div class="mb-3"><label class="form-label">Confirm Password</label> <input
-                                            type="password" class="form-control"></div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h5>New password must contain:</h5>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item"><i
-                                                class="ti ti-circle-check text-success f-16 me-2"></i> At least
-                                            8 characters</li>
-                                        <li class="list-group-item"><i
-                                                class="ti ti-circle-check text-success f-16 me-2"></i> At least
-                                            1 lower letter (a-z)</li>
-                                        <li class="list-group-item"><i
-                                                class="ti ti-circle-check text-success f-16 me-2"></i> At least
-                                            1 uppercase letter(A-Z)</li>
-                                        <li class="list-group-item"><i
-                                                class="ti ti-circle-check text-success f-16 me-2"></i> At least
-                                            1 number (0-9)</li>
-                                        <li class="list-group-item"><i
-                                                class="ti ti-circle-check text-success f-16 me-2"></i> At least
-                                            1 special characters</li>
-                                    </ul>
+                        <form action="{{ route('auth.change_password') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PATCH')
+                            <div class="card-header">
+                                <h5>Ubah Password</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="alert alert-light" role="alert">
+                                            <h5 class="alert-heading fw-bold mb-3">Keamanan Password</h5>
+                                            <span>
+                                                <ul>
+                                                    <li class="mb-2">Jangan berikan <strong>Password</strong> anda kepada orang lain</li>
+                                                    <li class="mb-2">Password akan diproses melalui metode <i>Bcrypt Hash Password</i> oleh sistem</li>
+                                                    <li>Apabila anda lupa Password akun Simrsmu, silakan masuk ke laman <b>Lupa Password</b>
+                                                        pada halaman Login</li>
+                                                </ul>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Password Lama <a class="text-danger">*</a></label>
+                                            <input type="password" class="form-control" id="oldPassword" name="current_password"
+                                            placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" required>
+                                            {{-- <div class="valid-feedback">
+                                                Looks good!
+                                            </div> --}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Password Baru <a class="text-danger">*</a></label>
+                                            <input type="password" class="form-control is-invalid" id="newPassword" name="new_password"
+                                            placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Konfirmasi Password Baru <a class="text-danger">*</a></label>
+                                            <input type="password" class="form-control is-invalid" id="confirmPassword" name="new_password_confirmation"
+                                            placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5>Password harus memenuhi kriteria</h5>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item requirements">
+                                                <i class="ti ti-circle-check text-danger f-16 me-2 leng"></i> Melebihi lebih 8 karakter
+                                            </li>
+                                            {{-- <li class="list-group-item requirements">
+                                                <i class="ti ti-circle-check text-success f-16 me-2"></i> At least 1 lower letter (a-z)
+                                            </li> --}}
+                                            <li class="list-group-item requirements">
+                                                <i class="ti ti-circle-check text-danger f-16 me-2 big-letter"></i> Minimal 1 Huruf Kapital (A-Z)
+                                            </li>
+                                            <li class="list-group-item requirements">
+                                                <i class="ti ti-circle-check text-danger f-16 me-2 num"></i> Minimal 1 Angka (0-9)
+                                            </li>
+                                            <li class="list-group-item requirements">
+                                                <i class="ti ti-circle-check text-danger f-16 me-2 special-char"></i> Minimal 1 Karakter Khusus (!@#$%^&*)
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-footer text-end btn-page">
-                            <div class="btn btn-outline-secondary">Cancel</div>
-                            <div class="btn btn-primary">Update Profile</div>
-                        </div>
+                            <div class="card-footer text-end btn-page pb-0 pt-3 pe-2">
+                                {{-- <div class="btn btn-outline-secondary">Cancel</div> --}}
+                                <button class="btn btn-secondary" type="submit" value="Submit" id="btn-submit-password" disabled><i class="ti ti-rocket"></i>&nbsp;&nbsp;Perbarui</button>
+                            </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="profile-5" role="tabpanel" aria-labelledby="profile-tab-5">
@@ -1294,4 +1327,91 @@
             </div>
         </div><!-- [ sample-page ] end -->
     </div><!-- [ Main Content ] end -->
+
+    <script>
+        addEventListener("DOMContentLoaded", (event) => {
+            const password = document.getElementById("newPassword");
+            const cpassword = document.getElementById("confirmPassword");
+            const leng = $(".leng");
+            const bigLetter = $(".big-letter");
+            const num = $(".num");
+            const specialChar = $(".special-char");
+
+            password.addEventListener("input", () => {
+                const value = password.value;
+                const isLengthValid = value.length >= 8;
+                const hasUpperCase = /[A-Z]/.test(value);
+                const hasNumber = /\d/.test(value);
+                const hasSpecialChar = /[!@#$%^&*()\[\]{}\\|;:'",<.>/?`~]/.test(value);
+
+                // RESET INPUT KONFIRMASI PASSWORD
+                cpassword.value = '';
+                $('#btn-submit-password').prop('disabled', true);
+                $('#btn-submit-password').removeClass("btn-primary");
+                $('#btn-submit-password').addClass("btn-secondary");
+                cpassword.classList.remove("is-valid");
+                cpassword.classList.add("is-invalid");
+
+                const isPasswordValid = isLengthValid && hasUpperCase && hasNumber && hasSpecialChar;
+
+                // PANJANG MINIMAL 8 KARAKTER
+                if (isLengthValid == true) {
+                    leng.removeClass('ti-circle-x text-danger');
+                    leng.addClass('ti-circle-check text-success');
+                } else {
+                    leng.removeClass('ti-circle-check text-success');
+                    leng.addClass('ti-circle-x text-danger');
+                }
+                // MINIMAL 1 HURUF BESAR
+                if (hasUpperCase == true) {
+                    bigLetter.removeClass('ti-circle-x text-danger');
+                    bigLetter.addClass('ti-circle-check text-success');
+                } else {
+                    bigLetter.removeClass('ti-circle-check text-success');
+                    bigLetter.addClass('ti-circle-x text-danger');
+                }
+                // MINIMAL 1 ANGKA
+                if (hasNumber == true) {
+                    num.removeClass('ti-circle-x text-danger');
+                    num.addClass('ti-circle-check text-success');
+                } else {
+                    num.removeClass('ti-circle-check text-success');
+                    num.addClass('ti-circle-x text-danger');
+                }
+                // MINIMAL 1 KARAKTER KHUSUS
+                if (hasSpecialChar == true) {
+                    specialChar.removeClass('ti-circle-x text-danger');
+                    specialChar.addClass('ti-circle-check text-success');
+                } else {
+                    specialChar.removeClass('ti-circle-check text-success');
+                    specialChar.addClass('ti-circle-x text-danger');
+                }
+
+                // CEKLIS INPUT
+                if (isPasswordValid) {
+                    password.classList.remove("is-invalid");
+                    password.classList.add("is-valid");
+                } else {
+                    password.classList.remove("is-valid");
+                    password.classList.add("is-invalid");
+                }
+            });
+
+            cpassword.addEventListener("input", () => {
+                if (password.value == cpassword.value) {
+                    $('#btn-submit-password').prop('disabled', false);
+                    $('#btn-submit-password').removeClass("btn-secondary");
+                    $('#btn-submit-password').addClass("btn-primary");
+                    cpassword.classList.remove("is-invalid");
+                    cpassword.classList.add("is-valid");
+                } else {
+                    $('#btn-submit-password').prop('disabled', true);
+                    $('#btn-submit-password').removeClass("btn-primary");
+                    $('#btn-submit-password').addClass("btn-secondary");
+                    cpassword.classList.remove("is-valid");
+                    cpassword.classList.add("is-invalid");
+                }
+            });
+        });
+        </script>
 @endsection

@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{{ asset('fonts/material.css') }}"><!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('css/style-preset.css') }}">
+    <!-- Initialize js -->
+    <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
 </head><!-- [Head] end --><!-- [Body] Start -->
 
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
@@ -56,12 +58,36 @@
     <script src="{{ asset('js/fonts/custom-font.js') }}"></script>
     <script src="{{ asset('js/pcoded.js') }}"></script>
     <script src="{{ asset('js/plugins/feather.min.js') }}"></script>
+    <script src="{{ asset('js/lightbox-bootstrap5.bundle.min.js') }}"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script> --}}
     {{-- <script>layout_change('light');</script>
     <script>change_box_container('false');</script>
     <script>layout_caption_change('true');</script>
     <script>layout_rtl_change('false');</script>
     <script>preset_change('preset-1');</script>
     <script>main_layout_change('vertical');</script> --}}
+
+    {{-- <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+            })
+        })()
+    </script> --}}
 </body>
 
 </html>
