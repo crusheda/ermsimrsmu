@@ -53,6 +53,8 @@ class ProfilController extends Controller
         $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
         $showlog = logs::where('user_id', $id)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
+        $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
+        $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
 
         $data = [
             'id_user' => $id,
@@ -61,6 +63,8 @@ class ProfilController extends Controller
             'show' => $show,
             'foto' => $foto,
             'role' => $role,
+            'provinsi' => $provinsi,
+            'kota' => $kota,
         ];
 
         return view('pages.setting.profil.index2')->with('list', $data);

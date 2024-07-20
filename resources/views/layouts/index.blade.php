@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="{{ asset('fonts/material.css') }}"><!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('css/style-preset.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/uikit.css') }}">
+    {{-- PLUGIN CSS --}}
+    <link href="{{ asset('css/plugins/animate.min.css') }}" rel="stylesheet" type="text/css">
     <!-- Initialize js -->
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
 </head><!-- [Head] end --><!-- [Body] Start -->
@@ -58,7 +61,14 @@
     <script src="{{ asset('js/fonts/custom-font.js') }}"></script>
     <script src="{{ asset('js/pcoded.js') }}"></script>
     <script src="{{ asset('js/plugins/feather.min.js') }}"></script>
+
+    {{-- PLUGIN JS --}}
     <script src="{{ asset('js/lightbox-bootstrap5.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/highlight.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/clipboard.min.js') }}"></script>
+    <script src="{{ asset('js/component.js') }}"></script>
+
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltip.js/1.3.1/tooltip.min.js"></script> --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script> --}}
     {{-- <script>layout_change('light');</script>
     <script>change_box_container('false');</script>
@@ -67,7 +77,7 @@
     <script>preset_change('preset-1');</script>
     <script>main_layout_change('vertical');</script> --}}
 
-    {{-- <script>
+    <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function () {
         'use strict'
@@ -87,7 +97,7 @@
             }, false)
             })
         })()
-    </script> --}}
+    </script>
 </body>
 
 </html>

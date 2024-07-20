@@ -38,8 +38,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-3" data-bs-toggle="tab"
-                                href="#profile-3" role="tab" aria-selected="true">
-                                <i class="ti ti-id me-2"></i><s>My Account</s>
+                                href="#ubah-foto-profil" role="tab" aria-selected="true">
+                                <i class="ti ti-id me-2"></i>Ubah Foto Profil
                             </a>
                         </li>
                         <li class="nav-item">
@@ -48,7 +48,7 @@
                                 <i class="ti ti-lock me-2"></i>Ubah Password
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
                                 href="#profile-5" role="tab" aria-selected="true">
                                 <i class="ti ti-users me-2"></i><s>Role</s>
@@ -59,7 +59,7 @@
                                 href="#profile-6" role="tab" aria-selected="true">
                                 <i class="ti ti-settings me-2"></i><s>Settings</s>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                                                         <i class="fab fa-facebook-f f-16"></i>
                                                     </div>
                                                 </div>
-                                                <div class="flex-grow-1">
+                                                <div class="flex-grow-1 ms-4 text-start">
                                                     <h6 class="mb-0">Facebook / <mark>{{ $list['show']->fb }}</mark></h6>
                                                 </div>
                                             </div>
@@ -168,7 +168,7 @@
                                                         <i class="fab fa-instagram f-16"></i>
                                                     </div>
                                                 </div>
-                                                <div class="flex-grow-1">
+                                                <div class="flex-grow-1 ms-4 text-start">
                                                     <h6 class="mb-0">Instagram / <mark>{{ $list['show']->ig }}</mark></h6>
                                                 </div>
                                             </div>
@@ -182,148 +182,14 @@
                                                         <i class="fab fa-youtube f-16"></i>
                                                     </div>
                                                 </div>
-                                                <div class="flex-grow-1">
+                                                <div class="flex-grow-1 ms-4 text-start">
                                                     <h6 class="mb-0">Youtube / <mark>rspkusukoharjo</mark></h6>
                                                 </div>
                                             </div>
                                         </a>
                                     </div>
-                                    {{-- <div class="d-flex align-items-center mb-3">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-xs btn-light-facebook"><i
-                                                    class="fab fa-facebook-f f-16"></i></div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-0">Facebook</h6>
-                                        </div>
-                                        <div class="flex-grow-0 ms-3">
-                                            <h6 class="mb-0"><small class="text-muted f-w-400">@ {{ $list['show']->fb }}</small>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <div class="avtar avtar-xs btn-light-instagram"><i
-                                                    class="fab fa-instagram f-16"></i></div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-0">Instagram</h6>
-                                        </div>
-                                        <div class="flex-grow-0 ms-3">
-                                            <h6 class="mb-0"><small class="text-muted f-w-400">@ {{ $list['show']->ig }}</small></h6>
-                                        </div>
-                                    </div> --}}
                                 </div>
                             </div>
-                            {{-- <div class="card">
-                                <div class="card-header">
-                                    <h5>Skills</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row align-items-center mb-3">
-                                        <div class="col-sm-6 mb-2 mb-sm-0">
-                                            <p class="mb-0">Junior</p>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 me-3">
-                                                    <div class="progress progress-primary" style="height: 6px">
-                                                        <div class="progress-bar" style="width: 30%"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <p class="mb-0 text-muted">30%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mb-3">
-                                        <div class="col-sm-6 mb-2 mb-sm-0">
-                                            <p class="mb-0">UX Researcher</p>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 me-3">
-                                                    <div class="progress progress-primary" style="height: 6px">
-                                                        <div class="progress-bar" style="width: 80%"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <p class="mb-0 text-muted">80%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mb-3">
-                                        <div class="col-sm-6 mb-2 mb-sm-0">
-                                            <p class="mb-0">Wordpress</p>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 me-3">
-                                                    <div class="progress progress-primary" style="height: 6px">
-                                                        <div class="progress-bar" style="width: 90%"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <p class="mb-0 text-muted">90%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mb-3">
-                                        <div class="col-sm-6 mb-2 mb-sm-0">
-                                            <p class="mb-0">HTML</p>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 me-3">
-                                                    <div class="progress progress-primary" style="height: 6px">
-                                                        <div class="progress-bar" style="width: 30%"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <p class="mb-0 text-muted">30%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mb-3">
-                                        <div class="col-sm-6 mb-2 mb-sm-0">
-                                            <p class="mb-0">Graphic Design</p>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 me-3">
-                                                    <div class="progress progress-primary" style="height: 6px">
-                                                        <div class="progress-bar" style="width: 95%"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <p class="mb-0 text-muted">95%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-6 mb-2 mb-sm-0">
-                                            <p class="mb-0">Code Style</p>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 me-3">
-                                                    <div class="progress progress-primary" style="height: 6px">
-                                                        <div class="progress-bar" style="width: 75%"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <p class="mb-0 text-muted">75%</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
                         </div>
                         <div class="col-lg-8 col-xxl-9">
                             <div class="card">
@@ -457,44 +323,6 @@
                                         </li>
                                         @endif
                                     </ul>
-                                    {{-- <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0 pt-0">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Master Degree (Year)</p>
-                                                    <p class="mb-0">2014-2017</p>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Institute</p>
-                                                    <p class="mb-0">-</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Bachelor (Year)</p>
-                                                    <p class="mb-0">2011-2013</p>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Institute</p>
-                                                    <p class="mb-0">Imperial College London</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-0 pb-0">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">School (Year)</p>
-                                                    <p class="mb-0">2009-2011</p>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <p class="mb-1 text-muted">Institute</p>
-                                                    <p class="mb-0">School of London, England</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul> --}}
                                 </div>
                             </div>
                             <div class="card">
@@ -525,166 +353,468 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- FORM UBAH PROFIL --}}
                 <div class="tab-pane" id="ubah-profil" role="tabpanel" aria-labelledby="profile-tab-2">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Personal Information</h5>
+                    <form id="formUpdate" class="form-auth-small needs-validation" action="{{ route('profil.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+                        @csrf
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Deskripsi Pengalaman Kerja</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <textarea class="form-control" name="pengalaman_kerja" placeholder="e.g. Saya pernah bekerja pada suatu instansi swasta ternama yang bertempat di Kota X dan berprofesi sebagai X.... Saya memiliki kemampuan yang luas biasa..."><?php echo htmlspecialchars($list['show']->pengalaman_kerja); ?></textarea>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-sm-12 text-center mb-3">
-                                            <div class="user-upload wid-75"><img
-                                                    src="../assets/images/user/avatar-4.jpg" alt="img"
-                                                    class="img-fluid"> <label for="uplfile"
-                                                    class="img-avtar-upload"><i
-                                                        class="ti ti-camera f-24 mb-1"></i>
-                                                    <span>Upload</span></label> <input type="file" id="uplfile"
-                                                    class="d-none"></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">First Name</label>
-                                                <input type="text" class="form-control" value="Anshan"></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Last Name</label> <input
-                                                    type="text" class="form-control" value="Handgun"></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Country</label> <input
-                                                    type="text" class="form-control" value="New York"></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Zip code</label> <input
-                                                    type="text" class="form-control" value="956754"></div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <div class="mb-3"><label class="form-label">Bio</label> <textarea
-                                                    class="form-control">Hello, I’m Anshan Handgun Creative Graphic Designer & User Experience Designer based in Website, I create digital Products a more Beautiful and usable place. Morbid accusant ipsum. Nam nec tellus at.</textarea>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Data Sensitif</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nomor Induk Pegawai (NIP) <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" value="{{ $list['show']->nip }}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div class="">
+                                                    <label class="form-label">Nomor Induk Kependudukan (NIK) <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" name="nik" value="{{ $list['show']->nik }}" minlength="16" maxlength="16" placeholder="Isi dengan kombinasi Angka" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email Aktif <span class="text-danger">*</span></label>
+                                                    <input type="email" class="form-control" name="email" value="{{ $list['show']->email }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <div class="mb-3">
+                                                    <label class="form-label">No. HP Aktif (Whatsapp) <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control telphone_with_code" name="no_hp" value="{{ $list['show']->no_hp }}" maxlength="13" placeholder="628**********" data-mask="(62) 9999-9999-9999">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
-                                            <div class="mb-3"><label class="form-label">Experience</label>
-                                                <select class="form-control">
-                                                    <option>Startup</option>
-                                                    <option>2 year</option>
-                                                    <option>3 year</option>
-                                                    <option selected="selected">4 year</option>
-                                                    <option>5 year</option>
-                                                </select></div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Data Diri</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            {{-- <div class="col-sm-12 text-center mb-3">
+                                                <div class="user-upload wid-75"><img
+                                                        src="../assets/images/user/avatar-4.jpg" alt="img"
+                                                        class="img-fluid"> <label for="uplfile"
+                                                        class="img-avtar-upload"><i
+                                                            class="ti ti-camera f-24 mb-1"></i>
+                                                        <span>Upload</span></label> <input type="file" id="uplfile"
+                                                        class="d-none"></div>
+                                            </div> --}}
+                                            <div class="col-sm-8">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nama Lengkap, <mark><i>Beserta Gelar</i></mark> <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="nama" value="{{ $list['show']->nama }}"
+                                    placeholder="e.g. Sunaryo, S.Kep" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nama Panggilan <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="nick" value="{{ $list['show']->nick }}"
+                                    placeholder="e.g. Soenaryo" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tempat Lahir <span class="text-danger">*</span></label>
+                                                    <select class="select2 form-control" id="temp_lahir" name="temp_lahir" required>
+                                                        @foreach ($list['kota'] as $item)
+                                                            <option value="{{ $item->nama_kabkota }}"
+                                                                @if ($list['show']->temp_lahir == $item->nama_kabkota) selected @endif>{{ $item->nama_kabkota }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tanggal Lahir <span class="text-danger">*</span></label>
+                                                    <input type="date" class="form-control" name="tgl_lahir"
+                                                        value="{{ $list['show']->tgl_lahir }}" placeholder="YYYY-MM-DD" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
+                                                    <select class="select2 form-control" id="jns_kelamin" name="jns_kelamin" required>
+                                                        <option value="LAKI-LAKI" @if ($list['show']->jns_kelamin == 'LAKI-LAKI') echo selected @endif>
+                                                            Laki-laki</option>
+                                                        <option value="PEREMPUAN" @if ($list['show']->jns_kelamin == 'PEREMPUAN') echo selected @endif>
+                                                            Perempuan</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="">
+                                                    <label class="form-label">Status Kawin <span class="text-danger">*</span></label>
+                                                    <select class="select2 form-control" name="status_kawin" required>
+                                                        <option value="BELUM" @if ($list['show']->status_kawin == 'BELUM') echo selected @endif>Belum
+                                                        </option>
+                                                        <option value="SUDAH" @if ($list['show']->status_kawin == 'SUDAH') echo selected @endif>Sudah
+                                                        </option>
+                                                        <option value="CERAI" @if ($list['show']->status_kawin == 'CERAI') echo selected @endif>Cerai
+                                                        </option>
+                                                        <option value="RAHASIA" @if ($list['show']->status_kawin == 'RAHASIA') echo selected @endif>Tidak
+                                                            ingin memberi tahu</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Alamat Sesuai KTP</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-light">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                @if (!empty($list['show']->alamat_dom)) value="1" @else value="0" checked @endif
+                                                name="cek_dom" id="checkbox_alamat">
+                                                <label class="form-check-label" for="checkbox_alamat"><u><b>Alamat Domisili sama dengan KTP</b></u></label>
+                                            </div>
+                                            <small>Hilangkan centang untuk menampilkan Pilihan Domisili</small>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Provinsi <span class="text-danger">*</span></label>
+                                                    <select class="select2 form-control" name="ktp_provinsi" id="apiprovinsi"
+                                                        style="width: 100%" required>
+                                                        @foreach ($list['provinsi'] as $item)
+                                                            <option value="{{ $item->provinsi }}"
+                                                                @if ($item->provinsi == $list['show']->ktp_provinsi) echo selected @endif>{{ $item->provinsi }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kabupaten <span class="text-danger">*</span></label>
+                                                    <select class="select2 form-control" name="ktp_kabupaten" id="apikota" style="width: 100%"
+                                                        disabled required>
+                                                        @if (!empty($list['show']->ktp_kabupaten))
+                                                            <option value="{{ $list['show']->ktp_kabupaten }}">
+                                                                {{ $list['show']->ktp_kabupaten }}</option>
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kecamatan <span class="text-danger">*</span></label>
+                                                    <select class="select2 form-control" name="ktp_kecamatan" id="apikecamatan"
+                                                        style="width: 100%" disabled required>
+                                                        @if (!empty($list['show']->ktp_kecamatan))
+                                                            <option value="{{ $list['show']->ktp_kecamatan }}">
+                                                                {{ $list['show']->ktp_kecamatan }}</option>
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kelurahan / Desa <span class="text-danger">*</span></label>
+                                                    <select class="select2 form-control" name="ktp_kelurahan" id="apidesa"
+                                                        style="width: 100%" disabled required>
+                                                        @if (!empty($list['show']->ktp_kelurahan))
+                                                            <option value="{{ $list['show']->ktp_kelurahan }}">
+                                                                {{ $list['show']->ktp_kelurahan }}</option>
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="">
+                                                    <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" name="alamat_ktp" required placeholder="Tuliskan alamat lengkap sesuai KTP Anda"><?php echo htmlspecialchars($list['show']->alamat_ktp); ?></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card" id="hidedom" @if (empty($list['show']->alamat_dom)) style="display: none" @endif>
+                                    <div class="card-header">
+                                        <h5>Alamat Domisli (Bila Ada)</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Provinsi</label>
+                                                    <select class="select2 form-control" name="dom_provinsi" id="apiprovinsidom"
+                                                        style="width: 100%">
+                                                        @foreach ($list['provinsi'] as $item)
+                                                            <option value="{{ $item->provinsi }}"
+                                                                @if ($item->provinsi == $list['show']->dom_provinsi) echo selected @endif>
+                                                                {{ $item->provinsi }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kabupaten</label>
+                                                    <select class="select2 form-control" name="dom_kabupaten" id="apikotadom"
+                                                        style="width: 100%" disabled>
+                                                        @if (!empty($list['show']->dom_kabupaten))
+                                                            <option value="{{ $list['show']->dom_kabupaten }}">
+                                                                {{ $list['show']->dom_kabupaten }}</option>
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kecamatan</label>
+                                                    <select class="select2 form-control" name="dom_kecamatan" id="apikecamatandom"
+                                                        style="width: 100%" disabled>
+                                                        @if (!empty($list['show']->dom_kecamatan))
+                                                            <option value="{{ $list['show']->dom_kecamatan }}">
+                                                                {{ $list['show']->dom_kecamatan }}</option>
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kelurahan</label>
+                                                    <select class="select2 form-control" name="dom_kelurahan" id="apidesadom"
+                                                        style="width: 100%" disabled>
+                                                        @if (!empty($list['show']->dom_kelurahan))
+                                                            <option value="{{ $list['show']->dom_kelurahan }}">
+                                                                {{ $list['show']->dom_kelurahan }}</option>
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="">
+                                                    <label class="form-label">Alamat Lengkap</label>
+                                                    <textarea class="form-control" name="alamat_dom" id="apialamatdom" placeholder="Tuliskan alamat lengkap domisili Anda"><?php echo htmlspecialchars($list['show']->alamat_dom); ?></textarea>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Social Network</h5>
+                            <div class="col-lg-5">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Media Sosial</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="input-group mb-3">
+                                            <div class="d-flex align-items-center input-group-text">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-facebook">
+                                                        <i class="fab fa-facebook-f f-16"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-0">Facebook /</h6>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control" name="fb" value="{{ $list['show']->fb }}" placeholder="Tuliskan Username Facebook Anda">
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="d-flex align-items-center input-group-text">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-instagram">
+                                                        <i class="fab fa-instagram f-16"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-0">Instagram /</h6>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control" name="ig" value="{{ $list['show']->ig }}" placeholder="Tuliskan Username Instagram Anda">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="flex-grow-1 me-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <div class="avtar avtar-xs btn-light-twitter"><i
-                                                            class="fab fa-twitter f-16"></i></div>
-                                                </div>
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h6 class="mb-0">Twitter</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-shrink-0"><button
-                                                class="btn btn-link-primary">Connect</button></div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Data Pendidikan</h5>
                                     </div>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="flex-grow-1 me-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <div class="avtar avtar-xs btn-light-facebook"><i
-                                                            class="fab fa-facebook-f f-16"></i></div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="alert alert-light">
+                                                    <h6>Keterangan Pengisian</h6>
+                                                    <i class="ti ti-arrow-narrow-right text-primary"></i> Kolom pertama adalah nama sekolah/universitas<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary"></i> Kolom kedua adalah tahun lulus sesuai ijazah
                                                 </div>
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h6 class="mb-0">Facebook <small
-                                                            class="text-muted f-w-400">/Anshan Handgun</small>
-                                                    </h6>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sekolah Dasar (SD) atau sederajat</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="sd" value="{{ $list['show']->sd }}" placeholder="Nama Sekolah">
+                                                        <input type="number" class="form-control" name="th_sd" value="{{ $list['show']->th_sd }}" placeholder="Tahun Lulus" maxlength="4">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">SMP/SLTP atau sederajat</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="smp" value="{{ $list['show']->smp }}" placeholder="Nama Sekolah">
+                                                        <input type="number" class="form-control" name="th_smp" value="{{ $list['show']->th_smp }}" placeholder="Tahun Lulus">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">SMA/SMK atau sederajat</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="sma" value="{{ $list['show']->sma }}" placeholder="Nama Sekolah">
+                                                        <input type="number" class="form-control" name="th_sma" value="{{ $list['show']->th_sma }}" placeholder="Tahun Lulus">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Diploma 2</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="d2" value="{{ $list['show']->d2 }}" placeholder="Nama Universitas">
+                                                        <input type="number" class="form-control" name="th_d2" value="{{ $list['show']->th_d2 }}" placeholder ="Tahun Lulus">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Diploma 3</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="d3" value="{{ $list['show']->d3 }}" placeholder="Nama Universitas">
+                                                        <input type="number" class="form-control" name="th_d3" value="{{ $list['show']->th_d3 }}" placeholder ="Tahun Lulus">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Diploma 4</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="d4" value="{{ $list['show']->d4 }}" placeholder="Nama Universitas">
+                                                        <input type="number" class="form-control" name="th_d4" value="{{ $list['show']->th_d4 }}" placeholder ="Tahun Lulus">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sarjana 1</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="s1" value="{{ $list['show']->s1 }}" placeholder="Nama Universitas">
+                                                        <input type="number" class="form-control" name="th_s1" value="{{ $list['show']->th_s1 }}" placeholder ="Tahun Lulus">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sarjana 1 <b>Khusus Profesi</b></label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="s1_profesi" value="" placeholder="Nama Universitas" disabled>
+                                                        <input type="number" class="form-control" name="th_s1_profesi" value="" placeholder ="Tahun Lulus" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sarjana 2</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" name="s2" value="{{ $list['show']->s2 }}" placeholder="Nama Universitas">
+                                                        <input type="number" class="form-control" name="th_s2" value="{{ $list['show']->th_s2 }}" placeholder ="Tahun Lulus">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="">
+                                                    <label class="form-label">Sarjana 3</label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="s3" value="{{ $list['show']->s3 }}" placeholder="Nama Universitas">
+                                                        <input type="number" class="form-control" name="th_s3" value="{{ $list['show']->th_s3 }}" placeholder="Tahun Lulus">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="flex-shrink-0"><button
-                                                class="btn btn-link-danger">Remove</button></div>
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 me-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <div class="avtar avtar-xs btn-light-linkedin"><i
-                                                            class="fab fa-linkedin-in f-16"></i></div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Data Kesehatan</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Riwayat Penyakit</label>
+                                                    <textarea name="riwayat_penyakit" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_penyakit); ?></textarea>
                                                 </div>
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h6 class="mb-0">Linkedin</h6>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Riwayat Penyakit Keluarga</label>
+                                                    <textarea name="riwayat_penyakit_keluarga" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_penyakit_keluarga); ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Riwayat Operasi</label>
+                                                    <textarea name="riwayat_operasi" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_operasi); ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="">
+                                                    <label class="form-label">Riwayat Penggunaan Obat</label>
+                                                    <textarea name="riwayat_penggunaan_obat" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_penggunaan_obat); ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="flex-shrink-0"><button
-                                                class="btn btn-link-primary">Connect</button></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Contact Information</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Contact Phone</label>
-                                                <input type="text" class="form-control"
-                                                    value="(+99) 9999 999 999"></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Email <span
-                                                        class="text-danger">*</span></label> <input type="text"
-                                                    class="form-control" value="demo@sample.com"></div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <div class="mb-3"><label class="form-label">Portfolio Url</label>
-                                                <input type="text" class="form-control"
-                                                    value="https://demo.com/"></div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <div class="mb-3"><label class="form-label">Address</label>
-                                                <textarea
-                                                    class="form-control">3379  Monroe Avenue, Fort Myers, Florida(33912)</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-12 text-end btn-page">
+                                <button type="submit" class="btn btn-primary" id="btn-submit-profil"><i class="ti ti-rocket"></i>&nbsp;&nbsp;Perbarui</button>
                             </div>
                         </div>
-                        <div class="col-12 text-end btn-page">
-                            <div class="btn btn-outline-secondary">Cancel</div>
-                            <div class="btn btn-primary">Update Profile</div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="tab-pane" id="profile-3" role="tabpanel" aria-labelledby="profile-tab-3">
+
+                {{-- UBAH FOTO PROFIL --}}
+                <div class="tab-pane" id="ubah-foto-profil" role="tabpanel" aria-labelledby="ubah-foto-profil-tab-3">
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>General Settings</h5>
+                                    <h5>Ubah Foto Profil</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Username <span
-                                                        class="text-danger">*</span></label> <input type="text"
-                                                    class="form-control" value="Ashoka_Tano_16"> <small
-                                                    class="form-text text-muted">Your Profile URL:
-                                                    https://pc.com/Ashoka_Tano_16</small></div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Username <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" value="Ashoka_Tano_16">
+                                                <small class="form-text text-muted">Your Profile URL: https://pc.com/Ashoka_Tano_16</small>
+                                            </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="mb-3"><label class="form-label">Account Email <span
@@ -715,137 +845,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Advance Settings</h5>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0 pt-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div>
-                                                    <p class="mb-1">Secure Browsing</p>
-                                                    <p class="text-muted text-sm mb-0">Browsing Securely ( https
-                                                        ) when it's necessary</p>
-                                                </div>
-                                                <div class="form-check form-switch p-0"><input
-                                                        class="form-check-input h4 position-relative m-0"
-                                                        type="checkbox" role="switch" checked=""></div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div>
-                                                    <p class="mb-1">Login Notifications</p>
-                                                    <p class="text-muted text-sm mb-0">Notify when login
-                                                        attempted from other place</p>
-                                                </div>
-                                                <div class="form-check form-switch p-0"><input
-                                                        class="form-check-input h4 position-relative m-0"
-                                                        type="checkbox" role="switch" checked=""></div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-0 pb-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div>
-                                                    <p class="mb-1">Login Approvals</p>
-                                                    <p class="text-muted text-sm mb-0">Approvals is not required
-                                                        when login from unrecognized devices.</p>
-                                                </div>
-                                                <div class="form-check form-switch p-0"><input
-                                                        class="form-check-input h4 position-relative m-0"
-                                                        type="checkbox" role="switch" checked=""></div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-primary" id="btn-submit-foto-profil">Perbarui</button>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Recognized Devices</h5>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0 pt-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="me-2">
-                                                    <p class="mb-2">Celt Desktop</p>
-                                                    <p class="mb-0 text-muted">4351 Deans Lane</p>
-                                                </div>
-                                                <div class="">
-                                                    <div class="text-success d-inline-block me-2"><i
-                                                            class="fas fa-circle f-10 me-2"></i> Current Active
-                                                    </div><a href="#!" class="text-danger"><i
-                                                            class="feather icon-x-circle"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="me-2">
-                                                    <p class="mb-2">Imco Tablet</p>
-                                                    <p class="mb-0 text-muted">4185 Michigan Avenue</p>
-                                                </div>
-                                                <div class="">
-                                                    <div class="text-muted d-inline-block me-2"><i
-                                                            class="fas fa-circle f-10 me-2"></i> 5 days ago
-                                                    </div><a href="#!" class="text-danger"><i
-                                                            class="feather icon-x-circle"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-0 pb-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="me-2">
-                                                    <p class="mb-2">Albs Mobile</p>
-                                                    <p class="mb-0 text-muted">3462 Fairfax Drive</p>
-                                                </div>
-                                                <div class="">
-                                                    <div class="text-muted d-inline-block me-2"><i
-                                                            class="fas fa-circle f-10 me-2"></i> 1 month ago
-                                                    </div><a href="#!" class="text-danger"><i
-                                                            class="feather icon-x-circle"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Active Sessions</h5>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0 pt-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="me-2">
-                                                    <p class="mb-2">Celt Desktop</p>
-                                                    <p class="mb-0 text-muted">4351 Deans Lane</p>
-                                                </div><button class="btn btn-link-danger">Logout</button>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item px-0 pb-0">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="me-2">
-                                                    <p class="mb-2">Moon Tablet</p>
-                                                    <p class="mb-0 text-muted">4185 Michigan Avenue</p>
-                                                </div><button class="btn btn-link-danger">Logout</button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 text-end"><button class="btn btn-outline-dark ms-2">Bersihkan</button>
-                            <button class="btn btn-primary">Perbarui</button></div>
                     </div>
                 </div>
+
+                {{-- UBAH PASSWORD --}}
                 <div class="tab-pane" id="ubah-password" role="tabpanel" aria-labelledby="profile-tab-4">
                     <div class="card">
                         <form action="{{ route('auth.change_password') }}" method="POST" enctype="multipart/form-data">
@@ -887,6 +893,7 @@
                                             <label class="form-label">Konfirmasi Password Baru <a class="text-danger">*</a></label>
                                             <input type="password" class="form-control is-invalid" id="confirmPassword" name="new_password_confirmation"
                                             placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" required>
+                                            <small>Tuliskan password yang sama untuk konfirmasi password baru Anda </small>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -917,7 +924,7 @@
                             </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="profile-5" role="tabpanel" aria-labelledby="profile-tab-5">
+                {{-- <div class="tab-pane" id="profile-5" role="tabpanel" aria-labelledby="profile-tab-5">
                     <div class="card">
                         <div class="card-header">
                             <h5>Invite Team Members</h5>
@@ -1323,7 +1330,7 @@
                             <div class="btn btn-primary">Update Profile</div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div><!-- [ sample-page ] end -->
     </div><!-- [ Main Content ] end -->
@@ -1336,6 +1343,7 @@
             const bigLetter = $(".big-letter");
             const num = $(".num");
             const specialChar = $(".special-char");
+            var isPasswordValid = null;
 
             password.addEventListener("input", () => {
                 const value = password.value;
@@ -1352,7 +1360,7 @@
                 cpassword.classList.remove("is-valid");
                 cpassword.classList.add("is-invalid");
 
-                const isPasswordValid = isLengthValid && hasUpperCase && hasNumber && hasSpecialChar;
+                isPasswordValid = isLengthValid && hasUpperCase && hasNumber && hasSpecialChar;
 
                 // PANJANG MINIMAL 8 KARAKTER
                 if (isLengthValid == true) {
@@ -1397,8 +1405,9 @@
                 }
             });
 
+            // VALIDASI KONFIRMASI PASSWORD
             cpassword.addEventListener("input", () => {
-                if (password.value == cpassword.value) {
+                if (password.value == cpassword.value && isPasswordValid) {
                     $('#btn-submit-password').prop('disabled', false);
                     $('#btn-submit-password').removeClass("btn-secondary");
                     $('#btn-submit-password').addClass("btn-primary");
@@ -1412,6 +1421,206 @@
                     cpassword.classList.add("is-invalid");
                 }
             });
+
+            $("#checkbox_alamat").on('change', function() {
+                if ($(this).is(':checked')) {
+                    $("#apiprovinsidom").val("").trigger('change').find('selected').remove();
+                    $("#apikotadom").val("").trigger('change').find('selected').remove();
+                    $("#apikecamatandom").val("").trigger('change').find('selected').remove();
+                    $("#apidesadom").val("").trigger('change').find('selected').remove();
+                    $("#apialamatdom").val("").text("").trigger('change');
+                    // $('#apiprovinsidom').prop('disabled', true);
+                    // $('#apikotadom').prop('disabled', true);
+                    // $('#apikecamatandom').prop('disabled', true);
+                    // $('#apidesadom').prop('disabled', true);
+                    // $('#alamat_dom').prop('disabled', true);
+                    $("#hidedom").removeClass('show').hide();
+                    $(this).val("0");
+                } else {
+                    // $('#alamatdomisili').prop('hidden', false);
+                    $('#apiprovinsidom').prop('disabled', false);
+                    $('#apikotadom').prop('disabled', true);
+                    $('#apikecamatandom').prop('disabled', true);
+                    $('#apidesadom').prop('disabled', true);
+                    $("#hidedom").addClass('show').show();
+                    $(this).val("1");
+                }
+            });
+
+            // ALAMAT KTP
+            $('#apiprovinsi').change(function() {
+                $.ajax({
+                    url: "/api/provinsi/" + this.value,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        // console.log(this.value);
+                        // var valprovinsi = $("#apiprovinsi").val();
+                        $("#apikota").val("").find('option').remove();
+                        $("#apikecamatan").val("").find('option').remove();
+                        $("#apidesa").val("").find('option').remove();
+                        $("#apikota").attr('disabled', false);
+                        $("#apikecamatan").attr('disabled', true);
+                        $("#apidesa").attr('disabled', true);
+                        $("#apikota").append('<option value="">Pilih</option>');
+                        // res.forEach(item => {
+                        //     $("#apikota").val(item.nama_kabkota);
+                        // });
+                        // var ary = res.;
+                        var len = res.length;
+                        var sel = document.getElementById('apikota');
+                        for (var i = 0; i < len; i++) {
+                            var opt = document.createElement('option');
+                            opt.innerHTML = res[i]['nama_kabkota'];
+                            opt.value = res[i]['nama_kabkota'];
+                            sel.appendChild(opt);
+                            // $("#sel_user").append("<option value='"+id+"'>"+name+"</option>");
+                        }
+                    }
+                });
+            });
+
+            $('#apikota').change(function() {
+                $.ajax({
+                    url: "/api/kota/" + this.value,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $("#apikecamatan").val("").find('option').remove();
+                        $("#apidesa").val("").find('option').remove();
+                        $("#apikecamatan").attr('disabled', false);
+                        $("#apidesa").attr('disabled', true);
+                        $("#apikecamatan").append('<option value="">Pilih</option>');
+                        // res.forEach(item => {
+                        //     $("#apikota").val(item.nama_kabkota);
+                        // });
+                        // var ary = res.;
+                        var len = res.length;
+                        var sel = document.getElementById('apikecamatan');
+                        for (var i = 0; i < len; i++) {
+                            var opt = document.createElement('option');
+                            opt.innerHTML = res[i]['kecamatan'];
+                            opt.value = res[i]['kecamatan'];
+                            sel.appendChild(opt);
+                            // $("#sel_user").append("<option value='"+id+"'>"+name+"</option>");
+                        }
+                    }
+                });
+            });
+
+            $('#apikecamatan').change(function() {
+                $.ajax({
+                    url: "/api/kecamatan/" + this.value,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $("#apidesa").val("").find('option').remove();
+                        $("#apidesa").attr('disabled', false);
+                        $("#apidesa").append('<option value="">Pilih</option>');
+                        // res.forEach(item => {
+                        //     $("#apikota").val(item.nama_kabkota);
+                        // });
+                        // var ary = res.;
+                        var len = res.length;
+                        var sel = document.getElementById('apidesa');
+                        for (var i = 0; i < len; i++) {
+                            var opt = document.createElement('option');
+                            opt.innerHTML = res[i]['desa'];
+                            opt.value = res[i]['desa'];
+                            sel.appendChild(opt);
+                            // $("#sel_user").append("<option value='"+id+"'>"+name+"</option>");
+                        }
+                    }
+                });
+            });
+
+            // ALAMAT DOMISILI
+            $('#apiprovinsidom').change(function() {
+                $.ajax({
+                    url: "/api/provinsi/" + this.value,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        // var valprovinsi = $("#apiprovinsi").val();
+                        $("#apikotadom").val("").find('option').remove();
+                        $("#apikecamatandom").val("").find('option').remove();
+                        $("#apidesadom").val("").find('option').remove();
+                        $("#apikotadom").attr('disabled', false);
+                        $("#apikecamatandom").attr('disabled', true);
+                        $("#apidesadom").attr('disabled', true);
+                        $("#apikotadom").append('<option value="">Pilih</option>');
+                        // res.forEach(item => {
+                        //     $("#apikota").val(item.nama_kabkota);
+                        // });
+                        // var ary = res.;
+                        var len = res.length;
+                        var sel = document.getElementById('apikotadom');
+                        for (var i = 0; i < len; i++) {
+                            var opt = document.createElement('option');
+                            opt.innerHTML = res[i]['nama_kabkota'];
+                            opt.value = res[i]['nama_kabkota'];
+                            sel.appendChild(opt);
+                            // $("#sel_user").append("<option value='"+id+"'>"+name+"</option>");
+                        }
+                    }
+                });
+            });
+
+            $('#apikotadom').change(function() {
+                $.ajax({
+                    url: "/api/kota/" + this.value,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $("#apikecamatandom").val("").find('option').remove();
+                        $("#apidesadom").val("").find('option').remove();
+                        $("#apikecamatandom").attr('disabled', false);
+                        $("#apidesadom").attr('disabled', true);
+                        $("#apikecamatandom").append('<option value="">Pilih</option>');
+                        // res.forEach(item => {
+                        //     $("#apikota").val(item.nama_kabkota);
+                        // });
+                        // var ary = res.;
+                        var len = res.length;
+                        var sel = document.getElementById('apikecamatandom');
+                        for (var i = 0; i < len; i++) {
+                            var opt = document.createElement('option');
+                            opt.innerHTML = res[i]['kecamatan'];
+                            opt.value = res[i]['kecamatan'];
+                            sel.appendChild(opt);
+                            // $("#sel_user").append("<option value='"+id+"'>"+name+"</option>");
+                        }
+                    }
+                });
+            });
+
+            $('#apikecamatandom').change(function() {
+                $.ajax({
+                    url: "/api/kecamatan/" + this.value,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $("#apidesadom").val("").find('option').remove();
+                        $("#apidesadom").attr('disabled', false);
+                        $("#apidesadom").append('<option value="">Pilih</option>');
+                        // res.forEach(item => {
+                        //     $("#apikota").val(item.nama_kabkota);
+                        // });
+                        // var ary = res.;
+                        var len = res.length;
+                        var sel = document.getElementById('apidesadom');
+                        for (var i = 0; i < len; i++) {
+                            var opt = document.createElement('option');
+                            opt.innerHTML = res[i]['desa'];
+                            opt.value = res[i]['desa'];
+                            sel.appendChild(opt);
+                            // $("#sel_user").append("<option value='"+id+"'>"+name+"</option>");
+                        }
+                    }
+                });
+            });
         });
+
+        // FUNCTION
         </script>
 @endsection
