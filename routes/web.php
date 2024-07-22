@@ -205,3 +205,13 @@ Route::group(['middleware' => ['auth']], function () {
 //     return view('pages.dashboard.index');
 // })->name('starter');
 
+// INVENTARIS
+Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], function () {
+    // ASET RUANGAN
+    Route::get('asetx/ruangan','\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@index')->name('asetx_ruangan.index');
+
+    // ASET
+    Route::get('asetx','\App\Http\Controllers\Inventaris\Aset\AsetController@index2')->name('asetx.index');
+    Route::get('asetx/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail2')->name('asetx.detail');
+});
+

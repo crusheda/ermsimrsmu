@@ -28,7 +28,35 @@
     <link href="{{ asset('css/plugins/animate.min.css') }}" rel="stylesheet" type="text/css">
     <!-- Initialize js -->
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
-</head><!-- [Head] end --><!-- [Body] Start -->
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
+    {{-- <link href="{{ asset('libs/select2/css/select2.css') }}" rel="stylesheet" type="text/css" /> --}}
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" /> {{-- YANG DIPAKAI INI --}}
+    {{-- DATEPICKER --}}
+    <link href="{{ asset('libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/@chenfengyuan/datepicker/datepicker.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    {{-- DATA TABLES --}}
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.1.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/b-print-3.1.0/datatables.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.1.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/b-print-3.1.0/datatables.min.js"></script>
+
+    {{-- <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/buttons.bootstrap5.min.css') }}">
+    <link href="{{ asset('libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" /> --}}
+
+    {{-- MANUAL STYLING --}}
+    <style>
+        .table.dataTable  {
+            font-size: 13px;
+        }
+    </style>
+</head>
 
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
     data-pc-theme_contrast="" data-pc-theme="light"><!-- [ Pre-loader ] start -->
@@ -53,8 +81,6 @@
     </form>
 
     <script data-cfasync="false" src="{{ asset('cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
-    {{-- <script src="{{ asset('js/pages/dashboard-default.js') }}"></script><!-- [Page Specific JS] end --><!-- Required Js --> --}}
     <script src="{{ asset('js/plugins/popper.min.js') }}"></script>
     <script src="{{ asset('js/plugins/simplebar.min.js') }}"></script>
     <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
@@ -63,12 +89,58 @@
     <script src="{{ asset('js/plugins/feather.min.js') }}"></script>
 
     {{-- PLUGIN JS --}}
+    <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script> {{-- YANG DIPAKAI INI --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="{{ asset('js/lightbox-bootstrap5.bundle.min.js') }}"></script>
     <script src="{{ asset('js/plugins/highlight.min.js') }}"></script>
     <script src="{{ asset('js/plugins/clipboard.min.js') }}"></script>
     <script src="{{ asset('js/component.js') }}"></script>
 
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltip.js/1.3.1/tooltip.min.js"></script> --}}
+    {{-- DATEPICKER --}}
+    <script src="{{ asset('libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('libs/spectrum-colorpicker2/spectrum.min.js') }}"></script>
+    <script src="{{ asset('libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+    <script src="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
+    <script src="{{ asset('libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
+    <script src="{{ asset('libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
+
+    {{-- DATA TABLES --}}
+    {{-- <script src="{{ asset('libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+
+    <script src="{{ asset('libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('libs/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('libs/pdfmake/build/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('libs/pdfmake/build/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('libs/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('libs/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('libs/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
+
+    <script src="{{ asset('js/pages/datatables.init.js') }}"></script>
+    <script src="{{ asset('libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('libs/admin-resources/rwd-table/rwd-table.min.js') }}"></script> --}}
+    {{-- ================================================================================================================= --}}
+
+    {{-- <script src="{{ asset('js/plugins/dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/jszip.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('js/plugins/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/buttons.bootstrap5.min.js') }}"></script> --}}
+    {{-- ================================================================================================================= --}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltip.js/1.3.1/tooltip.min.js"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script> --}}
     {{-- <script>layout_change('light');</script>
     <script>change_box_container('false');</script>
