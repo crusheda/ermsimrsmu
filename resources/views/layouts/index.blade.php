@@ -26,6 +26,11 @@
     <link rel="stylesheet" href="{{ asset('css/uikit.css') }}">
     {{-- PLUGIN CSS --}}
     <link href="{{ asset('css/plugins/animate.min.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/iziToast.css') }}" />
+    <!-- Flat Pickr css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Sweet Alert-->
+    <link href="{{ asset('libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Initialize js -->
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
@@ -60,6 +65,12 @@
 
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
     data-pc-theme_contrast="" data-pc-theme="light"><!-- [ Pre-loader ] start -->
+
+    <!-- Logout Form -->
+    <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
+
     <div class="page-loader">
         <div class="bar"></div>
     </div><!-- [ Pre-loader ] End --><!-- [ Sidebar Menu ] start -->
@@ -74,11 +85,6 @@
     </div>
 
     @include('inc.nwfooter')
-
-    <!-- Logout Form -->
-    <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
-        {{ csrf_field() }}
-    </form>
 
     <script data-cfasync="false" src="{{ asset('cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js') }}"></script>
     <script src="{{ asset('js/plugins/popper.min.js') }}"></script>
@@ -108,6 +114,16 @@
     <script src="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') }}"></script>
     <script src="{{ asset('libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
     <script src="{{ asset('libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
+
+    <!-- Flat Pickr js -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="{{ asset('libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('js/pages/sweet-alerts.init.js') }}"></script>
+
+    <!-- Notif js -->
+    <script src="{{ asset('js/iziToast.js') }}"></script>
 
     {{-- DATA TABLES --}}
     {{-- <script src="{{ asset('libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
@@ -140,7 +156,7 @@
     <script src="{{ asset('js/plugins/buttons.bootstrap5.min.js') }}"></script> --}}
     {{-- ================================================================================================================= --}}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltip.js/1.3.1/tooltip.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tooltip.js/1.3.1/tooltip.min.js"></script> --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script> --}}
     {{-- <script>layout_change('light');</script>
     <script>change_box_container('false');</script>

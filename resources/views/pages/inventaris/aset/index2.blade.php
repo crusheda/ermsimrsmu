@@ -998,19 +998,6 @@
         }
 
         function tambah() {
-            // $.ajax(
-            // {
-            //     url: "/api/inventaris/aset/getTahunBulanPengadaan",
-            //     type: 'GET',
-            //     dataType: 'json', // added data type
-            //     success: function(res) {
-            //         $('#thbln_add').val(res.month+'-'+res.year);
-            //     }
-            // })
-
-            // $("#btn-simpan-edit").attr('disabled', 'disabled');
-            // $("#btn-simpan-edit").find("i").toggleClass("fa-save fa-spinner fa-spin");
-
             $('#tgl_perolehan_add').change(function() {
                 var thn = $('#tgl_perolehan_add').val();
                 $('#kd_th_add').text(thn.substring(0,4));
@@ -1028,10 +1015,8 @@
                     }
                 })
             });
-            $('#modalTambah').modal('show');
 
-            // $("#btn-simpan-edit").prop('disabled',false);
-            // $("#btn-simpan-edit").find("i").toggleClass("fa-save fa-spinner fa-spin");
+            $('#modalTambah').modal('show');
         }
 
         function ubah(id) {

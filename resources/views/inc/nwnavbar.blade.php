@@ -39,8 +39,8 @@
                             <a href="#!">
                                 <i class="ti ti-lock"></i> <span>Lock Screen</span>
                             </a> --}}
-                            <a href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
-                                <i class="ti ti-power"></i> <span>Logout</span>
+                            <a class="button" href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                                <i class="ti ti-power"></i> Logout
                             </a>
                         </div>
                     </div>
