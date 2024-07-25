@@ -22,7 +22,7 @@
     </div><!-- [ breadcrumb ] end -->
 
     <!-- [ Main Content ] start -->
-    <div class="row pt-1">
+    <div class="row">
         <div class="card" style="overflow: visible;">
 
             <div class="card-header d-flex align-items-center justify-content-between py-3">
@@ -447,7 +447,7 @@
                                     <input type="text" id="tgl_berlaku_edit" class="form-control flatpickrunl" placeholder="YYYY-MM-DD" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tidak ada batasan pemilihan tanggal"/>
                                 </div>
                             </div> --}}
-                            <hr>
+                            {{-- <hr> --}}
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Nama Sarana <a class="text-danger">*</a></label>
@@ -908,7 +908,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Detail Sarana ${item.jenis==1?'Medis':'Non Medis'}" style="color:${item.jenis==1?'#FF0089':'#5a6ee6'}"><strong><u>`+item.no_inventaris+`</u></strong></a>
+                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/asetx/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Detail Sarana ${item.jenis==1?'Medis':'Non Medis'}" style="color:${item.jenis==1?'#FF0089':'#5a6ee6'}"><strong><u>`+item.no_inventaris+`</u></strong></a>
                                             </div>
                                         </div>
                                     </td>`;
@@ -1107,8 +1107,8 @@
             // Definisi
             var save = new FormData();
             save.append('id',$("#id_edit").val());
-            save.append('no_kalibrasi',$("#no_kalibrasi_edit").val());
-            save.append('tgl_berlaku',$("#tgl_berlaku_edit").val());
+            // save.append('no_kalibrasi',$("#no_kalibrasi_edit").val());
+            // save.append('tgl_berlaku',$("#tgl_berlaku_edit").val());
             save.append('sarana',$("#sarana_edit").val());
             save.append('merk',$("#merk_edit").val());
             save.append('tipe',$("#tipe_edit").val());

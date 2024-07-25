@@ -68,10 +68,10 @@
                         </table>
                     </div> --}}
                     <div class="hstack gap-2">
-                        <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
+                        <button class="btn btn-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
                         {{-- <button class="btn btn-soft-info w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button> --}}
-                        <button class="btn btn-soft-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
-                        <a class="btn btn-soft-success w-100 tombol-menu" href="javascript:void(0);" role="button"
+                        <button class="btn btn-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
+                        <a class="btn btn-success w-100 tombol-menu" href="javascript:void(0);" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class='bx bx-caret-down align-middle'></i>&nbsp;&nbsp;Menu
                         </a>
