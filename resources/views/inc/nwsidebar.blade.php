@@ -46,7 +46,7 @@
                 {{-- <svg class="pc-icon">
                     <use xlink:href="#custom-status-up"></use>
                 </svg> --}}
-                <i class="fas fa-archive"></i>
+                <i class="fas fa-dolly-flatbed"></i>
             </span>
             <span class="pc-mtext">Inventaris</span>
             <span class="pc-arrow mt-1">

@@ -22,7 +22,7 @@
     </div><!-- [ breadcrumb ] end -->
 
     <!-- [ Main Content ] start -->
-    <div class="row">
+    <div class="row pt-1">
         <div class="card" style="overflow: visible;">
 
             <div class="card-header d-flex align-items-center justify-content-between py-3">
@@ -34,6 +34,7 @@
                             <li>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Sarana</a>
                                 <a class="dropdown-item" href="{{ route('aset_ruangan.index') }}">Daftar Ruangan</a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="refresh()">Segarkan Tabel</a>
                             </li>
                         </ul>
                     @else
@@ -791,7 +792,7 @@
         function filter() {
             $("#show_iklan").prop('hidden', true);
             $("#show-table").prop('hidden', false);
-            $("#btn-refresh").prop('disabled', false);
+            // $("#btn-refresh").prop('disabled', false);
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="20"><center><i class="fa fa-sync fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -825,7 +826,7 @@
                         if (adminID == true) {
                             content += `<td><center>`
                                         + `<div class='btn-group'>`
-                                            + `<button type='button' class='btn btn-sm btn-light btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                            + `<button type='button' class='btn btn-sm btn-link-secondary dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
                                             + `<ul class='dropdown-menu dropdown-menu-right'>`
                                                 + `<div class="dropdown-header noti-title">`
                                                     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
@@ -859,51 +860,6 @@
                             } else {
                                 content += `<td><center>`+item.id+`</center></td>`
                             }
-                            // if (userID == item.id_user) {
-                            //     if (updet == date) {
-                            //         content += `<td><center>`
-                            //                     + `<div class='btn-group'>`
-                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
-                            //                             + `<div class="dropdown-header noti-title">`
-                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                            //                             + `</div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                            //                             + `<div class="dropdown-divider"></div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
-                            //                         + `</ul>`
-                            //                     + `</div>`
-                            //                 + `</center></td>`;
-                            //     } else {
-                            //         content += `<td><center>`
-                            //                     + `<div class='btn-group'>`
-                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
-                            //                             + `<div class="dropdown-header noti-title">`
-                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                            //                             + `</div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
-                            //                             + `<div class="dropdown-divider"></div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
-                            //                         + `</ul>`
-                            //                     + `</div>`
-                            //                 + `</center></td>`;
-                            //     }
-                            // } else {
-                            //     content += `<td><center>`
-                            //                 + `<div class='btn-group'>`
-                            //                     + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                            //                     + `<ul class='dropdown-menu dropdown-menu-right'>`
-                            //                         + `<div class="dropdown-header noti-title">`
-                            //                             + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                            //                         + `</div>`
-                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
-                            //                         + `<div class="dropdown-divider"></div>`
-                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
-                            //                     + `</ul>`
-                            //                 + `</div>`
-                            //             + `</center></td>`;
-                            // }
                         }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
@@ -1281,7 +1237,7 @@
 
         function refresh() {
             // $("#btn-refresh").prop('disabled', true);
-            $("#btn-refresh").find("i").toggleClass("fa-spin");
+            // $("#btn-refresh").find("i").toggleClass("fa-spin");
             $('.modal').modal('hide');
 
             // Clear Pilihan Select2
@@ -1298,14 +1254,22 @@
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
+
+            var filter1 = $("#filterJenis").val();
+            var filter2 = $("#filterLokasi").val();
+            var filter3 = $("#filterTglPerolehan").val();
+            var filter4 = $("#filterBulanKalibrasi").val();
+            var filter5 = $("#filterTahunKalibrasi").val();
             $.ajax({
                 url: "/api/inventaris/aset/filter",
                 type: 'POST',
                 dataType: 'json', // added data type
                 data: {
-                    // regulasi: regulasi,
-                    // waktu: waktu,
-                    // pembuat: pembuat,
+                    filter1: filter1,
+                    filter2: filter2,
+                    filter3: filter3,
+                    filter4: filter4,
+                    filter5: filter5,
                 },
                 success: function(res) {
                     $("#tampil-tbody").empty();
@@ -1321,18 +1285,18 @@
                         if (adminID == true) {
                             content += `<td><center>`
                                         + `<div class='btn-group'>`
-                                            + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
+                                            + `<button type='button' class='btn btn-sm btn-link-secondary dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
                                             + `<ul class='dropdown-menu dropdown-menu-right'>`
                                                 + `<div class="dropdown-header noti-title">`
                                                     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                                 + `</div>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
                                                 + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
-                                                + `<div class="dropdown-divider"></div>`
-                                                + `<div class="dropdown-header noti-title">`
-                                                    + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
-                                                + `</div>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
+                                                // + `<div class="dropdown-divider"></div>`
+                                                // + `<div class="dropdown-header noti-title">`
+                                                //     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
+                                                // + `</div>`
+                                                // + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
                                             + `</ul>`
                                         + `</div>`
                                     + `</center></td>`;
@@ -1355,71 +1319,26 @@
                             } else {
                                 content += `<td><center>`+item.id+`</center></td>`
                             }
-                            // if (userID == item.id_user) {
-                            //     if (updet == date) {
-                            //         content += `<td><center>`
-                            //                     + `<div class='btn-group'>`
-                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
-                            //                             + `<div class="dropdown-header noti-title">`
-                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                            //                             + `</div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                            //                             + `<div class="dropdown-divider"></div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
-                            //                         + `</ul>`
-                            //                     + `</div>`
-                            //                 + `</center></td>`;
-                            //     } else {
-                            //         content += `<td><center>`
-                            //                     + `<div class='btn-group'>`
-                            //                         + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                            //                         + `<ul class='dropdown-menu dropdown-menu-right'>`
-                            //                             + `<div class="dropdown-header noti-title">`
-                            //                                 + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                            //                             + `</div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
-                            //                             + `<div class="dropdown-divider"></div>`
-                            //                             + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
-                            //                         + `</ul>`
-                            //                     + `</div>`
-                            //                 + `</center></td>`;
-                            //     }
-                            // } else {
-                            //     content += `<td><center>`
-                            //                 + `<div class='btn-group'>`
-                            //                     + `<button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class="bx bx-dots-vertical-rounded"></i> `+item.id+`</button>`
-                            //                     + `<ul class='dropdown-menu dropdown-menu-right'>`
-                            //                         + `<div class="dropdown-header noti-title">`
-                            //                             + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
-                            //                         + `</div>`
-                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</s></a></li>`
-                            //                         + `<div class="dropdown-divider"></div>`
-                            //                         + `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><s><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</s></a></li>`
-                            //                     + `</ul>`
-                            //                 + `</div>`
-                            //             + `</center></td>`;
-                            // }
                         }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/aset/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Detail Sarana ${item.jenis==1?'Medis':'Non Medis'}" style="color:${item.jenis==1?'#FF0089':'#5a6ee6'}"><h6 class='mb-0'><strong><u>`+item.no_inventaris+`</u></strong></h6></a>
+                                                <a href='javascript:void(0);' onclick="location.href='/inventaris/asetx/`+item.token+`'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Detail Sarana ${item.jenis==1?'Medis':'Non Medis'}" style="color:${item.jenis==1?'#FF0089':'#5a6ee6'}"><strong><u>`+item.no_inventaris+`</u></strong></a>
                                             </div>
                                         </div>
                                     </td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>`+item.sarana+`</h6>
-                                                <h6 class='mb-0'><small class='text-truncate text-muted'>Tgl. Operasi : `+item.tgl_operasi+`</small></h6>
+                                                `+item.sarana+`
+                                                <small class='text-truncate text-muted'>Tgl. Operasi : `+item.tgl_operasi+`</small>
                                             </div>
                                         </div>
                                     </td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>`+item.ruangan+`</h6>
+                                                `+item.ruangan+`
                                                 <small class='text-truncate text-muted'>`+item.lokasi+`</small>
                                             </div>
                                         </div>
@@ -1440,30 +1359,31 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>${item.no_kalibrasi?item.no_kalibrasi:'-'}</h6>
+                                                ${item.no_kalibrasi?item.no_kalibrasi:'-'}
                                                 <small class='text-truncate text-muted'>${item.tgl_berlaku?item.tgl_berlaku+"&nbsp;<i class='fas fa-long-arrow-alt-right text-danger'></i>&nbsp;"+item.tgl_berakhir:''}</small>
                                             </div>
                                         </div>
                                     </td>`;
-                            if (item.kondisi == 1) {
-                                content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
-                            } else {
-                                if (item.kondisi == 2) {
-                                    content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
+                                if (item.kondisi == 1) {
+                                    content += `<td><kbd class='text-dark' style='background-color:#eaf9f4'>Baik</kbd></td>`;
                                 } else {
-                                    if (item.kondisi == 3) {
-                                        content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
+                                    if (item.kondisi == 2) {
+                                        content += `<td><kbd class='text-dark' style='background-color:#fef7ed'>Cukup</kbd></td>`;
                                     } else {
-                                        content += `<td><kbd class='text-dark' style='background-color:#d6d6d6'>Tidak Diketahui</kbd></td>`;
+                                        if (item.kondisi == 3) {
+                                            content += `<td><kbd class='text-dark' style='background-color:#fef0f0'>Buruk</kbd></td>`;
+                                        } else {
+                                            content += `<td><kbd class='text-dark' style='background-color:#d6d6d6'>Tidak Diketahui</kbd></td>`;
+                                        }
                                     }
                                 }
-                            }
-                            content += `<td>`+item.tgl_input+`</td>`;
-                            content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`; // .substring(0, 19).replace('T',' ')
+                        content += `<td>`+item.tgl_input+`</td>`;
+                        content += `<td>`+new Date(item.updated_at).toLocaleString("sv-SE")+`</td></tr>`; // .substring(0, 19).replace('T',' ')
                         $('#tampil-tbody').append(content);
                     })
 
                     var table = $('#dttable').DataTable({
+                        dom: 'Bfrtip',
                         order: [
                             [10, "desc"]
                         ],
@@ -1481,8 +1401,8 @@
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
 
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
+                    // table.buttons().container()
+                    //     .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({
