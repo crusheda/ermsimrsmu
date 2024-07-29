@@ -116,25 +116,21 @@
                                             </div> --}}
                                         </div>
                                         <hr class="my-3 border border-secondary-subtle">
-                                        <div
-                                            class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-id-card-alt me-3"></i>
                                             <p class="mb-0">{{ $list['show']->nip?$list['show']->nip:'-' }}</p>
                                         </div>
-                                        <div
-                                            class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-address-card me-3"></i>
                                             <p class="mb-0">{{ $list['show']->nik }}</p>
                                         </div>
-                                        <div
-                                            class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-envelope me-3"></i>
                                             <p class="mb-0"><a href="javascript:void(0);"
                                                     class="text-dark">{{ $list['show']->email }}</a>
                                             </p>
                                         </div>
-                                        <div
-                                            class="d-inline-flex align-items-center justify-content-start w-100">
+                                        <div class="d-inline-flex align-items-center justify-content-start w-100">
                                             <i class="fab fa-whatsapp-square me-3"></i>
                                             <p class="mb-0">{{ $list['show']->no_hp }}</p>
                                         </div>
@@ -365,7 +361,7 @@
                                         <h5>Deskripsi Pengalaman Kerja</h5>
                                     </div>
                                     <div class="card-body">
-                                        <textarea class="form-control" name="pengalaman_kerja" placeholder="e.g. Saya pernah bekerja pada suatu instansi swasta ternama yang bertempat di Kota X dan berprofesi sebagai X.... Saya memiliki kemampuan yang luas biasa..."><?php echo htmlspecialchars($list['show']->pengalaman_kerja); ?></textarea>
+                                        <textarea class="form-control" name="pengalaman_kerja" placeholder="e.g. Saya pernah bekerja pada suatu instansi swasta ternama yang bertempat di Kota X dan berprofesi sebagai X...."><?php echo htmlspecialchars($list['show']->pengalaman_kerja); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -383,7 +379,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-7">
-                                                <div class="">
+                                                <div class="mb-3">
                                                     <label class="form-label">Nomor Induk Kependudukan (NIK) <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" name="nik" value="{{ $list['show']->nik }}" minlength="16" maxlength="16" placeholder="Isi dengan kombinasi Angka" required>
                                                 </div>
@@ -395,7 +391,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-5">
-                                                <div class="mb-3">
+                                                <div>
                                                     <label class="form-label">No. HP Aktif (Whatsapp) <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control telphone_with_code" name="no_hp" value="{{ $list['show']->no_hp }}" maxlength="13" placeholder="628**********" data-mask="(62) 9999-9999-9999">
                                                 </div>

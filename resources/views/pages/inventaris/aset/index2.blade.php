@@ -202,9 +202,9 @@
                                 <div class="col-md-6 mb-3">
                                     <div class="text-muted">
                                         <p class="mb-1"><strong>Keterangan Pengisian :</strong></p>
-                                        <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Periksa No. Inventaris sebelum Submit</p>
-                                        <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input <strong>Wajib</strong> diisi</p>
-                                        <p class="mb-0"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Pastikan tidak berpindah halaman saat proses Submit berjalan</p>
+                                        <p class="mb-1"><i class="fas fa-chevron-right text-primary me-1"></i> Periksa No. Inventaris sebelum Submit</p>
+                                        <p class="mb-1"><i class="fas fa-chevron-right text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input <strong>Wajib</strong> diisi</p>
+                                        <p class="mb-0"><i class="fas fa-chevron-right text-primary me-1"></i> Pastikan tidak berpindah halaman saat proses Submit berjalan</p>
                                     </div>
                                 </div>
                             </div>
@@ -408,9 +408,9 @@
                                 <div class="col-md-7 mb-3">
                                     <div class="text-muted">
                                         <p class="mb-1"><strong>Keterangan :</strong></p>
-                                        <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input <strong>Wajib</strong> diisi</p>
-                                        <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> No. Inventaris sudah <mark><strong>TIDAK DAPAT</strong></mark> diubah, Hapus aset apabila diperlukan</p>
-                                        <p class="mb-0"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Pastikan tidak berpindah halaman saat proses Simpan berjalan</p>
+                                        <p class="mb-1"><i class="fas fa-chevron-right text-primary me-1"></i> Tanda <a class="text-danger">*</a> isian/input <strong>Wajib</strong> diisi</p>
+                                        <p class="mb-1"><i class="fas fa-chevron-right text-primary me-1"></i> No. Inventaris sudah <mark><strong>TIDAK DAPAT</strong></mark> diubah, Hapus aset apabila diperlukan</p>
+                                        <p class="mb-0"><i class="fas fa-chevron-right text-primary me-1"></i> Pastikan tidak berpindah halaman saat proses Simpan berjalan</p>
                                     </div>
                                 </div>
                             </div>

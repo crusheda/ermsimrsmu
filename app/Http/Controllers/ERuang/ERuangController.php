@@ -73,128 +73,98 @@ class ERuangController extends Controller
                             ->join('users','users.id','=','eruang.id_user')
                             ->join('eruang_ref','eruang_ref.id','=','eruang.id_ruangan')
                             ->orderBy('eruang.jam_mulai', 'ASC')
-                            ->first();
+                            ->get();
         $getJamMulai = Carbon::parse($request->jam_mulai)->isoFormat('HH');
         $getJamSelesai = Carbon::parse($request->jam_selesai)->isoFormat('HH');
         $getMenitMulai = Carbon::parse($request->jam_mulai)->isoFormat('mm');
         $getMenitSelesai = Carbon::parse($request->jam_selesai)->isoFormat('mm');
 
         if (!empty($getData)) {
-            $dbJamMulai = Carbon::parse($getData->jam_mulai)->isoFormat('HH:mm');
-            $dbJamSelesai = Carbon::parse($getData->jam_selesai)->isoFormat('HH:mm');
-            $dbMulai = Carbon::parse($getData->jam_mulai)->isoFormat('HH');
-            $dbSelesai = Carbon::parse($getData->jam_selesai)->isoFormat('HH');
-            $diffdb = $dbSelesai - $dbMulai;
-            $diffinp = $getJamSelesai - $getJamMulai;
-            if ($getJamMulai == $getJamSelesai) {
-                if ($getMenitMulai == $getMenitSelesai) {
-                    return Response::json(array(
-                        'message' => 'Jam tidak valid/tidak boleh sama!',
-                        'code' => 400,
-                    ));
-                    // return response()->json('Jam tidak valid/tidak boleh sama!', 400);
-                } else {
-                    if ($getMenitMulai < $getMenitSelesai) {
-                        $cekVal = null;
-                        for ($i=0; $i <= $diffdb; $i++) { // 9,10,11
-                            for ($y=0; $y <= $diffinp; $y++) { // 11,12
-                                if ($dbMulai+$i == $getJamMulai+$y) {
-                                    $cekVal = $dbMulai+$i;
+            $cekVal = null;
+            foreach ($getData as $chain => $loc) {
+                $dbJamMulai = Carbon::parse($loc->jam_mulai)->isoFormat('HH:mm');
+                $dbJamSelesai = Carbon::parse($loc->jam_selesai)->isoFormat('HH:mm');
+                $dbMulai = Carbon::parse($loc->jam_mulai)->isoFormat('HH');
+                $dbSelesai = Carbon::parse($loc->jam_selesai)->isoFormat('HH');
+                $diffdb = $dbSelesai - $dbMulai;
+                $diffinp = $getJamSelesai - $getJamMulai;
+                if ($getJamMulai == $getJamSelesai) {
+                    if ($getMenitMulai == $getMenitSelesai) {
+                        return Response::json(array(
+                            'message' => 'Jam tidak valid/tidak boleh sama!',
+                            'code' => 400,
+                        ));
+                    } else {
+                        if ($getMenitMulai < $getMenitSelesai) {
+                            $cekVal = null;
+                            for ($i=0; $i <= $diffdb; $i++) { // 9,10,11
+                                for ($y=0; $y <= $diffinp; $y++) { // 11,12
+                                    if ($dbMulai+$i == $getJamMulai+$y) {
+                                        $cekVal = $dbMulai+$i;
+                                    }
                                 }
                             }
-                        }
-                        if ($cekVal != null) {
+                            if ($cekVal != null) {
+                                return Response::json(array(
+                                    'message' => 'Ruangan '.$loc->nama_ruangan.' sudah terpesan oleh '.$loc->nama_user.' pada jam '.$dbJamMulai.' - '.$dbJamSelesai.', silakan memilih Ruangan/Jam lainnya',
+                                    'code' => 400,
+                                ));
+                            }
+                        } else {
                             return Response::json(array(
-                                'message' => 'Ruangan '.$getData->nama_ruangan.' sudah terpesan oleh '.$getData->nama_user.' pada jam '.$dbJamMulai.' - '.$dbJamSelesai.', silakan memilih Ruangan/Jam lainnya',
+                                'message' => 'Menit Jam Mulai tidak boleh melebihi Menit Jam Selesai',
                                 'code' => 400,
                             ));
-                        } else {
-                            $data = new eruang;
-                            $data->id_user      = $request->user;
-                            $data->id_ruangan   = $request->ruangan;
-                            $data->agenda       = $request->agenda;
-                            $data->tgl          = $tgl;
-                            $data->jam_mulai    = $request->jam_mulai;
-                            $data->jam_selesai  = $request->jam_selesai;
-                            $data->ket          = $request->ket;
-                            $data->gizi         = $gizi;
-                            $data->save();
-                            return Response::json(array(
-                                'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
-                                'code' => 200,
-                            ));
                         }
+                    }
+                } else {
+                    if ($getJamMulai < $getJamSelesai) {
+                        // if ($getMenitMulai <= $getMenitSelesai) {
+                            $cekVal = null;
+                            for ($i=0; $i <= $diffdb; $i++) { // 9,10,11
+                                for ($y=0; $y <= $diffinp; $y++) { // 11,12
+                                    if ($dbMulai+$i == $getJamMulai+$y) {
+                                        $cekVal = $dbMulai+$i;
+                                    }
+                                }
+                            }
+                            if ($cekVal != null) {
+                                return Response::json(array(
+                                    'message' => 'Ruangan '.$loc->nama_ruangan.' sudah terpesan oleh '.$loc->nama_user.' pada jam '.$dbJamMulai.' - '.$dbJamSelesai.', silakan memilih Ruangan/Jam lainnya',
+                                    'code' => 400,
+                                ));
+                            }
+                        // } else {
+                        //     return Response::json(array(
+                        //         'message' => 'Menit Jam Mulai tidak boleh melebihi Menit Jam Selesai',
+                        //         'code' => 400,
+                        //     ));
+                        // }
                     } else {
                         return Response::json(array(
-                            'message' => 'Menit Jam Mulai tidak boleh melebihi Menit Jam Selesai',
+                            'message' => 'Jam Mulai tidak boleh melebihi Jam Selesai',
                             'code' => 400,
                         ));
                     }
-                }
-            } else {
-                if ($getJamMulai < $getJamSelesai) {
-                    if ($getMenitMulai <= $getMenitSelesai) {
-                        $cekVal = null;
-                        for ($i=0; $i <= $diffdb; $i++) { // 9,10,11
-                            for ($y=0; $y <= $diffinp; $y++) { // 11,12
-                                if ($dbMulai+$i == $getJamMulai+$y) {
-                                    $cekVal = $dbMulai+$i;
-                                }
-                            }
-                        }
-                        if ($cekVal != null) {
-                            return Response::json(array(
-                                'message' => 'Ruangan '.$getData->nama_ruangan.' sudah terpesan oleh '.$getData->nama_user.' pada jam '.$dbJamMulai.' - '.$dbJamSelesai.', silakan memilih Ruangan/Jam lainnya',
-                                'code' => 400,
-                            ));
-                        } else {
-                            $data = new eruang;
-                            $data->id_user      = $request->user;
-                            $data->id_ruangan   = $request->ruangan;
-                            $data->agenda       = $request->agenda;
-                            $data->tgl          = $tgl;
-                            $data->jam_mulai    = $request->jam_mulai;
-                            $data->jam_selesai  = $request->jam_selesai;
-                            $data->ket          = $request->ket;
-                            $data->gizi         = $gizi;
-                            $data->save();
-                            return Response::json(array(
-                                'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
-                                'code' => 200,
-                            ));
-                        }
-                    } else {
-                        return Response::json(array(
-                            'message' => 'Menit Jam Mulai tidak boleh melebihi Menit Jam Selesai',
-                            'code' => 400,
-                        ));
-                    }
-                } else {
-                    return Response::json(array(
-                        'message' => 'Jam Mulai tidak boleh melebihi Jam Selesai',
-                        'code' => 400,
-                    ));
                 }
             }
-
-            // $dbMulai = Carbon::parse($getData->jam_mulai)->isoFormat('HH');
-            // $dbSelesai = Carbon::parse($getData->jam_selesai)->isoFormat('HH');
-
-            // if($getJamMulai >= $dbMulai && $getJamMulai <= $dbSelesai) {
-            //     return response()->json(' - jam awal tidak valid',201);
-            //     // return response()->json('Ruangan '.$getData->nama_ruangan.' sudah terpesan oleh '.$getData->nama_user.', silakan memilih Ruangan/Jam lainnya', 400);
-            // } else {
-            //     if($getJamSelesai >= $dbMulai && $getJamSelesai <= $dbSelesai) {
-            //         return response()->json(' - jam selesai tidak valid',201);
-            //         // return response()->json('Ruangan '.$getData->nama_ruangan.' sudah terpesan oleh '.$getData->nama_user.', silakan memilih Ruangan/Jam lainnya', 400);
-            //     } else {
-            //         echo " - Ruangan tersedia";
-            //     }
-            // }
-            // print_r($getJamSelesai);
-            // // print_r();
-            // die();
-            // return response()->json('Ruangan '.$getData->nama_ruangan.' sudah terpesan oleh '.$getData->nama_user.', silakan memilih Ruangan/Jam lainnya', 400);
+            // VALIDATION
+            if ($cekVal == null) {
+                $data = new eruang;
+                $data->id_user      = $request->user;
+                $data->id_ruangan   = $request->ruangan;
+                $data->agenda       = $request->agenda;
+                $data->tgl          = $tgl;
+                $data->jam_mulai    = $request->jam_mulai;
+                $data->jam_selesai  = $request->jam_selesai;
+                $data->ket          = $request->ket;
+                $data->gizi         = $gizi;
+                $data->save();
+                return Response::json(array(
+                    'message' => 'Peminjaman Ruangan Berhasil pada '.$push,
+                    'code' => 200,
+                ));
+            }
         } else {
             if ($getJamMulai == $getJamSelesai) {
                 if ($getMenitMulai == $getMenitSelesai) {
@@ -348,9 +318,11 @@ class ERuangController extends Controller
         $input1 = $request->tgl;
         $input2 = $request->ruangan;
         $input3 = $request->status;
-        if ($request->status != 1) {
-            $input3 = null;
-        }
+        // if ($request->status != 1) {
+        //     $input3 = null;
+        // } else {
+        //     $input3 = $request->status;
+        // }
 
         $show = eruang::select('eruang.*','users.nama as nama_user','users.no_hp','users_foto.filename as foto_profil','eruang_ref.id as id_ruangan_ref','eruang_ref.nama as nama_ruangan','eruang_ref.kapasitas')
                 ->leftJoin('users','users.id','=','eruang.id_user')
@@ -362,8 +334,20 @@ class ERuangController extends Controller
                 ->when($input2 != null, function ($q) use ($input2) {
                     $q->where('eruang.id_ruangan',$input2);
                 })
-                ->where('gizi_verif',$input3)
-                ->where('status_penolakan',null)
+                ->when($input3 == 1, function ($q) use ($input3) {
+                    $q->where('gizi_verif',null);
+                })
+                ->when($input3 == 2, function ($q) use ($input3) {
+                    $q->where('gizi_verif',1);
+                })
+                // if ($input3 == 1) {
+                //     $show->where('eruang.gizi_verif',1);
+                // } else {
+                //     if ($input3 == 2) {
+                //         $show->where('eruang.gizi_verif',null);
+                //     }
+                // }
+                ->where('eruang.status_penolakan',null)
                 ->orderBy('eruang.tgl','asc')
                 ->orderBy('eruang.jam_mulai','asc')
                 ->limit(9)
