@@ -92,7 +92,7 @@
                                         <div class="col-md-6">
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai dan pemilihan Jam & Menit tidak boleh sama</small><br>
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Perubahan dan penghapusan data hanya dapat dilakukan sampai H-1 Acara & maksimal kurang dari Jam 12:00 WIB, tidak dalam kondisi ditolak oleh Admin, dan apabila sudah diverifikasi oleh bagian Gizi</small><br>
-                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Request pesanan gizi dapat dilakukan dengan cara mengubah data setelah pengajuan</small>
+                                            <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Permintaan khusus pada pesanan gizi dapat dilakukan dengan cara mengubah data setelah pengajuan</small>
                                         </div>
                                         <div class="col-md-6">
                                             <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Apabila sudah diverifikasi oleh bagian Gizi, maka peminjaman ruangan tidak dapat dihapus, akan tetapi Anda masih dapat mengubahnya dengan sepengetahuan bagian Gizi (Konfirmasi terlebih dahulu)</small><br>
@@ -696,16 +696,29 @@
                                             </div></td></center>`;
                             }
                         } else {
-                            content = `<tr><center><td><div class="d-flex align-items-center">
-                                            <div class="dropdown">
-                                                <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
-                                                    <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                    <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                            if (item.status_penolakan == null) {
+                                content = `<tr><center><td><div class="d-flex align-items-center">
+                                                <div class="dropdown">
+                                                    <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a href="javascript:;" class="dropdown-item text-secondary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> <s>Tolak</s></a>
+                                                        <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                        <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div></td></center>`;
+                                            </div></td></center>`;
+                            } else {
+                                content = `<tr><center><td><div class="d-flex align-items-center">
+                                                <div class="dropdown">
+                                                    <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
+                                                        <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                        <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                    </div>
+                                                </div>
+                                            </div></td></center>`;
+                            }
                         }
                     // JIKA USER
                     } else {
@@ -1258,35 +1271,40 @@
                 var harih = new Date(val).toLocaleDateString("sv-SE");
                 var hariini = new Date().toLocaleDateString("sv-SE");
                 var jamSekarang = date.getHours();
+                var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-tata-usaha']) }}";
 
-                if (hmin1 > hariini) {
+                if (adminID) {
                     tolak(res.id);
                 } else {
-                    if (hmin1 == hariini) {
-                        if (jamSekarang < 12) {
-                            tolak(res.id);
+                    if (hmin1 > hariini) {
+                        tolak(res.id);
+                    } else {
+                        if (hmin1 == hariini) {
+                            if (jamSekarang < 12) {
+                                tolak(res.id);
+                            } else {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: 'Penolakan pengajuan sudah melewati batas waktu yang telah ditentukan',
+                                    position: 'topRight'
+                                });
+                            }
                         } else {
                             iziToast.error({
                                 title: 'Pesan Galat!',
                                 message: 'Penolakan pengajuan sudah melewati batas waktu yang telah ditentukan',
                                 position: 'topRight'
                             });
-                        }
-                    } else {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Penolakan pengajuan sudah melewati batas waktu yang telah ditentukan',
-                            position: 'topRight'
-                        });
-                        // if (harih == hariini) {
+                            // if (harih == hariini) {
 
-                        // } else {
-                        //     iziToast.error({
-                        //         title: 'Pesan Galat!',
-                        //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
-                        //         position: 'topRight'
-                        //     });
-                        // }
+                            // } else {
+                            //     iziToast.error({
+                            //         title: 'Pesan Galat!',
+                            //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
+                            //         position: 'topRight'
+                            //     });
+                            // }
+                        }
                     }
                 }
             },
@@ -1313,35 +1331,40 @@
                 var harih = new Date(val).toLocaleDateString("sv-SE");
                 var hariini = new Date().toLocaleDateString("sv-SE");
                 var jamSekarang = date.getHours();
+                var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-tata-usaha']) }}";
 
-                if (hmin1 > hariini) {
+                if (adminID) {
                     ubah(res.id);
                 } else {
-                    if (hmin1 == hariini) {
-                        if (jamSekarang < 12) {
-                            ubah(res.id);
+                    if (hmin1 > hariini) {
+                        ubah(res.id);
+                    } else {
+                        if (hmin1 == hariini) {
+                            if (jamSekarang < 12) {
+                                ubah(res.id);
+                            } else {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: 'Perubahan data sudah melewati batas waktu yang telah ditentukan',
+                                    position: 'topRight'
+                                });
+                            }
                         } else {
                             iziToast.error({
                                 title: 'Pesan Galat!',
                                 message: 'Perubahan data sudah melewati batas waktu yang telah ditentukan',
                                 position: 'topRight'
                             });
-                        }
-                    } else {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Perubahan data sudah melewati batas waktu yang telah ditentukan',
-                            position: 'topRight'
-                        });
-                        // if (harih == hariini) {
+                            // if (harih == hariini) {
 
-                        // } else {
-                        //     iziToast.error({
-                        //         title: 'Pesan Galat!',
-                        //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
-                        //         position: 'topRight'
-                        //     });
-                        // }
+                            // } else {
+                            //     iziToast.error({
+                            //         title: 'Pesan Galat!',
+                            //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
+                            //         position: 'topRight'
+                            //     });
+                            // }
+                        }
                     }
                 }
             },
@@ -1368,35 +1391,40 @@
                 var harih = new Date(val).toLocaleDateString("sv-SE");
                 var hariini = new Date().toLocaleDateString("sv-SE");
                 var jamSekarang = date.getHours();
+                var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-tata-usaha']) }}";
 
-                if (hmin1 > hariini) {
+                if (adminID) {
                     hapus(res.id);
                 } else {
-                    if (hmin1 == hariini) {
-                        if (jamSekarang < 12) {
-                            hapus(res.id);
+                    if (hmin1 > hariini) {
+                        hapus(res.id);
+                    } else {
+                        if (hmin1 == hariini) {
+                            if (jamSekarang < 12) {
+                                hapus(res.id);
+                            } else {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: 'Penghapusan data sudah melewati batas waktu yang telah ditentukan',
+                                    position: 'topRight'
+                                });
+                            }
                         } else {
                             iziToast.error({
                                 title: 'Pesan Galat!',
                                 message: 'Penghapusan data sudah melewati batas waktu yang telah ditentukan',
                                 position: 'topRight'
                             });
-                        }
-                    } else {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Penghapusan data sudah melewati batas waktu yang telah ditentukan',
-                            position: 'topRight'
-                        });
-                        // if (harih == hariini) {
+                            // if (harih == hariini) {
 
-                        // } else {
-                        //     iziToast.error({
-                        //         title: 'Pesan Galat!',
-                        //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
-                        //         position: 'topRight'
-                        //     });
-                        // }
+                            // } else {
+                            //     iziToast.error({
+                            //         title: 'Pesan Galat!',
+                            //         message: 'Silakan memilih tanggal yang valid (Harus lebih dari hari ini)',
+                            //         position: 'topRight'
+                            //     });
+                            // }
+                        }
                     }
                 }
             },

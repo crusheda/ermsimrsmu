@@ -318,6 +318,7 @@ class ERuangController extends Controller
         $input1 = $request->tgl;
         $input2 = $request->ruangan;
         $input3 = $request->status;
+        $tigahariyanglalu = Carbon::now()->subDays(3)->isoFormat('YYYY-MM-DD'); // 28-05-2024 menjadi 2024-05-28
         // if ($request->status != 1) {
         //     $input3 = null;
         // } else {
@@ -334,8 +335,12 @@ class ERuangController extends Controller
                 ->when($input2 != null, function ($q) use ($input2) {
                     $q->where('eruang.id_ruangan',$input2);
                 })
+                // ->when($input3 != 0, function ($q) use ($input3) {
+                //     $q->where('eruang.tgl','>=',$tigahariyanglalu);
+                // })
                 ->when($input3 == 1, function ($q) use ($input3) {
                     $q->where('gizi_verif',null);
+                    $q->where('eruang.tgl','>=',$tigahariyanglalu);
                 })
                 ->when($input3 == 2, function ($q) use ($input3) {
                     $q->where('gizi_verif',1);
