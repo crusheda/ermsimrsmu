@@ -338,7 +338,7 @@ class ERuangController extends Controller
                 // ->when($input3 != 0, function ($q) use ($input3) {
                 //     $q->where('eruang.tgl','>=',$tigahariyanglalu);
                 // })
-                ->when($input3 == 1, function ($q) use ($input3) {
+                ->when($input3 == 1, function ($q) use ($input3,$tigahariyanglalu) {
                     $q->where('gizi_verif',null);
                     $q->where('eruang.tgl','>=',$tigahariyanglalu);
                 })
