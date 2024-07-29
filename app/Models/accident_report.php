@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class k3_accident_report extends Model
+class accident_report extends Model
 {
     use HasFactory;
     protected $table = 'mfk_accident_report';

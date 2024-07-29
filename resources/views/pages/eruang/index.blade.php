@@ -300,8 +300,8 @@
                                 <div class="col-xxl-3 col-lg-6">
                                     <div class="position-relative">
                                         <select class="select2 form-control" id="tampil_gizi_status" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih Status Verifikasi">
-                                            <option value="0" hidden selected>Semua Data</option>
-                                            <option value="1">Belum Diverifikasi</option>
+                                            <option value="0" hidden>Semua Data</option>
+                                            <option value="1" selected>Belum Diverifikasi</option>
                                             <option value="2">Sudah Diverifikasi</option>
                                         </select>
                                     </div>

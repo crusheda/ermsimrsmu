@@ -25,7 +25,7 @@
         <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
             <thead>
                 <tr>
-                    <th>AKSI</th>
+                    <th><center>AKSI</center></th>
                     <th>KORBAN</th>
                     <th>UNIT</th>
                     <th>LOKASI</th>
@@ -39,7 +39,7 @@
             </tbody>
             <tfoot class="bg-whitesmoke">
                 <tr>
-                    <th>AKSI</th>
+                    <th><center>AKSI</center></th>
                     <th>KORBAN</th>
                     <th>UNIT</th>
                     <th>LOKASI</th>
@@ -104,6 +104,14 @@
                     var table = $('#dttable').DataTable({
                         order: [
                             [4, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '8%' },
+                            { sWidth: '32%' },
+                            { sWidth: '25%' },
+                            { sWidth: '20%' },
+                            { sWidth: '15%' },
                         ],
                         displayLength: 7,
                         lengthChange: true,

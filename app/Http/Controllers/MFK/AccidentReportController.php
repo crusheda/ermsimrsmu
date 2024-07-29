@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
-use App\Models\k3_accident_report;
+use App\Models\model_has_roles;
+use App\Models\accident_report;
 use App\Models\roles;
 use Carbon\Carbon;
 use Auth;
@@ -19,7 +20,7 @@ class AccidentReportController extends Controller
     public function index()
     {
         // $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        // $show = k3_accident_report::get();
+        // $show = accident_report::get();
 
         // $data = [
         //     'show' => $show,
@@ -32,7 +33,7 @@ class AccidentReportController extends Controller
 
     function tambah() {
         $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        // $show = k3_accident_report::get();
+        // $show = accident_report::get();
 
         $data = [
             // 'show' => $show,
@@ -47,7 +48,7 @@ class AccidentReportController extends Controller
     }
 
     function table() {
-        $show = k3_accident_report::orderBy('tgl','DESC')
+        $show = accident_report::orderBy('tgl','DESC')
                 ->limit('30')
                 ->get();
 
@@ -84,13 +85,13 @@ class AccidentReportController extends Controller
 
         $user = Auth::user();
         $name = $user->name; //jamhuri$user = Auth::user();
-        $role = $user->roles->first()->name; //kabag-keperawatan
+        // $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('roles.name')->where('model_has_roles.model_id', $userId)->get();
+        // foreach ($role as $key => $value) {
+        //     $unit[] = $value->name;
+        // }
 
         $thn = Carbon::now()->format('Y');
-        // $thn = Carbon::now();
-        $getlahir = $request->lahir;
-        $parse = Carbon::parse($getlahir)->format('Y');
-        // $parse = Carbon::parse($getlahir);
+        $parse = Carbon::parse($request->lahir)->format('Y');
         $usia = $thn - $parse;
 
         $data = new accident_report;
@@ -105,7 +106,7 @@ class AccidentReportController extends Controller
         $data->lahir = $request->lahir;
         $data->usia = $usia;
         $data->jk = $request->jk;
-        $data->unit = $request->unit;
+        $data->role = $request->unit;
         $data->cedera = $request->cedera;
         $data->penanganan = $request->penanganan;
         $data->k_aset = $request->k_aset;
@@ -135,10 +136,9 @@ class AccidentReportController extends Controller
         $data->filename = $path;
         $data->user = $name;
 
-
         $data->save();
 
-        return redirect()->back()->with('message','Tambah Laporan Kecelakaan Kerja Berhasil.');
+        return redirect()->route('accidentreport.index')->with('message','Tambah Laporan Kecelakaan Kerja Berhasil.');
     }
 
     /**
@@ -149,7 +149,7 @@ class AccidentReportController extends Controller
      */
     public function show($id)
     {
-        $data = k3_accident_report::find($id);
+        $data = accident_report::find($id);
         return Storage::download($data->filename, $data->title);
     }
 
@@ -169,7 +169,7 @@ class AccidentReportController extends Controller
         // $parse = Carbon::parse($getlahir);
         $usia = $thn - $parse;
 
-        $data = k3_accident_report::find($id);
+        $data = accident_report::find($id);
         $data->tgl = $request->tgl;
         $data->lokasi = $request->lokasi;
         $data->jenis = $request->jenis;
@@ -181,7 +181,7 @@ class AccidentReportController extends Controller
         $data->lahir = $request->lahir;
         $data->usia = $usia;
         $data->jk = $request->jk;
-        $data->unit = $request->unit;
+        $data->role = $request->unit;
         $data->cedera = $request->cedera;
         $data->penanganan = $request->penanganan;
         $data->k_aset = $request->k_aset;
@@ -211,7 +211,7 @@ class AccidentReportController extends Controller
         // die();
         $data->save();
 
-        return redirect()->back()->with('message','Perubahan Laporan Kecelakaan Kerja Berhasil.');
+        return redirect()->route('accidentreport.index')->with('message','Perubahan Laporan Kecelakaan Kerja Berhasil.');
     }
 
     /**
@@ -222,7 +222,7 @@ class AccidentReportController extends Controller
      */
     public function destroy($id)
     {
-        $data = k3_accident_report::find($id);
+        $data = accident_report::find($id);
         $data->delete();
 
         // redirect
@@ -231,7 +231,7 @@ class AccidentReportController extends Controller
 
     public function download(Request $id)
     {
-        $data = k3_accident_report::find($id);
+        $data = accident_report::find($id);
         $data->filename = $filename;
         $path = storage_path($filename);
 
@@ -240,7 +240,7 @@ class AccidentReportController extends Controller
 
     public function cetak($id)
     {
-        $data = k3_accident_report::where('id',$id)->first();
+        $data = accident_report::where('id',$id)->first();
 
         $tgl = Carbon::parse($data->tgl)->toDateString();
         $jam = Carbon::parse($data->tgl)->toTimeString();
@@ -385,7 +385,7 @@ class AccidentReportController extends Controller
     public function verifikasi($id)
     {
         $getclock = Carbon::now();
-        $data = k3_accident_report::find($id);
+        $data = accident_report::find($id);
         $data->verifikasi = $getclock;
         $data->save();
 
