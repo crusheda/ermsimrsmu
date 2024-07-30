@@ -184,11 +184,10 @@
                     <li class="menu-title" key="t-menu">Akreditasi</li>
                 @endif
 
-                @if (Auth::user()->getPermission('kecelakaan_kerja') == true)
+                {{-- @if (Auth::user()->getPermission('kecelakaan_kerja') == true)
                 <li hidden>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="bx bx-walk"></i>
-                        {{-- <span class="badge rounded-pill bg-danger float-end">new</span> --}}
                         <span key="t-dashboards">MFK</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
@@ -197,7 +196,14 @@
                         @endif
                     </ul>
                 </li>
-                @endif
+                @endif --}}
+                <li>
+                    <a href="{{ route('accidentreport.index') }}" class="waves-effect">
+                        <span class="badge rounded-pill bg-primary float-end">new</span>
+                        <i class="fas fa-running"></i>
+                        <span key="t-chat">Kecelakaan Kerja</span>
+                    </a>
+                </li>
 
                 @if (Auth::user()->getPermission('manajemen_risiko') == true)
                 <li>
