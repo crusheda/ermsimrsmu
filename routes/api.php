@@ -219,6 +219,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // MFK
             // KECELAKAAN KERJA
             Route::get('mfk/kecelakaankerja/data','\App\Http\Controllers\MFK\AccidentReportController@table');
+            Route::get('mfk/kecelakaankerja/{id}/hapus','\App\Http\Controllers\MFK\AccidentReportController@destroy');
         // MUTU
             // MANAJEMEN RISIKO
             Route::get('manrisk/data','\App\Http\Controllers\Mutu\ManriskController@table');

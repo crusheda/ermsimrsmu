@@ -15,7 +15,7 @@
             <div class="btn-group">
                 <button class="btn btn-soft-success" onclick="window.location='{{ route('accidentreport.tambah') }}'"><i
                         class="mdi mdi-microsoft-excel"></i>&nbsp;&nbsp;Tambah Data</button>
-                <button type="button" class="btn btn-soft-warning" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                <button type="button" class="btn btn-warning disabled" data-bs-toggle="tooltip" data-bs-offset="0,4"
                     data-bs-placement="bottom" data-bs-html="true"
                     title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Segarkan Tabel</span>" onclick="refresh()">
                     <i class="fa-fw fas fa-sync nav-icon"></i></button>
@@ -81,23 +81,21 @@
                         content = `<tr id='data"+ item.id +"'>`;
                         content +=
                             `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand"><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>` +
-                            `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(` +
-                            item.id +
-                            `)"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
-                            `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/pelayanan/kebidanan/skl/` +
-                            item.id +
-                            `/print','id','width=900,height=600')"><i class='bx bx-printer scaleX-n1-rtl'></i> Cetak</a></li>` +
-                            `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/pelayanan/kebidanan/skl/` +
-                            item.id +
-                            `/cetak')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>` +
+                            `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                             item.id +
                             `)"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
-                        content += item.korban + "</td><td>" +
-                                    item.role + "</td><td>" +
-                                    item.lokasi + "</td><td>" +
-                                    item.tgl + "</td>";
+                        if (item.korban != null) {
+                            res.user.forEach(key => {
+                                if (item.korban == key.id) {
+                                    content += key.nama;
+                                }
+                            })
+                        } else {
+                            content += item.korban_luar;
+                        }
+                        content += "</td><td>" + item.role + "</td><td>" + item.lokasi + "</td><td>" + item.tgl + "</td>";
                         content += `</tr>`;
                         $('#tampil-tbody').append(content);
                     });
@@ -136,5 +134,46 @@
             });
 
         })
+
+        function hapus(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Ingin menghapus Laporan ID : ' + id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times"></i> Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/mfk/kecelakaankerja/" + id + "/hapus",
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Laporan telah berhasil dihapus',
+                                position: 'topRight'
+                            });
+                            // fresh();
+                            window.location.reload();
+                        },
+                        error: function(res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Laporan gagal dihapus',
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            })
+        }
     </script>
 @endsection

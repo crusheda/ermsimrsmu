@@ -1,6 +1,11 @@
 @extends('layouts.default')
 
 @section('content')
+    {{-- <style>
+        .select2-container {
+            width: 100% !important;
+        }
+    </style> --}}
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
@@ -14,7 +19,7 @@
         <div class="card-body">
             <h4 classs="card-title">
                 <div class="btn-group">
-                    <button class="btn btn-soft-primary" onclick="window.location='{{ route('accidentreport.index') }}'"><i
+                    <button class="btn btn-soft-dark" onclick="window.location='{{ route('accidentreport.index') }}'"><i
                         class="fas fa-arrow-left"></i>&nbsp;&nbsp;Kembali</button>
                 </div>
             </h4>
@@ -27,15 +32,15 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label>Waktu <a class="text-danger">*</a></label>
-                            <input type="text" class="form-control flatpickrfull" name="tgl"
+                            <input type="datetime-local" class="form-control" name="tgl"
                                 placeholder="Pilih Tanggal dan Waktu" required>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
-                            <label>Lokasi</label>
+                            <label>Lokasi <a class="text-danger">*</a></label>
                             <input type="text" name="lokasi" id="lokasi" class="form-control"
-                                placeholder="">
+                                placeholder="" required>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -72,8 +77,8 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group mb-3">
-                            <label>Kronologi Kecelakaan</label>
-                            <textarea class="form-control" name="kronologi" id="kronologi1" placeholder="" maxlength="190" rows="3"></textarea>
+                            <label>Kronologi Kecelakaan <a class="text-danger">*</a></label>
+                            <textarea class="form-control" name="kronologi" id="kronologi1" placeholder="" maxlength="190" rows="3" required></textarea>
                         </div>
                     </div>
                     <hr>
@@ -83,52 +88,66 @@
                         <div class="col">
                             <div class="form-group mb-3">
                                 <label>Kerugian Pada Manusia</label><br>
-                                <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian1" value="1">
-                                <label for="radio-kerugian1"><mark>Tak Cedera</mark> (Tidak ada cedera dan tidak ada hilang hari kerja)</label><br>
-                                <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian2" value="2">
-                                <label for="radio-kerugian2"><mark>Cedera Ringan</mark> (Mengalami cedera ringan/mendapat P3K tapi tidak ada hilang hari kerja)</label><br>
-                                <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian3" value="3">
-                                <label for="radio-kerugian3"><mark>Cedera Sedang</mark> (Mengalami cedera yang memerlukan pertolongan medis tapi adanya hilang hari kerja)</label><br>
-                                <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian4" value="4">
-                                <label for="radio-kerugian4"><mark>Cedera Berat</mark> (Mengalami cedera yang memerlukan pertolongan medis dan atau rujukan medis, cacat sementara dan adanya hilang hari kerja)</label><br>
-                                <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian5" value="5">
-                                <label for="radio-kerugian5"><mark>Meninggal/Fatal</mark> (Mengalami cacat permanen atau kematian)</label>
+                                <div class="checkbox-group required">
+                                    <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian1" value="1" checked>
+                                    <label for="radio-kerugian1"><mark>Tak Cedera</mark> (Tidak ada cedera dan tidak ada hilang hari kerja)</label><br>
+                                    <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian2" value="2">
+                                    <label for="radio-kerugian2"><mark>Cedera Ringan</mark> (Mengalami cedera ringan/mendapat P3K tapi tidak ada hilang hari kerja)</label><br>
+                                    <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian3" value="3">
+                                    <label for="radio-kerugian3"><mark>Cedera Sedang</mark> (Mengalami cedera yang memerlukan pertolongan medis tapi adanya hilang hari kerja)</label><br>
+                                    <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian4" value="4">
+                                    <label for="radio-kerugian4"><mark>Cedera Berat</mark> (Mengalami cedera yang memerlukan pertolongan medis dan atau rujukan medis, cacat sementara dan adanya hilang hari kerja)</label><br>
+                                    <input class="form-check-input" type="radio" name="kerugian" id="radio-kerugian5" value="5">
+                                    <label for="radio-kerugian5"><mark>Meninggal/Fatal</mark> (Mengalami cacat permanen atau kematian)</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label>Nama Korban <a class="text-danger">*</a></label>
-                            <input type="text" name="korban" id="korban" class="form-control"
-                                placeholder="" required>
+                        <div class="mb-3">
+                            <label>Nama Korban <a class="text-danger">*</a><input type="checkbox" class="checkbox_check me-2" style="margin-left: 8px" onclick="validateLuarRs()" id="luarrs">Luar RS ?</label>
+                            {{-- <div class="input-group"> --}}
+                                <div class="korban1">
+                                    <select class="select2 form-select korban1select" name="korban" required>
+                                        <option value="">Pilih Karyawan</option>
+                                        @foreach($list['user'] as $us => $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <input type="text" name="korban_luar" class="form-control korban2" placeholder="Tuliskan Nama Korban dari luar Rumah Sakit" hidden>
+                            {{-- </div> --}}
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label>Tanggal Lahir</label>
-                            <input type="text" name="lahir" class="form-control flatpickr"
-                                placeholder="YYYY-MM-DD">
+                            <label>Unit/Jabatan/Jenis <a class="text-danger">*</a></label>
+                            <div class="korban1">
+                                <select class="select2 form-select korban1select" name="role" id="unit" required>
+                                    <option value="">Pilih</option>
+                                    @foreach($list['unit'] as $name => $item)
+                                        <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="text" name="role_luar" class="form-control korban2" placeholder="e.g. Tukang Sampah" hidden>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <div class="form-group mb-3">
+                            <label>Tanggal Lahir <a class="text-danger">*</a></label>
+                            <input type="date" name="lahir" class="form-control"
+                                placeholder="YYYY-MM-DD" required>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <div class="form-group mb-3">
                             <label>Jenis Kelamin <a class="text-danger">*</a></label>
-                            <select id="jk" name="jk" class="select2 form-select" required>
-                                <option value="">Pilih</option>
-                                <option value="laki-laki">Laki-laki</option>
-                                <option value="perempuan">Perempuan</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group mb-3">
-                            <label>Unit</label>
-                            <select class="select2 form-select" name="unit" id="unit" required>
-                                <option value="">Pilih</option>
-                                @foreach($list['unit'] as $name => $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                                <select id="jk" name="jk" class="select2 form-select" required>
+                                    <option value="">Pilih</option>
+                                    <option value="laki-laki">Laki-laki</option>
+                                    <option value="perempuan">Perempuan</option>
+                                </select>
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -140,8 +159,8 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group mb-3">
-                            <label>Penanganan</label>
-                            <textarea class="form-control" name="penanganan" id="penanganan1" placeholder="" maxlength="190" rows="3"></textarea>
+                            <label>Penanganan <a class="text-danger">*</a></label>
+                            <textarea class="form-control" name="penanganan" id="penanganan1" placeholder="" maxlength="190" rows="3" required></textarea>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -164,41 +183,41 @@
                     <h5>1. Penyebab Langsung</h5>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label>Tindakan Tidak Aman <i>(Unsafe Action)</i></label>
+                            <label>Tindakan Tidak Aman <i>(Unsafe Action)</i> <a class="text-danger">*</a></label>
                             <input type="text" name="tta" id="tta" class="form-control"
-                                placeholder="">
+                                placeholder="" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label>Kondisi Tidak Aman <i>(Unsafe Condition)</i></label>
+                            <label>Kondisi Tidak Aman <i>(Unsafe Condition)</i> <a class="text-danger">*</a></label>
                             <input type="text" name="kta" id="kta" class="form-control"
-                                placeholder="">
+                                placeholder="" required>
                         </div>
                     </div>
                     <br>
                     <h5>2. Penyebab Dasar</h5>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label>Faktor Personal</label>
+                            <label>Faktor Personal <a class="text-danger">*</a></label>
                             <input type="text" name="f_personal" id="f_personal" class="form-control"
-                                placeholder="">
+                                placeholder="" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label>Faktor Pekerjaan : </label>
+                            <label>Faktor Pekerjaan <a class="text-danger">*</a></label>
                             <input type="text" name="f_pekerjaan" id="f_pekerjaan" class="form-control"
-                                placeholder="">
+                                placeholder="" required>
                         </div>
                     </div>
                     <br>
                     <h5>3. Alat / Sumber Yang Terlibat Pada Kecelakaan</h5>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label>Peralatan Kerja</label>
+                            <label>Peralatan Kerja <a class="text-danger">*</a></label>
                             <input type="text" name="p_kerja" id="p_kerja" class="form-control"
-                                placeholder="">
+                                placeholder="" required>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -275,20 +294,20 @@
                     <hr>
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label>Rencana Tindakan</label>
-                            <textarea class="form-control" name="r_tindakan" id="r_tindakan" placeholder="" maxlength="190" rows="2"></textarea>
+                            <label>Rencana Tindakan <a class="text-danger">*</a></label>
+                            <textarea class="form-control" name="r_tindakan" id="r_tindakan" placeholder="" maxlength="190" rows="2" required></textarea>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group mb-3">
-                            <label>Target Waktu</label>
-                            <textarea class="form-control" name="t_waktu" id="t_waktu" placeholder="" maxlength="190" rows="2"></textarea>
+                            <label>Target Waktu <a class="text-danger">*</a></label>
+                            <textarea class="form-control" name="t_waktu" id="t_waktu" placeholder="" maxlength="190" rows="2" required></textarea>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group mb-3">
-                            <label>Wewenang</label>
-                            <textarea class="form-control" name="wewenang" id="wewenang" placeholder="" maxlength="190" rows="2"></textarea>
+                            <label>Wewenang <a class="text-danger">*</a></label>
+                            <textarea class="form-control" name="wewenang" id="wewenang" placeholder="" maxlength="190" rows="2" required></textarea>
                         </div>
                     </div>
                     <hr>
@@ -307,7 +326,7 @@
 
     <script>
         $(document).ready(function() {
-
+            $('div.checkbox-group.required :checkbox:checked').length > 0
             // SELECT2
             var te = $(".select2");
             te.length && te.each(function() {
@@ -372,6 +391,24 @@
 
                 return true;
             });
+        }
+
+        function validateLuarRs() {
+            if ($('input.checkbox_check').is(':checked')) {
+                $(".korban1").prop('hidden', true);
+                $(".korban2").prop('hidden', false);
+                $(".korban1select").prop('required', false);
+                $(".korban2").prop('required', true);
+                $(".korban1select").val('').trigger('change');
+                $(".korban2").val('');
+            } else {
+                $(".korban1").prop('hidden', false);
+                $(".korban2").prop('hidden', true);
+                $(".korban1select").prop('required', true);
+                $(".korban2").prop('required', false);
+                $(".korban1select").val('').trigger('change');
+                $(".korban2").val('');
+            }
         }
     </script>
 @endsection

@@ -13,7 +13,7 @@ class CreateTableK3AccidentReport extends Migration
      */
     public function up()
     {
-        Schema::create('accident_report', function (Blueprint $table) {
+        Schema::create('mfk_accident_report', function (Blueprint $table) {
             $table->id();
             $table->dateTime('tgl')->nullable();
             $table->string('lokasi')->nullable();
@@ -22,11 +22,13 @@ class CreateTableK3AccidentReport extends Migration
             $table->string('kronologi')->nullable();
 
             $table->string('kerugian')->nullable();
-            $table->string('korban')->nullable();
+            $table->integer('korban')->nullable();
+            $table->string('korban_luar')->nullable();
+            $table->longText('role')->nullable();
+            $table->string('role_luar')->nullable();
             $table->date('lahir')->nullable();
             $table->string('usia')->nullable();
             $table->string('jk')->nullable();
-            $table->longText('role')->nullable();
             $table->string('cedera')->nullable();
             $table->string('penanganan')->nullable();
             $table->string('k_aset')->nullable();
@@ -57,7 +59,7 @@ class CreateTableK3AccidentReport extends Migration
                 $table->string('filename', 200)->nullable();
 
             $table->dateTime('verifikasi')->nullable();
-            $table->string('user')->nullable();
+            $table->integer('user')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

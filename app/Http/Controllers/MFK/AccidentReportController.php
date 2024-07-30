@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\model_has_roles;
 use App\Models\accident_report;
 use App\Models\roles;
+use App\Models\User;
 use Carbon\Carbon;
 use Auth;
 use Storage;
@@ -33,27 +34,46 @@ class AccidentReportController extends Controller
 
     function tambah() {
         $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        // $show = accident_report::get();
+        $user = user::where('nik', '<>',null)->get();
 
         $data = [
-            // 'show' => $show,
+            'user' => $user,
             'unit' => $unit
         ];
 
         return view('pages.mfk.accidentreport.tambah')->with('list', $data);
     }
 
-    function ubah() {
+    function ubah($id) {
+        $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+        $user = user::where('nik', '<>',null)->get();
+        $show = accident_report::where('id',$id)
+                ->orderBy('tgl','DESC')
+                ->limit('30')
+                ->first();
 
+        // print_r($show);
+        // die();
+        $data = [
+            'user' => $user,
+            'unit' => $unit,
+            'show' => $show
+        ];
+
+        return view('pages.mfk.accidentreport.ubah')->with('list', $data);
     }
 
     function table() {
+        $user = user::where('nik', '<>',null)->get();
+        $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
         $show = accident_report::orderBy('tgl','DESC')
                 ->limit('30')
                 ->get();
 
         $data = [
+            'user' => $user,
             'show' => $show,
+            'unit' => $unit
         ];
 
         return response()->json($data, 200);
@@ -84,6 +104,7 @@ class AccidentReportController extends Controller
         // die();
 
         $user = Auth::user();
+        $id_user = $user->id; //jamhuri$user = Auth::user();
         $name = $user->name; //jamhuri$user = Auth::user();
         // $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('roles.name')->where('model_has_roles.model_id', $userId)->get();
         // foreach ($role as $key => $value) {
@@ -102,11 +123,20 @@ class AccidentReportController extends Controller
         $data->kronologi = $request->kronologi;
 
         $data->kerugian = $request->kerugian;
-        $data->korban = $request->korban;
+        if ($request->korban != '') {
+            $data->korban = $request->korban;
+        } else {
+            $data->korban_luar = $request->korban_luar;
+        }
         $data->lahir = $request->lahir;
         $data->usia = $usia;
         $data->jk = $request->jk;
-        $data->role = $request->unit;
+        $data->role = $request->role;
+        // if ($request->role != '') {
+        //     $data->role = $request->role;
+        // } else {
+        //     $data->role_luar = $request->role_luar;
+        // }
         $data->cedera = $request->cedera;
         $data->penanganan = $request->penanganan;
         $data->k_aset = $request->k_aset;
@@ -134,7 +164,7 @@ class AccidentReportController extends Controller
 
         $data->title = $title;
         $data->filename = $path;
-        $data->user = $name;
+        $data->user = $id_user;
 
         $data->save();
 
@@ -222,11 +252,21 @@ class AccidentReportController extends Controller
      */
     public function destroy($id)
     {
+        // Inisialisasi
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
         $data = accident_report::find($id);
+
+        // Proses Hapus Lampiran
+        if ($data->filename != null && $data->filename != '') {
+            Storage::delete($data->filename);
+        }
+
+        // Proses Hapus Data dari DB
         $data->delete();
 
         // redirect
-        return Redirect::back()->with('message','Hapus Laporan Berhasil');
+        return response()->json($tgl, 200);
+        // return Redirect::back()->with('message','Hapus Laporan Berhasil');
     }
 
     public function download(Request $id)
