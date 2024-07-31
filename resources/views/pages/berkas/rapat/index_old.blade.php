@@ -1,83 +1,60 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Administrasi</li>
-                        <li class="breadcrumb-item">Berkas</li>
-                        <li class="breadcrumb-item" aria-current="page">Rapat</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Berkas Rapat</h2>
-                    </div>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Berkas - Rapat</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="">
-            <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Tabel</h5>
-                    <div class="btn-group">
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i
-                                class="tf-icon bx bx-upload"></i>&nbsp;&nbsp;Upload Berkas</button>
-                    </div>
-                </div>
-                <div class="card-body pt-3 pb-2">
-                    <div class="table-responsive">
-                        <table id="dttable" class="table table-hover dt-responsive nowrap align-middle">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>KEGIATAN</th>
-                                    <th>KETUA</th>
-                                    <th>WAKTU</th>
-                                    <th>LOKASI</th>
-                                    <th>KET</th>
-                                    <th>UPDATE</th>
-                                    <th>USER</th>
-                                    <th>
-                                        <center>#</center>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="9">
-                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>KEGIATAN</th>
-                                    <th>KETUA</th>
-                                    <th>WAKTU</th>
-                                    <th>LOKASI</th>
-                                    <th>KET</th>
-                                    <th>UPDATE</th>
-                                    <th>USER</th>
-                                    <th>
-                                        <center>#</center>
-                                    </th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="card card-body table-responsive">
+        <h4 classs="card-title">
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i
+                    class="tf-icon bx bx-upload"></i>&nbsp;&nbsp;Upload Berkas</button>
+        </h4>
+        <hr>
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>KEGIATAN</th>
+                    <th>KETUA</th>
+                    <th>WAKTU</th>
+                    <th>LOKASI</th>
+                    <th>KET</th>
+                    <th>UPDATE</th>
+                    <th>USER</th>
+                    <th>
+                        <center>#</center>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="9">
+                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot class="bg-whitesmoke">
+                <tr>
+                    <th>ID</th>
+                    <th>KEGIATAN</th>
+                    <th>KETUA</th>
+                    <th>WAKTU</th>
+                    <th>LOKASI</th>
+                    <th>KET</th>
+                    <th>UPDATE</th>
+                    <th>USER</th>
+                    <th>
+                        <center>#</center>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
     {{-- MODAL START --}}
@@ -260,8 +237,6 @@
     </div>
     {{-- MODAL END --}}
 
-    {{-- <script type="module">import { DataTable } from '/js/plugins/module.js';
-        window.dt = new DataTable('#dttable');</script> --}}
     <script>
         $(document).ready(function() {
             // SELECT2
@@ -385,15 +360,17 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
                         order: [
                             [0, "desc"]
                         ],
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
+
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                 }
             });
         });

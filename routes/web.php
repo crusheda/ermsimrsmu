@@ -194,25 +194,21 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
 // SIMRSMU V3.1
-Route::get('/dashboardx', [App\Http\Controllers\Dashboard\DefaultController::class, 'index2'])->name('dashboardx');
-Route::group(['middleware' => ['auth']], function () {
-    // PROFIL
-    // Route::get('profil/ubahpassword', [App\Http\Controllers\Setting\UbahPassword\UbahPasswordController::class, 'showChangePasswordForm'])->name('profil.ubahpassword');
-    // Route::patch('profil/ubahpassword', [App\Http\Controllers\Setting\UbahPassword\UbahPasswordController::class, 'changePassword'])->name('auth.change_password');
-    Route::get('profilx', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'index2'])->name('profilx');
-    // Route::put('profil/{id}/ubahfoto', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'storeImg'])->name('profil.ubahfoto');
-});
-// Route::get('/starter', function () {
-//     return view('pages.dashboard.index');
-// })->name('starter');
+// Route::get('/dashboardx', [App\Http\Controllers\Dashboard\DefaultController::class, 'index2'])->name('dashboardx');
+// Route::group(['middleware' => ['auth']], function () {
+//     Route::get('profilx', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'index2'])->name('profilx');
+// });
+// // Route::get('/starter', function () {
+// //     return view('pages.dashboard.index');
+// // })->name('starter');
 
-// INVENTARIS
-Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], function () {
-    // ASET RUANGAN
-    Route::get('asetx/ruangan','\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@index')->name('asetx_ruangan.index');
+// // INVENTARIS
+// Route::group(['middleware' => ['auth'], 'prefix' => 'inventaris', 'as' => ''], function () {
+//     // ASET RUANGAN
+//     Route::get('asetx/ruangan','\App\Http\Controllers\Inventaris\Aset\AsetRuanganController@index')->name('asetx_ruangan.index');
 
-    // ASET
-    Route::get('asetx','\App\Http\Controllers\Inventaris\Aset\AsetController@index2')->name('asetx.index');
-    Route::get('asetx/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail2')->name('asetx.detail');
-});
+//     // ASET
+//     Route::get('asetx','\App\Http\Controllers\Inventaris\Aset\AsetController@index2')->name('asetx.index');
+//     Route::get('asetx/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail2')->name('asetx.detail');
+// });
 

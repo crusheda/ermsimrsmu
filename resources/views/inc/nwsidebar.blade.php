@@ -11,7 +11,7 @@
         </a>
     </li>
     <li class="pc-item">
-        <a href="{{ route('dashboardx') }}" class="pc-link">
+        <a href="{{ route('dashboard') }}" class="pc-link">
             <span class="pc-micon">
                 {{-- <svg class="pc-icon">
                     <use xlink:href="#custom-notification-status"></use>
@@ -55,7 +55,18 @@
             {{-- <span class="pc-badge">2</span> --}}
         </a>
         <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="{{ route('asetx.index') }}">Aset</a></li>
+            <li class="pc-item"><a class="pc-link" href="{{ route('aset.index') }}">Aset</a></li>
         </ul>
+    </li>
+    <li class="pc-item">
+        <a href="{{ route('eruang.index') }}" class="pc-link">
+            <span class="pc-micon">
+                {{-- <svg class="pc-icon">
+                    <use xlink:href="#custom-notification-status"></use>
+                </svg> --}}
+                <i class="fas fa-key"></i>
+            </span>
+            <span class="pc-mtext">E-Ruang</span>
+        </a>
     </li>
 </ul>

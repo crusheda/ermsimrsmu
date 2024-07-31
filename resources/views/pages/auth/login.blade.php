@@ -63,7 +63,7 @@
                             <hr>
 
                             <div class="mb-3">
-                                <center><label for="">Selesaikan Captcha</label></center>
+                                <center><label for="" class ="form-label">Selesaikan Captcha</label></center>
                                 {{-- {!! Captcha::img('math') !!} --}}
                                 <div id="reloadedCaptcha" class="mb-2 text-center"><span>{!! captcha_img('math') !!}</span></div>
                                 <div class="input-group auth-pass-inputgroup">

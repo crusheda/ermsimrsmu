@@ -99,80 +99,80 @@ class AsetController extends Controller
 
     }
 
-    function index2()
-    {
-        $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-        $month = Carbon::now()->isoFormat('MM');
-        $year = Carbon::now()->isoFormat('YYYY');
-        $ruangan = aset_ruangan::get();
+    // function index2() // OLD
+    // {
+    //     $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+    //     $month = Carbon::now()->isoFormat('MM');
+    //     $year = Carbon::now()->isoFormat('YYYY');
+    //     $ruangan = aset_ruangan::get();
 
-        $data = [
-            'role' => $role,
-            'month' => $month,
-            'year' => $year,
-            'ruangan' => $ruangan,
-        ];
+    //     $data = [
+    //         'role' => $role,
+    //         'month' => $month,
+    //         'year' => $year,
+    //         'ruangan' => $ruangan,
+    //     ];
 
-        return view('pages.inventaris.aset.index2')->with('list',$data);
-    }
+    //     return view('pages.inventaris.aset.index2')->with('list',$data);
+    // }
 
-    function detail2($token)
-    {
-        // print_r($token);
-        // die();
-        $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')
-                ->where('aset.token',$token)
-                ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
-                ->first();
+    // function detail2($token) // OLD
+    // {
+    //     // print_r($token);
+    //     // die();
+    //     $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')
+    //             ->where('aset.token',$token)
+    //             ->select('aset_ruangan.ruangan','aset_ruangan.lokasi','aset.*')
+    //             ->first();
 
-        // print_r($token);
-        // die();
+    //     // print_r($token);
+    //     // die();
 
-        if (empty($show)) { // JIKA DATA TIDAK DITEMUKAN
-            $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
-            $month = Carbon::now()->isoFormat('MM');
-            $year = Carbon::now()->isoFormat('YYYY');
-            $ruangan = aset_ruangan::get();
+    //     if (empty($show)) { // JIKA DATA TIDAK DITEMUKAN
+    //         $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
+    //         $month = Carbon::now()->isoFormat('MM');
+    //         $year = Carbon::now()->isoFormat('YYYY');
+    //         $ruangan = aset_ruangan::get();
 
-            $data = [
-                'role' => $role,
-                'month' => $month,
-                'year' => $year,
-                'ruangan' => $ruangan,
-            ];
+    //         $data = [
+    //             'role' => $role,
+    //             'month' => $month,
+    //             'year' => $year,
+    //             'ruangan' => $ruangan,
+    //         ];
 
-            return Redirect::to('/inventaris/aset')->with('list',$data);
-        } else { // JIKA DATA DITEMUKAN
-            $user = User::where('id',$show->id_user)->select('nama')->first(); // whereNotNull('nik')
+    //         return Redirect::to('/inventaris/aset')->with('list',$data);
+    //     } else { // JIKA DATA DITEMUKAN
+    //         $user = User::where('id',$show->id_user)->select('nama')->first(); // whereNotNull('nik')
 
-            if ($show->kondisi == 1) {
-                $kondisi = 'Baik';
-            } else {
-                if ($show->kondisi == 2) {
-                    $kondisi = 'Cukup';
-                } else {
-                    if ($show->kondisi == 3) {
-                        $kondisi = 'Buruk';
-                    }
-                }
-            }
+    //         if ($show->kondisi == 1) {
+    //             $kondisi = 'Baik';
+    //         } else {
+    //             if ($show->kondisi == 2) {
+    //                 $kondisi = 'Cukup';
+    //             } else {
+    //                 if ($show->kondisi == 3) {
+    //                     $kondisi = 'Buruk';
+    //                 }
+    //             }
+    //         }
 
-            // Menentukan Isi QR-Code
-            $qr = $show->sarana.' | '.$show->merk.' | '.$show->tipe.' | '.$show->ruangan.' | '.$kondisi;
+    //         // Menentukan Isi QR-Code
+    //         $qr = $show->sarana.' | '.$show->merk.' | '.$show->tipe.' | '.$show->ruangan.' | '.$kondisi;
 
-            $data = [
-                'show' => $show,
-                // 'mutasi' => $mutasi,
-                // 'peminjaman' => $peminjaman,
-                // 'pengembalian' => $pengembalian,
-                'qr' => $qr,
-                'user' => $user,
-            ];
+    //         $data = [
+    //             'show' => $show,
+    //             // 'mutasi' => $mutasi,
+    //             // 'peminjaman' => $peminjaman,
+    //             // 'pengembalian' => $pengembalian,
+    //             'qr' => $qr,
+    //             'user' => $user,
+    //         ];
 
-            return view('pages.inventaris.aset.detail2')->with('list',$data);
-        }
+    //         return view('pages.inventaris.aset.detail2')->with('list',$data);
+    //     }
 
-    }
+    // }
 
     function fresh($id){
         $show = aset::join('aset_ruangan','aset.id_ruangan','=','aset_ruangan.id')

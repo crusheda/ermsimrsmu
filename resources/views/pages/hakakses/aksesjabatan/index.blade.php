@@ -66,7 +66,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label for="">Pilih Salah Satu <b>Jabatan</b></label>
+                        <label for="" class ="form-label">Pilih Salah Satu <b>Jabatan</b></label>
                         <br>
                         <select class="select2 form-control" id="aksesjabatan-jabatan" style="width: 100%" data-bs-auto-close="outside" required>
                             {{-- <option value="">Pilih</option> --}}
@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label for="">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
+                        <label for="" class ="form-label">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAll()">Select All</button>
                         <button type="button" class="btn btn-outline-danger btn-sm" onclick="deselectAll()">Deselect All</button>
                         <br>
@@ -154,7 +154,7 @@
                     <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="">Akses</label>
+                    <label for="" class ="form-label">Akses</label>
                     <input type="text" id="inp-akses" class="form-control" placeholder="Masukkan nama akses">
                 </div>
                 <div class="modal-footer">
@@ -178,7 +178,7 @@
                     <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="">Jabatan</label>
+                    <label for="" class ="form-label">Jabatan</label>
                     <input type="text" id="inp-jabatan" class="form-control" placeholder="Masukkan nama jabatan"
                         required>
                 </div>
@@ -203,7 +203,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label for="">Pilih Salah Satu <b>Jabatan</b></label>
+                        <label for="" class ="form-label">Pilih Salah Satu <b>Jabatan</b></label>
                         <select class="select2 form-control" id="aksesjabatan-jabatan" style="width: 100%" data-bs-auto-close="outside" required>
                             @if (count($list['role']) > 0)
                                 @foreach ($list['role'] as $key => $item)
@@ -214,7 +214,7 @@
                         <small>Refresh browser apabila tidak ditemukan <kbd>Jabatan</kbd> yang baru saja ditambahkan.</small>
                     </div>
                     <div class="form-group">
-                        <label for="">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
+                        <label for="" class ="form-label">Pilih <b>Akses</b> (Bisa lebih dari satu)</label>
                         <select id="aksesjabatan-akses" class="select2 form-control" data-bs-auto-close="outside"
                             required multiple="multiple" style="width: 100%">
                             @if (count($list['permissions']) > 0)
@@ -836,8 +836,8 @@
             //     showCancelButton: true,
             //     focusCancel: true,
             //     confirmButtonColor: '#FF4845',
-            //     confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
-            //     cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
+            //     confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
+            //     cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i>  Batal`,
             //     backdrop: `rgba(26,27,41,0.8)`,
             // }).then((result) => {
             //     if (result.isConfirmed) {
@@ -877,8 +877,8 @@
                 showCancelButton: true,
                 focusCancel: true,
                 confirmButtonColor: '#FF4845',
-                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
-                cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
+                confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i>  Batal`,
                 backdrop: `rgba(26,27,41,0.8)`,
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -926,8 +926,8 @@
                 showCancelButton: true,
                 focusCancel: true,
                 confirmButtonColor: '#FF4845',
-                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
-                cancelButtonText: `<i class="fa fa-times"></i>  Batal`,
+                confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i>  Batal`,
                 backdrop: `rgba(26,27,41,0.8)`,
             }).then((result) => {
                 if (result.isConfirmed) {

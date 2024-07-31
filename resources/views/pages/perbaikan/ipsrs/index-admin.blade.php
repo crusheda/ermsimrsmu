@@ -200,7 +200,7 @@
                 showDenyButton: false,
                 showCloseButton: true,
                 showCancelButton: true,
-                cancelButtonText: `<i class="fa fa-times"></i> Tutup`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Tutup`,
                 confirmButtonText: `<i class="fa fa-download"></i> Download`,
                 backdrop: `rgba(26,27,41,0.8)`,
             }).then((result) => {

@@ -1,33 +1,33 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboardx') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Inventaris</li>
-                        <li class="breadcrumb-item"><a href="{{ route('asetx.index') }}">Aset</a></li>
-                        <li class="breadcrumb-item" aria-current="page">Detail</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Detail Aset</h2>
-                    </div>
-                </div>
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-chase">
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">ASET & GUDANG - SARANA</h4>
+            </div>
+        </div>
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
+    <div class="row">
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="fw-semibold text-center">SCAN - <b>QR CODE</b></h5>
-                        <center><div class="mb-3" id="qr"><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat..</div></center>
+                        <center><div class="mb-3" id="qr"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses QR Code...</div></center>
                         {{-- <div class="mb-3">
                             <center>
                                 {!! DNS2D::getBarcodeHTML($list['show']->token, 'QRCODE',5,5) !!}
@@ -68,12 +68,12 @@
                         </table>
                     </div> --}}
                     <div class="hstack gap-2">
-                        <button class="btn btn-light-dark w-100" onclick="window.location='{{ route('asetx.index') }}'"><i class="ti ti-arrow-back-up"></i>&nbsp;Kembali</button>
-                        {{-- <button class="btn btn-light-info w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button> --}}
-                        <button class="btn btn-light-warning w-100" onclick="cetak()"><i class="ti ti-printer"></i>&nbsp;Cetak</button>
-                        <a class="btn btn-light-success w-100 tombol-menu" href="javascript:void(0);" role="button"
+                        <button class="btn btn-soft-dark w-100" onclick="window.location='{{ route('aset.index') }}'"><i class="bx bx-caret-left scaleX-n1-rtl"></i> Kembali</button>
+                        {{-- <button class="btn btn-soft-info w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button> --}}
+                        <button class="btn btn-soft-warning w-100" onclick="cetak()"><i class="bx bx-printer scaleX-n1-rtl"></i> Cetak</button>
+                        <a class="btn btn-soft-success w-100 tombol-menu" href="javascript:void(0);" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="ti ti-caret-down"></i>&nbsp;Menu
+                            <i class='bx bx-caret-down align-middle'></i>&nbsp;&nbsp;Menu
                         </a>
                         <div class="dropdown-menu dropdown-menu-end tombol-menu">
                             <a class="dropdown-item menu-pemeliharaan" href="javascript:void(0);" onclick="modalPemeliharaan({{ $list['show']->id }})">Pemeliharaan</a>
@@ -89,11 +89,11 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center">
-                        {{-- <div id="kondisi_aset" class="bg-body p-3 rounded">
-                            <div class="text-primary m-1" role="status">
+                        <div id="kondisi_aset">
+                                <div class="spinner-border text-primary m-1" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
-                        </div> --}}
+                        </div>
                         {{-- @if ($list['show']->kondisi == 1)
                             <div class="avatar-md mx-auto mb-3">
                                 <div class="avatar-title bg-light rounded-circle text-primary h1">
@@ -130,23 +130,20 @@
                         {{-- <button class="btn btn-warning-outline btn-sm" onclick="showUpdateKondisi({{ $list['show']->kondisi }})" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                         title="Kondisi Sekarang"><i class='bx bx-edit scaleX-n1-rtl'></i> Perbarui Kondisi</button> --}}
-                        {{-- <hr> --}}
+                        <hr>
                         <div class="row text-center">
-                            <div class="col-6 border border-top-0 border-bottom-0 border-start-0">
+                            <div class="col-6">
                                 <div class="mt-3">
-                                    <p class="text-muted mb-1"><b>Status Aset</b></p>
-                                    <h3 id="status_aset">
-                                        <small class="mt-3"><center><i class="fa fa-spinner fa-spin fa-fw"></i></center></small>
-                                    </h3>
+                                    <p class="text-muted mb-1">Status Aset</p>
+                                    <h5 id="status_aset"></h5>
                                 </div>
                             </div>
 
-                            <div class="col-6 border border-top-0 border-bottom-0 border-end-0">
+                            <div class="col-6">
                                 <div class="mt-3">
-                                    <p class="text-muted mb-1"><b>Kondisi Aset</b></p>
-                                    <h3 id="kondisi_aset">
-                                        <small class="mt-3"><center><i class="fa fa-spinner fa-spin fa-fw"></i></center></small>
-                                    </h3>
+                                    <p class="text-muted mb-1">Tgl. Beroperasi</p>
+                                    <h6 class="mb-0">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->isoFormat('d MMM Y') }}</h6>
+                                    <small class="text-success">{{ Carbon\Carbon::parse($list['show']->tgl_operasi)->diffForHumans() }}</small>
                                 </div>
                             </div>
                         </div>
@@ -287,7 +284,7 @@
                         </li>
                     </ul>
                     <div class="mt-4">
-                        <a href="#!" class="btn btn-light-primary btn-hover w-100 rounded"><i class="mdi mdi-eye"></i> Tampilkan Semua Riwayat</a>
+                        <a href="#!" class="btn btn-soft-primary btn-hover w-100 rounded"><i class="mdi mdi-eye"></i> Tampilkan Semua Riwayat</a>
                     </div> --}}
                     {{-- SEDANG DALAM PROSES DEVELOPMENT----------------------------------------------------------------------------------------------------------- --}}
                 </div>
@@ -299,21 +296,8 @@
                     <div class="d-flex">
                         {{-- <img src="assets/images/companies/wechat.svg" alt="" height="50"> --}}
                         <div class="flex-grow-1">
-                            <h5 class="fw-semibold"><kbd>ID : {{ $list['show']->id }}</kbd>&nbsp;&nbsp;
-                                <a class="text-dark" href="javascript:void(0);" data-bs-toggle="tooltip"
-                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Aset">
-                                    {{ $list['show']->sarana }}&nbsp;
-                                    @if ($list['show']->jenis == 1)
-                                        <a href="javascript: void(0);" class="badge bg-danger font-size-12">
-                                            <i class="ti ti-medical-cross text-white me-1"></i> Aset Medis
-                                        </a>
-                                    @else
-                                        <a href="javascript: void(0);" class="badge bg-warning font-size-12">
-                                            <i class="ti ti-medical-cross text-white me-1"></i> Aset Non Medis
-                                        </a>
-                                    @endif
-                                </a>
-                            </h5>
+                            <h5 class="fw-semibold"><kbd>ID : {{ $list['show']->id }}</kbd>&nbsp;&nbsp;<a class="text-dark" href="javascript:void(0);" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Aset">{{ $list['show']->sarana }}</a></h5>
                             <h6>No. Inventaris : <a href="javascript:void(0);" id="show_no_inventaris">{{ $list['show']->no_inventaris }}</a></h6>
                             <ul class="list-unstyled hstack gap-2 mb-0">
                                 <li data-bs-toggle="tooltip"
@@ -353,8 +337,8 @@
                         </div>
                     @endif
 
-                    <div class="text-center mb-3">
-                        <div class="row bg-body p-3 rounded">
+                    <div class="text-center">
+                        <div class="row">
                             <div class="col-sm-3">
                                 <div>
                                     <p class="text-muted mb-2">Tgl. Input Aset</p>
@@ -392,10 +376,24 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
 
-                    <h5 class="fw-semibold mb-3"><i class="ph-duotone ph-arrow-bend-down-right"></i>&nbsp;Spesifikasi</h5>
+                    <h5 class="fw-semibold mb-3">Keterangan&nbsp;
+                        @if ($list['show']->jenis == 1)
+                            <a href="javascript: void(0);" class="badge bg-danger font-size-12">
+                                <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Medis
+                            </a>
+                        @else
+                            <a href="javascript: void(0);" class="badge bg-warning font-size-12">
+                                <i class="bx bx-purchase-tag-alt align-middle text-white me-1"></i> Non Medis
+                            </a>
+                        @endif
+                    </h5>
+                    <p class="text-muted">{{ $list['show']->keterangan }}</p>
+
+                    <h5 class="fw-semibold mb-3">Spesifikasi</h5>
                     {{-- <p class="text-muted mb-4"></p> --}}
-                    <div class="table-responsive mb-3" style="border: 0px">
+                    <div class="table-responsive" style="border: 0px">
                         <table class="table table-nowrap mb-0" style="width:100%">
                             <tbody>
                                 <tr>
@@ -418,12 +416,7 @@
                         </table>
                     </div>
 
-                    @if ($list['show']->keterangan)
-                    <h5 class="fw-semibold mb-3"><i class="ph-duotone ph-arrow-bend-down-right"></i>&nbsp;Keterangan</h5>
-                    <p class="text-muted">{{ $list['show']->keterangan }}</p>
-                    @endif
-
-                    <h5 class="fw-semibold mb-3"><i class="ph-duotone ph-arrow-bend-down-right"></i>&nbsp;Nilai Aset</h5>
+                    <h5 class="fw-semibold mb-3">Nilai Aset</h5>
                     <div class="text-right">
                         <h4><mark id="show_nilai_perolehan"></mark></h4>
                         <p class="text-muted mt-3">Asal Perolehan <i class="fa-fw fas fa-caret-right nav-icon"></i>
@@ -535,15 +528,15 @@
                 </div>
                 <div class="col-12 text-center mb-3">
                     <div class="btn-group">
-                        <button class="btn btn-light-warning btn-rounded" onclick="refreshModalPemeliharaan({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                        <button class="btn btn-soft-warning btn-rounded" onclick="refreshModalPemeliharaan({{ $list['show']->id }})" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Riwayat Pemeliharaan"><i class="fa fa-sync"></i>&nbsp;&nbsp;Refresh</button>
-                        <button type="reset" class="btn btn-light-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
-                        <button class="btn btn-light-primary btn-rounded" onclick="prosesPemeliharaan()" data-bs-toggle="tooltip"
+                        <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i>&nbsp;&nbsp;Tutup</button>
+                        <button class="btn btn-soft-primary btn-rounded" onclick="prosesPemeliharaan()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Pemeliharaan Aset" id="btn-simpan-pemeliharaan"><i class="fas fa-wrench"></i>&nbsp;&nbsp;Submit</button>
                     </div>
                 </div>
                 <hr>
-                <div class="table-responsive text-nowrap mb-4" style="border: 0px;margin-left:20px;margin-right:20px">
+                <div class="table-responsive text-nowrap" style="border: 0px;margin-left:20px;margin-right:20px">
                     <h4 class="card-title">Riwayat Pemeliharaan <mark>{{ $list['show']->sarana }}</mark></h4>
                     <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Penghapusan <strong>HANYA</strong> dapat dilakukan pada hari yang sama</footer></p>
@@ -609,17 +602,17 @@
                 </div>
                 <div class="col-12 text-center mb-3">
                     <div class="btn-group">
-                        <button class="btn btn-light-warning btn-rounded" onclick="refreshModalMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                        <button class="btn btn-soft-warning btn-rounded" onclick="refreshModalMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Riwayat Mutasi"><i class="fa fa-sync"></i>&nbsp;&nbsp;Refresh</button>
-                        <button type="reset" class="btn btn-light-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
-                        <button class="btn btn-light-primary btn-rounded" onclick="prosesMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                        <button type="reset" class="btn btn-soft-secondary btn-rounded" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i>&nbsp;&nbsp;Tutup</button>
+                        <button class="btn btn-soft-primary btn-rounded" onclick="prosesMutasi({{ $list['show']->id }})" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Proses Mutasi Sekarang" id="btn-mutasi-aktif"><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
                         <button class="btn btn-secondary btn-rounded" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Aset Sedang Dalam peminjaman" id="btn-mutasi-nonaktif" disabled hidden><i class="fas fa-luggage-cart"></i>&nbsp;&nbsp;Mutasi Aset</button>
                     </div>
                 </div>
                 <hr>
-                <div class="table-responsive text-nowrap mb-4" style="border: 0px;margin-left:20px;margin-right:20px">
+                <div class="table-responsive text-nowrap" style="border: 0px;margin-left:20px;margin-right:20px">
                     <h4 class="card-title">Riwayat Mutasi <mark>{{ $list['show']->sarana }}</mark></h4>
                     <p class="card-title-desc"><footer class="blockquote-footer"><strong>No. Inventaris akan berubah mengikuti Ruangan yang dipilih saat ini</strong></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_mutasi"></kbd> - <kbd id="lokasi_sekarang_mutasi"></kbd></footer></p>
@@ -655,7 +648,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="card-title-desc" style="margin-top: -18px"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_peminjaman"></kbd> - <kbd id="lokasi_sekarang_peminjaman"></kbd></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Riwayat penarikan yang sudah ada akan terhapus dan kondisi akan tetap sama dengan yang sebelumnya</p></footer>
                     <hr>
@@ -717,7 +710,7 @@
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button class="btn btn-primary me-sm-3 me-1" id="btn-peminjaman" onclick="prosesPeminjaman()"><i class="fas fa-qrcode"></i>&nbsp;&nbsp;Ajukan</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
         </div>
@@ -734,7 +727,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="card-title-desc" style="margin-top: -18px"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_pengembalian"></kbd> - <kbd id="lokasi_sekarang_pengembalian"></kbd></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Aset akan dikembalikan ke Gudang Aset setelah proses pengembalian</p>
                     <hr>
@@ -795,7 +788,7 @@
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button class="btn btn-primary me-sm-3 me-1" id="btn-pengembalian" onclick="prosesPengembalian()"><i class="fas fa-qrcode"></i>&nbsp;&nbsp;Ajukan Pengembalian</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
         </div>
@@ -812,7 +805,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="card-title-desc" style="margin-top: -18px"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
+                    <p class="card-title-desc"><footer class="blockquote-footer">No. Inventaris <code>{{ $list['show']->no_inventaris }}</code></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Ruangan Sekarang : <kbd id="ruangan_sekarang_penarikan"></kbd> - <kbd id="lokasi_sekarang_penarikan"></kbd></footer></p>
                     <p class="card-title-desc"><footer class="blockquote-footer">Jika <mark>dimusnahkan</mark>, Aset akan dikunci oleh sistem</footer></p>
                     <hr>
@@ -857,7 +850,7 @@
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button class="btn btn-primary me-sm-3 me-1" id="btn-penarikan" onclick="prosesPenarikan()"><i class="fa fa-people-carry"></i>&nbsp;&nbsp;Ajukan Penarikan</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
         </div>
@@ -876,7 +869,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" class="form-control" id="id_kondisi" hidden>
-                    <label for="">Pilih Kondisi</label>
+                    <label for="" class ="form-label">Pilih Kondisi</label>
                     <select class="form-select" id="pilihan_kondisi" required></select>
                 </div>
                 <div class="modal-footer">
@@ -1098,12 +1091,12 @@
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
                                 if (adminID == true) {
-                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 } else {
                                     if (updet == date) {
-                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                     } else {
-                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                     }
                                 }
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.nama_petugas}</td>`;
@@ -1209,7 +1202,6 @@
 
         function hapusPemeliharaan(id) {
             Swal.fire({
-                target: document.getElementById('formPemeliharaan'),
                 title: 'Apakah anda yakin?',
                 text: 'Hapus Pemeliharaan ID : '+id,
                 icon: 'warning',
@@ -1219,8 +1211,8 @@
                 showCancelButton: true,
                 focusCancel: true,
                 confirmButtonColor: '#FF4845',
-                confirmButtonText: `<i class="fa fa-trash"></i> Hapus`,
-                cancelButtonText: `<i class="fa fa-times"></i> Batal`,
+                confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Batal`,
                 backdrop: `rgba(26,27,41,0.8)`,
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -1314,28 +1306,28 @@
                             content = `<tr id='`+item.id+`'>`;
                                 if (adminID == true) {
                                     content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                        <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                         </div></center></td>`;
                                 } else {
                                     if (updet == date) {
                                         if (res.peminjaman != null) {
                                             if (res.peminjaman.status == 1) {
                                                 content += `<td><center><div class='btn-group'>
-                                                    <a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                                     </div></center></td>`;
                                             } else {
                                                 content += `<td><center><div class='btn-group'>
-                                                    <a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                                     </div></center></td>`;
                                             }
                                         } else {
                                             content += `<td><center><div class='btn-group'>
-                                                <a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                                 </div></center></td>`;
                                         }
                                     } else {
                                         content += `<td><center><div class='btn-group'>
-                                            <a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                            <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                             </div></center></td>`;
                                     }
                                 }
@@ -1476,7 +1468,6 @@
                         });
                     } else {
                         Swal.fire({
-                            target: document.getElementById('formMutasi'),
                             title: 'Batal Mutasi Aset ID : '+id+' ?',
                             text: 'Ruangan dan Kondisi aset sekarang akan dikembalikan seperti keadaan semula',
                             icon: 'warning',
@@ -1487,7 +1478,7 @@
                             focusCancel: true,
                             confirmButtonColor: '#FF4845',
                             confirmButtonText: `<i class="fa fa-history"></i> Batalkan Mutasi`,
-                            cancelButtonText: `<i class="fa fa-times"></i> Tutup`,
+                            cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Tutup`,
                             backdrop: `rgba(26,27,41,0.8)`,
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -1700,7 +1691,7 @@
         //                     focusCancel: true,
         //                     confirmButtonColor: '#FF4845',
         //                     confirmButtonText: `<i class="fa fa-history"></i> Batalkan Mutasi`,
-        //                     cancelButtonText: `<i class="fa fa-times"></i> Tutup`,
+        //                     cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Tutup`,
         //                     backdrop: `rgba(26,27,41,0.8)`,
         //                 }).then((result) => {
         //                     if (result.isConfirmed) {
@@ -1978,7 +1969,6 @@
 
         function batalPenarikan(id) {
             Swal.fire({
-                target: document.getElementById('formPenarikan'),
                 title: 'Batal Penarikan Aset ID : '+id+' ?',
                 text: 'Status, kondisi, dan ruangan aset yang sudah dilakukan penarikan akan dikembalikan seperti semula',
                 icon: 'warning',
@@ -1989,7 +1979,7 @@
                 focusCancel: true,
                 confirmButtonColor: '#FF4845',
                 confirmButtonText: `<i class="fa fa-history"></i> Batalkan Penarikan`,
-                cancelButtonText: `<i class="fa fa-times"></i> Tutup`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Tutup`,
                 backdrop: `rgba(26,27,41,0.8)`,
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -2056,15 +2046,43 @@
                         // FRESH KONDISI
                         $('#kondisi_aset').empty();
                         if (res.show.kondisi == 1) {
-                            $('#kondisi_aset').append(`<div class="badge bg-primary">Baik</div>`);
+                            $('#kondisi_aset').append(`
+                                <div class="avatar-md mx-auto mb-3">
+                                    <div class="avatar-title bg-light rounded-circle text-primary h1">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <p class="text-primary mb-0"><b>Kondisi Baik</b></p>
+                            `);
                         } else {
                             if (res.show.kondisi == 2) {
-                                $('#kondisi_aset').append(`<div class="badge bg-warning">Cukup</div>`);
+                                $('#kondisi_aset').append(`
+                                    <div class="avatar-md mx-auto mb-3">
+                                        <div class="avatar-title bg-warning rounded-circle text-light h1">
+                                            <i class="fas fa-minus"></i>
+                                        </div>
+                                    </div>
+                                    <p class="text-warning mb-0"><b>Kondisi Cukup</b></p>
+                                `);
                             } else {
                                 if (res.show.kondisi == 3) {
-                                    $('#kondisi_aset').append(`<div class="badge bg-danger">Buruk</div>`);
+                                    $('#kondisi_aset').append(`
+                                        <div class="avatar-md mx-auto mb-3">
+                                            <div class="avatar-title bg-danger rounded-circle text-light h1">
+                                                <i class="fas fa-times"></i>
+                                            </div>
+                                        </div>
+                                        <p class="text-danger mb-0"><b>Kondisi Buruk</b></p>
+                                    `);
                                 } else {
-                                    $('#kondisi_aset').append(`<div class="badge bg-dark">Kondisi Tidak Terdefinisi</div>`);
+                                    $('#kondisi_aset').append(`
+                                        <div class="avatar-md mx-auto mb-3">
+                                            <div class="avatar-title bg-dark rounded-circle text-light h1">
+                                                <i class="mdi mdi-email-open"></i>
+                                            </div>
+                                        </div>
+                                        <p class="text-dark mb-0"><b>Kondisi Tidak Terdefinisi</b></p>
+                                    `);
                                 }
                             }
                         }
@@ -2118,12 +2136,12 @@
                             var updet = new Date(item.created_at).toLocaleDateString();
                             content = `<tr id='`+item.id+`'>`;
                                 if (adminID == true) {
-                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                    content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                 } else {
                                     if (updet == date) {
-                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="hapusPemeliharaan(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                     } else {
-                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
+                                        content += `<td><center><a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></center></td>`;
                                     }
                                 }
                                 content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.nama_petugas}</td>`;
@@ -2205,28 +2223,28 @@
                             content = `<tr id='`+item.id+`'>`;
                                 if (adminID == true) {
                                     content += `<td><center><div class='btn-group'>
-                                        <a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                        <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                         </div></center></td>`;
                                 } else {
                                     if (updet == date) {
                                         if (res.peminjaman != null) {
                                             if (res.peminjaman.status == 1) {
                                                 content += `<td><center><div class='btn-group'>
-                                                    <a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                                     </div></center></td>`;
                                             } else {
                                                 content += `<td><center><div class='btn-group'>
-                                                    <a href='javascript:void(0);' class='btn btn-light-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                    <a href='javascript:void(0);' class='btn btn-soft-danger btn-sm' onclick="batalMutasi(${item.id})"><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                                     </div></center></td>`;
                                             }
                                         } else {
                                             content += `<td><center><div class='btn-group'>
-                                                <a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                                <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                                 </div></center></td>`;
                                         }
                                     } else {
                                         content += `<td><center><div class='btn-group'>
-                                            <a href='javascript:void(0);' class='btn btn-light-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
+                                            <a href='javascript:void(0);' class='btn btn-soft-secondary btn-sm'><i class='bx bx-trash scaleX-n1-rtl'></i> Batal</a>
                                             </div></center></td>`;
                                     }
                                 }

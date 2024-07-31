@@ -28,9 +28,9 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="collapse pc-user-links @if(URL::current() == url('/profilx')) collapse show @endif" id="pc_sidebar_userlink">
+                    <div class="collapse pc-user-links @if(URL::current() == url('/profil')) collapse show @endif" id="pc_sidebar_userlink">
                         <div class="pt-3">
-                            <a href="{{ route('profilx') }}" class="@if(URL::current() == url('/profilx')) text-primary @endif">
+                            <a href="{{ route('profil.index') }}" class="@if(URL::current() == url('/profil')) text-primary @endif">
                                 <i class="ti ti-user"></i> <span>Profil Saya</span>
                             </a>
                             {{-- <a href="#!">
