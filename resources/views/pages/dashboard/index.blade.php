@@ -13,7 +13,7 @@
                                 <footer class="blockquote-footer font-size-12 text-white">
                                     Ditetapkan mulai <cite title="Source Title"><strong>1 Juli 2023</strong></cite>
                                 </footer>
-                                <a href="#" class="btn btn-outline-light" data-bs-toggle="modal"
+                                <a href="#" class="btn btn-light btn-shadow" data-bs-toggle="modal"
                                 data-bs-target="#peraturan-kepegawaian">Selengkapnya</a>
                             </div>
                         </div>

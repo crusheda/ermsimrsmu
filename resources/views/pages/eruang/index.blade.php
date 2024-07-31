@@ -244,7 +244,7 @@
                             </div>
 
                             <div class="tab-pane table-responsive" id="riwayat" role="tabpanel">
-                                <table class="table align-middle dt-responsive w-100 table-check table-hover" id="dttable" style="width: 100%">
+                                <table class="table align-middle dt-responsive w-100 table-check table-hover nowrap" id="dttable" style="width: 100%">
                                     <thead>
                                         <tr>
                                             <th scope="col"><center>Aksi</center></th>

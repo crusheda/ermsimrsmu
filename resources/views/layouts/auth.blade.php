@@ -1,63 +1,55 @@
-<!doctype html>
-<html lang="en" data-layout-width="boxed" data-topbar="dark" data-preloader="disable" data-card-layout="borderless"
-    data-bs-theme="light" data-topbar-image="pattern-1">
-
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Form Login - SIMRSMU V3</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Simrsmu v3.1</title><!-- [Meta] -->
+    <meta charset="utf-8">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Sistem Manajemen Rumah Sakit PKU Muhammadiyah Sukoharjo" />
-    <meta name="keywords"
-        content="simrs, simrsmu, sim rspkuskh, pkuskh, rspkuskh, sistem pku, sistem informasi majemen rumah sakit">
+    <meta name="keywords" content="simrs, simrsmu, sim rspkuskh, pkuskh, rspkuskh, sistem pku, sistem informasi majemen rumah sakit, rumah sakit pku, pku muhammadiyah sukoharjo, pku sukoharjo">
     <meta name="author" content="Yussuf Faisal" />
-
-    <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_new_light.png') }}">
-    <!-- Bootstrap Css -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="{{ asset('css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
+    <link rel="stylesheet" href="{{ asset('fonts/inter/inter.css') }}" id="main-font-link">
+    <!-- [phosphor Icons] https://phosphoricons.com/ -->
+    <link rel="stylesheet" href="{{ asset('fonts/phosphor/duotone/style.css') }}">
+    <!-- [Tabler Icons] https://tablericons.com -->
+    <link rel="stylesheet" href="{{ asset('fonts/tabler-icons.min.css') }}">
+    <!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="{{ asset('fonts/feather.css') }}">
+    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
+    <link rel="stylesheet" href="{{ asset('fonts/fontawesome.css') }}">
+    <!-- [Material Icons] https://fonts.google.com/icons -->
+    <link rel="stylesheet" href="{{ asset('fonts/material.css') }}">
+    <!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" id="main-style-link">
+    <link rel="stylesheet" href="{{ asset('css/style-preset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iziToast.css') }}" />
-    <link href="{{ asset('css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-    <!-- App js -->
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/plugin.js') }}"></script>
-</head>
+</head><!-- [Head] end -->
 
-<body>
-    <div class="account-pages pt-sm-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center mb-4 text-muted mt-5">
-                        <a href="{{ route('portal') }}" class="d-block auth-logo">
-                            <img src="{{ asset('images/logo/logo_simrsmu_new_kop.png') }}" alt="" height="50"
-                                class="auth-logo-dark mx-auto">
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- end row -->
-
-            @yield('content')
-
-        </div>
+<!-- [Body] Start -->
+<body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
+    data-pc-theme_contrast="" data-pc-theme="light">
+    <!-- [ Pre-loader ] start -->
+    <div class="page-loader">
+        <div class="bar"></div>
     </div>
+    <!-- [ Pre-loader ] End -->
 
-    <!-- JAVASCRIPT -->
+    @yield('content') <!-- ALL CONTENT HERE -->
+
+    <!-- Required Js -->
     <script src="{{ asset('libs/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('libs/metismenu/metisMenu.min.js') }}"></script>
-    <script src="{{ asset('libs/simplebar/simplebar.min.js') }}"></script>
-    <script src="{{ asset('libs/node-waves/waves.min.js') }}"></script>
-    <!-- App js -->
+    <script src="{{ asset('js/plugins/popper.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/simplebar.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/fonts/custom-font.js') }}"></script>
+    <script src="{{ asset('js/pcoded.js') }}"></script>
+    <script src="{{ asset('js/plugins/feather.min.js') }}"></script>
     <script src="{{ asset('js/iziToast.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-</body>
 
+</body>
 </html>

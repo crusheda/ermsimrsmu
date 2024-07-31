@@ -10,7 +10,24 @@
         <div class="navbar-content">
             <div class="card pc-user-card">
                 <div class="card-body">
-                    <?php $foto_profil = \DB::table('users_foto')->where('user_id', Auth::user()->id)->first(); ?>
+                    <?php $foto_profil = \DB::table('users_foto')->where('user_id', Auth::user()->id)->first();
+                    $time = \Carbon\Carbon::now()->isoFormat('H');
+                    // PENGHITUNGAN WAKTU PAGI / SIANG / SORE / MALAM
+                    if ($time < "10") {
+                        $waktu = "Pagi";
+                    } else {
+                        if ($time >= "10" && $time < "15") {
+                            $waktu = "Siang";
+                        } else {
+                            if ($time >= "15" && $time < "19") {
+                                $waktu = "Sore";
+                            } else {
+                                if ($time >= "19") {
+                                    $waktu = "Malam";
+                                }
+                            }
+                        }
+                    }?>
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
                             @if (empty($foto_profil->filename))
@@ -20,7 +37,8 @@
                             @endif
                         </div>
                         <div class="flex-grow-1 ms-3 me-2">
-                            <h6 class="mb-0">{{ Auth::user()->name }}</h6><small>Administrator</small>
+                            <small>Selamat {{ $waktu }},</small>
+                            <h6 class="mb-0"><a class="text-primary">{{ Auth::user()->nick?Auth::user()->nick:Auth::user()->name }}</a></h6>
                         </div>
                         <a class="btn btn-icon btn-link-secondary avtar" data-bs-toggle="collapse" href="#pc_sidebar_userlink">
                             <svg class="pc-icon">

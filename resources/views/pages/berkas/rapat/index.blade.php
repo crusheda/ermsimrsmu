@@ -35,7 +35,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="dttable" class="table table-hover dt-responsive nowrap align-middle">
+                        <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
                                     <th>
@@ -52,7 +52,7 @@
                             </thead>
                             <tbody id="tampil-tbody">
                                 <tr>
-                                    <td colspan="9">
+                                    <td colspan="9" style="font-size:13px">
                                         <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                                     </td>
                                 </tr>
@@ -327,7 +327,7 @@
                         content = "<tr id='data" + item.id + "'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link-secondary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
-                                        <ul class='dropdown-menu dropdown-menu-end'>`;
+                                        <ul class='dropdown-menu dropdown-menu-right'>`;
                         if (adminID == true) {
                             content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
                                         <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` + item.id + `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>

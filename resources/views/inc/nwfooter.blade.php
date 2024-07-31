@@ -4,8 +4,8 @@
             <div class="col my-1">
             </div>
             <div class="col-auto my-1">
-                <p class="m-0">Made with <a class="text-danger" href="{{ url('https://instagram.com/hiyussuf') }}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                    title="Lihat Profil Developer">&#9829;</a> est. 2020</p>
+                <p class="m-0"><script>document.write(new Date().getFullYear())</script> © Made with <a class="text-danger" href="{{ url('https://instagram.com/hiyussuf') }}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                    title="Lihat Profil Developer">&#9829;</a></p>
                 {{-- <ul class="list-inline footer-link mb-0">
                     <li class="list-inline-item"><a href="../index-2.html">Home</a></li>
                     <li class="list-inline-item"><a href="https://phoenixcoded.gitbook.io/able-pro/"

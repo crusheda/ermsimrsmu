@@ -1,12 +1,12 @@
 <html lang="en">
 
 <head>
-    <title>SIMRSMU V3 - {{ Auth::user()->name }}</title><!-- [Meta] -->
+    <title>Simrsmu v3.1 - {{ Auth::user()->name }}</title><!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Sistem Manajemen Rumah Sakit PKU Muhammadiyah Sukoharjo" />
-    <meta name="keywords" content="simrs, simrsmu, sim rspkuskh, pkuskh, rspkuskh, sistem pku, sistem informasi majemen rumah sakit">
+    <meta name="keywords" content="simrs, simrsmu, sim rspkuskh, pkuskh, rspkuskh, sistem pku, sistem informasi majemen rumah sakit, rumah sakit pku, pku muhammadiyah sukoharjo, pku sukoharjo">
     <meta name="author" content="Yussuf Faisal" />
     <link rel="shortcut icon" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_new_light.png') }}">
