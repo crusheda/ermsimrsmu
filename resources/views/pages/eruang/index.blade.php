@@ -95,12 +95,12 @@
                             @endif
                         </ul>
 
-                        <div class="tab-content crypto-buy-sell-nav-content p-4">
+                        <div class="tab-content crypto-buy-sell-nav-content p-2">
                             <div class="tab-pane active" id="pengajuan" role="tabpanel">
                                 <form>
                                     <div class="mb-3">
-                                        <div class="row">
-                                            <label class="form-label"><i class="ti ti-info-circle me-1"></i><mark>Ketentuan</mark></label><br>
+                                        <div class="row alert alert-secondary">
+                                            {{-- <label class="form-label"><i class="ti ti-info-circle me-1"></i><mark>Ketentuan</mark></label><br> --}}
                                             <div class="col-md-6">
                                                 <small><i class="ti ti-arrow-narrow-right me-1"></i> Peminjaman ruangan dapat dilakukan apabila ruangan tersebut tersedia/tidak terpakai dan pemilihan Jam & Menit tidak boleh sama</small><br>
                                                 <small><i class="ti ti-arrow-narrow-right me-1"></i> Perubahan dan penghapusan data hanya dapat dilakukan sampai H-1 Acara & maksimal kurang dari Jam 12:00 WIB, tidak dalam kondisi ditolak oleh Admin, dan apabila sudah diverifikasi oleh bagian Gizi</small><br>
@@ -114,7 +114,7 @@
                                     </div>
 
                                     <div class="">
-                                        <label class="form-label">Pilih Ruangan <a class="text-danger">*</a> <mark>(Klik salah satu ruangan di bawah ini)</mark></label>
+                                        <label class="form-label">Pilih salah satu ruangan di bawah ini <a class="text-danger">*</a></label>
 
                                         <div class="row">
 
@@ -265,7 +265,7 @@
                             <div class="tab-pane" id="display" role="tabpanel" style="height:auto">
 
                                 <div class="row g-3 mb-4">
-                                    <div class="col-xxl-12">
+                                    <div class="col-xxl-12 alert alert-secondary m-b-0">
                                         <small><i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Peminjaman Ruangan dapat diverifikasi oleh Bagian Gizi Mulai dari <kbd>H-1 Acara setelah Pukul 12:00 WIB</kbd> sampai <kbd>Hari H Acara Pukul 23:59 WIB</kbd></small><br>
                                         <small><i class="ti ti-arrow-narrow-right me-1"></i> Data yang ditampilkan diurutkan berdasarkan <mark>Tanggal Terdekat</mark> lalu berdasarkan <strong>Jam dari yang paling Awal</strong></small><br>
                                         <small><i class="ti ti-arrow-narrow-right me-1"></i> Display diperbarui secara otomatis per 5 menit sekali dengan tampilan yang dibatasi (<strong>5 Antrean</strong>)</small>

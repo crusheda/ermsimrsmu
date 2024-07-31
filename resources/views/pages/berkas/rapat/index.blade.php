@@ -29,16 +29,18 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel</h5>
                     <div class="btn-group">
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i
-                                class="tf-icon bx bx-upload"></i>&nbsp;&nbsp;Upload Berkas</button>
+                        <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah"><i
+                                class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas</button>
                     </div>
                 </div>
-                <div class="card-body pt-3 pb-2">
+                <div class="card-body">
                     <div class="table-responsive">
                         <table id="dttable" class="table table-hover dt-responsive nowrap align-middle">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>
+                                        <center>#ID</center>
+                                    </th>
                                     <th>KEGIATAN</th>
                                     <th>KETUA</th>
                                     <th>WAKTU</th>
@@ -46,9 +48,6 @@
                                     <th>KET</th>
                                     <th>UPDATE</th>
                                     <th>USER</th>
-                                    <th>
-                                        <center>#</center>
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
@@ -60,7 +59,9 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>
+                                        <center>#ID</center>
+                                    </th>
                                     <th>KEGIATAN</th>
                                     <th>KETUA</th>
                                     <th>WAKTU</th>
@@ -68,9 +69,6 @@
                                     <th>KET</th>
                                     <th>UPDATE</th>
                                     <th>USER</th>
-                                    <th>
-                                        <center>#</center>
-                                    </th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -96,16 +94,22 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-secondary">
+                                    <small><i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen dan bisa lebih dari satu file</small><br>
+                                    <small><i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap file adalah <strong>5 mb</strong></small>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="mb-2">Kegiatan</label>
+                                    <label class="form-label">Kegiatan</label>
                                     <input type="text" name="nama" id="nama" class="form-control"
                                         placeholder="e.g. Rapat Unit IT" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="mb-2">Ketua Rapat</label>
+                                    <label class="form-label">Ketua Rapat</label>
                                     <select class="select2 form-control" name="kepala" style="width: 100%" required>
                                         <option value="">Pilih</option>
                                         @foreach ($list['users'] as $key => $item)
@@ -116,30 +120,26 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="mb-2">Tanggal</label>
+                                    <label class="form-label">Tanggal</label>
                                     <input class="form-control flatpickr" name="tanggal" type="text">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="mb-2">Lokasi Rapat</label>
+                                    <label class="form-label">Lokasi Rapat</label>
                                     <input type="text" name="lokasi" id="lokasi" class="form-control"
                                         placeholder="e.g. Ruang IT" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="mb-2">Keterangan</label>
+                            <label class="form-label">Keterangan</label>
                             <textarea maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control"
                                 name="keterangan" id="keterangan" placeholder="Optional"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="mb-2">Upload</label>
+                            <label class="form-label">Upload</label>
                             <input type="file" class="form-control mb-2" name="file2[]" id="file2" multiple required>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen dan bisa
-                            lebih dari satu file<br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum setiap file adalah
-                            <strong>5 mb</strong>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -168,44 +168,43 @@
                 <div class="modal-body">
                     <input type="text" id="id_edit" class="form-control" hidden>
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-secondary">
+                                <small><i class="fa-fw fas fa-caret-right nav-icon"></i> Waktu pengubahan berkas rapat hanya berlaku pada hari saat anda mengupload</small><br>
+                                <small><i class="fa-fw fas fa-caret-right nav-icon"></i> Periksa ulang lampiran berkas anda, apabila terdapat kesalahan upload dokumen mohon hapus dan upload ulang</small>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="mb-2">Kegiatan :</label>
+                                <label class="form-label">Kegiatan :</label>
                                 <input type="text" id="nama_edit" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="mb-2">Ketua Rapat : </label><br>
+                                <label class="form-label">Ketua Rapat : </label><br>
                                 <select class="form-control select2" id="kepala_edit" style="width: 100%"
                                     required></select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="mb-2">Tanggal :</label>
+                                <label class="form-label">Tanggal :</label>
                                 <input type="text" id="tanggal_edit" class="form-control flatpickr"
                                     placeholder="Tanggal Rapat" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="mb-2">Lokasi Rapat :</label>
+                                <label class="form-label">Lokasi Rapat :</label>
                                 <input type="text" id="lokasi_edit" class="form-control">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="mb-2">Keterangan :</label>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Keterangan :</label>
                         <textarea  maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control" id="keterangan_edit" ></textarea>
                     </div>
-                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Waktu pengubahan berkas rapat hanya berlaku pada
-                        hari saat anda mengupload</sub><br>
-                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Periksa ulang lampiran berkas anda, apabila
-                        terdapat kesalahan upload dokumen mohon hapus dan upload ulang</sub>
-
                 </div>
                 <div class="modal-footer">
                     Ditambahkan oleh&nbsp;<a id="user_edit"></a>
@@ -325,69 +324,51 @@
                     var date = getDateTime();
                     res.show.forEach(item => {
                         var updet = item.updated_at.substring(0, 10);
-                        content = "<tr id='data" + item.id + "'><td>" +
-                            item.id + "</td><td>" +
-                            item.nama + "</td><td>" +
-                            item.nama_kepala + "</td><td>" +
-                            item.tanggal + "</td><td>" +
-                            item.lokasi + "</td><td>";
+                        content = "<tr id='data" + item.id + "'>";
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-link-secondary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <ul class='dropdown-menu dropdown-menu-end'>`;
+                        if (adminID == true) {
+                            content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` + item.id + `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                        } else {
+                            if (item.user_id == userID) {
+                                if (updet == date) {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` + item.id + `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                } else {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                }
+                            } else {
+                                content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                            <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                            <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                            }
+                        }
+                        content += "</div></center></td>";
+                        content += "<td>" + item.nama + "</td><td>" +
+                                    item.nama_kepala + "</td><td>" +
+                                    item.tanggal + "</td><td>" +
+                                    item.lokasi + "</td><td>";
                         if (item.keterangan != null) {
                             content += item.keterangan;
                         }
                         content += '</td><td>' +
                             item.updated_at.substring(0, 19).replace('T',' ') + '</td><td>' +
                             item.nama_user + '</td>';
-                        content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
-                                        <ul class='dropdown-menu dropdown-menu-end'>`;
-                        if (adminID == true) {
-                            content +=
-                                `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
-                                item.id +
-                                `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                                            <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
-                                item.id +
-                                `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                            <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
-                                item.id +
-                                `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                        } else {
-                            if (item.user_id == userID) {
-                                if (updet == date) {
-                                    content +=
-                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
-                                        item.id +
-                                        `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                                                    <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
-                                        item.id +
-                                        `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
-                                        item.id +
-                                        `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                } else {
-                                    content +=
-                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
-                                        item.id +
-                                        `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                                                    <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                                    <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                }
-                            } else {
-                                content +=
-                                    `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` +
-                                    item.id +
-                                    `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
-                                                                <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                                <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                            }
-                        }
-                        content += "</div></center></td></tr>";
+                        content += "</tr>";
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
                         // dom: 'Bfrtip',
                         order: [
-                            [0, "desc"]
+                            [6, "desc"]
                         ],
                         displayLength: 7,
                         lengthChange: true,

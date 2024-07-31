@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card welcome-banner bg-blue-800">
+            <div class="card welcome-banner bg-blue-300">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div id="peraturan-kepegawaian" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalCenterTitle">Peraturan Kepegawaian</h5>
@@ -36,10 +36,9 @@
                     <div class="modal-body">
                         <embed src="/doc/073_PR_PERATURAN_PERUSAHAAN_2024.pdf" type="application/pdf" height="700px" width="100%">
                     </div>
-                    <div class="modal-footer">
+                    {{-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

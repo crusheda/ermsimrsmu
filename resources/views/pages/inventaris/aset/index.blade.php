@@ -152,7 +152,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center mt-lg-5" id="show_iklan">
+        <div class="row justify-content-center mt-lg-1" id="show_iklan">
             <div class="col-xl-5 col-sm-8">
                 <div class="card">
                     <div class="card-body">
