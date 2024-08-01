@@ -1,76 +1,100 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Administrasi</li>
-                        <li class="breadcrumb-item">Berkas</li>
-                        <li class="breadcrumb-item" aria-current="page">RKA</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Rencana Kerja dan Anggaran</h2>
-                    </div>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Berkas - Rencana Kerja Anggaran</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="">
-            <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h6 class="mb-0">Segera Upload RKA Anda Sebelum<br>Tanggal <b class="text-primary">xxx</b></h5>
-                    <div class="btn-group">
-                        <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
-                            <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas
-                        </button>
+    <div class="card">
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="d-flex">
+                        <div class="flex-grow-1 align-self-center">
+                            <div class="text-muted">
+                                <button type="button" class="btn btn-outline-primary mt-1" data-bs-toggle="modal"
+                                    data-bs-target="#tambah" value="animate__jackInTheBox">
+                                    <span class="tf-icon bx bx-upload"></span>&nbsp;&nbsp;Upload Berkas
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="dttable" class="table table-hover dt-responsive align-middle">
-                            <thead>
-                                <tr>
-                                    <th class="cell-fit">#ID</th>
-                                    <th>NAMA</th>
-                                    <th>FILE</th>
-                                    <th>TGL</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="9" style="font-size:13px">
-                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="cell-fit">#ID</th>
-                                    <th>NAMA</th>
-                                    <th>FILE</th>
-                                    <th>TGL</th>
-                                </tr>
-                            </tfoot>
-                        </table>
+
+                <div class="col-lg-4 align-self-center">
+                    <div class="text-lg-center mt-4 mt-lg-0">
+                        <div class="row">
+                            <div class="col-4">
+                                <div>
+                                    <p class="text-muted text-truncate mb-2">Tahun 2022</p>
+                                    <h5 class="mb-0">**</h5>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div>
+                                    <p class="text-muted text-truncate mb-2">Tahun 2023</p>
+                                    <h5 class="mb-0">**</h5>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div>
+                                    <p class="text-muted text-truncate mb-2">Tahun 2024</p>
+                                    <h5 class="mb-0">**</h5>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 d-none d-lg-block">
+                    <div class="clearfix mt-4 mt-lg-0">
+                        <p class="mb-0 float-end">Segera Upload RKA Anda Sebelum<br><b class=" float-end">Senin, 2 Oktober
+                                2023</b></p>
+                        {{-- <div class="dropdown float-end">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bxs-cog align-middle me-1"></i> Setting
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else</a>
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="card card-body table-responsive text-nowrap">
+        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+            <thead>
+                <tr>
+                    <th class="cell-fit">ID</th>
+                    <th>NAMA</th>
+                    <th>FILE</th>
+                    <th>TGL</th>
+                    <th class="cell-fit"></th>
+                </tr>
+            </thead>&nbsp;
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="6"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     {{-- MODAL START --}}
     <div class="modal fade animate__animated animate__jackInTheBox" data-bs-backdrop="static" id="tambah" tabindex="-1"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalCenterTitle">Upload Berkas RKA Terbaru</h5>
@@ -81,19 +105,22 @@
                     <div class="modal-body">
                         @csrf
                         <input type="file" name="file" class="form-control mb-2" accept=".xls,.xlsx,.pdf" required>
-                        <small>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Ukuran maksimal file adalah 5 Mb <br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berformat XLS/XLSX/PDF <br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Tidak dapat mengupload file dengan nama yang sama dengan dokumen sebelumnya
-                        </small>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Ukuran maksimal file adalah 50 Mb <br>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berformat XLS/XLSX/PDF <br>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Tidak dapat mengupload file dengan nama yang sama dengan dokumen sebelumnya
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="btn-simpan" onclick="saveData()"><i class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
+                        <button type="submit" class="btn btn-primary" id="btn-simpan" onclick="saveData()"><i
+                                class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
                 </form>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i
+                        class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
             </div>
         </div>
     </div>
+    </div>
+    <br><br><br>
+    <p id="tampilkan"></p>
 
     <div class="modal fade animate__animated animate__bounceInRight" id="hapus" data-bs-backdrop="static" id="hapus"
         tabindex="-1" aria-hidden="true">
@@ -153,12 +180,14 @@
 
                         if (item.foto_profil) {
                             try {
-                                var foto = `<img src="/storage/` + item.foto_profil.substr(7,1000) + `" alt="Avatar" class="img-radius wid-40 align-top">`;
+                                var foto = `<img src="/storage/` + item.foto_profil.substr(7,1000) + `" alt="Avatar" class="rounded-circle">`;
                             } catch (e) {
-                                var foto = `<img src="/images/pku/user.png" alt="" class="img-radius wid-40 align-top" />`;
+                                var foto =
+                                    `<div class="avatar-xs img-fluid rounded-circle"><img src="/images/pku/user.png" alt="" class="member-img img-fluid d-block rounded-circle" /></div>`;
                             }
                         } else {
-                            var foto = `<img src="/images/pku/user.png" alt="" class="img-radius wid-40 align-top" />`;
+                            var foto =
+                                `<div class="avatar-xs img-fluid rounded-circle"><img src="/images/pku/user.png" alt="" class="member-img img-fluid d-block rounded-circle" /></div>`;
                         }
                         if (item.nama_profil) {
                             var namamu = item.nama_profil;
@@ -168,9 +197,24 @@
                         var tahunrka = parseInt(item.tahun) + 1;
                         var updet = item.updated_at.substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
-                        content += `<td><div class="d-flex align-items-center"><div class="dropdown">
-                            <a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow text-body p-0" data-bs-toggle="dropdown">` + item.id + `<i class="bx bx-dots-vertical-rounded"></i></a>
-                            <div class="dropdown-menu dropdown-menu-right">`;
+                        content += `<td>` + item.id + `</td>`;
+                        content += `<td>
+                        <div class="d-flex justify-content-start align-items-center">
+                          <div class="avatar me-2">` + foto + `</div>
+                          <div class="d-flex flex-column">
+                            <h6 class="mb-0 text-truncate">` + namamu +
+                            `</h6><small class="text-truncate text-muted">` + un + `</small>
+                          </div>
+                        </div>
+                      </td>`;
+                        content += `<td>` + item.title +
+                            `&nbsp;&nbsp;<span class="badge bg-dark rounded-pill">RKA ` +
+                            tahunrka + `</span></td>`;
+                        content += `<td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td>`;
+                        content += `<td>
+                        <div class="d-flex align-items-center">
+                          <div class="dropdown"><a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
+                            <div class="dropdown-menu dropdown-menu-end">`;
                         if (downloader == true) {
                             content += `<a href="./rka/` + item.id +
                                 `" class="dropdown-item text-info">Download</a>`;
@@ -207,26 +251,14 @@
                                     }
                                 } else {
                                     content += `<a href="javascript:;" class="dropdown-item disabled">Download</a>
-                                            <a href="javascript:;" class="dropdown-item disabled">Hapus</a>`;
+                                              <a href="javascript:;" class="dropdown-item disabled">Hapus</a>`;
                                 }
                             }
                         }
                         content += `</div>
-                                </div>
-                            </div>
-                        </td>`;
-                        content += `<td><div class="d-flex justify-content-start align-items-center">
-                                            <div class="flex-shrink-0">` + foto + `</div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-0 text-truncate">` + namamu +
-                                                `</h6><small class="text-truncate text-muted">` + un + `</small>
-                                            </div>
-                                        </div>
-                                    </td>`;
-                        content += `<td>` + item.title +
-                            `&nbsp;&nbsp;<span class="badge bg-dark rounded-pill">RKA ` +
-                            tahunrka + `</span></td>`;
-                        content += `<td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td></tr>`;
+                          </div>
+                        </div>
+                      </td></tr>`;
                         $('#tampil-tbody').append(content);
                     });
 
@@ -244,7 +276,7 @@
                         .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                 }
             });
-        });
+        })
 
         function saveData() {
             $("#tambah").one('submit', function() {

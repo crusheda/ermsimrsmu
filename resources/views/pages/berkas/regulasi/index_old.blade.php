@@ -1,132 +1,129 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Administrasi</li>
-                        <li class="breadcrumb-item">Berkas</li>
-                        <li class="breadcrumb-item" aria-current="page">Regulasi</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">E-Regulasi</h2>
-                    </div>
-                </div>
+    <!-- start page title -->
+    {{-- <div class="row">
+        <div class="col-12 d-flex">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Berkas - Regulasi</h4>
+                <a href="job-list.html" class="btn btn-primary btn-sm">View All <i class="bx bx-right-arrow-alt"></i></a>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div> --}}
 
-    <!-- [ Main Content ] start -->
-    <div class="pt-1">
-        <div class="card job-filter">
-            <div class="card-body p-3">
-                <div class="row g-3">
-                    <div class="col-xxl-3 col-lg-4">
-                        <div class="position-relative">
-                            <label class="form-label">Jenis Regulasi</label>
-                            <i class="bx bx-help-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Anda dapat memilih satu dari tiga pilihan filter dibawah, lalu klik Submit"></i>
-                                <select class="form-control select2" id="search_regulasi" style="width: 100%">
-                                    <option value="">Pilih</option>
-                                    <option value="1">Kebijakan</option>
-                                    <option value="2">Panduan</option>
-                                    <option value="3">Pedoman</option>
-                                    <option value="4">Program</option>
-                                    <option value="5">SPO</option>
-                                    <option value="6">PPK</option>
-                                </select>
-                        </div>
-                    </div>
-                    <!--end col-->
-                    <div class="col-xxl-2 col-lg-4">
-                        <div class="position-relative">
-                            <label class="form-label">Waktu Pengesahan</label>
-                            <input type="month" class="form-control" value="" placeholder="Tgl" id="search_waktu" />
-                        </div>
-                    </div>
-                    <!--end col-->
-                    <div class="col-xxl-4 col-lg-4">
-                        <div class="position-relative">
-                            <label class="form-label">Unit Pembuat</label>
-                            <select class="form-control select2" id="search_pembuat" style="width: 100%">
+    <div class="d-flex">
+        <h4 class="card-title mb-4 flex-grow-1">Berkas - Regulasi</h4>
+        <div>
+            <div class="dropdown ms-auto">
+                <a class="btn btn-outline-dark btn-sm" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                    <i class="bx bxs-down-arrow"></i>&nbsp; Menu
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end">
+                    @if (Auth::user()->getPermission('admin_regulasi'))
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Regulasi</a>
+                        <div class="dropdown-divider"></div>
+                    @endif
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="tataCara()">Tata Cara</a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="showTotal()">Total Regulasi</a>
+                </div>
+            </div>
+            {{-- <div class="dropdown">
+                <button class="btn btn-info dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Menu
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    @if (Auth::user()->hasRole('it|sekretaris-direktur|administrator'))
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Regulasi</a>
+                    @endif
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="tataCara()">Tata Cara</a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="showTotal()">Total Regulasi</a>
+                </div>
+            </div> --}}
+        </div>
+    </div>
+    <div class="card job-filter">
+        <div class="card-body p-3">
+            <div class="row g-3">
+                <div class="col-xxl-3 col-lg-4">
+                    <div class="position-relative">
+                        <label class="form-label">Jenis Regulasi</label>
+                        <i class="bx bx-help-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Anda dapat memilih satu dari tiga pilihan filter dibawah, lalu klik Submit"></i>
+                            <select class="form-control select2" id="search_regulasi" style="width: 100%">
                                 <option value="">Pilih</option>
-                                @foreach($list['unit'] as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                @endforeach
+                                <option value="1">Kebijakan</option>
+                                <option value="2">Panduan</option>
+                                <option value="3">Pedoman</option>
+                                <option value="4">Program</option>
+                                <option value="5">SPO</option>
+                                <option value="6">PPK</option>
                             </select>
-                        </div>
                     </div>
-
-                    <div class="col-xxl-3 col-lg-4">
-                        <label class="form-label">Klik <a class="text-primary">Filter</a> untuk menampilkan data</label>
-                        <div class="position-relative btn-group w-100 h-80">
-                            <button type="button" class="btn btn-primary" id="btn-cari-show" onclick="cari()"><i class="fa-fw fas fa-search nav-icon"></i> Filter</button>
-                            <button type="button" class="btn btn-warning" onclick="bersih()"><i class="fa-fw fas fa-eraser nav-icon"></i> Reset</button>
-                            <div class="dropdown">
-                                <button type="button" class="btn btn-dark text-light" role="button" data-bs-toggle="dropdown" aria-haspopup="true" style="border-top-left-radius:0px;border-bottom-left-radius:0px">
-                                    <i class="ti ti-brand-asana"></i> Menu
-                                </button>
-
-                                <div class="dropdown-menu dropdown-menu-left">
-                                    @if (Auth::user()->getPermission('admin_regulasi'))
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Regulasi</a>
-                                        <div class="dropdown-divider"></div>
-                                    @endif
-                                    <a class="dropdown-item disabled" href="javascript:void(0);" {{--  onclick="tataCara()" --}} ><s>Tata Cara</s></a>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showTotal()">Total Regulasi</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-        </div>
+                <!--end col-->
+                <div class="col-xxl-3 col-lg-4">
+                    <div class="position-relative">
+                        <label class="form-label">Waktu Pengesahan</label>
+                        <input type="month" class="form-control" value="" placeholder="Tgl" id="search_waktu" />
+                    </div>
+                </div>
+                <!--end col-->
+                <div class="col-xxl-4 col-lg-4">
+                    <div class="position-relative">
+                        <label class="form-label">Unit Pembuat</label>
+                        <select class="form-control select2" id="search_pembuat" style="width: 100%">
+                            <option value="">Pilih</option>
+                            @foreach($list['unit'] as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
-    </div>
+                <div class="col-xxl-2 col-lg-4">
+                    <div class="position-relative h-100 hstack gap-3">
+                        <button type="button" class="btn btn-primary mt-4" id="btn-cari-show" onclick="cari()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Tampilkan Regulasi"><i class="fa-fw fas fa-search nav-icon"></i> Tampilkan</button>
+                        <button type="button" class="btn btn-outline-warning mt-4" onclick="bersih()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Bersihkan Kolom Pencarian"><i class="fa-fw fas fa-eraser nav-icon"></i> Ulangi Lagi</button>
+                    </div>
+                </div>
 
-    <div class="card table-card" id="show_table" hidden>
-        <div class="card-body text-nowrap">
-            <div class="table-responsive">
-                <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px"></th>
-                            <th style="width: 50px">ID</th>
-                            <th style="width: 90px">DISAHKAN</th>
-                            <th>JUDUL - UNIT TERKAIT</th>
-                            <th class="cell-fit">UNIT PEMBUAT</th>
-                            <th style="width: 170px">UPDATE</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tampil-tbody">
-                        <tr>
-                            <td colspan="9">
-                                <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th style="width: 50px"></th>
-                            <th style="width: 50px">ID</th>
-                            <th style="width: 90px">DISAHKAN</th>
-                            <th>JUDUL - UNIT TERKAIT</th>
-                            <th class="cell-fit">UNIT PEMBUAT</th>
-                            <th style="width: 170px">UPDATE</th>
-                        </tr>
-                    </tfoot>
-                </table>
             </div>
         </div>
     </div>
 
-    <div class="row justify-content-center mt-lg-4" id="show_iklan">
+    <div class="card card-body text-nowrap" id="show_table" hidden>
+        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+            <thead>
+                <tr>
+                    <th style="width: 50px"></th>
+                    <th style="width: 50px">ID</th>
+                    <th style="width: 90px">DISAHKAN</th>
+                    <th>JUDUL - UNIT TERKAIT</th>
+                    <th class="cell-fit">UNIT PEMBUAT</th>
+                    <th style="width: 170px">UPDATE</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="9">
+                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th style="width: 50px"></th>
+                    <th style="width: 50px">ID</th>
+                    <th style="width: 90px">DISAHKAN</th>
+                    <th>JUDUL - UNIT TERKAIT</th>
+                    <th class="cell-fit">UNIT PEMBUAT</th>
+                    <th style="width: 170px">UPDATE</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="row justify-content-center mt-lg-5" id="show_iklan">
         <div class="col-xl-5 col-sm-8">
             <div class="card">
                 <div class="card-body">
@@ -151,8 +148,8 @@
         </div>
     </div>
 
-    {{-- MODAL TAMBAH --}}
-    <div class="modal fade animate__animated animate__jackInTheBox" id="tambah" tabindex="-1" aria-hidden="true">
+    {{-- MODAL --}}
+    <div class="modal fade animate__animated animate__jackInTheBox" id="tambah" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -207,118 +204,13 @@
                     <div class="form-group">
                         <label class="form-label">Upload <a class="text-danger">*</a></label>
                         <input type="file" class="form-control mb-2" id="filex" name="filex" accept="application/pdf">
-                        <div class="alert alert-secondary">
-                            <small>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (PDF)
-                            </small>
-                        </div>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (PDF)
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" id="btn-upload" onclick="prosesTambah()"><i class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- MODAL UBAH --}}
-    <div class="modal fade animate__animated animate__rubberBand" id="ubah" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Ubah Regulasi
-                    </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="id_edit" hidden>
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jenis Regulasi <a class="text-danger">*</a></label>
-                                <select class="form-select" id="jns_regulasi_edit" style="width: 100%">
-                                    <option value="" hidden>Pilih</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Tgl. Pengesahan <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tgl_edit"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Unit Pembuat <a class="text-danger">*</a></label>
-                                <select class="form-select" id="pembuat_edit" style="width: 100%">
-                                    <option value="" hidden>Pilih</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Judul Dokumen <a class="text-danger">*</a></label>
-                                <input type="text" id="judul_edit" class="form-control" placeholder="e.g. PROSEDUR PERMINTAAN DARAH KEADAAN KHUSUS/CITO"/>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
-                                <input type="text" id="unit_edit" class="form-control" placeholder="e.g. BDRS, RAWAT INAP, KEBIDANAN, ICU, IBS"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Upload Ulang Berkas? <a class="text-danger">*</a></label>
-                        <div class="mb-3" id="upload_ulang"></div>
-                        <div class="alert alert-secondary">
-                            <small>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Apabila terdapat kesalahan File Upload, Anda dapat melakukan <b>Input Dokumen Ulang</b> di bawah ini<br>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Hubungi Admin untuk melakukan penghapusan berkas<br>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (<b>PDF</b>)
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Berkas Regulasi Terupload</label>
-                        <div id="berkas_regulasi"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- MODAL HAPUS --}}
-    <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
-            <div class="modal-content p-3 p-md-5">
-                <div class="row">
-                    <h4 class="modal-title text-center mb-3">
-                        Hapus Regulasi ID : <a id="show_id_hapus"></a>
-                    </h4>
-                    <div class="col-12 mb-3">
-                        <input type="text" id="id_hapus" hidden>
-                        <p style="text-align: justify;">Anda akan menghapus berkas Regulasi tersebut. Penghapusan Regulasi akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
-                            Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
-                        <label class="switch">
-                            <input type="checkbox" class="switch-input" id="setujuhapus">
-                            <span class="switch-toggle-slider">
-                            <span class="switch-on"></span>
-                            <span class="switch-off"></span>
-                            </span>
-                            <span class="switch-label">Anda siap menerima Risiko</span>
-                        </label>
-                    </div>
-                    <div class="col-12 text-center">
-                        <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -413,6 +305,72 @@
             </div>
         </div>
     </div>
+    <div class="modal fade animate__animated animate__rubberBand" id="ubah" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">
+                    Ubah Regulasi
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_edit" hidden>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenis Regulasi <a class="text-danger">*</a></label>
+                                <select class="form-select select2" id="jns_regulasi_edit" style="width: 100%">
+                                    <option value="" hidden>Pilih</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tgl. Pengesahan <a class="text-danger">*</a></label>
+                                <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tgl_edit"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Unit Pembuat <a class="text-danger">*</a></label>
+                                <select class="form-select select2" id="pembuat_edit" style="width: 100%">
+                                    <option value="" hidden>Pilih</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Judul Dokumen <a class="text-danger">*</a></label>
+                                <input type="text" id="judul_edit" class="form-control" placeholder="e.g. PROSEDUR PERMINTAAN DARAH KEADAAN KHUSUS/CITO"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
+                                <input type="text" id="unit_edit" class="form-control" placeholder="e.g. BDRS, RAWAT INAP, KEBIDANAN, ICU, IBS"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <small><i class="fa-fw fas fa-caret-right nav-icon mb-3"></i> Apabila terdapat kesalahan File Upload, Anda dapat melakukan <b>Input Dokumen Ulang</b> di bawah ini</small><br>
+                        <div class="mb-3" id="upload_ulang"></div>
+                        <small class="mb-4">
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Hubungi Admin untuk dilakukan penghapusan berkas<br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (<b>PDF</b>)
+                        </small><hr>
+                        <label class="form-label">Berkas Regulasi Terupload</label>
+                        <div id="berkas_regulasi"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade animate__animated animate__jackInTheBox" id="info" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
@@ -426,39 +384,39 @@
                     <table class="table-responsive table border-top table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th class="text-primary">JENIS REGULASI</th>
-                                <th class="text-primary">TOTAL</th>
+                                <th>JENIS REGULASI</th>
+                                <th>TOTAL</th>
                             </tr>
                         </thead>
                         <tbody id="tampil-tbody">
                             <tr>
-                                <th><h6>Kebijakan</h6></th>
+                                <th>Kebijakan</th>
                                 <td id="count_kebijakan"></td>
                             </tr>
                             <tr>
-                                <th><h6>Panduan</h6></th>
+                                <th>Panduan</th>
                                 <td id="count_panduan"></td>
                             </tr>
                             <tr>
-                                <th><h6>Pedoman</h6></th>
+                                <th>Pedoman</th>
                                 <td id="count_pedoman"></td>
                             </tr>
                             <tr>
-                                <th><h6>Program</h6></th>
+                                <th>Program</th>
                                 <td id="count_program"></td>
                             </tr>
                             <tr>
-                                <th><h6>SPO</h6></th>
+                                <th>SPO</th>
                                 <td id="count_spo"></td>
                             </tr>
                             <tr>
-                                <th><h6>PPK</h6></th>
+                                <th>PPK</th>
                                 <td id="count_ppk"></td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th class="text-primary">TOTAL KESELURUHAN</th>
+                                <th>TOTAL KESELURUHAN</th>
                                 <td id="count_total"></td>
                             </tr>
                         </tfoot>
@@ -470,9 +428,39 @@
             </div>
         </div>
     </div>
+    {{-- MODAL HAPUS --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+        <div class="modal-content p-3 p-md-5">
+            <div class="row">
+                <h4 class="modal-title text-center mb-3">
+                    Hapus Regulasi
+                </h4>
+                <div class="col-12 mb-3">
+                    <input type="text" id="id_hapus" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus berkas Regulasi tersebut. Penghapusan Regulasi akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
+                        Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
+
             // SELECT2
             var t = $(".select2");
             t.length && t.each(function() {
@@ -493,7 +481,7 @@
                 // defaultDate: now,
                 time_24hr: true,
             })
-        });
+        })
 
         function cari() {
             // $("#btn-cari").append('&nbsp;&nbsp;<span class="spinner-border" role="status" aria-hidden="true"></span>');
@@ -532,7 +520,7 @@
                             // var us = JSON.parse(res.user);
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
+                            content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="mdi mdi-dots-horizontal"></i></a><div class='dropdown-menu'>`
                                     + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/regulasi/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a>`;
                                     if (adminID == true) {
                                         content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>`
@@ -560,10 +548,10 @@
                             order: [
                                 [5, "desc"]
                             ],
-                            displayLength: 10,
+                            displayLength: 7,
                             lengthChange: true,
-                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
-                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
 
                         table.buttons().container()
@@ -684,7 +672,7 @@
                 success: function(res) {
                     // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
                     var sah = moment(res.show.sah).format('Y-MM-DD');
-                    document.getElementById('berkas_regulasi').innerHTML = "<h6><a href='/berkas/regulasi/"+res.show.id+"/download' target='_blank'>"+res.show.title+"</a></h6>";
+                    document.getElementById('berkas_regulasi').innerHTML = "<h6><a href='/v2/regulasi/"+res.show.id+"/download' target='_blank'>"+res.show.title+"</a></h6>";
                     document.getElementById('upload_ulang').innerHTML = `<input type='file' id="filex_edit" name='filex_edit' class="form-control" accept="application/pdf">`;
                     $("#id_edit").val(res.show.id);
 
@@ -794,7 +782,6 @@
 
         function hapus(id) {
             $("#id_hapus").val(id);
-            $("#show_id_hapus").text(id);
             var inputs = document.getElementById('setujuhapus');
             inputs.checked = false;
             $('#hapus').modal('show');

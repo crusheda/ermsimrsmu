@@ -71,7 +71,7 @@ class RegulasiController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $request->validate([
-            'file' => ['max:20000|mimes:pdf'],
+            'file' => ['max:5000|mimes:pdf'],
         ]);
 
         // tampung berkas yang sudah diunggah ke variabel baru
@@ -124,7 +124,7 @@ class RegulasiController extends Controller
         $tgl = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
 
         $request->validate([
-            'file' => ['max:20000|mimes:pdf|nullable'],
+            'file' => ['max:5000|mimes:pdf|nullable'],
         ]);
 
         $uploadedFile = $request->file('file');
