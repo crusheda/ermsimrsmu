@@ -670,9 +670,9 @@
                                                     <div class="dropdown">
                                                         <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a href="javascript:;" onclick="verifTolakTgl(` + item.id + `)" class="dropdown-item text-info"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Tolak</a>
-                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                            <a href="javascript:;" onclick="verifTolakTgl(` + item.id + `)" class="dropdown-item text-info"><i class='fas fa-calendar-times me-1'></i> Tolak</a>
+                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                         </div>
                                                     </div>
                                                 </div></td></center>`;
@@ -681,9 +681,9 @@
                                                     <div class="dropdown">
                                                         <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
-                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                            <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='fas fa-calendar-times me-1'></i> Alasan Penolakan</a>
+                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                         </div>
                                                     </div>
                                                 </div></td></center>`;
@@ -694,9 +694,9 @@
                                                     <div class="dropdown">
                                                         <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a href="javascript:;" class="dropdown-item text-secondary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> <s>Tolak</s></a>
-                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                            <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-calendar-times me-1'></i> <s>Tolak</s></a>
+                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                         </div>
                                                     </div>
                                                 </div></td></center>`;
@@ -705,9 +705,9 @@
                                                     <div class="dropdown">
                                                         <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
-                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                            <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='fas fa-calendar-times me-1'></i> Alasan Penolakan</a>
+                                                            <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                            <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                         </div>
                                                     </div>
                                                 </div></td></center>`;
@@ -723,8 +723,8 @@
                                                         <div class="dropdown">
                                                             <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                                <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                                <a href="javascript:;" onclick="verifEditTgl(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                                <a href="javascript:;" onclick="verifHapusTgl(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                             </div>
                                                         </div>
                                                     </div></td></center>`;
@@ -733,9 +733,9 @@
                                                         <div class="dropdown">
                                                             <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='bx bx-calendar-x scaleX-n1-rtl'></i> Alasan Penolakan</a>
-                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                                <a href="javascript:;" onclick="lihatPenolakan(` + item.id + `)" class="dropdown-item text-primary"><i class='fas fa-calendar-times me-1'></i> Alasan Penolakan</a>
+                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                                <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                             </div>
                                                         </div>
                                                     </div></td></center>`;
@@ -745,8 +745,8 @@
                                                     <div class="dropdown">
                                                         <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                            <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                            <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                            <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                         </div>
                                                     </div>
                                                 </div></td></center>`;
@@ -756,8 +756,8 @@
                                                 <div class="dropdown">
                                                     <a href="javascript:;" class="btn btn-link-light btn-sm text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
-                                                        <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
+                                                        <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                        <a href="javascript:;" class="dropdown-item text-secondary" disabled><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                     </div>
                                                 </div>
                                             </div></td></center>`;

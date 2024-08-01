@@ -1,216 +1,198 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Inventaris</li>
-                        <li class="breadcrumb-item">Aset</li>
-                        <li class="breadcrumb-item" aria-current="page">Ruangan</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Daftar Ruangan</h2>
-                    </div>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Aset & Gudang - Daftar Ruangan</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
+    <div class="card">
 
-        <div class="card table-card">
-
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="mb-0 card-title flex-grow-1">
-                        <div class="btn-group">
-                            <a class="btn btn-outline-secondary" href="{{ route('aset.index') }}" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Kembali ke Daftar Aset"><i class="fas fa-angle-left me-1"></i> Kembali</a>
-                            <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Tambah Ruangan & Lokasi"><i class='ti ti-layout-grid-add me-1'></i> Tambah</button>
-                        </div>
-                    </h5>
-                    <div class="flex-shrink-0">
-                        <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip"
+        <div class="card-body border-bottom">
+            <div class="d-flex align-items-center">
+                <h5 class="mb-0 card-title flex-grow-1">
+                    <div class="btn-group">
+                        <a class="btn btn-outline-secondary" href="{{ route('aset.index') }}" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Refresh Tabel Ruangan"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                        title="Kembali ke Daftar Aset"><i  class="bx bx-chevron-left"></i></a>
+                        <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                        title="Tambah Ruangan & Lokasi"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah</button>
+                    </div>
+                </h5>
+                <div class="flex-shrink-0">
+                    <button class="btn btn-info" onclick="refresh()" data-bs-toggle="tooltip"
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Refresh Tabel Ruangan"><i class="mdi mdi-refresh"></i> Segarkan</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" style="overflow: visible;">
+            <div class="table-responsive text-nowrap" style="border: 0px">
+                <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
+                    <thead>
+                        <tr>
+                            <th class="cell-fit">Aksi</th>
+                            <th><span class="badge bg-secondary">Kode</span> Ruangan</th>
+                            <th class="cell-fit">Lokasi</th>
+                            <th>Unit</th>
+                            <th class="cell-fit">Diperbarui</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tampil-tbody">
+                        <tr>
+                            <td colspan="9">
+                                <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- end table -->
+            </div>
+            <!-- end table responsive -->
+        </div>
+
+        <!-- MODAL TAMBAH -->
+        <div class="modal fade" tabindex="-1" id="modalTambah" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderdetailsModalLabel">Tambah Ruangan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Kode Inventaris <a class="text-danger">*</a></label>
+                                    <input type="text" id="kode" class="form-control" placeholder="e.g. 2.2.1.1">
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Nama Ruangan <a class="text-danger">*</a></label>
+                                    <input type="text" id="ruangan" class="form-control" placeholder="e.g. Poliklinik">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Lokasi <a class="text-danger">*</a></label>
+                                    <input type="text" id="lokasi" class="form-control" placeholder="e.g. Ruang Jaga Perawat">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
+                                    <select class="select2unit form-control" id="unit" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple">
+                                        {{-- <option value="">Pilih</option> --}}
+                                        @if (count($list['role']) > 0)
+                                            @foreach ($list['role'] as $key => $item)
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <small>Unit akan dapat melihat seluruh sarana yang berada di ruangan tersebut</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                                class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
+                        <button class="btn btn-info" onclick="simpan()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                            title="Simpan Data Ruangan"><i
+                                class="bx bxs-plus-square"></i>&nbsp;&nbsp;Submit</button>
+                        {{-- <button class="btn btn-primary" onclick="showKeranjang()" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Keranjang"><i
+                                class="bx bx-cart align-middle"></i>&nbsp;&nbsp;Keranjang</button> --}}
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="dttable" class="table table-hover dt-responsive align-middle">
-                        <thead>
-                            <tr>
-                                <th class="cell-fit">Aksi</th>
-                                <th><span class="badge bg-secondary">Kode</span> Ruangan</th>
-                                <th class="cell-fit">Lokasi</th>
-                                <th>Unit</th>
-                                <th class="cell-fit">Diperbarui</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tampil-tbody">
-                            <tr>
-                                <td colspan="9" style="font-size:13px">
-                                    <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- end table -->
-                </div>
-                <!-- end table responsive -->
-            </div>
-
         </div>
 
-    </div>
-
-    <!-- MODAL TAMBAH -->
-    <div class="modal fade" tabindex="-1" id="modalTambah" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah Ruangan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kode Inventaris <a class="text-danger">*</a></label>
-                                <input type="text" id="kode" class="form-control" placeholder="e.g. 2.2.1.1">
-                            </div>
-                        </div>
-                        <div class="col-md-8 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Ruangan <a class="text-danger">*</a></label>
-                                <input type="text" id="ruangan" class="form-control" placeholder="e.g. Poliklinik">
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Lokasi <a class="text-danger">*</a></label>
-                                <input type="text" id="lokasi" class="form-control" placeholder="e.g. Ruang Jaga Perawat">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
-                                <select class="select2unit form-control" id="unit" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple">
-                                    {{-- <option value="">Pilih</option> --}}
-                                    @if (count($list['role']) > 0)
-                                        @foreach ($list['role'] as $key => $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <small>Unit akan dapat melihat seluruh sarana yang berada di ruangan tersebut</small>
-                            </div>
-                        </div>
+        <!-- MODAL UBAH -->
+        <div class="modal fade" tabindex="-1" id="modalUbah" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderdetailsModalLabel">Ubah Ruangan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div class="modal-body">
+                        <input type="text" id="id_edit" hidden>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Kode Inventaris <a class="text-danger">*</a></label>
+                                    <input type="text" id="kode_edit" class="form-control" placeholder="e.g. 2.2.1.1">
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Nama Ruangan <a class="text-danger">*</a></label>
+                                    <input type="text" id="ruangan_edit" class="form-control" placeholder="e.g. Poliklinik">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Lokasi <a class="text-danger">*</a></label>
+                                    <input type="text" id="lokasi_edit" class="form-control" placeholder="e.g. Ruang Jaga Perawat">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
+                                    <select class="select2unit form-control" id="unit_edit" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple"></select>
+                                    <small>Unit akan dapat melihat seluruh sarana yang berada di ruangan tersebut</small>
+                                </div>
+                            </div>
+                        </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                            class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
-                    <button class="btn btn-info" onclick="simpan()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                        title="Simpan Data Ruangan"><i
-                            class="fas fa-save"></i>&nbsp;&nbsp;Submit</button>
-                    {{-- <button class="btn btn-primary" onclick="showKeranjang()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Keranjang"><i
-                            class="bx bx-cart align-middle"></i>&nbsp;&nbsp;Keranjang</button> --}}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL UBAH -->
-    <div class="modal fade" tabindex="-1" id="modalUbah" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Ubah Ruangan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="id_edit" hidden>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Kode Inventaris <a class="text-danger">*</a></label>
-                                <input type="text" id="kode_edit" class="form-control" placeholder="e.g. 2.2.1.1">
-                            </div>
-                        </div>
-                        <div class="col-md-8 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Ruangan <a class="text-danger">*</a></label>
-                                <input type="text" id="ruangan_edit" class="form-control" placeholder="e.g. Poliklinik">
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Lokasi <a class="text-danger">*</a></label>
-                                <input type="text" id="lokasi_edit" class="form-control" placeholder="e.g. Ruang Jaga Perawat">
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label class="form-label">Unit Terkait <a class="text-danger">*</a></label>
-                                <select class="select2unit form-control" id="unit_edit" style="width: 100%" data-bs-auto-close="outside" required multiple="multiple"></select>
-                                <small>Unit akan dapat melihat seluruh sarana yang berada di ruangan tersebut</small>
-                            </div>
-                        </div>
                     </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- MODAL HAPUS --}}
-    <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Hapus&nbsp;&nbsp;&nbsp;
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus Ruangan tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
-                    <label class="switch">
-                        <input type="checkbox" class="switch-input" id="setujuhapus">
-                        <span class="switch-toggle-slider">
-                        <span class="switch-on"></span>
-                        <span class="switch-off"></span>
-                        </span>
-                        <span class="switch-label">Anda siap menerima Risiko</span>
-                    </label>
-                </div>
-                <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+        {{-- MODAL HAPUS --}}
+        <div class="modal animate__animated animate__rubberBand fade" id="hapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Form Hapus&nbsp;&nbsp;&nbsp;
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="id_hapus" hidden>
+                        <p style="text-align: justify;">Anda akan menghapus Ruangan tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                        <label class="switch">
+                            <input type="checkbox" class="switch-input" id="setujuhapus">
+                            <span class="switch-toggle-slider">
+                            <span class="switch-on"></span>
+                            <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label">Anda siap menerima Risiko</span>
+                        </label>
+                    </div>
+                    <div class="col-12 text-center mb-4">
+                        <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <script>
         $(document).ready(function() {
 
@@ -226,10 +208,10 @@
                         var unit = JSON.parse(item.unit.replace(/"/g,""));
                         content = `<tr><td><div class="d-flex align-items-center">
                                             <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown">` + item.id + `</a>
+                                                <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
+                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                    <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                                 </div>
                                             </div>
                                         </div></td>`;
@@ -278,9 +260,13 @@
                 })
             });
 
-        });
+            // $(".select2").select2({
+            //     placeholder: "",
+            //     allowClear: true
+            // }).val('').trigger('change');
+        })
 
-        // FUNCTION AREA ------------------------------------------------------------
+        // FUNCTION AREA
         function tambah() {
             $('#modalTambah').modal('show');
         }
@@ -351,10 +337,10 @@
                         var unit = JSON.parse(item.unit.replace(/"/g,""));
                         content = `<tr><td><div class="d-flex align-items-center">
                                             <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown">` + item.id + `</a>
+                                                <a href="javascript:;" class="btn dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
+                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>
+                                                    <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>
                                                 </div>
                                             </div>
                                         </div></td>`;

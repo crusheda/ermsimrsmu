@@ -122,7 +122,7 @@
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-address-card me-3"></i>
-                                            <p class="mb-0">{{ $list['show']->nik }}</p>
+                                            <p class="mb-0">{{ $list['show']->nik?$list['show']->nik:'-' }}</p>
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-envelope me-3"></i>
@@ -132,7 +132,7 @@
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100">
                                             <i class="fab fa-whatsapp-square me-3"></i>
-                                            <p class="mb-0">{{ $list['show']->no_hp }}</p>
+                                            <p class="mb-0">{{ $list['show']->no_hp?$list['show']->no_hp:'-' }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -151,7 +151,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1 ms-4 text-start">
-                                                    <h6 class="mb-0">Facebook / <mark>{{ $list['show']->fb }}</mark></h6>
+                                                    <h6 class="mb-0">Facebook / <mark>{{ $list['show']->fb ? $list['show']->fb : 'xxx' }}</mark></h6>
                                                 </div>
                                             </div>
                                         </a>
@@ -165,7 +165,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1 ms-4 text-start">
-                                                    <h6 class="mb-0">Instagram / <mark>{{ $list['show']->ig }}</mark></h6>
+                                                    <h6 class="mb-0">Instagram / <mark>{{ $list['show']->ig ? $list['show']->ig : 'xxx' }}</mark></h6>
                                                 </div>
                                             </div>
                                         </a>
@@ -206,11 +206,11 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <p class="mb-1 text-muted">Nama Lengkap</p>
-                                                    <p class="mb-0">{{ $list['show']->nama }}</p>
+                                                    <p class="mb-0">{{ $list['show']->nama?$list['show']->nama:'-' }}</p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p class="mb-1 text-muted">Nama Panggilan</p>
-                                                    <p class="mb-0">{{ $list['show']->nick }}</p>
+                                                    <p class="mb-0">{{ $list['show']->nick?$list['show']->nick:'-' }}</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -218,11 +218,11 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <p class="mb-1 text-muted">Tempat Lahir</p>
-                                                    <p class="mb-0">{{ $list['show']->temp_lahir }}</p>
+                                                    <p class="mb-0">{{ $list['show']->temp_lahir?$list['show']->temp_lahir:'-' }}</p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p class="mb-1 text-muted">Tanggal Lahir</p>
-                                                    <p class="mb-0">{{ \Carbon\Carbon::parse($list['show']->tgl_lahir)->isoFormat('D MMMM Y') }}</p>
+                                                    <p class="mb-0">{{ $list['show']->tgl_lahir?\Carbon\Carbon::parse($list['show']->tgl_lahir)->isoFormat('D MMMM Y'):'-' }}</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -230,17 +230,17 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <p class="mb-1 text-muted">Jenis Kelamin</p>
-                                                    <p class="mb-0">{{ $list['show']->jns_kelamin }}</p>
+                                                    <p class="mb-0">{{ $list['show']->jns_kelamin?$list['show']->jns_kelamin:'-' }}</p>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p class="mb-1 text-muted">Status Kawin</p>
-                                                    <p class="mb-0">{{ $list['show']->status_kawin }}</p>
+                                                    <p class="mb-0">{{ $list['show']->status_kawin?$list['show']->status_kawin:'-' }}</p>
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <p class="mb-1 text-muted">Alamat Lengkap Sesuai KTP</p>
-                                            <p class="mb-0">{{ $list['show']->alamat_ktp }}</p>
+                                            <p class="mb-0">{{ $list['show']->alamat_ktp?$list['show']->alamat_ktp:'-' }}</p>
                                         </li>
                                         <li class="list-group-item px-0 pb-0">
                                             <p class="mb-1 text-muted">Alamat Domisili</p>
@@ -254,71 +254,75 @@
                                     <h5>Data Pendidikan</h5>
                                 </div>
                                 <div class="card-body pb-3">
-                                    <ul class="list-unstyled task-list">
-                                        @if (!empty($list['show']->s3))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">S3 - {{ $list['show']->s3 }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s3 }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->s2))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">S2 - {{ $list['show']->s2 }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s2 }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->s1))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">S1 - {{ $list['show']->s1 }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s1 }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->d4))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">D4 - {{ $list['show']->d4 }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d4 }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->d3))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">D3 - {{ $list['show']->d3 }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d3 }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->d2))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">D2 - {{ $list['show']->d2 }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d2 }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->sma))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">{{ $list['show']->sma }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sma }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->smp))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">{{ $list['show']->smp }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_smp }}</p>
-                                        </li>
-                                        @endif
-                                        @if (!empty($list['show']->sd))
-                                        <li>
-                                            <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                            <h5 class="text-muted">{{ $list['show']->sd }}</h5>
-                                            <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sd }}</p>
-                                        </li>
-                                        @endif
-                                    </ul>
+                                    @if (!empty($list['show']->nik))
+                                        <ul class="list-unstyled task-list">
+                                            @if (!empty($list['show']->s3))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">S3 - {{ $list['show']->s3 }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s3 }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->s2))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">S2 - {{ $list['show']->s2 }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s2 }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->s1))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">S1 - {{ $list['show']->s1 }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s1 }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->d4))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">D4 - {{ $list['show']->d4 }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d4 }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->d3))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">D3 - {{ $list['show']->d3 }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d3 }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->d2))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">D2 - {{ $list['show']->d2 }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d2 }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->sma))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">{{ $list['show']->sma }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sma }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->smp))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">{{ $list['show']->smp }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_smp }}</p>
+                                            </li>
+                                            @endif
+                                            @if (!empty($list['show']->sd))
+                                            <li>
+                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                <h5 class="text-muted">{{ $list['show']->sd }}</h5>
+                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sd }}</p>
+                                            </li>
+                                            @endif
+                                        </ul>
+                                    @else
+                                    -
+                                    @endif
                                 </div>
                             </div>
                             <div class="card">
@@ -329,19 +333,19 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0 pt-0">
                                             <p class="mb-1 text-muted">Riwayat Penyakit</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit }}</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit?$list['show']->riwayat_penyakit:'-' }}</p>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <p class="mb-1 text-muted">Riwayat Penyakit Keluarga</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit_keluarga }}</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit_keluarga?$list['show']->riwayat_penyakit_keluarga:'-' }}</p>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <p class="mb-1 text-muted">Riwayat Penggunaan Obat</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_penggunaan_obat }}</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_penggunaan_obat?$list['show']->riwayat_penggunaan_obat:'-' }}</p>
                                         </li>
                                         <li class="list-group-item px-0 pb-0">
                                             <p class="mb-1 text-muted">Riwayat Operasi</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_operasi }}</p>
+                                            <p class="mb-0">{{ $list['show']->riwayat_operasi?$list['show']->riwayat_operasi:'-' }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -361,7 +365,7 @@
                                         <h5>Deskripsi Pengalaman Kerja</h5>
                                     </div>
                                     <div class="card-body">
-                                        <textarea class="form-control" name="pengalaman_kerja" placeholder="e.g. Saya pernah bekerja pada suatu instansi swasta ternama yang bertempat di Kota X dan berprofesi sebagai X...."><?php echo htmlspecialchars($list['show']->pengalaman_kerja); ?></textarea>
+                                        <textarea class="form-control" name="pengalaman_kerja" placeholder="e.g. Saya pernah bekerja pada suatu instansi swasta ternama yang bertempat di Kota X dan berprofesi sebagai X . . ."><?php echo htmlspecialchars($list['show']->pengalaman_kerja); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -392,7 +396,7 @@
                                             </div>
                                             <div class="col-sm-5">
                                                 <div>
-                                                    <label class="form-label">No. HP Aktif (Whatsapp) <span class="text-danger">*</span></label>
+                                                    <label class="form-label">No. HP Aktif (Whatsapp +62) <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control telphone_with_code" name="no_hp" value="{{ $list['show']->no_hp }}" maxlength="13" placeholder="628**********" data-mask="(62) 9999-9999-9999">
                                                 </div>
                                             </div>
@@ -763,25 +767,25 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Riwayat Penyakit</label>
-                                                    <textarea name="riwayat_penyakit" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_penyakit); ?></textarea>
+                                                    <textarea name="riwayat_penyakit" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penyakit); ?></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Riwayat Penyakit Keluarga</label>
-                                                    <textarea name="riwayat_penyakit_keluarga" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_penyakit_keluarga); ?></textarea>
+                                                    <textarea name="riwayat_penyakit_keluarga" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penyakit_keluarga); ?></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label">Riwayat Operasi</label>
-                                                    <textarea name="riwayat_operasi" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_operasi); ?></textarea>
+                                                    <textarea name="riwayat_operasi" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_operasi); ?></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="">
                                                     <label class="form-label">Riwayat Penggunaan Obat</label>
-                                                    <textarea name="riwayat_penggunaan_obat" class="form-control"><?php echo htmlspecialchars($list['show']->riwayat_penggunaan_obat); ?></textarea>
+                                                    <textarea name="riwayat_penggunaan_obat" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penggunaan_obat); ?></textarea>
                                                 </div>
                                             </div>
                                         </div>

@@ -58,11 +58,15 @@
                         data-bs-target="#announcement" aria-controls="announcement" disabled><svg class="pc-icon">
                             <use xlink:href="#custom-flash"></use>
                         </svg></a></li> --}}
-                <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
-                        data-bs-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false"
-                        aria-expanded="false"><svg class="pc-icon">
+                <li class="dropdown pc-h-item">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0 waves-effect" data-bs-toggle="fullscreen" href="javascript:void(0);" onclick="toggle_fullscreen()" id="fullscreen-btn">
+                        <i class="fas fa-expand" style="font-size:22px"></i>
+                    </a>
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
+                        <svg class="pc-icon">
                             <use xlink:href="#custom-notification"></use>
-                        </svg> <span class="badge bg-success pc-h-badge">1</span></a>
+                        </svg> <span class="badge bg-success pc-h-badge">1</span>
+                    </a>
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
                             <h5 class="m-0">Notifikasi</h5><a href="javascript:void(0);" class="btn btn-link btn-sm">∞</a>
@@ -351,3 +355,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggle_fullscreen() {
+        if(document.fullscreen) {
+            $('#fullscreen-btn').find('i').toggleClass('fa-expand fa-compress');
+			document.exitFullscreen();
+		} else if(document.webkitFullscreenElement) {
+			document.webkitCancelFullScreen()
+		} else if(document.documentElement.requestFullscreen) {
+            $('#fullscreen-btn').find('i').toggleClass('fa-compress fa-expand');
+			document.documentElement.requestFullscreen();
+		} else {
+			document.documentElement.webkitRequestFullScreen();
+		}
+    }
+</script>

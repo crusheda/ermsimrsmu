@@ -31,9 +31,9 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
                             @if (empty($foto_profil->filename))
-                                <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar wid-45 rounded-circle">
+                                <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar wid-45 rounded-circle" style="width: 45px;height:45px">
                             @else
-                                <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar wid-45 rounded-circle">
+                                <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar wid-45 rounded-circle" style="width: 45px;height:45px">
                             @endif
                         </div>
                         <div class="flex-grow-1 ms-3 me-2">

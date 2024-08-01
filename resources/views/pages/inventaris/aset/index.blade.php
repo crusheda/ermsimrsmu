@@ -835,13 +835,13 @@
                                                 + `<div class="dropdown-header noti-title">`
                                                     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                                 + `</div>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a></li>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>`
                                                 // + `<div class="dropdown-divider"></div>`
                                                 // + `<div class="dropdown-header noti-title">`
                                                 //     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
                                                 // + `</div>`
-                                                // + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
+                                                // + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Kalibrasi</a></li>`
                                             + `</ul>`
                                         + `</div>`
                                     + `</center></td>`;
@@ -1294,13 +1294,13 @@
                                                 + `<div class="dropdown-header noti-title">`
                                                     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Aset & Gudang</h5>`
                                                 + `</div>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`
-                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a></li>`
+                                                + `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash-alt me-1'></i> Hapus</a></li>`
                                                 // + `<div class="dropdown-divider"></div>`
                                                 // + `<div class="dropdown-header noti-title">`
                                                 //     + `<h5 class="font-size-13 text-muted text-truncate mn-0">Elektromedis</h5>`
                                                 // + `</div>`
-                                                // + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Kalibrasi</a></li>`
+                                                // + `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="kalibrasi(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Kalibrasi</a></li>`
                                             + `</ul>`
                                         + `</div>`
                                     + `</center></td>`;

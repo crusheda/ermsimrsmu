@@ -64,7 +64,7 @@
 
                     <div class="col-xxl-3 col-lg-4">
                         <label class="form-label">Klik <a class="text-primary">Filter</a> untuk menampilkan data</label>
-                        <div class="position-relative btn-group w-100 h-80">
+                        <div class="position-relative btn-group w-100 h-80 m-t-5">
                             <button type="button" class="btn btn-primary" id="btn-cari-show" onclick="cari()"><i class="fa-fw fas fa-search nav-icon"></i> Filter</button>
                             <button type="button" class="btn btn-warning" onclick="bersih()"><i class="fa-fw fas fa-eraser nav-icon"></i> Reset</button>
                             <div class="dropdown">
