@@ -36,6 +36,8 @@
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
     {{-- <link href="{{ asset('libs/select2/css/select2.css') }}" rel="stylesheet" type="text/css" /> --}}
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" /> {{-- YANG DIPAKAI INI --}}
+    <!-- typeahead css -->
+    <link rel="stylesheet" href="{{ asset('libs/typeahead-js/typeahead.css') }}" />
     {{-- DATEPICKER --}}
     <link href="{{ asset('libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
@@ -130,6 +132,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
+    <!-- Typeahead -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
     {{-- DATA TABLES --}}
     {{-- <script src="{{ asset('libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
