@@ -31,7 +31,7 @@
                         <div class="btn-group">
                             <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
-                                <i class="bx bx-upload scaleX-n1-rtl"></i>
+                                <i class='fa-fw fas fa-upload nav-icon me-1'></i>
                                 <span class="align-middle">Upload</span>
                             </a>
                             <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -44,7 +44,7 @@
                     </h5>
                     <div class="flex-shrink-0">
                             <div class="btn-group">
-                                <h6 style="margin-top: 10px">Filter Tgl Diterima</h6>
+                                <h6 style="margin-top: 10px"><s>Filter Tgl Diterima</s></h6>
                                 {{-- <select class="form-select form-control ms-2" id="kd_bulan" onchange="getSurat()">
                                     <option value="0">Pilih Bulan</option>
                                     @php
@@ -69,15 +69,15 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-secondary mt-2">
-                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
-                    <small><i class="mdi mdi-arrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas</small>
+                    <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
+                    <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas</small>
                 </div>
                 <div class="table-responsive">
                     <table id="dttable" class="table table-hover w-100 align-middle">
                         <thead>
                             <tr>
                                 <th class="cell-fit">
-                                    <center></center>
+                                    <center>#ID</center>
                                 </th>
                                 <th class="cell-fit">NO SURAT</th>
                                 <th class="cell-fit">TGL SURAT</th>
@@ -99,7 +99,7 @@
                         <tfoot class="bg-whitesmoke">
                             <tr>
                                 <th class="cell-fit">
-                                    <center></center>
+                                    <center>#ID</center>
                                 </th>
                                 <th class="cell-fit">NO SURAT</th>
                                 <th class="cell-fit">TGL SURAT</th>
@@ -119,7 +119,7 @@
 
     {{-- MODAL TAMBAH --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="tambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <form class="form-auth-small" name="formTambah" action="{{ route('suratmasuk.store') }}" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
@@ -182,7 +182,7 @@
                                     <label class="form-label">Acara</label>
                                     <div class="input-group input-group-merge">
                                         <input type="text" class="form-control flatpickrrange" name="waktu" placeholder="YYYY-MM-DD to YYYY-MM-DD"/>
-                                        <span class="input-group-text cursor-pointer"><i class="bx bx-help-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
+                                        <span class="input-group-text cursor-pointer"><i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +196,7 @@
                         <div class="form-group">
                             <label class="form-label">Upload</label>
                             <input type="file" class="form-control mb-2" name="file" accept="application/pdf">
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
                             <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
                             <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>
                         </div>
@@ -263,7 +263,7 @@
                                 <label class="form-label">Acara</label>
                                 <div class="input-group input-group-merge">
                                     <input type="text" class="form-control flatpickrrange" id="waktu" placeholder="YYYY-MM-DD to YYYY-MM-DD"/>
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-help-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
+                                    <span class="input-group-text cursor-pointer"><i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -329,23 +329,25 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <table class="table dt-responsive table-hover table-bordered nowrap w-100 align-middle">
-                        <thead>
-                            <tr>
-                                <th>DITUJUKAN KEPADA</th>
-                                <th>TINDAK LANJUT</th>
-                                <th>KETERANGAN</th>
-                                <th>UPDATE</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tampil-tbody-disposisi">
-                            <tr>
-                                <td colspan="9">
-                                    <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table dt-responsive table-hover table-bordered nowrap w-100 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>DITUJUKAN KEPADA</th>
+                                    <th>TINDAK LANJUT</th>
+                                    <th>KETERANGAN</th>
+                                    <th>UPDATE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-disposisi">
+                                <tr>
+                                    <td colspan="9" style="font-size:13px">
+                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="col-12 text-center mb-4">
                     <div id="showBtnDownload"></div>
@@ -453,22 +455,22 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right dropend'>`
-                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
                                     }
                                     // if (adminID) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-trash nav-icon'></i> Hapus</a></li>`;
                                     // }
                             if (item.verif_disposisi == true) {
                                 content += `<div class="dropdown-divider"></div><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
-                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='bx bx-book-open scaleX-n1-rtl'></i> Lihat</a></li>`
-                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh</a></li>`
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='fa-fw fas fa-book-open nav-icon'></i> Lihat</a></li>`
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
                             }
                             content += `</ul></center></td><td>` + item.urutan + `&nbsp;&nbsp;`;
                             if (item.verif_disposisi != null) {
-                                content += `<i class="bx bxs-badge-check h5 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
+                                content += `<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
                             }
                             content += "</td><td>";
                                         if (item.tgl_surat != null) {
@@ -497,7 +499,7 @@
                                                 content += item.tglFrom.substring(0, 10);
                                             }
                                         } else {
-                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="mdi mdi-arrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
+                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
                                         + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
@@ -527,5 +529,636 @@
                 }
             );
         });
+
+        // FUNCTION-FUNCTION
+        function refresh() {
+            $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/suratmasuk/data",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        var adminID = "{{ Auth::user()->hasRole('administrator') }}";
+                        $("#tampil-tbody").empty();
+                        $('#dttable').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            // var updet = item.updated_at.substring(0, 10);
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
+                                    if (item.filename != null) {
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
+                                    }
+                                    // if (adminID) {
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-trash nav-icon'></i> Hapus</a></li>`;
+                                    // }
+                            if (item.verif_disposisi != null) {
+                                content += `<div class="dropdown-divider"></div><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='fa-fw fas fa-book-open nav-icon'></i> Lihat</a></li>`
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
+                            }
+                            content += `</ul></center></td><td>` + item.urutan + `&nbsp;&nbsp;`;
+                            if (item.verif_disposisi != null) {
+                                content += `<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
+                            }
+                            content += "</td><td>";
+                                        if (item.tgl_surat != null) {
+                                            content += item.tgl_surat;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</td><td>" + item.tgl_diterima + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.asal + "</h6><small class='text-truncate text-muted'>" + item.nomor + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                        if (item.deskripsi) {
+                                            content += item.deskripsi;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
+                                        if (item.tempat != null) {
+                                            content += item.tempat;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</h6><small class='text-truncate text-muted'>";
+                                        if (item.tglTo == null) {
+                                            if (item.tglFrom == null) {
+                                                content += '-';
+                                            } else {
+                                                content += item.tglFrom.substring(0, 10);
+                                            }
+                                        } else {
+                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
+                                        }
+                            content += "</small></div></div></td><td>"
+                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
+                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
+                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
+                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                            content += "</td></tr>";
+                            $('#tampil-tbody').append(content);
+                        });
+                        var table = $('#dttable').DataTable({
+                            dom: 'Bfrtip',
+                            order: [
+                                [7, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    }
+                }
+            );
+        }
+
+        function getSurat() {
+            $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            var bulan = $("#kd_bulan").val();
+            var tahun = $("#kd_tahun").val();
+            $.ajax(
+                {
+                    url: "/api/suratmasuk/filter/"+bulan+"/"+tahun,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        var adminID = "{{ Auth::user()->hasRole('administrator') }}";
+                        $("#tampil-tbody").empty();
+                        $('#dttable').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            // var updet = item.updated_at.substring(0, 10);
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
+                                    if (item.filename != null) {
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
+                                    }
+                                    // if (adminID) {
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-trash nav-icon'></i> Hapus</a></li>`;
+                                    // }
+                            if (item.verif_disposisi != null) {
+                                content += `<div class="dropdown-divider"></div><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='fa-fw fas fa-book-open nav-icon'></i> Lihat</a></li>`
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
+                            }
+                            content += `</ul></center></td><td>` + item.urutan + `&nbsp;&nbsp;`;
+                            if (item.verif_disposisi != null) {
+                                content += `<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
+                            }
+                            content += "</td><td>";
+                                        if (item.tgl_surat != null) {
+                                            content += item.tgl_surat;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</td><td>" + item.tgl_diterima + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.asal + "</h6><small class='text-truncate text-muted'>" + item.nomor + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                        if (item.deskripsi) {
+                                            content += item.deskripsi;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
+                                        if (item.tempat != null) {
+                                            content += item.tempat;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</h6><small class='text-truncate text-muted'>";
+                                        if (item.tglTo == null) {
+                                            if (item.tglFrom == null) {
+                                                content += '-';
+                                            } else {
+                                                content += item.tglFrom.substring(0, 10);
+                                            }
+                                        } else {
+                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
+                                        }
+                            content += "</small></div></div></td><td>"
+                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
+                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
+                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
+                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                            content += "</td></tr>";
+                            $('#tampil-tbody').append(content);
+                        });
+                        var table = $('#dttable').DataTable({
+                            dom: 'Bfrtip',
+                            order: [
+                                [7, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    }
+                }
+            );
+        }
+
+        function showAll() {
+            $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/suratmasuk/data/all",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        var adminID = "{{ Auth::user()->hasRole('administrator') }}";
+                        $("#tampil-tbody").empty();
+                        $('#dttable').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            // var updet = item.updated_at.substring(0, 10);
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
+                                    if (item.filename != null) {
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
+                                    }
+                                    // if (adminID) {
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-trash nav-icon'></i> Hapus</a></li>`;
+                                    // }
+                            if (item.verif_disposisi != null) {
+                                content += `<div class="dropdown-divider"></div><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='fa-fw fas fa-book-open nav-icon'></i> Lihat</a></li>`
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
+                            }
+                            content += `</ul></center></td><td>` + item.urutan + `&nbsp;&nbsp;`;
+                            if (item.verif_disposisi != null) {
+                                content += `<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
+                            }
+                            content += "</td><td>";
+                                        if (item.tgl_surat != null) {
+                                            content += item.tgl_surat;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</td><td>" + item.tgl_diterima + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.asal + "</h6><small class='text-truncate text-muted'>" + item.nomor + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                        if (item.deskripsi) {
+                                            content += item.deskripsi;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
+                                        if (item.tempat != null) {
+                                            content += item.tempat;
+                                        } else {
+                                            content += '-';
+                                        }
+                            content += "</h6><small class='text-truncate text-muted'>";
+                                        if (item.tglTo == null) {
+                                            if (item.tglFrom == null) {
+                                                content += '-';
+                                            } else {
+                                                content += item.tglFrom.substring(0, 10);
+                                            }
+                                        } else {
+                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
+                                        }
+                            content += "</small></div></div></td><td>"
+                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
+                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
+                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
+                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                            content += "</td></tr>";
+                            $('#tampil-tbody').append(content);
+                        });
+                        var table = $('#dttable').DataTable({
+                            dom: 'Bfrtip',
+                            order: [
+                                [7, "desc"]
+                            ],
+                            displayLength: 7,
+                            lengthChange: true,
+                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    }
+                }
+            );
+        }
+
+        function modalTambah() {
+            $('#tambah').modal('show');
+
+            $.ajax(
+            {
+                url: "/api/suratmasuk/tambah",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#no_surat').val(res.show);
+                }
+            })
+
+            // Showing Tooltip
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            })
+        }
+
+        function getDateTime() {
+            var now     = new Date();
+            var year    = now.getFullYear();
+            var month   = now.getMonth()+1;
+            var day     = now.getDate();
+            if(month.toString().length == 1) {
+                    month = '0'+month;
+            }
+            if(day.toString().length == 1) {
+                    day = '0'+day;
+            }
+            var dateTime = year+'-'+month+'-'+day;
+            return dateTime;
+        }
+
+        function ubahFile(id) {
+            $('#linksurat').empty();
+            document.getElementById('uploadFileSusulan').innerHTML = `
+            <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>
+            <input type='file' id="filex`+id+`" name='filex`+id+`' class="form-control mb-2" accept="application/pdf">
+            <input type="text" class="form-control" id="verifberkas`+id+`" hidden>
+            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
+            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
+            <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>`;
+            $("#verifberkas"+id).val(1);
+        }
+
+        function showUbah(id) {
+            $('#uploadFileSusulan').empty();
+            $('#linksurat').empty();
+            $.ajax(
+            {
+                url: "/api/suratmasuk/data/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#ubah').modal('show');
+                    // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
+                    var dt = moment(res.show.tanggal).format('Y-MM-DD HH:mm');
+                    if (res.show.filename != null) {
+                        document.getElementById('linksurat').innerHTML = `
+                        <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>&nbsp;&nbsp;
+                        <button class='btn btn-sm btn-outline-dark' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
+                        <h6 class='mb-2'><a href='/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
+                        <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>`;
+                        $("#verifberkas"+res.show.id).val(0);
+                    } else {
+                        document.getElementById('linksurat').innerHTML = `
+                        <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>
+                        <input type='file' id="filex`+res.show.id+`" name='filex`+res.show.id+`' class="form-control mb-2" accept="application/pdf">
+                        <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
+                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>`;
+                        $("#verifberkas"+res.show.id).val(1);
+                    }
+                    $("#id_edit").val(res.show.id);
+
+                    // INIT DATE
+                    const today = new Date();
+                    var tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 2);
+                    var next = new Date(today);
+                    next.setDate(next.getDate() + 999999);
+                        // TGL SURAT EDIT
+                        var a = document.querySelector("#tgl_surat");
+                        var b = new Date(Date.now() - 1728e5);
+                        a.flatpickr({
+                            enableTime: 0,
+                            minuteIncrement: 1,
+                            defaultDate: res.show.tgl_surat,
+                            time_24hr: true,
+                            disable: [{
+                                from: tomorrow.toISOString().split("T")[0],
+                                to: next.toISOString().split("T")[0]
+                            }]
+                        })
+                        // TGL DITERIMA EDIT
+                        var a = document.querySelector("#tgl_diterima");
+                        var b = new Date(Date.now() - 1728e5);
+                        a.flatpickr({
+                            enableTime: 0,
+                            minuteIncrement: 1,
+                            defaultDate: res.show.tgl_diterima,
+                            time_24hr: true,
+                            disable: [{
+                                from: tomorrow.toISOString().split("T")[0],
+                                to: next.toISOString().split("T")[0]
+                            }]
+                        })
+
+                    $("#asal").val(res.show.asal);
+                    $("#nomor").val(res.show.nomor);
+                    $("#deskripsi").val(res.show.deskripsi);
+                    $("#tempat").val(res.show.tempat);
+                    $("#waktu").val(res.waktu);
+                    $("#user").find('option').remove();
+                    $("#user").append(`
+                        <option value="84" ${res.show.user == '84' ? "selected":""}>Sri Suryani, Amd</option>
+                        <option value="293" ${res.show.user == '293' ? "selected":""}>Zia Nuswantara pahlawan, S.H</option>
+                        <option value="88" ${res.show.user == '88' ? "selected":""}>Siti Dewi Sholikhah</option>
+                        <option value="82" ${res.show.user == '82' ? "selected":""}>Salis Annisa Hafiz, Amd.Kom</option>
+                    `);
+                }
+            }
+            );
+        }
+
+        // function ubah() {
+        //     $("#btn-ubah").prop('disabled', true);
+        //     $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+        //     var id              = $("#id_edit").val();
+        //     var tgl_surat       = $("#tgl_surat").val();
+        //     var tgl_diterima    = $("#tgl_diterima").val();
+        //     var asal            = $("#asal").val();
+        //     var nomor           = $("#nomor").val();
+        //     var deskripsi       = $("#deskripsi").val();
+        //     var tempat          = $("#tempat").val();
+        //     var waktu           = $("#waktu").val();
+        //     var user            = $("#user").val();
+
+        //     // console.log(file);
+        //     if (user == "" || tgl_diterima == "" || nomor == "" || asal == "") {
+        //         iziToast.error({
+        //             title: 'Pesan Galat!',
+        //             message: 'Mohon lengkapi kolom pengisian wajib *',
+        //             position: 'topRight'
+        //         });
+        //     } else {
+        //         $.ajax({
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             method: 'PUT',
+        //             url: '/api/suratmasuk/'+id,
+        //             // dataType: 'json',
+        //             data: {
+        //                 id: id,
+        //                 tgl_surat: tgl_surat,
+        //                 tgl_diterima: tgl_diterima,
+        //                 asal: asal,
+        //                 nomor: nomor,
+        //                 deskripsi: deskripsi,
+        //                 tempat: tempat,
+        //                 waktu: waktu,
+        //                 user: user,
+        //             },
+        //             // data: formData,
+        //             // cache: false,
+        //             // processData: false,
+        //             // contentType: false,
+        //             // enctype: 'multipart/form-data',
+        //             success: function(res) {
+        //                 iziToast.success({
+        //                     title: 'Pesan Sukses!',
+        //                     message: 'Surat Masuk berhasil diperbarui pada '+res,
+        //                     position: 'topRight'
+        //                 });
+        //                 if (res) {
+        //                     $('#ubah').modal('hide');
+        //                     fresh();
+        //                     refresh();
+        //                     // window.location.reload();
+        //                 }
+        //             }
+        //         });
+        //     }
+        //     $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+        //     $("#btn-ubah").prop('disabled', false);
+        // }
+
+        function ubahAjx() {
+            $("#btn-ubah").prop('disabled', true);
+            $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            if (user == "" || tgl_diterima == "" || nomor == "" || asal == "") {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon lengkapi kolom pengisian wajib *',
+                    position: 'topRight'
+                });
+            } else {
+                var fd = new FormData();
+                var id_edit = $("#id_edit").val();
+
+                // Get the selected file
+                if ($("#verifberkas"+id_edit).val() == 1) {
+                    var files = $('#filex'+id_edit)[0].files;
+                    fd.append('file',files[0]);
+                }
+
+                fd.append('id_edit',$("#id_edit").val());
+                fd.append('tgl_surat',$("#tgl_surat").val());
+                fd.append('tgl_diterima',$("#tgl_diterima").val());
+                fd.append('asal',$("#asal").val());
+                fd.append('nomor',$("#nomor").val());
+                fd.append('deskripsi',$("#deskripsi").val());
+                fd.append('tempat',$("#tempat").val());
+                fd.append('waktu',$("#waktu").val());
+                fd.append('user',$("#user").val());
+
+                // if(files.length > 0){
+
+                //     // Append data
+                // }else{
+                //     iziToast.error({
+                //         title: 'Pesan Galat!',
+                //         message: 'Mohon upload berkas file Surat Masuk terlebih dahulu sebelum menyimpan.',
+                //         position: 'topRight'
+                //     });
+                // }
+                // fd.append('_token',CSRF_TOKEN);
+
+                // Hide alert
+                // $('#responseMsg').hide();
+
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('suratmasuk.ubah')}}",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Surat Masuk berhasil diperbarui pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            $('#ubah').modal('hide');
+                            refresh();
+                            // window.location.reload();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                    }
+                });
+            }
+
+            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-ubah").prop('disabled', false);
+        }
+
+        function hapus(id) {
+            $("#id_hapus").val(id);
+            var inputs = document.getElementById('setujuhapus');
+            inputs.checked = false;
+            $('#hapus').modal('show');
+        }
+
+        function prosesHapus() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan berkas',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus").val();
+                $.ajax({
+                    url: "/api/suratmasuk/"+id,
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Berkas telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#hapus').modal('hide');
+                        refresh();
+                        // window.location.reload();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Berkas gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
+        function showDisposisi(id) {
+            $('#disposisi').modal('show');
+            $("#tampil-tbody-disposisi").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/suratmasuk/data/disposisi/"+id,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $("#tampil-tbody-disposisi").empty();
+                        res.show.forEach(item => {
+                            if (item.filename != null) {
+                                $('#showBtnDownload').empty();
+                                $('#showBtnDownload').append(`<button class='btn btn-info btn-sm' onclick="window.open('/berkas/disposisi/`+item.id_surat+`')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh&nbsp;&nbsp;<span class="badge text-bg-light text-dark">`+item.title+`</span></button>`);
+                            }
+                            // var updet = item.updated_at.substring(0, 10);
+                            content = "<tr id='data"+ item.id +"'><td>";
+                            var tujuan = JSON.parse(item.tujuan);
+                            tujuan.forEach(tuju => {
+                                res.roles.forEach(val => {
+                                    if (tuju == val.id) {
+                                        content += `<kbd>`+val.name+`</kbd>&nbsp;`;
+                                    }
+                                })
+                            })
+                            content += `</td><td>`+item.tindak_lanjut+`</td><td>`;
+                            if (item.ket != null) {
+                                content += item.ket;
+                            }
+                            content += `</td><td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
+                        })
+                        $('#tampil-tbody-disposisi').append(content);
+                    }
+                }
+            )
+        }
+
+        function saveData() {
+            $("#tambah").one('submit', function() {
+                //stop submitting the form to see the disabled button effect
+                $("#btn-simpan").attr('disabled','disabled');
+                $("#btn-simpan").find("i").removeClass("fa-upload").addClass("fa-sync fa-spin");
+                // $('#tambah').modal('hide');
+                // fresh();
+                // refresh();
+                return true;
+            });
+        }
     </script>
 @endsection

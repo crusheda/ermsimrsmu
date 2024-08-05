@@ -808,9 +808,109 @@
                                     <h5>Ubah Foto Profil</h5>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <input type="file" id="fileInput" accept="image/*" />
+                                                <input type="button" id="btnCrop" value="Crop" />
+                                                <input type="button" id="btnRestore" value="Restore" />
+                                            </div>
+                                            <div class="col-md-7 mb-3 mb-md-0">
+                                                <canvas id="canvas" style="height: 600px;width: 600px;background-color: #ffffff;cursor:default;border: 1px solid black;">
+                                                    Your browser does not support the HTML5 canvas element.
+                                                </canvas>
+                                                {{-- <div class="cropper">
+                                                    <img src="{{ asset('images/light-box/l1.jpg') }}" alt="image" id="croppr" style="max-width: 100%; width:100%; height:100%">
+                                                </div> --}}
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div id="result" style="height: 100px;width: 100px;"></div>
+                                                {{-- <div class="rounded bg-light px-4 py-3 mb-3">
+                                                    <h5>Selection value</h5>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <p id="valX"><strong>x: </strong>&nbsp;500</p>
+                                                            <p class="mb-1" id="valY"><strong>y: </strong>&nbsp;500</p>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <p id="valW"><strong>width: </strong>&nbsp;500</p>
+                                                            <p class="mb-1" id="valH"><strong>height: </strong>&nbsp;500</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <div class="col">
+                                                        <h6>Aspect Ratio</h6>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="form-check"><input class="form-check-input" type="checkbox"
+                                                                value="" id="cb-ratio"> <label class="form-check-label"
+                                                                for="cb-ratio">Enable</label></div>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group mb-3"><span class="input-group-text">A</span> <input
+                                                        type="text" class="form-control" id="input-ratio" value="1.0"
+                                                        disabled="disabled"></div>
+                                                <div class="row mb-1">
+                                                    <div class="col">
+                                                        <h6>Maximum size</h6>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="form-check"><input class="form-check-input" type="checkbox"
+                                                                value="" id="max-checkbox"> <label class="form-check-label"
+                                                                for="max-checkbox">Enable</label></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-1 g-sm-3 mb-4">
+                                                    <div class="col-4">
+                                                        <div class="input-group"><span class="input-group-text">W</span> <input
+                                                                type="text" class="form-control" id="max-input-width"
+                                                                value="150" disabled="disabled"></div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="input-group"><span class="input-group-text">H</span> <input
+                                                                type="text" class="form-control" id="max-input-height"
+                                                                value="150" disabled="disabled"></div>
+                                                    </div>
+                                                    <div class="col-4"><select id="max-input-unit" disabled="disabled"
+                                                            class="form-control">
+                                                            <option>px</option>
+                                                            <option value="%">%</option>
+                                                        </select></div>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <div class="col">
+                                                        <h6>Minimum size</h6>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <div class="form-check"><input class="form-check-input" type="checkbox"
+                                                                value="" id="min-checkbox"> <label class="form-check-label"
+                                                                for="min-checkbox">Enable</label></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-1 g-sm-3">
+                                                    <div class="col-4">
+                                                        <div class="input-group"><span class="input-group-text">W</span> <input
+                                                                type="text" class="form-control" id="min-input-width"
+                                                                value="150" disabled="disabled"></div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="input-group"><span class="input-group-text">H</span> <input
+                                                                type="text" class="form-control" id="min-input-height"
+                                                                value="150" disabled="disabled"></div>
+                                                    </div>
+                                                    <div class="col-4"><select id="min-input-unit" disabled="disabled"
+                                                            class="form-control">
+                                                            <option>px</option>
+                                                            <option value="%">%</option>
+                                                        </select></div>
+                                                </div> --}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="row">
                                         <div class="col-sm-12">Sedang dalam pengembangan</div>
-                                        {{-- <div class="col-sm-6">
+                                        <div class="col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label">Username <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" value="Ashoka_Tano_16">
@@ -841,8 +941,8 @@
                                                     <option>Key</option>
                                                     <option>Pin</option>
                                                 </select></div>
-                                        </div> --}}
-                                    </div>
+                                        </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -1338,6 +1438,7 @@
 
     <script>
         addEventListener("DOMContentLoaded", (event) => {
+            // "use strict";
             const password = document.getElementById("newPassword");
             const cpassword = document.getElementById("confirmPassword");
             const leng = $(".leng");
@@ -1620,6 +1721,48 @@
                     }
                 });
             });
+
+            // IMG CROPPER
+            var canvas  = $("#canvas"),
+                context = canvas.get(0).getContext("2d"),
+                $result = $('#result');
+
+            $('#fileInput').on( 'change', function(){
+                if (this.files && this.files[0]) {
+                    if ( this.files[0].type.match(/^image\//) ) {
+                        var reader = new FileReader();
+                        reader.onload = function(evt) {
+                            var img = new Image();
+                            img.onload = function() {
+                                context.canvas.height = img.height;
+                                context.canvas.width  = img.width;
+                                context.drawImage(img, 0, 0);
+                                var cropper = canvas.cropper({
+                                    aspectRatio: 1 / 1
+                                });
+                                $('#btnCrop').click(function() {
+                                    // Get a string base 64 data url
+                                    var croppedImageDataURL = canvas.cropper('getCroppedCanvas').toDataURL("image/png");
+                                    $result.append( $('<img>').attr('src', croppedImageDataURL).height(100).width(100) );
+                                });
+                                $('#btnRestore').click(function() {
+                                    canvas.cropper('reset');
+                                    $result.empty();
+                                });
+                            };
+                            img.src = evt.target.result;
+                        };
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                    else {
+                        alert("Invalid file type! Please select an image file.");
+                    }
+                }
+                else {
+                    alert('No file(s) selected.');
+                }
+            });
+
         });
 
         // FUNCTION

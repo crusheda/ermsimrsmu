@@ -33,7 +33,7 @@ class SuratMasukController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => ['max:20000','mimes:pdf'],
+            'file' => ['max:5000','mimes:pdf'],
             'tgl_diterima' => 'required',
             'no_surat' => 'required',
             'asal' => 'required',

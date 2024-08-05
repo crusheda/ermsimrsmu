@@ -38,6 +38,9 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" /> {{-- YANG DIPAKAI INI --}}
     <!-- typeahead css -->
     <link rel="stylesheet" href="{{ asset('libs/typeahead-js/typeahead.css') }}" />
+    <!-- cropper css -->
+    {{-- <link rel="stylesheet" href="{{ asset('css/plugins/croppr.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/cropper.css') }}">
     {{-- DATEPICKER --}}
     <link href="{{ asset('libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
@@ -61,6 +64,9 @@
     <style>
         .table.dataTable  {
             font-size: 13px;
+        }
+        .tooltip{
+            z-index: 1151 !important;
         }
     </style>
 </head>
@@ -126,6 +132,10 @@
 
     <!-- Notif js -->
     <script src="{{ asset('js/iziToast.js') }}"></script>
+
+    {{-- Cropped IMG JS --}}
+    {{-- <script src="{{ asset('js/plugins/croppr.min.js') }}"></script> --}}
+    <script src="{{ asset('js/cropper.js') }}"></script>
 
     <!-- BLOB js -->
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> --}}
