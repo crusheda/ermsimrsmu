@@ -810,21 +810,36 @@
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="row">
-                                            <div class="col-md-5">
-                                                <input type="file" id="fileInput" accept="image/*" />
-                                                <input type="button" id="btnCrop" value="Crop" />
-                                                <input type="button" id="btnRestore" value="Restore" />
-                                            </div>
-                                            <div class="col-md-7 mb-3 mb-md-0">
-                                                <canvas id="canvas" style="height: 600px;width: 600px;background-color: #ffffff;cursor:default;border: 1px solid black;">
+                                            <div class="col-md-6 mb-3">
+                                                <div class="bg-light px-4 py-3 mb-3">
+                                                    <h5>Pilih Foto Profil</h5>
+                                                    <input type="file" id="fileInput" accept="image/*" class="form-control mb-3"/>
+                                                    <small>
+                                                        <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Silakan upload file foto formal<br>
+                                                        <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>File foto tidak boleh melebihi 5 mb
+                                                    </small>
+                                                </div>
+                                                <canvas id="canvas" style="height: 530px;width: 100%;background-color: #ffffff;border:1px solid #97a2aa !important;
+                                                cursor:default;border: 1px solid black;">
                                                     Your browser does not support the HTML5 canvas element.
                                                 </canvas>
-                                                {{-- <div class="cropper">
-                                                    <img src="{{ asset('images/light-box/l1.jpg') }}" alt="image" id="croppr" style="max-width: 100%; width:100%; height:100%">
-                                                </div> --}}
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <h5 class="mb-3">Preview Foto Profil</h5>
+                                                <div class="bg-light px-4 py-3 mb-3">
+                                                    <p>
+                                                        Nama File : asjkdnsakjdnsajkn <br>
+                                                        Terakhir diperbarui pada xxx
+                                                    </p>
+                                                    <div class="btn-group">
+                                                        <button type="button" id="btnCrop" value="Crop" class="btn btn-link-warning">Potong</button>
+                                                        <button type="button" id="btnRestore" value="Restore" class="btn btn-link-danger">Bersihkan</button>
+                                                        <button type="submit" id="btn-submit-foto-profil" class="btn btn-link-primary">Perbarui / Simpan</button>
+                                                    </div>
+                                                </div>
+                                                <center><div id="result" class="rounded align-middle shadow-lg p-t-40" style="height: 580px;width: 100%"></div></center>
                                             </div>
                                             <div class="col-md-12">
-                                                <div id="result" style="height: 100px;width: 100px;"></div>
                                                 {{-- <div class="rounded bg-light px-4 py-3 mb-3">
                                                     <h5>Selection value</h5>
                                                     <div class="row">
@@ -946,9 +961,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 text-end">
+                        {{-- <div class="col-12 text-end">
                             <button type="submit" class="btn btn-primary disabled" id="btn-submit-foto-profil">Perbarui</button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -1741,9 +1756,10 @@
                                     aspectRatio: 1 / 1
                                 });
                                 $('#btnCrop').click(function() {
+                                    $result.empty();
                                     // Get a string base 64 data url
                                     var croppedImageDataURL = canvas.cropper('getCroppedCanvas').toDataURL("image/png");
-                                    $result.append( $('<img>').attr('src', croppedImageDataURL).height(100).width(100) );
+                                    $result.append( $('<img>').attr('src', croppedImageDataURL).height(500).width(500) );
                                 });
                                 $('#btnRestore').click(function() {
                                     canvas.cropper('reset');
