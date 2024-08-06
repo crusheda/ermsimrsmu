@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::group(['middleware' => ['auth']], function () {
 
     // PROFIL
+    // Route::post('profil/fotoprofil', '\App\Http\Controllers\Setting\Profil\ProfilController@storeBlobImg');
     Route::get('provinsi/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiProvinsi');
     Route::get('kota/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKota');
     Route::get('kecamatan/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKecamatan');

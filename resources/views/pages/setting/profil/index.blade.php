@@ -31,9 +31,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-2" data-bs-toggle="tab"
+                            <a class="nav-link" data-bs-toggle="tab"
                                 href="#ubah-profil" role="tab" aria-selected="true">
                                 <i class="ti ti-file-text me-2"></i>Ubah Profil
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab"
+                                href="#upload-dokumen" role="tab" aria-selected="true">
+                                <i class="ti ti-cloud-upload me-2"></i><s>Dokumen</s>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -800,7 +806,23 @@
                 </div>
 
                 {{-- UBAH FOTO PROFIL --}}
-                <div class="tab-pane" id="ubah-foto-profil" role="tabpanel" aria-labelledby="ubah-foto-profil-tab-3">
+                <div class="tab-pane" id="upload-dokumen" role="tabpanel" aria-labelledby="upload-dokumen-tab-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Penyimpanan Dokumen</h5>
+                                </div>
+                                <div class="card-body">
+                                    <center><h5>Sedang dalam pengembangan oleh <a class="text-primary">Developer</a></h5></center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- UBAH FOTO PROFIL --}}
+                <div class="tab-pane" id="ubah-foto-profil" role="tabpanel" aria-labelledby="ubah-foto-profil-tab-4">
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -809,166 +831,85 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="container">
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <div class="bg-light px-4 py-3 mb-3">
-                                                    <h5>Pilih Foto Profil</h5>
-                                                    <input type="file" id="fileInput" accept="image/*" class="form-control mb-3"/>
-                                                    <small>
-                                                        <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Silakan upload file foto formal<br>
-                                                        <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>File foto tidak boleh melebihi 5 mb
-                                                    </small>
-                                                </div>
-                                                <canvas id="canvas" style="height: 530px;width: 100%;background-color: #ffffff;border:1px solid #97a2aa !important;
-                                                cursor:default;border: 1px solid black;">
-                                                    Your browser does not support the HTML5 canvas element.
-                                                </canvas>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <h5 class="mb-3">Preview Foto Profil</h5>
-                                                <div class="bg-light px-4 py-3 mb-3">
-                                                    <p>
-                                                        Nama File : asjkdnsakjdnsajkn <br>
-                                                        Terakhir diperbarui pada xxx
-                                                    </p>
-                                                    <div class="btn-group">
-                                                        <button type="button" id="btnCrop" value="Crop" class="btn btn-link-warning">Potong</button>
-                                                        <button type="button" id="btnRestore" value="Restore" class="btn btn-link-danger">Bersihkan</button>
-                                                        <button type="submit" id="btn-submit-foto-profil" class="btn btn-link-primary">Perbarui / Simpan</button>
-                                                    </div>
-                                                </div>
-                                                <center><div id="result" class="rounded align-middle shadow-lg p-t-40" style="height: 580px;width: 100%"></div></center>
-                                            </div>
-                                            <div class="col-md-12">
-                                                {{-- <div class="rounded bg-light px-4 py-3 mb-3">
-                                                    <h5>Selection value</h5>
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <p id="valX"><strong>x: </strong>&nbsp;500</p>
-                                                            <p class="mb-1" id="valY"><strong>y: </strong>&nbsp;500</p>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <p id="valW"><strong>width: </strong>&nbsp;500</p>
-                                                            <p class="mb-1" id="valH"><strong>height: </strong>&nbsp;500</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <div class="col">
-                                                        <h6>Aspect Ratio</h6>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                                value="" id="cb-ratio"> <label class="form-check-label"
-                                                                for="cb-ratio">Enable</label></div>
-                                                    </div>
-                                                </div>
-                                                <div class="input-group mb-3"><span class="input-group-text">A</span> <input
-                                                        type="text" class="form-control" id="input-ratio" value="1.0"
-                                                        disabled="disabled"></div>
-                                                <div class="row mb-1">
-                                                    <div class="col">
-                                                        <h6>Maximum size</h6>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                                value="" id="max-checkbox"> <label class="form-check-label"
-                                                                for="max-checkbox">Enable</label></div>
-                                                    </div>
-                                                </div>
-                                                <div class="row g-1 g-sm-3 mb-4">
-                                                    <div class="col-4">
-                                                        <div class="input-group"><span class="input-group-text">W</span> <input
-                                                                type="text" class="form-control" id="max-input-width"
-                                                                value="150" disabled="disabled"></div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="input-group"><span class="input-group-text">H</span> <input
-                                                                type="text" class="form-control" id="max-input-height"
-                                                                value="150" disabled="disabled"></div>
-                                                    </div>
-                                                    <div class="col-4"><select id="max-input-unit" disabled="disabled"
-                                                            class="form-control">
-                                                            <option>px</option>
-                                                            <option value="%">%</option>
-                                                        </select></div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <div class="col">
-                                                        <h6>Minimum size</h6>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-check"><input class="form-check-input" type="checkbox"
-                                                                value="" id="min-checkbox"> <label class="form-check-label"
-                                                                for="min-checkbox">Enable</label></div>
-                                                    </div>
-                                                </div>
-                                                <div class="row g-1 g-sm-3">
-                                                    <div class="col-4">
-                                                        <div class="input-group"><span class="input-group-text">W</span> <input
-                                                                type="text" class="form-control" id="min-input-width"
-                                                                value="150" disabled="disabled"></div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div class="input-group"><span class="input-group-text">H</span> <input
-                                                                type="text" class="form-control" id="min-input-height"
-                                                                value="150" disabled="disabled"></div>
-                                                    </div>
-                                                    <div class="col-4"><select id="min-input-unit" disabled="disabled"
-                                                            class="form-control">
-                                                            <option>px</option>
-                                                            <option value="%">%</option>
-                                                        </select></div>
-                                                </div> --}}
+                                        <div class="bg-light px-4 py-3 mb-3">
+                                            <h5>Pilih Foto</h5>
+                                            <input type="file" id="fileInput" accept="image/*" class="form-control mb-3"/>
+                                            <small>
+                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Silakan upload file foto formal<br>
+                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>File foto tidak boleh melebihi 5 mb<br>
+                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Foto disarankan berasio 1:1<br>
+                                            </small>
+                                            <br>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#pratinjau" class="btn btn-link-danger">Pratinjau</button>
+                                                <button type="submit" id="btn-submit-fotoprofil" class="btn btn-outline-primary">Perbarui</button>
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="row">
-                                        <div class="col-sm-12">Sedang dalam pengembangan</div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Username <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" value="Ashoka_Tano_16">
-                                                <small class="form-text text-muted">Your Profile URL: https://pc.com/Ashoka_Tano_16</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Account Email <span
-                                                        class="text-danger">*</span></label> <input type="text"
-                                                    class="form-control" value="demo@sample.com"></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Language</label> <select
-                                                    class="form-control">
-                                                    <option>Washington</option>
-                                                    <option>India</option>
-                                                    <option>Africa</option>
-                                                    <option>New York</option>
-                                                    <option>Malaysia</option>
-                                                </select></div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="mb-3"><label class="form-label">Sign in Using</label>
-                                                <select class="form-control">
-                                                    <option>Password</option>
-                                                    <option>Face Recognition</option>
-                                                    <option>Thumb Impression</option>
-                                                    <option>Key</option>
-                                                    <option>Pin</option>
-                                                </select></div>
-                                        </div>
-                                    </div> --}}
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-12 text-end">
-                            <button type="submit" class="btn btn-primary disabled" id="btn-submit-foto-profil">Perbarui</button>
+                        {{-- START CROPPER COBA-COBA............................................................................................ --}}
+                        {{-- <div class="col-md-12 mb-3">
+                            <div class="bg-light px-4 py-3 mb-3">
+                                <h5>Pilih Foto Profil</h5>
+                                <input type="file" id="fileInput" accept="image/*" class="form-control mb-3"/>
+                                <small>
+                                    <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Silakan upload file foto formal<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>File foto tidak boleh melebihi 5 mb<br>
+                                </small>
+                                <div class="btn-group">
+                                    <button type="button" id="btnCrop" value="Crop" class="btn btn-link-warning">Potong</button>
+                                    <button type="button" id="btnRestore" value="Restore" class="btn btn-link-danger">Bersihkan</button>
+                                    <button type="submit" id="btnSubmit" class="btn btn-link-primary">Perbarui / Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <center>
+                                <div id="result" class="rounded align-middle shadow-lg p-t-40" style="height: 580px;width: 100%">
+                                    <h5 class="mb-3">Foto Profil Sekarang</h5>
+                                    @if (empty($list['foto']->filename))
+                                        <img src="{{ asset('images/pku/user.png') }}" alt="Tidak ada lampiran">
+                                    @else
+                                        <img src="{{ url('storage/'.substr($list['foto']->filename,7,1000)) }}" alt="" height="500" width="500">
+                                    @endif
+                                </div>
+                            </center>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <center>
+                                <div id="blah_a" class="rounded align-middle shadow-lg p-t-40" style="height: 580px;width: 100%">
+                                    <h5 class="mb-3">Foto Profil Baru</h5>
+                                    <img id="blah" src="" alt="Tidak ada lampiran">
+                                </div>
+                            </center>
                         </div> --}}
+                        {{-- END CROPPER COBA-COBA............................................................................................ --}}
+                    </div>
+                </div>
+
+                {{-- PRATINJAU FOTO PROFIL --}}
+                <div class="modal fade " id="pratinjau" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Pratinjau Foto Profl</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <center><div id="blah_a" class="align-middle text-center mb-3">
+                                    {{-- {{ asset('images/no-image.png') }} --}}
+                                    <img id="blah" src="" alt="Belum ada foto terupload">
+                                </div>
+                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button></center>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 {{-- UBAH PASSWORD --}}
-                <div class="tab-pane" id="ubah-password" role="tabpanel" aria-labelledby="profile-tab-4">
+                <div class="tab-pane" id="ubah-password" role="tabpanel" aria-labelledby="profile-tab-5">
                     <div class="card">
                         <form action="{{ route('auth.change_password') }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -1738,49 +1679,90 @@
             });
 
             // IMG CROPPER
-            var canvas  = $("#canvas"),
-                context = canvas.get(0).getContext("2d"),
-                $result = $('#result');
+            // var canvas  = $("#canvas"),
+            //     context = canvas.get(0).getContext("2d"),
+            //     $result = $('#result');
 
-            $('#fileInput').on( 'change', function(){
-                if (this.files && this.files[0]) {
-                    if ( this.files[0].type.match(/^image\//) ) {
-                        var reader = new FileReader();
-                        reader.onload = function(evt) {
-                            var img = new Image();
-                            img.onload = function() {
-                                context.canvas.height = img.height;
-                                context.canvas.width  = img.width;
-                                context.drawImage(img, 0, 0);
-                                var cropper = canvas.cropper({
-                                    aspectRatio: 1 / 1
-                                });
-                                $('#btnCrop').click(function() {
-                                    $result.empty();
-                                    // Get a string base 64 data url
-                                    var croppedImageDataURL = canvas.cropper('getCroppedCanvas').toDataURL("image/png");
-                                    $result.append( $('<img>').attr('src', croppedImageDataURL).height(500).width(500) );
-                                });
-                                $('#btnRestore').click(function() {
-                                    canvas.cropper('reset');
-                                    $result.empty();
-                                });
-                            };
-                            img.src = evt.target.result;
-                        };
-                        reader.readAsDataURL(this.files[0]);
-                    }
-                    else {
-                        alert("Invalid file type! Please select an image file.");
-                    }
-                }
-                else {
-                    alert('No file(s) selected.');
-                }
-            });
+            // $('#fileInput').on( 'change', function(){
+            //     if (this.files && this.files[0]) {
+            //         if ( this.files[0].type.match(/^image\//) ) {
+            //             var reader = new FileReader();
+            //             reader.onload = function(evt) {
+            //                 var img = new Image();
+            //                 img.onload = function() {
+            //                     context.canvas.height = img.height;
+            //                     context.canvas.width  = img.width;
+            //                     context.drawImage(img, 0, 0);
+            //                     var cropper = canvas.cropper({
+            //                         aspectRatio: 1 / 1
+            //                     });
+            //                     $('#btnCrop').click(function() {
+            //                         $result.empty();
+            //                         // Get a string base 64 data url
+            //                         var croppedImageDataURL = canvas.cropper('getCroppedCanvas').toDataURL("image/png");
+            //                         $result.append( $('<img>').attr('src', croppedImageDataURL).height(500).width(500) );
+            //                         console.log(croppedImageDataURL);
+            //                     });
+            //                     $('#btnRestore').click(function() {
+            //                         canvas.cropper('reset');
+            //                         $result.empty();
+            //                     });
+            //                     $('#btnSubmit').on('click', function (event) {
+            //                         canvas.cropper('getCroppedCanvas').toBlob(function (blob) {
+            //                             var formData = new FormData();
+            //                             formData.append('croppedImage', blob);
+            //                             console.log(blob);
+
+            //                             $.ajax("/api/profil/fotoprofil", {
+            //                                 method: "POST",
+            //                                 data: formData,
+            //                                 processData: false,
+            //                                 contentType: false,
+            //                                 success: function () {
+            //                                     alert('Upload success');
+            //                                     // location.reload();
+            //                                 },
+            //                                 error: function () {
+            //                                     alert('Upload error');
+            //                                 }
+            //                             });
+            //                         });
+            //                     });
+            //                 };
+            //                 img.src = evt.target.result;
+            //             };
+            //             reader.readAsDataURL(this.files[0]);
+            //             console.log()
+            //         }
+            //         else {
+            //             alert("Invalid file type! Please select an image file.");
+            //         }
+            //     }
+            //     else {
+            //         alert('No file(s) selected.');
+            //     }
+            // });
+
+
+            // $("#fileInput").change(function() {
+            //     readURL(this);
+            // });
 
         });
 
         // FUNCTION
+        // function readURL(input) {
+        //     if (input.files && input.files[0]) {
+        //         var reader = new FileReader();
+
+        //         reader.onload = function(e) {
+        //             $('#blah_a').attr('href', e.target.result);
+        //             $('#blah').attr('src', e.target.result).height(400).width(400);
+        //         }
+
+        //         reader.readAsDataURL(input.files[0]);
+        //     }
+        // }
+
         </script>
 @endsection

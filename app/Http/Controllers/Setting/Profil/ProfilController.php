@@ -437,6 +437,18 @@ class ProfilController extends Controller
         return redirect()->back()->with('message','Ubah Foto Profil Berhasil');
     }
 
+    function storeBlobImg(Request $request)
+    {
+        $data = base64_decode($request->croppedImage);
+        print_r($request->croppedImage);
+        print_r($data);
+        die();
+
+        file_put_contents('test.png', $data);
+        // print_r($request->all());
+        // die();
+    }
+
     public function apiProvinsi($id)
     {
         $data = DB::table('alamat')
