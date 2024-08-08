@@ -24,7 +24,7 @@
 
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
-        <div class="">
+        <div class="col-sm-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel</h5>

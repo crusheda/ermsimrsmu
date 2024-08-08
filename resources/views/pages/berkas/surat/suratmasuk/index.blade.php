@@ -24,94 +24,104 @@
 
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
-        <div class="card table-card">
-            <div class="card-header align-items-center justify-content-between py-3">
-                <div class="d-flex">
-                    <h5 class="mb-0 card-title flex-grow-1">
-                        <div class="btn-group">
-                            <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
-                                <i class='fa-fw fas fa-upload nav-icon me-1'></i>
-                                <span class="align-middle">Upload</span>
-                            </a>
-                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Tampilkan 100 Data</span>" onclick="refresh()">
-                                <i class="fa-fw fas fa-sync nav-icon"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-infinity nav-icon'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
-                                <i class="fa-fw fas fa-infinity nav-icon"></i></button>
-                        </div>
-                    </h5>
-                    <div class="flex-shrink-0">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header align-items-center justify-content-between py-3">
+                    <div class="d-flex">
+                        <h5 class="mb-0 card-title flex-grow-1">
                             <div class="btn-group">
-                                <h6 style="margin-top: 10px"><s>Filter Tgl Diterima</s></h6>
-                                {{-- <select class="form-select form-control ms-2" id="kd_bulan" onchange="getSurat()">
-                                    <option value="0">Pilih Bulan</option>
-                                    @php
-                                        $bulan=array("","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
-                                        $jml_bln=count($bulan);
-                                        for($c=1 ; $c < $jml_bln ; $c+=1){
-                                            echo"<option value=$c> $bulan[$c] </option>";
-                                        }
-                                        @endphp
-                                </select>
-                                <select class="form-select form-control ms-2" id="kd_tahun" onchange="getSurat()">
-                                    <option value="0">Pilih Tahun</option>
-                                    @php
-                                        for ($i=2023; $i <= $list['year']; $i++) {
-                                            echo"<option value=$i> $i </option>";
-                                        }
-                                    @endphp
-                                </select> --}}
+                                <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
+                                    <i class='fa-fw fas fa-upload nav-icon me-1'></i>
+                                    <span class="align-middle">Upload</span>
+                                </a>
+                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Tampilkan 100 Data</span>" onclick="refresh()">
+                                    <i class="fa-fw fas fa-sync nav-icon"></i></button>
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="<i class='fa-fw fas fa-infinity nav-icon'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
+                                    <i class="fa-fw fas fa-infinity nav-icon"></i></button>
                             </div>
+                        </h5>
+                        <div class="flex-shrink-0">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down me-1"></i> Filter</span></button>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
+                                    <div class="dropdown-item-text">
+                                        <div>
+                                            <h6 class="mb-0 text-center">BY. Tgl Diterima</h6>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <select class="form-select form-control mb-3" id="kd_bulan" onchange="getSurat()">
+                                        <option value="0">Pilih Bulan</option>
+                                        @php
+                                            $bulan=array("","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
+                                            $jml_bln=count($bulan);
+                                            for($c=1 ; $c < $jml_bln ; $c+=1){
+                                                echo"<option value=$c> $bulan[$c] </option>";
+                                            }
+                                            @endphp
+                                    </select>
+                                    <select class="form-select form-control" id="kd_tahun" onchange="getSurat()">
+                                        <option value="0">Pilih Tahun</option>
+                                        @php
+                                            for ($i=2023; $i <= $list['year']; $i++) {
+                                                echo"<option value=$i> $i </option>";
+                                            }
+                                        @endphp
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-secondary mt-2">
-                    <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
-                    <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas</small>
-                </div>
-                <div class="table-responsive">
-                    <table id="dttable" class="table table-hover w-100 align-middle">
-                        <thead>
-                            <tr>
-                                <th class="cell-fit">
-                                    <center>#ID</center>
-                                </th>
-                                <th class="cell-fit">NO SURAT</th>
-                                <th class="cell-fit">TGL SURAT</th>
-                                <th class="cell-fit">TGL DITERIMA</th>
-                                <th>ASAL/NO.SRT</th>
-                                <th>DESKRIPSI</th>
-                                <th>TEMPAT/ACARA</th>
-                                <th>UPDATE</th>
-                                <th class="cell-fit">USER</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tampil-tbody">
-                            <tr>
-                                <td colspan="9" style="font-size:13px">
-                                    <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot class="bg-whitesmoke">
-                            <tr>
-                                <th class="cell-fit">
-                                    <center>#ID</center>
-                                </th>
-                                <th class="cell-fit">NO SURAT</th>
-                                <th class="cell-fit">TGL SURAT</th>
-                                <th class="cell-fit">TGL DITERIMA</th>
-                                <th>ASAL/NO.SRT</th>
-                                <th>DESKRIPSI</th>
-                                <th>TEMPAT/ACARA</th>
-                                <th>UPDATE</th>
-                                <th class="cell-fit">USER</th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                <div class="card-body">
+                    <div class="alert alert-secondary">
+                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
+                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas</small>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="dttable" class="table table-hover w-100 align-middle">
+                            <thead>
+                                <tr>
+                                    <th class="cell-fit">
+                                        <center>#ID</center>
+                                    </th>
+                                    <th class="cell-fit">NO SURAT</th>
+                                    <th class="cell-fit">TGL SURAT</th>
+                                    <th class="cell-fit">TGL DITERIMA</th>
+                                    <th>ASAL/NO.SRT</th>
+                                    <th>DESKRIPSI</th>
+                                    <th>TEMPAT/ACARA</th>
+                                    <th>UPDATE</th>
+                                    <th class="cell-fit">USER</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody">
+                                <tr>
+                                    <td colspan="9" style="font-size:13px">
+                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-whitesmoke">
+                                <tr>
+                                    <th class="cell-fit">
+                                        <center>#ID</center>
+                                    </th>
+                                    <th class="cell-fit">NO SURAT</th>
+                                    <th class="cell-fit">TGL SURAT</th>
+                                    <th class="cell-fit">TGL DITERIMA</th>
+                                    <th>ASAL/NO.SRT</th>
+                                    <th>DESKRIPSI</th>
+                                    <th>TEMPAT/ACARA</th>
+                                    <th>UPDATE</th>
+                                    <th class="cell-fit">USER</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,13 +137,13 @@
                         Form Upload&nbsp;&nbsp;&nbsp;
                     </h4>
                     <div class="card-title-elements">
-                      <select class="form-select form-select-sm" name="user" required>
-                        <option value="" hidden>Pilih Petugas</option>
-                        <option value="84" selected>Sri Suryani, Amd</option>
-                        <option value="293">Zia Nuswantara pahlawan, S.H</option>
-                        <option value="88">Siti Dewi Sholikhah</option>
-                        <option value="82">Salis Annisa Hafiz, Amd.Kom</option>
-                      </select>
+                        <select class="form-select form-select-sm" name="user" required>
+                            <option value="" hidden>Pilih Petugas</option>
+                            <option value="84" selected>Sri Suryani, Amd</option>
+                            <option value="293">Zia Nuswantara pahlawan, S.H</option>
+                            <option value="88">Siti Dewi Sholikhah</option>
+                            <option value="82">Salis Annisa Hafiz, Amd.Kom</option>
+                        </select>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -221,7 +231,7 @@
                         Form Ubah&nbsp;&nbsp;&nbsp;
                     </h4>
                     <div class="card-title-elements">
-                      <select class="form-select form-select-sm" id="user" required></select>
+                        <select class="form-select form-select-sm" id="user" required></select>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -455,7 +465,7 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
                                     + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
@@ -545,7 +555,7 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
                                     + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
@@ -636,7 +646,7 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
                                     + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
@@ -725,7 +735,7 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
                                     + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
@@ -861,7 +871,7 @@
                     if (res.show.filename != null) {
                         document.getElementById('linksurat').innerHTML = `
                         <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>&nbsp;&nbsp;
-                        <button class='btn btn-sm btn-outline-dark' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
+                        <button class='btn btn-sm btn-link' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
                         <h6 class='mb-2'><a href='/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
                         <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>`;
                         $("#verifberkas"+res.show.id).val(0);

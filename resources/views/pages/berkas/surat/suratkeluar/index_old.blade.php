@@ -1,174 +1,110 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Inventaris</li>
-                        <li class="breadcrumb-item">Berkas</li>
-                        <li class="breadcrumb-item" aria-current="page">Surat Keluar</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Surat Keluar</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- [ breadcrumb ] end -->
-
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header align-items-center justify-content-between py-3">
-                    <div class="d-flex">
-                        <h5 class="mb-0 card-title flex-grow-1">
-                            <div class="btn-group">
-                                <a class="btn btn-primary text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-upload nav-icon'></i> <span>Upload Surat Masuk Baru</span>" onclick="modalTambah()">
-                                    <i class='fa-fw fas fa-upload nav-icon me-1'></i>
-                                    <span class="align-middle">Upload</span>
-                                </a>
-                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Tampilkan 100 Data</span>" onclick="refresh()">
-                                    <i class="fa-fw fas fa-sync nav-icon"></i></button>
-                                {{-- <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="<i class='fa-fw fas fa-infinity nav-icon'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
-                                    <i class="fa-fw fas fa-infinity nav-icon"></i></button> --}}
-                            </div>
-                        </h5>
-                        <div class="flex-shrink-0">
-                            <div class="dropdown">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down me-1"></i> Filter</span></button>
-                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
-                                    <div class="dropdown-item-text">
-                                        <div>
-                                            <h6 class="mb-0 text-center">Filter Surat</h6>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <select class="form-select form-control mb-3" id="kd_bulan" onchange="getSurat()">
-                                        <option value="0" hidden>Pilih Bulan</option>
-                                        @php
-                                            $bulan=array("","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
-                                            $jml_bln=count($bulan);
-                                            for($c=1 ; $c < $jml_bln ; $c+=1){
-                                                echo"<option value=$c> $bulan[$c] </option>";
-                                            }
-                                        @endphp
-                                    </select>
-                                    <select class="form-select form-control mb-3" id="kd_tahun" onchange="getSurat()">
-                                        <option value="0" hidden>Pilih Tahun</option>
-                                        @php
-                                            for ($i=2023; $i <= $list['year']; $i++) {
-                                                echo"<option value=$i> $i </option>";
-                                            }
-
-                                        @endphp
-                                    </select>
-                                    <select class="form-select form-control" id="kd_surat" onchange="getSurat()">
-                                        <option value="0" selected hidden>Pilih Jenis Surat</option>
-                                        @if(count($list['kode']) > 0)
-                                            @foreach($list['kode'] as $item)
-                                                <option value="{{ $item->id }}"><b>{{ $item->nama }}</b></option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-                            {{-- <div class="btn-group">
-                                <h6 style="margin-top: 10px">Filter</h6>
-                                <select class="form-select form-control ms-2" id="kd_bulan" onchange="getSurat()">
-                                    <option value="0">Pilih Bulan</option>
-                                    @php
-                                        $bulan=array("","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
-                                        $jml_bln=count($bulan);
-                                        for($c=1 ; $c < $jml_bln ; $c+=1){
-                                            echo"<option value=$c> $bulan[$c] </option>";
-                                        }
-                                    @endphp
-                                </select>
-                                <select class="form-select form-control ms-2" id="kd_tahun" onchange="getSurat()">
-                                    <option value="0">Pilih Tahun</option>
-                                    @php
-                                        for ($i=2023; $i <= $list['year']; $i++) {
-                                            echo"<option value=$i> $i </option>";
-                                        }
-
-                                    @endphp
-                                </select>
-                            </div>
-                            <div class="float-end ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Filter Jenis Surat">
-                                <select class="form-control select2" id="kd_surat" onchange="getSurat()">
-                                    <option value="0" selected>Pilih</option>
-                                    @if(count($list['kode']) > 0)
-                                        @foreach($list['kode'] as $item)
-                                            <option value="{{ $item->id }}"><b>{{ $item->nama }}</b></option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="dttable" class="table table-hover dt-responsive align-middle">
-                            <thead>
-                                <tr>
-                                    <th class="cell-fit">
-                                        <center>#ID</center>
-                                    </th>
-                                    <th class="cell-fit">NO</th>
-                                    <th>TGL</th>
-                                    <th>NO. SURAT</th>
-                                    <th>ISI RINGKASAN</th>
-                                    <th>DITUJUKAN KEPADA</th>
-                                    <th>PEMBUAT SURAT</th>
-                                    <th>KESESUAIAN</th>
-                                    <th>UPDATE</th>
-                                    <th>USER</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="9" style="font-size:13px">
-                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot class="bg-whitesmoke">
-                                <tr>
-                                    <th class="cell-fit">
-                                        <center>#ID</center>
-                                    </th>
-                                    <th class="cell-fit">NO</th>
-                                    <th>TGL</th>
-                                    <th>NO. SURAT</th>
-                                    <th>ISI RINGKASAN</th>
-                                    <th>DITUJUKAN KEPADA</th>
-                                    <th>PEMBUAT SURAT</th>
-                                    <th>KES ESUAIAN</th>
-                                    <th>UPDATE</th>
-                                    <th>USER</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Berkas - Surat Keluar</h4>
             </div>
         </div>
     </div>
 
+    <div class="card card-body table-responsive" style="overflow: visible;">
+        <div class="d-flex">
+            <h4 classs="card-title flex-grow-1">
+                <div class="btn-group">
+                    <a class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#tambah" value="animate__jackInTheBox">
+                        <i class="bx bx-upload scaleX-n1-rtl"></i>
+                        <span class="align-middle">Upload</span>
+                    </a>
+                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                        title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Segarkan</span>" onclick="refresh()">
+                        <i class="fa-fw fas fa-sync nav-icon"></i></button>
+                </div>
+            </h4>
+            <div class="ms-auto flex-grow-0">
+                <div class="btn-group">
+                    <h6 style="margin-top: 10px">Filter</h6>
+                    <select class="form-select form-control ms-2" id="kd_bulan" onchange="getSurat()">
+                        <option value="0">Pilih Bulan</option>
+                        <?php
+                            $bulan=array("","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
+                            $jml_bln=count($bulan);
+                            for($c=1 ; $c < $jml_bln ; $c+=1){
+                                echo"<option value=$c> $bulan[$c] </option>";
+                            }
+                        ?>
+                    </select>
+                    <select class="form-select form-control ms-2" id="kd_tahun" onchange="getSurat()">
+                        <option value="0">Pilih Tahun</option>
+                        @php
+                            for ($i=2023; $i <= $list['year']; $i++) {
+                                echo"<option value=$i> $i </option>";
+                            }
+
+                        @endphp
+                    </select>
+                </div>
+                <div class="float-end ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Filter Jenis Surat">
+                    <select class="form-control select2" id="kd_surat" onchange="getSurat()">
+                        <option value="0" selected>Pilih</option>
+                        @if(count($list['kode']) > 0)
+                            @foreach($list['kode'] as $item)
+                                <option value="{{ $item->id }}"><b>{{ $item->nama }}</b></option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
+            <thead>
+                <tr>
+                    <th class="cell-fit">
+                        <center></center>
+                    </th>
+                    <th class="cell-fit">NO</th>
+                    <th>TGL</th>
+                    <th>NO. SURAT</th>
+                    <th>ISI RINGKASAN</th>
+                    <th>DITUJUKAN KEPADA</th>
+                    <th>PEMBUAT SURAT</th>
+                    <th>KESESUAIAN</th>
+                    <th>UPDATE</th>
+                    <th>USER</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="9">
+                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot class="bg-whitesmoke">
+                <tr>
+                    <th class="cell-fit">
+                        <center></center>
+                    </th>
+                    <th class="cell-fit">NO</th>
+                    <th>TGL</th>
+                    <th>NO. SURAT</th>
+                    <th>ISI RINGKASAN</th>
+                    <th>DITUJUKAN KEPADA</th>
+                    <th>PEMBUAT SURAT</th>
+                    <th>KES ESUAIAN</th>
+                    <th>UPDATE</th>
+                    <th>USER</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
     {{-- MODAL TAMBAH --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="tambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <form class="form-auth-small" name="formTambah" action="{{ route('suratkeluar.store') }}" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
@@ -176,20 +112,20 @@
                         Form Upload&nbsp;&nbsp;&nbsp;
                     </h4>
                     <div class="card-title-elements">
-                        <select class="form-select form-select-sm" name="user" autofocus required>
-                            <option value="" hidden>Pilih Petugas</option>
-                            <option value="84" selected>Sri Suryani, Amd</option>
-                            <option value="293">Zia Nuswantara pahlawan, S.H</option>
-                            <option value="88">Siti Dewi Sholikhah</option>
-                            <option value="82">Salis Annisa Hafiz, Amd.Kom</option>
-                        </select>
+                      <select class="form-select form-select-sm" name="user" autofocus required>
+                        <option value="" hidden>Pilih Petugas</option>
+                        <option value="84" selected>Sri Suryani, Amd</option>
+                        <option value="293">Zia Nuswantara pahlawan, S.H</option>
+                        <option value="88">Siti Dewi Sholikhah</option>
+                        <option value="82">Salis Annisa Hafiz, Amd.Kom</option>
+                      </select>
                     </div>
                     <div class="card-title-elements" style="margin-left: 10px">
-                        <select class="form-select form-select-sm" name="sesuai" required>
-                            <option value="" hidden>Pilih Kesesuaian</option>
-                            <option value="0">Tidak Sesuai</option>
-                            <option value="1">Sesuai</option>
-                        </select>
+                      <select class="form-select form-select-sm" name="sesuai" required>
+                        <option value="" hidden>Pilih Kesesuaian</option>
+                        <option value="0">Tidak Sesuai</option>
+                        <option value="1">Sesuai</option>
+                      </select>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -231,8 +167,8 @@
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label for="select2Dark" class="form-label">Ditujukan Kepada <a class="text-danger">*</a></label>
-                                    <button class="btn btn-sm btn-link-primary" type="button" onclick="ubahTujuan1()" id="btn-manual1">Tulis Manual</button>
-                                    <button class="btn btn-sm btn-link-primary" type="button" onclick="ubahTujuan2()" id="btn-manual2" hidden>Pilihan Karyawan</button>
+                                    <button class="btn btn-sm btn-outline-dark" type="button" onclick="ubahTujuan1()" id="btn-manual1">Tulis Manual</button>
+                                    <button class="btn btn-sm btn-outline-dark" type="button" onclick="ubahTujuan2()" id="btn-manual2" hidden>Pilihan Karyawan</button>
                                     <div class="select2-dark" id="tujuan1_add">
                                         <select class="select2users form-select" name="tujuan[]" id="tujuan1_add_req" data-allow-clear="true" data-bs-auto-close="outside" style="width: 100%" required multiple>
                                             {{-- <option value="all">Seluruh Karyawan</option> --}}
@@ -282,17 +218,17 @@
 
     {{-- MODAL UBAH --}}
     <div class="modal fade animate__animated animate__rubberBand" id="ubah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
                         Form&nbsp;&nbsp;&nbsp;
                     </h4>
                     <div class="card-title-elements">
-                        <select class="form-select form-select-sm" id="user" required></select>
+                      <select class="form-select form-select-sm" id="user" required></select>
                     </div>
                     <div class="card-title-elements" style="margin-left: 10px">
-                        <select class="form-select form-select-sm" id="sesuai" required></select>
+                      <select class="form-select form-select-sm" id="sesuai" required></select>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -390,6 +326,8 @@
 
     <script>
         $(document).ready(function() {
+            $("body").addClass('sidebar-enable vertical-collpsed');
+
             // SELECT2
             var t = $(".select2");
             t.length && t.each(function() {
@@ -448,22 +386,22 @@
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
-                                btnColor = 'btn-link-danger';
+                                btnColor = 'btn-outline-danger';
                             } else {
                                 if (item.sesuai == '1') {
-                                    btnColor = 'btn-link-primary';
+                                    btnColor = 'btn-outline-primary';
                                 } else {
-                                    btnColor = 'btn-link-dark';
+                                    btnColor = 'btn-outline-dark';
                                 }
                             }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn `+btnColor+` dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
+                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
                                     // }
                             content += `</ul></center></td><td>`;
                                         if (item.pembuat) {
@@ -517,7 +455,6 @@
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
                             order: [
                                 [8, "desc"]
                             ],
@@ -525,13 +462,16 @@
                                 { width: "8%", targets: 2 },
                                 { width: "40%", targets: 4 },
                                 { width: "20%", targets: 5 },
-                                { visible: false, targets: [6,7,9] },
+                                { visible: false, targets: [6,7] },
                             ],
                             displayLength: 7,
                             lengthChange: true,
                             lengthMenu: [7, 10, 25, 50, 75, 100],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
+
+                        table.buttons().container()
+                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                         // Showing Tooltip
                         $('[data-bs-toggle="tooltip"]').tooltip({
@@ -543,10 +483,6 @@
         });
 
         // FUNCTION-FUNCTION
-        function modalTambah() {
-            $('#tambah').modal('show');
-        }
-
         function gantiTahun() {
             $("#urutanNow").prop('hidden', true);
             $("#urutanLast").prop('hidden', false);
@@ -603,22 +539,22 @@
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
-                                btnColor = 'btn-link-danger';
+                                btnColor = 'btn-outline-danger';
                             } else {
                                 if (item.sesuai == '1') {
-                                    btnColor = 'btn-link-primary';
+                                    btnColor = 'btn-outline-primary';
                                 } else {
-                                    btnColor = 'btn-link-dark';
+                                    btnColor = 'btn-outline-dark';
                                 }
                             }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
+                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
                                     // }
                             content += `</ul></center></td><td>`;
                                         if (item.pembuat) {
@@ -672,7 +608,6 @@
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
                             order: [
                                 [8, "desc"]
                             ],
@@ -680,13 +615,16 @@
                                 { width: "8%", targets: 2 },
                                 { width: "40%", targets: 4 },
                                 { width: "20%", targets: 5 },
-                                { visible: false, targets: [6,7,9] },
+                                { visible: false, targets: [6,7] },
                             ],
                             displayLength: 7,
                             lengthChange: true,
                             lengthMenu: [7, 10, 25, 50, 75, 100],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
+
+                        table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                         // Showing Tooltip
                         $('[data-bs-toggle="tooltip"]').tooltip({
@@ -718,13 +656,13 @@
                             var us = JSON.parse(res.user);
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-outline-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>`
+                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>`
                                     }
                                     // if (adminID) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
                                     // }
                             content += `</ul></center></td><td>`;
                             content += item.urutan + "</td><td>"
@@ -773,7 +711,6 @@
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
                             order: [
                                 [8, "desc"]
                             ],
@@ -781,13 +718,16 @@
                                 { width: "8%", targets: 2 },
                                 { width: "40%", targets: 4 },
                                 { width: "20%", targets: 5 },
-                                { visible: false, targets: [6,7,9] },
+                                { visible: false, targets: [6,7] },
                             ],
                             displayLength: 7,
                             lengthChange: true,
                             lengthMenu: [7, 10, 25, 50, 75, 100],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
+
+                        table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                         // Showing Tooltip
                         $('[data-bs-toggle="tooltip"]').tooltip({
@@ -1051,5 +991,3 @@
         }
     </script>
 @endsection
-
-
