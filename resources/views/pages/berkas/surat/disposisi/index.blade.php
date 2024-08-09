@@ -34,7 +34,7 @@
                                 title="Tabel Disposisi Surat Masuk akan disegarkan" onclick="refresh()">
                                 <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-infinity nav-icon'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
+                                title="Tampilkan Semua Data" onclick="showAll()">
                                 <i class="fa-fw fas fa-infinity nav-icon"></i></button>
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Informasi Sistem Disposisi" disabled>
@@ -385,12 +385,16 @@
                         });
 
                         // Showing Tooltip
-                        $('[data-bs-toggle="tooltip"]').tooltip({
-                            trigger: 'hover'
-                        })
+                        // $('[data-bs-toggle="tooltip"]').tooltip({
+                        //     trigger: 'hover'
+                        // })
                     }
                 }
             );
+
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            })
         });
 
         // FUNCTION-FUNCTION
@@ -487,9 +491,9 @@
                         });
 
                         // Showing Tooltip
-                        $('[data-bs-toggle="tooltip"]').tooltip({
-                            trigger: 'hover'
-                        })
+                        // $('[data-bs-toggle="tooltip"]').tooltip({
+                        //     trigger: 'hover'
+                        // })
                     }
                 }
             );
@@ -580,9 +584,9 @@
                         });
 
                         // Showing Tooltip
-                        $('[data-bs-toggle="tooltip"]').tooltip({
-                            trigger: 'hover'
-                        })
+                        // $('[data-bs-toggle="tooltip"]').tooltip({
+                        //     trigger: 'hover'
+                        // })
                     }
                 }
             );

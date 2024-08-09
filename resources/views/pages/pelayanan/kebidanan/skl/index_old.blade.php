@@ -1,119 +1,81 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Pelayanan</li>
-                        <li class="breadcrumb-item" aria-current="page">Surat Keterangan Lahir</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">SKL (Surat Keterangan Lahir)</h2>
-                    </div>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Pelayanan - Surat Keterangan Lahir</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="col-md-12">
-            <div class="card table-card">
-                <div class="card-header align-items-center justify-content-between py-3">
-                    <div class="d-flex">
-                        <h5 class="mb-0 card-title flex-grow-1">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                    data-bs-placement="bottom" data-bs-html="true" title="<span>Tambah Data SKL</span>"
-                                    value="animate__jackInTheBox">
-                                    <i class="material-icons-two-tone me-1 text-light">add_box</i>
-                                    <span class="align-middle">Tambah</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                    data-bs-placement="bottom" data-bs-html="true" title="<span>Refresh Tabel</span>" onclick="refresh()">
-                                    <i class="fa-fw fas fa-sync nav-icon"></i></button>
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                    data-bs-placement="bottom" id="btn-showall" data-bs-html="true" title="<span>Tampilkan Semua Data SKL</span>" onclick="showAll()">
-                                    <i class="fa-fw fas fa-history"></i>&nbsp;&nbsp;Riwayat</button>
-                            </div>
-                        </h5>
-                        <div class="flex-shrink-0">
-                            <div class="dropdown">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down me-1"></i> Filter</span></button>
-                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-md" style="width: 300px">
-                                    <div class="dropdown-item-text">
-                                        <div>
-                                            <h6 class="mb-0 text-center">Pencarian Berdasarkan Nama Ibu</h6>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <div class="form-group mb-3 m-r-10 m-l-10">
-                                        <div class="input-group">
-                                            <div class="input-group-text">NY.</div>
-                                            <input type="text" class="form-control" id="cari_ibu" placeholder="Tulis Nama Ibu" width="300">
-                                        </div>
-                                    </div>
-                                    <center>
-                                        <button type="button" id="btn-filter" class="btn btn-link-primary mb-2 btn-block w-100" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                            data-bs-placement="bottom" data-bs-html="true" title="<span>Filter Data Berdasarkan Nama Ibu</span>" onclick="filter()">
-                                            <i class="fas fa-filter fa-sm scaleX-n1-rtl"></i>
-                                            <span class="align-middle">Filter</span>
-                                        </button>
-                                    </center>
-                                </div>
+    <div class="card card-body table-responsive text-nowrap" style="overflow: visible;">
+        <div classs="card-title">
+            <div class="d-flex">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="bottom" data-bs-html="true" title="<span>Tambah Data SKL</span>"
+                        value="animate__jackInTheBox">
+                        <i class="bx bx-plus scaleX-n1-rtl"></i>
+                        <span class="align-middle">Tambah</span>
+                    </button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="bottom" data-bs-html="true" title="<span>Refresh Tabel</span>" onclick="refresh()">
+                        <i class="fa-fw fas fa-sync nav-icon"></i></button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                        data-bs-placement="bottom" id="btn-showall" data-bs-html="true" title="<span>Tampilkan Semua Data SKL</span>" onclick="showAll()">
+                        <i class="fa-fw fas fa-history"></i>&nbsp;&nbsp;Riwayat</button>
+                </div>
+                <div class="hstack gap-3 ms-auto">
+                    <div class="btn-group">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-text">NY.</div>
+                                <input type="text" class="form-control" id="cari_ibu" placeholder="Tulis Nama Ibu">
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    {{-- <div class="alert alert-secondary m-2">
-                        <small>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat <br>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas
-                        </small>
-                    </div> --}}
-                    <div class="table-responsive">
-                        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
-                            <thead>
-                                <tr>
-                                    <th class="cell-fit">#ID</th>
-                                    <th class="cell-fit">NO SURAT</th>
-                                    <th class="cell-fit">TGL</th>
-                                    <th class="cell-fit">IBU</th>
-                                    <th class="cell-fit">AYAH</th>
-                                    <th class="cell-fit">ANAK</th>
-                                    <th class="cell-fit">JK / BB / TB</th>
-                                    <th class="cell-fit">ALAMAT</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="cell-fit">#ID</th>
-                                    <th class="cell-fit">NO SURAT</th>
-                                    <th class="cell-fit">TGL</th>
-                                    <th class="cell-fit">IBU</th>
-                                    <th class="cell-fit">AYAH</th>
-                                    <th class="cell-fit">ANAK</th>
-                                    <th class="cell-fit">JK / BB / TB</th>
-                                    <th class="cell-fit">ALAMAT</th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <button type="button" id="btn-filter" class="btn btn-outline-dark" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                            data-bs-placement="bottom" data-bs-html="true" title="<span>Filter Data Berdasarkan Nama Ibu</span>" onclick="filter()">
+                            <i class="fas fa-filter fa-sm scaleX-n1-rtl"></i>
+                            <span class="align-middle">Filter</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        <hr>
+        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+            <thead>
+                <tr>
+                    <th class="cell-fit"></th>
+                    <th class="cell-fit">NO SURAT</th>
+                    <th class="cell-fit">TGL</th>
+                    <th class="cell-fit">IBU</th>
+                    <th class="cell-fit">AYAH</th>
+                    <th class="cell-fit">ANAK</th>
+                    <th class="cell-fit">JK / BB / TB</th>
+                    <th class="cell-fit">ALAMAT</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="10"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="cell-fit"></th>
+                    <th class="cell-fit">NO SURAT</th>
+                    <th class="cell-fit">TGL</th>
+                    <th class="cell-fit">IBU</th>
+                    <th class="cell-fit">AYAH</th>
+                    <th class="cell-fit">ANAK</th>
+                    <th class="cell-fit">JK / BB / TB</th>
+                    <th class="cell-fit">ALAMAT</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
     {{-- MODAL START --}}
@@ -388,6 +350,7 @@
 
     <script>
         $(document).ready(function() {
+
             // TGL ADD
             const l = document.querySelector("#tgl_add");
             const c = new Date(Date.now() + 1728e5),
@@ -420,19 +383,19 @@
                         // var updet = item.updated_at.substring(0, 10);
                         content = `<tr id='data"+ item.id +"'>`;
                         content +=
-                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
+                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand"><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(` +
                             item.id +
-                            `)"><i class='fas fa-edit'></i> Ubah</a></li>` +
+                            `)"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/pelayanan/kebidanan/skl/` +
                             item.id +
-                            `/print','id','width=900,height=600')"><i class='fas fa-print'></i> Cetak</a></li>` +
+                            `/print','id','width=900,height=600')"><i class='bx bx-printer scaleX-n1-rtl'></i> Cetak</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/pelayanan/kebidanan/skl/` +
                             item.id +
-                            `/cetak')"><i class='fas fa-download'></i> Download</a></li>` +
+                            `/cetak')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                             item.id +
-                            `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
+                            `)"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
                         content += item.no_surat + "</td><td>" +
                             item.tgl + "</td><td>" +
@@ -539,7 +502,8 @@
                     });
                 }
             });
-        });
+
+        })
 
         // FUNCTION
         function filter() {
@@ -565,19 +529,19 @@
                             // var updet = item.updated_at.substring(0, 10);
                             content = `<tr id='data"+ item.id +"'>`;
                             content +=
-                                `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
+                                `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand"><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>` +
                                 `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(` +
                                 item.id +
-                                `)"><i class='fas fa-edit'></i> Ubah</a></li>` +
+                                `)"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
                                 `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/pelayanan/kebidanan/skl/` +
                                 item.id +
-                                `/print','id','width=900,height=600')"><i class='fas fa-print'></i> Cetak</a></li>` +
+                                `/print','id','width=900,height=600')"><i class='bx bx-printer scaleX-n1-rtl'></i> Cetak</a></li>` +
                                 `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/pelayanan/kebidanan/skl/` +
                                 item.id +
-                                `/cetak')"><i class='fas fa-download'></i> Download</a></li>` +
+                                `/cetak')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>` +
                                 `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                                 item.id +
-                                `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
+                                `)"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>` +
                                 `</ul></center></td><td>`;
                             content += item.no_surat + "</td><td>" +
                                 item.tgl + "</td><td>" +
@@ -643,19 +607,19 @@
                         // var updet = item.updated_at.substring(0, 10);
                         content = `<tr id='data"+ item.id +"'>`;
                         content +=
-                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
+                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand"><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(` +
                             item.id +
-                            `)"><i class='fas fa-edit'></i> Ubah</a></li>` +
+                            `)"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/pelayanan/kebidanan/skl/` +
                             item.id +
-                            `/print','id','width=900,height=600')"><i class='fas fa-print'></i> Cetak</a></li>` +
+                            `/print','id','width=900,height=600')"><i class='bx bx-printer scaleX-n1-rtl'></i> Cetak</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/pelayanan/kebidanan/skl/` +
                             item.id +
-                            `/cetak')"><i class='fas fa-download'></i> Download</a></li>` +
+                            `/cetak')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                             item.id +
-                            `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
+                            `)"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
                         content += item.no_surat + "</td><td>" +
                             item.tgl + "</td><td>" +
@@ -731,19 +695,19 @@
                         // var updet = item.updated_at.substring(0, 10);
                         content = `<tr id='data"+ item.id +"'>`;
                         content +=
-                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
+                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand"><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(` +
                             item.id +
-                            `)"><i class='fas fa-edit'></i> Ubah</a></li>` +
+                            `)"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/pelayanan/kebidanan/skl/` +
                             item.id +
-                            `/print','id','width=900,height=600')"><i class='fas fa-print'></i> Cetak</a></li>` +
+                            `/print','id','width=900,height=600')"><i class='bx bx-printer scaleX-n1-rtl'></i> Cetak</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/pelayanan/kebidanan/skl/` +
                             item.id +
-                            `/cetak')"><i class='fas fa-download'></i> Download</a></li>` +
+                            `/cetak')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                             item.id +
-                            `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
+                            `)"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
                         content += item.no_surat + "</td><td>" +
                             item.tgl + "</td><td>" +
