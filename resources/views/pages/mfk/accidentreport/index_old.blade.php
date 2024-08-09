@@ -1,163 +1,155 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Akreditasi</li>
-                        <li class="breadcrumb-item">MFK</li>
-                        <li class="breadcrumb-item" aria-current="page">Kecelakaan Kerja</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Kecelakaan Kerja</h2>
-                    </div>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Akreditasi MFK - Kecelakaan Kerja</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 card-title flex-grow-1">Accident Report x Akreditasi (<b class="text-primary">Pokja MFK</b>)</h5>
-                    <div class="flex-shrink-0">
-                        <div class="btn-group">
-                            <button class="btn btn-primary" onclick="window.location='{{ route('accidentreport.tambah') }}'">
-                                <i class="fas fa-plus-square me-1"></i>Tambah Data</button>
-                            <button type="button" class="btn btn-outline-warning lh-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-sync nav-icon me-1'></i> <span>Segarkan Tabel</span>" onclick="refresh()">
-                                <i class="fa-fw fas fa-sync nav-icon"></i></button>
-                            <button type="button" class="btn btn-outline-danger lh-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-infinity nav-icon me-1'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
-                                <i class="fa-fw fas fa-infinity nav-icon"></i></button>
-                        </div>
-                    </div>
+    <div class="card card-body table-responsive" style="overflow: visible;">
+        <h4 classs="card-title">
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="window.location='{{ route('accidentreport.tambah') }}'"><i
+                        class="fas fa-feather-alt"></i>&nbsp;&nbsp;Tambah Data</button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                    data-bs-placement="bottom" data-bs-html="true"
+                    title="Segarkan Tabel" onclick="refresh()" id="btn-refresh">
+                    <i class="fa-fw fas fa-sync nav-icon"></i></button>
+                <button type="button" class="btn btn-info" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                    data-bs-placement="bottom" data-bs-html="true"
+                    title="Tampilkan Semua Data" onclick="showAll()" id="btn-show-all">
+                    <i class="fa-fw fas fa-infinity nav-icon"></i></button>
+            </div>
+        </h4>
+        <hr>
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
+            <thead>
+                <tr>
+                    <th><center>AKSI</center></th>
+                    <th>KORBAN</th>
+                    <th>UNIT</th>
+                    <th>LOKASI</th>
+                    <th>TGL</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="10"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                </tr>
+            </tbody>
+            <tfoot class="bg-whitesmoke">
+                <tr>
+                    <th><center>AKSI</center></th>
+                    <th>KORBAN</th>
+                    <th>UNIT</th>
+                    <th>LOKASI</th>
+                    <th>TGL</th>
+                </tr>
+            </tfoot>
+        </table>
+        <table id="dttable2" class="table dt-responsive table-hover w-100 align-middle" hidden>
+            <thead>
+                <tr>
+                    <th><center>ID</center></th>
+                    <th>KORBAN</th>
+                    <th>UNIT</th>
+                    <th>LOKASI</th>
+                    <th>TGL</th>
+                    <th>JENIS KECELAKAAN</th>
+                    <th>KRONOLOGI KECELAKAAN</th>
+                    <th>KERUGIAN PADA MANUSIA</th>
+                    <th>TANGGAL LAHIR / USIA</th>
+                    <th>JENIS KELAMIN</th>
+                    <th>ANGGOTA TUBUH CEDERA</th>
+                    <th>PENANGANAN</th>
+                    <th>KERUGIAN ASET</th>
+                    <th>KERUGIAN LINGKUNGAN</th>
+                    <th>1. TINDAKAN TIDAK AMAN</th>
+                    <th>1. KONDISI TIDAK AMAN</th>
+                    <th>2. FAKTOR PERSONAL</th>
+                    <th>2. FAKTOR PEKERJAAN</th>
+                    <th>3. PERALATAN KERJA</th>
+                    <th>3. BENDA BERGERAK</th>
+                    <th>3. MESIN</th>
+                    <th>3. BEJANA TEKAN</th>
+                    <th>3. MATERIAL</th>
+                    <th>3. ALAT LISTRIK</th>
+                    <th>3. ALAT BERAT</th>
+                    <th>3. RADIASI</th>
+                    <th>3. KENDARAAN</th>
+                    <th>3. BINATANG</th>
+                    <th>3. LAIN-LAIN</th>
+                    <th>RENCANA TINDAKAN</th>
+                    <th>TARGET WAKTU</th>
+                    <th>WEWENANG</th>
+                    <th>TERAKHIR DIUPDATE</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody2">
+                <tr>
+                    <td colspan="40"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                </tr>
+            </tbody>
+            <tfoot class="bg-whitesmoke">
+                <tr>
+                    <th><center>ID</center></th>
+                    <th>KORBAN</th>
+                    <th>UNIT</th>
+                    <th>LOKASI</th>
+                    <th>TGL</th>
+                    <th>JENIS KECELAKAAN</th>
+                    <th>KRONOLOGI KECELAKAAN</th>
+                    <th>KERUGIAN PADA MANUSIA</th>
+                    <th>TANGGAL LAHIR / USIA</th>
+                    <th>JENIS KELAMIN</th>
+                    <th>ANGGOTA TUBUH CEDERA</th>
+                    <th>PENANGANAN</th>
+                    <th>KERUGIAN ASET</th>
+                    <th>KERUGIAN LINGKUNGAN</th>
+                    <th>1. TINDAKAN TIDAK AMAN</th>
+                    <th>1. KONDISI TIDAK AMAN</th>
+                    <th>2. FAKTOR PERSONAL</th>
+                    <th>2. FAKTOR PEKERJAAN</th>
+                    <th>3. PERALATAN KERJA</th>
+                    <th>3. BENDA BERGERAK</th>
+                    <th>3. MESIN</th>
+                    <th>3. BEJANA TEKAN</th>
+                    <th>3. MATERIAL</th>
+                    <th>3. ALAT LISTRIK</th>
+                    <th>3. ALAT BERAT</th>
+                    <th>3. RADIASI</th>
+                    <th>3. KENDARAAN</th>
+                    <th>3. BINATANG</th>
+                    <th>3. LAIN-LAIN</th>
+                    <th>RENCANA TINDAKAN</th>
+                    <th>TARGET WAKTU</th>
+                    <th>WEWENANG</th>
+                    <th>TERAKHIR DIUPDATE</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__jackInTheBox fade" id="tampil" aria-hidden="true"
+        aria-labelledby="modalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kecelakaan Kerja</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="card-body">
-                    <div class="alert alert-secondary">
-                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
-                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas</small>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
-                            <thead>
-                                <tr>
-                                    <th><center>#ID</center></th>
-                                    <th>KORBAN</th>
-                                    <th>UNIT</th>
-                                    <th>LOKASI</th>
-                                    <th>TGL</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
-                                </tr>
-                            </tbody>
-                            <tfoot class="bg-whitesmoke">
-                                <tr>
-                                    <th><center>#ID</center></th>
-                                    <th>KORBAN</th>
-                                    <th>UNIT</th>
-                                    <th>LOKASI</th>
-                                    <th>TGL</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <table id="dttable2" class="table dt-responsive table-hover w-100 align-middle" hidden>
-                            <thead>
-                                <tr>
-                                    <th><center>#ID</center></th>
-                                    <th>KORBAN</th>
-                                    <th>UNIT</th>
-                                    <th>LOKASI</th>
-                                    <th>TGL</th>
-                                    <th>JENIS KECELAKAAN</th>
-                                    <th>KRONOLOGI KECELAKAAN</th>
-                                    <th>KERUGIAN PADA MANUSIA</th>
-                                    <th>TANGGAL LAHIR / USIA</th>
-                                    <th>JENIS KELAMIN</th>
-                                    <th>ANGGOTA TUBUH CEDERA</th>
-                                    <th>PENANGANAN</th>
-                                    <th>KERUGIAN ASET</th>
-                                    <th>KERUGIAN LINGKUNGAN</th>
-                                    <th>1. TINDAKAN TIDAK AMAN</th>
-                                    <th>1. KONDISI TIDAK AMAN</th>
-                                    <th>2. FAKTOR PERSONAL</th>
-                                    <th>2. FAKTOR PEKERJAAN</th>
-                                    <th>3. PERALATAN KERJA</th>
-                                    <th>3. BENDA BERGERAK</th>
-                                    <th>3. MESIN</th>
-                                    <th>3. BEJANA TEKAN</th>
-                                    <th>3. MATERIAL</th>
-                                    <th>3. ALAT LISTRIK</th>
-                                    <th>3. ALAT BERAT</th>
-                                    <th>3. RADIASI</th>
-                                    <th>3. KENDARAAN</th>
-                                    <th>3. BINATANG</th>
-                                    <th>3. LAIN-LAIN</th>
-                                    <th>RENCANA TINDAKAN</th>
-                                    <th>TARGET WAKTU</th>
-                                    <th>WEWENANG</th>
-                                    <th>TERAKHIR DIUPDATE</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody2">
-                                <tr>
-                                    <td colspan="40" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
-                                </tr>
-                            </tbody>
-                            <tfoot class="bg-whitesmoke">
-                                <tr>
-                                    <th><center>#ID</center></th>
-                                    <th>KORBAN</th>
-                                    <th>UNIT</th>
-                                    <th>LOKASI</th>
-                                    <th>TGL</th>
-                                    <th>JENIS KECELAKAAN</th>
-                                    <th>KRONOLOGI KECELAKAAN</th>
-                                    <th>KERUGIAN PADA MANUSIA</th>
-                                    <th>TANGGAL LAHIR / USIA</th>
-                                    <th>JENIS KELAMIN</th>
-                                    <th>ANGGOTA TUBUH CEDERA</th>
-                                    <th>PENANGANAN</th>
-                                    <th>KERUGIAN ASET</th>
-                                    <th>KERUGIAN LINGKUNGAN</th>
-                                    <th>1. TINDAKAN TIDAK AMAN</th>
-                                    <th>1. KONDISI TIDAK AMAN</th>
-                                    <th>2. FAKTOR PERSONAL</th>
-                                    <th>2. FAKTOR PEKERJAAN</th>
-                                    <th>3. PERALATAN KERJA</th>
-                                    <th>3. BENDA BERGERAK</th>
-                                    <th>3. MESIN</th>
-                                    <th>3. BEJANA TEKAN</th>
-                                    <th>3. MATERIAL</th>
-                                    <th>3. ALAT LISTRIK</th>
-                                    <th>3. ALAT BERAT</th>
-                                    <th>3. RADIASI</th>
-                                    <th>3. KENDARAAN</th>
-                                    <th>3. BINATANG</th>
-                                    <th>3. LAIN-LAIN</th>
-                                    <th>RENCANA TINDAKAN</th>
-                                    <th>TARGET WAKTU</th>
-                                    <th>WEWENANG</th>
-                                    <th>TERAKHIR DIUPDATE</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                <div class="modal-body">
+                    ini isinya
                 </div>
             </div>
         </div>
     </div>
+    {{-- MODAL END --}}
 
     <script>
         $(document).ready(function() {
@@ -173,11 +165,11 @@
                         // var updet = item.updated_at.substring(0, 10);
                         content = `<tr id='data"+ item.id +"'>`;
                         content +=
-                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
-                            `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>` +
+                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand"><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>` +
+                            `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                             item.id +
-                            `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>` +
+                            `)"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
                         if (item.korban != null) {
                             res.user.forEach(key => {
@@ -193,7 +185,6 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -208,16 +199,11 @@
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['excel', 'pdf']
-                        buttons: [
-                            // { extend: 'copy', className: 'btn btn-primary' },
-                            // { extend: 'csv', className: 'btn btn-primary' },
-                            { extend: 'excel', className: 'btn btn-success' },
-                            { extend: 'pdf', className: 'btn btn-primary' },
-                            // { extend: 'print', className: 'btn btn-primary' },
-                            // { extend: 'colvis', className: 'btn btn-dark' },
-                        ]
+                        buttons: ['excel', 'pdf']
                     });
+
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // SELECT PICKER
                     var t = $(".select2");
@@ -232,9 +218,8 @@
                 }
             });
 
-        });
+        })
 
-        // FUNCTION-FUNCTION
         function refresh() {
             $("#btn-refresh").find("i").toggleClass("fa-sync fa-spinner fa-spin");
             $("#tampil-tbody2").empty();
@@ -257,11 +242,11 @@
                         // var updet = item.updated_at.substring(0, 10);
                         content = `<tr id='data"+ item.id +"'>`;
                         content +=
-                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
-                            `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>` +
+                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand"><i class='bx bx-dots-vertical-rounded'></i></button><ul class='dropdown-menu dropdown-menu-right'>` +
+                            `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a></li>` +
                             `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
                             item.id +
-                            `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>` +
+                            `)"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
                         if (item.korban != null) {
                             res.user.forEach(key => {
@@ -277,7 +262,6 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -292,16 +276,11 @@
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['excel', 'pdf']
-                        buttons: [
-                            // { extend: 'copy', className: 'btn btn-primary' },
-                            // { extend: 'csv', className: 'btn btn-primary' },
-                            { extend: 'excel', className: 'btn btn-success' },
-                            { extend: 'pdf', className: 'btn btn-primary' },
-                            // { extend: 'print', className: 'btn btn-primary' },
-                            // { extend: 'colvis', className: 'btn btn-dark' },
-                        ]
+                        buttons: ['excel', 'pdf']
                     });
+
+                    table.buttons().container()
+                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // SELECT PICKER
                     var t = $(".select2");
@@ -323,7 +302,6 @@
             });
             $("#btn-refresh").find("i").toggleClass("fa-spinner fa-spin fa-sync");
         }
-
         function showAll() {
             $("#btn-show-all").find("i").toggleClass("fa-infinity fa-spinner fa-spin");
             $("#tampil-tbody").empty();
@@ -419,7 +397,6 @@
                         $('#tampil-tbody2').append(content);
                     });
                     var table = $('#dttable2').DataTable({
-                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -463,16 +440,11 @@
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['excel', 'pdf']
-                        buttons: [
-                            // { extend: 'copy', className: 'btn btn-primary' },
-                            // { extend: 'csv', className: 'btn btn-primary' },
-                            { extend: 'excel', className: 'btn btn-success' },
-                            { extend: 'pdf', className: 'btn btn-primary' },
-                            // { extend: 'print', className: 'btn btn-primary' },
-                            { extend: 'colvis', className: 'btn btn-dark' },
-                        ]
+                        buttons: ['excel', 'colvis']
                     });
+
+                    table.buttons().container()
+                        .appendTo('#dttable2_wrapper .col-md-6:eq(0)');
 
                     iziToast.warning({
                         title: 'Pesan Tambahan!',

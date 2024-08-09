@@ -45,7 +45,7 @@
                         </h5>
                         <div class="flex-shrink-0">
                             <div class="dropdown">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down me-1"></i> Filter</span></button>
+                                <button type="button" class="btn btn-info" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down me-1"></i> Filter</span></button>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-md" style="width: 300px">
                                     <div class="dropdown-item-text">
                                         <div>
@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
                                     <center>
-                                        <button type="button" id="btn-filter" class="btn btn-link-primary mb-2 btn-block w-100" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                        <button type="button" id="btn-filter" class="btn btn-link-info mb-2 btn-block w-100" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                             data-bs-placement="bottom" data-bs-html="true" title="<span>Filter Data Berdasarkan Nama Ibu</span>" onclick="filter()">
                                             <i class="fas fa-filter fa-sm scaleX-n1-rtl"></i>
                                             <span class="align-middle">Filter</span>
@@ -130,37 +130,44 @@
                     <div class="modal-body">
                         @csrf
                         <div class="row">
+                            <div class="alert alert-secondary">
+                                <small>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Nomor Surat</b> sudah sesuai sebelum disimpan<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Tanda <a class="text-danger">*</a> berarti isian <b>Wajib</b> diisi<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menggunakan <b>Huruf Besar/Capital/Uppercase</b> saat pengisian
+                                </small>
+                            </div>
                             <div class="col-md-4 mb-3">
                                 {{-- <div class="form-group">
-                                        <label>No Surat : </label>
+                                        <label class="form-label">No Surat : </label>
                                         <input type="number" name="no_surat" value="{{ $list['nomer'] }}" class="form-control"
                                             placeholder="" disabled>
                                         <input type="number" name="no_surat" value="{{ $list['nomer'] }}" class="form-control"
                                             placeholder="" hidden>
                                     </div> --}}
                                 <div class="form-group">
-                                    <label>No Surat : </label>
+                                    <label class="form-label">No Surat <a class="text-danger">*</a></label>
                                     <div class="input-group">
                                         <button class="btn btn-outline-dark" type="button" id="button_ubah_no_surat"
-                                            onclick="ubahNoSurat()">Ubah</button>
+                                            onclick="ubahNoSurat()" style="border-top-left-radius:8px;border-bottom-left-radius:8px">Ubah</button>
                                         <input type="text" class="form-control" id="tampil_no_surat"
-                                            value="{{ $list['nomer'] }}" disabled>
+                                            value="{{ $list['nomer'] }}" style="border-top-right-radius:8px;border-bottom-right-radius:8px" disabled>
                                         <input type="number" name="no_surat" id="save_no_surat"
-                                            value="{{ $list['nomer'] }}" class="form-control" placeholder="" hidden
+                                            value="{{ $list['nomer'] }}" class="form-control" placeholder="" style="border-radius:8px" hidden
                                             required>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-8 mb-3">
                                 <div class="form-group">
-                                    <label>Waktu :</label>
+                                    <label class="form-label">Waktu <a class="text-danger">*</a></label>
                                     <input type="datetime-local" name="tgl" id="tgl_add" class="form-control"
                                         placeholder="" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label>Nama Ibu : </label>
+                                    <label class="form-label">Nama Ibu <a class="text-danger">*</a></label>
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text" id="basic-addon34">NY.</span>
                                         <input type="text" class="form-control" name="ibu" id="basic-url3"
@@ -170,7 +177,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label>Nama Ayah : </label>
+                                    <label class="form-label">Nama Ayah <a class="text-danger">*</a></label>
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text" id="basic-addon34">TN.</span>
                                         <input type="text" class="form-control" name="ayah" id="basic-url3"
@@ -180,14 +187,14 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label>Nama Anak : </label>
+                                    <label class="form-label">Nama Anak (Optional)</label>
                                     <input type="text" class="form-control" name="anak" id="basic-url3"
                                         aria-describedby="basic-addon34" placeholder="Nama Lengkap Anak (Bila Ada)" />
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label>Nama Dokter : </label>
+                                    <label class="form-label">Nama Dokter <a class="text-danger">*</a></label>
                                     <select class="form-control" name="dr" style="width: 100%" required>
                                         <option selected="selected" value="" hidden>Pilih</option>
                                         <option value="1">dr. Gede Sri Dhyana M. A., Sp.OG</option>
@@ -198,7 +205,7 @@
                             </div>
                             <div class="col-md-3 mb-3">
                                 <div class="form-group">
-                                    <label>Berat Badan : </label>
+                                    <label class="form-label">Berat Badan <a class="text-danger">*</a></label>
                                     <div class="input-group input-group-merge">
                                         <input type="number" name="bb"
                                             oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
@@ -209,7 +216,7 @@
                             </div>
                             <div class="col-md-3 mb-3">
                                 <div class="form-group">
-                                    <label>Tinggi Badan : </label>
+                                    <label class="form-label">Tinggi Badan <a class="text-danger">*</a></label>
                                     <div class="input-group input-group-merge">
                                         <input type="number" name="tb"
                                             oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
@@ -220,8 +227,8 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
-                                    <label>Jenis Kelamin</label>
-                                    <select name="kelamin" class="form-control select2" style="width: 100%" required>
+                                    <label class="form-label">Jenis Kelamin <a class="text-danger">*</a></label>
+                                    <select name="kelamin" class="form-control" style="width: 100%" required>
                                         <option selected="selected" value="" hidden>Pilih</option>
                                         <option value="unknown">Belum Diketahui</option>
                                         <option value="laki-laki">Laki-laki (L)</option>
@@ -231,17 +238,13 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
-                                    <label>Alamat :</label>
+                                    <label class="form-label">Alamat <a class="text-danger">*</a></label>
                                     <textarea class="form-control" name="alamat" placeholder="Masukkan Alamat Lengkap" required></textarea>
                                 </div>
                             </div>
                         </div>
-                        <a><i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Nomor Surat</b> sudah sesuai
-                            sebelum disimpan</a><br>
-                        <a><i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menggunakan <b>Huruf
-                                Besar/Capital/Uppercase</b> saat pengisian</a>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer p-b-0">
                         <a class="btn btn-label-secondary" href="javascript:void(0);" data-bs-dismiss="modal"><i
                                 class="fas fa-chevron-left"></i>&nbsp;&nbsp;Tutup</a>
                         <button class="btn btn-primary" id="btn-simpan" onclick="saveData()"><i
@@ -264,49 +267,49 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             {{-- <div class="form-group">
-                                    <label>No Surat : </label>
+                                    <label class="form-label">No Surat : </label>
                                     <input type="number" name="no_surat" value="{{ $list['nomer'] }}" class="form-control"
                                         placeholder="" disabled>
                                     <input type="number" name="no_surat" value="{{ $list['nomer'] }}" class="form-control"
                                         placeholder="" hidden>
                                 </div> --}}
                             <div class="form-group">
-                                <label>No Surat : </label>
+                                <label class="form-label">No Surat <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" id="no_surat_edit"
                                     value="" disabled>
                             </div>
                         </div>
                         <div class="col-md-8 mb-3">
                             <div class="form-group">
-                                <label>Waktu :</label>
-                                <input type="datetime-local" id="tgl_edit" class="form-control" placeholder="">
+                                <label class="form-label">Waktu <a class="text-danger">*</a></label>
+                                <input type="datetime-local" id="tgl_edit" class="form-control" placeholder="" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label>Nama Ibu : </label>
+                                <label class="form-label">Nama Ibu <a class="text-danger">*</a></label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text" id="basic-addon34">NY.</span>
                                     <input type="text" class="form-control" id="ibu_edit"
-                                        aria-describedby="basic-addon34" placeholder="Nama Lengkap Ibu" />
+                                        aria-describedby="basic-addon34" placeholder="Nama Lengkap Ibu" required/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label>Nama Ayah : </label>
+                                <label class="form-label">Nama Ayah <a class="text-danger">*</a></label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text" id="basic-addon34">TN.</span>
                                     <input type="text" class="form-control" id="ayah_edit"
-                                        aria-describedby="basic-addon34" placeholder="Nama Lengkap Ayah" />
+                                        aria-describedby="basic-addon34" placeholder="Nama Lengkap Ayah" required/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label>Nama Anak : </label>
+                                <label class="form-label">Nama Anak (Optional)</label>
                                 <div class="input-group input-group-merge">
-                                    <span class="input-group-text" id="basic-addon34">BY.</span>
+                                    {{-- <span class="input-group-text" id="basic-addon34">BY.</span> --}}
                                     <input type="text" class="form-control" id="anak_edit"
                                         aria-describedby="basic-addon34" placeholder="Nama Lengkap Anak (Bila Ada)" />
                                 </div>
@@ -314,14 +317,13 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label>Nama Dokter : </label>
-                                <select class="form-control" id="dr_edit" style="width: 100%;"
-                                    required></select>
+                                <label class="form-label">Nama Dokter <a class="text-danger">*</a></label>
+                                <select class="form-control" id="dr_edit" style="width: 100%;" required></select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label>Berat Badan : </label>
+                                <label class="form-label">Berat Badan <a class="text-danger">*</a></label>
                                 <div class="input-group input-group-merge">
                                     <input type="number" id="bb_edit"
                                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
@@ -332,7 +334,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label>Tinggi Badan : </label>
+                                <label class="form-label">Tinggi Badan <a class="text-danger">*</a></label>
                                 <div class="input-group input-group-merge">
                                     <input type="number" id="tb_edit"
                                         oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
@@ -343,14 +345,14 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label>Jenis Kelamin</label>
-                                <select class="form-control select2" id="kelamin_edit" style="width: 100%;z-index: 9999!important;"></select>
+                                <label class="form-label">Jenis Kelamin <a class="text-danger">*</a></label>
+                                <select class="form-control select2" id="kelamin_edit" style="width: 100%;z-index: 9999!important;" required></select>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label>Alamat :</label>
-                                <textarea class="form-control" id="alamat_edit" placeholder="Masukkan Alamat Lengkap"></textarea>
+                                <label class="form-label">Alamat <a class="text-danger">*</a></label>
+                                <textarea class="form-control" id="alamat_edit" placeholder="Masukkan Alamat Lengkap" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -365,7 +367,7 @@
         </div>
     </div>
     {{-- MAINTENANCE --}}
-    <div class="modal fade animate__animated animate__lightSpeedIn" id="maintenance" tabindex="-1" aria-hidden="true">
+    {{-- <div class="modal fade animate__animated animate__lightSpeedIn" id="maintenance" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-simple modal-enable-otp modal-dialog-centered">
             <div class="modal-content p-3 p-md-5">
                 <div class="modal-body">
@@ -383,7 +385,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- MODAL END --}}
 
     <script>
@@ -458,14 +460,22 @@
                         order: [
                             [1, "desc"]
                         ],
-                        displayLength: 7,
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '6%' },
+                            { sWidth: '7%' },
+                            { sWidth: '12%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
+                            { sWidth: '10%' },
+                            { sWidth: '20%' },
+                        ],
+                        displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // SELECT PICKER
                     var t = $(".select2");
@@ -603,14 +613,22 @@
                             order: [
                                 [1, "desc"]
                             ],
-                            displayLength: 7,
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '6%' },
+                                { sWidth: '7%' },
+                                { sWidth: '12%' },
+                                { sWidth: '15%' },
+                                { sWidth: '15%' },
+                                { sWidth: '15%' },
+                                { sWidth: '10%' },
+                                { sWidth: '20%' },
+                            ],
+                            displayLength: 10,
                             lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            lengthMenu: [10, 25, 50, 75, 100],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
-
-                        table.buttons().container()
-                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                         // SELECT PICKER
                         var t = $(".select2");
@@ -628,6 +646,7 @@
         }
 
         function showAll() {
+            $("#cari_ibu").val('');
             $("#btn-showall").prop('disabled', true);
             $("#btn-showall").find("i").toggleClass("fa-history fa-spinner fa-spin");
             $("#tampil-tbody").empty().append(
@@ -681,14 +700,22 @@
                         order: [
                             [1, "desc"]
                         ],
-                        displayLength: 7,
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '6%' },
+                            { sWidth: '7%' },
+                            { sWidth: '12%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
+                            { sWidth: '10%' },
+                            { sWidth: '20%' },
+                        ],
+                        displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // SELECT PICKER
                     var t = $(".select2");
@@ -718,6 +745,7 @@
         }
 
         function refresh() {
+            $("#cari_ibu").val('');
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="10"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
@@ -769,14 +797,22 @@
                         order: [
                             [1, "desc"]
                         ],
-                        displayLength: 7,
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '6%' },
+                            { sWidth: '7%' },
+                            { sWidth: '12%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
+                            { sWidth: '15%' },
+                            { sWidth: '10%' },
+                            { sWidth: '20%' },
+                        ],
+                        displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // SELECT PICKER
                     var t = $(".select2");

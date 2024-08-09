@@ -67,7 +67,7 @@
                             title="Cari data berdasarkan tanggal acara" disabled><i class="ti ti-search align-middle"></i> </button>
                             <button type="button" class="btn btn-warning" onclick="riwayat()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Refresh Tabel Pemesanan Ruangan"><i class="fas fa-sync fa-fw nav-icon"></i></button>
+                            title="Refresh Tabel Pemesanan Ruangan"><i class="fas fa-sync fa-fw nav-icon me-1"></i>Segarkan</button>
                         </div>
                     </div>
                     <div class="float-end" id="btn_link_display" hidden>
@@ -294,7 +294,8 @@
                                             <select class="select2 form-control" id="tampil_gizi_status" style="width: 100%" data-bs-auto-close="outside" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pilih Status Verifikasi">
                                                 <option value="0" hidden>Semua Data</option>
                                                 <option value="1" selected>Belum Diverifikasi</option>
-                                                <option value="2">Sudah Diverifikasi / Ditolak</option>
+                                                <option value="2">Sudah Diverifikasi</option>
+                                                <option value="3">Ditolak</option>
                                             </select>
                                         </div>
                                     </div>
@@ -764,10 +765,21 @@
                             }
                         }
                         // LANJUT CONTENT
+                        // WARNA NAMA RUANGAN
+                        var namar = null;
+                        if (item.status_penolakan) {
+                            namar = `<u><s class='text-danger'>`+item.nama_ruangan+`</s></u>`;
+                        } else {
+                            if (item.gizi_verif) {
+                                namar = `<u class='text-dark'>`+item.nama_ruangan+`</u>`;
+                            } else {
+                                namar = `<u class='text-primary'>`+item.nama_ruangan+`</u>`;
+                            }
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><span class="badge text-bg-secondary" style="font-size:10px;padding:3">`+item.kapasitas+` P</span> <u>`+item.nama_ruangan+`</u> ${item.status_penolakan?'<i class="bx bxs-x-square h5 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Ditolak oleh Admin"></i>':''} ${item.gizi_verif?'<i class="bx bxs-badge-check h5 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Telah Diverifikasi oleh Gizi"></i>':''}</h6>
+                                                <h6 class='mb-0'><span class="badge text-bg-secondary" style="font-size:10px;padding:3">`+item.kapasitas+` P</span> `+namar+` ${item.gizi_verif?'<i class="ti ti-checkbox text-info" title="Telah Diverifikasi oleh Gizi"></i>':''}</h6>
                                                 <h6 class='mb-0'><small class='text-truncate text-muted'>`+item.agenda+`</small></h6>
                                             </div>
                                         </div>
@@ -780,7 +792,7 @@
                                             </div>
                                         </div>
                                     </td>`;
-                        content += `<td>`+item.tgl+`</td>`;
+                        content += `<td><center>`+item.tgl+`</center></td>`;
                         content += `<td>`+item.jam_mulai.substring(0, 5)+` - `+item.jam_selesai.substring(0, 5)+` WIB</td>`;
                         content += `<td>${item.ket?item.ket:''}</td>`;
                         content += `<td style="white-space: pre-line">${item.gizi?item.gizi:''}</td>`;
@@ -1537,26 +1549,30 @@
 
                             content = ``;
                             content += `<div class="col-xl-4 col-sm-6 d-flex align-items-stretch">`;
-                                        if (item.gizi_verif == null) {
-                                            if (harih < hariini) {
-                                                content += `<div class="card border border-secondary" style="width:100%">`;
+                                        if (item.status_penolakan == null) {
+                                            if (item.gizi_verif == null) {
+                                                if (harih < hariini) {
+                                                    content += `<div class="card border border-5 border-secondary" style="width:100%">`;
+                                                } else {
+                                                    if (valid == 1) {
+                                                        content += `<div class="card border border-5 border-primary" style="width:100%">`;
+                                                    } else {
+                                                        content += `<div class="card border border-5 border-warning" style="width:100%">`;
+                                                    }
+                                                }
                                             } else {
-                                                content += `<div class="card border border-primary" style="width:100%">`;
+                                                content += `<div class="card border border-5 border-success" style="width:100%">`;
                                             }
                                         } else {
-                                            content += `<div class="card border border-danger" style="width:100%">`;
+                                            content += `<div class="card border border-5 border-danger" style="width:100%">`;
                                         }
                                     content += `<div class="card-body">
                                                     <div class="d-flex">
                                                         <div class="flex-shrink-0 me-4">
-                                                            <div class="avatar-md">
-                                                                <span class="avatar-title rounded-circle bg-light text-danger font-size-16">
-                                                                    <img src="${item.foto_profil?'/storage/'+item.foto_profil.substr(7,1000):'/images/pku/user.png'}" alt="" height="60">
-                                                                </span>
-                                                            </div>
+                                                            <img src="${item.foto_profil?'/storage/'+item.foto_profil.substr(7,1000):'/images/pku/user.png'}" class="user-avtar wid-60 rounded-circle" alt="Avatar" style="width: 60px;height:60px">
                                                         </div>
                                                         <div class="flex-grow-1 overflow-hidden">
-                                                            <h4 class="text-truncate font-size-20"><a href="javascript: void(0);" class="text-dark"><mark>${item.gizi_verif?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</mark></a></h4>
+                                                            <h4 class="text-truncate font-size-20"><a href="javascript: void(0);" class="text-dark"><mark>${item.status_penolakan?'<s>'+item.nama_ruangan+'</s>':item.nama_ruangan}</mark></a></h4>
                                                             <p class="text-muted mb-0 mt-1">
                                                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>Agenda :</b> ${item.agenda}<br>
                                                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> <b>User :</b> ${item.nama_user?item.nama_user:'Tidak Ada Nama'} (${item.no_hp?item.no_hp:'-'})<br>
@@ -1566,20 +1582,33 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="px-4 py-3 border-top">
+                                                <div class="px-3 py-2 border-top">
                                                     <ul class="list-inline mb-0">
-                                                        <li class="list-inline-item me-3">
+                                                        <li class="list-inline-item me-3 mt-1">
                                                             <i class= "ti ti-calendar-plus me-1"></i> ${item.tgl}
                                                         </li>
-                                                        <li class="list-inline-item me-3">
+                                                        <li class="list-inline-item me-3 mt-1">
                                                             <i class= "ti ti-clock me-1"></i> ${item.jam_mulai.substring(0,5)} - ${item.jam_selesai.substring(0,5)} WIB
                                                         </li>
                                                         <div class="float-end">`;
-                                                            if (valid == 1) {
-                                                                content += `<button class="btn btn-link-primary avtar-s mb-0 btn-icon" onclick="verifGizi(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi"><i class="ti ti-check"></i></button>`;
+                                                        if (item.status_penolakan == null) {
+                                                            if (item.gizi_verif == null) {
+                                                                if (harih < hariini) {
+                                                                    content += `<button class="btn btn-secondary avtar-s mb-0 btn-icon" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Gagal Verifikasi"><i class="ti ti-check"></i></button>`;
+                                                                } else {
+                                                                    if (valid == 1) {
+                                                                        content += `<button class="btn btn-primary avtar-s mb-0 btn-sm" onclick="verifGizi(${item.id})" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi Sekarang"><i class="ti ti-check me-1"></i> Verifikasi</button>`;
+                                                                    } else {
+                                                                        content += `<button class="btn btn-warning avtar-s mb-0 btn-icon" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Verifikasi Belum Dapat Dilakukan"><i class="ti ti-check"></i></button>`;
+                                                                    }
+                                                                }
                                                             } else {
-                                                                content += `<button class="btn btn-link-secondary avtar-s mb-0 btn-icon" disabled><i class="ti ti-check"></i></button>`;
+                                                                content += `<button class="btn btn-success avtar-s mb-0 btn-icon" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Sudah Terverifikasi"><i class="ti ti-checks"></i></button>`;
                                                             }
+                                                        } else {
+                                                            content += `<button class="btn btn-danger avtar-s mb-0 btn-icon" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pengajuan Ditolak"><i class="ti ti-x"></i></button>`;
+                                                        }
+
                                             content += `</div>
                                                     </ul>
                                                 </div>

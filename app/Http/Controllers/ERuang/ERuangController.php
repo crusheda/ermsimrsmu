@@ -344,12 +344,31 @@ class ERuangController extends Controller
                 // ->when($input3 != 0, function ($q) use ($input3) {
                 //     $q->where('eruang.tgl','>=',$tigahariyanglalu);
                 // })
+                ->when($input3 == 0, function ($q) use ($input3) {
+                    // $q->where('eruang.status_penolakan',null);
+                    $q->orderBy('eruang.tgl','desc');
+                    $q->orderBy('eruang.jam_mulai','desc');
+                })
                 ->when($input3 == 1, function ($q) use ($input3,$tigahariyanglalu) {
+                    $q->where('eruang.status_penolakan',null);
                     $q->where('gizi_verif',null);
                     $q->where('eruang.tgl','>=',$tigahariyanglalu);
+                    $q->orderBy('eruang.tgl','asc');
+                    $q->orderBy('eruang.jam_mulai','asc');
+                    $q->limit(9);
                 })
                 ->when($input3 == 2, function ($q) use ($input3) {
+                    $q->where('eruang.status_penolakan',null);
                     $q->where('gizi_verif',1);
+                    $q->orderBy('eruang.tgl','asc');
+                    $q->orderBy('eruang.jam_mulai','asc');
+                    $q->limit(9);
+                })
+                ->when($input3 == 3, function ($q) use ($input3) {
+                    $q->where('status_penolakan',1);
+                    $q->orderBy('eruang.tgl','desc');
+                    $q->orderBy('eruang.jam_mulai','desc');
+                    // $q->limit(9);
                 })
                 // if ($input3 == 1) {
                 //     $show->where('eruang.gizi_verif',1);
@@ -358,10 +377,9 @@ class ERuangController extends Controller
                 //         $show->where('eruang.gizi_verif',null);
                 //     }
                 // }
-                ->where('eruang.status_penolakan',null)
-                ->orderBy('eruang.tgl','asc')
-                ->orderBy('eruang.jam_mulai','asc')
-                ->limit(9)
+                // ->orderBy('eruang.tgl','asc')
+                // ->orderBy('eruang.jam_mulai','asc')
+                // ->limit(9)
                 ->get();
         $now = Carbon::now()->isoFormat('HH:mm:ss');
 
