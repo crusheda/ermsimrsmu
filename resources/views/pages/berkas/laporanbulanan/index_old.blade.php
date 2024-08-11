@@ -1,77 +1,80 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Laporan Bulanan</h4>
+            </div>
+        </div>
+    </div>
 
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Administrasi</li>
-                        <li class="breadcrumb-item">Berkas</li>
-                        <li class="breadcrumb-item" aria-current="page">Laporan Rutin</li>
-                    </ul>
+    <div class="card">
+        <div>
+            <div class="row">
+                <div class="col-lg-10 col-sm-8">
+                    <div  class="p-4">
+                        <h5 class="text-primary">Laporan Digital</h5>
+                        <p>Upload Laporan Bulanan Maksimal Tanggal 15 Setiap Bulan</p>
+                        {{-- <div class="text-muted">
+                            <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> If several languages coalesce</p>
+                            <p class="mb-1"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> Sed ut perspiciatis unde</p>
+                            <p class="mb-0"><i class="mdi mdi-circle-medium align-middle text-primary me-1"></i> It would be necessary</p>
+                        </div> --}}
+                        <a href="javascript:;" class="btn btn-primary" value="animate__jackInTheBox" id="btn-tambah" onclick="tambah()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Laporan Bulanan"><i class="fas fa-plus"></i>&nbsp;&nbsp;Form Upload</a>
+                    </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Laporan Rutin</h2>
+                <div class="col-lg-2 col-sm-4 align-self-center">
+                    <div>
+                        <img src="{{ asset('images/crypto/features-img/img-1.png') }}" alt="" class="img-fluid d-block" width="300">
                     </div>
                 </div>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="col-sm-12">
-            <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Bulanan <b class="text-primary">x</b> Triwulan <b class="text-primary">x</b> Tahunan</h5>
-                    <div class="btn-group">
-                        <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah"><i
-                                class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas</button>
-                        <button class="btn btn-outline-info btn-shadow" id="btn-verif" onclick="verif()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Menampilkan Semua Data Laporan Bulanan Bawahan">
-                            <i class="fas fa-history"></i>&nbsp;
-                            <span class="align-middle">Laporan Bawahan</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
-                            <thead>
-                                <tr>
-                                    <th>DIUPDATE</th>
-                                    <th>JUDUL</th>
-                                    <th>BLN / THN</th>
-                                    <th>KETERANGAN</th>
-                                    <th class="cell-fit">
-                                        <center>#</center>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="5" style="font-size:13px"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <th>DIUPDATE</th>
-                                <th>JUDUL</th>
-                                <th>BLN / THN</th>
-                                <th>KETERANGAN</th>
-                                <th class="cell-fit">
-                                    <center>#</center>
-                                </th>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
+    <div class="card card-body table-responsive text-nowrap">
+        <div classs="card-title">
+            <div class="btn-group">
+                <button class="btn btn-outline-primary" id="btn-verif" onclick="verif()" data-bs-toggle="tooltip"
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="Menampilkan Semua Data Laporan Bulanan Bawahan">
+                    <i class="fas fa-history"></i>&nbsp;
+                    <span class="align-middle">Laporan Bawahan</span>
+                </button>
+                <button class="btn btn-outline-secondary" onclick="tutorial()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                data-bs-html="true" title="Lihat tutorial verifikasi dokumen" disabled><i class="far fa-question-circle"></i> Tutorial</button>
             </div>
         </div>
+        <hr>
+        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+            <thead>
+                <tr>
+                    <th>DIUPDATE</th>
+                    <th>JUDUL</th>
+                    <th>BLN / THN</th>
+                    <th>KETERANGAN</th>
+                    <th class="cell-fit">
+                        <center>#</center>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="5"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <th>DIUPDATE</th>
+                <th>JUDUL</th>
+                <th>BLN / THN</th>
+                <th>KETERANGAN</th>
+                <th class="cell-fit">
+                    <center>#</center>
+                </th>
+            </tfoot>
+        </table>
     </div>
 
     {{-- MODAL --}}
@@ -82,24 +85,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Tambah
+                        Tambah Laporan Bulanan
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-auth-small needs-validation" name="formTambah" action="{{ route('bulanan.store') }}" method="POST"
-                        enctype="multipart/form-data" novalidate>
+                    <form class="form-auth-small" name="formTambah" action="{{ route('bulanan.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
+                        <i class="fa-fw fas fa-info-circle nav-icon"></i> Pengubahan atau Penghapusan dokumen laporan hanya
+                        berlaku pada <strong>Hari saat Anda mengupload saja</strong>
+                        <hr>
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="alert alert-secondary">
-                                    Pengubahan atau Penghapusan dokumen laporan hanya berlaku pada <strong>Hari saat Anda mengupload saja</strong>
-                                </div>
-                            </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Pilih Bulan <a class="text-danger">*</a></label>
-                                    <select class="form-control" name="bln" id="bln-tambah" style="width: 100%" required>
+                                    <label>Bulan</label>
+                                    <select class="select2 form-control" name="bln" id="bln-tambah" style="width: 100%" required>
                                         <option value="">Bulan</option>
                                         <?php
                                         $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -113,8 +114,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Pilih Tahun <a class="text-danger">*</a></label>
-                                    <select class="form-control" name="thn" id="thn-tambah" style="width: 100%" required>
+                                    <label>Tahun</label>
+                                    <select class="select2 form-control" name="thn" id="thn-tambah" style="width: 100%" required>
                                         <option value="">Tahun</option>
                                         @php
                                             for ($i = 2018; $i <= $list['thn']; $i++) {
@@ -126,30 +127,23 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Judul <a class="text-danger">*</a></label>
+                                    <label>Judul</label>
                                     <input type="text" name="judul" class="form-control"
                                         placeholder="Laporan Bulanan Unit X" required>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label class="form-label">Keterangan</label>
-                                    <textarea rows="3" class="form-control" name="ket" id="ket" placeholder="Optional"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label class="form-label">Dokumen <a class="text-danger">*</a></label>
-                                    {{-- <input type="file" name="file" class="form-control mb-2" accept="application/pdf" required> --}}
-                                    <input type="file" name="file" class="form-control mb-2" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="alert alert-secondary mb-0">
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen<br>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong class="text-danger">5 mb</strong>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Keterangan</label>
+                            <textarea rows="3" class="form-control" name="ket" id="ket" placeholder="Optional"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Dokumen</label>
+                            {{-- <input type="file" name="file" class="form-control mb-2" accept="application/pdf" required> --}}
+                            <input type="file" name="file" class="form-control mb-2" required>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen<br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah
+                            <strong>20 mb</strong>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -170,7 +164,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Ubah&nbsp;<span class="badge bg-dark"><a id="show_edit"></a></span>
+                        Ubah Laporan Bulanan&nbsp;<span class="badge bg-dark"><a id="show_edit"></a></span>
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
@@ -180,26 +174,26 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label class="form-label">Bulan</label>
+                                <label>Bulan</label>
                                 <select class="select2 form-control" id="bln_edit" style="width: 100%" required></select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label class="form-label">Tahun</label>
+                                <label>Tahun</label>
                                 <select class="select2 form-control" id="thn_edit" style="width: 100%" required></select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label class="form-label">Judul</label>
+                                <label>Judul</label>
                                 <input type="text" id="judul_edit" class="form-control"
                                     placeholder="Laporan Bulanan Unit X" required>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group mb-3">
-                                <label class="form-label">Keterangan</label>
+                                <label>Keterangan</label>
                                 <textarea rows="3" class="form-control" id="ket_edit" placeholder="Optional"></textarea>
                             </div>
                         </div>
@@ -260,10 +254,10 @@
             </div>
         </div>
     </div>
-
     <script>
         $(document).ready(function() {
-
+            // $("html").addClass('layout-menu-collapsed');
+            // SELECT2
             var t = $(".select2");
             t.length && t.each(function() {
                 var e = $(this);
@@ -286,7 +280,7 @@
                         content += `<td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td><td>` + item.judul + ` `;
                         res.verif.forEach(valver => {
                             if (valver.lap_id == item.id) {
-                                content += `<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Laporan Terverifikasi"></i>`;
+                                content += `<i class="bx bxs-badge-check h5 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Laporan Terverifikasi"></i>`;
                             }
                         });
                         content += `</td><td>` + item.bln + ` / ` + item.thn + `</td><td>`;
@@ -296,7 +290,7 @@
                         content +=
                             `</td><td><center>
                               <div class='btn-group'>
-                                <button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button>
+                                <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                 <ul class='dropdown-menu dropdown-menu-end'>
                                   <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
                         if (item.ket_verif != null) {

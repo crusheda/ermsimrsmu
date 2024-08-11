@@ -87,7 +87,7 @@
             {{-- <span class="pc-badge">2</span> --}}
         </a>
         <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="{{ route('bulanan.index') }}">Laporan Bulanan</a></li>
+            <li class="pc-item"><a class="pc-link" href="{{ route('bulanan.index') }}">Laporan Rutin</a></li>
             <li class="pc-item"><a class="pc-link" href="{{ route('rapat.index') }}">Rapat</a></li>
             <li class="pc-item"><a class="pc-link" href="{{ route('rka.index') }}">RKA</a></li>
             <li class="pc-item"><a class="pc-link" href="{{ route('regulasi.index') }}">Regulasi</a></li>

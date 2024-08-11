@@ -114,7 +114,7 @@ class LaporanBulananController extends Controller
         }
 
         $request->validate([
-            'file' => ['max:20000'],
+            'file' => ['max:5000'],
             ]);
         // $request->validate([
         //     'file' => ['max:20000','mimes:pdf'],
