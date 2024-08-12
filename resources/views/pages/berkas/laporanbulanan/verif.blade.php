@@ -58,7 +58,7 @@
                             </thead>
                             <tbody id="tampil-tbody">
                                 <tr>
-                                    <td colspan="10" style="font-size:13px"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                                    <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -94,31 +94,33 @@
                 <div class="modal-body">
                     <div id="show-action"></div>
                     <hr>
-                    <table id="dttable-verif" class="table dt-responsive table-hover table-bordered nowrap w-100 align-middle">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>ID</th>
-                                <th>NAMA USER</th>
-                                <th>JABATAN</th>
-                                <th>UPDATE</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tampil-tbody-verif">
-                            <tr>
-                                <td colspan="5"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>ID</th>
-                                <th>NAMA USER</th>
-                                <th>JABATAN</th>
-                                <th>UPDATE</th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <div class="table-responsive text-nowrap">
+                        <table id="dttable-verif" class="table dt-responsive table-hover table-bordered nowrap w-100 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ID</th>
+                                    <th>NAMA USER</th>
+                                    <th>JABATAN</th>
+                                    <th>UPDATE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-verif">
+                                <tr>
+                                    <td colspan="5"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ID</th>
+                                    <th>NAMA USER</th>
+                                    <th>JABATAN</th>
+                                    <th>UPDATE</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,7 +152,7 @@
                                 var un = item.unit;
                             }
                         }
-                        var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
                         var colorBtn = 'info';
                         if (res.verif.length != 0) {
@@ -176,21 +178,18 @@
                         if (item.ket != null) {
                             content += item.ket;
                         }
-                        content += `</td><td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td></tr>`;
+                        content += `</td><td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
                         order: [
                             [6, "desc"]
                         ],
-                        displayLength: 7,
+                        displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [10, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -219,6 +218,9 @@
         function refresh() {
             $("#refreshBtn").prop('disabled', true);
             $("#refreshBtn").find("i").toggleClass("fa-sync fa-spinner fa-spin");
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
             $.ajax({
                 url: "/api/laporan/bulanan/table/{{ Auth::user()->id }}/verif",
                 type: 'GET',
@@ -235,7 +237,7 @@
                                 var un = item.unit;
                             }
                         }
-                        var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
                         var colorBtn = 'info';
                         if (res.verif.length != 0) {
@@ -261,7 +263,7 @@
                         if (item.ket != null) {
                             content += item.ket;
                         }
-                        content += `</td><td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td></tr>`;
+                        content += `</td><td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
@@ -273,9 +275,6 @@
                         lengthMenu: [7, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -318,8 +317,8 @@
                         }
                         content += `<td>` + item.queue + `</td>
                                         <td>` + item.user_name + `</td>
-                                        <td>` + item.role_name.toString().replaceAll('"', '').replace(',', ', ').replace('-', ' ').replace('[', '').replace(']', '') + `</td>
-                                        <td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td>
+                                        <td style="white-space: normal;">` + item.role_name.toString().replaceAll('"', '').replace(',', ', ').replace('-', ' ').replace('[', '').replace(']', '') + `</td>
+                                        <td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td>
                                     </tr>`;
                         $('#tampil-tbody-verif').append(content);
                         // VALIDASI SUDAH VERIF ATAU KAH BELUM
@@ -331,19 +330,27 @@
                         order: [
                             [1, "desc"]
                         ],
-                        displayLength: 7,
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '8%' },
+                            { sWidth: '8%' },
+                            { sWidth: '30%' },
+                            { sWidth: '34%' },
+                            { sWidth: '20%' },
+                        ],
+                        displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
 
                     // TAMPIL BUTTON VERIFIKASI
                     if (verifBtn == true) {
-                        actionBtn = `<button type="button" class="btn btn-secondary waves-effect btn-label waves-light" style="margin-right: 8px" disabled><i class="bx bx-check label-icon"></i> Verifikasi</button>`;
+                        actionBtn = `<button type="button" class="btn btn-secondary waves-effect btn-label waves-light" style="margin-right: 8px" disabled><i class="fas fa-check label-icon me-1"></i> Verifikasi</button>`;
                     } else {
-                        actionBtn = `<button type="button" class="btn btn-info waves-effect btn-label waves-light" style="margin-right: 8px" id="verifUser(`+id+`)" onclick="verifUser(`+id+`)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Verifikasi Laporan"><i class="fas fa-check label-icon"></i> Verifikasi</button>`;
+                        actionBtn = `<button type="button" class="btn btn-primary waves-effect btn-label waves-light" style="margin-right: 8px" id="verifUser(`+id+`)" onclick="verifUser(`+id+`)"><i class="fas fa-check label-icon me-1"></i> Verifikasi</button>`;
                     }
-                    actionBtn += `<button type="button" class="btn btn-outline-secondary waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#tampil-catatan" disabled><i class="bx bx-note label-icon "></i> Tambahkan Catatan</button>
+                    actionBtn += `<button type="button" class="btn btn-outline-secondary waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#tampil-catatan" disabled><i class="fas fa-sticky-note me-1"></i> Tambahkan Catatan</button>
                                 <div class="collapse" id="tampil-catatan">
                                     <div class="form-group mb-2 mt-2">
                                         <textarea class="form-control" id="catatan(`+id+`)" placeholder="Tuliskan Catatan Laporan"></textarea>

@@ -283,9 +283,6 @@
                         lengthMenu: [7, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                 }
             });
         })
@@ -368,9 +365,6 @@
                         lengthMenu: [7, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                 }
             });
         }

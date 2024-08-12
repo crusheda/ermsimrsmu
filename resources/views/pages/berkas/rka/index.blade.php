@@ -166,7 +166,7 @@
                             var namamu = '';
                         }
                         var tahunrka = parseInt(item.tahun) + 1;
-                        var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
                         content += `<td><div class="d-flex align-items-center"><div class="dropdown">
                             <a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow text-body p-0" data-bs-toggle="dropdown">` + item.id + `<i class="bx bx-dots-vertical-rounded"></i></a>
@@ -226,7 +226,7 @@
                         content += `<td>` + item.title +
                             `&nbsp;&nbsp;<span class="badge bg-dark rounded-pill">RKA ` +
                             tahunrka + `</span></td>`;
-                        content += `<td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td></tr>`;
+                        content += `<td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
                         $('#tampil-tbody').append(content);
                     });
 

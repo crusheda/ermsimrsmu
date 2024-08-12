@@ -243,7 +243,7 @@
                                 }
                             })
                         })
-                        content += `</td><td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
+                        content += `</td><td>`+new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19)+`</td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
                     var table = $('#dttable').DataTable({
@@ -368,7 +368,7 @@
                                 }
                             })
                         })
-                        content += `</td><td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
+                        content += `</td><td>`+new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19)+`</td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
                     var table = $('#dttable').DataTable({

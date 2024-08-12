@@ -275,7 +275,7 @@
                         content += `</td><td>`;
                             if(item.updated_at)
                             {
-                                content += item.updated_at.substring(0, 19).replace('T',' ');
+                                content += new Date(item.updated_at).toLocaleString("sv-SE");
                             } else { content += `-`; }
                         content += `</td></tr>`;
                         $('#tampil-tbody').append(content);
@@ -299,9 +299,6 @@
                         lengthMenu: [7, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                 }
             })
 
@@ -420,7 +417,7 @@
                         content += `</td><td>`;
                             if(item.updated_at)
                             {
-                                content += item.updated_at.substring(0, 19).replace('T',' ');
+                                content += new Date(item.updated_at).toLocaleString("sv-SE");
                             } else { content += `-`; }
                         content += `</td></tr>`;
                         $('#tampil-tbody').append(content);
@@ -444,9 +441,6 @@
                         lengthMenu: [7, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({

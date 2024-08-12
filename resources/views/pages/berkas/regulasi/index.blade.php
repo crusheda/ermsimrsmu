@@ -553,7 +553,7 @@
                                                 content += res.unit[i].nama;
                                             }
                                         }
-                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td></tr>";
+                            content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
@@ -565,10 +565,7 @@
                             lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
                             // buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
-
-                        table.buttons().container()
-                            .appendTo('#dttable_wrapper .col-md-6:eq(0)');
-                        },
+                    },
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',

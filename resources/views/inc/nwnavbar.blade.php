@@ -8,7 +8,7 @@
             </a>
         </div>
         <div class="navbar-content">
-            <div class="card pc-user-card">
+            <div class="card pc-user-card step1">
                 <div class="card-body">
                     <?php $foto_profil = \DB::table('users_foto')->where('user_id', Auth::user()->id)->first();
                     $time = \Carbon\Carbon::now()->isoFormat('H');
@@ -48,8 +48,8 @@
                     </div>
                     <div class="collapse pc-user-links @if(URL::current() == url('/profil')) collapse show @endif" id="pc_sidebar_userlink">
                         <div class="pt-3">
-                            <a href="{{ route('profil.index') }}" class="@if(URL::current() == url('/profil')) text-primary @endif">
-                                <i class="ti ti-user"></i> <span>Profil Saya</span>
+                            <a href="{{ route('profil.index') }}" class="@if(URL::current() == url('/profil')) text-primary @endif step2">
+                                <i class="ti ti-user"></i> <span class="step3">Profil Saya</span>
                             </a>
                             {{-- <a href="#!">
                                 <i class="ti ti-settings"></i> <span>Settings</span>

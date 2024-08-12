@@ -3,21 +3,22 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card welcome-banner bg-blue-300">
+            <div class="card welcome-banner bg-blue-300 shadow">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-8">
                             <div class="p-4">
-                                <h2 class="text-white">Halo, Selamat {{ $list['waktu'] }} <a class="text-white">{{ $list['user']->nama ? $list['kelamin'].' '.$list['user']->nama : $list['kelamin'].' '.$list['user']->name }}</h2>
-                                <p class="text-white">Sudahkan Anda Membaca <b>Peraturan Kepegawaian</b> ?</p>
+                                <h5 class="text-white">Halo, Selamat {{ $list['waktu'] }}</h5>
+                                <h2 class="text-white">{{ $list['user']->nama ? $list['kelamin'].' '.$list['user']->nama : $list['kelamin'].' '.$list['user']->name }}</h2>
+                                <p class="text-white">Sudahkan Anda Membaca <b><u>Peraturan Kepegawaian</u></b> ?</p>
                                 <footer class="blockquote-footer font-size-12 text-white">
                                     Ditetapkan mulai <cite title="Source Title"><strong>1 Juli 2023</strong></cite>
                                 </footer>
                                 <a href="#" class="btn btn-light btn-shadow" data-bs-toggle="modal"
-                                data-bs-target="#peraturan-kepegawaian">Selengkapnya</a>
+                                data-bs-target="#peraturan-kepegawaian">Baca Selengkapnya</a>
                             </div>
                         </div>
-                        <div class="col-sm-6 text-center">
+                        <div class="col-sm-4 text-center">
                             <div class="img-welcome-banner">
                                 <img src="{{ asset('images/widget/welcome-banner.png') }}" alt="img" class="img-fluid">
                             </div>
@@ -45,8 +46,29 @@
     </div>
 
     <script>
-        // $(document).ready(function() {
-
-        // });
+        $(document).ready(function() {
+            $('#pc_sidebar_userlink').addClass('show');
+            $('.pc-sidebar').addClass('mob-sidebar-active');
+            // console.log("{{ $list['user']->nik }}");
+            if ("{{ $list['user']->nik }}" == '') {
+                introJs().setOptions({
+                    showProgress: true,
+                    steps: [{
+                        intro: "<h6>Mohon mengikuti langkah berikut ini...</h6>"
+                    }, {
+                        element: document.querySelector(".step1"),
+                        intro: "Silakan melengkapi<br><b class='text-primary'>Biodata Profil Karyawan</b>"
+                    }, {
+                        element: document.querySelector(".step2"),
+                        intro: "Klik tombol di atas (<u>Profil Saya</u>) untuk membuka halaman <b>Profil Karyawan</b>"
+                    }, {
+                        element: document.querySelector(".step3"),
+                        intro: "Yang ini ya tombol nya :)</b>"
+                    }]
+                }).onbeforeexit(function () {
+                    return confirm("Apakah Anda sudah siap?")
+                }).start();
+            }
+        });
     </script>
 @endsection

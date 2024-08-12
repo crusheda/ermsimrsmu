@@ -508,7 +508,7 @@
                                         content += "-";
                                     }
                                 }
-                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                            content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -663,7 +663,7 @@
                                         content += "-";
                                     }
                                 }
-                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                            content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -764,7 +764,7 @@
                                         content += "-";
                                     }
                                 }
-                            content += "</td><td>" + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                            content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }

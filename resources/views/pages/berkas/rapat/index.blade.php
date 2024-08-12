@@ -323,7 +323,7 @@
                     var adminID = "{{ Auth::user()->getPermission('admin_rapat') }}";
                     var date = getDateTime();
                     res.show.forEach(item => {
-                        var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = "<tr id='data" + item.id + "'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link-secondary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
@@ -360,7 +360,7 @@
                             content += item.keterangan;
                         }
                         content += '</td><td>' +
-                            item.updated_at.substring(0, 19).replace('T',' ') + '</td><td>' +
+                            new Date(item.updated_at).toLocaleString("sv-SE") + '</td><td>' +
                             item.nama_user + '</td>';
                         content += "</tr>";
                         $('#tampil-tbody').append(content);

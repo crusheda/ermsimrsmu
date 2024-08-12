@@ -41,6 +41,8 @@
     <!-- cropper css -->
     {{-- <link rel="stylesheet" href="{{ asset('css/plugins/croppr.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/cropper.css') }}">
+    {{-- INTRO JS --}}
+    <link rel="stylesheet" href="{{ asset('css/plugins/introjs.min.css') }}">
     {{-- DATEPICKER --}}
     <link href="{{ asset('libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
@@ -50,6 +52,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     {{-- DATA TABLES --}}
     <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.1.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/b-print-3.1.0/datatables.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.datatables.net/fixedcolumns/5.0.1/css/fixedColumns.dataTables.css" rel="stylesheet"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/plugins/fixedColumns.bootstrap5.min.css') }}">
+    <script src="{{ asset('js/plugins/dataTables.fixedColumns.min.js') }}"></script> --}}
+    {{-- <script src="https://cdn.datatables.net/fixedcolumns/5.0.1/js/dataTables.fixedColumns.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/5.0.1/js/fixedColumns.dataTables.js"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.1.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/b-print-3.1.0/datatables.min.js"></script>
@@ -132,6 +139,9 @@
 
     <!-- Notif js -->
     <script src="{{ asset('js/iziToast.js') }}"></script>
+
+    {{-- INTRO JS --}}
+    <script src="{{ asset('js/plugins/intro.min.js') }}"></script>
 
     {{-- Cropped IMG JS --}}
     {{-- <script src="{{ asset('js/plugins/croppr.min.js') }}"></script> --}}

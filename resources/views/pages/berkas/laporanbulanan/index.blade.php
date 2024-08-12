@@ -44,28 +44,30 @@
                         <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
                             <thead>
                                 <tr>
-                                    <th>DIUPDATE</th>
+                                    <th class="cell-fit">
+                                        <center>#ID</center>
+                                    </th>
                                     <th>JUDUL</th>
                                     <th>BLN / THN</th>
                                     <th>KETERANGAN</th>
-                                    <th class="cell-fit">
-                                        <center>#</center>
-                                    </th>
+                                    <th>DIUPDATE</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
                                 <tr>
-                                    <td colspan="5" style="font-size:13px"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                                    <td colspan="5" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
                                 </tr>
                             </tbody>
                             <tfoot>
-                                <th>DIUPDATE</th>
-                                <th>JUDUL</th>
-                                <th>BLN / THN</th>
-                                <th>KETERANGAN</th>
-                                <th class="cell-fit">
-                                    <center>#</center>
-                                </th>
+                                <tr>
+                                    <th class="cell-fit">
+                                        <center>#ID</center>
+                                    </th>
+                                    <th>JUDUL</th>
+                                    <th>BLN / THN</th>
+                                    <th>KETERANGAN</th>
+                                    <th>DIUPDATE</th>
+                                </tr>
                             </tfoot>
                         </table>
                     </div>
@@ -170,7 +172,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Ubah&nbsp;<span class="badge bg-dark"><a id="show_edit"></a></span>
+                        Form Ubah&nbsp;<span class="badge bg-dark badge-sm"><a id="show_edit"></a></span>
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
@@ -180,19 +182,19 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label class="form-label">Bulan</label>
+                                <label class="form-label">Bulan <a class="text-danger">*</a></label>
                                 <select class="select2 form-control" id="bln_edit" style="width: 100%" required></select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label class="form-label">Tahun</label>
+                                <label class="form-label">Tahun <a class="text-danger">*</a></label>
                                 <select class="select2 form-control" id="thn_edit" style="width: 100%" required></select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label class="form-label">Judul</label>
+                                <label class="form-label">Judul <a class="text-danger">*</a></label>
                                 <input type="text" id="judul_edit" class="form-control"
                                     placeholder="Laporan Bulanan Unit X" required>
                             </div>
@@ -218,7 +220,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade animate__animated animate__bounceInRight" id="info" tabindex="-1" aria-hidden="true">
+    {{-- <div class="modal fade animate__animated animate__bounceInRight" id="info" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -259,7 +261,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <script>
         $(document).ready(function() {
@@ -281,20 +283,9 @@
                     $("#tampil-tbody").empty();
                     var date = getDateTime();
                     res.show.forEach(item => {
-                        var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
-                        content += `<td>` + item.updated_at.substring(0, 19).replace('T',' ') + `</td><td>` + item.judul + ` `;
-                        res.verif.forEach(valver => {
-                            if (valver.lap_id == item.id) {
-                                content += `<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Laporan Terverifikasi"></i>`;
-                            }
-                        });
-                        content += `</td><td>` + item.bln + ` / ` + item.thn + `</td><td>`;
-                        if (item.ket != null) {
-                            content += item.ket;
-                        }
-                        content +=
-                            `</td><td><center>
+                        content += `<td><center>
                               <div class='btn-group'>
                                 <button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button>
                                 <ul class='dropdown-menu dropdown-menu-end'>
@@ -321,21 +312,30 @@
                                 `<li><a href="javascript:void(0);" class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                                 <li><a href='javascript:void(0);' class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                         }
-                        content += `</ul></div></center></td></tr>`;
+                        content += `</ul></div></center></td>`;
+                        content += `<td>` + item.judul + ` `;
+                        res.verif.forEach(valver => {
+                            if (valver.lap_id == item.id) {
+                                content += `<i class="ti ti-checkbox text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"data-bs-html="true" title="Laporan Terverifikasi"></i>`;
+                            }
+                        });
+                        content += `</td><td>` + item.bln + ` / ` + item.thn + `</td><td>`;
+                        if (item.ket != null) {
+                            content += item.ket;
+                        }
+                        content += `</td><td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td>`;
+                        content += `</tr>`;
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
                         order: [
-                            [0, "desc"]
+                            [4, "desc"]
                         ],
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({

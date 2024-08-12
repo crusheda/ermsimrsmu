@@ -512,7 +512,7 @@
                                             content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
-                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                                        + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -602,7 +602,7 @@
                                             content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
-                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                                        + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -693,7 +693,7 @@
                                             content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
-                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                                        + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -782,7 +782,7 @@
                                             content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
                                         }
                             content += "</small></div></div></td><td>"
-                                        + item.updated_at.substring(0, 19).replace('T',' ') + "</td><td>";
+                                        + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
                                         if (item.user == '84') { content += 'Sri Suryani, Amd'; }
                                         if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
                                         if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
@@ -1151,7 +1151,7 @@
                             if (item.ket != null) {
                                 content += item.ket;
                             }
-                            content += `</td><td>`+item.updated_at.substring(0, 19).replace('T',' ')+`</td></tr>`;
+                            content += `</td><td>`+new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19)+`</td></tr>`;
                         })
                         $('#tampil-tbody-disposisi').append(content);
                     }
