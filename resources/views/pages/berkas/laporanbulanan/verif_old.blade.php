@@ -1,84 +1,67 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Administrasi</li>
-                        <li class="breadcrumb-item">Berkas</li>
-                        <li class="breadcrumb-item">Laporan Rutin</li>
-                        <li class="breadcrumb-item" aria-current="page">Verifikasi</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Verifikasi Laporan Rutin</h2>
-                    </div>
-                </div>
+    <style>
+        .tooltip{
+            z-index: 1151 !important;
+        }
+    </style>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Laporan Bulanan - Verifikasi</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="col-sm-12">
-            <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <button class="btn btn-link-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
-                        data-bs-html="true" title="Kembali ke halaman sebelumnya" onclick="window.location='{{ route('bulanan.index') }}'">
-                        <i class="fas fa-chevron-left mt-2"></i>&nbsp;
-                        <span class="align-middle">Kembali</span>
-                    </button>
-                    <h5 class="mb-0">Tabel Verifikasi Laporan</h5>
-                    <div class="btn-group">
-                        <button class="btn btn-warning" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
-                        {{-- <button class="btn btn-outline-secondary" onclick="tutorial()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
-                        data-bs-html="true" title="Lihat tutorial verifikasi dokumen" disabled><i class="far fa-question-circle"></i> Tutorial</button> --}}
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
-                            <thead>
-                                <tr>
-                                    <th class="cell-fit">
-                                        <center>#</center>
-                                    </th>
-                                    <th>NAMA</th>
-                                    <th>UNIT</th>
-                                    <th>JUDUL</th>
-                                    <th>BLN / THN</th>
-                                    <th>KETERANGAN</th>
-                                    <th>DIUPDATE</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="10" style="font-size:13px"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="cell-fit">
-                                        <center>#</center>
-                                    </th>
-                                    <th>NAMA</th>
-                                    <th>UNIT</th>
-                                    <th>JUDUL</th>
-                                    <th>BLN / THN</th>
-                                    <th>KETERANGAN</th>
-                                    <th>DIUPDATE</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
+    <div class="card card-body table-responsive text-nowrap">
+        <div classs="card-title">
+            <div class="btn-group">
+                <button class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                    data-bs-html="true" title="Kembali ke halaman sebelumnya" onclick="window.location='{{ route('bulanan.index') }}'">
+                    <i class="fas fa-chevron-left"></i>&nbsp;
+                    <span class="align-middle">Kembali</span>
+                </button>
+                <button class="btn btn-outline-warning" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync"></i> Refresh</button>
+                <button class="btn btn-outline-secondary" onclick="tutorial()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                data-bs-html="true" title="Lihat tutorial verifikasi dokumen" disabled><i class="far fa-question-circle"></i> Tutorial</button>
             </div>
         </div>
+        <hr>
+        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+            <thead>
+                <tr>
+                    <th class="cell-fit">
+                        <center>#</center>
+                    </th>
+                    <th>NAMA</th>
+                    <th>UNIT</th>
+                    <th>JUDUL</th>
+                    <th>BLN / THN</th>
+                    <th>KETERANGAN</th>
+                    <th>DIUPDATE</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="7"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="cell-fit">
+                        <center>#</center>
+                    </th>
+                    <th>NAMA</th>
+                    <th>UNIT</th>
+                    <th>JUDUL</th>
+                    <th>BLN / THN</th>
+                    <th>KETERANGAN</th>
+                    <th>DIUPDATE</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
     {{-- MODAL --}}
@@ -126,6 +109,7 @@
 
     <script>
         $(document).ready(function() {
+
             var t = $(".select2");
             t.length && t.each(function() {
                 var e = $(this);
@@ -198,9 +182,9 @@
                     })
                 }
             });
-        });
+        })
 
-        // FUNCTION-FUNCTION
+        // FUNCTION
         function getDateTime() {
             var now = new Date();
             var year = now.getFullYear();

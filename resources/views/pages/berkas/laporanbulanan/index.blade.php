@@ -93,7 +93,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="alert alert-secondary">
-                                    Pengubahan atau Penghapusan dokumen laporan hanya berlaku pada <strong>Hari saat Anda mengupload saja</strong>
+                                    Pengubahan atau Penghapusan dokumen laporan hanya berlaku pada <strong class="text-danger">Hari saat Anda mengupload saja</strong>
                                 </div>
                             </div>
                             <div class="col-md-4">
