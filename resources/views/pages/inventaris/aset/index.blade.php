@@ -796,7 +796,7 @@
             $("#show-table").prop('hidden', false);
             // $("#btn-refresh").prop('disabled', false);
             $("#tampil-tbody").empty().append(
-                `<tr><td colspan="20"><center><i class="fa fa-sync fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr><td colspan="20" style="font-size:13px"><center><i class="fa fa-sync fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             var filter1 = $("#filterJenis").val();
             var filter2 = $("#filterLokasi").val();
@@ -1254,7 +1254,7 @@
             $('#kd_sarana_add').text(' . . ');
 
             $("#tampil-tbody").empty().append(
-                `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr><td colspan="20" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
 
             var filter1 = $("#filterJenis").val();

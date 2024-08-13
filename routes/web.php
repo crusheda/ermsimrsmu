@@ -56,11 +56,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     Route::put('strukturorganisasi/{id}', [App\Http\Controllers\StrukturOrganisasiController::class, 'update'])->name('strukturorganisasi.update');
 
     // PROFIL KARYAWAN
-    Route::get('profilkaryawan', [App\Http\Controllers\ProfilKaryawanController::class, 'index'])->name('profilkaryawan.index');
-    Route::get('profilkaryawan/{id}', [App\Http\Controllers\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
+    Route::get('profilkaryawan', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'index'])->name('profilkaryawan.index');
+    Route::get('profilkaryawan/{id}', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
     Route::get('profilkaryawan/detail/{id}', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'indexKepegawaian'])->name('profilkaryawan.kepegawaian');
-    Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
-    Route::resource('profilkaryawan', '\App\Http\Controllers\ProfilKaryawanController');
+    Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
+    Route::resource('profilkaryawan', '\App\Http\Controllers\Kepegawaian\ProfilKaryawanController');
 });
 
 // BERKAS

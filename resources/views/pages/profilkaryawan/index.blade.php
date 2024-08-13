@@ -26,9 +26,13 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'">
+                    <div class="btn-group shadow">
+                        <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Akun Pengguna Baru">
                             <i class="fas fa-plus me-1"></i> Tambah Pengguna</button>
+                        <button class="btn btn-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel Profil Karyawan">
+                            <i class="fas fa-sync"></i></button>
+                        <button class="btn btn-info disabled" onclick="" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan">
+                            <i class="fas fa-history me-1"></i> Tampilkan Semua</button>
                     </div>
                     <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
@@ -303,20 +307,69 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
                         order: [
                             [3, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '10%' },
+                            { sWidth: '20%' },
+                            { sWidth: '55%' },
+                            { sWidth: '15%' },
                         ],
                         displayLength: 10,
                         lengthChange: true,
                         lengthMenu: [10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 }
             });
         });
 
         // FUNCTION-FUNCTION
+        function refresh() {
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/profilkaryawan/table",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        content = "<tr id='data" + item.id + "'>";
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow ${item.nik?'text-primary':'text-danger'}' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <ul class='dropdown-menu dropdown-menu-right'>`;
+                            content += `<li><a href="javascript:void(0);" class='dropdown-item text-primary' onclick="lihatProfil(` + item.id + `)"><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
+                        content += `</div></center></td>`;
+                        content += `<td>${item.name}</td>`;
+                        content += `<td>${item.nama?item.nama:'<b class="text-danger">Data Tidak Valid</b>'}</td>`;
+                        content += '<td>' + new Date(item.updated_at).toLocaleString("sv-SE") + '</td>';
+                        content += `</tr>`;
+                        $('#tampil-tbody').append(content);
+                    });
+                    var table = $('#dttable').DataTable({
+                        order: [
+                            [3, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '10%' },
+                            { sWidth: '20%' },
+                            { sWidth: '55%' },
+                            { sWidth: '15%' },
+                        ],
+                        displayLength: 10,
+                        lengthChange: true,
+                        lengthMenu: [10, 25, 50, 75, 100],
+                    });
+                }
+            });
+        }
+
         function showNonAktif() {
             $('#nonaktif').modal('show');
             $.ajax({
