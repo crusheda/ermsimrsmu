@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], fun
     Route::resource('akunpengguna', '\App\Http\Controllers\HakAkses\DataKaryawanController');
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], function () {
     // STRUKTUR ORGANISASI
     Route::get('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi.index');
     Route::get('strukturorganisasi/tambah', [App\Http\Controllers\StrukturOrganisasiController::class, 'create'])->name('strukturorganisasi.tambah');

@@ -42,9 +42,7 @@
                             <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="refresh()" data-bs-toggle="tooltip"
-                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Daftar Ruangan Sarana">Segarkan Tabel</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="refresh()">Segarkan Tabel</a>
                                 </li>
                             </ul>
                         @endif

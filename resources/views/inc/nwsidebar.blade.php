@@ -22,13 +22,11 @@
         </a>
     </li>
     @if (
-            Auth::user()->getPermission('akses_jabatan') == true ||
-            Auth::user()->getPermission('akun_pengguna') == true ||
             Auth::user()->getPermission('struktur_organisasi') == true ||
             Auth::user()->getPermission('profil_karyawan') == true ||
             Auth::user()->getRole('it') == true
         )
-        <li class="pc-item pc-caption"><label>Atur Pengguna</label></li>
+        <li class="pc-item pc-caption"><label>Kepegawaian</label></li>
         @if (Auth::user()->getPermission('profil_karyawan') == true || Auth::user()->getRole('it') == true)
             <li class="pc-item">
                 <a href="{{ route('profilkaryawan.index') }}" class="pc-link">
@@ -39,6 +37,23 @@
                 </a>
             </li>
         @endif
+        @if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('it') == true)
+            <li class="pc-item">
+                <a href="{{ route('strukturorganisasi.index') }}" class="pc-link">
+                    <span class="pc-micon">
+                        <i class="fas fa-sitemap"></i>
+                    </span>
+                    <span class="pc-mtext">Struktur Organisasi</span>
+                </a>
+            </li>
+        @endif
+    @endif
+    @if (
+            Auth::user()->getPermission('akses_jabatan') == true ||
+            Auth::user()->getPermission('akun_pengguna') == true ||
+            Auth::user()->getRole('it') == true
+        )
+        <li class="pc-item pc-caption"><label>Atur Pengguna</label></li>
         @if (Auth::user()->getPermission('akses_jabatan') == true || Auth::user()->getPermission('akun_pengguna') == true)
             <li class="pc-item pc-hasmenu">
                 <a href="javascript: void(0);" class="pc-link">
@@ -58,16 +73,6 @@
                         <li class="pc-item"><a class="pc-link" href="{{ route('akunpengguna.index') }}">Akun Pengguna</a></li>
                     @endif
                 </ul>
-            </li>
-        @endif
-        @if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('it') == true)
-            <li class="pc-item">
-                <a href="{{ route('strukturorganisasi.index') }}" class="pc-link">
-                    <span class="pc-micon">
-                        <i class="fas fa-sitemap"></i>
-                    </span>
-                    <span class="pc-mtext">Struktur Organisasi</span>
-                </a>
             </li>
         @endif
     @endif

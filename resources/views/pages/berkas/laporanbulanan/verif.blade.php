@@ -270,9 +270,9 @@
                         order: [
                             [6, "desc"]
                         ],
-                        displayLength: 7,
+                        displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
 

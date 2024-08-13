@@ -132,6 +132,17 @@ class ProfilKaryawanController extends Controller
     }
 
     // API
+    function table()
+    {
+        $show = users::where('status',null)->orderBy('updated_at','desc')->get();
+
+        $data = [
+            'show' => $show
+        ];
+
+        return response()->json($data, 200);
+    }
+
     function tableNonaktif()
     {
         $show = users::onlyTrashed()->orderBy('deleted_at','desc')->get();
