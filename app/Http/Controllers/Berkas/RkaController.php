@@ -144,7 +144,16 @@ class RkaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        // $now = Carbon::now();
+
+        // $data = berkas_rka::where('id', $id)->first();
+        // $file = $data->filename;
+
+        // Storage::delete($file);
+        // $data->delete();
+
+        // return response()->json($tgl, 200);
     }
 
     // API

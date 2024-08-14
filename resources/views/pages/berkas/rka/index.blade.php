@@ -68,16 +68,14 @@
     </div>
 
     {{-- MODAL START --}}
-    <div class="modal fade animate__animated animate__jackInTheBox" data-bs-backdrop="static" id="tambah" tabindex="-1"
-        aria-hidden="true">
+    <div class="modal fade" id="tambah" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalCenterTitle">Upload Berkas RKA Terbaru</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="form-auth-small" id="tambah" name="formTambah" action="{{ route('rka.store') }}"
-                    method="POST" enctype="multipart/form-data">
+                <form class="form-auth-small" id="tambah" name="formTambah" action="{{ route('rka.store') }}" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         @csrf
                         <input type="file" name="file" class="form-control mb-2" accept=".xls,.xlsx,.pdf" required>
@@ -87,31 +85,31 @@
                             <i class="fa-fw fas fa-caret-right nav-icon"></i> Tidak dapat mengupload file dengan nama yang sama dengan dokumen sebelumnya
                         </small>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer p-b-0">
                         <button type="submit" class="btn btn-primary" id="btn-simpan" onclick="saveData()"><i class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
                 </form>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                    </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade animate__animated animate__bounceInRight" id="hapus" data-bs-backdrop="static" id="hapus"
-        tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-simple modal-enable-otp modal-dialog-centered">
-            <div class="modal-content p-3 p-md-5">
+    <div class="modal fade" id="modalHapus" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="text-center">
+                        <h3>Hapus Berkas RKA Anda?</h3>
+                    </div>
+                </div>
                 <div class="modal-body">
-                    <div class="text-center mb-4">
-                        <h3 class="mb-3">Hapus Berkas RKA Anda?</h3>
-                    </div>
                     <input type="text" id="tampungHapus" hidden>
-                    <p align="justify" class="mb-4">File yang sudah anda Upload akan terhapus oleh Sistem. Anda hanya memiliki kesempatan menghapus pada
+                    <p>File yang sudah anda Upload akan terhapus oleh Sistem. Anda hanya memiliki kesempatan menghapus pada
                         Hari saat Anda mengupload file tersebut.</p>
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-danger me-sm-3 me-1" onclick="hapus()"><i
-                                class="fa-fw fas fa-trash nav-icon"></i> Hapus</button>
-                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                            aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Batal</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" onclick="hapus()"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon me-1"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -169,45 +167,37 @@
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
                         content += `<td><div class="d-flex align-items-center"><div class="dropdown">
-                            <a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow text-body p-0" data-bs-toggle="dropdown">` + item.id + `<i class="bx bx-dots-vertical-rounded"></i></a>
+                            <a href="javascript:void(0);" class="btn btn-icon btn-link dropdown-toggle hide-arrow text-primary p-0" data-bs-toggle="dropdown">` + item.id + `</a>
                             <div class="dropdown-menu dropdown-menu-right">`;
                         if (downloader == true) {
                             content += `<a href="./rka/` + item.id +
-                                `" class="dropdown-item text-info">Download</a>`;
+                                `" class="dropdown-item text-info"><i class="fa-fw fas fa-download nav-icon me-1"></i> Download</a>`;
                             if (item.id_user == userID) {
                                 if (updet == date) {
-                                    content += `<a href="javascript:;" onclick="showHapus(` +
-                                        item.id +
-                                        `)" class="dropdown-item text-danger">Hapus</a>`;
+                                    content += `<a href="javascript:void(0);" onclick="showHapus(` + item.id + `)" class="dropdown-item text-danger"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a>`;
                                 } else {
-                                    content +=
-                                        `<a href="javascript:;" class="dropdown-item disabled">Hapus</a>`;
+                                    content += `<a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a>`;
                                 }
                             } else {
                                 content +=
-                                    `<a href="javascript:;" class="dropdown-item disabled">Hapus</a>`;
+                                    `<a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a>`;
                             }
                         } else {
                             if (adminID == true) {
-                                content += `<a href="./rka/` + item.id + `" class="dropdown-item text-info">Download</a>
-                                            <a href="javascript:;" onclick="showHapus(` + item.id +
-                                    `)" class="dropdown-item text-danger">Hapus</a>`;
+                                content += `<a href="./rka/` + item.id + `" class="dropdown-item text-info"><i class="fa-fw fas fa-download nav-icon me-1"></i> Download</a>
+                                            <a href="javascript:void(0);" onclick="showHapus(` + item.id + `)" class="dropdown-item text-danger"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a>`;
                             } else {
                                 if (item.id_user == userID) {
-                                    content += `<a href="./rka/` + item.id +
-                                        `" class="dropdown-item text-info">Download</a>`;
+                                    content += `<a href="./rka/` + item.id + `" class="dropdown-item text-info"><i class="fa-fw fas fa-download nav-icon me-1"></i> Download</a>`;
                                     if (updet == date) {
                                         content +=
-                                            `<a href="javascript:;" onclick="showHapus(` + item
-                                            .id +
-                                            `)" class="dropdown-item text-danger">Hapus</a>`;
+                                            `<a href="javascript:void(0);" onclick="showHapus(` + item.id + `)" class="dropdown-item text-danger"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a>`;
                                     } else {
-                                        content +=
-                                            `<a href="javascript:;" class="dropdown-item disabled">Hapus</a>`;
+                                        content += `<a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a>`;
                                     }
                                 } else {
-                                    content += `<a href="javascript:;" class="dropdown-item disabled">Download</a>
-                                            <a href="javascript:;" class="dropdown-item disabled">Hapus</a>`;
+                                    content += `<a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-download nav-icon me-1"></i> Download</a>
+                                            <a href="javascript:void(0);" class="dropdown-item disabled"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a>`;
                                 }
                             }
                         }
@@ -239,9 +229,6 @@
                         lengthMenu: [7, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
-                    table.buttons().container()
-                        .appendTo('#dttable_wrapper .col-md-6:eq(0)');
                 }
             });
         });
@@ -271,14 +258,14 @@
 
         function showHapus(params) {
             $('#tampungHapus').val(params);
-            $('#hapus').modal('show');
+            $('#modalHapus').modal('show');
         }
 
         function hapus() {
             var idHapus = $('#tampungHapus').val();
             $.ajax({
                 url: "/api/rka/hapus/" + idHapus,
-                type: 'GET',
+                type: 'DELETE',
                 dataType: 'json', // added data type
                 success: function(res) {
                     $('#hapus').modal('hide');

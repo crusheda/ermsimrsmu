@@ -63,7 +63,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // BERKAS
         // RKA
         Route::get('rka/table', '\App\Http\Controllers\Berkas\RkaController@table');
-        Route::get('rka/hapus/{id}', '\App\Http\Controllers\Berkas\RkaController@hapus');
+        // Route::get('rka/hapus/{id}', '\App\Http\Controllers\Berkas\RkaController@hapus');
+        Route::delete('rka/hapus/{id}', '\App\Http\Controllers\Berkas\RkaController@hapus');
 
         // REGULASI
         Route::get('regulasi/showtambah', '\App\Http\Controllers\Berkas\RegulasiController@showTambah');
