@@ -81,6 +81,7 @@
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
     data-pc-theme_contrast="" data-pc-theme="light"><!-- [ Pre-loader ] start -->
 
+
     <!-- Logout Form -->
     <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
         {{ csrf_field() }}
@@ -95,6 +96,30 @@
 
     <div class="pc-container">
         <div class="pc-content">
+
+            {{-- START MESSAGE SUCCESS --}}
+            @if(session('message'))
+            <div class="alert alert-success alert-dismissible fade show">
+                <strong>Pesan Sukses!</strong> {{ session('message') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            {{-- END MESSAGE SUCCESS --}}
+
+            {{-- START MESSAGE ERROR --}}
+            @if($errors->count() > 0)
+            <div class="alert alert-danger alert-dismissible fade show">
+                <strong>Pesan Galat!</strong>
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            {{-- END MESSAGE ERROR --}}
+
             @yield('content') <!-- ALL CONTENT HERE -->
         </div>
     </div>

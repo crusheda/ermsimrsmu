@@ -176,7 +176,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
             Route::get('kecelakaankerja/tambah','\App\Http\Controllers\MFK\AccidentReportController@tambah')->name('accidentreport.tambah');
             Route::post('kecelakaankerja/simpan','\App\Http\Controllers\MFK\AccidentReportController@store')->name('accidentreport.store');
             Route::get('kecelakaankerja/ubah/{id}','\App\Http\Controllers\MFK\AccidentReportController@ubah')->name('accidentreport.showupdate');
-            Route::get('kecelakaankerja/ubah','\App\Http\Controllers\MFK\AccidentReportController@update')->name('accidentreport.update');
+            Route::put('kecelakaankerja/ubah','\App\Http\Controllers\MFK\AccidentReportController@update')->name('accidentreport.update');
     });
 
     // Mutu

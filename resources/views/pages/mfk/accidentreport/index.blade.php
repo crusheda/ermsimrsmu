@@ -193,7 +193,7 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
+                        // dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -277,7 +277,7 @@
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
+                        // dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],

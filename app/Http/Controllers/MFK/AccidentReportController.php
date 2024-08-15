@@ -47,8 +47,10 @@ class AccidentReportController extends Controller
     function ubah($id) {
         $unit = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
         $user = user::where('nik', '<>',null)->get();
-        $show = accident_report::where('id',$id)
-                ->orderBy('tgl','DESC')
+        $show = accident_report::join('users','users.id','=','mfk_accident_report.korban')
+                ->select('mfk_accident_report.*','users.nama as nama_korban')
+                ->where('mfk_accident_report.id',$id)
+                ->orderBy('mfk_accident_report.tgl','DESC')
                 ->limit('30')
                 ->first();
 
@@ -190,7 +192,7 @@ class AccidentReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $thn = Carbon::now()->format('Y');
         // $thn = Carbon::now();
@@ -199,7 +201,7 @@ class AccidentReportController extends Controller
         // $parse = Carbon::parse($getlahir);
         $usia = $thn - $parse;
 
-        $data = accident_report::find($id);
+        $data = accident_report::find($request->id);
         $data->tgl = $request->tgl;
         $data->lokasi = $request->lokasi;
         $data->jenis = $request->jenis;
@@ -207,11 +209,15 @@ class AccidentReportController extends Controller
         $data->kronologi = $request->kronologi;
 
         $data->kerugian = $request->kerugian;
-        $data->korban = $request->korban;
+        // if ($request->korban != '') {
+        //     $data->korban = $request->korban;
+        // } else {
+        //     $data->korban_luar = $request->korban_luar;
+        // }
         $data->lahir = $request->lahir;
         $data->usia = $usia;
         $data->jk = $request->jk;
-        $data->role = $request->unit;
+        // $data->role = $request->unit;
         $data->cedera = $request->cedera;
         $data->penanganan = $request->penanganan;
         $data->k_aset = $request->k_aset;
