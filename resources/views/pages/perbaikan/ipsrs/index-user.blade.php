@@ -1,320 +1,318 @@
-@extends('layouts.default')
+@extends('layouts.index')
 
 @section('content')
     {{-- Sistem Tracking --}}
     <link href="{{ asset('css/tracking.css') }}" rel="stylesheet" />
 
-    <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Pengaduan - Perbaikan IPSRS</h4>
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item">Pengaduan</li>
+                        <li class="breadcrumb-item">Perbaikan</li>
+                        <li class="breadcrumb-item" aria-current="page">IPSRS</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <div class="page-header-title">
+                        <h2 class="mb-0">Perbaikan IPSRS</h2>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </div><!-- [ breadcrumb ] end -->
 
-    <style>
-        /* img.zoom {
-                    width: 350px;
-                    height: 200px;
-                    -webkit-transition: all .2s ease-in-out;
-                    -moz-transition: all .2s ease-in-out;
-                    -o-transition: all .2s ease-in-out;
-                    -ms-transition: all .2s ease-in-out;
-                  } */
-        .transisi {
-            -webkit-transform: scale(3.8);
-            -moz-transform: scale(3.8);
-            -o-transform: scale(3.8);
-            /* transform: scale(3.8); */
-            -webkit-transition: all .2s ease-in-out;
-            -moz-transition: all .2s ease-in-out;
-            -o-transition: all .2s ease-in-out;
-            -ms-transition: all .2s ease-in-out;
-        }
-    </style>
-
-    @if (session('message'))
-        <div class="alert alert-primary alert-dismissible" role="alert">
-            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Proses Berhasil!</h6>
-            <p class="mb-0">{{ session('message') }}</p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            </button>
-        </div>
-    @endif
-    @if ($errors->count() > 0)
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <h6 class="alert-heading d-flex align-items-center fw-bold mb-1">Proses Gagal!</h6>
-            <p class="mb-0">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            </button>
-        </div>
-    @endif
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card mb-4">
+    <!-- [ Main Content ] start -->
+    <div class="row pt-1">
+        {{-- BARIS 1 --}}
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-around flex-wrap my-4 mb-5" style="margin-top:0rem !important">
-                        <div class="d-flex align-items-start me-4 mt-3 gap-3">
-                            <span class="badge bg-primary bg-opacity-50 p-2 rounded"><i class='bx bx-check bx-sm'></i></span>
-                            <div>
-                                <span>Total</span>
-                                <h5 class="mb-0">{{ $list['total'] }}</h5>
-                            </div>
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-1">{{ $list['total'] }}</h3>
+                            <p class="text-muted mb-0">Total Pengaduan <b class="text-primary">Anda</b></p>
                         </div>
-                        <div class="d-flex align-items-start mt-3 gap-3">
-                            <span class="badge bg-success bg-opacity-50 p-2 rounded"><i class='bx bx-customize bx-sm'></i></span>
-                            <div>
-                                <span>Selesai</span>
-                                <h5 class="mb-0">{{ $list['totalselesai'] }}</h5>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-start mt-3 gap-3">
-                            <span class="badge bg-danger bg-opacity-50 p-2 rounded"><i class='bx bx-calendar-x bx-sm'></i></span>
-                            <div>
-                                <span>Ditolak</span>
-                                <h5 class="mb-0">{{ $list['totalditolak'] }}</h5>
-                            </div>
-                        </div>
+                        <div class="col-4 text-end"><i class="ti ti-license text-secondary f-36"></i></div>
                     </div>
-                    <hr>
-                    <center><h5>Form Tambah</h5></center>
-                    <div class="info-container">
-                        <form method="POST" id="formTambah" action="{{ route('ipsrs.store') }}"
-                            enctype="multipart/form-data">
-                            @csrf
-                            <input type="text" name="user_id" value="{{ Auth::user()->id }}" hidden>
-                            <div class="form-group mb-3">
-                                <label for="defaultFormControlInput" class="form-label">Lokasi <a class="text-danger">*</a></label>
-                                <input type="text" name="lokasi" id="clr_lokasi"
-                                    class="form-control typeahead-bloodhound" placeholder="Teks Otomatis" autocomplete="off"
-                                    required />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="defaultFormControlInput" class="form-label">Pengaduan <a class="text-danger">*</a></label>
-                                <div class="form-group">
-                                    <textarea rows="3" class="autosize1 form-control" name="pengaduan" id="clr_pengaduan"
-                                        placeholder="Deskripsi Pengaduan Anda" required></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="defaultFormControlInput" class="form-label">Lampiran (Optional) : </label>
-                                <div class="form-group">
-                                    <input type="file" name="file" id="imgInp" class="form-control">
-                                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menyertakan
-                                        lampiran foto</sub><br>
-                                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan upload Foto/Gambar bukan
-                                        Video, berformat <b>jpg,png,jpeg,gif</b> </sub>
-                                    <center>
-                                        <div class="card" style="width: 18rem;margin-top:20px">
-                                            <a class="image-popup-vertical-fit" id="blah_a" href="">
-                                                <img class="card-img-top" id="blah" src="{{ asset('images/no-image.png') }}"
-                                                    alt="Tidak ada lampiran">
-                                            </a>
-                                        </div>
-                                    </center>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <div class="btn-group">
-                                    <button class="btn btn-primary" onclick="simpan()" id="btn-simpan" type="submit"><i
-                                            class="fa-fw fas fa-save nav-icon"></i> Submit</button>
-                        </form>
-                        <button class="btn btn-outline-warning" onclick="clearInp()" type="button"><i
-                                class="fa-fw fas fa-eraser nav-icon"></i></button>
-                        {{-- <button class="btn btn-label-info" onclick="riwayat()" id="btn-simpan" type="submit"><i class="fa-fw fas fa-history nav-icon"></i> Riwayat</button> --}}
-                                </div>
-                            </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-1">-</h3>
+                            <p class="text-muted mb-0">Total Dikerjakan</p>
+                        </div>
+                        <div class="col-4 text-end"><i class="ti ti-clock text-primary f-36"></i></div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-1">{{ $list['totalselesai'] }}</h3>
+                            <p class="text-muted mb-0">Total Diselesaikan</p>
+                        </div>
+                        <div class="col-4 text-end"><i class="ti ti-clipboard-check text-success f-36"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-1">{{ $list['totalditolak'] }}</h3>
+                            <p class="text-muted mb-0">Total Ditolak</p>
+                        </div>
+                        <div class="col-4 text-end"><i class="ti ti-file-text text-danger f-36"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- BARIS 2 --}}
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                    <h5 class="mb-0 card-title flex-grow-1">Form Tambah</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="formTambah" action="{{ route('ipsrs.store') }}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="text" name="user_id" value="{{ Auth::user()->id }}" hidden>
+                        <div class="form-group mb-3">
+                            <label for="defaultFormControlInput" class="form-label">Lokasi <a class="text-danger">*</a></label>
+                            <input type="text" name="lokasi" id="clr_lokasi"
+                                class="form-control typeahead-bloodhound" placeholder="Teks Otomatis" autocomplete="off"
+                                required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="defaultFormControlInput" class="form-label">Pengaduan <a class="text-danger">*</a></label>
+                            <div class="form-group">
+                                <textarea rows="3" class="autosize1 form-control" name="pengaduan" id="clr_pengaduan"
+                                    placeholder="Deskripsi Pengaduan Anda" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="defaultFormControlInput" class="form-label">Lampiran (<strong>Optional</strong>) : </label>
+                            <input type="file" name="file" id="imgInp" class="form-control mb-3">
+                            <div class="alert alert-secondary">
+                                <small>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menyertakan lampiran foto <br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan upload Foto/Gambar bukan Video, berformat <b>jpg,png,jpeg</b>
+                                </small>
+                            </div>
+                            <center>
+                                <div class="card" style="width: 18rem;margin-top:20px">
+                                    <a class="image-popup-vertical-fit" id="blah_a" href="">
+                                        <img class="card-img-top" id="blah" src="{{ asset('images/no-image.png') }}"
+                                            alt="Tidak ada lampiran">
+                                    </a>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="d-flex justify-content-center" style="margin-bottom:-15px">
+                            <div class="btn-group">
+                                <button class="btn btn-primary" onclick="simpan()" id="btn-simpan" type="submit">
+                                    <i class="fa-fw fas fa-save nav-icon"></i> Submit
+                                </button>
+                    </form>
+                                <button class="btn btn-outline-warning" onclick="clearInp()" type="button">
+                                    <i class="fa-fw fas fa-eraser nav-icon"></i>
+                                </button>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
             @if (count($list['recent']) > 0)
                 <div class="card">
-                    <div class="card-header bg-transparent border-bottom">
-                        <div class="d-flex flex-wrap align-items-start">
-                            <div class="me-2">
-                                <h5 class="card-title mt-1 mb-0">Pengaduan berjalan <span class="badge bg-primary">{{ count($list['recent']) }}</span></h5>
-                            </div>
-                            <ul class="nav nav-tabs nav-tabs-custom card-header-tabs ms-auto" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#post-recent" role="tab">
-                                        Aktif
-                                    </a>
-                                </li>
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#post-popular" role="tab">
-                                        Popular
-                                    </a>
-                                </li> --}}
-                            </ul>
-                        </div>
-
+                    <div class="card-header d-flex align-items-center justify-content-between py-3">
+                        <h5 class="mb-0 card-title flex-grow-1">Pengaduan Berjalan <span class="badge bg-secondary text-light">{{ count($list['recent']) }}</span></h5>
                     </div>
-
                     <div class="card-body">
-
-                        <div data-simplebar style="max-height: 295px;">
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="post-recent" role="tabpanel">
-                                    @for ($i = 0; $i < count($list['recent']); $i++)
-                                    <ul class="list-group list-group-flush">
-
-                                        <li class="list-group-item py-3">
-                                            <div class="d-flex">
-                                                <div class="me-3">
-                                                    @if (!empty($list['recent'][$i]->filename_pengaduan))
-                                                        <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                                            data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
-                                                            <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem">
-                                                        </a>
-                                                        {{-- <img src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}"
-                                                        class="avatar-md h-auto d-block rounded" alt="Image Request" style="width:6.5rem"/> <!-- height="62" width="62"  --> --}}
-                                                    @else
-                                                        <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:6.5rem">
-                                                    @endif
-                                                </div>
-
-                                                <div class="align-self-center overflow-hidden me-auto">
-                                                    <h5 class="font-size-14 text-truncate">
-                                                        <a href="javascript: void(0);" class="text-dark">{{ $list['recent'][$i]->lokasi }}&nbsp;
-                                                        @if (!empty($list['recent'][$i]->tgl_selesai) && empty($list['recent'][$i]->ket_penolakan))
-                                                            <span class="badge" style="background-color: turquoise">Selesai</span>
-                                                        @elseif (!empty($list['recent'][$i]->ket_penolakan))
-                                                            <span class="badge" style="background-color: red">Ditolak</span>
-                                                        @elseif (empty($list['recent'][$i]->tgl_diterima))
-                                                            <span class="badge" style="background-color: rebeccapurple">Diverifikasi</span>
-                                                        @elseif (empty($list['recent'][$i]->tgl_dikerjakan))
-                                                            <span class="badge" style="background-color: salmon">Diterima</span>
-                                                        @elseif (empty($list['recent'][$i]->tgl_selesai))
-                                                            <span class="badge" style="background-color: orange">Dikerjakan</span>
-                                                        @endif</a>
-                                                    </h5>
-                                                    <p class="text-muted mb-0">
-                                                        <small class="text-muted">{{ $list['recent'][$i]->ket_pengaduan }}</small><br>
-                                                        <small class="text-muted">{{ \Carbon\Carbon::parse($list['recent'][$i]->tgl_pengaduan)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</small>
-                                                    </p>
-                                                </div>
-
-                                                {{-- <div class="dropdown ms-2">
-                                                    <a class="text-muted font-size-14" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="mdi mdi-dots-horizontal"></i>
-                                                    </a>
-
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div> {{-- style="max-height: 295px;" --}}
+                            <div class="row">
+                                @for ($i = 0; $i < count($list['recent']); $i++)
+                                    <div class="col-12 mb-3">
+                                        <div class="card shadow border mb-0">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0">
+                                                        @if (!empty($list['recent'][$i]->filename_pengaduan))
+                                                            <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
+                                                                <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:3.5rem">
+                                                            </a>
+                                                            {{-- <img src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}"
+                                                            class="avatar-md h-auto d-block rounded" alt="Image Request" style="width:6.5rem"/> <!-- height="62" width="62"  --> --}}
+                                                        @else
+                                                            <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:3.5rem">
+                                                        @endif
+                                                        {{-- <img src="../assets/images/widget/img-acitivity-3.svg" alt="img" class="wid-30 rounded"> --}}
                                                     </div>
-                                                </div> --}}
-                                                <button class="btn btn-outline-primary btn-sm align-middle" style="height:30px"
-                                                    data-bs-target="#track{{ $list['recent'][$i]->id }}"
-                                                    data-bs-toggle="modal">
-                                                    Lihat&nbsp;&nbsp;<span class="badge bg-light">ID :
-                                                        {{ $list['recent'][$i]->id }}</span>
-                                                </button>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h6 class="mb-0">
+                                                            {{ $list['recent'][$i]->lokasi }}&nbsp;
+                                                            @if (!empty($list['recent'][$i]->tgl_selesai) && empty($list['recent'][$i]->ket_penolakan))
+                                                                <span class="badge" style="background-color: turquoise">Selesai</span>
+                                                            @elseif (!empty($list['recent'][$i]->ket_penolakan))
+                                                                <span class="badge" style="background-color: red">Ditolak</span>
+                                                            @elseif (empty($list['recent'][$i]->tgl_diterima))
+                                                                <span class="badge" style="background-color: rebeccapurple">Diverifikasi</span>
+                                                            @elseif (empty($list['recent'][$i]->tgl_dikerjakan))
+                                                                <span class="badge" style="background-color: salmon">Diterima</span>
+                                                            @elseif (empty($list['recent'][$i]->tgl_selesai))
+                                                                <span class="badge" style="background-color: orange">Dikerjakan</span>
+                                                            @endif
+                                                        </h6>
+                                                        <p class="mb-0">
+                                                            <small>{{ $list['recent'][$i]->ket_pengaduan }} <br>
+                                                            {{ \Carbon\Carbon::parse($list['recent'][$i]->tgl_pengaduan)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</small>
+                                                        </p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <button class="btn btn-primary btn-sm align-middle" data-bs-target="#track{{ $list['recent'][$i]->id }}" data-bs-toggle="modal">
+                                                            Lihat&nbsp;&nbsp;<span class="badge bg-light text-dark">ID : {{ $list['recent'][$i]->id }}</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </li>
-
-                                    </ul>
-                                    @endfor
-                                </div>
-                                <!-- end tab pane -->
+                                        </div>
+                                    </div>
+                                @endfor
                             </div>
-                            <!-- end tab content -->
+                            <!-- Tab panes -->
                         </div>
                     </div>
                 </div>
             @endif
-            <div class="card table-responsive text-nowrap" style="overflow: visible;">
-                <div class="card-header bg-transparent border-bottom">
-                    <div class="d-flex flex-wrap align-items-start">
-                        <div class="me-2">
-                            <h5 class="card-title mt-1 mb-0">Daftar Pengaduan</h5>
+            <div class="card table-card">
+                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                    <h5 class="mb-0 card-title flex-grow-1">Riwayat Pengaduan <a class="text-primary">IPSRS</a></h5>
+                    <div class="flex-shrink-0">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Tabel Disposisi Surat Masuk akan disegarkan" onclick="refresh()">
+                                <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Tampilkan Semua Data" onclick="showAll()">
+                                <i class="fa-fw fas fa-infinity nav-icon"></i></button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Informasi Sistem Disposisi" disabled>
+                                <i class="fa-fw fas fa-info nav-icon me-1"></i><s>Informasi</s></button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <center>ID</center>
-                                </th>
-                                <th>LOKASI</th>
-                                <th>STATUS</th>
-                                <th>TGL PENGADUAN</th>
-                                <th>
-                                    <center>AKSI</center>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody style="text-transform: capitalize">
-                            @if (count($list['show']) > 0)
-                                @foreach ($list['show'] as $item)
-                                    <tr>
-                                        <td>
-                                            <center>
-                                                <button type="button" class="btn btn-label-primary btn-sm"
-                                                    data-bs-toggle="modal" data-bs-target="#track{{ $item->id }}"><i
-                                                        class="fa-fw fas fa-search nav-icon"></i>
-                                                    {{ $item->id }}</button>
-                                            </center>
-                                        </td>
-                                        <td>{{ $item->lokasi }}</td>
+                    <div class="alert alert-secondary m-2">
+                        <small>
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat <br>
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas
+                        </small>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <center>ID</center>
+                                    </th>
+                                    <th>LOKASI</th>
+                                    <th>STATUS</th>
+                                    <th>TGL PENGADUAN</th>
+                                    <th>
+                                        <center>AKSI</center>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-transform: capitalize;font-size: 13px">
+                                @if (count($list['show']) > 0)
+                                    @foreach ($list['show'] as $item)
+                                        <tr>
+                                            <td>
+                                                <center>
+                                                    <button type="button" class="btn btn-label-primary btn-sm"
+                                                        data-bs-toggle="modal" data-bs-target="#track{{ $item->id }}"><i
+                                                            class="fa-fw fas fa-search nav-icon"></i>
+                                                        {{ $item->id }}</button>
+                                                </center>
+                                            </td>
+                                            <td>{{ $item->lokasi }}</td>
 
-                                        @if (!empty($item->tgl_selesai) && empty($item->ket_penolakan))
-                                            <td><kbd style="background-color: turquoise">Selesai</kbd></td>
-                                        @elseif (!empty($item->ket_penolakan))
-                                            <td><kbd style="background-color: red">Ditolak</kbd></td>
-                                        @elseif (empty($item->tgl_diterima))
-                                            <td><kbd style="background-color: rebeccapurple">Diverifikasi</kbd></td>
-                                        @elseif (empty($item->tgl_dikerjakan))
-                                            <td><kbd style="background-color: salmon">Diterima</kbd></td>
-                                        @elseif (empty($item->tgl_selesai))
-                                            <td><kbd style="background-color: orange">Dikerjakan</kbd></td>
-                                        @endif
+                                            @if (!empty($item->tgl_selesai) && empty($item->ket_penolakan))
+                                                <td><kbd style="background-color: turquoise">Selesai</kbd></td>
+                                            @elseif (!empty($item->ket_penolakan))
+                                                <td><kbd style="background-color: red">Ditolak</kbd></td>
+                                            @elseif (empty($item->tgl_diterima))
+                                                <td><kbd style="background-color: rebeccapurple">Diverifikasi</kbd></td>
+                                            @elseif (empty($item->tgl_dikerjakan))
+                                                <td><kbd style="background-color: salmon">Diterima</kbd></td>
+                                            @elseif (empty($item->tgl_selesai))
+                                                <td><kbd style="background-color: orange">Dikerjakan</kbd></td>
+                                            @endif
 
-                                        <td>{{ $item->tgl_pengaduan }}</td>
-                                        <td>
-                                            <center>
-                                                <div class="btn-group">
-                                                    @if (empty($item->tgl_selesai))
-                                                        @if (!empty($item->tgl_diterima))
+                                            <td>{{ $item->tgl_pengaduan }}</td>
+                                            <td>
+                                                <center>
+                                                    <div class="btn-group">
+                                                        @if (empty($item->tgl_selesai))
+                                                            @if (!empty($item->tgl_diterima))
+                                                                <button type="button" class="btn btn-secondary btn-sm text-white"
+                                                                    disabled><i class="fa-fw fas fa-edit nav-icon"></i></button>
+                                                                @if (empty($item->filename_pengaduan))
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary btn-sm text-white" disabled><i
+                                                                            class="fa-fw fas fa-image nav-icon"></i></button>
+                                                                @else
+                                                                    <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
+                                                                        <i class="fa-fw fas fa-image nav-icon"></i>
+                                                                        <img class="img-fluid" alt="" src="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem" hidden>
+                                                                    </a>
+                                                                    {{-- <button type="button" class="btn btn-info btn-sm text-white"
+                                                                        onclick="showLampiran({{ $item->id }})"><i class="fa-fw fas fa-image nav-icon"></i></button> --}}
+                                                                @endif
+                                                                <button type="button" class="btn btn-secondary btn-sm text-white"
+                                                                    disabled><i class="fa-fw fas fa-trash nav-icon"></i></button>
+                                                            @else
+                                                                <button type="button" class="btn btn-warning btn-sm text-white"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#ubah{{ $item->id }}"><i
+                                                                        class="fa-fw fas fa-edit nav-icon"></i></button>
+                                                                @if (empty($item->filename_pengaduan))
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary btn-sm text-white" disabled><i
+                                                                            class="fa-fw fas fa-image nav-icon"></i></button>
+                                                                @else
+                                                                    <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
+                                                                        <i class="fa-fw fas fa-image nav-icon"></i>
+                                                                        <img class="img-fluid" alt="" src="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem" hidden>
+                                                                    </a>
+                                                                    {{-- <button type="button" class="btn btn-info btn-sm text-white"
+                                                                        onclick="showLampiran({{ $item->id }})"><i
+                                                                            class="fa-fw fas fa-image nav-icon"></i></button> --}}
+                                                                @endif
+                                                                <button type="button" class="btn btn-danger btn-sm text-white"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#hapus{{ $item->id }}"><i
+                                                                        class="fa-fw fas fa-trash nav-icon"></i></button>
+                                                            @endif
+                                                        @else
                                                             <button type="button" class="btn btn-secondary btn-sm text-white"
                                                                 disabled><i class="fa-fw fas fa-edit nav-icon"></i></button>
                                                             @if (empty($item->filename_pengaduan))
-                                                                <button type="button"
-                                                                    class="btn btn-secondary btn-sm text-white" disabled><i
-                                                                        class="fa-fw fas fa-image nav-icon"></i></button>
-                                                            @else
-                                                                <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
-                                                                    <i class="fa-fw fas fa-image nav-icon"></i>
-                                                                    <img class="img-fluid" alt="" src="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem" hidden>
-                                                                </a>
-                                                                {{-- <button type="button" class="btn btn-info btn-sm text-white"
-                                                                    onclick="showLampiran({{ $item->id }})"><i class="fa-fw fas fa-image nav-icon"></i></button> --}}
-                                                            @endif
-                                                            <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                                disabled><i class="fa-fw fas fa-trash nav-icon"></i></button>
-                                                        @else
-                                                            <button type="button" class="btn btn-warning btn-sm text-white"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#ubah{{ $item->id }}"><i
-                                                                    class="fa-fw fas fa-edit nav-icon"></i></button>
-                                                            @if (empty($item->filename_pengaduan))
-                                                                <button type="button"
-                                                                    class="btn btn-secondary btn-sm text-white" disabled><i
-                                                                        class="fa-fw fas fa-image nav-icon"></i></button>
+                                                                <button type="button" class="btn btn-secondary btn-sm text-white"
+                                                                    disabled><i class="fa-fw fas fa-image nav-icon"></i></button>
                                                             @else
                                                                 <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
                                                                     <i class="fa-fw fas fa-image nav-icon"></i>
@@ -324,37 +322,18 @@
                                                                     onclick="showLampiran({{ $item->id }})"><i
                                                                         class="fa-fw fas fa-image nav-icon"></i></button> --}}
                                                             @endif
-                                                            <button type="button" class="btn btn-danger btn-sm text-white"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#hapus{{ $item->id }}"><i
-                                                                    class="fa-fw fas fa-trash nav-icon"></i></button>
-                                                        @endif
-                                                    @else
-                                                        <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                            disabled><i class="fa-fw fas fa-edit nav-icon"></i></button>
-                                                        @if (empty($item->filename_pengaduan))
                                                             <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                                disabled><i class="fa-fw fas fa-image nav-icon"></i></button>
-                                                        @else
-                                                            <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
-                                                                <i class="fa-fw fas fa-image nav-icon"></i>
-                                                                <img class="img-fluid" alt="" src="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem" hidden>
-                                                            </a>
-                                                            {{-- <button type="button" class="btn btn-info btn-sm text-white"
-                                                                onclick="showLampiran({{ $item->id }})"><i
-                                                                    class="fa-fw fas fa-image nav-icon"></i></button> --}}
+                                                                disabled><i class="fa-fw fas fa-trash nav-icon"></i></button>
                                                         @endif
-                                                        <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                            disabled><i class="fa-fw fas fa-trash nav-icon"></i></button>
-                                                    @endif
-                                                </div>
-                                            </center>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -545,82 +524,90 @@
                             <table class="table table-striped display">
                                 <thead>
                                     <tr>
-                                        <th>STATUS</th>
+                                        <th>#</th>
                                         <th>TGL</th>
                                         <th>KETERANGAN</th>
                                     </tr>
                                 </thead>
-                                <tbody style="text-transform: capitalize">
+                                <tbody style="text-transform: capitalize;font-size:13px">
                                     <tr>
-                                        <th><button class="btn btn-label-dark btn-sm disabled"
-                                                type="button">DITERIMA</button></th>
-                                        <td>{{ \Carbon\Carbon::parse($item->tgl_diterima)->isoFormat('DD MMM Y, HH:mm a') }}
+                                        <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS DITERIMA</th>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($item->tgl_diterima)->isoFormat('DD MMM Y, HH:mm a') }}
                                         </td>
                                         <td>{{ $item->ket_diterima }}</td>
                                     </tr>
                                     <tr>
-                                        <th><button class="btn btn-primary btn-sm" type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#collapseExample{{ $item->id }}">DIKERJAKAN</button>
+                                        <th>
+                                            <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ $item->id }}">
+                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i> <b>STATUS PENGERJAAN</b>
+                                            </button>
                                         </th>
-                                        <td>{{ \Carbon\Carbon::parse($item->tgl_dikerjakan)->isoFormat('DD MMM Y, HH:mm a') }}
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($item->tgl_dikerjakan)->isoFormat('DD MMM Y, HH:mm a') }}
                                         </td>
                                         <td>{{ $item->ket_dikerjakan }}</td>
                                     </tr>
                                     <tr>
-                                        <th><button class="btn btn-label-dark btn-sm disabled"
-                                                type="button">SELESAI</button></th>
-                                        <td>{{ \Carbon\Carbon::parse($item->tgl_selesai)->isoFormat('DD MMM Y, HH:mm a') }}
+                                        <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS SELESAI</th>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($item->tgl_selesai)->isoFormat('DD MMM Y, HH:mm a') }}
                                         </td>
                                         <td>{{ $item->ket_selesai }}</td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <p><b># Klik tombol Status <kbd>DIKERJAKAN</kbd> untuk melihat detail Status.</b></p>
+                            <p><b># Klik tombol Status <kbd class="bg-primary text-light">DIKERJAKAN</kbd> untuk melihat detail Status Pengerjaan</b></p>
                         @else
                             <p><b>Laporan Ditolak Pada : </b>{{ $item->tgl_selesai }}</p>
                             <p><b>Keterangan Penolakan : </b></p>
                             <textarea class="form-control" disabled><?php echo htmlspecialchars($item->ket_penolakan); ?></textarea>
                         @endif
                         <div class="collapse" id="collapseExample{{ $item->id }}">
-                            <div class="card card-body">
-                                <h5><b>Status Dikerjakan</b></h5>
-                                <table class="table table-striped display">
-                                    <thead>
-                                        <tr>
-                                            <th>TGL</th>
-                                            <th>KETERANGAN</th>
-                                            <th>
-                                                <center>LAMPIRAN</center>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $data = \App\Models\perbaikan_ipsrs_catatan::where('pengaduan_id', $item->id)->get();
-                                        @endphp
-                                        @if (count($data) > 0)
-                                            @foreach ($data as $item)
+                            <div class="card table-card">
+                                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                                    <h5 class="mb-0 card-title flex-grow-1"><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Tabel Status <a class="text-primary">Dikerjakan</a></h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped display">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $item->created_at }}</td>
-                                                    <td>{{ $item->keterangan }}</td>
-                                                    <td>
-                                                        <center>
-                                                            @if (!empty($item->title))
-                                                                <button class="btn btn-success"
-                                                                    onclick="window.location.href='{{ url('pengaduan/ipsrs/lampiran/catatan/' . $item->id) }}'"><i
-                                                                        class="fa-fw fas fa-download nav-icon"></i></button>
-                                                            @else
-                                                                <button class="btn btn-secondary disabled"><i
-                                                                        class="fa-fw fas fa-download nav-icon"></i></button>
-                                                            @endif
-                                                        </center>
-                                                    </td>
+                                                    <th>TGL</th>
+                                                    <th>KETERANGAN</th>
+                                                    <th>
+                                                        <center>LAMPIRAN</center>
+                                                    </th>
                                                 </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                            </thead>
+                                            <tbody style="font-size:13px">
+                                                @php
+                                                    $data = \App\Models\perbaikan_ipsrs_catatan::where('pengaduan_id', $item->id)->get();
+                                                @endphp
+                                                @if (count($data) > 0)
+                                                    @foreach ($data as $item)
+                                                        <tr>
+                                                            <td>{{ $item->created_at }}</td>
+                                                            <td>{{ $item->keterangan }}</td>
+                                                            <td>
+                                                                <center>
+                                                                    @if (!empty($item->title))
+                                                                        <button class="btn btn-success"
+                                                                            onclick="window.location.href='{{ url('pengaduan/ipsrs/lampiran/catatan/' . $item->id) }}'"><i
+                                                                                class="fa-fw fas fa-download nav-icon"></i></button>
+                                                                    @else
+                                                                        <button class="btn btn-secondary disabled"><i
+                                                                                class="fa-fw fas fa-download nav-icon"></i></button>
+                                                                    @endif
+                                                                </center>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -658,10 +645,9 @@
         </div>
     @endforeach
     {{-- MODAL END --}}
+
     <script>
         $(document).ready(function() {
-            $("html").addClass('layout-menu-collapsed');
-
             // AUTOCOMPLETE LOKASI
             var path = "{{ route('ipsrs.ac.lokasi') }}";
             $('.typeahead-bloodhound').typeahead({
@@ -674,12 +660,6 @@
                 }
             });
 
-            // $('.zoom').hover(function() {
-            //     $(this).addClass('transisi');
-            // }, function() {
-            //     $(this).removeClass('transisi');
-            // });
-
             var table = $('#dttable').DataTable({
                 order: [
                     [3, "desc"]
@@ -687,11 +667,7 @@
                 displayLength: 7,
                 lengthChange: true,
                 lengthMenu: [7, 10, 25, 50, 75, 100],
-                buttons: ['copy', 'excel', 'pdf', 'colvis']
             });
-
-            table.buttons().container()
-                .appendTo('#dttable_wrapper .col-md-6:eq(0)');
 
             // SELECT PICKER
             var t = $(".select2");
@@ -702,7 +678,6 @@
                     dropdownParent: e.parent()
                 })
             })
-
         });
 
         // FUNCTION

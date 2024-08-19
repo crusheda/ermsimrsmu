@@ -8,7 +8,7 @@
                 <div class="col-md-12">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Inventaris</li>
+                        <li class="breadcrumb-item">Administrasi</li>
                         <li class="breadcrumb-item">Berkas</li>
                         <li class="breadcrumb-item" aria-current="page">Surat Masuk</li>
                     </ul>
