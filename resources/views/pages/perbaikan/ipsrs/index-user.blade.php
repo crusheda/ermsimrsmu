@@ -141,58 +141,55 @@
                         <h5 class="mb-0 card-title flex-grow-1">Pengaduan Berjalan <span class="badge bg-secondary text-light">{{ count($list['recent']) }}</span></h5>
                     </div>
                     <div class="card-body">
-                        <div> {{-- style="max-height: 295px;" --}}
-                            <div class="row">
-                                @for ($i = 0; $i < count($list['recent']); $i++)
-                                    <div class="col-12 mb-3">
-                                        <div class="card shadow border mb-0">
-                                            <div class="card-body p-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        @if (!empty($list['recent'][$i]->filename_pengaduan))
-                                                            <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                                                data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
-                                                                <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:3.5rem">
-                                                            </a>
-                                                            {{-- <img src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}"
-                                                            class="avatar-md h-auto d-block rounded" alt="Image Request" style="width:6.5rem"/> <!-- height="62" width="62"  --> --}}
-                                                        @else
-                                                            <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:3.5rem">
+                        <div class="row">
+                            @for ($i = 0; $i < count($list['recent']); $i++)
+                                <div class="col-12 mb-3">
+                                    <div class="card shadow border mb-0">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    @if (!empty($list['recent'][$i]->filename_pengaduan))
+                                                        <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                            data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
+                                                            <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:3.5rem">
+                                                        </a>
+                                                        {{-- <img src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}"
+                                                        class="avatar-md h-auto d-block rounded" alt="Image Request" style="width:6.5rem"/> <!-- height="62" width="62"  --> --}}
+                                                    @else
+                                                        <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:3.5rem">
+                                                    @endif
+                                                    {{-- <img src="../assets/images/widget/img-acitivity-3.svg" alt="img" class="wid-30 rounded"> --}}
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-0">
+                                                        {{ $list['recent'][$i]->lokasi }}&nbsp;
+                                                        @if (!empty($list['recent'][$i]->tgl_selesai) && empty($list['recent'][$i]->ket_penolakan))
+                                                            <span class="badge" style="background-color: turquoise">Selesai</span>
+                                                        @elseif (!empty($list['recent'][$i]->ket_penolakan))
+                                                            <span class="badge" style="background-color: red">Ditolak</span>
+                                                        @elseif (empty($list['recent'][$i]->tgl_diterima))
+                                                            <span class="badge" style="background-color: rebeccapurple">Diverifikasi</span>
+                                                        @elseif (empty($list['recent'][$i]->tgl_dikerjakan))
+                                                            <span class="badge" style="background-color: salmon">Diterima</span>
+                                                        @elseif (empty($list['recent'][$i]->tgl_selesai))
+                                                            <span class="badge" style="background-color: orange">Dikerjakan</span>
                                                         @endif
-                                                        {{-- <img src="../assets/images/widget/img-acitivity-3.svg" alt="img" class="wid-30 rounded"> --}}
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-0">
-                                                            {{ $list['recent'][$i]->lokasi }}&nbsp;
-                                                            @if (!empty($list['recent'][$i]->tgl_selesai) && empty($list['recent'][$i]->ket_penolakan))
-                                                                <span class="badge" style="background-color: turquoise">Selesai</span>
-                                                            @elseif (!empty($list['recent'][$i]->ket_penolakan))
-                                                                <span class="badge" style="background-color: red">Ditolak</span>
-                                                            @elseif (empty($list['recent'][$i]->tgl_diterima))
-                                                                <span class="badge" style="background-color: rebeccapurple">Diverifikasi</span>
-                                                            @elseif (empty($list['recent'][$i]->tgl_dikerjakan))
-                                                                <span class="badge" style="background-color: salmon">Diterima</span>
-                                                            @elseif (empty($list['recent'][$i]->tgl_selesai))
-                                                                <span class="badge" style="background-color: orange">Dikerjakan</span>
-                                                            @endif
-                                                        </h6>
-                                                        <p class="mb-0">
-                                                            <small>{{ $list['recent'][$i]->ket_pengaduan }} <br>
-                                                            {{ \Carbon\Carbon::parse($list['recent'][$i]->tgl_pengaduan)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</small>
-                                                        </p>
-                                                    </div>
-                                                    <div class="flex-shrink-0">
-                                                        <button class="btn btn-primary btn-sm align-middle" data-bs-target="#track{{ $list['recent'][$i]->id }}" data-bs-toggle="modal">
-                                                            Lihat&nbsp;&nbsp;<span class="badge bg-light text-dark">ID : {{ $list['recent'][$i]->id }}</span>
-                                                        </button>
-                                                    </div>
+                                                    </h6>
+                                                    <p class="mb-0">
+                                                        <small>{{ $list['recent'][$i]->ket_pengaduan }} <br>
+                                                        {{ \Carbon\Carbon::parse($list['recent'][$i]->tgl_pengaduan)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</small>
+                                                    </p>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <button class="btn btn-primary btn-sm align-middle" data-bs-target="#track{{ $list['recent'][$i]->id }}" data-bs-toggle="modal">
+                                                        Lihat&nbsp;&nbsp;<span class="badge bg-light text-dark">ID : {{ $list['recent'][$i]->id }}</span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endfor
-                            </div>
-                            <!-- Tab panes -->
+                                </div>
+                            @endfor
                         </div>
                     </div>
                 </div>
@@ -202,23 +199,23 @@
                     <h5 class="mb-0 card-title flex-grow-1">Riwayat Pengaduan <a class="text-primary">IPSRS</a></h5>
                     <div class="flex-shrink-0">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="Tabel Disposisi Surat Masuk akan disegarkan" onclick="refresh()">
+                            <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Refresh Tabel Riwayat Pengaduan IPSRS" onclick="refresh()">
                                 <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            {{-- <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Tampilkan Semua Data" onclick="showAll()">
                                 <i class="fa-fw fas fa-infinity nav-icon"></i></button>
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Informasi Sistem Disposisi" disabled>
-                                <i class="fa-fw fas fa-info nav-icon me-1"></i><s>Informasi</s></button>
+                                <i class="fa-fw fas fa-info nav-icon me-1"></i><s>Informasi</s></button> --}}
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-secondary m-2">
                         <small>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat <br>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi <b>100 data</b> pengaduan <br>
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol <i class="fa-fw fas fa-infinity nav-icon text-danger"></i> di atas
                         </small>
                     </div>
                     <div class="table-responsive">
@@ -226,112 +223,28 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <center>ID</center>
+                                        <center>#ID</center>
                                     </th>
                                     <th>LOKASI</th>
                                     <th>STATUS</th>
                                     <th>TGL PENGADUAN</th>
-                                    <th>
-                                        <center>AKSI</center>
-                                    </th>
                                 </tr>
                             </thead>
-                            <tbody style="text-transform: capitalize;font-size: 13px">
-                                @if (count($list['show']) > 0)
-                                    @foreach ($list['show'] as $item)
-                                        <tr>
-                                            <td>
-                                                <center>
-                                                    <button type="button" class="btn btn-label-primary btn-sm"
-                                                        data-bs-toggle="modal" data-bs-target="#track{{ $item->id }}"><i
-                                                            class="fa-fw fas fa-search nav-icon"></i>
-                                                        {{ $item->id }}</button>
-                                                </center>
-                                            </td>
-                                            <td>{{ $item->lokasi }}</td>
-
-                                            @if (!empty($item->tgl_selesai) && empty($item->ket_penolakan))
-                                                <td><kbd style="background-color: turquoise">Selesai</kbd></td>
-                                            @elseif (!empty($item->ket_penolakan))
-                                                <td><kbd style="background-color: red">Ditolak</kbd></td>
-                                            @elseif (empty($item->tgl_diterima))
-                                                <td><kbd style="background-color: rebeccapurple">Diverifikasi</kbd></td>
-                                            @elseif (empty($item->tgl_dikerjakan))
-                                                <td><kbd style="background-color: salmon">Diterima</kbd></td>
-                                            @elseif (empty($item->tgl_selesai))
-                                                <td><kbd style="background-color: orange">Dikerjakan</kbd></td>
-                                            @endif
-
-                                            <td>{{ $item->tgl_pengaduan }}</td>
-                                            <td>
-                                                <center>
-                                                    <div class="btn-group">
-                                                        @if (empty($item->tgl_selesai))
-                                                            @if (!empty($item->tgl_diterima))
-                                                                <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                                    disabled><i class="fa-fw fas fa-edit nav-icon"></i></button>
-                                                                @if (empty($item->filename_pengaduan))
-                                                                    <button type="button"
-                                                                        class="btn btn-secondary btn-sm text-white" disabled><i
-                                                                            class="fa-fw fas fa-image nav-icon"></i></button>
-                                                                @else
-                                                                    <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
-                                                                        <i class="fa-fw fas fa-image nav-icon"></i>
-                                                                        <img class="img-fluid" alt="" src="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem" hidden>
-                                                                    </a>
-                                                                    {{-- <button type="button" class="btn btn-info btn-sm text-white"
-                                                                        onclick="showLampiran({{ $item->id }})"><i class="fa-fw fas fa-image nav-icon"></i></button> --}}
-                                                                @endif
-                                                                <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                                    disabled><i class="fa-fw fas fa-trash nav-icon"></i></button>
-                                                            @else
-                                                                <button type="button" class="btn btn-warning btn-sm text-white"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#ubah{{ $item->id }}"><i
-                                                                        class="fa-fw fas fa-edit nav-icon"></i></button>
-                                                                @if (empty($item->filename_pengaduan))
-                                                                    <button type="button"
-                                                                        class="btn btn-secondary btn-sm text-white" disabled><i
-                                                                            class="fa-fw fas fa-image nav-icon"></i></button>
-                                                                @else
-                                                                    <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
-                                                                        <i class="fa-fw fas fa-image nav-icon"></i>
-                                                                        <img class="img-fluid" alt="" src="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem" hidden>
-                                                                    </a>
-                                                                    {{-- <button type="button" class="btn btn-info btn-sm text-white"
-                                                                        onclick="showLampiran({{ $item->id }})"><i
-                                                                            class="fa-fw fas fa-image nav-icon"></i></button> --}}
-                                                                @endif
-                                                                <button type="button" class="btn btn-danger btn-sm text-white"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#hapus{{ $item->id }}"><i
-                                                                        class="fa-fw fas fa-trash nav-icon"></i></button>
-                                                            @endif
-                                                        @else
-                                                            <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                                disabled><i class="fa-fw fas fa-edit nav-icon"></i></button>
-                                                            @if (empty($item->filename_pengaduan))
-                                                                <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                                    disabled><i class="fa-fw fas fa-image nav-icon"></i></button>
-                                                            @else
-                                                                <a class="btn btn-sm btn-info image-popup-vertical-fit" href="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}">
-                                                                    <i class="fa-fw fas fa-image nav-icon"></i>
-                                                                    <img class="img-fluid" alt="" src="{{ url('storage/' . substr($item->filename_pengaduan, 7, 1000)) }}" style="width:6.5rem" hidden>
-                                                                </a>
-                                                                {{-- <button type="button" class="btn btn-info btn-sm text-white"
-                                                                    onclick="showLampiran({{ $item->id }})"><i
-                                                                        class="fa-fw fas fa-image nav-icon"></i></button> --}}
-                                                            @endif
-                                                            <button type="button" class="btn btn-secondary btn-sm text-white"
-                                                                disabled><i class="fa-fw fas fa-trash nav-icon"></i></button>
-                                                        @endif
-                                                    </div>
-                                                </center>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
+                            <tbody id="tampil-tbody">
+                                <tr>
+                                    <td colspan="5" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                                </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>
+                                        <center>#ID</center>
+                                    </th>
+                                    <th>LOKASI</th>
+                                    <th>STATUS</th>
+                                    <th>TGL PENGADUAN</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -340,46 +253,147 @@
     </div>
 
     {{-- MODAL START --}}
-    @foreach ($list['show'] as $item)
-        <div class="modal fade" id="ubah{{ $item->id }}" data-bs-backdrop="static" tabindex="-1"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Ubah Data <kbd>ID : {{ $item->id }}</kbd></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+    <div class="modal fade" id="modalUbah" data-bs-backdrop="static" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ubah Data <kbd>ID : <a id="show_id"></a></kbd></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_edit" hidden>
+                    <div class="alert alert-secondary">
+                        <small>
+                            Apabila laporan sudah berada pada status <kbd style="background-color: salmon">DITERIMA</kbd> oleh IPSRS,
+                            anda tidak dapat lagi mengubah ataupun menghapus laporan ini.
+                        </small>
                     </div>
-                    <div class="modal-body">
-                        {{ Form::model($item, ['route' => ['ipsrs.update', $item->id], 'method' => 'PUT', 'id' => 'formUbah']) }}
-                        @csrf
-                        <input type="text" name="id" value="{{ $item->id }}" hidden>
-                        <div class="form-group mb-3">
-                            <label for="defaultFormControlInput" class="form-label">Lokasi</label>
-                            <input type="text" name="lokasi" class="form-control typeahead-bloodhound"
-                                value="{{ $item->lokasi }}" placeholder="Masukkan Lokasi" autocomplete="off" required />
+                    <div class="form-group mb-3">
+                        <label for="defaultFormControlInput" class="form-label">Lokasi <a class="text-danger">*</a></label>
+                        <input type="text" id="lokasi_edit" class="form-control typeahead-bloodhound"
+                            placeholder="Masukkan Lokasi" autocomplete="off" required />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="defaultFormControlInput" class="form-label">Pengaduan <a class="text-danger">*</a></label>
+                        <div class="form-group">
+                            <textarea rows="3" class="autosize1 form-control" id="pengaduan_edit" placeholder="Deskripsi Pengaduan Anda" required></textarea>
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="defaultFormControlInput" class="form-label">Pengaduan</label>
-                            <div class="form-group">
-                                <textarea rows="3" class="autosize1 form-control" name="pengaduan" placeholder="Deskripsi Pengaduan Anda"
-                                    required><?php echo htmlspecialchars($item->ket_pengaduan); ?></textarea>
-                            </div>
-                        </div>
-                        <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Apabila laporan sudah berada pada status
-                            <kbd style="background-color: salmon">DITERIMA</kbd> oleh IPSRS, anda tidak dapat lagi mengubah
-                            ataupun menghapus laporan ini.</sub>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary pull-right" type="submit"><i
-                                class="fa-fw fas fa-save nav-icon"></i> Simpan</button>
-                        {!! Form::close() !!}
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                                class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary pull-right" onclick="prosesUbah()"><i
+                            class="fa-fw fas fa-save nav-icon"></i> Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                            class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Hapus Pengaduan&nbsp;&nbsp;&nbsp;
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_hapus" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus pengaduan <kbd>ID :<strong><a id="show_id_hapus"></a></strong></kbd> tersebut. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalTrack" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tracking <kbd>ID : <a id="show_id_track"></a></kbd></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="bg-white p-2 border rounded px-3">
+                                <div class="d-flex flex-row justify-content-between align-items-center order">
+                                    <div class="d-flex flex-column order-details">
+                                        <span><b>Pengaduan :</b><br><a id="track_pengaduan"></a></span>
+                                        <span class="date">Pada tgl <a id="track_tgl_pengaduan"></a></span>
+                                    </div>
+                                </div>
+                                <div id="track_dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped display">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>TGL</th>
+                                    <th>KETERANGAN</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-transform: capitalize" id="tampil-tbody-track">
+                                <tr>
+                                    <td colspan="5" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-secondary">
+                        <small><b># Klik tombol Status <kbd class="bg-primary text-light">DIKERJAKAN</kbd> untuk melihat detail Status Pengerjaan</b></small>
+                    </div>
+                    <div class="collapse" id="showDikerjakan">
+                        <div class="card table-card">
+                            <div class="card-header d-flex align-items-center justify-content-between py-3">
+                                <h5 class="mb-0 card-title flex-grow-1"><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Tabel Status <a class="text-primary">Dikerjakan</a></h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped display">
+                                        <thead>
+                                            <tr>
+                                                <th>TGL</th>
+                                                <th>KETERANGAN</th>
+                                                <th>
+                                                    <center>LAMPIRAN</center>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size:13px" id="tampil-tbody-catatan">
+                                            <tr>
+                                                <td colspan="5" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i
+                            class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    @foreach ($list['show'] as $item)
         <div class="modal fade" id="track{{ $item->id }}" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                 <div class="modal-content">
@@ -618,31 +632,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="modal fade" id="hapus{{ $item->id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Hapus Pengaduan&nbsp;<kbd>ID : {{ $item->id }}</kbd>&nbsp;</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p><b>Laporan : </b><br>{{ $item->ket_pengaduan }}</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i
-                                class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                        @if (count($list) > 0)
-                            <form action="{{ route('ipsrs.destroy', $item->id) }}" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp;&nbsp;Hapus</button>
-                            </form>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
     @endforeach
     {{-- MODAL END --}}
 
@@ -660,15 +649,6 @@
                 }
             });
 
-            var table = $('#dttable').DataTable({
-                order: [
-                    [3, "desc"]
-                ],
-                displayLength: 7,
-                lengthChange: true,
-                lengthMenu: [7, 10, 25, 50, 75, 100],
-            });
-
             // SELECT PICKER
             var t = $(".select2");
             t.length && t.each(function() {
@@ -678,9 +658,400 @@
                     dropdownParent: e.parent()
                 })
             })
+
+            // initialize
+            refresh();
         });
 
         // FUNCTION
+        function refresh() {
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="20" style="font-size: 13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/perbaikan/ipsrs/user/table/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    var date = new Date().toLocaleDateString('en-ZA');
+                    res.show.forEach(item => {
+                        var updet = new Date(item.updated_at).toLocaleDateString('en-ZA');
+                        var status = '';
+                        if (item.tgl_selesai != null && item.ket_penolakan == null) {
+                            status = '<td><center><kbd style="background-color: turquoise">Selesai</kbd></center></td>';
+                        } else {
+                            if (item.ket_penolakan != null) {
+                                status = '<td><center><kbd style="background-color: red">Ditolak</kbd></center></td>';
+                            } else {
+                                if (item.tgl_diterima == null) {
+                                    status = '<td><center><kbd style="background-color: rebeccapurple">Diverifikasi</kbd></center></td>';
+                                } else {
+                                    if (item.tgl_dikerjakan == null) {
+                                        status = '<td><center><kbd style="background-color: salmon">Diterima</kbd></center></td>';
+                                    } else {
+                                        if (item.tgl_selesai == null) {
+                                            status = '<td><center><kbd style="background-color: orange">Dikerjakan</kbd></center></td>';
+                                        } else {
+                                            status = '<td><center><kbd style="background-color: dark">Tidak Ditemukan</kbd></center></td>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        content = `<tr><td><center><div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <a href="javascript:;" class="btn btn-sm btn-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown">${item.id}</a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="javascript:;" onclick="track(${item.id})" class="dropdown-item text-primary"><i class='fas fa-search me-1'></i> Track</a>`;
+                        if (item.tgl_selesai == null) {
+                            if (item.tgl_diterima != null) {
+                                content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                if (item.filename_pengaduan != null) {
+                                    content += `<a href="javascript:;" onclick="showLampiran(${item.id})" class="dropdown-item text-info"><i class='fas fa-image me-1'></i> Lampiran</a>`;
+                                } else {
+                                    content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-image me-1'></i> Lampiran</a>`;
+                                }
+                                content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
+                            } else {
+                                content += `<a href="javascript:;" onclick="ubah(${item.id})" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                if (item.filename_pengaduan != null) {
+                                    content += `<a href="javascript:;" onclick="showLampiran(${item.id})" class="dropdown-item text-info"><i class='fas fa-image me-1'></i> Lampiran</a>`;
+                                } else {
+                                    content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-image me-1'></i> Lampiran</a>`;
+                                }
+                                content += `<a href="javascript:;" onclick="hapus(${item.id})" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
+                            }
+                        } else {
+                            content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                            if (item.filename_pengaduan != null) {
+                                content += `<a href="javascript:;" onclick="showLampiran(${item.id})" class="dropdown-item text-info"><i class='fas fa-image me-1'></i> Lampiran</a>`;
+                            } else {
+                                content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-image me-1'></i> Lampiran</a>`;
+                            }
+                            content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
+                        }
+                        content += `</div></div></div></center></td>`;
+                        // LANJUT CONTENT
+                        content += `<td>${item.lokasi}</td>`;
+                        content += status;
+                        content += `<td>`+new Date(item.tgl_pengaduan).toLocaleString("sv-SE")+`</td></tr>`;
+                        $('#tampil-tbody').append(content);
+                    })
+
+                    var table = $('#dttable').DataTable({
+                        // dom: 'Bfrtip',
+                        order: [
+                            [3, "desc"]
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '17%' },
+                        //     { sWidth: '13%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '10%' },
+                        // ],
+                        // columnDefs: [
+                        //     { visible: false, targets: [7] },
+                        // ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
+        function track(id) {
+            $('#show_id_track').text(id);
+            $.ajax(
+            {
+                url: "/api/perbaikan/ipsrs/user/track/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#track_pengaduan').text(res.show.ket_pengaduan);
+                    $('#track_tgl_pengaduan').text(new Date(res.show.tgl_pengaduan).toLocaleDateString('en-ZA'));
+                    var content = '';
+                    var content2 = '';
+                    var content3 = '';
+                    $('#track_dot').empty();
+                    if (item.tgl_selesai != null && item.ket_penolakan == null) { // Selesai
+                        content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                        <span class="dot"></span>
+                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                        <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span>
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-between align-items-center">
+                                        <div class="d-flex flex-column align-items-start">
+                                            <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <span>${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}</span><span>Diterima</span>
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <span>${new Date(item.tgl_dikerjakan).toLocaleDateString('en-ZA')}</span><span>Dikerjakan</span>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span>${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}</span><span>Selesai</span>
+                                        </div>
+                                    </div>`;
+                    } else {
+                        if (item.ket_penolakan != null) { // Ditolak
+                            content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                            <span class="dot-ditolak"></span>
+                                            <hr class="flex-fill track-line-ditolak"><span class="dot-ditolak"></span>
+                                            <hr class="flex-fill track-line-ditolak"><span class="dot-ditolak"></span>
+                                            <hr class="flex-fill track-line-ditolak"><span class="d-flex justify-content-center align-items-center big-dot-ditolak dot-ditolak"><i class="fa fa-times text-white"></i></span>
+                                        </div>
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <div class="d-flex flex-column align-items-start"></div>
+                                            <div class="d-flex flex-column justify-content-center"></div>
+                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <span>${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}</span><span>Ditolak</span>
+                                            </div>
+                                        </div>`;
+                        } else {
+                            if (item.tgl_diterima == null) { // Diverifikasi
+                                content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                                <span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span>
+                                                <hr class="flex-fill"><span class="dot"></span>
+                                                <hr class="flex-fill"><span class="dot"></span>
+                                                <hr class="flex-fill"><span class="dot"></span>
+                                            </div>
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                                <div class="d-flex flex-column align-items-start">
+                                                    <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <span>-</span><span>Diterima</span>
+                                                </div>
+                                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                                    <span>-</span><span>Dikerjakan</span>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span>-</span><span>Selesai</span>
+                                                </div>
+                                            </div>`;
+                            } else {
+                                if (item.tgl_dikerjakan == null) { // Diterima
+                                    content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                                    <span class="dot"></span>
+                                                    <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span>
+                                                    <hr class="flex-fill"><span class="dot"></span>
+                                                    <hr class="flex-fill"><span class="dot"></span>
+                                                </div>
+                                                <div class="d-flex flex-row justify-content-between align-items-center">
+                                                    <div class="d-flex flex-column align-items-start">
+                                                        <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <span>${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}</span><span>Diterima</span>
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                                        <span>-</span><span>Dikerjakan</span>
+                                                    </div>
+                                                    <div class="d-flex flex-column align-items-center">
+                                                        <span>-</span><span>Selesai</span>
+                                                    </div>
+                                                </div>`;
+                                } else {
+                                    if (item.tgl_selesai == null) { // Dikerjakan
+                                        content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                                        <span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="dot"></span>
+                                                        <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span>
+                                                        <hr class="flex-fill"><span class="dot"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-row justify-content-between align-items-center">
+                                                        <div class="d-flex flex-column align-items-start">
+                                                            <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <span>${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}</span><span>Diterima</span>
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                                            <span>${new Date(item.tgl_dikerjakan).toLocaleDateString('en-ZA')}</span><span>Dikerjakan</span>
+                                                        </div>
+                                                        <div class="d-flex flex-column align-items-center">
+                                                            <span>-</span><span>Selesai</span>
+                                                        </div>
+                                                    </div>`;
+                                    } else {
+                                        alert('Tracking Tidak Ditemukan!!');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $('#track_dot').append(content);
+                    $('#tampil-tbody-track').empty();
+                    if (item.ket_penolakan == null) {
+                        content2 = `<tr>
+                                        <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS DITERIMA</th>
+                                        <td>
+                                            ${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}
+                                        </td>
+                                        <td>${item->ket_diterima}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#showDikerjakan">
+                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i> <b>STATUS PENGERJAAN</b>
+                                            </button>
+                                        </th>
+                                        <td>
+                                            ${new Date(item.tgl_dikerjakan).toLocaleDateString('en-ZA')}
+                                        </td>
+                                        <td>${item->ket_dikerjakan}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS SELESAI</th>
+                                        <td>
+                                            ${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}
+                                        </td>
+                                        <td>${item->ket_selesai}</td>
+                                    </tr>`;
+                    } else {
+                        content2 = `<tr>
+                                        <th class="text-danger"><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS DITOLAK</th>
+                                        <td>
+                                            ${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}
+                                        </td>
+                                        <td>${item->ket_penolakan}</td>
+                                    </tr>`;
+                    }
+                    $('#tampil-tbody-track').append(content2);
+                    $('#tampil-tbody-catatan').empty();
+                    if (res.catatan != null && res.catatan != '') {
+                        res.catatan.forEach(val => {
+                            content3 = `<tr>
+                                            <td>${val.created_at}</td>
+                                            <td>${val.keterangan}</td>
+                                            <td>
+                                                <center>
+                                                        <button class="btn btn-success btn-sm" onclick="${val.title?"window.location.href='{{ url('pengaduan/ipsrs/lampiran/catatan/'"+val.id+") }}":''}" ${val.title?'':'disabled'}>
+                                                            <i class="fa-fw fas fa-download nav-icon"></i>
+                                                        </button>
+                                                </center>
+                                            </td>
+                                        </tr>`;
+                        });
+                    }
+                    $('#tampil-tbody-catatan').append(content3);
+                }
+            })
+            $('#modalTrack').modal('show');
+        }
+
+        function ubah(id) {
+            $('#show_id').text(id);
+            $('#id_edit').val(id);
+            $.ajax(
+            {
+                url: "/api/perbaikan/ipsrs/user/ubah/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#lokasi_edit').val(res.show.lokasi);
+                    $('#pengaduan_edit').val(res.show.ket_pengaduan);
+                }
+            })
+            $('#modalUbah').modal('show');
+        }
+
+        function prosesUbah() {
+            var fd = new FormData();
+            fd.append('id',$("#id_edit").val());
+            fd.append('lokasi',$("#lokasi_edit").val());
+            fd.append('pengaduan',$("#pengaduan_edit").val());
+            fd.append('user','{{ Auth::user()->id }}');
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: "{{ route('ipsrs.user.prosesUbah') }}",
+                data: fd,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: 'Ubah Pengaduan berhasil pada '+ res,
+                        position: 'topRight'
+                    });
+                    if (res) {
+                        $('#modalUbah').modal('hide');
+                        refresh();
+                    }
+                },
+                error: function (res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON.error,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        function hapus(id) {
+            $('#show_id_hapus').text(id);
+            $("#id_hapus").val(id);
+            $('#modalHapus').modal('show');
+        }
+
+        function prosesHapus() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan Pengaduan',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus").val();
+                $.ajax({
+                    url: "/api/perbaikan/ipsrs/user/hapus/"+id,
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Pengaduan telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalHapus').modal('hide');
+                        refresh();
+                        // window.location.reload();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Aset gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
         function showLampiran(id) {
             Swal.fire({
                 // title: 'Lampiran ID : '+id,
@@ -704,19 +1075,6 @@
             })
         }
 
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    $('#blah_a').attr('href', e.target.result);
-                    $('#blah').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
         function simpan() {
             $("#formTambah").one('submit', function() {
                 //stop submitting the form to see the disabled button effect
@@ -738,6 +1096,19 @@
                 message: 'Form Tambah berhasil dibersihkan',
                 position: 'topRight'
             });
+        }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#blah_a').attr('href', e.target.result);
+                    $('#blah').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         $("#imgInp").change(function() {

@@ -74,6 +74,32 @@ class ipsrsController extends Controller
         }
     }
 
+    function tableUser($id)
+    {
+        $show = perbaikan_ipsrs::where('user_id', $id)->get();
+        $catatan = perbaikan_ipsrs_catatan::get();
+
+        $data = [
+            'show' => $show,
+            'catatan' => $catatan,
+        ];
+
+        return response()->json($data);
+    }
+
+    function track($id)
+    {
+        $show = perbaikan_ipsrs::where('id', $id)->first();
+        $catatan = perbaikan_ipsrs_catatan::where('pengaduan_id',$id)->get();
+
+        $data = [
+            'show' => $show,
+            'catatan' => $catatan,
+        ];
+
+        return response()->json($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -229,6 +255,45 @@ class ipsrsController extends Controller
                 return Redirect::back()->withErrors('Tanggal Hapus Laporan Tidak Valid. Pastikan anda menghapus laporan di hari yang sama');
             }
         }
+    }
+
+    // USER
+    function getUbah($id)
+    {
+        $show = perbaikan_ipsrs::where('id', $id)->first();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data);
+    }
+
+    function prosesUbah(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = perbaikan_ipsrs::find($request->id);
+        $data->lokasi = $request->lokasi;
+        $data->ket_pengaduan = $request->pengaduan;
+        $data->user_id = $request->user;
+        $data->save();
+
+        return response()->json($tgl);
+    }
+
+    function prosesHapus($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $hapusData = perbaikan_ipsrs::find($id);
+        if ($hapusData->filename != null && $hapusData->filename != '') {
+            Storage::delete($hapusData->filename);
+        }
+        $hapusData->delete();
+
+        return response()->json($tgl, 200);
     }
 
     public function detail($id)
@@ -392,159 +457,6 @@ class ipsrsController extends Controller
 
         return Redirect::back()->with('message','Ubah Catatan Pengerjaan Laporan Berhasil');
     }
-
-    // public function terima(Request $request)
-    // {
-    //     $now = Carbon::now();
-    //     $user = Auth::user();
-    //     $user_id = $user->id;
-
-    //     $data = perbaikan_ipsrs::find($request->id);
-    //     $data->verifikator_id = $user_id;
-    //     $data->tgl_diterima = $now;
-    //     $data->ket_diterima = $request->ket;
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Laporan Pengaduan Berhasil Diverifikasi');
-    // }
-
-    // public function ubahTerima(Request $request)
-    // {
-    //     $now = Carbon::now();
-
-    //     $data = perbaikan_ipsrs::find($request->id);
-    //     $data->ket_diterima = $request->ket;
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Laporan Verifikasi Pengaduan Berhasil Diubah');
-    // }
-
-    // public function tolak(Request $request)
-    // {
-    //     // print_r($request->id);
-    //     // die();
-    //     $now = Carbon::now();
-
-    //     $data = perbaikan_ipsrs::find($request->id);
-    //     $data->tgl_selesai = $now;
-    //     $data->ket_penolakan = $request->ket;
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Laporan Pengaduan Berhasil Ditolak');
-    // }
-
-    // public function kerjakan(Request $request)
-    // {
-    //     $now = Carbon::now();
-
-    //     $data = perbaikan_ipsrs::find($request->id);
-    //     $data->tgl_dikerjakan = $now;
-    //     $data->ket_dikerjakan = $request->ket;
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Ubah Status Laporan Pengaduan Menjadi Dikerjakan Berhasil');
-    // }
-
-    // public function ubahKerjakan(Request $request)
-    // {
-    //     $now = Carbon::now();
-
-    //     $data = perbaikan_ipsrs::find($request->id);
-    //     $data->ket_dikerjakan = $request->ket;
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Keterangan Pengerjaan Laporan Pengaduan Berhasil Diubah');
-    // }
-
-    // public function tambahketerangan(Request $request)
-    // {
-    //     // tampung berkas yang sudah diunggah ke variabel baru
-    //     // 'file' merupakan nama input yang ada pada form
-    //     $request->validate([
-    //         'catatan' => ['image','mimes:jpg,png,jpeg,gif'],
-    //     ]);
-
-    //     $uploadedFile = $request->file('catatan');
-
-    //     // simpan berkas yang diunggah ke sub-direktori 'public/files'
-    //     // direktori 'files' otomatis akan dibuat jika belum ada
-    //     if ($uploadedFile == '') {
-    //         $path = '';
-    //         $title = '';
-    //     }else {
-    //         $path = $uploadedFile->store('public/files/ipsrs/pengaduan/catatan');
-    //         $title = $request->title ?? $uploadedFile->getClientOriginalName();
-    //     }
-
-    //     $data = new perbaikan_ipsrs_catatan;
-    //     $data->pengaduan_id = $request->id;
-    //     $data->keterangan = $request->ket;
-    //     $data->title = $title;
-    //     $data->filename = $path;
-    //     // print_r($uploadedFile);
-    //     // die();
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Tambah Keterangan Pengerjaan Laporan Berhasil');
-    // }
-
-    // public function ubahketerangan(Request $request)
-    // {
-    //     // tampung berkas yang sudah diunggah ke variabel baru
-    //     // 'file' merupakan nama input yang ada pada form
-    //     $uploadedFile = $request->file('catatan');
-
-    //     // simpan berkas yang diunggah ke sub-direktori 'public/files'
-    //     // direktori 'files' otomatis akan dibuat jika belum ada
-    //     $data = perbaikan_ipsrs_catatan::find($request->id);
-
-    //     if ($uploadedFile != '') {
-    //         $path = $uploadedFile->store('public/files/ipsrs/pengaduan/catatan');
-    //         $title = $request->title ?? $uploadedFile->getClientOriginalName();
-    //         $data->title = $title;
-    //         $data->filename = $path;
-    //     }
-
-    //     $data->keterangan = $request->ket;
-    //     // print_r($data);
-    //     // die();
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Ubah Keterangan Pengerjaan Laporan Berhasil');
-    // }
-
-    // public function selesai(Request $request)
-    // {
-    //     $now = Carbon::now();
-
-    //     // print_r($request->id);
-    //     // die();
-    //     $data = perbaikan_ipsrs::find($request->id);
-    //     $data->tgl_selesai = $now;
-    //     $data->ket_selesai = 'Laporan Pengaduan Selesai';
-    //     $data->save();
-
-    //     return Redirect::back()->with('message','Laporan Berhasil Diselesaikan');
-    // }
-
-    // public function history()
-    // {
-    //     $user = Auth::user();
-    //     $name = $user->name;
-    //     $role = $user->roles->first()->name; //kabag-keperawatan
-
-    //     if (Auth::user()->hasRole('ipsrs')) {
-    //         $showrecent = perbaikan_ipsrs::whereNotNull('tgl_selesai')->get();
-    //     }else {
-    //         $showrecent = '';
-    //     }
-
-    //     $data = [
-    //         'showrecent' => $showrecent
-    //     ];
-
-    //     return view('pages.new.laporan.ipsrs.history-pengaduan')->with('list', $data);
-    // }
 
     public function autocompleteLokasi(Request $request)
     {
