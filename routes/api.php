@@ -132,19 +132,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // PENGADUAN
         // IPSRS
             // USER
+                Route::get('perbaikan/ipsrs/lokasi', '\App\Http\Controllers\Perbaikan\ipsrsController@autocompleteLokasi')->name('ipsrs.ac.lokasi');
                 Route::get('perbaikan/ipsrs/user/table/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@tableUser')->name('ipsrs.user.table');
                 Route::get('perbaikan/ipsrs/user/track/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@track')->name('ipsrs.user.track');
                 Route::get('perbaikan/ipsrs/user/ubah/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@getUbah')->name('ipsrs.user.ubah');
                 Route::post('perbaikan/ipsrs/user/ubah', '\App\Http\Controllers\Perbaikan\ipsrsController@prosesUbah')->name('ipsrs.user.prosesUbah');
                 Route::delete('perbaikan/ipsrs/user/hapus/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@prosesHapus')->name('ipsrs.user.prosesHapus');
             // ADMIN
-                Route::get('perbaikan/ipsrs/lokasi', '\App\Http\Controllers\Perbaikan\ipsrsController@autocompleteLokasi')->name('ipsrs.ac.lokasi');
-                Route::post('perbaikan/ipsrs/verif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@verif')->name('ipsrs.verif');
-                Route::post('perbaikan/ipsrs/unverif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@unverif')->name('ipsrs.unverif');
-                Route::post('perbaikan/ipsrs/process/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@process')->name('ipsrs.process');
-                Route::post('perbaikan/ipsrs/finish/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@finish')->name('ipsrs.finish');
-                Route::get('perbaikan/ipsrs/result/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@result')->name('ipsrs.result');
+                Route::get('perbaikan/ipsrs/admin/table', '\App\Http\Controllers\Perbaikan\ipsrsController@tableAdmin')->name('ipsrs.admin.table');
+                Route::get('perbaikan/ipsrs/admin/lampiran/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@lampiranAdmin')->name('ipsrs.admin.lampiran');
                 Route::post('perbaikan/ipsrs/filter', '\App\Http\Controllers\Perbaikan\ipsrsController@filter')->name('ipsrs.filter');
+                // DETAIL
+                    Route::post('perbaikan/ipsrs/verif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@verif')->name('ipsrs.verif');
+                    Route::post('perbaikan/ipsrs/unverif/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@unverif')->name('ipsrs.unverif');
+                    Route::post('perbaikan/ipsrs/process/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@process')->name('ipsrs.process');
+                    Route::post('perbaikan/ipsrs/finish/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@finish')->name('ipsrs.finish');
+                    Route::get('perbaikan/ipsrs/result/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@result')->name('ipsrs.result');
 
     // E-RUANG
         Route::get('eruang', 'App\Http\Controllers\ERuang\ERuangController@table')->name('eruang.table');

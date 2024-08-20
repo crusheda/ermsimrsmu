@@ -30076,7 +30076,7 @@ select[data-multiselectsplitter-secondselect-selector].datatable-input {
 }
 
 .typeahead {
-    position: relative
+    /* position: relative */
 }
 
 .typeahead>ul {

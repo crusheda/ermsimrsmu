@@ -32,8 +32,8 @@ class ipsrsController extends Controller
 
         // if (Auth::user()->getManyRole(['ipsrs','it','sekretaris-direktur'])) {
         if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true) {
-            $show = perbaikan_ipsrs::where('tgl_selesai', null)->orderBy('tgl_pengaduan','DESC')->get();
-            $fotouser = users_foto::where('id',$user_id)->first();
+            // $show = perbaikan_ipsrs::where('tgl_selesai', null)->orderBy('tgl_pengaduan','DESC')->get();
+            // $fotouser = users_foto::where('id',$user_id)->first();
             $total = perbaikan_ipsrs::count();
             $totalMasukPengaduan = perbaikan_ipsrs::whereNotNull('tgl_pengaduan')->where('tgl_diterima', null)->where('tgl_dikerjakan', null)->where('tgl_selesai', null)->where('ket_penolakan', null)->count();
             $totalDiverifikasi = perbaikan_ipsrs::whereNotNull('tgl_diterima')->where('tgl_dikerjakan', null)->where('tgl_selesai', null)->where('ket_penolakan', null)->count();
@@ -42,8 +42,8 @@ class ipsrsController extends Controller
             $totalDitolak = perbaikan_ipsrs::whereNotNull('ket_penolakan')->count();
 
             $data = [
-                'show' => $show,
-                'fotouser' => $fotouser,
+                // 'show' => $show,
+                // 'fotouser' => $fotouser,
                 'total' => $total,
                 'totalmasukpengaduan' => $totalMasukPengaduan,
                 'totaldiverifikasi' => $totalDiverifikasi,
@@ -54,16 +54,14 @@ class ipsrsController extends Controller
 
             return view('pages.perbaikan.ipsrs.index-admin')->with('list', $data);
         }else {
-            $show = perbaikan_ipsrs::where('user_id', $user_id)->get();
-            $recent = perbaikan_ipsrs::where('user_id', $user_id)->where('tgl_selesai', null)->orderBy('tgl_pengaduan','DESC')->get();
+            // $show = perbaikan_ipsrs::where('user_id', $user_id)->get();
+            $recent = perbaikan_ipsrs::where('user_id', $user_id)->where('tgl_selesai', null)->orderBy('tgl_pengaduan','DESC')->limit(10)->get();
             $total = perbaikan_ipsrs::where('user_id', $user_id)->count();
             $totalSelesai = perbaikan_ipsrs::where('user_id', $user_id)->where('tgl_selesai', '!=', null)->where('ket_penolakan', null)->count();
             $totalDitolak = perbaikan_ipsrs::where('user_id', $user_id)->where('ket_penolakan', '!=', null)->count();
-            $tambahketerangan = perbaikan_ipsrs_catatan::get();
+            // $tambahketerangan = perbaikan_ipsrs_catatan::get();
 
             $data = [
-                'show' => $show,
-                'tambahketerangan' => $tambahketerangan,
                 'recent' => $recent,
                 'total' => $total,
                 'totalselesai' => $totalSelesai,
@@ -85,6 +83,25 @@ class ipsrsController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    function tableAdmin()
+    {
+        $show = perbaikan_ipsrs::get();
+        $catatan = perbaikan_ipsrs_catatan::get();
+
+        $data = [
+            'show' => $show,
+            'catatan' => $catatan,
+        ];
+
+        return response()->json($data);
+    }
+
+    function lampiranAdmin($id)
+    {
+        $show = perbaikan_ipsrs::where('id',$id)->first();
+        return response()->json($show);
     }
 
     function track($id)

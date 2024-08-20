@@ -74,7 +74,7 @@
                             <h3 class="mb-1">{{ $list['totalditolak'] }}</h3>
                             <p class="text-muted mb-0">Total Ditolak</p>
                         </div>
-                        <div class="col-4 text-end"><i class="ti ti-file-text text-danger f-36"></i></div>
+                        <div class="col-4 text-end"><i class="ti ti-file-shredder text-danger f-36"></i></div>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                         <div class="form-group mb-3">
                             <label for="defaultFormControlInput" class="form-label">Lokasi <a class="text-danger">*</a></label>
                             <input type="text" name="lokasi" id="clr_lokasi"
-                                class="form-control typeahead-bloodhound" placeholder="Teks Otomatis" autocomplete="off"
+                                class="form-control typeahead" placeholder="Teks Otomatis"
                                 required />
                         </div>
                         <div class="form-group mb-3">
@@ -140,56 +140,57 @@
                     <div class="card-header d-flex align-items-center justify-content-between py-3">
                         <h5 class="mb-0 card-title flex-grow-1">Pengaduan Berjalan <span class="badge bg-secondary text-light">{{ count($list['recent']) }}</span></h5>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @for ($i = 0; $i < count($list['recent']); $i++)
-                                <div class="col-12 mb-3">
-                                    <div class="card shadow border mb-0">
-                                        <div class="card-body p-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    @if (!empty($list['recent'][$i]->filename_pengaduan))
-                                                        <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                                            data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
-                                                            <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:3.5rem">
-                                                        </a>
-                                                        {{-- <img src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}"
-                                                        class="avatar-md h-auto d-block rounded" alt="Image Request" style="width:6.5rem"/> <!-- height="62" width="62"  --> --}}
-                                                    @else
-                                                        <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:3.5rem">
-                                                    @endif
-                                                    {{-- <img src="../assets/images/widget/img-acitivity-3.svg" alt="img" class="wid-30 rounded"> --}}
-                                                </div>
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h6 class="mb-0">
-                                                        {{ $list['recent'][$i]->lokasi }}&nbsp;
-                                                        @if (!empty($list['recent'][$i]->tgl_selesai) && empty($list['recent'][$i]->ket_penolakan))
-                                                            <span class="badge" style="background-color: turquoise">Selesai</span>
-                                                        @elseif (!empty($list['recent'][$i]->ket_penolakan))
-                                                            <span class="badge" style="background-color: red">Ditolak</span>
-                                                        @elseif (empty($list['recent'][$i]->tgl_diterima))
-                                                            <span class="badge" style="background-color: rebeccapurple">Diverifikasi</span>
-                                                        @elseif (empty($list['recent'][$i]->tgl_dikerjakan))
-                                                            <span class="badge" style="background-color: salmon">Diterima</span>
-                                                        @elseif (empty($list['recent'][$i]->tgl_selesai))
-                                                            <span class="badge" style="background-color: orange">Dikerjakan</span>
+                    <div class="card-body"> {{-- data-simplebar style="max-height: 295px;" --}}
+                        <div class="row" style="margin-bottom:-15px">
+                            @if (empty($list['recent']))
+                                <h6 class="text-center">Tidak ada</h6>
+                            @else
+                                @for ($i = 0; $i < count($list['recent']); $i++)
+                                    <div class="col-12 mb-3">
+                                        <div class="card shadow border mb-0">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0">
+                                                        @if (!empty($list['recent'][$i]->filename_pengaduan))
+                                                            <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
+                                                                <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:3.5rem">
+                                                            </a>
+                                                        @else
+                                                            <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:3.5rem">
                                                         @endif
-                                                    </h6>
-                                                    <p class="mb-0">
-                                                        <small>{{ $list['recent'][$i]->ket_pengaduan }} <br>
-                                                        {{ \Carbon\Carbon::parse($list['recent'][$i]->tgl_pengaduan)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</small>
-                                                    </p>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <button class="btn btn-primary btn-sm align-middle" data-bs-target="#track{{ $list['recent'][$i]->id }}" data-bs-toggle="modal">
-                                                        Lihat&nbsp;&nbsp;<span class="badge bg-light text-dark">ID : {{ $list['recent'][$i]->id }}</span>
-                                                    </button>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h6 class="mb-0">
+                                                            {{ $list['recent'][$i]->lokasi }}&nbsp;
+                                                            @if (!empty($list['recent'][$i]->tgl_selesai) && empty($list['recent'][$i]->ket_penolakan))
+                                                                <span class="badge" style="background-color: turquoise">Selesai</span>
+                                                            @elseif (!empty($list['recent'][$i]->ket_penolakan))
+                                                                <span class="badge" style="background-color: red">Ditolak</span>
+                                                            @elseif (empty($list['recent'][$i]->tgl_diterima))
+                                                                <span class="badge" style="background-color: rebeccapurple">Diverifikasi</span>
+                                                            @elseif (empty($list['recent'][$i]->tgl_dikerjakan))
+                                                                <span class="badge" style="background-color: salmon">Diterima</span>
+                                                            @elseif (empty($list['recent'][$i]->tgl_selesai))
+                                                                <span class="badge" style="background-color: orange">Dikerjakan</span>
+                                                            @endif
+                                                        </h6>
+                                                        <p class="mb-0">
+                                                            <small>{{ $list['recent'][$i]->ket_pengaduan }} <br>
+                                                            {{ \Carbon\Carbon::parse($list['recent'][$i]->tgl_pengaduan)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</small>
+                                                        </p>
+                                                    </div>
+                                                    <div class="flex-shrink-0">
+                                                        <button class="btn btn-primary btn-sm align-middle" onclick="track({{ $list['recent'][$i]->id }})">
+                                                            Lihat&nbsp;&nbsp;<span class="badge bg-light text-dark align-middle">ID : {{ $list['recent'][$i]->id }}</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endfor
+                                @endfor
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -201,11 +202,11 @@
                         <div class="btn-group">
                             <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Refresh Tabel Riwayat Pengaduan IPSRS" onclick="refresh()">
-                                <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                            {{-- <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                <i class="fa-fw fas fa-sync nav-icon me-1"></i> Refresh</button>
+                            <button type="button" class="btn btn-link-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Tampilkan Semua Data" onclick="showAll()">
-                                <i class="fa-fw fas fa-infinity nav-icon"></i></button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                <i class="fa-fw fas fa-infinity nav-icon me-1"></i> All</button>
+                            {{-- <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Informasi Sistem Disposisi" disabled>
                                 <i class="fa-fw fas fa-info nav-icon me-1"></i><s>Informasi</s></button> --}}
                         </div>
@@ -222,11 +223,9 @@
                         <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <center>#ID</center>
-                                    </th>
+                                    <th>#ID</th>
                                     <th>LOKASI</th>
-                                    <th>STATUS</th>
+                                    <th><center>STATUS</center></th>
                                     <th>TGL PENGADUAN</th>
                                 </tr>
                             </thead>
@@ -237,11 +236,9 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>
-                                        <center>#ID</center>
-                                    </th>
+                                    <th>#ID</th>
                                     <th>LOKASI</th>
-                                    <th>STATUS</th>
+                                    <th><center>STATUS</center></th>
                                     <th>TGL PENGADUAN</th>
                                 </tr>
                             </tfoot>
@@ -271,7 +268,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="defaultFormControlInput" class="form-label">Lokasi <a class="text-danger">*</a></label>
-                        <input type="text" id="lokasi_edit" class="form-control typeahead-bloodhound"
+                        <input type="text" id="lokasi_edit" class="form-control typeahead"
                             placeholder="Masukkan Lokasi" autocomplete="off" required />
                     </div>
                     <div class="form-group mb-3">
@@ -297,10 +294,11 @@
                     <h4 class="modal-title">
                         Hapus Pengaduan&nbsp;&nbsp;&nbsp;
                     </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus pengaduan <kbd>ID :<strong><a id="show_id_hapus"></a></strong></kbd> tersebut. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <p style="text-align: justify;">Anda akan menghapus pengaduan <kbd>ID:<strong><a id="show_id_hapus"></a></strong></kbd> tersebut. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
                         <span class="switch-toggle-slider">
@@ -328,10 +326,15 @@
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="bg-white p-2 border rounded px-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center order">
-                                    <div class="d-flex flex-column order-details">
-                                        <span><b>Pengaduan :</b><br><a id="track_pengaduan"></a></span>
-                                        <span class="date">Pada tgl <a id="track_tgl_pengaduan"></a></span>
+                                <div class="justify-content-between align-items-center">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <i class="ti ti-corner-up-right text-primary me-1"></i> <b>Pengaduan oleh <a id="track_oleh" class="text-primary"></a></b><br>
+                                            <i class="ti ti-corner-down-right text-primary me-1"></i> <a id="track_pengaduan"></a>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="float-end">Pada tgl. <b><a id="track_tgl_pengaduan" class="text-warning"></a></b></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="track_dot"></div>
@@ -362,7 +365,7 @@
                             <div class="card-header d-flex align-items-center justify-content-between py-3">
                                 <h5 class="mb-0 card-title flex-grow-1"><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Tabel Status <a class="text-primary">Dikerjakan</a></h5>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body p-b-0">
                                 <div class="table-responsive">
                                     <table class="table table-striped display">
                                         <thead>
@@ -392,254 +395,14 @@
             </div>
         </div>
     </div>
-
-    @foreach ($list['show'] as $item)
-        <div class="modal fade" id="track{{ $item->id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tracking <kbd>ID : {{ $item->id }}</kbd></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="bg-white p-2 border rounded px-3">
-                                    <div class="d-flex flex-row justify-content-between align-items-center order">
-                                        <div class="d-flex flex-column order-details"><span><b>Pengaduan :</b>
-                                                <br>{{ $item->ket_pengaduan }}</span><span class="date">Pada tgl
-                                                {{ \Carbon\Carbon::parse($item->tgl_pengaduan)->isoFormat('DD MMM, YYYY HH:mm A') }}</span>
-                                        </div>
-                                    </div>
-                                    {{-- Selesai --}}
-                                    @if (!empty($item->tgl_selesai) && empty($item->ket_penolakan))
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                                            <span class="dot"></span>
-                                            <hr class="flex-fill track-line"><span class="dot"></span>
-                                            <hr class="flex-fill track-line"><span class="dot"></span>
-                                            <hr class="flex-fill track-line"><span
-                                                class="d-flex justify-content-center align-items-center big-dot dot"><i
-                                                    class="fa fa-check text-white"></i></span>
-                                        </div>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-column align-items-start">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_pengaduan)->isoFormat('DD MMM') }}</span><span>Pengaduan</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_diterima)->isoFormat('DD MMM') }}</span><span>Diterima</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_dikerjakan)->isoFormat('DD MMM') }}</span><span>Dikerjakan</span>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_selesai)->isoFormat('DD MMM') }}</span><span>Selesai</span>
-                                            </div>
-                                        </div>
-                                        {{-- Ditolak --}}
-                                    @elseif (!empty($item->ket_penolakan))
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                                            <span class="dot-ditolak"></span>
-                                            <hr class="flex-fill track-line-ditolak"><span class="dot-ditolak"></span>
-                                            <hr class="flex-fill track-line-ditolak"><span class="dot-ditolak"></span>
-                                            <hr class="flex-fill track-line-ditolak"><span
-                                                class="d-flex justify-content-center align-items-center big-dot-ditolak dot-ditolak"><i
-                                                    class="fa fa-times text-white"></i></span>
-                                        </div>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-column align-items-start"></div>
-                                            <div class="d-flex flex-column justify-content-center"></div>
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_selesai)->isoFormat('DD MMM') }}</span><span>Ditolak</span>
-                                            </div>
-                                        </div>
-                                        {{-- Diverifikasi --}}
-                                    @elseif (empty($item->tgl_diterima))
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                                            <span class="d-flex justify-content-center align-items-center big-dot dot"><i
-                                                    class="fa fa-check text-white"></i></span>
-                                            <hr class="flex-fill"><span class="dot"></span>
-                                            <hr class="flex-fill"><span class="dot"></span>
-                                            <hr class="flex-fill"><span class="dot"></span>
-                                        </div>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-column align-items-start">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_pengaduan)->isoFormat('DD MMM') }}</span><span>Pengaduan</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <span>-</span><span>Diterima</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <span>-</span><span>Dikerjakan</span>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center">
-                                                <span>-</span><span>Selesai</span>
-                                            </div>
-                                        </div>
-                                        {{-- Diterima --}}
-                                    @elseif (empty($item->tgl_dikerjakan))
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                                            <span class="dot"></span>
-                                            <hr class="flex-fill track-line"><span
-                                                class="d-flex justify-content-center align-items-center big-dot dot"><i
-                                                    class="fa fa-check text-white"></i></span>
-                                            <hr class="flex-fill"><span class="dot"></span>
-                                            <hr class="flex-fill"><span class="dot"></span>
-                                        </div>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-column align-items-start">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_pengaduan)->isoFormat('DD MMM') }}</span><span>Pengaduan</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_diterima)->isoFormat('DD MMM') }}</span><span>Diterima</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <span>-</span><span>Dikerjakan</span>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center">
-                                                <span>-</span><span>Selesai</span>
-                                            </div>
-                                        </div>
-                                        {{-- Dikerjakan --}}
-                                    @elseif (empty($item->tgl_selesai))
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                                            <span class="dot"></span>
-                                            <hr class="flex-fill track-line"><span class="dot"></span>
-                                            <hr class="flex-fill track-line"><span
-                                                class="d-flex justify-content-center align-items-center big-dot dot"><i
-                                                    class="fa fa-check text-white"></i></span>
-                                            <hr class="flex-fill"><span class="dot"></span>
-                                        </div>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-column align-items-start">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_pengaduan)->isoFormat('DD MMM') }}</span><span>Pengaduan</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_diterima)->isoFormat('DD MMM') }}</span><span>Diterima</span>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <span>{{ \Carbon\Carbon::parse($item->tgl_dikerjakan)->isoFormat('DD MMM') }}</span><span>Dikerjakan</span>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-center">
-                                                <span>-</span><span>Selesai</span>
-                                            </div>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div><br>
-                        @if ($item->ket_penolakan == null)
-                            <table class="table table-striped display">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>TGL</th>
-                                        <th>KETERANGAN</th>
-                                    </tr>
-                                </thead>
-                                <tbody style="text-transform: capitalize;font-size:13px">
-                                    <tr>
-                                        <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS DITERIMA</th>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($item->tgl_diterima)->isoFormat('DD MMM Y, HH:mm a') }}
-                                        </td>
-                                        <td>{{ $item->ket_diterima }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample{{ $item->id }}">
-                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i> <b>STATUS PENGERJAAN</b>
-                                            </button>
-                                        </th>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($item->tgl_dikerjakan)->isoFormat('DD MMM Y, HH:mm a') }}
-                                        </td>
-                                        <td>{{ $item->ket_dikerjakan }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS SELESAI</th>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($item->tgl_selesai)->isoFormat('DD MMM Y, HH:mm a') }}
-                                        </td>
-                                        <td>{{ $item->ket_selesai }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <p><b># Klik tombol Status <kbd class="bg-primary text-light">DIKERJAKAN</kbd> untuk melihat detail Status Pengerjaan</b></p>
-                        @else
-                            <p><b>Laporan Ditolak Pada : </b>{{ $item->tgl_selesai }}</p>
-                            <p><b>Keterangan Penolakan : </b></p>
-                            <textarea class="form-control" disabled><?php echo htmlspecialchars($item->ket_penolakan); ?></textarea>
-                        @endif
-                        <div class="collapse" id="collapseExample{{ $item->id }}">
-                            <div class="card table-card">
-                                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                                    <h5 class="mb-0 card-title flex-grow-1"><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Tabel Status <a class="text-primary">Dikerjakan</a></h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped display">
-                                            <thead>
-                                                <tr>
-                                                    <th>TGL</th>
-                                                    <th>KETERANGAN</th>
-                                                    <th>
-                                                        <center>LAMPIRAN</center>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="font-size:13px">
-                                                @php
-                                                    $data = \App\Models\perbaikan_ipsrs_catatan::where('pengaduan_id', $item->id)->get();
-                                                @endphp
-                                                @if (count($data) > 0)
-                                                    @foreach ($data as $item)
-                                                        <tr>
-                                                            <td>{{ $item->created_at }}</td>
-                                                            <td>{{ $item->keterangan }}</td>
-                                                            <td>
-                                                                <center>
-                                                                    @if (!empty($item->title))
-                                                                        <button class="btn btn-success"
-                                                                            onclick="window.location.href='{{ url('pengaduan/ipsrs/lampiran/catatan/' . $item->id) }}'"><i
-                                                                                class="fa-fw fas fa-download nav-icon"></i></button>
-                                                                    @else
-                                                                        <button class="btn btn-secondary disabled"><i
-                                                                                class="fa-fw fas fa-download nav-icon"></i></button>
-                                                                    @endif
-                                                                </center>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i
-                                class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
     {{-- MODAL END --}}
 
+    {{-- <script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script> --}}
     <script>
         $(document).ready(function() {
             // AUTOCOMPLETE LOKASI
             var path = "{{ route('ipsrs.ac.lokasi') }}";
-            $('.typeahead-bloodhound').typeahead({
+            $('.typeahead').typeahead({
                 source: function(query, process) {
                     return $.get(path, {
                         lokasi: query
@@ -701,7 +464,7 @@
                             }
                         }
 
-                        content = `<tr><td><center><div class="d-flex align-items-center">
+                        content = `<tr><td><div class="d-flex align-items-center">
                                         <div class="dropdown">
                                             <a href="javascript:;" class="btn btn-sm btn-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown">${item.id}</a>
                                             <div class="dropdown-menu dropdown-menu-right">
@@ -733,7 +496,7 @@
                             }
                             content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
                         }
-                        content += `</div></div></div></center></td>`;
+                        content += `</div></div></div></td>`;
                         // LANJUT CONTENT
                         content += `<td>${item.lokasi}</td>`;
                         content += status;
@@ -746,20 +509,19 @@
                         order: [
                             [3, "desc"]
                         ],
-                        // bAutoWidth: false,
-                        // aoColumns : [
-                        //     { sWidth: '5%' },
-                        //     { sWidth: '17%' },
-                        //     { sWidth: '13%' },
-                        //     { sWidth: '10%' },
-                        //     { sWidth: '10%' },
-                        // ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '10%' },
+                            { sWidth: '50%' },
+                            { sWidth: '20%' },
+                            { sWidth: '20%' },
+                        ],
                         // columnDefs: [
                         //     { visible: false, targets: [7] },
                         // ],
-                        displayLength: 7,
+                        displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
 
@@ -780,12 +542,13 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $('#track_pengaduan').text(res.show.ket_pengaduan);
-                    $('#track_tgl_pengaduan').text(new Date(res.show.tgl_pengaduan).toLocaleDateString('en-ZA'));
+                    $('#track_oleh').text(res.show.nama);
+                    $('#track_tgl_pengaduan').text(new Date(res.show.tgl_pengaduan).toLocaleString('fr-FR'));
                     var content = '';
                     var content2 = '';
                     var content3 = '';
                     $('#track_dot').empty();
-                    if (item.tgl_selesai != null && item.ket_penolakan == null) { // Selesai
+                    if (res.show.tgl_selesai != null && res.show.ket_penolakan == null) { // Selesai
                         content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
                                         <span class="dot"></span>
                                         <hr class="flex-fill track-line"><span class="dot"></span>
@@ -794,20 +557,20 @@
                                     </div>
                                     <div class="d-flex flex-row justify-content-between align-items-center">
                                         <div class="d-flex flex-column align-items-start">
-                                            <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                            <span>${res.show.tgl_pengaduan?new Date(res.show.tgl_pengaduan).toLocaleDateString('en-ZA'):''}</span><span>Pengaduan</span>
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
-                                            <span>${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}</span><span>Diterima</span>
+                                            <span>${res.show.tgl_diterima?new Date(res.show.tgl_diterima).toLocaleDateString('en-ZA'):''}</span><span>Diterima</span>
                                         </div>
                                         <div class="d-flex flex-column justify-content-center align-items-center">
-                                            <span>${new Date(item.tgl_dikerjakan).toLocaleDateString('en-ZA')}</span><span>Dikerjakan</span>
+                                            <span>${res.show.tgl_dikerjakan?new Date(res.show.tgl_dikerjakan).toLocaleDateString('en-ZA'):''}</span><span>Dikerjakan</span>
                                         </div>
                                         <div class="d-flex flex-column align-items-center">
-                                            <span>${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}</span><span>Selesai</span>
+                                            <span>${res.show.tgl_selesai?new Date(res.show.tgl_selesai).toLocaleDateString('en-ZA'):''}</span><span>Selesai</span>
                                         </div>
                                     </div>`;
                     } else {
-                        if (item.ket_penolakan != null) { // Ditolak
+                        if (res.show.ket_penolakan != null) { // Ditolak
                             content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
                                             <span class="dot-ditolak"></span>
                                             <hr class="flex-fill track-line-ditolak"><span class="dot-ditolak"></span>
@@ -820,11 +583,11 @@
                                             <div class="d-flex flex-column justify-content-center align-items-center">
                                             </div>
                                             <div class="d-flex flex-column align-items-center">
-                                                <span>${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}</span><span>Ditolak</span>
+                                                <span>${res.show.tgl_selesai?new Date(res.show.tgl_selesai).toLocaleDateString('en-ZA'):''}</span><span>Ditolak</span>
                                             </div>
                                         </div>`;
                         } else {
-                            if (item.tgl_diterima == null) { // Diverifikasi
+                            if (res.show.tgl_diterima == null) { // Diverifikasi
                                 content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
                                                 <span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span>
                                                 <hr class="flex-fill"><span class="dot"></span>
@@ -833,7 +596,7 @@
                                             </div>
                                             <div class="d-flex flex-row justify-content-between align-items-center">
                                                 <div class="d-flex flex-column align-items-start">
-                                                    <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                                    <span>${res.show.tgl_pengaduan?new Date(res.show.tgl_pengaduan).toLocaleDateString('en-ZA'):''}</span><span>Pengaduan</span>
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <span>-</span><span>Diterima</span>
@@ -846,7 +609,7 @@
                                                 </div>
                                             </div>`;
                             } else {
-                                if (item.tgl_dikerjakan == null) { // Diterima
+                                if (res.show.tgl_dikerjakan == null) { // Diterima
                                     content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
                                                     <span class="dot"></span>
                                                     <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span>
@@ -855,10 +618,10 @@
                                                 </div>
                                                 <div class="d-flex flex-row justify-content-between align-items-center">
                                                     <div class="d-flex flex-column align-items-start">
-                                                        <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                                        <span>${res.show.tgl_pengaduan?new Date(res.show.tgl_pengaduan).toLocaleDateString('en-ZA'):''}</span><span>Pengaduan</span>
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">
-                                                        <span>${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}</span><span>Diterima</span>
+                                                        <span>${res.show.tgl_diterima?new Date(res.show.tgl_diterima).toLocaleDateString('en-ZA'):''}</span><span>Diterima</span>
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center align-items-center">
                                                         <span>-</span><span>Dikerjakan</span>
@@ -868,7 +631,7 @@
                                                     </div>
                                                 </div>`;
                                 } else {
-                                    if (item.tgl_selesai == null) { // Dikerjakan
+                                    if (res.show.tgl_selesai == null) { // Dikerjakan
                                         content = `<div class="d-flex flex-row justify-content-between align-items-center align-content-center">
                                                         <span class="dot"></span>
                                                         <hr class="flex-fill track-line"><span class="dot"></span>
@@ -877,13 +640,13 @@
                                                     </div>
                                                     <div class="d-flex flex-row justify-content-between align-items-center">
                                                         <div class="d-flex flex-column align-items-start">
-                                                            <span>${new Date(item.tgl_pengaduan).toLocaleDateString('en-ZA')}</span><span>Pengaduan</span>
+                                                            <span>${res.show.tgl_pengaduan?new Date(res.show.tgl_pengaduan).toLocaleDateString('en-ZA'):''}</span><span>Pengaduan</span>
                                                         </div>
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <span>${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}</span><span>Diterima</span>
+                                                            <span>${res.show.tgl_diterima?new Date(res.show.tgl_diterima).toLocaleDateString('en-ZA'):''}</span><span>Diterima</span>
                                                         </div>
                                                         <div class="d-flex flex-column justify-content-center align-items-center">
-                                                            <span>${new Date(item.tgl_dikerjakan).toLocaleDateString('en-ZA')}</span><span>Dikerjakan</span>
+                                                            <span>${res.show.tgl_dikerjakan?new Date(res.show.tgl_dikerjakan).toLocaleDateString('en-ZA'):''}</span><span>Dikerjakan</span>
                                                         </div>
                                                         <div class="d-flex flex-column align-items-center">
                                                             <span>-</span><span>Selesai</span>
@@ -898,59 +661,64 @@
                     }
                     $('#track_dot').append(content);
                     $('#tampil-tbody-track').empty();
-                    if (item.ket_penolakan == null) {
-                        content2 = `<tr>
+                    if (res.show.ket_penolakan == null) {
+                        content2 = `<tr style="font-size: 13px">
                                         <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS DITERIMA</th>
                                         <td>
-                                            ${new Date(item.tgl_diterima).toLocaleDateString('en-ZA')}
+                                            ${res.show.tgl_diterima?new Date(res.show.tgl_diterima).toLocaleDateString('en-ZA'):''}
                                         </td>
-                                        <td>${item->ket_diterima}</td>
+                                        <td>${res.show.ket_diterima?res.show.ket_diterima:''}</td>
                                     </tr>
-                                    <tr>
+                                    <tr style="font-size: 13px">
                                         <th>
                                             <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#showDikerjakan">
                                                 <i class="fa-fw fas fa-caret-right nav-icon me-1"></i> <b>STATUS PENGERJAAN</b>
                                             </button>
                                         </th>
                                         <td>
-                                            ${new Date(item.tgl_dikerjakan).toLocaleDateString('en-ZA')}
+                                            ${res.show.tgl_dikerjakan?new Date(res.show.tgl_dikerjakan).toLocaleDateString('en-ZA'):''}
                                         </td>
-                                        <td>${item->ket_dikerjakan}</td>
+                                        <td>${res.show.ket_dikerjakan?res.show.ket_dikerjakan:''}</td>
                                     </tr>
-                                    <tr>
+                                    <tr style="font-size: 13px">
                                         <th><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS SELESAI</th>
                                         <td>
-                                            ${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}
+                                            ${res.show.tgl_selesai?new Date(res.show.tgl_selesai).toLocaleDateString('en-ZA'):''}
                                         </td>
-                                        <td>${item->ket_selesai}</td>
+                                        <td>${res.show.ket_selesai?res.show.ket_selesai:''}</td>
                                     </tr>`;
                     } else {
-                        content2 = `<tr>
+                        content2 = `<tr style="font-size: 13px">
                                         <th class="text-danger"><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> STATUS DITOLAK</th>
                                         <td>
-                                            ${new Date(item.tgl_selesai).toLocaleDateString('en-ZA')}
+                                            ${res.show.tgl_selesai?new Date(res.show.tgl_selesai).toLocaleDateString('en-ZA'):''}
                                         </td>
-                                        <td>${item->ket_penolakan}</td>
+                                        <td>${res.show.ket_penolakan?res.show.ket_penolakan:''}</td>
                                     </tr>`;
                     }
                     $('#tampil-tbody-track').append(content2);
                     $('#tampil-tbody-catatan').empty();
                     if (res.catatan != null && res.catatan != '') {
                         res.catatan.forEach(val => {
-                            content3 = `<tr>
-                                            <td>${val.created_at}</td>
-                                            <td>${val.keterangan}</td>
+                            content3 = `<tr style="font-size: 13px">
+                                            <td>${val.created_at?val.created_at:''}</td>
+                                            <td>${val.keterangan?val.keterangan:''}</td>
                                             <td>
                                                 <center>
-                                                        <button class="btn btn-success btn-sm" onclick="${val.title?"window.location.href='{{ url('pengaduan/ipsrs/lampiran/catatan/'"+val.id+") }}":''}" ${val.title?'':'disabled'}>
+                                                        <button class="btn btn-success btn-sm" onclick="${val.title?"window.location.href='perbaikan/ipsrs/lampiran/catatan/"+val.id+"'":''}" ${val.title?'':'disabled'}>
                                                             <i class="fa-fw fas fa-download nav-icon"></i>
                                                         </button>
                                                 </center>
                                             </td>
                                         </tr>`;
+                            $('#tampil-tbody-catatan').append(content3);
                         });
+                    } else {
+                        content3 = `<tr style="font-size: 13px">
+                                        <td colspan="3"><center>Belum ada catatan pengerjaan</center></td>
+                                    </tr>`;
+                        $('#tampil-tbody-catatan').append(content3);
                     }
-                    $('#tampil-tbody-catatan').append(content3);
                 }
             })
             $('#modalTrack').modal('show');
@@ -967,9 +735,9 @@
                 success: function(res) {
                     $('#lokasi_edit').val(res.show.lokasi);
                     $('#pengaduan_edit').val(res.show.ket_pengaduan);
+                    $('#modalUbah').modal('show');
                 }
             })
-            $('#modalUbah').modal('show');
         }
 
         function prosesUbah() {

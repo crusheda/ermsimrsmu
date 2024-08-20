@@ -37,10 +37,12 @@
     {{-- <link href="{{ asset('libs/select2/css/select2.css') }}" rel="stylesheet" type="text/css" /> --}}
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" type="text/css" /> {{-- YANG DIPAKAI INI --}}
     <!-- typeahead css -->
-    <link rel="stylesheet" href="{{ asset('libs/typeahead-js/typeahead.css') }}" />
+    {{-- <script src="{{ asset('js/plugins/type-ahead.min.js') }}"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('libs/typeahead-js/typeahead.css') }}" /> --}}
     <!-- cropper css -->
     {{-- <link rel="stylesheet" href="{{ asset('css/plugins/croppr.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/cropper.css') }}">
+    <link href="{{ asset('libs/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
     {{-- INTRO JS --}}
     <link rel="stylesheet" href="{{ asset('css/plugins/introjs.min.css') }}">
     {{-- DATEPICKER --}}
@@ -155,6 +157,12 @@
     <script src="{{ asset('libs/bootstrap-maxlength/bootstrap-maxlength.min.js') }}"></script>
     <script src="{{ asset('libs/@chenfengyuan/datepicker/datepicker.min.js') }}"></script>
 
+    <!-- Magnific Popup-->
+    <script src="{{ asset('libs/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+
+    <!-- lightbox init js-->
+    <script src="{{ asset('js/pages/lightbox.init.js') }}"></script>
+
     <!-- Flat Pickr js -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -178,7 +186,10 @@
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
     <!-- Typeahead -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js" integrity="sha512-qOBWNAMfkz+vXXgbh0Wz7qYSLZp6c14R0bZeVX2TdQxWpuKr6yHjBIM69fcF8Ve4GUX6B6AKRQJqiiAmwvmUmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+
     {{-- DATA TABLES --}}
     {{-- <script src="{{ asset('libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
