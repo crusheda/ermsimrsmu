@@ -386,7 +386,7 @@ class ipsrsController extends Controller
     {
         $now = Carbon::now();
 
-        $data = perbaikan_ipsrs::find($request->id);
+        $data = perbaikan_ipsrs::where('id',$request->id)->first();
         $data->tgl_selesai = $now;
         $data->ket_selesai = $request->ket_selesai;
         $data->save();

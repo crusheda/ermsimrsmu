@@ -154,7 +154,7 @@
                                                         @if (!empty($list['recent'][$i]->filename_pengaduan))
                                                             <a class="image-popup-no-margins" href="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                                 data-bs-placement="bottom" data-bs-html="true" title="Klik untuk lihat lampiran">
-                                                                <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="width:3.5rem">
+                                                                <img class="img-fluid" alt="" src="{{ url('storage/' . substr($list['recent'][$i]->filename_pengaduan, 7, 1000)) }}" style="max-height: 1000px;width:3.5rem">
                                                             </a>
                                                         @else
                                                             <img class="img-fluid" alt="" src="{{ url("images/no-image.png") }}" style="width:3.5rem">

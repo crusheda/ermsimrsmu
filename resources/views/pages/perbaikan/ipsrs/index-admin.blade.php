@@ -168,7 +168,10 @@
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="imgPush"></div>
+                <div class="modal-body">
+                    <div id="imgPush"></div>
+                    <h6 id="titleImgPush" class="text-center"></h6>
+                </div>
                 <div class="col-12 text-center mb-4">
                     <button type="reset" class="btn btn-link-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
                 </div>
@@ -282,6 +285,7 @@
                 dataType: 'json',
                 success: function(res) {
                     $('#imgPush').empty();
+                    $('#titleImgPush').text(res.title_pengaduan);
                     $('#imgPush').append(`<center><img src="/storage/`+res.filename_pengaduan.substring(7,1000)+`" class="img-fluid" alt=""></center>`);
                     $('#modalLampiran').modal('show');
                 }
