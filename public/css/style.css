@@ -25388,6 +25388,43 @@ pre[class*=language-] {
     }
 }
 
+.floting-button {
+    position: fixed;
+    bottom: 40px;
+    right: 70px;
+    z-index: 1030
+}
+
+.floting-button .btn,.floting-button .introjs-tooltip .introjs-button,.introjs-tooltip .floting-button .introjs-button {
+    animation: pulse 2s infinite
+}
+
+@media (max-width: 575.98px) {
+    .floting-button .btn,.floting-button .introjs-tooltip .introjs-button,.introjs-tooltip .floting-button .introjs-button {
+        --bs-btn-padding-y:0.8rem;
+        --bs-btn-padding-x: 0.8rem;
+        --bs-btn-border-radius: 50px
+    }
+
+    .floting-button .btn span,.floting-button .introjs-tooltip .introjs-button span,.introjs-tooltip .floting-button .introjs-button span {
+        display: none
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--bs-danger-rgb),.3)
+    }
+
+    70% {
+        box-shadow: 0 0 0 20px rgba(var(--bs-danger-rgb),0)
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--bs-danger-rgb),0)
+    }
+}
+
 [data-pc-layout=compact] .pc-sidebar .pc-navbar>.pc-item {
     margin: 4px 14px
 }

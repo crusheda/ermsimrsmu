@@ -72,7 +72,7 @@
                         {{-- <button class="btn btn-light-info w-100" disabled><i class="bx bx-download scaleX-n1-rtl"></i> Download</button> --}}
                         <button class="btn btn-light-warning w-100" onclick="cetak()"><i class="ti ti-printer"></i>&nbsp;Cetak</button>
                         <a class="btn btn-light-success w-100 tombol-menu" href="javascript:void(0);" role="button"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" hidden>
                             <i class="ti ti-caret-down"></i>&nbsp;Menu
                         </a>
                         <div class="dropdown-menu dropdown-menu-end tombol-menu">

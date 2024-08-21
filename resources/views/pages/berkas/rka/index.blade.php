@@ -27,7 +27,7 @@
         <div class="">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h6 class="mb-0">Segera Upload RKA Anda Sebelum<br>Tanggal <b class="text-primary">xxx</b></h6>
+                    <h6 class="mb-0">Pengumpulan RKA Th.2024 Sebelum<br>Bulan <b class="text-primary">September Minggu Pertama</b></h6>
                     <div class="btn-group">
                         <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
                             <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas
@@ -80,8 +80,8 @@
                         @csrf
                         <input type="file" name="file" class="form-control mb-2" accept=".xls,.xlsx,.pdf" required>
                         <small>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Ukuran maksimal file adalah 5 Mb <br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berformat XLS/XLSX/PDF <br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Ukuran maksimal file adalah <span class="badge text-bg-primary">5 Mb</span><br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berformat XLS/XLSX/PDF menyesuaikan sumber file yang ada<br>
                             <i class="fa-fw fas fa-caret-right nav-icon"></i> Tidak dapat mengupload file dengan nama yang sama dengan dokumen sebelumnya
                         </small>
                     </div>

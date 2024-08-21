@@ -47,7 +47,7 @@
                 <div class="card-body p-3">
                     <div class="alert alert-secondary">
                         <small><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Refresh browser Anda apabila terjadi Error saat pengambilan data karyawan</small><br>
-                        <small><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Klik pada <u><b>Nama Karyawan</b></u> untuk melihat profil lengkap</small>
+                        <small><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Klik pada <u class="text-primary"><b>#ID Karyawan</b></u> untuk melihat Profil</small>
                     </div>
                     <div class="table-responsive">
                         <table id="dttable" class="table align-middle dt-responsive table-hover nowrap w-100">

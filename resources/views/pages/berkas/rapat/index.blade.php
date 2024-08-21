@@ -102,14 +102,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Kegiatan</label>
+                                    <label class="form-label">Kegiatan <a class="text-danger">*</a></label>
                                     <input type="text" name="nama" id="nama" class="form-control"
                                         placeholder="e.g. Rapat Unit IT" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Ketua Rapat</label>
+                                    <label class="form-label">Ketua Rapat <a class="text-danger">*</a></label>
                                     <select class="select2 form-control" name="kepala" style="width: 100%" required>
                                         <option value="">Pilih</option>
                                         @foreach ($list['users'] as $key => $item)
@@ -120,13 +120,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Tanggal</label>
-                                    <input class="form-control flatpickr" name="tanggal" type="text">
+                                    <label class="form-label">Tanggal <a class="text-danger">*</a></label>
+                                    <input class="form-control flatpickr" name="tanggal" type="text" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Lokasi Rapat</label>
+                                    <label class="form-label">Lokasi Rapat <a class="text-danger">*</a></label>
                                     <input type="text" name="lokasi" id="lokasi" class="form-control"
                                         placeholder="e.g. Ruang IT" required>
                                 </div>
@@ -138,7 +138,7 @@
                                 name="keterangan" id="keterangan" placeholder="Optional"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Upload</label>
+                            <label class="form-label">Upload <a class="text-danger">*</a></label>
                             <input type="file" class="form-control mb-2" name="file2[]" id="file2" multiple required>
                         </div>
                 </div>
@@ -176,33 +176,33 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Kegiatan :</label>
+                                <label class="form-label">Kegiatan <a class="text-danger">*</a></label>
                                 <input type="text" id="nama_edit" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Ketua Rapat : </label><br>
+                                <label class="form-label">Ketua Rapat <a class="text-danger">*</a></label><br>
                                 <select class="form-control select2" id="kepala_edit" style="width: 100%"
                                     required></select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Tanggal :</label>
+                                <label class="form-label">Tanggal <a class="text-danger">*</a></label>
                                 <input type="text" id="tanggal_edit" class="form-control flatpickr"
                                     placeholder="Tanggal Rapat" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Lokasi Rapat :</label>
-                                <input type="text" id="lokasi_edit" class="form-control">
+                                <label class="form-label">Lokasi Rapat <a class="text-danger">*</a></label>
+                                <input type="text" id="lokasi_edit" class="form-control" required>
                             </div>
                         </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Keterangan :</label>
+                        <label class="form-label">Keterangan</label>
                         <textarea  maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control" id="keterangan_edit" ></textarea>
                     </div>
                 </div>

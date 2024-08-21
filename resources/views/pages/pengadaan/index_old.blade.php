@@ -1,40 +1,58 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-    <div class="floting-button" id="myBtn" style="display: none"><a href="javascript:void(0);" onclick="topFunction()" class="btn btn btn-primary buynowlinks d-inline-flex align-items-center gap-2" data-bs-toggle="tooltip" data-bs-original-title="Go To Top"><i class="ti ti-arrow-big-top me-1"></i> Gulir</a></div>
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Administrasi</li>
-                        <li class="breadcrumb-item" aria-current="page">Pengadaan</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Pengadaan Rutin</h2>
-                    </div>
-                </div>
+    <style>
+        #myBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: none;
+            outline: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            /* padding: 15px; */
+            border-radius: 4px;
+        }
+    </style>
+    <button onclick="topFunction()" id="myBtn" class="bg-primary" title="Go to top" style="display: none">
+        <h6 style="margin-top: 0.3rem;margin-bottom: 0.3rem;"><i class='bx bx-chevron-up align-middle'></i> Gulir ke atas</h6>
+    </button>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Pengadaan</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-
+    <div class="row">
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex">
                         <div>
-                            <h5 class="card-title mb-3">Digital Pengadaan</h5>
+                            <h4 class="card-title mb-3">Digital Pengadaan</h4>
                             <p class="text-muted">Semua data terintegrasi menjadi satu dengan tampilan yang baru hanya di
                                 Simrsmu</p>
                             <div class="btn-group">
-                                <a href="javascript:void(0);" class="btn btn-light-dark btn-sm disabled">
-                                    <i class='fas fa-info-circle align-middle me-1'></i> Baca Panduan</a>
+                                <a href="javascript:void(0);" class="btn btn-primary btn-sm"><i
+                                        class='bx bx-info-circle align-middle'></i> Baca Panduan</a>
+                                @if (Auth::user()->getPermission('admin_pengadaan'))
+                                    <a class="btn btn-dark btn-sm" href="javascript:void(0);" role="button"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Menu&nbsp;&nbsp;<i class='bx bx-caret-down align-middle'></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="javascript:void(0);"><s>Tambah Barang</s></a>
+                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
+                                            data-bs-target="#rekap">Rekap Pengadaan</a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div>
@@ -44,23 +62,30 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 card-title flex-grow-1"><i class="ti ti-history me-1"></i> Riwayat Pengadaan</h5>
-                    <div class="flex-shrink-0">
-                        <div class="btn-group">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="card-title mb-4"><i class="bx bx-sort-down"></i> Riwayat Pengadaan</h4>
+                        <div class="dropdown ms-2 dropend">
                             <a onclick="refreshRiwayat()" class="text-warning" href="javascript:void(0);"
                                 data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                                 title="Refresh Data Riwayat Pengadaan"><i class='fa-fw fas fa-sync nav-icon'></i></a>
+                            {{-- <a class="text-muted" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="mdi mdi-dots-horizontal font-size-18"></i>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Lihat Keranjang</a>
+                                <a class="dropdown-item" href="#">Hapus Isi Keranjang</a>
+                            </div> --}}
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
                     <div data-simplebar style="max-height: 500px;">
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="border: 0px">
                             <table class="table table-nowrap align-middle table-hover mb-0">
                                 <tbody id="tampil-tbody">
                                     <tr>
-                                        <td colspan="9" style="font-size:13px">
+                                        <td colspan="9">
                                             <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center>
                                         </td>
                                     </tr>
@@ -75,9 +100,9 @@
         <div class="col-lg-9">
 
             <div class="row mb-3">
-                <div class="col-xl-4 col-sm-6 m-t-5">
+                <div class="col-xl-4 col-sm-6">
                     <div class="mt-2">
-                        <h4><i class="ti ti-list-check me-1"></i> Pembelanjaan</h4>
+                        <h5><i class="bx bx-menu-alt-left"></i> Pembelanjaan</h5>
                     </div>
                 </div>
                 <div class="col-lg-8 col-sm-6">
@@ -88,41 +113,20 @@
                                     autocomplete="off" placeholder="Cari Barang..." data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="Tekan ENTER untuk Submit">
-                                <i class="fas fa-search-alt search-icon"></i>
+                                <i class="bx bx-search-alt search-icon"></i>
                             </div>
                         </div>
                         <ul class="nav nav-pills product-view-nav justify-content-end mt-3 mt-sm-0">
-                            <li class="nav-item me-1">
-                                <button class="btn btn-icon btn-primary rounded" onclick="showKeranjang()" data-bs-toggle="tooltip"
+                            <li class="nav-item">
+                                <button class="nav-link active" onclick="showKeranjang()" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Tampilkan Keranjang"><i class="ti ti-shopping-cart align-middle"></i></button>
+                                    title="Tampilkan Keranjang"><i class="bx bx-cart align-middle"></i></button>
                             </li>
                             <li class="nav-item">
-                                <button class="btn btn-icon btn-warning rounded" onclick="refresh()" data-bs-toggle="tooltip"
+                                <button class="nav-link bg-warning text-white" onclick="refresh()" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Refresh Data Pembelanjaan"><i class="fas fa-sync align-middle"></i></button>
+                                    title="Refresh Data Pembelanjaan"><i class="bx bx-sync align-middle"></i></button>
                             </li>
-                            {{-- IF SUPER USER --}}
-                            @if (Auth::user()->getPermission('admin_pengadaan'))
-                                <li class="nav-item">
-                                    <div class="dropdown ms-2 dropend">
-                                        <a class="text-muted btn btn-icon btn-secondary rounded" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-sliders-h font-size-18 text-light"></i>
-                                        </a>
-
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="javascript:void(0);"><s>Daftar Barang</s></a>
-                                            <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                                            data-bs-target="#rekap">Rekap Pengadaan</a>
-                                        </div>
-                                    </div>
-                                </li>
-                                {{-- <li class="nav-item">
-                                    <button class="btn btn-icon btn-warning rounded" onclick="" data-bs-toggle="tooltip"
-                                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                        title="Refresh Data Pembelanjaan"><i class="fas fa-sync align-middle"></i></button>
-                                </li> --}}
-                            @endif
                         </ul>
                     </div>
                 </div>
@@ -154,16 +158,18 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="text-center mt-2 mb-5" id="progress-ajax">
-                        <a href="javascript:void(0);" class="text-dark" id="ajax-loading">
-                            <i class="fas fa-sync fa-spin font-size-18 align-middle me-2"></i> Memuat Data...</a>
+                    <div class="text-center mt-2 mb-5">
+                        <a href="javascript:void(0);" class="text-dark" id="ajax-pending" style="display: none"><i
+                                class="bx bx-caret-down font-size-18 align-middle me-2"></i> Gulir ke bawah untuk
+                            melanjutkan <i class="bx bx-caret-down font-size-18 align-middle me-2"></i> </a>
+                        <a href="javascript:void(0);" class="text-dark" id="ajax-loading"><i
+                                class="bx bx-loader bx-spin font-size-18 align-middle me-2"></i> Memuat Data...</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- MULAI MODAL --}}
     <!--TAMBAH KERANJANG -->
     <div class="modal fade" tabindex="-1" id="addKeranjang" role="dialog" data-bs-backdrop="static"
         aria-labelledby="orderdetailsModalLabel" aria-hidden="true">
@@ -192,11 +198,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
-                            class="fa fa-times me-1"></i> Batal</button>
-                    <button class="btn btn-info" onclick="masukKeranjang()"><i
-                            class="ti ti-square-plus me-1"></i> Tambah</button>
-                    <button class="btn btn-primary" onclick="showKeranjang()"><i
-                            class="ti ti-shopping-cart-plus me-1 align-middle"></i> Lihat Keranjang</button>
+                            class="fa fa-times"></i>&nbsp;&nbsp;Batal</button>
+                    <button class="btn btn-info" onclick="masukKeranjang()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                        title="Barang akan dimasukkan ke keranjang"><i
+                            class="bx bxs-plus-square"></i>&nbsp;&nbsp;Tambah</button>
+                    <button class="btn btn-primary" onclick="showKeranjang()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Keranjang"><i
+                            class="bx bx-cart align-middle"></i>&nbsp;&nbsp;Keranjang</button>
                 </div>
             </div>
         </div>
@@ -232,7 +241,7 @@
                                 </thead>
                                 <tbody id="tampil-keranjang">
                                     <tr>
-                                        <td colspan="9" style="font-size:13px">
+                                        <td colspan="9">
                                             <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center>
                                         </td>
                                     </tr>
@@ -292,7 +301,7 @@
                                 </thead>
                                 <tbody id="tampil-riwayat">
                                     <tr>
-                                        <td colspan="9" style="font-size:13px">
+                                        <td colspan="9">
                                             <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memuat data...</center>
                                         </td>
                                     </tr>
@@ -367,7 +376,6 @@
             </div>
         </div>
     </div>
-    {{-- SELESAI MODAL --}}
 
     <script>
         $(document).ready(function() {
@@ -395,7 +403,7 @@
                         var tglUpload = item.updated_at.substring(8, 10);
                         var blnUpload = item.updated_at.substring(5, 7);
                         var thnUpload = item.updated_at.substring(0, 4);
-                        content = `<tr id="pengadaan` + item.id_pengadaan + `" style="font-size:13px">
+                        content = `<tr id="pengadaan` + item.id_pengadaan + `">
                                     <td style="width: 50px;">
                                         <span class="badge bg-primary">ID : ` + item.id_pengadaan + `</span>
                                     </td>
@@ -410,13 +418,13 @@
                                                 <li class="list-inline-item">
                                                     <a href="javascript: void(0);" onclick="showRiwayat(` + item
                             .id_pengadaan + `)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
-                                                            class="fas fa-shopping-bag"></i></a>
+                                                            class="bx bx-shopping-bag"></i></a>
                                                 </li>
                                                 <li class="list-inline-item">`;
                         if (adminID) {
                             content += `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
                                 item.id_pengadaan +
-                                `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
+                                `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
                         } else {
                             if (thnUpload == thn) { // TAHUN SAMA
                                 if (blnUpload == bln) { // BULAN SAMA
@@ -425,18 +433,18 @@
                                         content +=
                                             `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
                                             item.id_pengadaan +
-                                            `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
+                                            `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
                                     } else {
                                         content +=
-                                            `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                            `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
                                     }
                                 } else {
                                     content +=
-                                        `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                        `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
                                 }
                             } else {
                                 content +=
-                                    `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                    `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
                             }
                         }
                         content += `</li>
@@ -454,10 +462,23 @@
                 }
             });
 
+            // AUTOCOMPLETE CARI BARANG
+            // var path = "{{ route('pengadaan.getacbarang') }}";
+            // $('.typeahead').typeahead({
+            //     source: function(query, process) {
+            //         return $.get(path, {
+            //             barang: query
+            //         }, function(data) {
+            //             return process(data);
+            //         });
+            //     }
+            // });
+
+            // var site_url = "{{ url('/') }}";
             var page = 1;
             var pagecari = 1;
 
-            // $('#ajax-loading').show();
+            $('#ajax-loading').show();
             load_more(page);
 
             // AUTO SHOW CARI BARANG
@@ -478,10 +499,25 @@
                 }
             });
 
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                    $('#ajax-pending').hide();
+                    $('#ajax-loading').show();
+                    var val_barang = $("#caribarang").val();
+                    if (val_barang.length === 0) {
+                        page++;
+                        load_more(page);
+                    } else {
+                        pagecari++;
+                        load_more_cari(val_barang, pagecari);
+                    }
+                }
+            });
+
             $(".input-quantity").TouchSpin({
                 verticalbuttons: true
             });
-        });
+        })
 
         // FUNCTION AREA
         function refresh() {
@@ -497,7 +533,7 @@
 
         function refreshRiwayat() {
             $("#tampil-tbody").empty().append(
-                `<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             $.ajax({
                 url: "/api/pengadaan/data/{{ Auth::user()->id }}",
@@ -518,7 +554,7 @@
                         var tglUpload = item.updated_at.substring(8, 10);
                         var blnUpload = item.updated_at.substring(5, 7);
                         var thnUpload = item.updated_at.substring(0, 4);
-                        content = `<tr id="pengadaan` + item.id_pengadaan + `" style="font-size:13px">
+                        content = `<tr id="pengadaan` + item.id_pengadaan + `">
                                     <td style="width: 50px;">
                                         <span class="badge bg-primary">ID : ` + item.id_pengadaan + `</span>
                                     </td>
@@ -533,13 +569,13 @@
                                                 <li class="list-inline-item">
                                                     <a href="javascript: void(0);" onclick="showRiwayat(` + item
                             .id_pengadaan + `)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
-                                                            class="fas fa-shopping-bag"></i></a>
+                                                            class="bx bx-shopping-bag"></i></a>
                                                 </li>
                                                 <li class="list-inline-item">`;
                         if (adminID) {
                             content += `<a href="javascript: void(0);" onclick="hapusRiwayat(` + item
                                 .id_pengadaan +
-                                `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
+                                `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
                         } else {
                             if (thnUpload == thn) { // TAHUN SAMA
                                 if (blnUpload == bln) { // BULAN SAMA
@@ -548,18 +584,18 @@
                                         content +=
                                             `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
                                             item.id_pengadaan +
-                                            `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
+                                            `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="bx bxs-trash"></i></a>`;
                                     } else {
                                         content +=
-                                            `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                            `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
                                     }
                                 } else {
                                     content +=
-                                        `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                        `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
                                 }
                             } else {
                                 content +=
-                                    `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                    `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="bx bxs-trash"></i></a>`;
                             }
                         }
                         content += `</li>
@@ -597,7 +633,7 @@
                             } else {
                                 ket = '';
                             }
-                            content = `<tr style="font-size:13px">
+                            content = `<tr>
                                             <th scope="row">
                                                 <div>
                                                     <img src="{{ asset('images/no-img.png') }}" alt=""
@@ -680,7 +716,7 @@
                                 min: 1
                             });
                         })
-                        content2 = `<tr style="font-size:13px">
+                        content2 = `<tr>
                                         <th colspan="4">Total Keseluruhan</th>
                                         <td colspan="2" id="ttl_seluruh">` + formatRupiah(tot, 'Rp ') + `</td>
                                         <td hidden>
@@ -937,7 +973,7 @@
                         } else {
                             ket = '';
                         }
-                        content = `<tr style="font-size:13px">
+                        content = `<tr>
                                         <th scope="row">
                                             <div>
                                                 <img src="{{ asset('images/no-img.png') }}" alt=""
@@ -956,7 +992,7 @@
                                     </tr>`;
                         $('#tampil-riwayat').append(content);
                     })
-                    content_total = `<tr style="font-size:13px">
+                    content_total = `<tr>
                                         <td colspan="2">
                                             <h6 class="m-0 text-right">Total Keseluruhan</h6>
                                         </td>
@@ -1025,9 +1061,8 @@
 
         // When the user clicks on the button, scroll to the top of the document
         function topFunction() {
-            $('html, body').animate({scrollTop:0}, '300');
-            // document.body.scrollTop = 0;
-            // document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }
 
         /* Fungsi formatRupiah */
@@ -1057,14 +1092,16 @@
                 type: "get",
                 datatype: "html",
                 beforeSend: function() {
-                    $('#progress-ajax').empty();
-                    $('#progress-ajax').append(`<a href="javascript:void(0);" class="text-dark" id="ajax-loading">
-                    <i class="fas fa-sync fa-spin font-size-18 align-middle me-2"></i> Memuat Data...</a>`);
+                    $('#ajax-pending').hide();
+                    $('#ajax-loading').show();
                 }
             }).done(function(res) {
-                $('#progress-ajax').empty();
-                if (page <= res.last_page) {
-                    $('#progress-ajax').append(`<button class="btn btn-primary" id="btnNext${res.current_page+1}" onclick="load_more(${res.current_page+1})">Klik Disini</button>`);
+                if (res.data.length === 0) {
+                    $('#ajax-pending').hide();
+                    $('#ajax-loading').empty();
+                    $('#ajax-loading').append("<center>Seluruh Barang ditampilkan</center>");
+                    return;
+                } else {
                     res.data.forEach(item => {
                         content =
                             `<div class="col-xl-3 col-sm-6">
@@ -1079,17 +1116,17 @@
                             item.nama + `</a></h6>
                                                 <h5 class="my-0 mb-3"><b class="text-success">` + formatRupiah(item
                                 .harga, 'Rp ') + `</b> <span class="text-muted me-2">/ ` + item.satuan + `</span></h5>
-                                                <a href="javascript:void(0);" onclick="addKeranjang(` + item.id + `)" class="btn btn-light-secondary btn-sm">
-                                                    <i class="fas fa-cart-plus me-1"></i> Tambahkan</a>
+                                                <a href="javascript:void(0);" onclick="addKeranjang(` + item.id + `)" class="btn btn-outline-light btn-sm text-dark">
+                                                    <i class="mdi mdi-cart-arrow-right me-1"></i> Masukkan keranjang </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>`;
                         $("#daftar-barang").append(content);
                     })
-                } else {
-                    $('#progress-ajax').append(`<center>Seluruh Barang ditampilkan</center>`);
+                    $('#ajax-pending').show();
                 }
+                $('#ajax-loading').hide();
             }).fail(function(jqXHR, ajaxOptions, thrownError) {
                 alert('No response from server');
             });
@@ -1106,17 +1143,17 @@
                         type: "get",
                         datatype: "html",
                         beforeSend: function() {
-                            $('#progress-ajax').empty();
-                            $('#progress-ajax').append(`<a href="javascript:void(0);" class="text-dark" id="ajax-loading">
-                            <i class="fas fa-sync fa-spin font-size-18 align-middle me-2"></i> Memuat Data...</a>`);
+                            $('#ajax-pending').hide();
+                            $('#ajax-loading').show();
                         }
                     })
                     .done(function(res) {
-                        // console.log(res);
-                        // console.log(res.last_page+1);
-                        $('#progress-ajax').empty();
-                        if (page <= res.last_page) {
-                            $('#progress-ajax').append(`<button class="btn btn-primary" id="btnNext${res.current_page+1}" onclick="load_more_cari(${res.current_page+1})">Klik Disini</button>`);
+                        if (res.data.length == 0) {
+                            $('#ajax-pending').hide();
+                            $('#ajax-loading').empty();
+                            $('#ajax-loading').append("<center>Seluruh Barang ditampilkan</center>");
+                            return;
+                        } else {
                             res.data.forEach(item => {
                                 content =
                                     `<div class="col-xl-3 col-sm-6">
@@ -1133,17 +1170,17 @@
                                         item.harga, 'Rp ') + `</b> <span class="text-muted me-2">/ ` +
                                     item.satuan + `</span></h5>
                                                         <a href="javascript:void(0);" onclick="addKeranjang(` + item
-                                    .id + `)" class="btn btn-light-secondary btn-sm">
-                                                            <i class="fas fa-cart-plus me-1"></i> Tambahkan</a>
+                                    .id + `)" class="btn btn-outline-light btn-sm text-dark">
+                                                            <i class="mdi mdi-cart-arrow-right me-1"></i> Masukkan keranjang </a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>`;
                                 $("#daftar-barang").append(content);
                             })
-                        } else {
-                            $('#progress-ajax').append(`<center>Seluruh Barang ditampilkan</center>`);
+                            $('#ajax-pending').show();
                         }
+                        $('#ajax-loading').hide();
                     })
                     .fail(function(jqXHR, ajaxOptions, thrownError) {
                         alert('No response from server');
@@ -1181,5 +1218,68 @@
                 }
             });
         }
+
+        // $('#btn-ajukan').prop('disabled', true);
+        //     $('#btn-ajukan').find('i').removeClass('bx-check-double').addClass('bx-loader bx-spin');
+
+        // function cari() {
+        //     var bulan = $("#bulan").val();
+        //     var tahun = $("#tahun").val();
+        //     $("#tampil-rekap").empty();
+        //     $("#tampil-rekap").append(
+
+        //     );
+        //     $.ajax({
+        //         url: "/api/pengadaan/rekap/bulan/" + bulan + "/tahun/" + tahun,
+        //         type: 'GET',
+        //         dataType: 'json', // added data type
+        //         success: function(res)
+        //         {
+        //             // TABLE HEAD
+        //             contenthead = '<tr>' +
+        //                 '<th rowspan="2">IDB</th>' +
+        //                 '<th rowspan="2">BARANG</th>' +
+        //                 '<th rowspan="2">HARGA</th>' +
+        //                 '<th rowspan="2">SATUAN</th>';
+        //             res.unit.forEach(key => {
+        //                 contenthead += '<th colspan="2">' + JSON.parse(key.unit) + '</th>';
+        //             });
+        //             contenthead += "</tr><tr>";
+        //             res.unit.forEach(key => {
+        //                 contenthead += "<th>JML</th><th>NOM</th>";
+        //             });
+        //             contenthead += "</tr>";
+        //             $('#tampil-thead').append(contenthead);
+        //             // TABLE BODY
+        //             contentbody = "";
+        //             res.barang.forEach(item => {
+        //                 contentbody += "<tr><td>" +
+        //                     item.id_barang + "</td><td>" +
+        //                     item.nama_barang + "</td><td>" +
+        //                     item.harga_barang + "</td><td>" +
+        //                     item.satuan_barang + "</td>";
+
+        //                 res.unit.forEach(key => {
+        //                     res.show.forEach(val => {
+        //                         if (val.unit == key.unit) {
+        //                             // if (item.id_barang == val.id_barang) {
+        //                             // if (key.unit == val.unit) {
+        //                             if (item.id_barang == val.id_barang) {
+        //                                 contentbody += "<td>" + val.jumlah +
+        //                                     "</td><td>" + val.total + "</td>";
+        //                             }
+        //                             // else {
+        //                             //   contentbody += '<td></td>';
+        //                             // }
+        //                         }
+        //                     });
+        //                 });
+        //                 contentbody += "</tr>";
+        //             });
+        //             $('#tampil-tbody').append(contentbody);
+
+        //         }
+        //     });
+        // }
     </script>
 @endsection

@@ -73,7 +73,7 @@
                         </div>
                         <div class="dropdown-body text-wrap header-notification-scroll position-relative"
                             style="max-height: calc(100vh - 215px)">
-                            <p class="text-span">Tahun 2025</p>
+                            {{-- <p class="text-span">Tahun 2025</p> --}}
                             <div class="card mb-2">
                                 <div class="card-body">
                                     <div class="d-flex">
@@ -81,8 +81,8 @@
                                                 <use xlink:href="#custom-layer"></use>
                                             </svg></div>
                                         <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">Baru Saja</span>
-                                            <h5 class="text-body mb-2">Simrs Kekinian</h5>
-                                            <p class="mb-0">Tahun baru 2025 dengan tampilan Simrs yang baru</p>
+                                            <h5 class="text-body mb-2">Update v3.1</h5>
+                                            <p class="mb-0">Simrsmu sedang dalam pengembangan menjadi lebih baik lagi..</p>
                                         </div>
                                     </div>
                                 </div>

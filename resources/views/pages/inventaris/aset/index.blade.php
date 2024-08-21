@@ -56,12 +56,10 @@
                             title="Cari Nama Aset/Sarana">
                             <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana ..." disabled>
                         </div>
-                        <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Pilih Ruangan / Lokasi">
+                        <div class="col-xxl-2 col-lg-4">
                             <div class="select2-dark">
                                 <select class="selectFilter form-select" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                                    <option value="" selected hidden>Pilih Lokasi</option>
+                                    <option value="" selected hidden>Pilih Ruangan / Lokasi</option>
                                     @if (!empty($list['ruangan']))
                                         @foreach ($list['ruangan'] as $item)
                                             <option value="{{ $item->id }}">{{ $item->ruangan }} - {{ $item->lokasi }}</option>

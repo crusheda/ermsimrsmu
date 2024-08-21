@@ -269,7 +269,7 @@ class PengadaanController extends Controller
 
     function loadMore()
     {
-        $barang = pengadaan_barang::orderBy('nama','asc')->paginate(12);
+        $barang = pengadaan_barang::orderBy('nama','asc')->paginate(40);
 
         // print_r($barang);
         // die();

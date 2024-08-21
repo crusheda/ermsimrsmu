@@ -12,6 +12,7 @@ use App\Models\role_has_permissions;
 use App\Models\unit;
 use App\Models\users;
 use App\Models\users_foto;
+// use App\Models\datalogs;
 use Carbon\Carbon;
 use Auth;
 use Storage;
@@ -27,9 +28,9 @@ class ipsrsController extends Controller
      */
     public function index()
     {
+        // datalogs::record(Auth::user(), 'Seseorang baru saja mengakses Halaman Perbaikan IPSRS', '', 'ini before', 'ini after', 'ini user target');
         $user = Auth::user();
         $user_id = $user->id;
-
         // if (Auth::user()->getManyRole(['ipsrs','it','sekretaris-direktur'])) {
         if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true) {
             // $show = perbaikan_ipsrs::where('tgl_selesai', null)->orderBy('tgl_pengaduan','DESC')->get();
