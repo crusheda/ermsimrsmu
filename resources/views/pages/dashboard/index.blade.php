@@ -47,10 +47,10 @@
 
     <script>
         $(document).ready(function() {
-            $('#pc_sidebar_userlink').addClass('show');
-            $('.pc-sidebar').addClass('mob-sidebar-active');
             // console.log("{{ $list['user']->nik }}");
             if ("{{ $list['user']->nik }}" == '') {
+                $('#pc_sidebar_userlink').addClass('show');
+                $('.pc-sidebar').addClass('mob-sidebar-active');
                 introJs().setOptions({
                     showProgress: true,
                     steps: [{

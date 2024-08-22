@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" id="riwayat_pengadaan">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 card-title flex-grow-1"><i class="ti ti-history me-1"></i> Riwayat Pengadaan</h5>
                     <div class="flex-shrink-0">
@@ -255,7 +255,7 @@
                 <div class="modal-footer">
                     <button class="btn btn-danger" onclick="checkoutKeranjang()" id="btn-ajukan"
                         data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                        title="Ajukan Barang Pengadaan"><i class="bx bx-check-double"></i>&nbsp;&nbsp;Ajukan</button>
+                        title="Ajukan Barang Pengadaan"><i class="ti ti-checks me-1"></i> Ajukan</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
@@ -451,6 +451,9 @@
                             trigger: 'hover'
                         })
                     })
+                    // if (res.pengadaan) {
+                    //     $('#riwayat_pengadaan').props('hidden',true);
+                    // }
                 }
             });
 
@@ -601,49 +604,40 @@
                                             <th scope="row">
                                                 <div>
                                                     <img src="{{ asset('images/no-img.png') }}" alt=""
-                                                        class="avatar-sm">
+                                                        class="avatar-sm wid-60">
                                                 </div>
                                             </th>
                                             <td style="word-wrap: break-word" class="text-wrap">
                                                 <div>
-                                                    <h5 class="text-truncate font-size-14">` + item.nama_barang +
-                                `</h5>
+                                                    <h5 class="text-truncate font-size-14">` + item.nama_barang + `</h5>
                                                     <small><p class="mb-0">Keterangan : <span class="fw-medium text-primary">` + ket + `</span></p></small>
                                                 </div>
                                             </td>
                                             <td>` + formatRupiah(item.harga_barang, 'Rp ') + `</td>
                                             <td>
                                                 <div class="me-3" style="width: 120px;">
-                                                    <input type="text" value="` + item.jml_permintaan +
-                                `" id="jml_set` + item.id +
-                                `" class="input-quantity form-control idJumlah` + urutan + `" name="demo_vertical">
+                                                    <input type="text" value="` + item.jml_permintaan + `" id="jml_set` + item.id + `" class="input-quantity form-control idJumlah` + urutan + `" name="demo_vertical">
                                                 </div>
                                             </td>
-                                            <td id="ttl` + item.id + `">` + formatRupiah(item.total_barang, 'Rp ') +
-                                `</td>
+                                            <td id="ttl` + item.id + `">` + formatRupiah(item.total_barang, 'Rp ') + `</td>
                                             <td>
                                                 <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus ` + item.nama_barang + `">
-                                                    <a href="javascript: void(0);" onclick="hapusBarangKeranjang(` +
-                                item.id + `)" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                    <a href="javascript: void(0);" onclick="hapusBarangKeranjang(` + item.id + `)" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
                                                 </div>
                                             </td>
                                             <td hidden>
                                                 <input type="number" id="totalKeranjang" value="` + item.total_barang + `" class="form-control">
                                                 <input type="number" id="urutan" value="` + res.keranjang.length + `" class="form-control">
-                                                <input type="number" id="idBarang` + urutan + `" value="` + item
-                                .id_barang + `" class="form-control">
+                                                <input type="number" id="idBarang` + urutan + `" value="` + item .id_barang + `" class="form-control">
                                                 <input type="number" id="ket` + urutan + `" value="` + ket + `" class="form-control">
 
-                                                <input type="number" id="hrg` + item.id + `" value="` + item
-                                .harga_barang + `" class="form-control">
-                                                <input type="number" id="tot` + item.id + `" value="` + item
-                                .total_barang + `" class="form-control total` + urutan + `">
+                                                <input type="number" id="hrg` + item.id + `" value="` + item .harga_barang + `" class="form-control">
+                                                <input type="number" id="tot` + item.id + `" value="` + item .total_barang + `" class="form-control total` + urutan + `">
                                             </td>
                                         </tr>`;
                             $('#tampil-keranjang').append(content);
                             $("#nama_k").text(res.keranjang[0].nama_user);
-                            $("#tgl_k").text(res.keranjang[0].updated_at.substring(0, 19).replace('T',
-                                ' '));
+                            $("#tgl_k").text(res.keranjang[0].updated_at.substring(0, 19).replace('T', ' '));
 
                             // Showing Tooltip
                             $('[data-bs-toggle="tooltip"]').tooltip({
@@ -681,7 +675,7 @@
                             });
                         })
                         content2 = `<tr style="font-size:13px">
-                                        <th colspan="4">Total Keseluruhan</th>
+                                        <th colspan="4">TOTAL KESELURUHAN</th>
                                         <td colspan="2" id="ttl_seluruh">` + formatRupiah(tot, 'Rp ') + `</td>
                                         <td hidden>
                                             <input type="number" id="ttl_getSeluruh" value="` + tot + `" class="form-control" hidden>
