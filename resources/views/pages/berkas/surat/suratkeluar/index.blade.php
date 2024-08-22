@@ -231,8 +231,8 @@
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label for="select2Dark" class="form-label">Ditujukan Kepada <a class="text-danger">*</a></label>
-                                    <button class="btn btn-sm btn-link-primary" type="button" onclick="ubahTujuan1()" id="btn-manual1">Tulis Manual</button>
-                                    <button class="btn btn-sm btn-link-primary" type="button" onclick="ubahTujuan2()" id="btn-manual2" hidden>Pilihan Karyawan</button>
+                                    <button class="btn btn-sm btn-link" type="button" onclick="ubahTujuan1()" id="btn-manual1">Tulis Manual</button>
+                                    <button class="btn btn-sm btn-link" type="button" onclick="ubahTujuan2()" id="btn-manual2" hidden>Pilihan Karyawan</button>
                                     <div class="select2-dark" id="tujuan1_add">
                                         <select class="select2users form-select" name="tujuan[]" id="tujuan1_add_req" data-allow-clear="true" data-bs-auto-close="outside" style="width: 100%" required multiple>
                                             {{-- <option value="all">Seluruh Karyawan</option> --}}
@@ -258,18 +258,24 @@
                                     <textarea rows="3" class="form-control" name="isi" placeholder="Optional"></textarea>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Upload Berkas Surat (Optional)</label>
                                     <input type="file" class="form-control mb-2" name="file" accept="application/pdf">
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-secondary">
+                                    <small>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>
+                                    </small>
                                 </div>
                             </div>
                         </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer p-b-0">
 
                     <button class="btn btn-primary" id="btn-simpan" onclick="saveData()"><i class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
                     </form>
@@ -369,7 +375,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus berkas surat masuk tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
+                    <p style="text-align: justify;">Anda akan menghapus berkas surat keluar tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
                         Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">

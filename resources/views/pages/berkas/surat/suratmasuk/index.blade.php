@@ -79,7 +79,7 @@
                 <div class="card-body">
                     <div class="alert alert-secondary">
                         <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
-                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas</small>
+                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol <i class="fas fa-infinity text-danger"></i> di atas</small>
                     </div>
                     <div class="table-responsive">
                         <table id="dttable" class="table table-hover w-100 align-middle">
@@ -192,7 +192,7 @@
                                     <label class="form-label">Acara</label>
                                     <div class="input-group input-group-merge">
                                         <input type="text" class="form-control flatpickrrange" name="waktu" placeholder="YYYY-MM-DD to YYYY-MM-DD"/>
-                                        <span class="input-group-text cursor-pointer"><i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
+                                        <span class="input-group-text cursor-pointer"><i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -202,13 +202,21 @@
                                     <textarea rows="3" class="form-control" name="deskripsi" placeholder="Optional"></textarea>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Upload</label>
-                            <input type="file" class="form-control mb-2" name="file" accept="application/pdf">
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>
+                            <div class="col-md-7">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Upload</label>
+                                    <input type="file" class="form-control mb-2" name="file" accept="application/pdf">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="alert alert-secondary">
+                                    <small>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>
+                                    </small>
+                                </div>
+                            </div>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -273,7 +281,7 @@
                                 <label class="form-label">Acara</label>
                                 <div class="input-group input-group-merge">
                                     <input type="text" class="form-control flatpickrrange" id="waktu" placeholder="YYYY-MM-DD to YYYY-MM-DD"/>
-                                    <span class="input-group-text cursor-pointer"><i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
+                                    <span class="input-group-text cursor-pointer"><i class="fas fa-question-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Klik 2x apabila hanya memilih satu tanggal saja"></i></span>
                                 </div>
                             </div>
                         </div>

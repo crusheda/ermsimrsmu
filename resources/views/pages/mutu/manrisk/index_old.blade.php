@@ -1,78 +1,57 @@
-@extends('layouts.index')
+@extends('layouts.default')
 
 @section('content')
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Mutu</li>
-                        <li class="breadcrumb-item" aria-current="page">Manajemen Risiko</li>
-                    </ul>
-                </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Manajemen Risiko</h2>
-                    </div>
-                </div>
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0 font-size-18">Mutu - Manajemen Risiko</h4>
             </div>
         </div>
-    </div><!-- [ breadcrumb ] end -->
+    </div>
 
-    <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        <div class="col-md-12">
-            <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 card-title flex-grow-1">Tabel</h5>
-                    <div class="flex-shrink-0 float-end">
-                        <div class="btn-group shadow">
-                            <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#tambah"><i
-                                class="ph-duotone ph-microsoft-excel-logo me-1"></i> Upload Excel</button>
-                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Segarkan Tabel</span>" onclick="refresh()">
-                                <i class="ph-duotone ph-repeat me-1"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
-                            <thead>
-                                <tr>
-                                    <th class="cell-fit"></th>
-                                    <th class="cell-fit">ID</th>
-                                    <th>JUDUL</th>
-                                    <th>BULAN</th>
-                                    <th>TAHUN</th>
-                                    <th>KETERANGAN</th>
-                                    <th>UPDATE</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tampil-tbody">
-                                <tr>
-                                    <td colspan="9" style="font-size:13px">
-                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot class="bg-whitesmoke">
-                                <tr>
-                                    <th class="cell-fit"></th>
-                                    <th class="cell-fit">ID</th>
-                                    <th>JUDUL</th>
-                                    <th>BULAN</th>
-                                    <th>TAHUN</th>
-                                    <th>KETERANGAN</th>
-                                    <th>UPDATE</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
+    <div class="card card-body table-responsive" style="overflow: visible;">
+        <h4 classs="card-title">
+            <div class="btn-group">
+                <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#tambah"><i
+                        class="mdi mdi-microsoft-excel"></i>&nbsp;&nbsp;Upload Berkas Excel</button>
+                <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                    title="<i class='fa-fw fas fa-sync nav-icon'></i> <span>Segarkan Tabel</span>" onclick="refresh()">
+                    <i class="fa-fw fas fa-sync nav-icon"></i></button>
             </div>
-        </div>
+        </h4>
+        <hr>
+        <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
+            <thead>
+                <tr>
+                    <th class="cell-fit"></th>
+                    <th class="cell-fit">ID</th>
+                    <th>JUDUL</th>
+                    <th>BULAN</th>
+                    <th>TAHUN</th>
+                    <th>KETERANGAN</th>
+                    <th>UPDATE</th>
+                </tr>
+            </thead>
+            <tbody id="tampil-tbody">
+                <tr>
+                    <td colspan="9">
+                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot class="bg-whitesmoke">
+                <tr>
+                    <th class="cell-fit"></th>
+                    <th class="cell-fit">ID</th>
+                    <th>JUDUL</th>
+                    <th>BULAN</th>
+                    <th>TAHUN</th>
+                    <th>KETERANGAN</th>
+                    <th>UPDATE</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 
     {{-- MODAL START --}}
@@ -93,14 +72,14 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Judul <a class="text-danger">*</a></label>
+                                    <label class="mb-2">Judul <a class="text-danger">*</a></label>
                                     <input type="text" name="judul" id="judul" class="form-control"
                                         placeholder="e.g. Manajemen Risiko Unit Bangsal X" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Bulan <a class="text-danger">*</a></label>
+                                    <label>Bulan <a class="text-danger">*</a></label>
                                     <select class="select2 form-control" name="bln" id="bln-tambah" style="width: 100%" required>
                                         <option value="" hidden> Pilih Bulan</option>
                                         <?php
@@ -116,7 +95,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Tahun <a class="text-danger">*</a></label>
+                                    <label>Tahun <a class="text-danger">*</a></label>
                                     <select class="select2 form-control" name="thn" id="thn-tambah" style="width: 100%" required>
                                         <option value="" hidden>Pilih Tahun</option>
                                         @php
@@ -129,17 +108,17 @@
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="form-label">Keterangan</label>
+                            <label class="mb-2">Keterangan</label>
                             <textarea maxlength="200" rows="2" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control"
                                 name="keterangan" id="keterangan" placeholder="Optional"></textarea>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="form-label">Upload Berkas Excel <a class="text-danger">*</a></label>
-                            <input type="file" name="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
-                        </div>
-                        <div class="alert alert-secondary">
-                            <small><i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Excel (Berformat <strong>.xlsx</strong>)<br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>1 mb</strong></small>
+                            <label>Upload Berkas Excel <a class="text-danger">*</a></label>
+                            <input type="file" name="file" class="form-control mb-2" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+                            {{-- <input type="file" name="file" class="form-control mb-2" required> --}}
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Excel (Berformat <strong>.xlsx</strong>)<br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah
+                            <strong>1 mb</strong>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -154,10 +133,72 @@
             </div>
         </div>
     </div>
-    {{-- MODAL END --}}
+
+    {{-- <div class="modal fade bd-example-modal-lg" id="ubah" role="dialog" aria-labelledby="confirmFormLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Ubah Berkas&nbsp;<kbd><a id="show_edit"></a></kbd>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_edit" class="form-control" hidden>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label>Judul</label>
+                                <input type="text" id="judul_edit" class="form-control"
+                                    placeholder="Laporan Bulanan Unit X" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label>Bulan</label>
+                                <select class="select2 form-control" id="bln_edit" style="width: 100%" required></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label>Tahun</label>
+                                <select class="select2 form-control" id="thn_edit" style="width: 100%" required></select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="mb-2">Keterangan :</label>
+                                <textarea  maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control" id="keterangan_edit" ></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            Dokumen Upload
+                            <div id="file_edit"></div>
+                        </div>
+                    </div>
+                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Waktu pengubahan berkas rapat hanya berlaku pada
+                        hari saat anda mengupload</sub><br>
+                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Periksa ulang lampiran berkas anda, apabila
+                        terdapat kesalahan upload dokumen mohon hapus dan upload ulang</sub>
+
+                </div>
+                <div class="modal-footer">
+                    Ditambahkan oleh&nbsp;<a id="user_edit"></a>
+                    <button class="btn btn-primary" id="submit_edit" onclick="ubah()"><i
+                            class="fa-fw fas fa-save nav-icon"></i> Simpan</button>
+                    </form>
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                            class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div> --}}
 
     <script>
         $(document).ready(function() {
+
             $.ajax({
                 url: "/api/manrisk/data",
                 type: 'GET',
@@ -182,10 +223,10 @@
                         }
                         var updet = new Date(item.updated_at).toLocaleDateString();
 
-                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        content = "<tr id='data" + item.id + "'>";
 
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link-secondary hide-arrow rounded' data-bs-toggle='dropdown' aria-expanded='false'><i class="ti ti-dots-vertical font-size-18"></i></button>
+                                        <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-right dropend'>`;
                         if (adminID == true) {
                             content +=
@@ -244,11 +285,10 @@
                     });
                 }
             });
-        });
+        })
 
-        // ALL FUNCTION AREA
         function refresh() {
-            $("#tampil-tbody").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
 
             $.ajax({
                 url: "/api/manrisk/data",
@@ -275,10 +315,10 @@
                         }
                         var updet = new Date(item.updated_at).toLocaleDateString();
 
-                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        content = "<tr id='data" + item.id + "'>";
 
-                            content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link-secondary hide-arrow rounded' data-bs-toggle='dropdown' aria-expanded='false'><i class="ti ti-dots-vertical font-size-18"></i></button>
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-primary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'><i class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-right dropend'>`;
                         if (adminID == true) {
                             content +=
@@ -393,4 +433,5 @@
             return dateTime;
         }
     </script>
+
 @endsection

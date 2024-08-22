@@ -53,7 +53,7 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <a href="{{ route('portal') }}" class="d-block auth-logo">
-                            <img src="{{ asset('images/logo/logo_simrsmu_new_kop.png') }}" alt="" height="50"
+                            <img src="{{ asset('images/logo/logo_simrsmu_new_kop_31.png') }}" alt="" height="50"
                                 class="auth-logo-dark mx-auto">
                         </a>
                         <div class="row justify-content-center mt-5">

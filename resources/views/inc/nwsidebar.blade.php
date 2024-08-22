@@ -198,4 +198,13 @@
             <span class="pc-mtext">Kecelakaan Kerja</span>
         </a>
     </li>
+    <li class="pc-item pc-caption"><label>Mutu</label></li>
+    <li class="pc-item">
+        <a href="{{ route('manrisk.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="fas fa-briefcase-medical"></i>
+            </span>
+            <span class="pc-mtext">Manajemen Risiko</span>
+        </a>
+    </li>
 </ul>

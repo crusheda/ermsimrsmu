@@ -46,7 +46,7 @@
                     <div class="alert alert-secondary m-2">
                         <small>
                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat <br>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol <i class="fas fa-infinity text-danger"></i> di atas
                         </small>
                     </div>
                     <div class="table-responsive">
@@ -127,13 +127,21 @@
                                     <textarea rows="3" class="form-control" id="ket_add" placeholder="Optional"></textarea>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Upload <a class="text-danger">*</a></label>
-                            <input type="file" class="form-control mb-2" id="file_add" accept="application/pdf">
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>20 mb</strong><br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Upload <a class="text-danger">*</a></label>
+                                    <input type="file" class="form-control mb-2" id="file_add" accept="application/pdf">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-secondary">
+                                    <small>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan<br>
+                                        <i class="fa-fw fas fa-caret-right nav-icon"></i> Dijadikan dalam Satu file <strong>PDF</strong>
+                                    </small>
+                                </div>
+                            </div>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -689,7 +697,7 @@
                                 $('#showBtnDownload').append(`<button class='btn btn-info' onclick="window.open('/berkas/disposisi/`+item.id_surat+`')"><i class='fas fa-download me-1'></i> Unduh <span class="badge bg-light text-dark">`+item.title+`</span></button>`);
                             }
                             // var updet = item.updated_at.substring(0, 10);
-                            content = "<tr id='data"+ item.id +"'><td>";
+                            content = "<tr id='data"+ item.id +"' style='font-size:13px'><td>";
                             var tujuan = JSON.parse(item.tujuan);
                             tujuan.forEach(tuju => {
                                 res.roles.forEach(val => {
