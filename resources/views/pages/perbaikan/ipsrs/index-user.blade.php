@@ -328,9 +328,8 @@
                             <div class="bg-white p-2 border rounded px-3">
                                 <div class="justify-content-between align-items-center">
                                     <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <i class="ti ti-corner-up-right text-primary me-1"></i> <b>Pengaduan oleh <a id="track_oleh" class="text-primary"></a></b><br>
-                                            <i class="ti ti-corner-down-right text-primary me-1"></i> <a id="track_pengaduan"></a>
+                                        <div class="flex-shrink-0 mb-2">
+                                            <i class="ti ti-corner-up-right text-primary me-1"></i> <b>Pengaduan oleh <a id="track_oleh" class="text-primary"></a></b>
                                         </div>
                                         <div class="flex-grow-1">
                                             <span class="float-end">Pada tgl. <b><a id="track_tgl_pengaduan" class="text-warning"></a></b></span>
@@ -338,6 +337,8 @@
                                     </div>
                                 </div>
                                 <div id="track_dot"></div>
+                                <hr>
+                                <p id="track_pengaduan"></p>
                             </div>
                         </div>
                     </div>
@@ -541,7 +542,7 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    $('#track_pengaduan').text(res.show.ket_pengaduan);
+                    $('#track_pengaduan').empty().append(`<a class="text-primary"><u>Keterangan</u></a> : `+res.show.ket_pengaduan);
                     $('#track_oleh').text(res.show.nama);
                     $('#track_tgl_pengaduan').text(new Date(res.show.tgl_pengaduan).toLocaleString('fr-FR'));
                     var content = '';

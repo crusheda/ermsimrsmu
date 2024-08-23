@@ -273,7 +273,7 @@
                             id="show_id"></span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-b-0">
                     <div id="orderlist-overview">
                         <p class="mb-2">Nama : <span class="list-id text-primary" id="nama_r"></span></p>
                         <p class="mb-2">Unit : <span class="list-id text-primary" id="unit_r"></span></p>
@@ -935,7 +935,7 @@
                                         <th scope="row">
                                             <div>
                                                 <img src="{{ asset('images/no-img.png') }}" alt=""
-                                                    class="avatar-sm">
+                                                    class="avatar-sm wid-60">
                                             </div>
                                         </th>
                                         <td>
