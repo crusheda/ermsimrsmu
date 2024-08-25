@@ -39,7 +39,7 @@
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
                                 href="#upload-dokumen" role="tab" aria-selected="true">
-                                <i class="ti ti-cloud-upload me-2"></i><s>Dokumen</s>
+                                <i class="ti ti-cloud-upload me-2"></i>Dokumen
                             </a>
                         </li>
                         <li class="nav-item">
@@ -807,16 +807,86 @@
 
                 {{-- UBAH FOTO PROFIL --}}
                 <div class="tab-pane" id="upload-dokumen" role="tabpanel" aria-labelledby="upload-dokumen-tab-3">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5>Penyimpanan Dokumen</h5>
-                                </div>
-                                <div class="card-body">
-                                    <center><h5>Sedang dalam pengembangan oleh <a class="text-primary">Developer</a></h5></center>
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Penyimpanan Dokumen</h5>
+                            <div class="flex-shrink-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-body">
+                            <h4>5/10 <small>dokumen wajib sudah terupload.</small></h4>
+                            <hr class="my-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="upload_jenis">
+                                            <option value="" selected hidden>Pilih Jenis Surat</option>
+                                            <option value="1">STR</option>
+                                            <option value="2">SIP</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-3"><label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                        <div class="row">
+                                            <div class="col"><input type="file" class="form-control" id="upload_dokumen"></div>
+                                            <div class="col-auto"><button class="btn btn-primary"><i class="fas fa-upload me-1"></i> Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body table-card">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>#ID</th>
+                                            <th>JENIS SURAT</th>
+                                            <th class="text-end">AKAN HABIS PADA</th>
+                                            <th class="text-end">TERAKHIR DIUBAH</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-auto pe-0">
+                                                        <img src="{{ asset('images/user/avatar-1.jpg') }}" alt="user-image" class="wid-40 rounded-circle">
+                                                    </div>
+                                                    <div class="col">
+                                                        <h5 class="mb-0">Addie Bass</h5>
+                                                        <p class="text-muted f-12 mb-0">
+                                                            <a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="1974786b7c6f78597e74787075377a7674">[email&#160;protected]</a>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">Owner</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <span class="badge bg-success">Joined</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="#" class="avtar avtar-s btn-link-secondary"><i class="ti ti-dots f-18"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-end btn-page">
+                            <div class="btn btn-link-danger">Cancel</div>
+                            <div class="btn btn-primary">Update Profile</div>
                         </div>
                     </div>
                 </div>
