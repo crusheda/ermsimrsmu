@@ -316,8 +316,10 @@ class AsetController extends Controller
             $data->id_ruangan = $request->ruangan;
             $data->jenis = $request->jenis;
             // $data->kalibrasi = $request->kalibrasi;
-            $data->no_kalibrasi = $request->no_kalibrasi;
-            $data->tgl_berlaku = $request->tgl_berlaku;
+
+            // OLD
+            // $data->no_kalibrasi = $request->no_kalibrasi;
+            // $data->tgl_berlaku = $request->tgl_berlaku;
             $data->tgl_perolehan = $request->tgl_perolehan;
             $data->no_inventaris = $no_inventaris;
             $data->sarana = $request->sarana;
@@ -474,8 +476,8 @@ class AsetController extends Controller
         } else {
             $data = aset::find($request->id);
             $data->id_user = $request->user;
-            $data->no_kalibrasi = $request->no_kalibrasi;
-            $data->tgl_berlaku = $request->tgl_berlaku;
+            // $data->no_kalibrasi = $request->no_kalibrasi;
+            // $data->tgl_berlaku = $request->tgl_berlaku;
             $data->sarana = $request->sarana;
             $data->merk = $request->merk;
             $data->tipe = $request->tipe;

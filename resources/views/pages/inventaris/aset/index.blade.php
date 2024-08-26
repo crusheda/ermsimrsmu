@@ -845,15 +845,23 @@
                         else {
                             if (kalibrasiID == true) {
                                 if (item.jenis == 1) {
-                                    content += `<td><center>`
-                                                + `<div class='btn-group'>`
-                                                    + `<button type="button" class="btn btn-soft-dark waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
-                                                + `</div>`
-                                            + `</center></td>`;
+                                    if (item.tgl_berlaku) {
+                                        content += `<td><center>`
+                                                    + `<div class='btn-group'>`
+                                                        + `<button type="button" class="btn btn-link-success waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                    + `</div>`
+                                                + `</center></td>`;
+                                    } else {
+                                        content += `<td><center>`
+                                                    + `<div class='btn-group'>`
+                                                        + `<button type="button" class="btn btn-link-primary waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                    + `</div>`
+                                                + `</center></td>`;
+                                    }
                                 } else {
                                     content += `<td><center>`
                                                 + `<div class='btn-group'>`
-                                                    + `<button type="button" class="btn btn-soft-secondary waves-effect btn-label waves-light" disabled><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                    + `<button type="button" class="btn btn-link text-dark waves-effect btn-label waves-light" disabled><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
                                                 + `</div>`
                                             + `</center></td>`;
                                 }
@@ -1304,15 +1312,23 @@
                         else {
                             if (kalibrasiID == true) {
                                 if (item.jenis == 1) {
-                                    content += `<td><center>`
-                                                + `<div class='btn-group'>`
-                                                    + `<button type="button" class="btn btn-soft-dark waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
-                                                + `</div>`
-                                            + `</center></td>`;
+                                    if (item.tgl_berlaku) {
+                                        content += `<td><center>`
+                                                    + `<div class='btn-group'>`
+                                                        + `<button type="button" class="btn btn-link-success waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                    + `</div>`
+                                                + `</center></td>`;
+                                    } else {
+                                        content += `<td><center>`
+                                                    + `<div class='btn-group'>`
+                                                        + `<button type="button" class="btn btn-link-primary waves-effect btn-label waves-light" onclick="kalibrasi(`+item.id+`)"><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                    + `</div>`
+                                                + `</center></td>`;
+                                    }
                                 } else {
                                     content += `<td><center>`
                                                 + `<div class='btn-group'>`
-                                                    + `<button type="button" class="btn btn-soft-secondary waves-effect btn-label waves-light" disabled><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
+                                                    + `<button type="button" class="btn btn-link text-dark waves-effect btn-label waves-light" disabled><i class="bx bx-smile label-icon"></i> Kalibrasi #`+item.id+`</button>`
                                                 + `</div>`
                                             + `</center></td>`;
                                 }
