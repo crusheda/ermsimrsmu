@@ -6,16 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use App\Models\users_foto;
+use App\Models\referensi;
+use App\Models\users_doc;
 use App\Models\users;
 use App\Models\logs;
 use App\Models\alamat;
 use App\Models\model_has_roles;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Auth;
-use Storage;
-use Exception;
-use Redirect;
+use Validator, Auth, Storage, Exception, Redirect;
 
 class ProfilController extends Controller
 {
@@ -34,6 +33,7 @@ class ProfilController extends Controller
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
         $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
         $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
+        $ref_dokumen = referensi::where('ref_jenis',8)->get();
 
         $data = [
             'id_user' => $id,
@@ -44,6 +44,7 @@ class ProfilController extends Controller
             'role' => $role,
             'provinsi' => $provinsi,
             'kota' => $kota,
+            'ref_dokumen' => $ref_dokumen,
         ];
 
         return view('pages.setting.profil.index')->with('list', $data);
@@ -480,5 +481,68 @@ class ProfilController extends Controller
                 ->get();
 
         return response()->json($data, 200);
+    }
+
+    // DOKUMEN
+    function tableDokumen($id)
+    {
+        $show  = users_doc::join('referensi','referensi.id','=','users_doc.ref_id')
+                ->where('users_doc.user_id', $id)
+                ->where('users_doc.deleted_at',null)
+                ->where('users_doc.status',true)
+                ->select('referensi.deskripsi as nama_ref','users_doc.*')
+                ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tambahDokumen(Request $request)
+    {
+        $carbon = Carbon::now();
+        // $tgl = $carbon->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $validator = Validator::make($request->all(), [
+            'file' => 'max:5000', // required -- mimes:jpg,png,jpeg
+        ]);
+
+        // print_r($request->jns);
+        // die();
+        if ($validator->fails()) {
+            $arr = json_encode($validator->errors());
+            return redirect()->back()->with('error',$arr);
+        } else {
+            $data = new users_doc;
+            $data->ref_id = $request->jenis;
+            $data->user_id = $request->user_id;
+            $data->tgl_mulai = $request->tgl_mulai;
+            $data->tgl_akhir = $request->tgl_akhir;
+            $data->no_surat = $request->no_surat;
+            $data->deskripsi = $request->deskripsi;
+            $data->status = true;
+
+            $file_upload = $request->file('file');
+            if ($request->hasFile('file')) {
+                // saving file
+                $array_filename = $file_upload->store('public/files/profil/dokumen/'.$request->user_id);
+                $array_title = $file_upload->getClientOriginalName();
+                // encode file
+                $data->filename = json_encode($array_filename);
+                $data->title = json_encode($array_title);
+            }
+
+            $data->save();
+
+            return response()->json($file_upload->getClientOriginalName(), 200);
+        }
+    }
+
+    function downloadDokumen($id)
+    {
+        $data = users_doc::find($id);
+        return Storage::download($data->filename, $data->title);
     }
 }

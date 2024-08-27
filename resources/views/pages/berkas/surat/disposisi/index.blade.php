@@ -351,7 +351,7 @@
                                         } else {
                                             content += '-';
                                         }
-                            content += "</td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
+                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
                                         if (item.tempat != null) {
                                             content += item.tempat;
                                         } else {
@@ -454,7 +454,7 @@
                                         } else {
                                             content += '-';
                                         }
-                            content += "</td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
+                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
                                         if (item.tempat != null) {
                                             content += item.tempat;
                                         } else {
@@ -554,7 +554,7 @@
                                         } else {
                                             content += '-';
                                         }
-                            content += "</td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
+                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
                                         if (item.tempat != null) {
                                             content += item.tempat;
                                         } else {

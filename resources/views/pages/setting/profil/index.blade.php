@@ -805,9 +805,9 @@
                     </form>
                 </div>
 
-                {{-- UBAH FOTO PROFIL --}}
+                {{-- UBAH DOKUMEN --}}
                 <div class="tab-pane" id="upload-dokumen" role="tabpanel" aria-labelledby="upload-dokumen-tab-3">
-                    <div class="card">
+                    <div class="card table-card">
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">Penyimpanan Dokumen</h5>
                             <div class="flex-shrink-0">
@@ -818,76 +818,84 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-b-0 p-3">
                             <h4>5/10 <small>dokumen wajib sudah terupload.</small></h4>
                             <hr class="my-3">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                        <select class="form-control" id="upload_jenis">
+                                        <select class="form-control" id="jenis_dokumen">
                                             <option value="" selected hidden>Pilih Jenis Surat</option>
-                                            <option value="1">STR</option>
-                                            <option value="2">SIP</option>
+                                            @if (count($list['ref_dokumen']) > 0)
+                                                @foreach ($list['ref_dokumen'] as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->deskripsi }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Tgl. Mulai Berlaku <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tgl_mulai_dokumen">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Tgl. Berakhir <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tgl_akhir_dokumen">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Nomor Surat <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="no_surat_dokumen">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Deskripsi</label>
+                                        <textarea id="deskripsi_dokumen" class="form-control" placeholder="" rows="1"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
                                     <div class="mb-3"><label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
                                         <div class="row">
-                                            <div class="col"><input type="file" class="form-control" id="upload_dokumen"></div>
-                                            <div class="col-auto"><button class="btn btn-primary"><i class="fas fa-upload me-1"></i> Upload</button>
+                                            <div class="col"><input type="file" class="form-control" id="upload_dokumen" accept="application/pdf"></div>
+                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahDokumen()" id="btn-upload-dokumen"><i class="fas fa-upload me-1"></i> Upload</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body table-card">
+                        <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table mb-0">
+                                <table class="table mb-0" id="dttable-dokumen">
                                     <thead>
                                         <tr>
-                                            <th>#ID</th>
+                                            <th><center>#ID</center></th>
                                             <th>JENIS SURAT</th>
-                                            <th class="text-end">AKAN HABIS PADA</th>
+                                            <th>DESKRIPSI</th>
+                                            <th>STATUS</th>
                                             <th class="text-end">TERAKHIR DIUBAH</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tampil-tbody-dokumen">
                                         <tr>
-                                            <td>
-                                                <div class="row">
-                                                    <div class="col-auto pe-0">
-                                                        <img src="{{ asset('images/user/avatar-1.jpg') }}" alt="user-image" class="wid-40 rounded-circle">
-                                                    </div>
-                                                    <div class="col">
-                                                        <h5 class="mb-0">Addie Bass</h5>
-                                                        <p class="text-muted f-12 mb-0">
-                                                            <a href="../cdn-cgi/l/email-protection.html" class="__cf_email__" data-cfemail="1974786b7c6f78597e74787075377a7674">[email&#160;protected]</a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primary">Owner</span>
-                                            </td>
-                                            <td class="text-end">
-                                                <span class="badge bg-success">Joined</span>
-                                            </td>
-                                            <td class="text-end">
-                                                <a href="#" class="avtar avtar-s btn-link-secondary"><i class="ti ti-dots f-18"></i></a>
+                                            <td colspan="9" style="font-size:13px">
+                                                <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="card-footer text-end btn-page">
+                        {{-- <div class="card-footer text-end btn-page">
                             <div class="btn btn-link-danger">Cancel</div>
                             <div class="btn btn-primary">Update Profile</div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -1817,10 +1825,138 @@
             // $("#fileInput").change(function() {
             //     readURL(this);
             // });
-
+            refreshDokumen();
         });
 
         // FUNCTION
+        function prosesTambahDokumen() {
+            $("#btn-upload-dokumen").prop('disabled', true);
+            $("#btn-upload-dokumen").find("i").toggleClass("fa-upload fa-sync fa-spin");
+
+            var user_id         = "{{ Auth::user()->id }}";
+            var jenis           = $("#jenis_dokumen").val();
+            var tgl_mulai       = $("#tgl_mulai_dokumen").val();
+            var tgl_akhir       = $("#tgl_akhir_dokumen").val();
+            var no_surat        = $("#no_surat_dokumen").val();
+            var deskripsi       = $("#deskripsi_dokumen").val();
+            var filex           = $('#upload_dokumen')[0].files.length;
+
+            if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || deskripsi == '' || filex == 0) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon lengkapi semua data terlebih dahulu dan pastikan tidak ada yang kosong',
+                    position: 'topRight'
+                });
+            } else {
+                var fd = new FormData();
+
+                // Get the selected file
+                var files = $('#upload_dokumen')[0].files;
+                console.log(files);
+
+                fd.append('file',files[0]);
+                fd.append('user_id',user_id);
+                fd.append('jenis',jenis);
+                fd.append('tgl_mulai',tgl_mulai);
+                fd.append('tgl_akhir',tgl_akhir);
+                fd.append('no_surat',no_surat);
+                fd.append('deskripsi',deskripsi);
+
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('profil.storeDokumen')}}",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Dokumen bernama '+res+' berhasil ditambahkan',
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            refreshDokumen();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+
+            $("#btn-upload-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
+            $("#btn-upload-dokumen").prop('disabled', false);
+        }
+
+        function refreshDokumen() {
+            $("#tampil-tbody-dokumen").empty();
+            $("#tampil-tbody-dokumen").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/profil/dokumen/table/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        var adminID = "{{ Auth::user()->getManyRole(['it','kabag-kepegawaian']) }}";
+                        var userID = "{{ Auth::user()->id }}";
+                        $("#tampil-tbody-dokumen").empty();
+                        $('#dttable-dokumen').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='btn-icon text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
+                                    + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/profil/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                    if (adminID == true) {
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                    } else {
+                                        if (item.user_id == userID) {
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                        } else {
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                        }
+                                    }
+                            content += `</div></center></td>`;
+                            content += `<td>
+                                            <h5 class="mb-0"><span class="badge bg-primary me-1" style="font-size: 10px;">${item.nama_ref}</span> ${item.no_surat?item.no_surat:'-'}</h5>
+                                            <p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>
+                                        </td>
+                                        <td style='white-space: normal !important;word-wrap: break-word;'>${item.deskripsi?item.deskripsi:'-'}</td>
+                                        <td><center><span class="badge bg-success">${item.status?'<span class="badge badge-success">Aktif</span>':'<span class="badge badge-danger">Nonaktif</span>'}</span></center></td>`;
+                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
+                            $('#tampil-tbody-dokumen').append(content);
+                        });
+                        var table = $('#dttable-dokumen').DataTable({
+                            order: [
+                                [4, "desc"]
+                            ],
+                            displayLength: 10,
+                            lengthChange: true,
+                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Dokumen tidak ditemukan.',
+                            position: 'topRight'
+                        });
+                    }
+                }
+            );
+        }
         // function readURL(input) {
         //     if (input.files && input.files[0]) {
         //         var reader = new FileReader();
