@@ -819,7 +819,7 @@
                             </div>
                         </div>
                         <div class="card-body p-b-0 p-3">
-                            <h4>5/10 <small>dokumen wajib sudah terupload.</small></h4>
+                            <h4>x/2 <small>dokumen wajib sudah terupload.</small></h4>
                             <hr class="my-3">
                             <div class="row">
                                 <div class="col-md-3">
@@ -843,7 +843,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Tgl. Berakhir <span class="text-danger">*</span></label>
+                                        <label class="form-label">Tgl. Berakhir Surat <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" id="tgl_akhir_dokumen">
                                     </div>
                                 </div>
@@ -872,13 +872,13 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table mb-0" id="dttable-dokumen">
+                                <table class="table mb-0 table-hover" id="dttable-dokumen">
                                     <thead>
                                         <tr>
-                                            <th><center>#ID</center></th>
+                                            <th><center>AKSI</center></th>
                                             <th>JENIS SURAT</th>
                                             <th>DESKRIPSI</th>
-                                            <th>STATUS</th>
+                                            <th><center>STATUS</center></th>
                                             <th class="text-end">TERAKHIR DIUBAH</th>
                                         </tr>
                                     </thead>
@@ -1842,56 +1842,63 @@
             var filex           = $('#upload_dokumen')[0].files.length;
 
             if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || deskripsi == '' || filex == 0) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Mohon lengkapi semua data terlebih dahulu dan pastikan tidak ada yang kosong',
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
                     position: 'topRight'
                 });
             } else {
-                var fd = new FormData();
+                if (tgl_mulai == tgl_akhir) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Tanggal Mulai Berlaku tidak diperbolehkan sama dengan Tanggal Berakhir Surat',
+                        position: 'topRight'
+                    });
+                } else {
+                    var fd = new FormData();
 
-                // Get the selected file
-                var files = $('#upload_dokumen')[0].files;
-                console.log(files);
+                    // Get the selected file
+                    var files = $('#upload_dokumen')[0].files;
 
-                fd.append('file',files[0]);
-                fd.append('user_id',user_id);
-                fd.append('jenis',jenis);
-                fd.append('tgl_mulai',tgl_mulai);
-                fd.append('tgl_akhir',tgl_akhir);
-                fd.append('no_surat',no_surat);
-                fd.append('deskripsi',deskripsi);
+                    fd.append('file',files[0]);
+                    fd.append('user_id',user_id);
+                    fd.append('jenis',jenis);
+                    fd.append('tgl_mulai',tgl_mulai);
+                    fd.append('tgl_akhir',tgl_akhir);
+                    fd.append('no_surat',no_surat);
+                    fd.append('deskripsi',deskripsi);
 
-                // AJAX request
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{route('profil.storeDokumen')}}",
-                    method: 'post',
-                    data: fd,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(res){
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Dokumen bernama '+res+' berhasil ditambahkan',
-                            position: 'topRight'
-                        });
-                        if (res) {
-                            refreshDokumen();
+                    // AJAX request
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{route('profil.storeDokumen')}}",
+                        method: 'post',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function(res){
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Dokumen bernama '+res+' berhasil ditambahkan',
+                                position: 'topRight'
+                            });
+                            if (res) {
+                                refreshDokumen();
+                            }
+                        },
+                        error: function(res){
+                            console.log("error : " + JSON.stringify(res) );
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON,
+                                position: 'topRight'
+                            });
                         }
-                    },
-                    error: function(res){
-                        console.log("error : " + JSON.stringify(res) );
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: res.responseJSON,
-                            position: 'topRight'
-                        });
-                    }
-                });
+                    });
+                }
             }
 
             $("#btn-upload-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
@@ -1913,8 +1920,8 @@
                         $('#dttable-dokumen').DataTable().clear().destroy();
                         res.show.forEach(item => {
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='btn-icon text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
-                                    + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/profil/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
+                                    + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/profil/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
                                     if (adminID == true) {
                                         content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
                                         content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
@@ -1929,17 +1936,25 @@
                                     }
                             content += `</div></center></td>`;
                             content += `<td>
-                                            <h5 class="mb-0"><span class="badge bg-primary me-1" style="font-size: 10px;">${item.nama_ref}</span> ${item.no_surat?item.no_surat:'-'}</h5>
+                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;background-color:${item.color}">${item.nama_ref}</span> ${item.no_surat?item.no_surat:'-'}</h5>
                                             <p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>
                                         </td>
                                         <td style='white-space: normal !important;word-wrap: break-word;'>${item.deskripsi?item.deskripsi:'-'}</td>
-                                        <td><center><span class="badge bg-success">${item.status?'<span class="badge badge-success">Aktif</span>':'<span class="badge badge-danger">Nonaktif</span>'}</span></center></td>`;
+                                        <td><center>${item.status?'<span class="badge bg-success">Aktif</span>':'<span class="badge bg-danger">Nonaktif</span>'}</center></td>`;
                             content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
                             $('#tampil-tbody-dokumen').append(content);
                         });
                         var table = $('#dttable-dokumen').DataTable({
                             order: [
                                 [4, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '30%' },
+                                { sWidth: '40%' },
+                                { sWidth: '10%' },
+                                { sWidth: '15%' },
                             ],
                             displayLength: 10,
                             lengthChange: true,

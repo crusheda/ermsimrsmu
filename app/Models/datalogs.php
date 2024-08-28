@@ -23,7 +23,7 @@ class datalogs extends Model
     public static function record($user_id = null, $event, $extra, $before, $after, $role_target)
     {
         return static::create([
-            'user_id' => is_null($user_id) ? null : $user_id->id, // User saat ini
+            'user_id' => is_null($user_id) ? null : $user_id, // User saat ini
             'ip' => request()->ip(),
             'event' => $event, // Pesan pendukung
             'extra' => $extra,

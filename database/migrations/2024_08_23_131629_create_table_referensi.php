@@ -18,6 +18,7 @@ class CreateTableReferensi extends Migration
             $table->integer('ref_jenis');
             $table->integer('queue')->comment('Urutan Referensi berdasarkan Jenis');
             $table->string('deskripsi');
+            $table->string('color')->nullable();
             $table->boolean('status')->comment('1=aktif;0=nonaktif');
             $table->timestamps();
             $table->softDeletes();

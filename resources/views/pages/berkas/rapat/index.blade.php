@@ -220,7 +220,7 @@
     </div>
 
     <div class="modal fade" tabindex="-1" id="download" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">File Berkas Rapat</h5>
@@ -237,18 +237,17 @@
                             </thead>
                             <tbody id="tampil-tbody-file">
                                 <tr>
-                                    <td colspan="2">
+                                    <td colspan="2" style="font-size:13px">
                                         <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> File download akan digabungkan dan dikonversikan
-                        dalam bentuk <kbd>ZIP FILE</kbd></sub>
+                    <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> File download akan digabungkan dan dikonversikan dalam bentuk <kbd>ZIP FILE</kbd></sub>
                 </div>
                 <div class="modal-footer">
-                    Diupload&nbsp;<a id="tgl_upload"></a>
+                    Diupload<a id="tgl_upload"></a>
                     <a type="button" class="btn btn-primary text-white" id="download_btn"><i
                             class="fa fa-download"></i> Download</a>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
@@ -324,7 +323,7 @@
                     var date = getDateTime();
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
-                        content = "<tr id='data" + item.id + "'>";
+                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link-secondary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
@@ -492,7 +491,7 @@
                     document.getElementById('download_btn').href = "/api/berkas/rapat/data/" + res.id + "/zip";
                     content = "";
                     res.file.forEach(item => {
-                        content += "<tr>";
+                        content += "<tr style='font-size:13px'>";
                         content += "<td>" + item.nama + "</td>";
                         content += "<td>" + item.size + " Mb</td>";
                         content += "</tr>";

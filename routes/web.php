@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('profil/ubahpassword', [App\Http\Controllers\Setting\UbahPassword\UbahPasswordController::class, 'changePassword'])->name('auth.change_password');
     Route::resource('profil', '\App\Http\Controllers\Setting\Profil\ProfilController');
     Route::put('profil/{id}/ubahfoto', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'storeImg'])->name('profil.ubahfoto');
+    Route::get('profil/dokumen/download/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@downloadDokumen');
 });
 
 // HAK AKSES

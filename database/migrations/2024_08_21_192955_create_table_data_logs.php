@@ -18,7 +18,7 @@ class CreateTableDataLogs extends Migration
             $table->string('user_id', 20)->nullable();
             $table->string('ip', 20);
             $table->string('event', 100)->nullable();
-            $table->text('extra')->nullable();
+            $table->longText('extra')->nullable();
             $table->longText('before')->nullable();
             $table->longText('after')->nullable();
             $table->string('role_target')->nullable();

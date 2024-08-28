@@ -26,7 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('kota/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKota');
     Route::get('kecamatan/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKecamatan');
     Route::get('profil/dokumen/table/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@tableDokumen');
-    Route::get('profil/dokumen/download/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@downloadDokumen');
     Route::post('profil/dokumen/add', '\App\Http\Controllers\Setting\Profil\ProfilController@tambahDokumen')->name('profil.storeDokumen');
 
 

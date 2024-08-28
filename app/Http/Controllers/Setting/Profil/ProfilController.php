@@ -12,6 +12,7 @@ use App\Models\users;
 use App\Models\logs;
 use App\Models\alamat;
 use App\Models\model_has_roles;
+use App\Models\datalogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator, Auth, Storage, Exception, Redirect;
@@ -33,7 +34,7 @@ class ProfilController extends Controller
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
         $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
         $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
-        $ref_dokumen = referensi::where('ref_jenis',8)->get();
+        $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
 
         $data = [
             'id_user' => $id,
@@ -490,7 +491,7 @@ class ProfilController extends Controller
                 ->where('users_doc.user_id', $id)
                 ->where('users_doc.deleted_at',null)
                 ->where('users_doc.status',true)
-                ->select('referensi.deskripsi as nama_ref','users_doc.*')
+                ->select('referensi.deskripsi as nama_ref','referensi.color','users_doc.*')
                 ->get();
 
         $data = [
@@ -506,37 +507,94 @@ class ProfilController extends Controller
         // $tgl = $carbon->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $validator = Validator::make($request->all(), [
-            'file' => 'max:5000', // required -- mimes:jpg,png,jpeg
+            'file' => 'mimes:pdf|max:5000', // required -- mimes:jpg,png,jpeg
         ]);
 
-        // print_r($request->jns);
-        // die();
+        // INIT VALIDATION
+        $getData = users_doc::join('referensi','referensi.id','=','users_doc.ref_id')
+                    ->select('referensi.deskripsi as nama_ref','users_doc.*')
+                    ->where('users_doc.user_id',$request->user_id)
+                    ->where('users_doc.ref_id',$request->jenis)
+                    ->where('users_doc.status', true)
+                    ->orderBy('users_doc.created_at','DESC')
+                    ->first();
+
         if ($validator->fails()) {
             $arr = json_encode($validator->errors());
-            return redirect()->back()->with('error',$arr);
+            return response()->json($arr, 404);
         } else {
-            $data = new users_doc;
-            $data->ref_id = $request->jenis;
-            $data->user_id = $request->user_id;
-            $data->tgl_mulai = $request->tgl_mulai;
-            $data->tgl_akhir = $request->tgl_akhir;
-            $data->no_surat = $request->no_surat;
-            $data->deskripsi = $request->deskripsi;
-            $data->status = true;
+            if ($getData != null) {
+                $tglLama = Carbon::parse($getData->tgl_akhir)->isoFormat('YYYY-MM-DD');
+                $tglBaru = Carbon::parse($request->tgl_akhir)->isoFormat('YYYY-MM-DD');
+                if ($tglBaru < $tglLama) {
+                    return response()->json('Surat '.$getData->nama_ref.' Anda masih berlaku sampai tgl '.$getData->tgl_akhir.' Dengan Nomor Surat : '.$getData->no_surat, 500);
+                } else {
+                    // SAVING DATA
+                    $data = new users_doc;
+                    $data->ref_id = $request->jenis;
+                    $data->user_id = $request->user_id;
+                    $data->tgl_mulai = $request->tgl_mulai;
+                    $data->tgl_akhir = $request->tgl_akhir;
+                    $data->no_surat = $request->no_surat;
+                    $data->deskripsi = $request->deskripsi;
+                    $data->status = true;
 
-            $file_upload = $request->file('file');
-            if ($request->hasFile('file')) {
-                // saving file
-                $array_filename = $file_upload->store('public/files/profil/dokumen/'.$request->user_id);
-                $array_title = $file_upload->getClientOriginalName();
-                // encode file
-                $data->filename = json_encode($array_filename);
-                $data->title = json_encode($array_title);
+                    $file_upload = $request->file('file');
+                    if ($request->hasFile('file')) {
+                        // SAVING FILE
+                        $array_filename = $file_upload->store('public/files/profil/dokumen/'.$request->user_id);
+                        $array_title = $file_upload->getClientOriginalName();
+                        // ENCODE FILE
+                        $data->filename = $array_filename;
+                        $data->title = $array_title;
+                        if ($array_title == $getData->title) {
+                            return response()->json('Nama File Upload tidak boleh sama dengan sebelumnya', 404);
+                        }
+                    }
+
+                    // NONAKTIFKAN DATA LAMA
+                    DB::table('users_doc')
+                        ->where('user_id', $request->user_id)
+                        ->where('users_doc.ref_id',$request->jenis)
+                        ->update(['status' => false]);
+
+                    $data->save();
+
+                    // CEK DATA
+                    $cekData = referensi::find($request->jenis);
+                    datalogs::record($request->user_id, 'Baru saja memperbarui Surat '.$cekData->deskripsi.' terbaru', $request->no_surat, $getData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+                    return response()->json($file_upload->getClientOriginalName(), 200);
+                }
+            } else {
+                // SAVING DATA
+                $data = new users_doc;
+                $data->ref_id = $request->jenis;
+                $data->user_id = $request->user_id;
+                $data->tgl_mulai = $request->tgl_mulai;
+                $data->tgl_akhir = $request->tgl_akhir;
+                $data->no_surat = $request->no_surat;
+                $data->deskripsi = $request->deskripsi;
+                $data->status = true;
+
+                $file_upload = $request->file('file');
+                if ($request->hasFile('file')) {
+                    // SAVING FILE
+                    $array_filename = $file_upload->store('public/files/profil/dokumen/'.$request->user_id);
+                    $array_title = $file_upload->getClientOriginalName();
+                    // ENCODE FILE
+                    $data->filename = $array_filename;
+                    $data->title = $array_title;
+                }
+
+                $data->save();
+
+                // CEK DATA
+                $cekData = referensi::find($request->jenis);
+                datalogs::record($request->user_id, 'Baru saja menambahkan Surat '.$cekData->deskripsi.' terbaru', $request->no_surat, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+                return response()->json($file_upload->getClientOriginalName(), 200);
             }
-
-            $data->save();
-
-            return response()->json($file_upload->getClientOriginalName(), 200);
         }
     }
 
