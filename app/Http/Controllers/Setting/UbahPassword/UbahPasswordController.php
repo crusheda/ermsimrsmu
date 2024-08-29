@@ -59,7 +59,8 @@ class UbahPasswordController extends Controller
             $user->save();
             return redirect($this->redirectTo)->withMessage('Password berhasil diperbarui!');
         } else {
-            return redirect()->back()->withMessage('Ubah Password gagal! Periksa password Anda sekali lagi.');
+            // return redirect()->back()->withMessage('');
+            return redirect()->back()->withErrors('Ubah Password gagal! Periksa password lama Anda sekali lagi.');
         }
     }
 

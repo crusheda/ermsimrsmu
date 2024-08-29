@@ -24,8 +24,8 @@ class CreateTableUsersDoc extends Migration
             $table->date('tgl_akhir')->nullable();
             $table->string('no_surat')->nullable();
             $table->longText('deskripsi')->nullable();
-            $table->string('title', 200);
-            $table->string('filename', 200);
+            $table->string('title', 200)->nullable();
+            $table->string('filename', 200)->nullable();
             $table->integer('valid')->comment('Verify from User Kepegawaian')->nullable();
             $table->dateTime('tgl_valid')->nullable();
             $table->boolean('status')->comment('1=aktif;0=nonaktif');

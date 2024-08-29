@@ -819,8 +819,16 @@
                             </div>
                         </div>
                         <div class="card-body p-b-0 p-3">
-                            <h4><a class="text-danger">*</a>/2 <small>dokumen wajib sudah terupload.</small></h4>
-                            <hr class="my-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0 flex-grow-1"><a class="text-danger">*</a>/2 <small>dokumen wajib sudah terupload.</small></h4>
+                                <div class="flex-shrink-0" id="switch-str" hidden>
+                                    <div class="form-check form-switch custom-switch-v1 switch-sm">
+                                        <input type="checkbox" class="form-check-input input-primary" id="checkboxseumurhidup">
+                                        <label class="form-check-label" for="checkboxseumurhidup">Seumur Hidup ?</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-2">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group mb-3">
@@ -856,7 +864,7 @@
                                 <div class="col-md-5">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Deskripsi</label>
-                                        <textarea id="deskripsi_dokumen" class="form-control" placeholder="" rows="1"></textarea>
+                                        <textarea id="deskripsi_dokumen" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-7">
@@ -1923,6 +1931,56 @@
             //     readURL(this);
             // });
             refreshDokumen();
+
+            var divswitchstr    = $("#switch-str");
+            var switchstr       = $("#checkboxseumurhidup");
+            var jenis           = $("#jenis_dokumen");
+            var tgl_mulai       = $("#tgl_mulai_dokumen");
+            var tgl_akhir       = $("#tgl_akhir_dokumen");
+            var no_surat        = $("#no_surat_dokumen");
+            var deskripsi       = $("#deskripsi_dokumen");
+            var upload          = $("#upload_dokumen");
+
+            jenis.change(function() {
+                // INIT
+                switchstr.prop('checked', false);
+                tgl_mulai.prop('disabled',false);
+                tgl_akhir.prop('disabled',false);
+                no_surat.prop('disabled',false);
+                deskripsi.prop('disabled',false);
+                upload.prop('disabled',false);
+
+                if (jenis.val() == 139) { // STR
+                    divswitchstr.prop('hidden',false);
+                } else {
+                    divswitchstr.prop('hidden',true);
+                }
+
+                if (jenis.val() == 141) { // BTCLS/ACLS
+                    tgl_mulai.prop('disabled',true);
+                    no_surat.prop('disabled',true);
+                    deskripsi.prop('disabled',true);
+                } else {
+                    tgl_mulai.prop('disabled',false);
+                    no_surat.prop('disabled',false);
+                    deskripsi.prop('disabled',false);
+                }
+            })
+
+            switchstr.change(function() {
+                // var validateStr = switchstr.is(":checked");
+                if (switchstr.is(":checked")) {
+                    tgl_mulai.prop('disabled',true);
+                    tgl_akhir.prop('disabled',true);
+                    deskripsi.prop('disabled',true);
+                    upload.prop('disabled',true);
+                } else {
+                    tgl_mulai.prop('disabled',false);
+                    tgl_akhir.prop('disabled',false);
+                    deskripsi.prop('disabled',false);
+                    upload.prop('disabled',false);
+                }
+            })
         });
 
         // FUNCTION
@@ -1937,65 +1995,105 @@
             var no_surat        = $("#no_surat_dokumen").val();
             var deskripsi       = $("#deskripsi_dokumen").val();
             var filex           = $('#upload_dokumen')[0].files.length;
+            var switchstr       = $("#checkboxseumurhidup").is(":checked");
+            var validasi        = true;
 
-            if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || deskripsi == '' || filex == 0) {
+            // PROSES VALIDASI INPUT DOKUMEN
+            if (jenis == '') {
+                validasi = false;
+            } else {
+                if (jenis == 139) { // STR
+                    if (switchstr) { // STR SEUMUR HIDUP
+                        if (jenis == '' || no_surat == '') {
+                            validasi = false;
+                        }
+                    } else { // STR BELUM SEUMUR HIDUP
+                        if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || deskripsi == '' || filex == 0) {
+                            validasi = false;
+                        } else {
+                            if (tgl_mulai == tgl_akhir) {
+                                validasi = false;
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: 'Tanggal Mulai Berlaku tidak diperbolehkan sama dengan Tanggal Berakhir Surat',
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    if (jenis == 141) { // BTCLS/ACLS
+                        if (jenis == '' || tgl_akhir == '' || filex == 0) {
+                            validasi = false;
+                        }
+                    } else { // INPUT JENIS LAINNYA
+                        if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || deskripsi == '' || filex == 0) {
+                            validasi = false;
+                        } else {
+                            if (tgl_mulai == tgl_akhir) {
+                                validasi = false;
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: 'Tanggal Mulai Berlaku tidak diperbolehkan sama dengan Tanggal Berakhir Surat',
+                                    position: 'topRight'
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            // PROSES SIMPAN DOKUMEN
+            if (validasi == false) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
                     position: 'topRight'
                 });
             } else {
-                if (tgl_mulai == tgl_akhir) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: 'Tanggal Mulai Berlaku tidak diperbolehkan sama dengan Tanggal Berakhir Surat',
-                        position: 'topRight'
-                    });
-                } else {
-                    var fd = new FormData();
+                var fd = new FormData();
 
-                    // Get the selected file
-                    var files = $('#upload_dokumen')[0].files;
+                // Get the selected file
+                var files = $('#upload_dokumen')[0].files;
 
-                    fd.append('file',files[0]);
-                    fd.append('user_id',user_id);
-                    fd.append('jenis',jenis);
-                    fd.append('tgl_mulai',tgl_mulai);
-                    fd.append('tgl_akhir',tgl_akhir);
-                    fd.append('no_surat',no_surat);
-                    fd.append('deskripsi',deskripsi);
+                fd.append('file',files[0]);
+                fd.append('user_id',user_id);
+                fd.append('jenis',jenis);
+                fd.append('tgl_mulai',tgl_mulai);
+                fd.append('tgl_akhir',tgl_akhir);
+                fd.append('no_surat',no_surat);
+                fd.append('deskripsi',deskripsi);
 
-                    // AJAX request
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: "{{route('profil.storeDokumen')}}",
-                        method: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        dataType: 'json',
-                        success: function(res){
-                            iziToast.success({
-                                title: 'Pesan Sukses!',
-                                message: 'Dokumen bernama '+res+' berhasil ditambahkan',
-                                position: 'topRight'
-                            });
-                            if (res) {
-                                refreshDokumen();
-                            }
-                        },
-                        error: function(res){
-                            console.log("error : " + JSON.stringify(res) );
-                            iziToast.error({
-                                title: 'Pesan Galat!',
-                                message: res.responseJSON,
-                                position: 'topRight'
-                            });
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('profil.storeDokumen')}}",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Dokumen bernama berhasil ditambahkan pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            refreshDokumen();
                         }
-                    });
-                }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
+                            position: 'topRight'
+                        });
+                    }
+                });
             }
 
             $("#btn-upload-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
@@ -2138,6 +2236,24 @@
         }
 
         function refreshDokumen() {
+            var switchstr       = $("#checkboxseumurhidup");
+            var jenis           = $("#jenis_dokumen");
+            var tgl_mulai       = $("#tgl_mulai_dokumen");
+            var tgl_akhir       = $("#tgl_akhir_dokumen");
+            var no_surat        = $("#no_surat_dokumen");
+            var deskripsi       = $("#deskripsi_dokumen");
+            var upload          = $("#upload_dokumen");
+
+            // INIT
+            switchstr.prop('checked', false);
+            jenis.val('');
+            tgl_mulai.prop('disabled',false).val('');
+            tgl_akhir.prop('disabled',false).val('');
+            no_surat.prop('disabled',false).val('');
+            deskripsi.prop('disabled',false).val('');
+            upload.prop('disabled',false).val('');
+
+            // MULAI TABEL
             $("#tampil-tbody-dokumen").empty();
             $("#tampil-tbody-dokumen").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
@@ -2153,7 +2269,11 @@
                         res.show.forEach(item => {
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/profil/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                if (item.title) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/profil/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' disabled><i class='fas fa-download me-1'></i> Download</a>`;
+                                }
                                 if (item.status) {
                                     if (adminID == true) {
                                         content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
@@ -2173,9 +2293,13 @@
                                 }
                             content += `</div></center></td>`;
                             content += `<td>
-                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;background-color:${item.color}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h5>
-                                            <p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>
-                                        </td>
+                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;background-color:${item.color}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h5>`;
+                                if (item.ref_id == 139 || item.tgl_akhir == '') {
+                                    content += `<p class="text-muted f-12 mb-0">Masa Berlaku <a class="text-primary">Seumur Hidup</a></p>`;
+                                } else {
+                                    content += `<p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>`;
+                                }
+                            content += `</td>
                                         <td style='white-space: normal !important;word-wrap: break-word;'>${item.deskripsi?item.deskripsi:'-'}</td>
                                         <td><center>${item.status?'<span class="badge bg-success">Aktif</span>':'<span class="badge bg-danger">Nonaktif</span>'}</center></td>`;
                             content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
