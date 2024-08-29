@@ -487,10 +487,11 @@ class ProfilController extends Controller
     // DOKUMEN
     function tableDokumen($id)
     {
-        $show  = users_doc::join('referensi','referensi.id','=','users_doc.ref_id')
+        $show  = DB::table('users_doc')
+                ->join('referensi','referensi.id','=','users_doc.ref_id')
                 ->where('users_doc.user_id', $id)
                 ->where('users_doc.deleted_at',null)
-                ->where('users_doc.status',true)
+                // ->where('users_doc.status',true)
                 ->select('referensi.deskripsi as nama_ref','referensi.color','users_doc.*')
                 ->get();
 
@@ -596,6 +597,50 @@ class ProfilController extends Controller
                 return response()->json($file_upload->getClientOriginalName(), 200);
             }
         }
+    }
+
+    function showUbahDokumen($id)
+    {
+        $show = users_doc::where('id',$id)->first();
+        $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
+
+        $data = [
+            'show' => $show,
+            'ref_dokumen' => $ref_dokumen,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function ubahDokumen(Request $request)
+    {
+        $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+
+        $data = users_doc::find($request->id);
+        $data->ref_id        = $request->jenis;
+        $data->tgl_mulai    = $request->tgl_mulai;
+        $data->tgl_akhir    = $request->tgl_akhir;
+        $data->no_surat     = $request->no_surat;
+        $data->deskripsi    = $request->deskripsi;
+        $data->save();
+
+        return response()->json($now, 200);
+    }
+
+    public function hapusDokumen($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $hapusData = users_doc::find($id);
+
+        // Proses Hapus
+        $file = $hapusData->filename;
+        Storage::delete($file);
+        $hapusData->status = false;
+        $hapusData->delete();
+
+        return response()->json($tgl, 200);
     }
 
     function downloadDokumen($id)

@@ -27,6 +27,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('kecamatan/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiKecamatan');
     Route::get('profil/dokumen/table/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@tableDokumen');
     Route::post('profil/dokumen/add', '\App\Http\Controllers\Setting\Profil\ProfilController@tambahDokumen')->name('profil.storeDokumen');
+    Route::post('profil/dokumen/ubah/{id}/proses', '\App\Http\Controllers\Setting\Profil\ProfilController@ubahDokumen')->name('profil.ubahDokumen');
+    Route::delete('profil/dokumen/hapus/{id}/proses', '\App\Http\Controllers\Setting\Profil\ProfilController@hapusDokumen')->name('profil.hapusDokumen');
+    Route::get('profil/dokumen/ubah/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@showUbahDokumen')->name('profil.showUbahDokumen');
 
 
     // PROFIL KARYAWAN - KEPEGAWAIAN

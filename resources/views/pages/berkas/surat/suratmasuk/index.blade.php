@@ -1013,6 +1013,11 @@
             $("#btn-ubah").prop('disabled', true);
             $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
 
+            var tgl_diterima    = $("#tgl_diterima").val();
+            var asal            = $("#asal").val();
+            var nomor           = $("#nomor").val();
+            var user            = $("#user").val();
+
             if (user == "" || tgl_diterima == "" || nomor == "" || asal == "") {
                 iziToast.error({
                     title: 'Pesan Galat!',

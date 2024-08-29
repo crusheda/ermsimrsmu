@@ -199,7 +199,7 @@
                                     <h5>Tentang Saya</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="mb-0">{{ $list['show']->pengalaman_kerja?$list['show']->pengalaman_kerja:'-' }}</p>
+                                    <p class="mb-0">{!! $list['show']->pengalaman_kerja?str_replace(array("\r\n", "\r", "\n"),"<br>", $list['show']->pengalaman_kerja):'-' !!}</p>
                                 </div>
                             </div>
                             <div class="card">
@@ -246,11 +246,11 @@
                                         </li>
                                         <li class="list-group-item px-0">
                                             <p class="mb-1 text-muted">Alamat Lengkap Sesuai KTP</p>
-                                            <p class="mb-0">{{ $list['show']->alamat_ktp?$list['show']->alamat_ktp:'-' }}</p>
+                                            <p class="mb-0">{!! $list['show']->alamat_ktp?str_replace(array("\r\n", "\r", "\n"),"<br>", $list['show']->alamat_ktp):'-' !!}</p>
                                         </li>
                                         <li class="list-group-item px-0 pb-0">
                                             <p class="mb-1 text-muted">Alamat Domisili</p>
-                                            <p class="mb-0">{{ $list['show']->alamat_dom?$list['show']->alamat_dom:'Sama dengan alamat pada KTP' }}</p>
+                                            <p class="mb-0">{!! $list['show']->alamat_dom?str_replace(array("\r\n", "\r", "\n"),"<br>", $list['show']->alamat_dom):'Sama dengan alamat pada KTP' !!}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -339,19 +339,19 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0 pt-0">
                                             <p class="mb-1 text-muted">Riwayat Penyakit</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit?$list['show']->riwayat_penyakit:'-' }}</p>
+                                            <p class="mb-0">{!! $list['show']->riwayat_penyakit?str_replace(array("\r\n", "\r", "\n"),"<br>", $list['show']->riwayat_penyakit):'-' !!}</p>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <p class="mb-1 text-muted">Riwayat Penyakit Keluarga</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_penyakit_keluarga?$list['show']->riwayat_penyakit_keluarga:'-' }}</p>
+                                            <p class="mb-0">{!! $list['show']->riwayat_penyakit_keluarga?str_replace(array("\r\n", "\r", "\n"),"<br>", $list['show']->riwayat_penyakit_keluarga):'-' !!}</p>
                                         </li>
                                         <li class="list-group-item px-0">
                                             <p class="mb-1 text-muted">Riwayat Penggunaan Obat</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_penggunaan_obat?$list['show']->riwayat_penggunaan_obat:'-' }}</p>
+                                            <p class="mb-0">{!! $list['show']->riwayat_penggunaan_obat?str_replace(array("\r\n", "\r", "\n"),"<br>", $list["show"]->riwayat_penggunaan_obat):'-' !!}</p>
                                         </li>
                                         <li class="list-group-item px-0 pb-0">
                                             <p class="mb-1 text-muted">Riwayat Operasi</p>
-                                            <p class="mb-0">{{ $list['show']->riwayat_operasi?$list['show']->riwayat_operasi:'-' }}</p>
+                                            <p class="mb-0">{!! $list['show']->riwayat_operasi?str_replace(array("\r\n", "\r", "\n"),"<br>", $list['show']->riwayat_operasi):'-' !!}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -819,7 +819,7 @@
                             </div>
                         </div>
                         <div class="card-body p-b-0 p-3">
-                            <h4>x/2 <small>dokumen wajib sudah terupload.</small></h4>
+                            <h4><a class="text-danger">*</a>/2 <small>dokumen wajib sudah terupload.</small></h4>
                             <hr class="my-3">
                             <div class="row">
                                 <div class="col-md-3">
@@ -876,7 +876,7 @@
                                     <thead>
                                         <tr>
                                             <th><center>AKSI</center></th>
-                                            <th>JENIS SURAT</th>
+                                            <th>DOKUMEN SURAT</th>
                                             <th>DESKRIPSI</th>
                                             <th><center>STATUS</center></th>
                                             <th class="text-end">TERAKHIR DIUBAH</th>
@@ -910,7 +910,7 @@
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="bg-light px-4 py-3 mb-3">
-                                            <h5>Pilih Foto</h5>
+                                            <h5 class="mb-3">Pilih Foto</h5>
                                             <input type="file" id="fileInput" accept="image/*" class="form-control mb-3"/>
                                             <small>
                                                 <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Silakan upload file foto formal<br>
@@ -976,11 +976,17 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <center><div id="blah_a" class="align-middle text-center mb-3">
-                                    {{-- {{ asset('images/no-image.png') }} --}}
-                                    <img id="blah" src="" alt="Belum ada foto terupload">
-                                </div>
-                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button></center>
+                                <center>
+                                    {{-- <a class="image-popup-vertical-fit" id="blah_a" href="">
+                                        <img class="card-img-top" id="blah" src="{{ asset('images/no-image.png') }}"
+                                            alt="Tidak ada lampiran">
+                                    </a> --}}
+                                    <div id="blah_a" class="align-middle text-center mb-3">
+                                        {{-- {{ asset('images/no-image.png') }} --}}
+                                        <img id="blah" src="" alt="Belum ada foto terupload">
+                                    </div>
+                                    <button type="reset" class="btn btn-link-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                                </center>
                             </div>
                         </div>
                     </div>
@@ -1470,6 +1476,97 @@
         </div><!-- [ sample-page ] end -->
     </div><!-- [ Main Content ] end -->
 
+    {{-- MODAL AREA ----------------------------------------------------------------------------------------------------------------------------------------------------- --}}
+    {{-- MODAL UBAH --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="ubahDokumen" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Ubah Dokumen&nbsp;&nbsp;&nbsp;
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_edit_dokumen" hidden>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                <select class="form-control" id="jenis_dokumen_edit"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Nomor Surat <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="no_surat_dokumen_edit">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Tgl. Mulai Berlaku <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="tgl_mulai_dokumen_edit">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Tgl. Berakhir Surat <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="tgl_akhir_dokumen_edit">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Deskripsi</label>
+                                <textarea id="deskripsi_dokumen_edit" class="form-control" placeholder="" rows="1"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Nama File Dokumen</label>
+                            <div class="alert alert-secondary">
+                                <a id="lampiran_edit"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-ubah-dokumen" onclick="prosesUbahDokumen()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL HAPUS --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="hapusDokumen" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Hapus&nbsp;&nbsp;&nbsp;
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_hapus_dokumen" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus berkas dokumen tersebut. Penghapusan berkas akan menyebabkan hilangnya data/dokumen yang terhapus tersebut pada Storage Sistem.
+                        Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapusdokumen">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-hapus-dokumen" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapusDokumen()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         addEventListener("DOMContentLoaded", (event) => {
             // "use strict";
@@ -1905,6 +2002,141 @@
             $("#btn-upload-dokumen").prop('disabled', false);
         }
 
+        function showUbahDokumen(id) {
+            $.ajax(
+            {
+                url: "/api/profil/dokumen/ubah/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#id_edit_dokumen").val(id);
+                    $("#jenis_dokumen_edit").find('option').remove();
+                    res.ref_dokumen.forEach(item => {
+                        $("#jenis_dokumen_edit").append(`
+                            <option value="${item.id}" ${item.id == res.show.ref_id? "selected":""}>${item.deskripsi}</option>
+                        `);
+                    });
+                    $('#tgl_mulai_dokumen_edit').val(res.show.tgl_mulai);
+                    $('#tgl_akhir_dokumen_edit').val(res.show.tgl_akhir);
+                    $('#no_surat_dokumen_edit').val(res.show.no_surat);
+                    $('#deskripsi_dokumen_edit').val(res.show.deskripsi);
+                    $('#lampiran_edit').text(res.show.title);
+                    $('#ubahDokumen').modal('show');
+                }
+            })
+        }
+
+        function prosesUbahDokumen()
+        {
+            $("#btn-ubah-dokumen").prop('disabled', true);
+            $("#btn-ubah-dokumen").find("i").toggleClass("fa-edit fa-sync fa-spin");
+
+            var jenis       = $("#jenis_dokumen_edit").val();
+            var tgl_mulai   = $("#tgl_mulai_dokumen_edit").val();
+            var tgl_akhir   = $("#tgl_akhir_dokumen_edit").val();
+            var no_surat    = $("#no_surat_dokumen_edit").val();
+            var deskripsi    = $("#deskripsi_dokumen_edit").val();
+
+            if (jenis == "" || tgl_mulai == "" || tgl_akhir == "" || no_surat == "") {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon lengkapi kolom pengisian wajib *',
+                    position: 'topRight'
+                });
+            } else {
+                var fd = new FormData();
+                var id_edit = $("#id_edit_dokumen").val();
+
+                // Get the selected file
+                // if ($("#verifberkas"+id_edit).val() == 1) {
+                //     var files = $('#filex'+id_edit)[0].files;
+                //     fd.append('file',files[0]);
+                // }
+
+                fd.append('id',id_edit);
+                fd.append('jenis',jenis);
+                fd.append('tgl_mulai',tgl_mulai);
+                fd.append('tgl_akhir',tgl_akhir);
+                fd.append('no_surat',no_surat);
+                fd.append('deskripsi',deskripsi);
+
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/profil/dokumen/ubah/"+id_edit+"/proses",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Dokumen berhasil diperbarui pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            $('#ubahDokumen').modal('hide');
+                            refreshDokumen();
+                            // window.location.reload();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                    }
+                });
+            }
+
+            $("#btn-ubah-dokumen").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+            $("#btn-ubah-dokumen").prop('disabled', false);
+        }
+
+        function showHapusDokumen(id) {
+            $("#id_hapus_dokumen").val(id);
+            var inputs = document.getElementById('setujuhapusdokumen');
+            inputs.checked = false;
+            $('#hapusDokumen').modal('show');
+        }
+
+        function prosesHapusDokumen() {
+            // SWITCH BTN HAPUS
+            var checkboxHapusDokumen = $('#setujuhapusdokumen').is(":checked");
+            if (checkboxHapusDokumen == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan berkas',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus_dokumen").val();
+                $.ajax({
+                    url: "/api/profil/dokumen/hapus/"+id+"/proses",
+                    type: 'DELETE',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Berkas telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#hapusDokumen').modal('hide');
+                        refreshDokumen();
+                        // window.location.reload();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Berkas gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
         function refreshDokumen() {
             $("#tampil-tbody-dokumen").empty();
             $("#tampil-tbody-dokumen").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
@@ -1920,23 +2152,28 @@
                         $('#dttable-dokumen').DataTable().clear().destroy();
                         res.show.forEach(item => {
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
-                                    + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/profil/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/profil/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                if (item.status) {
                                     if (adminID == true) {
-                                        content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                        content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
                                     } else {
                                         if (item.user_id == userID) {
-                                            content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                            content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
                                         } else {
-                                        content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                        content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-trash me-1'></i> Hapus</a>`;
                                         }
                                     }
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' value="animate__rubberBand" disabled><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                }
                             content += `</div></center></td>`;
                             content += `<td>
-                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;background-color:${item.color}">${item.nama_ref}</span> ${item.no_surat?item.no_surat:'-'}</h5>
+                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;background-color:${item.color}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h5>
                                             <p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>
                                         </td>
                                         <td style='white-space: normal !important;word-wrap: break-word;'>${item.deskripsi?item.deskripsi:'-'}</td>
@@ -1972,18 +2209,23 @@
                 }
             );
         }
-        // function readURL(input) {
-        //     if (input.files && input.files[0]) {
-        //         var reader = new FileReader();
 
-        //         reader.onload = function(e) {
-        //             $('#blah_a').attr('href', e.target.result);
-        //             $('#blah').attr('src', e.target.result).height(400).width(400);
-        //         }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-        //         reader.readAsDataURL(input.files[0]);
-        //     }
-        // }
+                reader.onload = function(e) {
+                    // $('#blah_a').attr('href', e.target.result);
+                    $('#blah').attr('src', e.target.result).height(400).width(400);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#fileInput").change(function() {
+            readURL(this);
+        });
 
         </script>
 @endsection
