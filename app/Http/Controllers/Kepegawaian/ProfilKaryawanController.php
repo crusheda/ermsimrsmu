@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
+use App\Models\referensi;
 use App\Models\users;
 use App\Models\users_foto;
 use App\Models\logs;
+use App\Models\alamat;
+use App\Models\model_has_roles;
+use App\Models\roles;
 use Carbon\Carbon;
 use Auth;
 use Storage;
@@ -70,26 +74,30 @@ class ProfilKaryawanController extends Controller
      */
     public function show($id)
     {
-        $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('roles.name')
-            ->where('users.id',$id)
-            ->get();
-
-        $show  = users::where('id','=', $id)->first();
-
-        $foto = users_foto::where('user_id', '=', $id)->first();
-
+        $show  = DB::table('users')->where('id','=', $id)->first();
+        $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
         $showlog = logs::where('user_id', $id)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->get();
+        $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
+        $onlyRole = roles::get();
+        $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
+        $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
+        $model = model_has_roles::where('model_id', $id)->get();
+        $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
 
         $data = [
             'id_user' => $id,
-            'role' => $role,
+            'showlog' => $showlog,
+            'model' => $model,
             'show' => $show,
             'foto' => $foto,
+            'role' => $role,
+            'onlyRole' => $onlyRole,
+            'provinsi' => $provinsi,
+            'kota' => $kota,
+            'ref_dokumen' => $ref_dokumen,
         ];
 
-        return view('pages.profilkaryawan.show')->with('list', $data);
+        return view('pages.profilkaryawan.detail')->with('list', $data);
     }
 
     /**

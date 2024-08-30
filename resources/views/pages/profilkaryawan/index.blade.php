@@ -31,7 +31,7 @@
                             <i class="fas fa-plus me-1"></i> Tambah Pengguna</button>
                         <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel Profil Karyawan">
                             <i class="fas fa-sync"></i></button>
-                        <button type="button" class="btn btn-light-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()">
+                        <button type="button" class="btn btn-light-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()" disabled>
                             <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tampilkan Semua</button>
                         {{-- <button class="btn btn-light-info" onclick="" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan">
                             <i class="fas fa-history me-1"></i></button> --}}
@@ -299,7 +299,7 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow ${item.nik?'text-primary':'text-danger'}' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                            content += `<li><a href="javascript:void(0);" class='dropdown-item text-primary' onclick="lihatProfil(` + item.id + `)"><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
+                            content += `<li><a href="/kepegawaian/profilkaryawan/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
                                         <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
                         content += `</div></center></td>`;
                         content += `<td>${item.name}</td>`;

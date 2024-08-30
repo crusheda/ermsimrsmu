@@ -157,5 +157,37 @@
                 }
             });
         }
+
+        function verifName() {
+            var name = $("#name").val();
+            $.ajax({
+                url: "/api/hakakses/akunpengguna/verif/" + name,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    if (res === 1) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Mohon maaf, username sudah ada, silakan coba lagi dengan username yang berbeda',
+                            position: 'topRight'
+                        });
+                    } else {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Username dapat digunakan',
+                            position: 'topRight'
+                        });
+                        $("#btn-simpan").prop('disabled', false);
+                    }
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Mohon maaf, username sudah ada, silakan coba lagi dengan username yang berbeda',
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
     </script>
 @endsection
