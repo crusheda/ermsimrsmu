@@ -7,12 +7,14 @@
                 <div class="col-md-12">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item" aria-current="page">Profil Akun</li>
+                        <li class="breadcrumb-item">Kepegawaian</li>
+                        <li class="breadcrumb-item">Profil Karyawan</li>
+                        <li class="breadcrumb-item" aria-current="page">Detail</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Profil Akun</h2>
+                        <h2 class="mb-0">Profil <a class="text-primary">{{ $list['show']->nama?$list['show']->nama:$list['show']->name }}</a></h2>
                     </div>
                 </div>
             </div>
@@ -27,28 +29,28 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="profile-tab-1" data-bs-toggle="tab"
                                 href="#profil-pengguna" role="tab" aria-selected="true">
-                                <i class="ti ti-user me-2"></i>Profil Pengguna
+                                <i class="ti ti-user me-2"></i>Profil
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#upload-dokumen" role="tab" aria-selected="true">
-                                <i class="ti ti-cloud-upload me-2"></i>Dokumen
+                                href="#penetapan" role="tab" aria-selected="true">
+                                <i class="ti ti-license me-2"></i>Penetapan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab-3" data-bs-toggle="tab"
+                                href="#rotasi" role="tab" aria-selected="true">
+                                <i class="ti ti-route me-2"></i>Rotasi
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#jabatan" role="tab" aria-selected="true">
-                                <i class="ti ti-file-text me-2"></i>Jabatan
+                                href="#pengguna" role="tab" aria-selected="true">
+                                <i class="ti ti-logout me-2"></i>Pengguna
                             </a>
                         </li>
                         {{-- <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-3" data-bs-toggle="tab"
-                                href="#ubah-foto-profil" role="tab" aria-selected="true">
-                                <i class="ti ti-id me-2"></i>Ubah Foto Profil
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
                                 href="#ubah-password" role="tab" aria-selected="true">
                                 <i class="ti ti-lock me-2"></i>Ubah Password
@@ -360,17 +362,171 @@
                     </div>
                 </div>
 
-                {{-- FORM UBAH PROFIL --}}
-                <div class="tab-pane" id="jabatan" role="tabpanel" aria-labelledby="profile-tab-2">
+                {{-- FORM PENETAPAN --}}
+                <div class="tab-pane" id="penetapan" role="tabpanel" aria-labelledby="profile-tab-2">
                     <div class="card">
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 card-title flex-grow-1">Penentuan Akses Jabatan</h5>
+                            <h5 class="mb-0 card-title flex-grow-1">Penetapan Pegawai</h5>
                             <div class="flex-shrink-0">
-                                <div class="btn-group">
+                                {{-- <div class="btn-group">
                                     <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                         title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
                                         <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div> --}}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="ref_penetapan">
+                                            <option value="" selected hidden>Pilih Jenis Surat</option>
+                                            @if (count($list['ref_penetapan']) > 0)
+                                                @foreach ($list['ref_penetapan'] as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->deskripsi }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                        <div class="row">
+                                            <div class="col"><textarea id="ket_penetapan" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea></div>
+                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahDokumen()" id="btn-upload-dokumen"><i class="fas fa-upload me-1"></i> Simpan</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card table-card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Tabel</h5>
+                            <div class="flex-shrink-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Refresh Tabel Penetapan Pegawai" onclick="refreshPenetapan()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-b-0 p-3">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table id="dttable-penetapan" class="table dt-responsive table-hover w-100 align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th class="cell-fit">#ID</th>
+                                                <th class="cell-fit">PEGAWAI</th>
+                                                <th class="cell-fit">TGL BERLAKU</th>
+                                                <th class="cell-fit">KETERANGAN</th>
+                                                <th class="cell-fit">DIPERBARUI</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tampil-tbody-penetapan">
+                                            <tr>
+                                                <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th class="cell-fit">#ID</th>
+                                                <th class="cell-fit">PEGAWAI</th>
+                                                <th class="cell-fit">TGL BERLAKU</th>
+                                                <th class="cell-fit">KETERANGAN</th>
+                                                <th class="cell-fit">DIPERBARUI</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- FORM ROTASI --}}
+                <div class="tab-pane" id="rotasi" role="tabpanel" aria-labelledby="profile-tab-2">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Rotasi Pegawai</h5>
+                            <div class="flex-shrink-0">
+                                {{-- <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div> --}}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                ini inputan
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card table-card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Tabel</h5>
+                            <div class="flex-shrink-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Refresh Tabel Rotasi Pegawai" onclick="refreshRotasi()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-b-0 p-3">
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table id="dttable-rotasi" class="table dt-responsive table-hover w-100 align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th class="cell-fit">#ID</th>
+                                                <th class="cell-fit">PEGAWAI</th>
+                                                <th class="cell-fit">TGL BERLAKU</th>
+                                                <th class="cell-fit">BEFORE</th>
+                                                <th class="cell-fit">AFTER</th>
+                                                <th class="cell-fit">KETERANGAN</th>
+                                                <th class="cell-fit">DIPERBARUI</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tampil-tbody-rotasi">
+                                            <tr>
+                                                <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th class="cell-fit">#ID</th>
+                                                <th class="cell-fit">PEGAWAI</th>
+                                                <th class="cell-fit">TGL BERLAKU</th>
+                                                <th class="cell-fit">BEFORE</th>
+                                                <th class="cell-fit">AFTER</th>
+                                                <th class="cell-fit">KETERANGAN</th>
+                                                <th class="cell-fit">DIPERBARUI</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- FORM DATA PENGGUNA --}}
+                <div class="tab-pane" id="pengguna" role="tabpanel" aria-labelledby="profile-tab-2">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Penentuan Akses Pengguna</h5>
+                            <div class="flex-shrink-0">
+                                {{-- <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -379,7 +535,8 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="alert alert-secondary">
-                                            <span><i class="fas fa-arrow-right text-primary me-1"></i> Password will be Encrypted with Laravel Bcrypt Hash</span>
+                                            <span><i class="fas fa-arrow-right text-primary me-1"></i> Password akan dienkripsi menggunakan Laravel Bcrypt Hash</span><br>
+                                            <span><i class="fas fa-arrow-right text-primary me-1"></i> Apabila melakukan perubahan Username, mohon klik Validasi terlebih dahulu sebelum Menyimpan Data</span>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-4">
@@ -388,7 +545,7 @@
                                             <div class="input-group mb-2">
                                                 <input type="text" name="name" id="name" class="form-control" placeholder=""
                                                     value="{{ $list['show']->name }}" required />
-                                                <button class="btn btn-outline-warning" type="button" onclick="verifName()">Check</button>
+                                                <button class="btn btn-outline-warning" type="button" onclick="verifName()">Check Validasi</button>
                                             </div>
                                             <sub>Klik Check untuk validasi ketersediaan Username</sub>
                                         </div>
@@ -423,7 +580,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 d-flex justify-content-between">
-                                        <button class="btn btn-primary" id="btn-simpan-jabatan" onclick="saveData()" disabled>
+                                        <button class="btn btn-primary" id="btn-simpan-jabatan" onclick="saveData()">
                                             <i class="fas fa-save fa-md"></i>&nbsp;&nbsp;
                                             <span class="align-middle d-sm-inline-block d-none me-sm-1">Simpan</span>
                                         </button>
@@ -952,6 +1109,10 @@
                     placeholder: "Pilih",
                     dropdownParent: e.parent()
                 })
+            });
+
+            $('#name').on('change', function() {
+                $('#btn-simpan-jabatan').prop('disabled',true);
             });
 
             refreshDokumen();

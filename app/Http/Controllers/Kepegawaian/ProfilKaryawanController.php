@@ -83,6 +83,8 @@ class ProfilKaryawanController extends Controller
         $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
         $model = model_has_roles::where('model_id', $id)->get();
         $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
+        $ref_rotasi = referensi::where('ref_jenis',9)->get(); // 10 is Jenis Rotasi Pegawai
+        $ref_penetapan = referensi::where('ref_jenis',10)->get(); // 10 is Jenis Penetapan Pegawai
 
         $data = [
             'id_user' => $id,
@@ -95,6 +97,8 @@ class ProfilKaryawanController extends Controller
             'provinsi' => $provinsi,
             'kota' => $kota,
             'ref_dokumen' => $ref_dokumen,
+            'ref_rotasi' => $ref_rotasi,
+            'ref_penetapan' => $ref_penetapan,
         ];
 
         return view('pages.profilkaryawan.detail')->with('list', $data);

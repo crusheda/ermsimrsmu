@@ -811,11 +811,11 @@
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">Penyimpanan Dokumen</h5>
                             <div class="flex-shrink-0">
-                                <div class="btn-group">
+                                {{-- <div class="btn-group">
                                     <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                         title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
                                         <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body p-b-0 p-3">
@@ -868,7 +868,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-7">
-                                    <div class="mb-3"><label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
                                         <div class="row">
                                             <div class="col"><input type="file" class="form-control" id="upload_dokumen" accept="application/pdf"></div>
                                             <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahDokumen()" id="btn-upload-dokumen"><i class="fas fa-upload me-1"></i> Upload</button>
