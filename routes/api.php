@@ -39,6 +39,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('profilkaryawan/nonaktif', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonaktif'])->name('profilkaryawan.nonaktif');
     Route::get('profilkaryawan/nonlengkap', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonLengkap'])->name('profilkaryawan.nonlengkap');
 
+        // PENETAPAN
+        Route::post('profilkaryawan/penetapan/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahPenetapan'])->name('profilkaryawan.tambahPenetapan');
+        Route::get('profilkaryawan/penetapan/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tablePenetapan'])->name('profilkaryawan.tablePenetapan');
+        Route::get('profilkaryawan/rotasi/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableRotasi'])->name('profilkaryawan.tableRotasi');
+
     // HAK AKSES
         // AKSES JABATAN
         Route::get('hakakses/aksesjabatan/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableAksesJabatan')->name('aksesjabatan.data');

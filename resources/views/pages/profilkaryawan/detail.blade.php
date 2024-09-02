@@ -379,9 +379,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
+                                        <label class="form-label">Status Pegawai <span class="text-danger">*</span></label>
                                         <select class="form-control" id="ref_penetapan">
-                                            <option value="" selected hidden>Pilih Jenis Surat</option>
+                                            <option value="" selected hidden>Pilih Perubahan Status</option>
                                             @if (count($list['ref_penetapan']) > 0)
                                                 @foreach ($list['ref_penetapan'] as $item)
                                                     <option value="{{ $item->id }}">{{ $item->deskripsi }}</option>
@@ -392,10 +392,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                        <label class="form-label">Keterangan</label>
                                         <div class="row">
-                                            <div class="col"><textarea id="ket_penetapan" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea></div>
-                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahDokumen()" id="btn-upload-dokumen"><i class="fas fa-upload me-1"></i> Simpan</button>
+                                            <div class="col"><textarea id="ket_penetapan" class="form-control" placeholder="Tuliskan Keterangan (Bila Ada)" rows="1"></textarea></div>
+                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahPenetapan()" id="btn-simpan-penetapan"><i class="fas fa-save me-1"></i> Simpan</button>
                                             </div>
                                         </div>
                                     </div>
@@ -405,7 +405,7 @@
                     </div>
                     <div class="card table-card">
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 card-title flex-grow-1">Tabel</h5>
+                            <h5 class="mb-0 card-title flex-grow-1">Tabel Riwayat</h5>
                             <div class="flex-shrink-0">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -421,7 +421,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="cell-fit">#ID</th>
-                                                <th class="cell-fit">PEGAWAI</th>
+                                                <th class="cell-fit">STATUS</th>
                                                 <th class="cell-fit">TGL BERLAKU</th>
                                                 <th class="cell-fit">KETERANGAN</th>
                                                 <th class="cell-fit">DIPERBARUI</th>
@@ -435,7 +435,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th class="cell-fit">#ID</th>
-                                                <th class="cell-fit">PEGAWAI</th>
+                                                <th class="cell-fit">STATUS</th>
                                                 <th class="cell-fit">TGL BERLAKU</th>
                                                 <th class="cell-fit">KETERANGAN</th>
                                                 <th class="cell-fit">DIPERBARUI</th>
@@ -469,7 +469,7 @@
                     </div>
                     <div class="card table-card">
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 card-title flex-grow-1">Tabel</h5>
+                            <h5 class="mb-0 card-title flex-grow-1">Tabel Riwayat</h5>
                             <div class="flex-shrink-0">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -1116,6 +1116,7 @@
             });
 
             refreshDokumen();
+            refreshPenetapan();
         });
 
         function verifName() {
@@ -1402,6 +1403,67 @@
             }
         }
 
+        // FUNCTION PENETAPAN
+        function prosesTambahPenetapan() {
+            // $("#btn-simpan-penetapan").prop('disabled', true);
+            // $("#btn-simpan-penetapan").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var fd = new FormData();
+
+            // ISIAN FORM WAJIB
+            var ref = $('#ref_penetapan').val();
+            var ket = $('#ket_penetapan').val();
+
+            if (ref != '') {
+                // INISIALISASI
+                fd.append('ref',ref);
+                fd.append('ket',ket);
+                fd.append('user_id','{{ Auth::user()->id }}');
+                fd.append('pegawai_id','{{ $list["show"]->id }}');
+
+                // AJAX REQUEST
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/profilkaryawan/penetapan/tambah",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Status Pegawai berhasil ditambahkan pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            refreshPenetapan();
+                        }
+                        // console.log(fd)
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            } else {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
+                    position: 'topRight'
+                });
+            }
+
+            // $("#btn-simpan-penetapan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            // $("#btn-simpan-penetapan").prop('disabled', false);
+        }
+
         function refreshDokumen() {
             var switchstr       = $("#checkboxseumurhidup");
             var jenis           = $("#jenis_dokumen");
@@ -1483,6 +1545,68 @@
                                 { sWidth: '40%' },
                                 { sWidth: '10%' },
                                 { sWidth: '15%' },
+                            ],
+                            displayLength: 10,
+                            lengthChange: true,
+                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Dokumen tidak ditemukan.',
+                            position: 'topRight'
+                        });
+                    }
+                }
+            );
+        }
+
+        function refreshPenetapan() {
+            var ref_id  = $("#ref_penetapan");
+            var ket     = $("#ket_penetapan");
+
+            // INIT
+            ref_id.val('');
+            ket.val('');
+
+            // MULAI TABEL
+            $("#tampil-tbody-penetapan").empty();
+            $("#tampil-tbody-penetapan").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/profilkaryawan/penetapan/table/{{ $list['show']->id }}",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        var adminID = "{{ Auth::user()->getManyRole(['it','kabag-kepegawaian']) }}";
+                        // var userID = "{{ Auth::user()->id }}";
+                        $("#tampil-tbody-penetapan").empty();
+                        $('#dttable-penetapan').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusDokumen(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                            content += `</div></center></td>`;
+                            content += `<td>${item.nama_referensi?item.nama_referensi:''}</td>`;
+                            content += `<td>` + new Date(item.created_at).toLocaleString("sv-SE") + `</td>`;
+                            content += `<td>${item.keterangan?item.keterangan:''}</td>`;
+                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
+                            $('#tampil-tbody-penetapan').append(content);
+                        });
+                        var table = $('#dttable-penetapan').DataTable({
+                            order: [
+                                [4, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '25%' },
+                                { sWidth: '10%' },
+                                { sWidth: '50%' },
+                                { sWidth: '10%' },
                             ],
                             displayLength: 10,
                             lengthChange: true,
