@@ -31,7 +31,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::delete('profil/dokumen/hapus/{id}/proses', '\App\Http\Controllers\Setting\Profil\ProfilController@hapusDokumen')->name('profil.hapusDokumen');
     Route::get('profil/dokumen/ubah/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@showUbahDokumen')->name('profil.showUbahDokumen');
 
-
     // PROFIL KARYAWAN - KEPEGAWAIAN
     Route::get('profilkaryawan/table', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'table'])->name('profilkaryawan.table');
     Route::get('profilkaryawan/setaktif/{id}', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'setAktif'])->name('profilkaryawan.setaktif');
@@ -40,9 +39,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('profilkaryawan/nonlengkap', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonLengkap'])->name('profilkaryawan.nonlengkap');
 
         // PENETAPAN
-        Route::post('profilkaryawan/penetapan/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahPenetapan'])->name('profilkaryawan.tambahPenetapan');
         Route::get('profilkaryawan/penetapan/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tablePenetapan'])->name('profilkaryawan.tablePenetapan');
+        Route::post('profilkaryawan/penetapan/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahPenetapan'])->name('profilkaryawan.tambahPenetapan');
+        Route::get('profilkaryawan/penetapan/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahPenetapan'])->name('profilkaryawan.showUbahPenetapan');
+        Route::post('profilkaryawan/penetapan/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahPenetapan'])->name('profilkaryawan.ubahPenetapan');
+        Route::delete('profilkaryawan/penetapan/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusPenetapan'])->name('profilkaryawan.hapusPenetapan');
+        // ROTASI
         Route::get('profilkaryawan/rotasi/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableRotasi'])->name('profilkaryawan.tableRotasi');
+        Route::post('profilkaryawan/rotasi/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahRotasi'])->name('profilkaryawan.tambahRotasi');
+        Route::get('profilkaryawan/rotasi/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahRotasi'])->name('profilkaryawan.showUbahRotasi');
+        Route::post('profilkaryawan/rotasi/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahRotasi'])->name('profilkaryawan.ubahRotasi');
+        Route::delete('profilkaryawan/rotasi/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusRotasi'])->name('profilkaryawan.hapusRotasi');
 
     // HAK AKSES
         // AKSES JABATAN

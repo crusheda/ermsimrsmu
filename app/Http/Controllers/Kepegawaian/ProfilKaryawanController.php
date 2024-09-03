@@ -72,7 +72,7 @@ class ProfilKaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id) // TAMPILAN HALAMAN DETAIL PROFIL KEPEGAWAIAN
     {
         $show  = DB::table('users')->where('id','=', $id)->first();
         $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
