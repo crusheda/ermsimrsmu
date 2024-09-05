@@ -34,6 +34,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
+                                href="#kelengkapan" role="tab" aria-selected="true">
+                                <i class="ti ti-sailboat me-2"></i>Profesi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab"
                                 href="#penetapan" role="tab" aria-selected="true">
                                 <i class="ti ti-license me-2"></i>Penetapan
                             </a>
@@ -46,8 +52,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#pengguna" role="tab" aria-selected="true">
-                                <i class="ti ti-logout me-2"></i>Pengguna
+                                href="#dokumen" role="tab" aria-selected="true">
+                                <i class="ti ti-cloud-download me-2"></i>Dokumen
                             </a>
                         </li>
                         {{-- <li class="nav-item">
@@ -416,8 +422,10 @@
                         </div>
                         <div class="card-body p-b-0 p-3">
                             <div class="alert alert-secondary">
-                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data record yang dapat di <mark>ubah/hapus</mark> adalah data paling terakhir<br>
-                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Penghapusan data akan menonaktifkan data record dan status pegawai akan digantikan oleh data record terakhir apabila terdapat data lebih dari 1<br>
+                                <small>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data record yang dapat di <mark>ubah/hapus</mark> adalah data paling terakhir<br>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Penghapusan data akan menonaktifkan data record dan status pegawai akan digantikan oleh data record terakhir apabila terdapat data lebih dari 1
+                                </small>
                             </div>
                             <div class="table-responsive">
                                 <table id="dttable-penetapan" class="table dt-responsive table-hover w-100 align-middle">
@@ -479,9 +487,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group mb-3">
                                         <label for="defaultFormControlInput" class="form-label">Jabatan <span class="text-danger">*</span></label>
-                                        <div class="select2-dark">
+                                        <div class="select2-dark mb-2">
                                             <select id="jabatan_rotasi" name="jabatan_rotasi[]" class="select2 form-select" data-bs-auto-close="outside" required multiple="multiple" data-placeholder="Pilih Jabatan ..." style="width: 100%">
                                                 @if (count($list['onlyRole']) > 0)
                                                     @foreach ($list['onlyRole'] as $item)
@@ -496,6 +504,7 @@
                                                 @endif
                                             </select>
                                         </div>
+                                        <sub><i class="ti ti-arrows-up-right text-primary me-1"></i> <u>Refresh Browser</u> apabila jabatan tidak sesuai</sub>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -524,8 +533,11 @@
                         </div>
                         <div class="card-body p-b-0 p-3">
                             <div class="alert alert-secondary">
-                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data record yang dapat di <mark>ubah/hapus</mark> adalah data paling terakhir<br>
-                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pembatalan data akan menonaktifkan data record dan rotasi jabatan pegawai akan digantikan oleh data record terakhir apabila terdapat data lebih dari 1<br>
+                                <small>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data record yang dapat di <mark>ubah/hapus</mark> adalah data paling terakhir<br>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data terhapus diabaikan dan tidak dapat dikembalikan lagi atau dibatalkan<br>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pembatalan data akan menonaktifkan data record dan rotasi jabatan pegawai pada baris yang dipilih dan akan digantikan oleh data jabatan pada record terakhir apabila terdapat data lebih dari 1
+                                </small>
                             </div>
                             <div class="table-responsive">
                                 <table id="dttable-rotasi" class="table dt-responsive table-hover w-100 align-middle">
@@ -1624,9 +1636,14 @@
                                     content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusRotasi(`+item.id+`)" value="animate__rubberBand"><i class='ti ti-arrow-back-up me-1'></i> Batalkan Rotasi</a>`;
                                 }
                             content += `</div></center></td>`;
+                            if (item.deleted_at != null) {
+                                bgHapus = `<span class="badge rounded-pill text-bg-secondary p-1">Terhapus</span>`;
+                            } else {
+                                bgHapus = ``;
+                            }
                             content += "<td style='white-space: normal !important;word-wrap: break-word;'>"
                                         + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>"
-                                        + "<h6 class='mb-0'>" + item.nama_referensi + "</h6><small class='text-truncate text-muted'>Oleh " + item.nama_kepegawaian + "</small>"
+                                        + "<h6 class='mb-0'>" + item.nama_referensi + "&nbsp;&nbsp;" + bgHapus + "</h6><small class='text-truncate text-muted'>Oleh " + item.nama_kepegawaian + "</small>"
                                         + "</div></div></td>";
                             content += `<td>` + new Date(item.created_at).toLocaleString("sv-SE") + `</td>`;
                             content += `<td>`;

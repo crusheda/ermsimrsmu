@@ -255,7 +255,20 @@ class DetailProfilKaryawanController extends Controller
             $model->save();
         }
 
+        // Aktifkan Data sebelumnya
+        $cek = users_rotasi::where('pegawai_id',$data->pegawai_id)
+                ->where('status',false)
+                ->where('deleted_at',null)
+                ->orderBy('created_at','desc')
+                ->first();
+        if (!empty($cek) || $cek != '') {
+            $cek->status = 1;
+            $cek->save();
+        }
+
         // Proses Hapus Data dari DB
+        $data->status = 0;
+        $data->save();
         $data->delete();
 
         // CEK DATA & SAVE LOG
