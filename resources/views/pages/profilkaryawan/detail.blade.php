@@ -8,7 +8,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
-                        <li class="breadcrumb-item">Profil Karyawan</li>
+                        <li class="breadcrumb-item"><a href="{{ route('profilkaryawan.index') }}">Profil Karyawan</a></li>
                         <li class="breadcrumb-item" aria-current="page">Detail</li>
                     </ul>
                 </div>
@@ -34,8 +34,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#kelengkapan" role="tab" aria-selected="true">
-                                <i class="ti ti-sailboat me-2"></i>Profesi
+                                href="#kepegawaian" role="tab" aria-selected="true">
+                                <i class="ti ti-sailboat me-2"></i>Kepegawaian
                             </a>
                         </li>
                         <li class="nav-item">
@@ -374,11 +374,6 @@
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">Penetapan Pegawai</h5>
                             <div class="flex-shrink-0">
-                                {{-- <div class="btn-group">
-                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
-                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body p-b-10">
@@ -464,11 +459,6 @@
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">Rotasi Pegawai</h5>
                             <div class="flex-shrink-0">
-                                {{-- <div class="btn-group">
-                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
-                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body p-b-10">
@@ -490,25 +480,13 @@
                                     <div class="form-group mb-3">
                                         <label for="defaultFormControlInput" class="form-label">Jabatan <span class="text-danger">*</span></label>
                                         <div class="select2-dark mb-2">
-                                            <select id="jabatan_rotasi" name="jabatan_rotasi[]" class="select2 form-select" data-bs-auto-close="outside" required multiple="multiple" data-placeholder="Pilih Jabatan ..." style="width: 100%">
-                                                @if (count($list['onlyRole']) > 0)
-                                                    @foreach ($list['onlyRole'] as $item)
-                                                        <option value="{{ $item->id }}"
-                                                            @if (count($list['model']) > 0)
-                                                                @foreach ($list['model'] as $val)
-                                                                    @if ($item->id == $val->role_id) selected @endif
-                                                                @endforeach
-                                                            @endif>@if($item->deskripsi) {{ $item->deskripsi }} @else {{ $item->name }} @endif
-                                                        </option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                            <select id="jabatan_rotasi" name="jabatan_rotasi[]" class="select2 form-select" data-bs-auto-close="outside" required multiple="multiple" data-placeholder="Pilih Jabatan ..." style="width: 100%"></select>
                                         </div>
-                                        <sub><i class="ti ti-arrows-up-right text-primary me-1"></i> <u>Refresh Browser</u> apabila jabatan tidak sesuai</sub>
+                                        {{-- <sub><i class="ti ti-arrows-up-right text-primary me-1"></i> <u>Refresh Browser</u> apabila jabatan tidak sesuai</sub> --}}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="mb-3">
+                                    <div class="form-group mb-3">
                                         <label class="form-label">Keterangan</label>
                                         <div class="row">
                                             <div class="col"><textarea id="ket_rotasi" class="form-control" placeholder="Tuliskan Keterangan (Bila Ada)" rows="1"></textarea></div>
@@ -580,11 +558,6 @@
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">Penentuan Akses Pengguna</h5>
                             <div class="flex-shrink-0">
-                                {{-- <div class="btn-group">
-                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
-                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                                </div> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -650,6 +623,48 @@
                                 </div> --}}
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                {{-- UBAH DOKUMEN --}}
+                <div class="tab-pane" id="dokumen" role="tabpanel" aria-labelledby="dokumen-tab-3">
+                    <div class="card table-card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Dokumen Karyawan</h5>
+                            <div class="flex-shrink-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table dt-responsive table-hover w-100 align-middle" id="dttable-dokumen">
+                                    <thead>
+                                        <tr>
+                                            <th><center>AKSI</center></th>
+                                            <th>DOKUMEN</th>
+                                            <th>DESKRIPSI</th>
+                                            <th><center>STATUS</center></th>
+                                            <th class="text-end">TERAKHIR DIUBAH</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tampil-tbody-dokumen">
+                                        <tr>
+                                            <td colspan="9" style="font-size:13px">
+                                                <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- <div class="card-footer text-end btn-page">
+                            <div class="btn btn-link-danger">Cancel</div>
+                            <div class="btn btn-primary">Update Profile</div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -1293,6 +1308,7 @@
             // inisialisasi table
             refreshPenetapan();
             refreshRotasi();
+            refreshDokumen();
         });
 
         // ALL FUNCTION AREA
@@ -1701,11 +1717,93 @@
                             lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
                             // buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
+
+                        // CHANGE SELECT JABATAN VALUE
+                        $("#jabatan_rotasi").find('option').remove();
+                        res.onlyRole.forEach(item => {
+                            opt = '';
+                            opt += `<option value="${item.id_role}"`;
+                            res.model.forEach(val => {
+                                if (item.id_role == val.role_id) {
+                                    opt += `selected`;
+                                }
+                            })
+                            opt += `>${item.deskripsi_role?item.deskripsi_role:item.nama_role}</option>`;
+                            $("#jabatan_rotasi").append(opt);
+                        });
                     },
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Record Rotasi Jabatan Pegawai tidak ditemukan.',
+                            position: 'topRight'
+                        });
+                    }
+                }
+            );
+        }
+
+        function refreshDokumen() {
+            $("#tampil-tbody-dokumen").empty();
+            $("#tampil-tbody-dokumen").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/profilkaryawan/dokumen/table/{{ $list['show']->id }}",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $("#tampil-tbody-dokumen").empty();
+                        $('#dttable-dokumen').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                                if (item.title) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/kepegawaian/profilkaryawan/dokumen/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' disabled><i class='fas fa-download me-1'></i> Download</a>`;
+                                }
+                            content += `</div></center></td>`;
+                            content += `<td>
+                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;${item.color?'background-color:'+item.color:''}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h5>`;
+                                if (item.tgl_akhir == '' || item.tgl_akhir == null) {
+                                    if (item.ref_id == 139) {
+                                        content += `<p class="text-muted f-12 mb-0">Masa Berlaku <a class="text-primary">Seumur Hidup</a></p>`;
+                                    }
+                                } else {
+                                    if (item.tgl_mulai == '' || item.tgl_mulai == null) {
+                                        content += `<p class="text-muted f-12 mb-0">${item.tgl_akhir}</p>`;
+                                    } else {
+                                        content += `<p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>`;
+                                    }
+                                }
+                            content += `</td>
+                                        <td style='white-space: normal !important;word-wrap: break-word;'>${item.deskripsi?item.deskripsi:'-'}</td>
+                                        <td><center>${item.status?'<span class="badge bg-success">Aktif</span>':'<span class="badge bg-danger">Nonaktif</span>'}</center></td>`;
+                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
+                            $('#tampil-tbody-dokumen').append(content);
+                        });
+                        var table = $('#dttable-dokumen').DataTable({
+                            order: [
+                                [4, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '30%' },
+                                { sWidth: '40%' },
+                                { sWidth: '10%' },
+                                { sWidth: '15%' },
+                            ],
+                            displayLength: 10,
+                            lengthChange: true,
+                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Dokumen tidak ditemukan.',
                             position: 'topRight'
                         });
                     }

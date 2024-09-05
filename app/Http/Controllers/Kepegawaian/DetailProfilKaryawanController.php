@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\referensi;
 use App\Models\datalogs;
 use App\Models\users;
+use App\Models\users_doc;
 use App\Models\users_foto;
 use App\Models\users_status;
 use App\Models\users_rotasi;
@@ -67,11 +68,29 @@ class DetailProfilKaryawanController extends Controller
                 ->where('model_has_roles.model_id',$id)
                 ->get();
         $onlyRole = roles::select('id as id_role','name as nama_role','deskripsi as deskripsi_role')->get();
+        $model = model_has_roles::where('model_id', $id)->get();
 
         $data = [
             'show' => $show,
             'role' => $role,
             'onlyRole' => $onlyRole,
+            'model' => $model,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tableDokumen($id)
+    {
+        $show = users_doc::join('referensi','referensi.id','=','users_doc.ref_id')
+                ->join('users','users.id','=','users_doc.user_id')
+                ->select('users.nama as nama_pegawai','referensi.deskripsi as nama_ref','referensi.color','users_doc.*')
+                ->where('users_doc.user_id',$id)
+                ->orderBy('users_doc.updated_at','desc')
+                ->get();
+
+        $data = [
+            'show' => $show,
         ];
 
         return response()->json($data, 200);
@@ -276,5 +295,11 @@ class DetailProfilKaryawanController extends Controller
         datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Rotasi Jabatan Pegawai ID : '.$id, null, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($tgl, 200);
+    }
+
+    function downloadDokumen($id)
+    {
+        $data = users_doc::find($id);
+        return Storage::download($data->filename, $data->title);
     }
 }

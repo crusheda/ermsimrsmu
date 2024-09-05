@@ -2009,7 +2009,7 @@
                             validasi = false;
                         }
                     } else { // STR BELUM SEUMUR HIDUP
-                        if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || deskripsi == '' || filex == 0) {
+                        if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || filex == 0) {
                             validasi = false;
                         } else {
                             if (tgl_mulai == tgl_akhir) {
@@ -2028,7 +2028,7 @@
                             validasi = false;
                         }
                     } else { // INPUT JENIS LAINNYA
-                        if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || deskripsi == '' || filex == 0) {
+                        if (jenis == '' || tgl_mulai == '' || tgl_akhir == '' || no_surat == '' || filex == 0) {
                             validasi = false;
                         } else {
                             if (tgl_mulai == tgl_akhir) {
@@ -2294,11 +2294,17 @@
                                 }
                             content += `</div></center></td>`;
                             content += `<td>
-                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;background-color:${item.color}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h5>`;
-                                if (item.ref_id == 139 || item.tgl_akhir == '') {
-                                    content += `<p class="text-muted f-12 mb-0">Masa Berlaku <a class="text-primary">Seumur Hidup</a></p>`;
+                                            <h5 class="mb-0"><span class="badge me-1" style="font-size: 10px;${item.color?'background-color:'+item.color:''}">${item.nama_ref}</span> ${item.status?item.no_surat:'<s>'+item.no_surat+'</s>'}</h5>`;
+                                if (item.tgl_akhir == '' || item.tgl_akhir == null) {
+                                    if (item.ref_id == 139) {
+                                        content += `<p class="text-muted f-12 mb-0">Masa Berlaku <a class="text-primary">Seumur Hidup</a></p>`;
+                                    }
                                 } else {
-                                    content += `<p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>`;
+                                    if (item.tgl_mulai == '' || item.tgl_mulai == null) {
+                                        content += `<p class="text-muted f-12 mb-0">${item.tgl_akhir}</p>`;
+                                    } else {
+                                        content += `<p class="text-muted f-12 mb-0">${item.tgl_mulai}&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;${item.tgl_akhir}</p>`;
+                                    }
                                 }
                             content += `</td>
                                         <td style='white-space: normal !important;word-wrap: break-word;'>${item.deskripsi?item.deskripsi:'-'}</td>

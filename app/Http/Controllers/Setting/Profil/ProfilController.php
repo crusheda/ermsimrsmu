@@ -517,6 +517,12 @@ class ProfilController extends Controller
             }
         }
 
+        if ($request->no_surat == null || $request->no_surat == '') {
+            $no_surat = '';
+        } else {
+            $no_surat = $request->no_surat;
+        }
+
         // INIT VALIDATION
         $getData = users_doc::join('referensi','referensi.id','=','users_doc.ref_id')
                     ->select('referensi.deskripsi as nama_ref','users_doc.*')
@@ -538,7 +544,7 @@ class ProfilController extends Controller
                 $data->user_id = $request->user_id;
                 $data->tgl_mulai = $request->tgl_mulai;
                 $data->tgl_akhir = $request->tgl_akhir;
-                $data->no_surat = $request->no_surat;
+                $data->no_surat = $no_surat;
                 $data->deskripsi = $request->deskripsi;
                 $data->status = true;
 
@@ -566,7 +572,7 @@ class ProfilController extends Controller
 
                 // CEK DATA
                 $cekData = referensi::find($request->jenis);
-                datalogs::record($request->user_id, 'Baru saja memperbarui Surat '.$cekData->deskripsi.' terbaru', $request->no_surat, $getData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+                datalogs::record($request->user_id, 'Baru saja memperbarui Surat '.$cekData->deskripsi.' terbaru', $no_surat, $getData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
                 return response()->json($tgl, 200);
             }
@@ -577,7 +583,7 @@ class ProfilController extends Controller
             $data->user_id = $request->user_id;
             $data->tgl_mulai = $request->tgl_mulai;
             $data->tgl_akhir = $request->tgl_akhir;
-            $data->no_surat = $request->no_surat;
+            $data->no_surat = $no_surat;
             $data->deskripsi = $request->deskripsi;
             $data->status = true;
 
@@ -595,7 +601,7 @@ class ProfilController extends Controller
 
             // CEK DATA
             $cekData = referensi::find($request->jenis);
-            datalogs::record($request->user_id, 'Baru saja menambahkan Surat '.$cekData->deskripsi.' terbaru', $request->no_surat, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            datalogs::record($request->user_id, 'Baru saja menambahkan Surat '.$cekData->deskripsi.' terbaru', $no_surat, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
             return response()->json($tgl, 200);
         }

@@ -27,11 +27,11 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <div class="btn-group shadow">
-                        <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Akun Pengguna Baru">
+                        <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Akun Pengguna Baru" disabled>
                             <i class="fas fa-plus me-1"></i> Tambah Pengguna</button>
-                        <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel Profil Karyawan">
+                        <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel">
                             <i class="fas fa-sync"></i></button>
-                        <button type="button" class="btn btn-light-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()" disabled>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()" disabled>
                             <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tampilkan Semua</button>
                         {{-- <button class="btn btn-light-info" onclick="" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan">
                             <i class="fas fa-history me-1"></i></button> --}}
@@ -56,9 +56,9 @@
                             <thead>
                                 <tr>
                                     <th class="cell-fit"><center>#ID</center></th>
-                                    <th class="cell-fit">AKUN</th>
-                                    <th class="cell-fit">NAMA</th>
-                                    <th class="cell-fit">UPDATE</th>
+                                    <th class="cell-fit">AKUN / USERNAME</th>
+                                    <th class="cell-fit">NAMA LENGKAP</th>
+                                    <th class="cell-fit">TERAKHIR DIPERBARUI</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
@@ -70,9 +70,9 @@
                             </tbody>
                             <tfoot>
                                 <th class="cell-fit"><center>#ID</center></th>
-                                <th class="cell-fit">AKUN</th>
-                                <th class="cell-fit">NAMA</th>
-                                <th class="cell-fit">UPDATE</th>
+                                <th class="cell-fit">AKUN / USERNAME</th>
+                                <th class="cell-fit">NAMA LENGKAP</th>
+                                <th class="cell-fit">TERAKHIR DIPERBARUI</th>
                             </tfoot>
                         </table>
                     </div>
@@ -184,7 +184,7 @@
                     <h4 class="modal-title">
                         Daftar Karyawan Nonaktif
                     </h4>
-                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-1">
                     <div class="table-responsive text-nowrap table-card">
@@ -225,9 +225,7 @@
                     <a class="btn btn-label-secondary" href="javascript:void(0);" data-bs-dismiss="modal"><i
                         class="fas fa-chevron-left"></i>&nbsp;&nbsp;Tutup</a>
                     <div class="btn-group">
-                        <button class="btn btn-warning" onclick="refreshNonAktif()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Segarkan"><i
-                                class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
+                        <button class="btn btn-warning" onclick="refreshNonAktif()"><i class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
                     </div>
                 </div>
             </div>
@@ -242,7 +240,7 @@
                     <h4 class="modal-title">
                         Daftar Profil Karyawan Belum Lengkap
                     </h4>
-                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Tutup"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-1">
                     <div class="table-responsive text-nowrap" style="border: 0px">
@@ -275,10 +273,36 @@
                     <a class="btn btn-label-secondary" href="javascript:void(0);" data-bs-dismiss="modal"><i
                         class="fas fa-chevron-left"></i>&nbsp;&nbsp;Tutup</a>
                     <div class="btn-group">
-                        <button class="btn btn-warning" onclick="refreshNonLengkap()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Segarkan"><i
-                                class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
+                        <button class="btn btn-warning" onclick="refreshNonLengkap()"><i class='fa-fw fas fa-sync nav-icon'></i>&nbsp;&nbsp;Segarkan</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal animate__animated animate__rubberBand fade" id="aktifKaryawan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Apakah Anda sudah Yakin?
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_aktif_karyawan" hidden>
+                    <p style="text-align: justify;">Anda akan mengaktifkan kembali karyawan dengan <kbd>ID : <a id="show_id_aktif_karyawan"></a></kbd> dan/apabila melanjutkan proses Submit, data Anda akan tercatat dalam database.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuaktifkaryawan">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Saya Setuju</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-aktif-karyawan" class="btn btn-danger me-sm-3 me-1" onclick="batalNonAktif()"><i class="ti ti-checkbox me-1" style="font-size:13px"></i> Submit</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close" onclick="hideAktifKaryawan()"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
                 </div>
             </div>
         </div>
@@ -344,7 +368,7 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow ${item.nik?'text-primary':'text-danger'}' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                            content += `<li><a href="javascript:void(0);" class='dropdown-item text-primary' onclick="lihatProfil(` + item.id + `)"><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
+                            content += `<li><a href="/kepegawaian/profilkaryawan/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
                                         <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
                         content += `</div></center></td>`;
                         content += `<td>${item.name}</td>`;
@@ -389,7 +413,7 @@
                                     <td>` + item.nama + `</td>
                                     <td>` + new Date(item.deleted_at).toLocaleString("sv-SE") +
                             `</td>
-                                    <td><center><a href='javascript:void(0);' class='btn btn-sm btn-link-primary' onclick="batalNonAktif(` +
+                                    <td><center><a href='javascript:void(0);' class='btn btn-sm btn-link-primary' onclick="showAktifKaryawan(` +
                             item.id + `)"><i class='fa-fw fas fa-user-check nav-icon'></i> Aktifkan</a></center></td>
                                 </tr>
                             `;
@@ -472,7 +496,7 @@
                                     <td>` + item.nama + `</td>
                                     <td>` + new Date(item.deleted_at).toLocaleString("sv-SE") +
                             `</td>
-                                    <td><center><a href='javascript:void(0);' class='btn btn-sm btn-link-primary' onclick="batalNonAktif(` +
+                                    <td><center><a href='javascript:void(0);' class='btn btn-sm btn-link-primary' onclick="showAktifKaryawan(` +
                             item.id + `)"><i class='fa-fw fas fa-user-check nav-icon'></i> Aktifkan</a></center></td>
                                 </tr>
                             `;
@@ -538,21 +562,49 @@
             })
         }
 
-        function batalNonAktif(id) {
-            $.ajax({
-                url: "/api/profilkaryawan/setaktif/"+id,
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    iziToast.success({
-                        title: 'Sukses!',
-                        message: 'User ID : '+id+' sukses di Aktifkan kembali pada '+ res,
-                        position: 'topRight'
-                    });
-                    refreshNonAktif();
-                    window.location.reload();
-                }
-            })
+        function showAktifKaryawan(id) {
+            $("#id_aktif_karyawan").val(id);
+            $("#show_id_aktif_karyawan").text(id);
+            var inputs = document.getElementById('setujuaktifkaryawan');
+            inputs.checked = false;
+            $('#nonaktif').modal('hide');
+            $('#aktifKaryawan').modal('show');
+        }
+
+        function hideAktifKaryawan() {
+            $('#nonaktif').modal('show');
+            $('#aktifKaryawan').modal('hide');
+        }
+
+        function batalNonAktif() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuaktifkaryawan').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk melakukan pengaktifan karyawan kembali',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_aktif_karyawan").val();
+                $.ajax({
+                    url: "/api/profilkaryawan/setaktif/"+id,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Sukses!',
+                            message: 'User ID : '+id+' sukses di Aktifkan kembali pada '+ res,
+                            position: 'topRight'
+                        });
+                        $('#aktifKaryawan').modal('hide');
+                        refreshNonAktif();
+                        refresh();
+                        $('#nonaktif').modal('show');
+                    }
+                })
+            }
         }
     </script>
 @endsection

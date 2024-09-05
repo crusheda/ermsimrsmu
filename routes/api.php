@@ -50,6 +50,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('profilkaryawan/rotasi/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahRotasi'])->name('profilkaryawan.showUbahRotasi');
         Route::post('profilkaryawan/rotasi/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahRotasi'])->name('profilkaryawan.ubahRotasi');
         Route::delete('profilkaryawan/rotasi/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusRotasi'])->name('profilkaryawan.hapusRotasi');
+        // DOKUMEN
+        Route::get('profilkaryawan/dokumen/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableDokumen'])->name('profilkaryawan.tableDokumen');
 
     // HAK AKSES
         // AKSES JABATAN
