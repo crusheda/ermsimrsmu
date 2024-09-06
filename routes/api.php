@@ -52,6 +52,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::delete('profilkaryawan/rotasi/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusRotasi'])->name('profilkaryawan.hapusRotasi');
         // DOKUMEN
         Route::get('profilkaryawan/dokumen/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableDokumen'])->name('profilkaryawan.tableDokumen');
+        // KEPEGAWAIAN (NIP & KLASIFIKASI)
+        Route::get('profilkaryawan/kepegawaian/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showKepegawaian'])->name('profilkaryawan.showKepegawaian');
+        Route::post('profilkaryawan/kepegawaian/nip/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahNIP'])->name('profilkaryawan.tambahNIP');
+        Route::post('profilkaryawan/kepegawaian/klasifikasi/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahKlasifikasi'])->name('profilkaryawan.tambahKlasifikasi');
 
     // HAK AKSES
         // AKSES JABATAN

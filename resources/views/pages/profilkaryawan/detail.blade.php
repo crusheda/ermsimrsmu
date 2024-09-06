@@ -56,12 +56,12 @@
                                 <i class="ti ti-cloud-download me-2"></i>Dokumen
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
-                                href="#ubah-password" role="tab" aria-selected="true">
-                                <i class="ti ti-lock me-2"></i>Ubah Password
+                                href="#spkrkk" role="tab" aria-selected="true">
+                                <i class="ti ti-lock me-2"></i>SPK & RKK
                             </a>
-                        </li> --}}
+                        </li>
                         {{-- <li class="nav-item">
                             <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
                                 href="#profile-5" role="tab" aria-selected="true">
@@ -368,6 +368,115 @@
                     </div>
                 </div>
 
+                {{-- FORM KEPEGAWAIAN --}}
+                <div class="tab-pane" id="kepegawaian" role="tabpanel" aria-labelledby="profile-tab-2">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Kelengkapan Profil Pegawai</h5>
+                            <div class="flex-shrink-0">
+                                <button type="button" class="btn btn-link-warning" id="btn-refresh-kepegawaian" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Segarkan Input Data" onclick="showKepegawaian()">
+                                    <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="card shadow-none border mb-0 h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <h6 class="mb-0">NIP (Nomor Induk Pegawai)</h6>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <h6 class="mb-0"><span class="badge bg-secondary">NIP Terakhir : <u id="show_nip_terakhir">0</u></span></h6>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 mt-3">
+                                                <div class="alert alert-secondary">
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Apabila karyawan baru, NIP bersifat otomatis<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Format <b>WAJIB</b> NIP adalah <u><b class="text-danger">Tahun Masuk</b></u> . <u><b class="text-warning">Bulan Masuk</b></u> . <u><b class="text-primary">Nomor Urutan</b></u><br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Lakukan dengan teliti dan hati-hati
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col"><input type="text" class="form-control" id="nip_pgw" maxlength="10" placeholder="Tuliskan NIP Pegawai (Wajib sesuai dengan Format)"></div>
+                                                    <div class="col-auto"><button class="btn btn-light-primary" onclick="prosesSimpanNIP()" id="btn-simpan-nip"><i class="fas fa-save me-1"></i> Simpan</button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card shadow-none border mb-0 h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <h6 class="mb-0">Klasifikasi Pegawai</h6>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 mt-3">
+                                                <div class="alert alert-secondary">
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Nakes (dokter, perawat, bidan)<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Nakesla (Ahli gizi, Rehab Medik, ATLM, Apoteker, TTK, Radiografer, Rekam Medik)<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Non Nakes (Selain Nakes dan Nakesla)
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col"><select class="form-control" id="klasifikasi_pgw"></select></div>
+                                                    <div class="col-auto"><button class="btn btn-light-primary" onclick="prosesSimpanKlasifikasiPgw()" id="btn-simpan-klasifikasi"><i class="fas fa-save me-1"></i> Simpan</button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="card shadow-none border mb-0">
+                                        <div class="card-body">
+                                            <h6 class="mb-3">Hapus Akun</h6>
+                                            <p class="mb-3">Apakah Anda yakin ingin menghapus akun {{ $list['show']->nama }}?<br>
+                                                Hapus akun dapat mengakibatkan <strong>Pengguna tidak dapat masuk kembali ke dalam sistem</strong> dan berstatus <strong>Non Aktif</strong>.
+                                                Lakukan dengan hati-hati karena data Akun Pengguna/Penghapus akan tercatat sebagai penerima risiko yang ada.
+                                            </p>
+                                            <button class="btn btn-light-danger" disabled><i class="fas fa-trash me-1"></i> Hapus Akun</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="row g-3">
+                                <div class="col-md-6 col-xl-4">
+                                    <div class="card shadow-none border mb-0">
+                                        <div class="card-body">
+                                            <h6 class="mb-3 fw-medium">Membership Plan</h6>
+                                            <h4 class="mb-3 fw-normal text-muted">Addicted $150</h4><a href="#"
+                                                class="link-primary d-flex align-items-center gap-2">See more Plan <i
+                                                    class="ti ti-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xl-4">
+                                    <div class="card shadow-none border mb-0">
+                                        <div class="card-body">
+                                            <h6 class="mb-3 fw-medium">Manage</h6>
+                                            <h4 class="mb-3 fw-normal text-muted">Membership</h4><a href="#"
+                                                class="link-primary d-flex align-items-center gap-2">Update, Cancel and
+                                                more <i class="ti ti-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-xl-4">
+                                    <div class="card shadow-none border mb-0">
+                                        <div class="card-body">
+                                            <h6 class="mb-3 fw-medium">Renewal Date</h6>
+                                            <h4 class="mb-3 fw-normal text-muted">120 November, 2024</h4><a href="#"
+                                                class="link-primary d-flex align-items-center gap-2">View payment method
+                                                <i class="ti ti-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+
                 {{-- FORM PENETAPAN --}}
                 <div class="tab-pane" id="penetapan" role="tabpanel" aria-labelledby="profile-tab-2">
                     <div class="card">
@@ -552,80 +661,6 @@
                     </div>
                 </div>
 
-                {{-- FORM DATA PENGGUNA --}}
-                <div class="tab-pane" id="pengguna" role="tabpanel" aria-labelledby="profile-tab-2">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 card-title flex-grow-1">Penentuan Akses Pengguna</h5>
-                            <div class="flex-shrink-0">
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                {{ Form::model($list['show'], ['route' => ['akunpengguna.update', $list['show']->id], 'method' => 'PUT', 'id' => 'formUbah']) }}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="alert alert-secondary">
-                                            <span><i class="fas fa-arrow-right text-primary me-1"></i> Password akan dienkripsi menggunakan Laravel Bcrypt Hash</span><br>
-                                            <span><i class="fas fa-arrow-right text-primary me-1"></i> Apabila melakukan perubahan Username, mohon klik Validasi terlebih dahulu sebelum Menyimpan Data</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group">
-                                            <label for="defaultFormControlInput" class="form-label">Username</label>
-                                            <div class="input-group mb-2">
-                                                <input type="text" name="name" id="name" class="form-control" placeholder=""
-                                                    value="{{ $list['show']->name }}" required />
-                                                <button class="btn btn-outline-warning" type="button" onclick="verifName()">Check Validasi</button>
-                                            </div>
-                                            <sub>Klik Check untuk validasi ketersediaan Username</sub>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group">
-                                            <label for="defaultFormControlInput" class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control" placeholder=""
-                                                value="{{ $list['show']->email }}" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-4">
-                                        <div class="form-group">
-                                            <label for="defaultFormControlInput" class="form-label">Role</label>
-                                            <div class="select2-dark">
-                                                <select id="role" name="role[]" class="select2 form-select" data-bs-auto-close="outside" required multiple="multiple" data-placeholder="Pilih Role ..." style="width: 100%">
-                                                    @if (count($list['onlyRole']) > 0)
-                                                        @foreach ($list['onlyRole'] as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                @if (count($list['model']) > 0)
-                                                                    @foreach ($list['model'] as $val)
-                                                                        @if ($item->id == $val->role_id) selected @endif
-                                                                    @endforeach
-                                                                @endif>{{ $item->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12 d-flex justify-content-between">
-                                        <button class="btn btn-primary" id="btn-simpan-jabatan" onclick="saveData()">
-                                            <i class="fas fa-save fa-md"></i>&nbsp;&nbsp;
-                                            <span class="align-middle d-sm-inline-block d-none me-sm-1">Simpan</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                {!! Form::close() !!}
-                                {{-- <div class="col-12 text-end btn-page">
-                                    <button type="submit" class="btn btn-primary" id="btn-submit-profil"><i class="ti ti-rocket"></i>&nbsp;&nbsp;Perbarui</button>
-                                </div> --}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 {{-- UBAH DOKUMEN --}}
                 <div class="tab-pane" id="dokumen" role="tabpanel" aria-labelledby="dokumen-tab-3">
                     <div class="card table-card">
@@ -665,6 +700,75 @@
                             <div class="btn btn-link-danger">Cancel</div>
                             <div class="btn btn-primary">Update Profile</div>
                         </div> --}}
+                    </div>
+                </div>
+
+                {{-- FORM DATA PENGGUNA --}}
+                <div class="tab-pane" id="spkrkk" role="tabpanel" aria-labelledby="profile-tab-2">
+                    <div class="card table-card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">SPK & RKK</h5>
+                            <div class="flex-shrink-0">
+                            </div>
+                        </div>
+                        <div class="card-body p-b-0 p-3">
+                            {{-- <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0 flex-grow-1"><a class="text-danger">*</a>/2 <small>dokumen wajib sudah terupload.</small></h4>
+                                <div class="flex-shrink-0" id="switch-str" hidden>
+                                    <div class="form-check form-switch custom-switch-v1 switch-sm">
+                                        <input type="checkbox" class="form-check-input input-primary" id="checkboxseumurhidup">
+                                        <label class="form-check-label" for="checkboxseumurhidup">Seumur Hidup ?</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-2"> --}}
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Tgl. Berakhir Surat <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tgl_akhir_spkrkk">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Deskripsi</label>
+                                        <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                        <div class="row">
+                                            <div class="col"><input type="file" class="form-control" id="upload_spkrkk" accept="application/pdf"></div>
+                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahSpkRkk()" id="btn-upload-spkrkk"><i class="fas fa-upload me-1"></i> Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0 table-hover" id="dttable-spkrkk">
+                                    <thead>
+                                        <tr>
+                                            <th><center>AKSI</center></th>
+                                            <th>TGL BERAKHIR</th>
+                                            <th>DESKRIPSI</th>
+                                            <th><center>STATUS</center></th>
+                                            <th class="text-end">TERAKHIR DIUBAH</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tampil-tbody-spkrkk">
+                                        <tr>
+                                            <td colspan="9" style="font-size:13px">
+                                                <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1306,6 +1410,7 @@
             });
 
             // inisialisasi table
+            showKepegawaian();
             refreshPenetapan();
             refreshRotasi();
             refreshDokumen();
@@ -1342,6 +1447,154 @@
                     });
                 }
             });
+        }
+        function showKepegawaian() {
+            $("#nip_pgw").val('');
+            $("#klasifikasi_pgw").val('');
+            $.ajax({
+                url: "/api/profilkaryawan/kepegawaian/{{ $list['show']->id }}",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#show_nip_terakhir").text(res.maxNip);
+                    $("#nip_pgw").val(res.show.nip);
+                    $("#klasifikasi_pgw").find('option').remove();
+                    res.ref_klasifikasi.forEach(item => {
+                        $("#klasifikasi_pgw").append(`<option value="" hidden>Pilih Salah Satu</option>`);
+                        $("#klasifikasi_pgw").append(`
+                            <option value="${item.id}" ${item.id == res.show.ref_profesi? "selected":""}>${item.deskripsi}</option>
+                        `);
+                    });
+                },
+                error: function(res) {
+                    console.log("error : " + JSON.stringify(res) );
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+        function prosesSimpanNIP() {
+            $("#btn-simpan-nip").prop('disabled', true);
+            $("#btn-simpan-nip").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var fd = new FormData();
+
+            // ISIAN FORM WAJIB
+            var nip = $('#nip_pgw').val();
+
+            if (nip == '') {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Masukkan NIP terlebih dahulu',
+                    position: 'topRight'
+                });
+            } else {
+                if (nip.length < 9) {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Format NIP tidak valid, gunakan <strong>Titik (<b class="text-primary">.</b>)</strong> untuk memisahkan Tahun/Bulan Masuk dan No.Urut Pegawai',
+                        position: 'topRight'
+                    });
+                } else {
+                    // INISIALISASI
+                    fd.append('nip',nip);
+                    fd.append('user_id','{{ Auth::user()->id }}');
+                    fd.append('pegawai_id','{{ $list["show"]->id }}');
+
+                    // AJAX REQUEST
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "/api/profilkaryawan/kepegawaian/nip/simpan",
+                        method: 'post',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function(res){
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'NIP Pegawai berhasil disimpan pada '+res,
+                                position: 'topRight'
+                            });
+                            if (res) {
+                                showKepegawaian();
+                            }
+                        },
+                        error: function(res){
+                            console.log("error : " + JSON.stringify(res) );
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            }
+
+            $("#btn-simpan-nip").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-simpan-nip").prop('disabled', false);
+        }
+        function prosesSimpanKlasifikasiPgw() {
+            $("#btn-simpan-klasifikasi").prop('disabled', true);
+            $("#btn-simpan-klasifikasi").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var fd = new FormData();
+
+            // ISIAN FORM WAJIB
+            var ref_profesi = $('#klasifikasi_pgw').val();
+
+            if (ref_profesi == '') {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pilih klasifikasi pegawai terlebih dahulu',
+                    position: 'topRight'
+                });
+            } else {
+                // INISIALISASI
+                fd.append('ref_profesi',ref_profesi);
+                fd.append('user_id','{{ Auth::user()->id }}');
+                fd.append('pegawai_id','{{ $list["show"]->id }}');
+
+                // AJAX REQUEST
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/profilkaryawan/kepegawaian/klasifikasi/simpan",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Klasifikasi pegawai berhasil disimpan pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            showKepegawaian();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+
+            $("#btn-simpan-klasifikasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-simpan-klasifikasi").prop('disabled', false);
         }
 
         // FUNCTION TAMBAH

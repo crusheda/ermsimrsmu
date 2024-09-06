@@ -182,6 +182,61 @@ class DetailProfilKaryawanController extends Controller
         return response()->json($tgl, 200);
     }
 
+    // FUNCTION KEPEGAWAIAN
+    function showKepegawaian($id)
+    {
+        $maxNip = users::max('urutan_masuk');
+        $show = users::where('id', $id)->first();
+        $ref_klasifikasi = referensi::where('ref_jenis',11)->get(); // 11 is Jenis Klasifikasi Pegawai
+
+        $data = [
+            'show' => $show,
+            'maxNip' => $maxNip,
+            'ref_klasifikasi' => $ref_klasifikasi,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tambahNIP(Request $request)
+    {
+        $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+
+        $getBulan = substr("19.12.314",3,2);
+        $getTahun = substr("19.12.314",0,2);
+        $urutan_masuk = substr("19.12.314",6,5);
+        $masuk_kerja = Carbon::parse($getTahun.'-'.$getBulan.'-01')->isoFormat('YYYY-MM-DD');
+
+        // print_r($masuk_kerja);
+        // die();
+
+        $data = users::find($request->pegawai_id);
+        $data->nip          = $request->nip;
+        $data->masuk_kerja  = $masuk_kerja;
+        $data->urutan_masuk = $urutan_masuk;
+        $data->save();
+
+        // CEK DATA & SAVE LOG
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+        return response()->json($now, 200);
+    }
+
+    function tambahKlasifikasi(Request $request)
+    {
+        $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+
+        $data = users::find($request->pegawai_id);
+        $data->ref_profesi   = $request->ref_profesi;
+        $data->save();
+
+        // CEK DATA & SAVE LOG
+        $cekData = referensi::find($request->ref_profesi); // 11 is Jenis Klasifikasi Pegawai
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Klasifikasi Pegawai menjadi '.$cekData->deskripsi, $request->ref_profesi, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+        return response()->json($now, 200);
+    }
+
     // FUNCTION SHOW UBAH
     function showUbahPenetapan($id)
     {
