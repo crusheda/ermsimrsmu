@@ -19,7 +19,7 @@ Auth::routes(['register' => false]);
 // Auth::routes(['register' => false]);
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
 Route::get('/', function () {
-    return view('pages.comingsoon');
+    return view('pages.index');
 })->name('portal');
 
 Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->name('auth.login');
