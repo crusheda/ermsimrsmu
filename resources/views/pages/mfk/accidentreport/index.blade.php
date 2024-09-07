@@ -35,16 +35,19 @@
                             <button type="button" class="btn btn-outline-warning lh-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="<i class='fa-fw fas fa-sync nav-icon me-1'></i> <span>Segarkan Tabel</span>" onclick="refresh()">
                                 <i class="fa-fw fas fa-sync nav-icon"></i></button>
-                            <button type="button" class="btn btn-outline-danger lh-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="<i class='fa-fw fas fa-infinity nav-icon me-1'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
-                                <i class="fa-fw fas fa-infinity nav-icon"></i></button>
+                            @if (Auth::user()->getPermission('admin_k3'))
+                                <button type="button" class="btn btn-outline-danger lh-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="<i class='fa-fw fas fa-infinity nav-icon me-1'></i> <span>Tampilkan Semua Data</span>" onclick="showAll()">
+                                    <i class="fa-fw fas fa-infinity nav-icon"></i></button>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-secondary">
                         <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi 100 data surat</small> <br>
-                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas</small>
+                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Ubah/Hapus data hanya dapat dilakukan oleh User yang bersangkutan dan pada hari yang sama dengan hari data disubmit</small> <br>
+                        <small><i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol berwarna <b class="text-danger">MERAH</b> di atas (Khusus <u>Admin</u>)</small>
                     </div>
                     <div class="table-responsive">
                         <table id="dttable" class="table dt-responsive table-hover w-100 align-middle">
@@ -169,16 +172,32 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody").empty();
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_k3') }}";
+                    // var date = getDateTime();
+                    var date = new Date().toLocaleDateString('en-ZA');
                     res.show.forEach(item => {
-                        // var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id='data"+ item.id +"'>`;
-                        content +=
-                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
-                            `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>` +
-                            `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
-                            item.id +
-                            `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>` +
-                            `</ul></center></td><td>`;
+                        content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>`;
+                        if (adminID == true) {
+                            content += `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                        } else {
+                            if (item.user == userID) {
+                                if (updet == date) {
+                                    content += `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                                } else {
+                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                                }
+                            } else {
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                            }
+                        }
+                        content += `</ul></center></td><td>`;
                         if (item.korban != null) {
                             res.user.forEach(key => {
                                 if (item.korban == key.id) {
@@ -253,16 +272,32 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_k3') }}";
+                    // var date = getDateTime();
+                    var date = new Date().toLocaleDateString('en-ZA');
                     res.show.forEach(item => {
-                        // var updet = item.updated_at.substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id='data"+ item.id +"'>`;
-                        content +=
-                            `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>` +
-                            `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>` +
-                            `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
-                            item.id +
-                            `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>` +
-                            `</ul></center></td><td>`;
+                        content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' value="animate__rubberBand">`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right'>`;
+                        if (adminID == true) {
+                            content += `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                        } else {
+                            if (item.user == userID) {
+                                if (updet == date) {
+                                    content += `<li><a href='/mfk/kecelakaankerja/ubah/`+item.id+`' class='dropdown-item text-warning'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                                } else {
+                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                                }
+                            } else {
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a></li>`;
+                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a></li>`;
+                            }
+                        }
+                        content += `</ul></center></td><td>`;
                         if (item.korban != null) {
                             res.user.forEach(key => {
                                 if (item.korban == key.id) {

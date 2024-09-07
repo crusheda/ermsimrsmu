@@ -62,11 +62,12 @@
                                 <i class="ti ti-brand-github"></i>
                             </a>
                         </li> --}}
+
                         <li class="nav-item">
                             @auth
-                                <a class="btn btn btn-primary btn-buy" href="{{ route('dashboard') }}"><i class="ti ti-home me-1"></i> Dashboard</a>
+                                <a class="btn btn-light-secondary shadow" href="{{ route('dashboard') }}"><i class="ti ti-home me-1"></i> Dashboard</a>
                             @else
-                                <a class="btn btn btn-primary btn-buy" href="{{ route('login') }}"><i class="ti ti-login me-1"></i> Login</a>
+                                <a class="btn btn-light-primary shadow" href="{{ route('login') }}"><i class="ti ti-login me-1"></i> Login</a>
                             @endauth
                         </li>
                     </ul>
@@ -76,7 +77,11 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-10 text-center">
-                    <h1 class="mb-4 wow fadeInUp" data-wow-delay="0.2s">Sistem Informasi Manajemen RS <span class="hero-text-gradient">PKU Muhammadiyah Sukoharjo</span></h1>
+                    <div class="mb-3 wow fadeInUp" data-wow-delay="0.2s">
+                        <img src="{{ asset('images/pku/logo_clear_100kb.png') }}" alt="img" class="img-fluid shadow rounded-circle" width="100px">
+                    </div>
+                    <h3 class="mb-2 wow fadeInUp" data-wow-delay="0.2s"><span class="hero-text-gradient">EST</span>. <span class="hero-text-gradient">2020</span></h3>
+                    <h1 class="mb-4 wow fadeInUp" data-wow-delay="0.2s">Sistem Informasi Manajemen RS <span class="hero-text-gradient"><br>PKU Muhammadiyah Sukoharjo</span></h1>
                     <div class="row justify-content-center wow fadeInUp" data-wow-delay="0.3s">
                         <div class="col-md-10">
                             <p class="text-muted f-16 mb-0">Simrsmu berfungsi sebagai platform yang mendukung manajemen data
@@ -84,11 +89,22 @@
                                 proses administrasi, tetapi juga meningkatkan kinerja yang optimal dengan dukungan sistem yang terintegrasi dan interkoneksi.</p>
                         </div>
                     </div>
-                    <div class="my-4 my-sm-5 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="row g-5 mt-1 mb-2 justify-content-center text-center wow fadeInUp" data-wow-delay="1s">
+                        <div class="col-auto">
+                            <p class="mb-4 text-muted">- Klik tombol di bawah untuk masuk -</p>
+                        </div>
+                    </div>
+                    <div class="m-b-35 wow fadeInUp" data-wow-delay="0.4s">
                         @auth
-                            <a class="btn btn btn-primary" href="{{ route('dashboard') }}"><i class="ti ti-home me-1"></i> Dashboard</a>
+                            <div class="dropdown d-inline-block">
+                                <a class="btn btn-light-primary dropdown-toggle arrow-none d-inline-flex align-items-center" data-bs-toggle="dropdown" href="#">Menu <i class="ti ti-chevron-down ms-1"></i></a>
+                                <div class="dropdown-menu drp-technology drp-tech-scrollble">
+                                    <a class="dropdown-item gap-2" href="{{ route('dashboard') }}"><i class="ti ti-home me-1"></i> Dashboard</a>
+                                    <a class="dropdown-item gap-2" href="javascript:void(0);"><i class="ti ti-logout me-1"></i> Logout</a>
+                                </div>
+                            </div>
                         @else
-                            <a class="btn btn btn-outline-primary" href="{{ route('login') }}"><i class="ti ti-login me-1"></i> Masuk / Login</a>
+                            <a class="btn btn-light-primary shadow" href="{{ route('login') }}"><i class="ti ti-login me-1"></i> Masuk / Login</a>
                         @endauth
                     </div>
                     <div class="row g-5 justify-content-center text-center wow fadeInUp" data-wow-delay="0.5s">
@@ -97,16 +113,11 @@
                                     class="fas fa-star text-warning"></i> <i class="fas fa-star text-warning"></i> <i
                                     class="fas fa-star text-warning"></i> <i
                                     class="fas fa-star-half-alt text-warning"></i></div>
-                            <h4 class="mb-0">4.7/5 <small class="text-muted f-w-400">Ratings</small></h4>
+                            <h4 class="mb-0">4.9/5 <small class="text-muted f-w-400">Baik</small></h4>
                         </div>
                         <div class="col-auto">
-                            <h5 class="mb-2"><small class="text-muted f-w-400">Sales</small></h5>
-                            <h4 class="mb-0">2.5K+</h4>
-                        </div>
-                    </div>
-                    <div class="row g-5 mt-1 justify-content-center text-center wow fadeInUp" data-wow-delay="1s">
-                        <div class="col-auto">
-                            <p class="mb-4 text-muted">- Click Below Icon to Preview Each Tech Demos -</p>
+                            <h5 class="mb-2 p-t-5"><small class="text-muted f-w-400">Pengguna</small></h5>
+                            <h4 class="mb-0">300+</h4>
                         </div>
                     </div>
                 </div>
@@ -114,10 +125,12 @@
         </div>
         <div class="technology-block">
             <ul class="list-inline mb-0">
+                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Support by RS PKU Muhammadiyah Sukoharjo">
+                    <a href="https://rspkusukoharjo.com/" target="_blank">
+                        <img src="{{ asset('images/pku/logo_admin.png') }}" alt="img" class="img-fluid" width="100px">
+                    </a>
+                </li>
                 {{-- <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Click to Preview Bootstrap 5"><a href="#"><img src="{{ asset('images/landing/tech-bootstrap.svg') }}"
-                            alt="img" class="img-fluid"></a></li>
-                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Click to Preview React MUI"><a href="react/index.html" target="_blank"><img
                             src="{{ asset('images/landing/tech-react.svg') }}" alt="img" class="img-fluid"></a></li>
                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top"

@@ -317,7 +317,7 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody").empty();
-                    var date = new Date().toISOString().split('T')[0];
+                    // var date = new Date().toISOString().split('T')[0];
                     var userID = "{{ Auth::user()->id }}";
                     var adminID = "{{ Auth::user()->getPermission('admin_rapat') }}";
                     var date = getDateTime();
