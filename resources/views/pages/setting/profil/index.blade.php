@@ -623,6 +623,39 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Data Kesehatan</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Riwayat Penyakit</label>
+                                                    <textarea name="riwayat_penyakit" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penyakit); ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Riwayat Penyakit Keluarga</label>
+                                                    <textarea name="riwayat_penyakit_keluarga" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penyakit_keluarga); ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Riwayat Operasi</label>
+                                                    <textarea name="riwayat_operasi" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_operasi); ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="">
+                                                    <label class="form-label">Riwayat Penggunaan Obat</label>
+                                                    <textarea name="riwayat_penggunaan_obat" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penggunaan_obat); ?></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-lg-5">
                                 <div class="card">
@@ -668,24 +701,50 @@
                                                 <div class="alert alert-light">
                                                     <h6>Keterangan Pengisian</h6>
                                                     <i class="ti ti-arrow-narrow-right text-primary"></i> Kolom pertama adalah nama sekolah/universitas<br>
-                                                    <i class="ti ti-arrow-narrow-right text-primary"></i> Kolom kedua adalah tahun lulus sesuai ijazah
+                                                    <i class="ti ti-arrow-narrow-right text-primary"></i> Kolom kedua adalah tahun lulus sesuai ijazah<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary"></i> Kolom ketiga adalah upload dokumen Ijazah (Ikon <i class="ti ti-cloud-upload"></i>)<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary"></i> Upload ulang dokumen ijazah untuk memperbarui dokumen baru
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Sekolah Dasar (SD) atau sederajat</label>
+                                                    <label class="form-label">Sekolah Dasar (SD) atau sederajat <span class="text-danger" id="wajib_sd" hidden>*</span></label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="sd" value="{{ $list['show']->sd }}" placeholder="Nama Sekolah">
                                                         <input type="number" class="form-control" name="th_sd" value="{{ $list['show']->th_sd }}" placeholder="Tahun Lulus" maxlength="4">
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_sd" name="upload_sd" value="{{ $list['show']->filename_sd }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_sd)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_sd" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_sd, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_sd" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">SMP/SLTP atau sederajat</label>
+                                                    <label class="form-label">SMP/SLTP atau sederajat <span class="text-danger" id="wajib_smp" hidden>*</span></label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="smp" value="{{ $list['show']->smp }}" placeholder="Nama Sekolah">
-                                                        <input type="number" class="form-control" name="th_smp" value="{{ $list['show']->th_smp }}" placeholder="Tahun Lulus">
+                                                        <input type="number" class="form-control" name="th_smp" value="{{ $list['show']->th_smp }}" placeholder="Tahun Lulus" disabled>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_smp" name="upload_smp" value="{{ $list['show']->filename_smp }}" accept="application/pdf" disabled>
+                                                        @if ($list['show']->filename_smp)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_smp" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_smp, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_smp" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -694,7 +753,19 @@
                                                     <label class="form-label">SMA/SMK atau sederajat</label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="sma" value="{{ $list['show']->sma }}" placeholder="Nama Sekolah">
-                                                        <input type="number" class="form-control" name="th_sma" value="{{ $list['show']->th_sma }}" placeholder="Tahun Lulus">
+                                                        <input type="number" class="form-control" name="th_sma" value="{{ $list['show']->th_sma }}" placeholder="Tahun Lulus" disabled>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_sma" name="upload_sma" value="{{ $list['show']->filename_sma }}" accept="application/pdf" disabled>
+                                                        @if ($list['show']->filename_sma)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_sma" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_sma, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_sma" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -705,6 +776,18 @@
                                                         <input type="text" class="form-control" name="d2" value="{{ $list['show']->d2 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_d2" value="{{ $list['show']->th_d2 }}" placeholder ="Tahun Lulus">
                                                     </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_d2" name="upload_d2" value="{{ $list['show']->filename_d2 }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_d2)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_d2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_d2, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_d2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
@@ -713,6 +796,18 @@
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="d3" value="{{ $list['show']->d3 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_d3" value="{{ $list['show']->th_d3 }}" placeholder ="Tahun Lulus">
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_d3" name="upload_d3" value="{{ $list['show']->filename_d3 }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_d3)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_d3" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_d3, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_d3" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -723,6 +818,18 @@
                                                         <input type="text" class="form-control" name="d4" value="{{ $list['show']->d4 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_d4" value="{{ $list['show']->th_d4 }}" placeholder ="Tahun Lulus">
                                                     </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_d4" name="upload_d4" value="{{ $list['show']->filename_d4 }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_d4)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_d4" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_d4, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_d4" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
@@ -732,14 +839,38 @@
                                                         <input type="text" class="form-control" name="s1" value="{{ $list['show']->s1 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_s1" value="{{ $list['show']->th_s1 }}" placeholder ="Tahun Lulus">
                                                     </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_s1" name="upload_s1" value="{{ $list['show']->filename_s1 }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_s1)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_s1, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="mb-3">
                                                     <label class="form-label">Sarjana 1 <b>Khusus Profesi</b></label>
                                                     <div class="input-group mb-3">
-                                                        <input type="text" class="form-control" name="s1_profesi" value="" placeholder="Nama Universitas" disabled>
-                                                        <input type="number" class="form-control" name="th_s1_profesi" value="" placeholder ="Tahun Lulus" disabled>
+                                                        <input type="text" class="form-control" name="s1_profesi" value="{{ $list['show']->s1_profesi }}" placeholder="Nama Universitas">
+                                                        <input type="number" class="form-control" name="th_s1_profesi" value="{{ $list['show']->th_s1_profesi }}" placeholder ="Tahun Lulus">
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_s1_profesi" name="upload_s1_profesi" value="{{ $list['show']->filename_s1_profesi }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_s1_profesi)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s1_profesi" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_s1_profesi, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s1_profesi" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -750,48 +881,39 @@
                                                         <input type="text" class="form-control" name="s2" value="{{ $list['show']->s2 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_s2" value="{{ $list['show']->th_s2 }}" placeholder ="Tahun Lulus">
                                                     </div>
+                                                    <div class="input-group mb-3">
+                                                        <input type="file" class="form-control" id="upload_s2" name="upload_s2" value="{{ $list['show']->filename_s2 }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_s2)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_s2, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="">
                                                     <label class="form-label">Sarjana 3</label>
-                                                    <div class="input-group">
+                                                    <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="s3" value="{{ $list['show']->s3 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_s3" value="{{ $list['show']->th_s3 }}" placeholder="Tahun Lulus">
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>Data Kesehatan</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Riwayat Penyakit</label>
-                                                    <textarea name="riwayat_penyakit" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penyakit); ?></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Riwayat Penyakit Keluarga</label>
-                                                    <textarea name="riwayat_penyakit_keluarga" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penyakit_keluarga); ?></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Riwayat Operasi</label>
-                                                    <textarea name="riwayat_operasi" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_operasi); ?></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="">
-                                                    <label class="form-label">Riwayat Penggunaan Obat</label>
-                                                    <textarea name="riwayat_penggunaan_obat" class="form-control" placeholder="Tuliskan bila ada"><?php echo htmlspecialchars($list['show']->riwayat_penggunaan_obat); ?></textarea>
+                                                    <div class="input-group">
+                                                        <input type="file" class="form-control" id="upload_s3" name="upload_s3" value="{{ $list['show']->filename_s3 }}" accept="application/pdf">
+                                                        @if ($list['show']->filename_s3)
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s3" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" style="padding-top:16" onclick="window.location='{{ url('storage/' . substr($list['show']->filename_s3, 7, 1000)) }}'" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                                data-bs-placement="bottom" data-bs-html="true" title="Download Ijazah"><i class="ti ti-cloud-download"></i></a>
+                                                        @else
+                                                            <label class="btn btn-outline-secondary" style="padding-top:16" for="upload_s3" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                                                                data-bs-html="true" title="Upload Ijazah"><i class="ti ti-cloud-upload"></i></label>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -812,8 +934,8 @@
                             <h5 class="mb-0 card-title flex-grow-1">Penyimpanan Dokumen</h5>
                             <div class="flex-shrink-0">
                                 {{-- <div class="btn-group">
-                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                        title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh"
+                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Dokumen" onclick="refreshDokumen()">
                                         <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
                                 </div> --}}
                             </div>
@@ -868,7 +990,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-7">
-                                    <div class="mb-3">
+                                    <div class="form-group mb-3">
                                         <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
                                         <div class="row">
                                             <div class="col"><input type="file" class="form-control" id="upload_dokumen" accept="application/pdf"></div>
@@ -1980,6 +2102,30 @@
                     tgl_akhir.prop('disabled',false);
                     deskripsi.prop('disabled',false);
                     upload.prop('disabled',false);
+                }
+            })
+
+            // VALIDASI DATA PENDIDIKAN
+            $("input[name='sd']").on("keyup change", function(e) {
+                if ($("input[name='sd']").val().length == 0) { // $("input[name='th_sd']").val() <= 0
+                    $("#upload_sd").prop('disabled',true).prop('required',false).val('');
+                    $("input[name='th_sd']").prop('disabled',true).val('');
+                    $("#wajib_sd").prop('hidden',true);
+                } else {
+                    $("#upload_sd").prop('disabled',false).prop('required',true);
+                    $("input[name='th_sd']").prop('disabled',false);
+                    $("#wajib_sd").prop('hidden',false);
+                }
+            })
+            $("input[name='smp']").on("keyup change", function(e) {
+                if ($("input[name='smp']").val().length == 0) {
+                    $("#upload_smp").prop('disabled',true).prop('required',false).val('');
+                    $("input[name='th_smp']").prop('disabled',true).val('');
+                    $("#wajib_smp").prop('hidden',true);
+                } else {
+                    $("#upload_smp").prop('disabled',false).prop('required',true);
+                    $("input[name='th_smp']").prop('disabled',false);
+                    $("#wajib_smp").prop('hidden',false);
                 }
             })
         });

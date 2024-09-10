@@ -210,6 +210,93 @@ class ProfilController extends Controller
                 }
             }
 
+            // VALIDASI FILE UPLOAD IJAZAH
+            $this->validate($request,[
+                'upload_sd' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_smp' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_sma' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_d2' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_d3' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_d4' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_s1' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_s1_profesi' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_s2' => 'nullable|file|max:5000', // MAX 5 Mb
+                'upload_s3' => 'nullable|file|max:5000', // MAX 5 Mb
+            ]);
+            // INIT VARIABLE
+            $upload_sd = $request->file('upload_sd');
+            $upload_smp = $request->file('upload_smp');
+            $upload_sma = $request->file('upload_sma');
+            $upload_d2 = $request->file('upload_d2');
+            $upload_d3 = $request->file('upload_d3');
+            $upload_d4 = $request->file('upload_d4');
+            $upload_s1 = $request->file('upload_s1');
+            $upload_s1_profesi = $request->file('upload_s1_profesi');
+            $upload_s2 = $request->file('upload_s2');
+            $upload_s3 = $request->file('upload_s3');
+            // STORE FILE
+            if ($upload_sd) {
+                if ($request->sd != null) {
+                    $path_sd = $upload_sd->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_sd = $path_sd;
+                }
+            }
+            if ($upload_smp) {
+                if ($request->smp != null) {
+                    $path_smp = $upload_smp->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_smp = $path_smp;
+                }
+            }
+            if ($upload_sma) {
+                if ($request->sma != null) {
+                    $path_sma = $upload_sma->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_sma = $path_sma;
+                }
+            }
+            if ($upload_d2) {
+                if ($request->d2 != null) {
+                    $path_d2 = $upload_d2->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_d2 = $path_d2;
+                }
+            }
+            if ($upload_d3) {
+                if ($request->d3 != null) {
+                    $path_d3 = $upload_d3->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_d3 = $path_d3;
+                }
+            }
+            if ($upload_d4) {
+                if ($request->d4 != null) {
+                    $path_d4 = $upload_d4->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_d4 = $path_d4;
+                }
+            }
+            if ($upload_s1) {
+                if ($request->s1 != null) {
+                    $path_s1 = $upload_s1->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_s1 = $path_s1;
+                }
+            }
+            if ($upload_s1_profesi) {
+                if ($request->s1_profesi != null) {
+                    $path_s1_profesi = $upload_s1_profesi->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_s1_profesi = $path_s1_profesi;
+                }
+            }
+            if ($upload_s2) {
+                if ($request->s2 != null) {
+                    $path_s2 = $upload_s2->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_s2 = $path_s2;
+                }
+            }
+            if ($upload_s3) {
+                if ($request->s3 != null) {
+                    $path_s3 = $upload_s3->store('public/files/profil/ijazah/'.$id);
+                    $data->filename_s3 = $path_s3;
+                }
+            }
+
+            // INPUT NAME
             $data->sd = $request->sd;
             $data->smp = $request->smp;
             $data->sma = $request->sma;
@@ -217,6 +304,7 @@ class ProfilController extends Controller
             $data->d3 = $request->d3;
             $data->d4 = $request->d4;
             $data->s1 = $request->s1;
+            $data->s1 = $request->s1_profesi;
             $data->s2 = $request->s2;
             $data->s3 = $request->s3;
 
@@ -274,6 +362,14 @@ class ProfilController extends Controller
                 if ($request->th_s1 == null) {
                 } else {
                     $data->th_s1 = $request->th_s1;
+                }
+            }
+            if (empty($data->th_s1_profesi)) {
+                $data->th_s1_profesi = $request->th_s1_profesi;
+            } else {
+                if ($request->th_s1_profesi == null) {
+                } else {
+                    $data->th_s1_profesi = $request->th_s1_profesi;
                 }
             }
             if (empty($data->th_s2)) {
