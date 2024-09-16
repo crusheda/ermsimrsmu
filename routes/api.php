@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('profilkaryawan/setnonaktif/{id}', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'setNonAktif'])->name('profilkaryawan.setnonaktif');
     Route::get('profilkaryawan/nonaktif', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonaktif'])->name('profilkaryawan.nonaktif');
     Route::get('profilkaryawan/nonlengkap', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonLengkap'])->name('profilkaryawan.nonlengkap');
+    Route::get('profilkaryawan/{user}/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'hapusPegawai'])->name('profilkaryawan.hapusPegawai');
 
         // PENETAPAN
         Route::get('profilkaryawan/penetapan/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tablePenetapan'])->name('profilkaryawan.tablePenetapan');

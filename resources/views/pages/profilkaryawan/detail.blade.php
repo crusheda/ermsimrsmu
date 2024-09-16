@@ -428,18 +428,28 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="card shadow-none border mb-0">
-                                        <div class="card-body">
-                                            <h6 class="mb-3">Hapus Akun</h6>
-                                            <p class="mb-3">Apakah Anda yakin ingin menghapus akun {{ $list['show']->nama }}?<br>
-                                                Hapus akun dapat mengakibatkan <strong>Pengguna tidak dapat masuk kembali ke dalam sistem</strong> dan berstatus <strong>Non Aktif</strong>.
-                                                Lakukan dengan hati-hati karena data Akun Pengguna/Penghapus akan tercatat sebagai penerima risiko yang ada.
-                                            </p>
-                                            <button class="btn btn-light-danger" disabled><i class="fas fa-trash me-1"></i> Hapus Akun</button>
+                                @if ($list['show']->deleted_at != null)
+                                    <div class="col-md-12">
+                                        <div class="card shadow-none border mb-0">
+                                            <div class="card-body">
+                                                <h5 class="mb-0 text-center">Pegawai telah resmi <b class="text-danger">dihapus/dinonaktifkan</b> pada {{ \Carbon\Carbon::parse($list['show']->deleted_at)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</h5>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <div class="col-md-12">
+                                        <div class="card shadow-none border mb-0">
+                                            <div class="card-body">
+                                                <h6 class="mb-3">Hapus Akun</h6>
+                                                <p class="mb-3">Apakah Anda yakin ingin menghapus akun {{ $list['show']->nama }}?<br>
+                                                    Hapus akun dapat mengakibatkan <strong>Pengguna tidak dapat masuk kembali ke dalam sistem</strong> dan berstatus <strong>Non Aktif</strong>.
+                                                    Lakukan dengan hati-hati karena data Akun Pengguna/Penghapus akan tercatat sebagai penerima risiko yang ada.
+                                                </p>
+                                                <button class="btn btn-light-danger" onclick="showHapusPegawai({{ $list['show']->id }})"><i class="fas fa-trash me-1"></i> Hapus Akun</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                             {{-- <div class="row g-3">
                                 <div class="col-md-6 col-xl-4">
@@ -1303,6 +1313,36 @@
     </div>
 
     {{-- FORM MODAL HAPUS --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="hapusPegawai" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Hapus Pegawai
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_hapus_pegawai" hidden>
+                    <p style="text-align: justify;">
+                        Apakah Anda yakin ingin <b>menghapus/menonaktifkan</b> Pegawai dengan <kbd>ID:<a id="show_id_pegawai"></a></kbd> ? <br>
+                        Data pegawai yang terlah terhapus masih dapat dilihat pada riwayat pegawai (Tidak berarti terhapus permanen). <br><br>Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapuspegawai">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-hapus-pegawai" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapusPegawai()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal animate__animated animate__rubberBand fade" id="hapusDokumen" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
@@ -2065,6 +2105,14 @@
         }
 
         // SHOW HAPUS
+        function showHapusPegawai(id) {
+            $("#id_hapus_pegawai").val(id);
+            $("#show_id_pegawai").text(id);
+            var inputs = document.getElementById('setujuhapuspegawai');
+            inputs.checked = false;
+            $('#hapusPegawai').modal('show');
+        }
+
         function showHapusPenetapan(id) {
             $("#id_hapus_penetapan").val(id);
             var inputs = document.getElementById('setujuhapuspenetapan');
@@ -2077,6 +2125,43 @@
             var inputs = document.getElementById('setujuhapusrotasi');
             inputs.checked = false;
             $('#hapusRotasi').modal('show');
+        }
+
+        function prosesHapusPegawai() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapuspegawai').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan (Nonaktif) pegawai',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus_pegawai").val();
+                $.ajax({
+                    url: "/api/profilkaryawan/{{ Auth::user()->id }}/hapus/"+id+"/proses",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    // type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Pegawai telah berhasil dihapus/dinonaktifkan pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#hapusPegawai').modal('hide');
+                        location.reload();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'pegawai gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
         }
 
         function prosesHapusPenetapan() {

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use App\Models\referensi;
+use App\Models\datalogs;
 use App\Models\users;
 use App\Models\users_foto;
 use App\Models\logs;
@@ -195,6 +196,27 @@ class ProfilKaryawanController extends Controller
 
         $data = users::find($id);
         $data->delete();
+
+        return response()->json($tgl, 200);
+    }
+
+    function hapusPegawai($user,$id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // print_r($id);
+        // die();
+        // Inisialisasi
+        $data = users::find($id);
+        $switch = $data;
+
+        // Proses Hapus Data dari DB
+        $data->user_hapus = $user;
+        $data->save();
+        $data->delete();
+
+        // CEK DATA & SAVE LOG
+        datalogs::record($user, 'Baru saja menghapus/menonaktifkan Pegawai ID : '.$id, null, null, $switch, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($tgl, 200);
     }
