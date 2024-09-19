@@ -713,7 +713,7 @@
                     </div>
                 </div>
 
-                {{-- FORM DATA PENGGUNA --}}
+                {{-- FORM SPK & RKK --}}
                 <div class="tab-pane" id="spkrkk" role="tabpanel" aria-labelledby="profile-tab-2">
                     <div class="card table-card">
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
@@ -733,9 +733,22 @@
                             </div>
                             <hr class="my-2"> --}}
                             <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Jenis Dokumen <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="jns_spkrkk">
+                                            <option value="" selected hidden>Pilih Kategori Rotasi</option>
+                                            @if (count($list['ref_rotasi']) > 0)
+                                                @foreach ($list['ref_rotasi'] as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->deskripsi }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Tgl. Berakhir Surat <span class="text-danger">*</span></label>
+                                        <label class="form-label">Tgl. Berakhir SPK <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" id="tgl_akhir_spkrkk">
                                     </div>
                                 </div>
