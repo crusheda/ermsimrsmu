@@ -13,6 +13,7 @@ use App\Models\users_doc;
 use App\Models\users_foto;
 use App\Models\users_status;
 use App\Models\users_rotasi;
+use App\Models\users_spkrkk;
 use App\Models\logs;
 use App\Models\alamat;
 use App\Models\model_has_roles;
@@ -91,6 +92,26 @@ class DetailProfilKaryawanController extends Controller
 
         $data = [
             'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tableSpkRkk($id)
+    {
+        $show = users_spkrkk::withTrashed()
+                ->join('users as u','u.id','=','users_spkrkk.pegawai_id')
+                ->join('users as us','us.id','=','users_spkrkk.user_id')
+                ->select('u.nama as nama_pegawai','us.nama as nama_kepegawaian','users_spkrkk.*')
+                ->where('users_spkrkk.pegawai_id',$id)
+                ->orderBy('users_spkrkk.updated_at','desc')
+                ->get();
+
+        $status = users_status::join('referensi','users_status.ref_id','=','referensi.id')->select('referensi.queue','users_status.*')->where('users_status.pegawai_id','=', $id)->where('users_status.status',1)->first();
+
+        $data = [
+            'show' => $show,
+            'status' => $status,
         ];
 
         return response()->json($data, 200);
@@ -182,6 +203,62 @@ class DetailProfilKaryawanController extends Controller
         return response()->json($tgl, 200);
     }
 
+    function tambahSpkRkk(Request $request)
+    {
+        $now = Carbon::now();
+        $tgl = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // VALIDASI DATA
+        $request->validate([
+            'file' => ['max:5000'], // 'mimes:jpeg,jpg,png'
+        ]);
+        $validasi = users_spkrkk::where('pegawai_id',$request->pegawai_id)->orderBy('created_at','desc')->first();
+        if (!empty($validasi) || $validasi != '') {
+            $validasi->status = 0;
+            $validasi->save();
+        }
+        $getStatusPegawai = users_status::where('pegawai_id',$request->pegawai_id)->where('status',1)->first();
+
+        // SAVING DATA
+        $data = new users_spkrkk;
+        $data->user_id = $request->user_id;
+        $data->pegawai_id = $request->pegawai_id;
+        if (!empty($getStatusPegawai) || $getStatusPegawai != '') {
+            $data->pegawai_status = $getStatusPegawai->ref_id;
+        }
+        if ($request->tgl_berakhir != null) {
+            $data->tgl_berakhir = $request->tgl_berakhir;
+        }
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = $file->store('public/files/kepegawaian/spkrkk/'.$request->pegawai_id);
+            $title = $file->getClientOriginalName();
+            $data->filename = json_encode($filename);
+            $data->title = json_encode($title);
+        }
+
+        $data->jns_dokumen = $request->jns_dokumen;
+        $data->deskripsi = $request->deskripsi;
+        $data->status = true;
+        $data->save();
+
+        // CEK DATA & SAVE LOG
+        $cekPegawai = users::find($request->pegawai_id);
+        if ($request->jns_dokumen == 0) {
+            $jns = 'SPK';
+        } else {
+            $jns = 'RKK';
+        }
+        $berakhir = null;
+        if (!empty($request->tgl_berakhir) || $request->tgl_berakhir != '') {
+            $berakhir = 'Berakhir pada tanggal '.$request->tgl_berakhir;
+        }
+
+        datalogs::record($request->user_id, 'Baru saja melakukan penambahan '.$jns.' pada Data Pegawai '.$cekPegawai->nama, $berakhir, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+        return response()->json($tgl, 200);
+    }
+
     // FUNCTION KEPEGAWAIAN
     function showKepegawaian($id)
     {
@@ -264,12 +341,25 @@ class DetailProfilKaryawanController extends Controller
         return response()->json($data, 200);
     }
 
+    function showUbahSpkRkk($id)
+    {
+        $show = users_spkrkk::where('id', $id)->first();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
     // FUNCTION UBAH
     function ubahPenetapan(Request $request)
     {
         $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
 
         $data = users_status::find($request->id);
+        $pushData = $data;
+        $pushPegawai = users::where('id',$data->pegawai_id)->first();
         $data->ref_id       = $request->ref_id;
         $data->user_id      = $request->user_id;
         $data->keterangan   = $request->keterangan;
@@ -277,7 +367,34 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_id);
-        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Status Pegawai menjadi '.$cekData->deskripsi.' pada record ID : '.$request->id, $request->keterangan, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Status Pegawai '.$pushPegawai->nama.' menjadi '.$cekData->deskripsi.' pada record ID : '.$request->id, $request->keterangan, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+        return response()->json($now, 200);
+    }
+
+    function ubahSpkRkk(Request $request)
+    {
+        $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+
+        $data = users_spkrkk::find($request->id);
+        $pushData = $data;
+        $pushPegawai = users::where('id',$data->pegawai_id)->first();
+
+        if ($request->pegawai_status) {
+            $data->pegawai_status   = $request->pegawai_status;
+        }
+        if ($request->tgl_berakhir) {
+            $data->tgl_berakhir   = $request->tgl_berakhir;
+        }
+
+        $data->jns_dokumen    = $request->jns_dokumen;
+        $data->user_id        = $request->user_id;
+        $data->deskripsi      = $request->deskripsi;
+        $data->save();
+
+        // CEK DATA & SAVE LOG
+        $cekData = referensi::find($request->ref_id);
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Dokumen SPK RKK Pegawai : '.$pushPegawai->nama.' pada record ID : '.$request->id, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($now, 200);
     }
@@ -289,6 +406,8 @@ class DetailProfilKaryawanController extends Controller
 
         // Inisialisasi
         $data = users_status::find($id);
+        $pushData = $data;
+        $pushPegawai = users::where('id',$data->pegawai_id)->first();
 
         // Validasi Pengambilan Record Lama
         $cek = users_status::where('pegawai_id',$data->pegawai_id)
@@ -307,7 +426,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($data->ref_id);
-        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Status Pegawai ID : '.$id, null, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Status Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($tgl, 200);
     }
@@ -318,6 +437,8 @@ class DetailProfilKaryawanController extends Controller
 
         // Inisialisasi
         $data = users_rotasi::find($id);
+        $pushData = $data;
+        $pushPegawai = users::where('id',$data->pegawai_id)->first();
 
         // SAVING DATA MODEL AS ROLES
         model_has_roles::where('model_id', $data->pegawai_id)->delete();
@@ -347,7 +468,35 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($data->ref_id);
-        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Rotasi Jabatan Pegawai ID : '.$id, null, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Rotasi Jabatan Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+        return response()->json($tgl, 200);
+    }
+
+    function hapusSpkRkk($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = users_spkrkk::find($id);
+        $pushData = $data;
+        $pushPegawai = users::where('id',$data->pegawai_id)->first();
+
+        if ($data->jns_dokumen == 0) {
+            $jns = 'SPK';
+        } else {
+            $jns = 'RKK';
+        }
+
+        // Proses Hapus Data dari DB
+        $data->status = 0;
+        $data->save();
+        Storage::delete(json_decode($data->filename));
+        $data->delete();
+
+        // CEK DATA & SAVE LOG
+        $cekData = referensi::find($data->ref_id);
+        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan '.$jns.' Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($tgl, 200);
     }
@@ -356,5 +505,11 @@ class DetailProfilKaryawanController extends Controller
     {
         $data = users_doc::find($id);
         return Storage::download($data->filename, $data->title);
+    }
+
+    function downloadSpkRkk($id)
+    {
+        $data = users_spkrkk::find($id);
+        return Storage::download(json_decode($data->filename), json_decode($data->title));
     }
 }

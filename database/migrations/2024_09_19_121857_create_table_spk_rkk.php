@@ -17,9 +17,9 @@ class CreateTableSpkRkk extends Migration
             $table->id();
             $table->integer('user_id')->comment('User Upload')->nullable();
             $table->integer('pegawai_id');
-            $table->integer('pegawai_status')->comment('KHUSUS TGL BERAKHIR (1=Kontrak;0=THL)')->nullable();
+            $table->integer('pegawai_status')->comment('KHUSUS TGL BERAKHIR (Kontrak & THL)')->nullable();
             $table->date('tgl_berakhir')->nullable();
-            $table->integer('jns_dokumen');
+            $table->integer('jns_dokumen')->comment('1=RKK;0=SPK');
             $table->longText('deskripsi')->nullable();
             $table->string('title', 200);
             $table->string('filename', 200);

@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     Route::get('profilkaryawan/{id}', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
     Route::get('profilkaryawan/detail/{id}', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'indexKepegawaian'])->name('profilkaryawan.kepegawaian');
     Route::get('profilkaryawan/dokumen/download/{id}', [App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class,'downloadDokumen'])->name('profilkaryawan.downloadDokumen');
+    Route::get('profilkaryawan/spkrkk/download/{id}', [App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class,'downloadSpkRkk'])->name('profilkaryawan.downloadSpkRkk');
     Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
     Route::resource('profilkaryawan', '\App\Http\Controllers\Kepegawaian\ProfilKaryawanController');
 });

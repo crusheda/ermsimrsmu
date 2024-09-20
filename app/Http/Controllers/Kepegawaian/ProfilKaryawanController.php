@@ -10,6 +10,10 @@ use App\Models\referensi;
 use App\Models\datalogs;
 use App\Models\users;
 use App\Models\users_foto;
+use App\Models\users_doc;
+use App\Models\users_rotasi;
+use App\Models\users_status;
+use App\Models\users_spkrkk;
 use App\Models\logs;
 use App\Models\alamat;
 use App\Models\model_has_roles;
@@ -75,7 +79,7 @@ class ProfilKaryawanController extends Controller
      */
     public function show($id) // TAMPILAN HALAMAN DETAIL PROFIL KEPEGAWAIAN
     {
-        $show  = DB::table('users')->where('id','=', $id)->first();
+        $show = DB::table('users')->where('id','=', $id)->first();
         $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
         $showlog = logs::where('user_id', $id)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
@@ -92,6 +96,7 @@ class ProfilKaryawanController extends Controller
             'showlog' => $showlog,
             'model' => $model,
             'show' => $show,
+            // 'status' => $status,
             'foto' => $foto,
             'role' => $role,
             'onlyRole' => $onlyRole,

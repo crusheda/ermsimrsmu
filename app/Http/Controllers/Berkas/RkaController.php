@@ -29,11 +29,13 @@ class RkaController extends Controller
         $show = berkas_rka::get();
         $user = Auth::user();
         $nama = $user->nama;
+        $bln = Carbon::now()->isoFormat('MM');
 
         $users = DB::table('users')->get();
 
         $data = [
             'show' => $show,
+            'bln' => $bln,
         ];
 
         return view('pages.berkas.rka.index')->with('list', $data);

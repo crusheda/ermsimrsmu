@@ -34,31 +34,31 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#kepegawaian" role="tab" aria-selected="true">
+                                href="#kepegawaian" role="tab" aria-selected="true" onclick="showKepegawaian()">
                                 <i class="ti ti-sailboat me-2"></i>Kepegawaian
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#penetapan" role="tab" aria-selected="true">
+                                href="#penetapan" role="tab" aria-selected="true" onclick="refreshPenetapan()">
                                 <i class="ti ti-license me-2"></i>Penetapan
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-3" data-bs-toggle="tab"
-                                href="#rotasi" role="tab" aria-selected="true">
+                                href="#rotasi" role="tab" aria-selected="true" onclick="refreshRotasi()">
                                 <i class="ti ti-route me-2"></i>Rotasi
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#dokumen" role="tab" aria-selected="true">
+                                href="#dokumen" role="tab" aria-selected="true" onclick="refreshDokumen()">
                                 <i class="ti ti-cloud-download me-2"></i>Dokumen
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
-                                href="#spkrkk" role="tab" aria-selected="true">
+                                href="#spkrkk" role="tab" aria-selected="true" onclick="refreshSpkRkk()">
                                 <i class="ti ti-lock me-2"></i>SPK & RKK
                             </a>
                         </li>
@@ -719,6 +719,9 @@
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">SPK & RKK</h5>
                             <div class="flex-shrink-0">
+                                <button type="button" class="btn btn-link-warning" id="btn-refresh-spkrkk" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Refresh Tabel SPK & RKK" onclick="refreshSpkRkk()">
+                                <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
                             </div>
                         </div>
                         <div class="card-body p-b-0 p-3">
@@ -732,33 +735,43 @@
                                 </div>
                             </div>
                             <hr class="my-2"> --}}
-                            <div class="row">
+                            <div class="row status_true_spkrkk">
+                                <div class="col-md-12">
+                                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                        <center><strong class="mb-0"><i><b class="text-danger">Form ini</b> diisi oleh komite keperawatan, komite nakesla, dan komite medik</i></strong></center>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
                                 <div class="col-md-2">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Jenis Dokumen <span class="text-danger">*</span></label>
                                         <select class="form-control" id="jns_spkrkk">
                                             <option value="" selected hidden>Pilih Kategori Rotasi</option>
-                                            @if (count($list['ref_rotasi']) > 0)
-                                                @foreach ($list['ref_rotasi'] as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->deskripsi }}</option>
-                                                @endforeach
-                                            @endif
+                                            <option value="0">SPK (Surat Penugasan Klinis)</option>
+                                            <option value="1">RKK (Rincian Kewenangan Klinis)</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2 penetapan_true_spkrkk">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Tgl. Berakhir SPK <span class="text-danger">*</span></label>
+                                        <label class="form-label">Tgl. Berakhir SPK <span id="wajib_tgl_akhir_spkrkk" class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="validasi_tgl_akhir_spkrkk" hidden>
                                         <input type="date" class="form-control" id="tgl_akhir_spkrkk">
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-3 penetapan_true_spkrkk">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Deskripsi</label>
                                         <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-5 penetapan_false_spkrkk" hidden>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Deskripsi</label>
+                                        <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
                                         <div class="row">
@@ -769,16 +782,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row status_false_spkrkk" hidden>
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger">
+                                        <h6 class="text-center mb-0">Dimohon untuk melengkapi Data Status Kepegawaian terlebih dahulu pada <mark>Menu Penetapan</mark> , Silakan <a href="javascript:void(0);" onclick="refreshSpkRkk()"><u>Segarkan</u></a> apabila sudah dilakukan</h6>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body status_true_spkrkk">
                             <div class="table-responsive">
                                 <table class="table mb-0 table-hover" id="dttable-spkrkk">
                                     <thead>
                                         <tr>
                                             <th><center>AKSI</center></th>
+                                            <th>RECORD</th>
                                             <th>TGL BERAKHIR</th>
                                             <th>DESKRIPSI</th>
-                                            <th><center>STATUS</center></th>
                                             <th class="text-end">TERAKHIR DIUBAH</th>
                                         </tr>
                                     </thead>
@@ -1443,6 +1463,34 @@
             </div>
         </div>
     </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="hapusSpkRkk" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Hapus SPK / RKK Pegawai
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_hapus_spkrkk" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus <strong>Data SPK / RKK</strong> <kbd>ID:<a id="show_id_hapusspkrkk"></a></kbd> dari database.
+                        Penghapusan data akan menghapus data record pada database dan menghapus file pada storage system. Maka dari itu, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penonaktifan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapusspkrkk">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-hapus-spkrkk" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapusSpkRkk()"><i class="fas fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         addEventListener("DOMContentLoaded", (event) => {
@@ -1462,11 +1510,24 @@
                 $('#btn-simpan-jabatan').prop('disabled',true);
             });
 
+            $('#jns_spkrkk').on('change', function() {
+                if ($(this).val() == 0) {
+                    $('#wajib_tgl_akhir_spkrkk').prop('hidden',false);
+                    $('#tgl_akhir_spkrkk').prop('disabled',false);
+                    $('#validasi_tgl_akhir_spkrkk').val('1');
+                } else {
+                    $('#wajib_tgl_akhir_spkrkk').prop('hidden',true);
+                    $('#tgl_akhir_spkrkk').prop('disabled',true);
+                    $('#validasi_tgl_akhir_spkrkk').val('0');
+                }
+            });
+
             // inisialisasi table
-            showKepegawaian();
-            refreshPenetapan();
-            refreshRotasi();
-            refreshDokumen();
+                // showKepegawaian();
+                // refreshPenetapan();
+                // refreshRotasi();
+                // refreshDokumen();
+                // refreshSpkRkk();
         });
 
         // ALL FUNCTION AREA
@@ -1770,6 +1831,89 @@
 
             $("#btn-simpan-rotasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
             $("#btn-simpan-rotasi").prop('disabled', false);
+        }
+
+        function prosesTambahSpkRkk() {
+            $("#btn-upload-spkrkk").prop('disabled', true);
+            $("#btn-upload-spkrkk").find("i").toggleClass("fa-upload fa-sync fa-spin");
+
+            var fd = new FormData();
+
+            // ISIAN FORM WAJIB
+            var cekValidasi = $('#validasi_tgl_akhir_spkrkk').val();
+            var jns_spkrkk = $('#jns_spkrkk').val();
+            var tgl_akhir_spkrkk = null;
+            if (cekValidasi == 1) {
+                tgl_akhir_spkrkk = $('#tgl_akhir_spkrkk').val();
+            }
+            var deskripsi_spkrkk = $('#deskripsi_spkrkk').val();
+            var filesAdded = $('#upload_spkrkk')[0].files[0];
+            console.log($('#upload_spkrkk')[0].files[0]);
+            console.log(filesAdded.length);
+            // CEK VALIDASI
+            var validate1 = 0;
+            if (jns_spkrkk != '' || filesAdded.length != 0) {
+                validate1 = 1;
+            }
+            var validate2 = 0;
+            if (cekValidasi == 1) {
+                if (tgl_akhir_spkrkk != null) {
+                    validate2 = 1;
+                }
+            } else {
+                validate2 = 1;
+            }
+
+            // EXECUTE
+            if (validate1 == 0 || validate2 == 0) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
+                    position: 'topRight'
+                });
+            } else {
+                // INISIALISASI
+                fd.append('jns_dokumen',jns_spkrkk);
+                fd.append('deskripsi',deskripsi_spkrkk);
+                fd.append('tgl_berakhir',tgl_akhir_spkrkk);
+                fd.append('user_id','{{ Auth::user()->id }}');
+                fd.append('pegawai_id','{{ $list["show"]->id }}');
+                fd.append('file',filesAdded);
+
+                // AJAX REQUEST
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/profilkaryawan/spkrkk/tambah",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'SPK / RKK Pegawai berhasil diupload pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            refreshSpkRkk();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+
+            $("#btn-upload-spkrkk").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
+            $("#btn-upload-spkrkk").prop('disabled', false);
         }
 
         // SHOW UBAH
@@ -2117,6 +2261,97 @@
             );
         }
 
+        function refreshSpkRkk() {
+            $("#tampil-tbody-spkrkk").empty();
+            $("#tampil-tbody-spkrkk").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/profilkaryawan/spkrkk/table/{{ $list['show']->id }}",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        // VALIDATION FORM
+                        if (res.status) {
+                            $('#jns_spkrkk').val('');
+                            $('#tgl_akhir_spkrkk').val('');
+                            $('#deskripsi_spkrkk').val('');
+                            $('#upload_spkrkk').val('');
+                            $('.status_true_spkrkk').prop('hidden',false);
+                            $('.status_false_spkrkk').prop('hidden',true);
+                            if (res.status.queue == 1 || res.status.queue == 2) {
+                                $('.penetapan_true_spkrkk').prop('hidden',false);
+                                $('.penetapan_false_spkrkk').prop('hidden',true);
+                            } else {
+                                $('.penetapan_true_spkrkk').prop('hidden',true);
+                                $('.penetapan_false_spkrkk').prop('hidden',false);
+                            }
+                        } else {
+                            $('.status_true_spkrkk').prop('hidden',true);
+                            $('.status_false_spkrkk').prop('hidden',false);
+                        }
+                        // ------------------------------------------------------
+                        $("#tampil-tbody-spkrkk").empty();
+                        $('#dttable-spkrkk').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                                if (item.deleted_at == null) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/kepegawaian/profilkaryawan/spkrkk/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-download me-1'></i> Download</a>`;
+                                }
+                                if (item.status == 0) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    // content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahSpkRkk(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusSpkRkk(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                }
+                            content += `</div></center></td>`;
+                            if (item.deleted_at != null) {
+                                bgHapus = `<span class="badge rounded-pill text-bg-secondary p-1">Terhapus</span>`;
+                            } else {
+                                bgHapus = ``;
+                            }
+                            content += `<td style='white-space: normal !important;word-wrap: break-word;'>`
+                                        + `<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>`
+                                        + `<h6 class='mb-0'>${item.jns_dokumen == 0?'<b class="text-primary">SPK</b>':'<b class="text-info">RKK</b>'}&nbsp;${item.nama_pegawai}&nbsp;&nbsp;` + bgHapus + `</h6><small class='text-truncate text-muted'>Oleh ` + item.nama_kepegawaian + `</small>`
+                                        + `</div></div></td>`;
+                            content += `<td>${item.tgl_berakhir}</td>`;
+                            content += `<td>${item.deskripsi?item.deskripsi:'-'}</td>`;
+                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
+                            $('#tampil-tbody-spkrkk').append(content);
+                        });
+                        var table = $('#dttable-spkrkk').DataTable({
+                            order: [
+                                [4, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '40%' },
+                                { sWidth: '10%' },
+                                { sWidth: '30%' },
+                                { sWidth: '15%' },
+                            ],
+                            displayLength: 10,
+                            lengthChange: true,
+                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Dokumen tidak ditemukan.',
+                            position: 'topRight'
+                        });
+                    }
+                }
+            );
+        }
+
         // SHOW HAPUS
         function showHapusPegawai(id) {
             $("#id_hapus_pegawai").val(id);
@@ -2138,6 +2373,14 @@
             var inputs = document.getElementById('setujuhapusrotasi');
             inputs.checked = false;
             $('#hapusRotasi').modal('show');
+        }
+
+        function showHapusSpkRkk(id) {
+            $("#id_hapus_spkrkk").val(id);
+            $("#show_id_hapusspkrkk").text(id);
+            var inputs = document.getElementById('setujuhapusspkrkk');
+            inputs.checked = false;
+            $('#hapusSpkRkk').modal('show');
         }
 
         function prosesHapusPegawai() {
@@ -2240,6 +2483,41 @@
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Rotasi Jabatan Pegawai gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
+        function prosesHapusSpkRkk() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapusspkrkk').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan data record SPK / RKK tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus_spkrkk").val();
+                $.ajax({
+                    url: "/api/profilkaryawan/spkrkk/hapus/"+id+"/proses",
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Data Record Pegawai telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#hapusSpkRkk').modal('hide');
+                        refreshSpkRkk();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Data Record Pegawai gagal dihapus',
                             position: 'topRight'
                         });
                     }
