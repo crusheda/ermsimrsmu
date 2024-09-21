@@ -275,6 +275,16 @@ class AsetController extends Controller
         return response()->json($data, 200);
     }
 
+    function makeEncrypt($id)
+    {
+        return response()->json(Crypt::encryptString($id), 200);
+    }
+
+    function makeDecrypt($id)
+    {
+        return response()->json(Crypt::decryptString($id), 200);
+    }
+
     function store(Request $request)
     {
         $carbon = Carbon::now();

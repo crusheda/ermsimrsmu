@@ -198,6 +198,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::post('eruang/ruangan/ubah/proses', 'App\Http\Controllers\ERuang\ERuangController@updateRuangan')->name('eruang.updateRuangan');
 
     // INVENTARIS
+        // ENCRYPT - DECRYPT
+            Route::get('inventaris/aset/en/{token}', '\App\Http\Controllers\Inventaris\Aset\AsetController@makeEncrypt')->name('aset.makeEncrypt');
+            Route::get('inventaris/aset/de/{token}', '\App\Http\Controllers\Inventaris\Aset\AsetController@makeDecrypt')->name('aset.makeDecrypt');
         // DETAIL ASET
             Route::get('inventaris/aset/{id}/fresh', '\App\Http\Controllers\Inventaris\Aset\AsetController@fresh')->name('aset_detail.fresh');
             Route::get('inventaris/aset/{token}/kondisi/{kondisi}', '\App\Http\Controllers\Inventaris\Aset\AsetController@ubahKondisi')->name('aset_detail.ubahKondisi');
