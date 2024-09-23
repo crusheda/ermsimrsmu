@@ -64,6 +64,16 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     Route::get('profilkaryawan/spkrkk/download/{id}', [App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class,'downloadSpkRkk'])->name('profilkaryawan.downloadSpkRkk');
     Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
     Route::resource('profilkaryawan', '\App\Http\Controllers\Kepegawaian\ProfilKaryawanController');
+
+    // PENGAJUAN
+        // SURAT KETERANGAN (SURKET)
+        Route::get('pengajuan/surket', [App\Http\Controllers\Kepegawaian\SurketController::class, 'index'])->name('kepegawaian.surket.index');
+
+        // IDCARD
+        Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'index'])->name('kepegawaian.idcard.index');
+
+    // MASUKAN / SARAN
+    Route::get('feedback', [App\Http\Controllers\Kepegawaian\SaranController::class, 'index'])->name('kepegawaian.feedback.index');
 });
 
 // BERKAS

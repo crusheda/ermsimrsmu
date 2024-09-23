@@ -62,13 +62,13 @@
                                 <i class="ti ti-lock me-2"></i>SPK & RKK
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
-                                href="#profile-5" role="tab" aria-selected="true">
-                                <i class="ti ti-users me-2"></i><s>Role</s>
+                                href="javascript: void(0);" role="tab" aria-selected="true">
+                                <i class="ti ti-plane me-2"></i><s>Surat Tugas</s>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" id="profile-tab-6" data-bs-toggle="tab"
                                 href="#profile-6" role="tab" aria-selected="true">
                                 <i class="ti ti-settings me-2"></i><s>Settings</s>

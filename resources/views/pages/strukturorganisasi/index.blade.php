@@ -64,7 +64,7 @@
                                                 class='bx bx-dots-vertical-rounded'></i></button>
                                         <ul class='dropdown-menu dropdown-menu-end'>
                                             <li><a href='javascript:void(0);' class='dropdown-item text-warning'
-                                                    onclick="window.location.href='{{ url('strukturorganisasi/' . $item->id . '/ubah') }}'"><i
+                                                    onclick="window.location.href='{{ url('kepegawaian/strukturorganisasi/' . $item->id . '/ubah') }}'"><i
                                                         class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
                                             <li><a href='javascript:void(0);' class='dropdown-item text-danger'
                                                     onclick="hapus({{ $item->id }})"><i
