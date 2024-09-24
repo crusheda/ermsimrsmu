@@ -216,7 +216,9 @@ class AsetController extends Controller
     {
         $ruangan = aset_ruangan::where('id', $id)->first();
 
-        $last = aset::orderBy('created_at','desc')->where('id_ruangan',$id)->first();
+        $last = aset::orderBy('urutan','desc')->where('id_ruangan',$id)->first();
+        // print_r($last->urutan);
+        // die();
         if (!empty($last)) {
             $kodeSarana = $last->urutan + 1;
         } else {
@@ -283,6 +285,19 @@ class AsetController extends Controller
     function makeDecrypt($id)
     {
         return response()->json(Crypt::decryptString($id), 200);
+    }
+
+    function refreshToken()
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        // $getData = aset::get();
+        $getCount = aset::count();
+        for ($i=1; $i <= $getCount; $i++) {
+            $data = aset::find($i);
+            $data->token = Crypt::encryptString($data->no_inventaris); // decryptString to Decrypt
+            $data->save();
+        }
+        return response()->json($tgl, 200);
     }
 
     function store(Request $request)

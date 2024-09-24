@@ -36,6 +36,7 @@
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Sarana</a>
                                     <a class="dropdown-item" href="{{ route('aset_ruangan.index') }}">Daftar Ruangan</a>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="refresh()">Segarkan Tabel</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="token()">Refresh Token</a>
                                 </li>
                             </ul>
                         @else
@@ -1728,6 +1729,29 @@
                 title: 'Show Result!',
                 message: 'For = '+decodedText,
                 position: 'topRight'
+            });
+        }
+
+        function token() {
+            $.ajax({
+                url: "/api/inventaris/aset/refreshtoken",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    refresh();
+                    iziToast.success({
+                        title: 'Sukses!',
+                        message: 'Token berhasil diperbarui pada '+ res,
+                        position: 'topRight'
+                    });
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Token gagal diperbarui',
+                        position: 'topRight'
+                    });
+                }
             });
         }
     </script>

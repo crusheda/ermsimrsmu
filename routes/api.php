@@ -235,6 +235,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::post('inventaris/aset/updatekalibrasi', '\App\Http\Controllers\Inventaris\Aset\AsetController@updateKalibrasi')->name('aset.updatekalibrasi');
             // Route::get('inventaris/aset/{id}/updatekalibrasi/{no_kalibrasi}/{tgl_berlaku}/{tgl_berakhir}', '\App\Http\Controllers\Inventaris\Aset\AsetController@updateKalibrasi')->name('aset.updatekalibrasi');
         // ASET
+            Route::get('inventaris/aset/refreshtoken', '\App\Http\Controllers\Inventaris\Aset\AsetController@refreshToken')->name('aset.refreshToken');
             Route::get('inventaris/aset/{token}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getAsetToken')->name('aset.getAsetToken');
             Route::get('inventaris/aset/ubah/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getUbahAset')->name('aset.getUbahAset');
             Route::post('inventaris/aset/update', '\App\Http\Controllers\Inventaris\Aset\AsetController@update')->name('aset.simpan');

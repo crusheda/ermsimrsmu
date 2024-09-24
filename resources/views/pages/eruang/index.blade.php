@@ -86,7 +86,7 @@
                                     Daftar Riwayat
                                 </a>
                             </li>
-                            @if (Auth::user()->getManyRole(['kasubag-tata-usaha','it','gizi']))
+                            @if (Auth::user()->getManyRole(['kasubag-tata-usaha','it','gizi','ahli-gizi','karu-gizi']))
                             <li class="nav-item">
                                 <a class="nav-link text-dark" id="link_display" data-bs-toggle="tab" href="#display" role="tab">
                                     Display Gizi
