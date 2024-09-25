@@ -44,7 +44,7 @@
             </a>
         </li>
     @endif
-    @if (Auth::user()->getRole('it') == true)
+    @if (Auth::user()->getRole('karu-it') == true)
         <li class="pc-item">
             <a href="javascript: void(0);" class="pc-link">
                 <span class="pc-micon">

@@ -58,6 +58,11 @@
                         data-bs-target="#announcement" aria-controls="announcement" disabled><svg class="pc-icon">
                             <use xlink:href="#custom-flash"></use>
                         </svg></a></li> --}}
+                @php
+                    // $notif = \DB::table('datalogs')->get();
+                    $notif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('users.nama','datalogs.*')->get();
+                    // $time = \Carbon\Carbon::now()->isoFormat('H');
+                @endphp
                 <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle arrow-none me-0 waves-effect" data-bs-toggle="fullscreen" href="javascript:void(0);" onclick="toggle_fullscreen()" id="fullscreen-btn">
                         <i class="fas fa-expand" style="font-size:22px"></i>
@@ -74,6 +79,21 @@
                         <div class="dropdown-body text-wrap header-notification-scroll position-relative"
                             style="max-height: calc(100vh - 215px)">
                             {{-- <p class="text-span">Tahun 2025</p> --}}
+                            @foreach ($notif as $item)
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0"><svg class="pc-icon text-primary">
+                                                    <use xlink:href="#custom-layer"></use>
+                                                </svg></div>
+                                            <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted"></span>
+                                                <h5 class="text-body mb-2"></h5>
+                                                <p class="mb-0">{{ $item->nama }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                             <div class="card mb-2">
                                 <div class="card-body">
                                     <div class="d-flex">
@@ -81,7 +101,7 @@
                                                 <use xlink:href="#custom-layer"></use>
                                             </svg></div>
                                         <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">Baru Saja</span>
-                                            <h5 class="text-body mb-2">Update v3.1</h5>
+                                            <h5 class="text-body mb-2">Update System v3.1</h5>
                                             <p class="mb-0">Simrsmu sedang dalam pengembangan menjadi lebih baik lagi..</p>
                                         </div>
                                     </div>
