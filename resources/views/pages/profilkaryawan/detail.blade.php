@@ -118,7 +118,7 @@
                                         <div class="row">
                                             <div class="col-6 border border-top-0 border-bottom-0 border-start-0">
                                                 <h6 class="mb-0">Status Pegawai</h6>
-                                                <small class="text-muted">{{ $list['show']->deleted_at == null? 'Aktif':'Non Aktif' }}</small>
+                                                <small class="text-muted">{{ $list['show']->deleted_at == null? 'Aktif':'Non Aktif' }} {{ empty($list['users_status'])? '':'- '.$list['users_status']->nama_referensi }}</small>
                                             </div>
                                             <div class="col-6 border border-top-0 border-bottom-0 border-end-0">
                                                 <h6 class="mb-0">Terakhir Login</h6>
@@ -132,21 +132,30 @@
                                         <hr class="my-3 border border-secondary-subtle">
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-id-card-alt me-3"></i>
-                                            <p class="mb-0">{{ $list['show']->nip?$list['show']->nip:'-' }}</p>
+                                            <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Induk Pegawai">{{ $list['show']->nip?$list['show']->nip:'-' }}</p>
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
-                                            <i class="fas fa-address-card me-3"></i>
+                                            <i class="fas fa-address-card me-3" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Induk Kependudukan"></i>
                                             <p class="mb-0">{{ $list['show']->nik?$list['show']->nik:'-' }}</p>
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-envelope me-3"></i>
-                                            <p class="mb-0"><a href="javascript:void(0);"
-                                                    class="text-dark">{{ $list['show']->email }}</a>
+                                            <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Email Aktif">
+                                                <a href="javascript:void(0);" class="text-dark">{{ $list['show']->email }}</a>
                                             </p>
                                         </div>
-                                        <div class="d-inline-flex align-items-center justify-content-start w-100">
+                                        <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fab fa-whatsapp-square me-3"></i>
-                                            <p class="mb-0">{{ $list['show']->no_hp?$list['show']->no_hp:'-' }}</p>
+                                            <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Handphone/Whatsapp">{{ $list['show']->no_hp?$list['show']->no_hp:'-' }}</p>
+                                        </div>
+                                        <div class="d-inline-flex align-items-center justify-content-start w-100">
+                                            <i class="fas fa-user-md me-3"></i>
+                                            <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Profesi/Klasifikasi Pegawai">
+                                                {{ $list['show']->ref_profesi == null?'-':'' }}
+                                                {{ $list['show']->ref_profesi == 1?'Nakes':'' }}
+                                                {{ $list['show']->ref_profesi == 2?'Nakesla':'' }}
+                                                {{ $list['show']->ref_profesi == 3?'Non Nakes':'' }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -381,7 +390,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-6" @if($list['show']->deleted_at != null) hidden @endif>
                                     <div class="card shadow-none border mb-0 h-100">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
@@ -406,7 +415,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" @if($list['show']->deleted_at != null) hidden @endif>
                                     <div class="card shadow-none border mb-0 h-100">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
@@ -432,7 +441,7 @@
                                     <div class="col-md-12">
                                         <div class="card shadow-none border mb-0">
                                             <div class="card-body">
-                                                <h5 class="mb-0 text-center">Pegawai telah resmi <b class="text-danger">dihapus/dinonaktifkan</b> pada {{ \Carbon\Carbon::parse($list['show']->deleted_at)->isoFormat('dddd, D MMMM Y, HH:mm a') }}</h5>
+                                                <h5 class="mb-0 text-center">Pegawai telah resmi <b class="text-danger">dihapus/dinonaktifkan</b> pada {{ \Carbon\Carbon::parse($list['show']->deleted_at)->isoFormat('dddd, D MMMM Y, HH:mm a') }} Oleh {{ $list['show']->deleted_at }}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -489,7 +498,7 @@
 
                 {{-- FORM PENETAPAN --}}
                 <div class="tab-pane" id="penetapan" role="tabpanel" aria-labelledby="profile-tab-2">
-                    <div class="card">
+                    <div class="card" @if($list['show']->deleted_at != null) hidden @endif>
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">Penetapan Pegawai</h5>
                             <div class="flex-shrink-0">
@@ -574,7 +583,7 @@
 
                 {{-- FORM ROTASI --}}
                 <div class="tab-pane" id="rotasi" role="tabpanel" aria-labelledby="profile-tab-2">
-                    <div class="card">
+                    <div class="card" @if($list['show']->deleted_at != null) hidden @endif>
                         <div class="card-header d-flex align-items-center justify-content-between py-3">
                             <h5 class="mb-0 card-title flex-grow-1">Rotasi Pegawai</h5>
                             <div class="flex-shrink-0">
@@ -724,68 +733,70 @@
                                 <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
                             </div>
                         </div>
-                        <div class="card-body p-b-0 p-3">
-                            {{-- <div class="d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0 flex-grow-1"><a class="text-danger">*</a>/2 <small>dokumen wajib sudah terupload.</small></h4>
-                                <div class="flex-shrink-0" id="switch-str" hidden>
-                                    <div class="form-check form-switch custom-switch-v1 switch-sm">
-                                        <input type="checkbox" class="form-check-input input-primary" id="checkboxseumurhidup">
-                                        <label class="form-check-label" for="checkboxseumurhidup">Seumur Hidup ?</label>
+                        <div @if($list['show']->deleted_at != null) hidden @endif>
+                            <div class="card-body p-b-0 p-3">
+                                {{-- <div class="d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0 flex-grow-1"><a class="text-danger">*</a>/2 <small>dokumen wajib sudah terupload.</small></h4>
+                                    <div class="flex-shrink-0" id="switch-str" hidden>
+                                        <div class="form-check form-switch custom-switch-v1 switch-sm">
+                                            <input type="checkbox" class="form-check-input input-primary" id="checkboxseumurhidup">
+                                            <label class="form-check-label" for="checkboxseumurhidup">Seumur Hidup ?</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr class="my-2"> --}}
-                            <div class="row status_true_spkrkk">
-                                <div class="col-md-12">
-                                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
-                                        <center><strong class="mb-0"><i><b class="text-danger">Form ini</b> diisi oleh komite keperawatan, komite nakesla, dan komite medik</i></strong></center>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <hr class="my-2"> --}}
+                                <div class="row status_true_spkrkk">
+                                    <div class="col-md-12">
+                                        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                            <center><strong class="mb-0"><i><b class="text-danger">Form ini</b> diisi oleh komite keperawatan, komite nakesla, dan komite medik</i></strong></center>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Jenis Dokumen <span class="text-danger">*</span></label>
-                                        <select class="form-control" id="jns_spkrkk">
-                                            <option value="" selected hidden>Pilih Kategori Rotasi</option>
-                                            <option value="0">SPK (Surat Penugasan Klinis)</option>
-                                            <option value="1">RKK (Rincian Kewenangan Klinis)</option>
-                                        </select>
+                                    <div class="col-md-2">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Jenis Dokumen <span class="text-danger">*</span></label>
+                                            <select class="form-control" id="jns_spkrkk">
+                                                <option value="" selected hidden>Pilih Kategori Rotasi</option>
+                                                <option value="0">SPK (Surat Penugasan Klinis)</option>
+                                                <option value="1">RKK (Rincian Kewenangan Klinis)</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2 penetapan_true_spkrkk">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Tgl. Berakhir SPK <span id="wajib_tgl_akhir_spkrkk" class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="validasi_tgl_akhir_spkrkk" hidden>
-                                        <input type="date" class="form-control" id="tgl_akhir_spkrkk">
+                                    <div class="col-md-2 penetapan_true_spkrkk">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Tgl. Berakhir SPK <span id="wajib_tgl_akhir_spkrkk" class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="validasi_tgl_akhir_spkrkk" hidden>
+                                            <input type="date" class="form-control" id="tgl_akhir_spkrkk">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3 penetapan_true_spkrkk">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Deskripsi</label>
-                                        <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
+                                    <div class="col-md-3 penetapan_true_spkrkk">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Deskripsi</label>
+                                            <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-5 penetapan_false_spkrkk" hidden>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Deskripsi</label>
-                                        <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
+                                    <div class="col-md-5 penetapan_false_spkrkk" hidden>
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Deskripsi</label>
+                                            <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
-                                        <div class="row">
-                                            <div class="col"><input type="file" class="form-control" id="upload_spkrkk" accept="application/pdf"></div>
-                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahSpkRkk()" id="btn-upload-spkrkk"><i class="fas fa-upload me-1"></i> Upload</button>
+                                    <div class="col-md-5">
+                                        <div class="form-group mb-3">
+                                            <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                            <div class="row">
+                                                <div class="col"><input type="file" class="form-control" id="upload_spkrkk" accept="application/pdf"></div>
+                                                <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahSpkRkk()" id="btn-upload-spkrkk"><i class="fas fa-upload me-1"></i> Upload</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row status_false_spkrkk" hidden>
-                                <div class="col-md-12">
-                                    <div class="alert alert-danger">
-                                        <h6 class="text-center mb-0">Dimohon untuk melengkapi Data Status Kepegawaian terlebih dahulu pada <mark>Menu Penetapan</mark> , Silakan <a href="javascript:void(0);" onclick="refreshSpkRkk()"><u>Segarkan</u></a> apabila sudah dilakukan</h6>
+                                <div class="row status_false_spkrkk" hidden>
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger">
+                                            <h6 class="text-center mb-0">Dimohon untuk melengkapi Data Status Kepegawaian terlebih dahulu pada <mark>Menu Penetapan</mark> , Silakan <a href="javascript:void(0);" onclick="refreshSpkRkk()"><u>Segarkan</u></a> apabila sudah dilakukan</h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

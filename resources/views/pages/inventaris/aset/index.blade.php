@@ -29,14 +29,16 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Filter Data</h5>
                     <div class="btn-group">
-                        @if (Auth::user()->getManyRole(['it','kasubag-aset-gudang']) == true)
+                        @if (Auth::user()->getManyRole(['karu-it','it','kasubag-aset-gudang']) == true)
                             <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Sarana</a>
                                     <a class="dropdown-item" href="{{ route('aset_ruangan.index') }}">Daftar Ruangan</a>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="refresh()">Segarkan Tabel</a>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="token()">Refresh Token</a>
+                                    @if (Auth::user()->getRole('karu-it') == true)
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="token()">Refresh Token</a>
+                                    @endif
                                 </li>
                             </ul>
                         @else
@@ -52,11 +54,11 @@
                 <div class="card-body border-bottom" id="filterTampil">
                     <div class="row g-3">
                         <input type="text" class="form-control" id="validasiTampil" value="0" hidden>
-                        <div class="col-xxl-3 col-lg-4" data-bs-toggle="tooltip"
+                        {{-- <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Cari Nama Aset/Sarana">
                             <input type="search" class="form-control" id="searchTableList" placeholder="Cari Sarana ..." disabled>
-                        </div>
+                        </div> --}}
                         <div class="col-xxl-2 col-lg-4">
                             <div class="select2-dark">
                                 <select class="selectFilter form-select" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
@@ -73,10 +75,10 @@
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Pilih Tanggal Perolehan Aset">
                             <div id="datepicker1">
-                                <input type="text" id="filterTglPerolehan" class="form-control flatpickr" placeholder="Pilih Tanggal">
+                                <input type="date" id="filterTglPerolehan" class="form-control" placeholder="Pilih Tanggal" disabled>
                             </div><!-- input-group -->
                         </div>
-                        <div class="col-xxl-1 col-lg-4" data-bs-toggle="tooltip"
+                        <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Pilih Jenis Sarana">
                             <select class="selectFilter form-select" id="filterJenis" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
@@ -85,7 +87,7 @@
                                 <option value="2">Non Medis</option>
                             </select>
                         </div>
-                        <div class="col-xxl-1 col-lg-4" data-bs-toggle="tooltip"
+                        <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                         title="Pilih Bulan Kalibrasi Berakhir">
                             <select class="form-select selectFilter" id="filterBulanKalibrasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%">
@@ -99,7 +101,7 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="col-xxl-1 col-lg-4" data-bs-toggle="tooltip"
+                        <div class="col-xxl-2 col-lg-4" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                         title="Pilih Tahun Kalibrasi Berakhir">
                             <select class="form-select selectFilter" id="filterTahunKalibrasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%">

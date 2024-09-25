@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
     // PROFIL KARYAWAN - KEPEGAWAIAN
     Route::get('profilkaryawan/table', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'table'])->name('profilkaryawan.table');
-    Route::get('profilkaryawan/setaktif/{id}', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'setAktif'])->name('profilkaryawan.setaktif');
+    Route::get('profilkaryawan/{user}/setaktif/{id}', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'setAktif'])->name('profilkaryawan.setaktif');
     Route::get('profilkaryawan/setnonaktif/{id}', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'setNonAktif'])->name('profilkaryawan.setnonaktif');
     Route::get('profilkaryawan/nonaktif', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonaktif'])->name('profilkaryawan.nonaktif');
     Route::get('profilkaryawan/nonlengkap', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonLengkap'])->name('profilkaryawan.nonlengkap');

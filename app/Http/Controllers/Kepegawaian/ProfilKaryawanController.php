@@ -79,7 +79,9 @@ class ProfilKaryawanController extends Controller
      */
     public function show($id) // TAMPILAN HALAMAN DETAIL PROFIL KEPEGAWAIAN
     {
-        $show = DB::table('users')->where('id','=', $id)->first();
+        $show = DB::table('users')
+                ->where('users.id','=', $id)
+                ->first();
         $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
         $showlog = logs::where('user_id', $id)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
@@ -87,6 +89,17 @@ class ProfilKaryawanController extends Controller
         $provinsi = alamat::select('provinsi')->groupBy('provinsi')->get();
         $kota = alamat::select('nama_kabkota')->groupBy('nama_kabkota')->get();
         $model = model_has_roles::where('model_id', $id)->get();
+
+        // GET DATA OF USER
+        $users_status = users_status::join('referensi','referensi.id','=','users_status.ref_id')
+                    ->select('users_status.*','referensi.deskripsi as nama_referensi')
+                    ->where('users_status.pegawai_id',$id)
+                    ->where('users_status.status',1)
+                    ->orderBy('users_status.updated_at','desc')
+                    ->first();
+        // print_r($users_status);
+        // die();
+        // REFERENSI
         $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
         $ref_rotasi = referensi::where('ref_jenis',9)->get(); // 10 is Jenis Rotasi Pegawai
         $ref_penetapan = referensi::where('ref_jenis',10)->get(); // 10 is Jenis Penetapan Pegawai
@@ -102,6 +115,7 @@ class ProfilKaryawanController extends Controller
             'onlyRole' => $onlyRole,
             'provinsi' => $provinsi,
             'kota' => $kota,
+            'users_status' => $users_status,
             'ref_dokumen' => $ref_dokumen,
             'ref_rotasi' => $ref_rotasi,
             'ref_penetapan' => $ref_penetapan,
@@ -183,14 +197,18 @@ class ProfilKaryawanController extends Controller
         return response()->json($data, 200);
     }
 
-    function setAktif($id)
+    function setAktif($user,$id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // $data = DB::table('users')->where('id',$id)->first();
         $data = users::onlyTrashed()->where('id',$id)->first();
+        $data->user_hapus = null;
         $data->deleted_at = null;
         $data->save();
+
+        // CEK DATA & SAVE LOG
+        datalogs::record($user, 'Baru saja mengaktifkan status Login Pegawai ID : '.$id, null, null, null, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($tgl, 200);
     }

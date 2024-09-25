@@ -312,43 +312,44 @@
         $(document).ready(function() {
 
             // TABEL PROFIL KARYAWAN INIT
-            $.ajax({
-                url: "/api/profilkaryawan/table",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $("#tampil-tbody").empty();
-                    res.show.forEach(item => {
-                        content = "<tr id='data" + item.id + "'>";
-                        content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow ${item.nik?'text-primary':'text-danger'}' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
-                                        <ul class='dropdown-menu dropdown-menu-right'>`;
-                            content += `<li><a href="/kepegawaian/profilkaryawan/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
-                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
-                        content += `</div></center></td>`;
-                        content += `<td>${item.name}</td>`;
-                        content += `<td>${item.nama?item.nama:'<b class="text-danger">Data Tidak Valid</b>'}</td>`;
-                        content += '<td>' + new Date(item.updated_at).toLocaleString("sv-SE") + '</td>';
-                        content += `</tr>`;
-                        $('#tampil-tbody').append(content);
-                    });
-                    var table = $('#dttable').DataTable({
-                        order: [
-                            [3, "desc"]
-                        ],
-                        bAutoWidth: false,
-                        aoColumns : [
-                            { sWidth: '10%' },
-                            { sWidth: '20%' },
-                            { sWidth: '55%' },
-                            { sWidth: '15%' },
-                        ],
-                        displayLength: 10,
-                        lengthChange: true,
-                        lengthMenu: [10, 25, 50, 75, 100],
-                    });
-                }
-            });
+            refresh();
+            // $.ajax({
+            //     url: "/api/profilkaryawan/table",
+            //     type: 'GET',
+            //     dataType: 'json', // added data type
+            //     success: function(res) {
+            //         $("#tampil-tbody").empty();
+            //         res.show.forEach(item => {
+            //             content = "<tr id='data" + item.id + "'>";
+            //             content += `<td><center><div class='btn-group'>
+            //                             <button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow ${item.nik?'text-primary':'text-danger'}' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+            //                             <ul class='dropdown-menu dropdown-menu-right'>`;
+            //                 content += `<li><a href="/kepegawaian/profilkaryawan/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
+            //                             <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
+            //             content += `</div></center></td>`;
+            //             content += `<td>${item.name}</td>`;
+            //             content += `<td>${item.nama?item.nama:'<b class="text-danger">Data Tidak Valid</b>'}</td>`;
+            //             content += '<td>' + new Date(item.updated_at).toLocaleString("sv-SE") + '</td>';
+            //             content += `</tr>`;
+            //             $('#tampil-tbody').append(content);
+            //         });
+            //         var table = $('#dttable').DataTable({
+            //             order: [
+            //                 [3, "desc"]
+            //             ],
+            //             bAutoWidth: false,
+            //             aoColumns : [
+            //                 { sWidth: '10%' },
+            //                 { sWidth: '20%' },
+            //                 { sWidth: '55%' },
+            //                 { sWidth: '15%' },
+            //             ],
+            //             displayLength: 10,
+            //             lengthChange: true,
+            //             lengthMenu: [10, 25, 50, 75, 100],
+            //         });
+            //     }
+            // });
         });
 
         // FUNCTION-FUNCTION
@@ -368,8 +369,8 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow ${item.nik?'text-primary':'text-danger'}' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                            content += `<li><a href="/kepegawaian/profilkaryawan/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>
-                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
+                            content += `<li><a href="/kepegawaian/profilkaryawan/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
+                            // content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Nonaktif</a></li>`;
                         content += `</div></center></td>`;
                         content += `<td>${item.name}</td>`;
                         content += `<td>${item.nama?item.nama:'<b class="text-danger">Data Tidak Valid</b>'}</td>`;
@@ -589,7 +590,7 @@
                 // PROSES HAPUS
                 var id = $("#id_aktif_karyawan").val();
                 $.ajax({
-                    url: "/api/profilkaryawan/setaktif/"+id,
+                    url: "/api/profilkaryawan/{{ Auth::user()->id }}/setaktif/"+id,
                     type: 'GET',
                     dataType: 'json', // added data type
                     success: function(res) {

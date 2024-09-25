@@ -25,13 +25,13 @@
     <!-- [ Main Content ] start -->
     <div class="pt-1">
         <div class="card job-filter">
-            <div class="card-body p-3">
+            <div class="card-body p-3" id="filterTampil">
                 <div class="row g-3">
                     <div class="col-xxl-3 col-lg-4">
                         <div class="position-relative">
                             <label class="form-label">Jenis Regulasi</label>
                             <i class="bx bx-help-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Anda dapat memilih satu dari tiga pilihan filter dibawah, lalu klik Submit"></i>
-                                <select class="form-control select2" id="search_regulasi" style="width: 100%">
+                                <select class="form-select selectFilter" id="search_regulasi" style="width: 100%" data-allow-clear="false" data-bs-auto-close="outside">
                                     <option value="">Pilih</option>
                                     <option value="1">Kebijakan</option>
                                     <option value="2">Panduan</option>
@@ -53,7 +53,7 @@
                     <div class="col-xxl-4 col-lg-4">
                         <div class="position-relative">
                             <label class="form-label">Unit Pembuat</label>
-                            <select class="form-control select2" id="search_pembuat" style="width: 100%">
+                            <select class="form-select selectFilter" id="search_pembuat" style="width: 100%" data-allow-clear="false" data-bs-auto-close="outside">
                                 <option value="">Pilih</option>
                                 @foreach($list['unit'] as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -166,7 +166,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Regulasi <a class="text-danger">*</a></label>
-                                <select class="form-select select2" id="jns_regulasi" style="width: 100%">
+                                <select class="form-select" id="jns_regulasi" style="width: 100%">
                                     <option value="" hidden>Pilih</option>
                                     <option value="1">Kebijakan</option>
                                     <option value="2">Panduan</option>
@@ -186,7 +186,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Unit Pembuat <a class="text-danger">*</a></label>
-                                <select class="form-select select2" id="pembuat" style="width: 100%">
+                                <select class="form-select selectFilter2" id="pembuat" style="width: 100%">
                                     <option value="" hidden>Pilih</option>
                                 </select>
                             </div>
@@ -238,7 +238,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Regulasi <a class="text-danger">*</a></label>
-                                <select class="form-select" id="jns_regulasi_edit" style="width: 100%">
+                                <select class="form-control" id="jns_regulasi_edit" style="width: 100%">
                                     <option value="" hidden>Pilih</option>
                                 </select>
                             </div>
@@ -252,7 +252,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Unit Pembuat <a class="text-danger">*</a></label>
-                                <select class="form-select" id="pembuat_edit" style="width: 100%">
+                                <select class="form-control selectFilter3" id="pembuat_edit" style="width: 100%">
                                     <option value="" hidden>Pilih</option>
                                 </select>
                             </div>
@@ -493,6 +493,18 @@
                 // defaultDate: now,
                 time_24hr: true,
             })
+
+            $('.selectFilter').select2({
+                dropdownParent: $('#filterTampil')
+            });
+
+            $('.selectFilter2').select2({
+                dropdownParent: $('#tambah')
+            });
+
+            $('.selectFilter3').select2({
+                dropdownParent: $('#ubah')
+            });
         });
 
         function cari() {
