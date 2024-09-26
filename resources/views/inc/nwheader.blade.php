@@ -60,7 +60,8 @@
                         </svg></a></li> --}}
                 @php
                     // $notif = \DB::table('datalogs')->get();
-                    $notif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('users.nama','datalogs.*')->get();
+                    $notif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('users.nama','datalogs.*')->orderBy('created_at','desc')->limit(15)->get();
+                    $jmlnotif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('datalogs.id')->orderBy('created_at','desc')->count();
                     // $time = \Carbon\Carbon::now()->isoFormat('H');
                 @endphp
                 <li class="dropdown pc-h-item">
@@ -70,43 +71,47 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
                         <svg class="pc-icon">
                             <use xlink:href="#custom-notification"></use>
-                        </svg> <span class="badge bg-success pc-h-badge">1</span>
+                        </svg> <span class="badge bg-success pc-h-badge">{{ $jmlnotif }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
-                            <h5 class="m-0">Notifikasi</h5><a href="javascript:void(0);" class="btn btn-link btn-sm">∞</a>
+                            <h5 class="m-0">Notifikasi (15 Data Terbaru)</h5><a href="javascript:void(0);" class="text-muted text-sm">Diperbarui {{ \Carbon\Carbon::now()->isoFormat('DD/MM/YYYY') }}</a>
                         </div>
                         <div class="dropdown-body text-wrap header-notification-scroll position-relative"
                             style="max-height: calc(100vh - 215px)">
-                            {{-- <p class="text-span">Tahun 2025</p> --}}
                             @foreach ($notif as $item)
+                                @if (Auth::user()->getManyRole(["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]) == true)
+                                    <div class="card mb-2">
+                                        <div class="card-body">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <h4><i class="ti ti-refresh-alert text-primary"></i></h4>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
+                                                    <h5 class="text-body mb-1">Log Kepegawaian</h5>
+                                                    <p class="mb-1">{{ $item->event }} {{ $item->extra?"(".$item->extra.")":"" }}</p>
+                                                    <small class="text-sm text-muted">Oleh {{ $item->nama }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                            @if (Auth::user()->getManyRole(["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]) != true)
                                 <div class="card mb-2">
                                     <div class="card-body">
                                         <div class="d-flex">
                                             <div class="flex-shrink-0"><svg class="pc-icon text-primary">
-                                                    <use xlink:href="#custom-layer"></use>
-                                                </svg></div>
-                                            <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted"></span>
-                                                <h5 class="text-body mb-2"></h5>
-                                                <p class="mb-0">{{ $item->nama }}</p>
+                                                <use xlink:href="#custom-layer"></use>
+                                            </svg></div>
+                                            <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">∞</span>
+                                                <h5 class="text-body mb-2">Update System v3.1</h5>
+                                                <p class="mb-0">Simrsmu sedang dalam pengembangan menjadi lebih baik lagi..</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                            <div class="card mb-2">
-                                <div class="card-body">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0"><svg class="pc-icon text-primary">
-                                                <use xlink:href="#custom-layer"></use>
-                                            </svg></div>
-                                        <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">Baru Saja</span>
-                                            <h5 class="text-body mb-2">Update System v3.1</h5>
-                                            <p class="mb-0">Simrsmu sedang dalam pengembangan menjadi lebih baik lagi..</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endif
                             {{-- <div class="card mb-2">
                                 <div class="card-body">
                                     <div class="d-flex">
@@ -173,8 +178,7 @@
                                 </div>
                             </div> --}}
                         </div>
-                        <div class="text-center py-2"><a href="javascript:void(0);" class="link-danger">...</a>
-                        </div>
+                        <div class="text-center py-2"><a href="javascript:void(0);" class="link-primary">Lihat Semua Notifikasi ({{ $jmlnotif }})</a></div>
                     </div>
                 </li>
                 <li class="dropdown pc-h-item header-user-profile">
