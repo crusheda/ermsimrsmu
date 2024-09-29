@@ -64,6 +64,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post('profilkaryawan/kepegawaian/nip/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahNIP'])->name('profilkaryawan.tambahNIP');
         Route::post('profilkaryawan/kepegawaian/klasifikasi/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahKlasifikasi'])->name('profilkaryawan.tambahKlasifikasi');
 
+    // KEPEGAWAIAN
+        // PENGAJUAN
+            // IDCARD
+                // ADMIN
+                Route::get('kepegawaian/pengajuan/idcard/table', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'indexAdmin'])->name('kepegawaian.tableIdcardAdmin');
+                // Route::post('kepegawaian/pengajuan/idcard/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahPenetapan'])->name('profilkaryawan.tambahPenetapan');
+                // Route::get('kepegawaian/pengajuan/idcard/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahPenetapan'])->name('profilkaryawan.showUbahPenetapan');
+                // Route::post('kepegawaian/pengajuan/idcard/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahPenetapan'])->name('profilkaryawan.ubahPenetapan');
+                // Route::delete('kepegawaian/pengajuan/idcard/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusPenetapan'])->name('profilkaryawan.hapusPenetapan');
+
     // HAK AKSES
         // AKSES JABATAN
         Route::get('hakakses/aksesjabatan/data', '\App\Http\Controllers\HakAkses\AksesJabatanController@tableAksesJabatan')->name('aksesjabatan.data');

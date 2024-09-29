@@ -13,21 +13,34 @@ class IDCardController extends Controller
 {
     function index()
     {
-        // $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
-        // $show  = idcard::get();
+        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
 
-        // $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        //     ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        //     ->select('roles.name as nama_role', 'users.id as id_user')
-        //     ->get();
+        $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('roles.name as nama_role', 'users.id as id_user')
+            ->get();
 
-        // $data = [
-        //     'show' => $show,
-        //     'showmin' => $showMin,
-        //     'role' => $role,
-        // ];
+        $data = [
+            'users' => $users,
+            'role' => $role,
+        ];
 
-        return view('pages.kepegawaian.idcard.index');
-        // return view('pages.profilkaryawan.index')->with('list', $data);
+        return view('pages.kepegawaian.idcard.index-user')->with('list', $data);
     }
+
+    // USER
+
+    // ADMIN
+    function indexAdmin()
+    {
+        $show  = idcard::get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    // BOTH
 }
