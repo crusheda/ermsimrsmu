@@ -27,17 +27,17 @@
         <div class="">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h6 class="mb-0">Pengumpulan RKA Th.{{ \Carbon\Carbon::now()->isoFormat('YYYY') }} Pada<br>Bulan <b class="text-primary">September</b>@if(\Carbon\Carbon::now()->isoFormat('MM') <= '09') (<b class="text-danger">Segera</b>) @endif</h6>
+                    <h6 class="mb-0">Pengumpulan RKA Th.{{ \Carbon\Carbon::now()->isoFormat('YYYY') }} Pada<br>Bulan <b class="text-primary">***</b>@if(\Carbon\Carbon::now()->isoFormat('MM') <= '09') (<b class="text-danger">Segera</b>) @endif</h6>
                     <div class="btn-group">
-                        @if (\Carbon\Carbon::now()->isoFormat('MM') <= '09')
+                        {{-- @if (\Carbon\Carbon::now()->isoFormat('MM') <= '09') --}}
                             <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
                                 <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas
                             </button>
-                        @else
+                        {{-- @else
                             <button class="btn btn-secondary btn-shadow" disabled>
                                 <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas
                             </button>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
                 <div class="card-body">
