@@ -39,6 +39,12 @@
                                     <option value="4">Program</option>
                                     <option value="5">SPO</option>
                                     <option value="6">PPK</option>
+                                    <option value="7">Undang-undang</option>
+                                    <option value="8">PERPU</option>
+                                    <option value="9">Peraturan Pemerintah</option>
+                                    <option value="10">Peraturan Presiden</option>
+                                    <option value="11">Peraturan Menteri</option>
+                                    <option value="12">Peraturan Daerah</option>
                                 </select>
                         </div>
                     </div>
@@ -174,13 +180,19 @@
                                     <option value="4">Program</option>
                                     <option value="5">SPO</option>
                                     <option value="6">PPK</option>
+                                    <option value="7">Undang-undang</option>
+                                    <option value="8">PERPU</option>
+                                    <option value="9">Peraturan Pemerintah</option>
+                                    <option value="10">Peraturan Presiden</option>
+                                    <option value="11">Peraturan Menteri</option>
+                                    <option value="12">Peraturan Daerah</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Pengesahan <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tgl"/>
+                                <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="tgl"/>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -209,7 +221,7 @@
                         <input type="file" class="form-control mb-2" id="filex" name="filex" accept="application/pdf">
                         <div class="alert alert-secondary">
                             <small>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (PDF)
                             </small>
                         </div>
@@ -246,7 +258,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tgl. Pengesahan <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control flatpickr" placeholder="YYYY-MM-DD" id="tgl_edit"/>
+                                <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="tgl_edit"/>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -277,7 +289,7 @@
                             <small>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Apabila terdapat kesalahan File Upload, Anda dapat melakukan <b>Input Dokumen Ulang</b> di bawah ini<br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Hubungi Admin untuk melakukan penghapusan berkas<br>
-                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (<b>PDF</b>)
                             </small>
                         </div>
@@ -455,6 +467,30 @@
                                 <th><h6>PPK</h6></th>
                                 <td id="count_ppk"></td>
                             </tr>
+                            <tr>
+                                <th><h6>Undang-Undang</h6></th>
+                                <td id="count_uu"></td>
+                            </tr>
+                            <tr>
+                                <th><h6>Peraturan Pemerintah Pengganti Undang-Undang (PERPU)</h6></th>
+                                <td id="count_perpu"></td>
+                            </tr>
+                            <tr>
+                                <th><h6>Peraturan Pemerintah</h6></th>
+                                <td id="count_pp"></td>
+                            </tr>
+                            <tr>
+                                <th><h6>Peraturan Presiden</h6></th>
+                                <td id="count_perpres"></td>
+                            </tr>
+                            <tr>
+                                <th><h6>Peraturan Menteri</h6></th>
+                                <td id="count_perment"></td>
+                            </tr>
+                            <tr>
+                                <th><h6>Peraturan Daerah</h6></th>
+                                <td id="count_perda"></td>
+                            </tr>
                         </tbody>
                         <tfoot>
                             <tr>
@@ -505,6 +541,33 @@
             $('.selectFilter3').select2({
                 dropdownParent: $('#ubah')
             });
+
+            $('#search_regulasi').on('change', function() {
+                if ($(this).val() == '7' || $(this).val() == '8' || $(this).val() == '9' || $(this).val() == '10' || $(this).val() == '11' || $(this).val() == '12') {
+                    $('#search_waktu').prop('disabled',true);
+                    $('#search_pembuat').prop('disabled',true);
+                    $('#search_waktu').val('');
+                    $('#search_pembuat').val('').change();
+                } else {
+                    $('#search_waktu').prop('disabled',false);
+                    $('#search_pembuat').prop('disabled',false);
+                }
+            });
+
+            $('#jns_regulasi').on('change', function() {
+                if ($(this).val() == '7' || $(this).val() == '8' || $(this).val() == '9' || $(this).val() == '10' || $(this).val() == '11' || $(this).val() == '12') {
+                    $('#tgl').prop('disabled',true);
+                    $('#pembuat').prop('disabled',true);
+                    $('#unit').prop('disabled',true);
+                    $('#tgl').val('');
+                    $('#pembuat').val('').change();
+                    $('#unit').val('');
+                } else {
+                    $('#tgl').prop('disabled',false);
+                    $('#pembuat').prop('disabled',false);
+                    $('#unit').prop('disabled',false);
+                }
+            });
         });
 
         function cari() {
@@ -551,19 +614,22 @@
                                                 + `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>`;
                                     }
                             content += `</div></center></td><td>`;
-                            content += item.id + "</td><td>"
-                                        + item.sah + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-primary'><u><a href='/berkas/regulasi/" + item.id + "/download' target='_blank'>" + item.judul + "</a></u></h6><small class='text-truncate text-muted' style='white-space: normal !important;word-wrap: break-word;'>"
+                            content += item.id + `</td><td>${item.sah?item.sah:'-'}</td><td style='white-space: normal !important;word-wrap: break-word;'>`
+                                        + `<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-primary'><u><a href='/berkas/regulasi/` + item.id + `/download' target='_blank'>` + item.judul + `</a></u></h6><small class='text-truncate text-muted' style='white-space: normal !important;word-wrap: break-word;'>`
                                         if (item.unit) {
                                             content += item.unit;
                                         } else {
                                             content += '-';
                                         }
                             content += "</small></div></div></td><td>";
-                                        for(i = 0; i < res.unit.length; i++){
-                                            if (res.unit[i].id == item.pembuat) {
-                                                content += res.unit[i].nama;
+                                        if (item.pembuat) {
+                                            for(i = 0; i < res.unit.length; i++){
+                                                if (res.unit[i].id == item.pembuat) {
+                                                    content += res.unit[i].nama;
+                                                }
                                             }
+                                        } else {
+                                            content += `-`;
                                         }
                             content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
                             $('#tampil-tbody').append(content);
@@ -625,59 +691,110 @@
             var unit            = $("#unit").val();
             var filex           = $('#filex')[0].files.length;
 
-            if (jns_regulasi == "" || tgl == "" || pembuat == "" || judul == "" || unit == "" || filex == 0) {
+            if (jns_regulasi == "" || judul == "" || filex == 0) {
                 iziToast.error({
                     title: 'Pesan Galat!',
                     message: 'Mohon lengkapi semua data terlebih dahulu dan pastikan tidak ada yang kosong',
                     position: 'topRight'
                 });
             } else {
-                var fd = new FormData();
+                if (jns_regulasi == '7' || jns_regulasi == '8' || jns_regulasi == '9' || jns_regulasi == '10' || jns_regulasi == '11' || jns_regulasi == '12') {
+                    var fd = new FormData();
 
-                // Get the selected file
-                var files = $('#filex')[0].files;
-                console.log(files);
-                var judul = $("#judul").val();
-                fd.append('file',files[0]);
-
-                fd.append('user_id',user_id);
-                fd.append('jns_regulasi',$("#jns_regulasi").val());
-                fd.append('tgl',$("#tgl").val());
-                fd.append('pembuat',$("#pembuat").val());
-                fd.append('judul',judul);
-                fd.append('unit',$("#unit").val());
-
-                // AJAX request
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{route('regulasi.tambah')}}",
-                    method: 'post',
-                    data: fd,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(res){
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'REGULASI - '+judul+' berhasil ditambah',
+                    // Get the selected file
+                    var files = $('#filex')[0].files;
+                    var judul = $("#judul").val();
+                    fd.append('file',files[0]);
+                    fd.append('user_id',user_id);
+                    fd.append('jns_regulasi',$("#jns_regulasi").val());
+                    fd.append('judul',judul);
+                    // console.log('sampe sini');
+                    // AJAX request
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{route('regulasi.tambah')}}",
+                        method: 'post',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function(res){
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'REGULASI - '+judul+' berhasil ditambah',
+                                position: 'topRight'
+                            });
+                            if (res) {
+                                $('#tambah').modal('hide');
+                                cari();
+                            }
+                        },
+                        error: function(res){
+                            console.log("error : " + JSON.stringify(res) );
+                            iziToast.error({
+                                title: 'Error '+res.status+' - '+res.statusText+'!',
+                                message: res.responseJSON,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                } else {
+                    if (tgl == "" || pembuat == "" || unit == "") {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Mohon lengkapi semua data terlebih dahulu dan pastikan tidak ada yang kosong',
                             position: 'topRight'
                         });
-                        if (res) {
-                            $('#tambah').modal('hide');
-                            cari();
-                        }
-                    },
-                    error: function(res){
-                        console.log("error : " + JSON.stringify(res) );
-                        iziToast.error({
-                            title: 'Error '+res.status+' - '+res.statusText+'!',
-                            message: res.responseJSON,
-                            position: 'topRight'
+                    } else {
+                        var fd = new FormData();
+
+                        // Get the selected file
+                        var files = $('#filex')[0].files;
+                        var judul = $("#judul").val();
+                        fd.append('file',files[0]);
+
+                        fd.append('user_id',user_id);
+                        fd.append('jns_regulasi',$("#jns_regulasi").val());
+                        fd.append('tgl',$("#tgl").val());
+                        fd.append('pembuat',$("#pembuat").val());
+                        fd.append('judul',judul);
+                        fd.append('unit',$("#unit").val());
+
+                        // AJAX request
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: "{{route('regulasi.tambah')}}",
+                            method: 'post',
+                            data: fd,
+                            contentType: false,
+                            processData: false,
+                            dataType: 'json',
+                            success: function(res){
+                                iziToast.success({
+                                    title: 'Pesan Sukses!',
+                                    message: 'REGULASI - '+judul+' berhasil ditambah',
+                                    position: 'topRight'
+                                });
+                                if (res) {
+                                    $('#tambah').modal('hide');
+                                    cari();
+                                }
+                            },
+                            error: function(res){
+                                console.log("error : " + JSON.stringify(res) );
+                                iziToast.error({
+                                    title: 'Error '+res.status+' - '+res.statusText+'!',
+                                    message: res.responseJSON,
+                                    position: 'topRight'
+                                });
+                            }
                         });
                     }
-                });
+                }
             }
 
             $("#btn-upload").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
@@ -700,12 +817,12 @@
                     // INIT DATE EDIT
                     var a = document.querySelector("#tgl_edit");
                     // var tgl_push = moment(res.show.sah).format('Y-MM-DD');
-                    a.flatpickr({
-                        enableTime: 0,
-                        minuteIncrement: 1,
-                        defaultDate: res.show.sah,
-                        time_24hr: true,
-                    })
+                    // a.flatpickr({
+                    //     enableTime: 0,
+                    //     minuteIncrement: 1,
+                    //     defaultDate: res.show.sah,
+                    //     time_24hr: true,
+                    // })
 
                     $("#judul_edit").val(res.show.judul);
                     $("#unit_edit").val(res.show.unit);
@@ -717,14 +834,47 @@
                         <option value="4" ${res.show.jns_regulasi == 4 ? "selected":""}>Program</option>
                         <option value="5" ${res.show.jns_regulasi == 5 ? "selected":""}>SPO</option>
                         <option value="6" ${res.show.jns_regulasi == 6 ? "selected":""}>PPK</option>
+                        <option value="7" ${res.show.jns_regulasi == 7 ? "selected":""}>Undang-undang</option>
+                        <option value="8" ${res.show.jns_regulasi == 8 ? "selected":""}>PERPU</option>
+                        <option value="9" ${res.show.jns_regulasi == 9 ? "selected":""}>Peraturan Pemerintah</option>
+                        <option value="10" ${res.show.jns_regulasi == 10 ? "selected":""}>Peraturan Presiden</option>
+                        <option value="11" ${res.show.jns_regulasi == 11 ? "selected":""}>Peraturan Menteri</option>
+                        <option value="12" ${res.show.jns_regulasi == 12 ? "selected":""}>Peraturan Daerah</option>
                     `);
+                    if ($("#jns_regulasi_edit").val() == '7' || $("#jns_regulasi_edit").val() == '8' || $("#jns_regulasi_edit").val() == '9' || $("#jns_regulasi_edit").val() == '10' || $("#jns_regulasi_edit").val() == '11' || $("#jns_regulasi_edit").val() == '12') {
+                        $('#tgl_edit').prop('disabled',true);
+                        $('#pembuat_edit').prop('disabled',true);
+                        $('#unit_edit').prop('disabled',true);
+                        $('#tgl_edit').val('');
+                        $('#pembuat_edit').val('').change();
+                        $('#unit_edit').val('');
+                    } else {
+                        $('#tgl_edit').prop('disabled',false);
+                        $('#pembuat_edit').prop('disabled',false);
+                        $('#unit_edit').prop('disabled',false);
+                    }
                     $("#pembuat_edit").find('option').remove();
                     res.unit.forEach(pounch => {
                         $("#pembuat_edit").append(`
+                            <option value="" hidden>Pilih</option>
                             <option value="${pounch.id}" ${res.show.pembuat == pounch.id ? "selected":""}>${pounch.nama}</option>
                         `);
                     });
                     $('#ubah').modal('show');
+                }
+            });
+            $('#jns_regulasi_edit').on('change', function() {
+                if ($(this).val() == '7' || $(this).val() == '8' || $(this).val() == '9' || $(this).val() == '10' || $(this).val() == '11' || $(this).val() == '12') {
+                    $('#tgl_edit').prop('disabled',true);
+                    $('#pembuat_edit').prop('disabled',true);
+                    $('#unit_edit').prop('disabled',true);
+                    $('#tgl_edit').val('');
+                    $('#pembuat_edit').val('').change();
+                    $('#unit_edit').val('');
+                } else {
+                    $('#tgl_edit').prop('disabled',false);
+                    $('#pembuat_edit').prop('disabled',false);
+                    $('#unit_edit').prop('disabled',false);
                 }
             });
         }
@@ -867,6 +1017,12 @@
                     $("#count_program").text(res.totprogram);
                     $("#count_spo").text(res.totspo);
                     $("#count_ppk").text(res.totppk);
+                    $("#count_uu").text(res.totuu);
+                    $("#count_perpu").text(res.totperpu);
+                    $("#count_pp").text(res.totpp);
+                    $("#count_perpres").text(res.totperpres);
+                    $("#count_perment").text(res.totperment);
+                    $("#count_perda").text(res.totperda);
                     $("#count_total").text(res.total);
                 }
                 }

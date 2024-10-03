@@ -19,8 +19,8 @@ class CreateTableRegulasi extends Migration
             $table->integer('jns_regulasi');
             $table->date('sah')->nullable();
             $table->string('judul');
-            $table->string('pembuat');
-            $table->longText('unit');
+            $table->string('pembuat')->nullable();
+            $table->longText('unit')->nullable();
             $table->string('title')->nullable();
             $table->string('filename')->nullable();
             $table->timestamps();

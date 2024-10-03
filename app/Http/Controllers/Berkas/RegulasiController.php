@@ -71,7 +71,7 @@ class RegulasiController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $request->validate([
-            'file' => ['max:5000|mimes:pdf'],
+            'file' => ['max:2000|mimes:pdf'],
         ]);
 
         // tampung berkas yang sudah diunggah ke variabel baru
@@ -95,21 +95,41 @@ class RegulasiController extends Controller
                 $path = $uploadedFile->store('public/files/regulasi/spo');
             } elseif ($request->jns_regulasi == 6) {
                 $path = $uploadedFile->store('public/files/regulasi/ppk');
+            } elseif ($request->jns_regulasi == 7) {
+                $path = $uploadedFile->store('public/files/regulasi/uu');
+            } elseif ($request->jns_regulasi == 8) {
+                $path = $uploadedFile->store('public/files/regulasi/perpu');
+            } elseif ($request->jns_regulasi == 9) {
+                $path = $uploadedFile->store('public/files/regulasi/pp');
+            } elseif ($request->jns_regulasi == 10) {
+                $path = $uploadedFile->store('public/files/regulasi/perpres');
+            } elseif ($request->jns_regulasi == 11) {
+                $path = $uploadedFile->store('public/files/regulasi/perment');
+            } elseif ($request->jns_regulasi == 12) {
+                $path = $uploadedFile->store('public/files/regulasi/perda');
             }
 
             $data = new berkas_regulasi;
             $data->id_user = $request->user_id;
             $data->jns_regulasi = $request->jns_regulasi;
-            $data->sah = $request->tgl;
             $data->judul = $request->judul;
-            $data->pembuat = $request->pembuat;
-            $data->unit = $request->unit;
+            if (
+                $request->jns_regulasi != '7'  ||
+                $request->jns_regulasi != '8'  ||
+                $request->jns_regulasi != '9'  ||
+                $request->jns_regulasi != '10' ||
+                $request->jns_regulasi != '11' ||
+                $request->jns_regulasi != '12'
+                )
+            {
+                $data->sah = $request->tgl;
+                $data->pembuat = $request->pembuat;
+                $data->unit = $request->unit;
+            }
 
-                $data->title = $title;
-                $data->filename = $path;
+            $data->title = $title;
+            $data->filename = $path;
 
-            // print_r($data);
-            // die();
             $data->save();
 
             return response()->json($tgl, 200);
@@ -124,7 +144,7 @@ class RegulasiController extends Controller
         $tgl = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
 
         $request->validate([
-            'file' => ['max:5000|mimes:pdf|nullable'],
+            'file' => ['max:2000|mimes:pdf|nullable'],
         ]);
 
         $uploadedFile = $request->file('file');
@@ -133,10 +153,20 @@ class RegulasiController extends Controller
             $data = berkas_regulasi::find($request->id_edit);
             $data->id_user = $request->user_id;
             $data->jns_regulasi = $request->jns_regulasi;
-            $data->sah = $request->tgl;
             $data->judul = $request->judul;
-            $data->pembuat = $request->pembuat;
-            $data->unit = $request->unit;
+            if (
+                $request->jns_regulasi != '7'  ||
+                $request->jns_regulasi != '8'  ||
+                $request->jns_regulasi != '9'  ||
+                $request->jns_regulasi != '10' ||
+                $request->jns_regulasi != '11' ||
+                $request->jns_regulasi != '12'
+                )
+            {
+                $data->sah = $request->tgl;
+                $data->pembuat = $request->pembuat;
+                $data->unit = $request->unit;
+            }
 
             $data->save();
             return response()->json($tgl, 200);
@@ -164,18 +194,40 @@ class RegulasiController extends Controller
                     $path = $uploadedFile->store('public/files/regulasi/spo');
                 } elseif ($request->jns_regulasi == 6) {
                     $path = $uploadedFile->store('public/files/regulasi/ppk');
+                } elseif ($request->jns_regulasi == 7) {
+                    $path = $uploadedFile->store('public/files/regulasi/uu');
+                } elseif ($request->jns_regulasi == 8) {
+                    $path = $uploadedFile->store('public/files/regulasi/perpu');
+                } elseif ($request->jns_regulasi == 9) {
+                    $path = $uploadedFile->store('public/files/regulasi/pp');
+                } elseif ($request->jns_regulasi == 10) {
+                    $path = $uploadedFile->store('public/files/regulasi/perpres');
+                } elseif ($request->jns_regulasi == 11) {
+                    $path = $uploadedFile->store('public/files/regulasi/perment');
+                } elseif ($request->jns_regulasi == 12) {
+                    $path = $uploadedFile->store('public/files/regulasi/perda');
                 }
 
                 $data = berkas_regulasi::find($request->id_edit);
                 $data->id_user = $request->user_id;
                 $data->jns_regulasi = $request->jns_regulasi;
-                $data->sah = $request->tgl;
                 $data->judul = $request->judul;
-                $data->pembuat = $request->pembuat;
-                $data->unit = $request->unit;
+                if (
+                    $request->jns_regulasi != '7'  ||
+                    $request->jns_regulasi != '8'  ||
+                    $request->jns_regulasi != '9'  ||
+                    $request->jns_regulasi != '10' ||
+                    $request->jns_regulasi != '11' ||
+                    $request->jns_regulasi != '12'
+                    )
+                {
+                    $data->sah = $request->tgl;
+                    $data->pembuat = $request->pembuat;
+                    $data->unit = $request->unit;
+                }
 
-                    $data->title = $title;
-                    $data->filename = $path;
+                $data->title = $title;
+                $data->filename = $path;
 
                 $data->save();
                 return response()->json($tgl, 200);
@@ -266,6 +318,12 @@ class RegulasiController extends Controller
         $totProgram     = berkas_regulasi::where('jns_regulasi',4)->count();
         $totSpo         = berkas_regulasi::where('jns_regulasi',5)->count();
         $totPpk         = berkas_regulasi::where('jns_regulasi',6)->count();
+        $totUU          = berkas_regulasi::where('jns_regulasi',6)->count();
+        $totPerPu       = berkas_regulasi::where('jns_regulasi',6)->count();
+        $totPP          = berkas_regulasi::where('jns_regulasi',6)->count();
+        $totPerPres     = berkas_regulasi::where('jns_regulasi',6)->count();
+        $totPerMent     = berkas_regulasi::where('jns_regulasi',6)->count();
+        $totPerDa       = berkas_regulasi::where('jns_regulasi',6)->count();
 
         $total = $totKebijakan + $totPedoman + $totPanduan + $totProgram + $totSpo + $totPpk;
         // print_r($total);
@@ -279,6 +337,12 @@ class RegulasiController extends Controller
             'totprogram' => $totProgram,
             'totspo' => $totSpo,
             'totppk' => $totPpk,
+            'totuu' => $totUU,
+            'totperpu' => $totPerPu,
+            'totpp' => $totPP,
+            'totperpres' => $totPerPres,
+            'totperment' => $totPerMent,
+            'totperda' => $totPerDa,
         ];
 
         return response()->json($data, 200);
