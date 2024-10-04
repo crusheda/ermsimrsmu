@@ -37,7 +37,7 @@
                                     <input type="radio" name="pengajuan" class="form-check-input input-primary" id="idcard1" value="1">
                                     <label class="form-check-label d-block" for="idcard1">
                                         <span class="card-body p-3 d-block">
-                                            <span class="h5 mb-3 d-block">ID Card Baru</span>
+                                            <span class="h5 mb-3 d-block">ID Card Baru <a class="text-danger">*</a></span>
                                             <span class="d-flex align-items-center">
                                             <span class="f-12 badge bg-secondary me-3">Rp 0 ,-</span>
                                         </span>
@@ -51,7 +51,7 @@
                                     <input type="radio" name="pengajuan" class="form-check-input input-primary" id="idcard2" value="2">
                                     <label class="form-check-label d-block" for="idcard2">
                                         <span class="card-body p-3 d-block">
-                                            <span class="h5 mb-3 d-block">Ganti ID Card Lama</span>
+                                            <span class="h5 mb-3 d-block">Ganti ID Card Lama <a class="text-danger">*</a></span>
                                             <span class="d-flex align-items-center">
                                             <span class="f-12 badge bg-primary me-3">Rp 25.000 ,-</span>
                                         </span>
@@ -60,41 +60,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="divider"><span>Isian Wajib</span></div>
+                    <div class="divider"><span>Isian Wajib (<a class="text-danger">*</a>)</span></div>
                     <div class="row">
                         <div class="col-12 mt-2">
                             <div class="mb-3 row">
-                                <label class="col-lg-4 col-form-label">Nama Lengkap (<mark>Beserta Gelar</mark>) & Panggilan
+                                <label class="col-lg-4 col-form-label">Nama Lengkap (<mark>Beserta Gelar</mark>) & Panggilan <a class="text-danger">*</a>
                                     <small class="text-muted d-block">Periksa nama lengkap dan gelar Anda</small>
                                 </label>
                                 <div class="col-lg-8">
                                     <div class="row">
                                         <div class="col-8">
-                                            <input type="text" class="form-control" placeholder="Nama Lengkap">
+                                            <input type="text" class="form-control" placeholder="Nama Lengkap" name="nama">
                                         </div>
                                         <div class="col-4">
-                                            <input type="text" class="form-control" placeholder="Nama Panggilan">
+                                            <input type="text" class="form-control" placeholder="Nama Panggilan" name="panggilan">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label class="col-lg-4 col-form-label">Nomor Induk Pegawai (<mark>NIP</mark>)
+                                <label class="col-lg-4 col-form-label">Nomor Induk Pegawai (<mark>NIP</mark>) <a class="text-danger">*</a>
                                     <small class="text-muted d-block">Konfirmasi kepegawaian apabila nomor <b>NIP</b> kosong</small>
                                 </label>
-                                <div class="col-lg-8"><input type="text" class="form-control"></div>
+                                <div class="col-lg-8"><input type="text" class="form-control" name="nip"></div>
                             </div>
                             <div class="mb-3 row">
-                                <label class="col-lg-4 col-form-label">Jabatan
-                                    <small class="text-muted d-block">Enter the 3 or 4 digit number on the card</small>
+                                <label class="col-lg-4 col-form-label">Jabatan <a class="text-danger">*</a>
+                                    <small class="text-muted d-block">Masukkan Jabatan Anda</small>
                                 </label>
-                                <div class="col-lg-8">
-                                    <input type="text" class="form-control">
-                                </div>
+                                <div class="col-lg-8"><input type="text" class="form-control" name="jabatan"></div>
                             </div>
                             <div class="text-end btn-page mb-0 mt-4">
-                                <button class="btn btn-outline-secondary">Bersihkan</button>
-                                <button class="btn btn-primary">Ajukan Sekarang</button>
+                                <button class="btn btn-outline-secondary" id="clear_text">Bersihkan</button>
+                                <button class="btn btn-primary" id="btn-simpan" onclick="ajukan()">Ajukan Sekarang</button>
                             </div>
                         </div>
                     </div>
@@ -124,9 +122,30 @@
                                             <b>Rp 0,-</b>
                                         </h5>
                                     </div>
-                                    <a href="#" class="avtar avtar-s btn-link-danger btn-pc-default flex-shrink-0">
-                                        <i class="ti ti-checkbox f-20"></i>
-                                    </a>
+                                    <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-20"></i></a>
+                                    <ul class="dropdown-menu">
+                                        <a class="dropdown-item" href="javascript:void(0);">Ubah</a>
+                                        <a class="dropdown-item" href="javascript:void(0);">Hapus</a>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex align-items-start">
+                                    {{-- <img class="bg-light rounded img-fluid wid-60 flex-shrink-0"
+                                        src="../assets/images/application/img-prod-2.jpg"
+                                        alt="User image"> --}}
+                                    <div class="flex-grow-1 mx-2">
+                                        <h5 class="mb-1">Pengajuan ID Card Baru</h5>
+                                        <p class="text-muted text-sm mb-2">Yussuf Faisal</p>
+                                        <h5 class="mb-1">
+                                            <b>Rp 0,-</b>
+                                        </h5>
+                                    </div>
+                                    <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-20"></i></a>
+                                    <ul class="dropdown-menu">
+                                        <a class="dropdown-item" href="javascript:void(0);">Ubah</a>
+                                        <a class="dropdown-item" href="javascript:void(0);">Hapus</a>
+                                    </ul>
                                 </div>
                             </li>
                         </ul>
@@ -161,7 +180,20 @@
 
     <script>
         $(document).ready(function() {
+            // SELECT2
+            var t = $(".select2");
+            t.length && t.each(function() {
+                var e = $(this);
+                e.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: "Pilih",
+                    allowClear: true,
+                    dropdownParent: e.parent()
+                })
+            });
 
+            // $('.select2Tambah').select2({
+            //     dropdownParent: $('#tambah')
+            // });
         });
 
         function saveData() {

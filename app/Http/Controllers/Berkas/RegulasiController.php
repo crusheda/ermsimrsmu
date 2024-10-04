@@ -318,14 +318,14 @@ class RegulasiController extends Controller
         $totProgram     = berkas_regulasi::where('jns_regulasi',4)->count();
         $totSpo         = berkas_regulasi::where('jns_regulasi',5)->count();
         $totPpk         = berkas_regulasi::where('jns_regulasi',6)->count();
-        $totUU          = berkas_regulasi::where('jns_regulasi',6)->count();
-        $totPerPu       = berkas_regulasi::where('jns_regulasi',6)->count();
-        $totPP          = berkas_regulasi::where('jns_regulasi',6)->count();
-        $totPerPres     = berkas_regulasi::where('jns_regulasi',6)->count();
-        $totPerMent     = berkas_regulasi::where('jns_regulasi',6)->count();
-        $totPerDa       = berkas_regulasi::where('jns_regulasi',6)->count();
+        $totUU          = berkas_regulasi::where('jns_regulasi',7)->count();
+        $totPerPu       = berkas_regulasi::where('jns_regulasi',8)->count();
+        $totPP          = berkas_regulasi::where('jns_regulasi',9)->count();
+        $totPerPres     = berkas_regulasi::where('jns_regulasi',10)->count();
+        $totPerMent     = berkas_regulasi::where('jns_regulasi',11)->count();
+        $totPerDa       = berkas_regulasi::where('jns_regulasi',12)->count();
 
-        $total = $totKebijakan + $totPedoman + $totPanduan + $totProgram + $totSpo + $totPpk;
+        $total = $totKebijakan + $totPedoman + $totPanduan + $totProgram + $totSpo + $totPpk + $totUU + $totPerPu + $totPP + $totPerPres + $totPerMent + $totPerDa;
         // print_r($total);
         // die();
 
