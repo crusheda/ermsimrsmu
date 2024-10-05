@@ -3,34 +3,38 @@
 namespace App\Http\Controllers\Kepegawaian;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use App\Models\referensi;
 use App\Models\datalogs;
 use App\Models\users;
+use App\Models\users_foto;
 use App\Models\kepegawaian\idcard;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Auth;
+use Validator,Redirect,Response,File;
 
 class IDCardController extends Controller
 {
-    function index()
+    function indexUser()
     {
-        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+        $id_user = Auth::user()->id;
+        $user  = users::where('id',$id_user)->first();
 
         $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('roles.name as nama_role', 'users.id as id_user')
-            ->get();
+            ->select('roles.name as nama_role','roles.deskripsi as nama_role2', 'users.id as id_user')
+            ->where('users.id',$id_user)
+            ->first();
 
         $data = [
-            'users' => $users,
+            'user' => $user,
             'role' => $role,
         ];
 
         return view('pages.kepegawaian.idcard.index-user')->with('list', $data);
     }
 
-    // USER
-
-    // ADMIN
     function indexAdmin()
     {
         $show  = idcard::get();
@@ -41,6 +45,63 @@ class IDCardController extends Controller
 
         return response()->json($data, 200);
     }
+
+    // USER
+    function riwayat($id)
+    {
+        $data = idcard::where('pegawai_id',$id)->get();
+        return response()->json($data);
+    }
+
+    function tambahPengajuan(Request $request)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $fotouser  = users_foto::where('user_id',$request->pegawai)->first();
+
+        if (empty($fotouser)) {
+            return Response::json(array(
+                'message' => 'Foto profil belum diupload/diganti!',
+                'code' => 500,
+            ));
+        } else {
+            // Verifikasi Duplikat Pengajuan
+            $verif = idcard::where('pegawai_id',$request->pegawai)->whereIn('progress',['0','1'])->first();
+            if (empty($verif)) {
+                $data = new idcard;
+                $data->pegawai_id           = $request->pegawai;
+                $data->pegawai_nip          = $request->nip;
+                $data->pegawai_nama         = $request->nama;
+                $data->pegawai_panggilan    = $request->panggilan;
+                $data->pegawai_jabatan      = $request->jabatan;
+                $data->progress             = 0;
+                $data->pengajuan            = $request->pengajuan;
+                $data->alasan               = $request->alasan;
+                $data->title                = $fotouser->title;
+                $data->filename             = $fotouser->filename;
+                $data->save();
+
+                return response()->json($push);
+            } else {
+                return Response::json(array(
+                    'message' => 'Terdapat pengajuan ID Card yang masih Aktif/Belum Diselesaikan!',
+                    'code' => 500,
+                ));
+            }
+        }
+    }
+
+    function hapusPengajuan($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = idcard::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
+    }
+
+    // ADMIN
 
     // BOTH
 }

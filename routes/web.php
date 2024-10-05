@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], fun
     Route::resource('akunpengguna', '\App\Http\Controllers\HakAkses\DataKaryawanController');
 });
 
+// KEPEGAWAIAN
 Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], function () {
     // STRUKTUR ORGANISASI
     Route::get('strukturorganisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi.index');
@@ -70,7 +71,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
         Route::get('pengajuan/surket', [App\Http\Controllers\Kepegawaian\SurketController::class, 'index'])->name('kepegawaian.surket.index');
 
         // IDCARD
-        Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'index'])->name('kepegawaian.idcard.index');
+        Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'indexUser'])->name('kepegawaian.idcard.indexUser');
 
     // MASUKAN / SARAN
     Route::get('feedback', [App\Http\Controllers\Kepegawaian\SaranController::class, 'index'])->name('kepegawaian.feedback.index');
