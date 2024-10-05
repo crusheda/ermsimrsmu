@@ -24,7 +24,7 @@ class CreateTableKepegawaianIdCard extends Migration
             $table->string('pegawai_panggilan');
             $table->string('pegawai_jabatan');
 
-            $table->integer('progress')->comment('0=pengajuan;1=dalam_proses;2=selesai');
+            $table->integer('progress')->comment('0=pengajuan;1=dalam_proses;2=selesai;3=ditolak');
             $table->date('estimasi')->comment('Estimasi Pengerjaan')->nullable();
             $table->integer('pengajuan')->comment('0=baru;1=ganti');
             $table->longText('alasan')->nullable();

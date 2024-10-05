@@ -68,11 +68,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // PENGAJUAN
             // IDCARD
                 // ADMIN
-                Route::get('kepegawaian/pengajuan/idcard/table', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'indexAdmin'])->name('kepegawaian.tableIdcardAdmin');
-                Route::get('kepegawaian/pengajuan/idcard/riwayat/{id}', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'riwayat'])->name('kepegawaian.idcard.riwayat');
+                Route::get('kepegawaian/pengajuan/idcard/table', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'table'])->name('kepegawaian.idcard.table');
+                Route::post('kepegawaian/pengajuan/idcard/status', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'ubahStatus'])->name('kepegawaian.idcard.ubahStatus');
                 // USER
                 Route::post('kepegawaian/pengajuan/idcard/tambah', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'tambahPengajuan'])->name('kepegawaian.idcard.tambahPengajuan');
-                Route::delete('kepegawaian/pengajuan/idcard/{id}', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'hapusPengajuan'])->name('kepegawaian.idcard.hapusPengajuan');
+                Route::get('kepegawaian/pengajuan/idcard/riwayat/{id}', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'riwayat'])->name('kepegawaian.idcard.riwayat');
+                Route::delete('kepegawaian/pengajuan/idcard/{id}/delete', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'hapusPengajuan'])->name('kepegawaian.idcard.hapusPengajuan');
                 // Route::get('kepegawaian/pengajuan/idcard/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahPenetapan'])->name('profilkaryawan.showUbahPenetapan');
                 // Route::post('kepegawaian/pengajuan/idcard/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahPenetapan'])->name('profilkaryawan.ubahPenetapan');
                 // Route::delete('kepegawaian/pengajuan/idcard/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusPenetapan'])->name('profilkaryawan.hapusPenetapan');

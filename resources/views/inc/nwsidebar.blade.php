@@ -67,7 +67,7 @@
                 <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.surket.index') }}">Surat Keterangan</a></li>
                 <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Surat Ijin</s></a></li>
                 <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Cuti</s></a></li>
-                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.idcard.tambahPengajuan') }}">ID Card</a></li>
+                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.idcard.index') }}">ID Card</a></li>
             </ul>
         </li>
         <li class="pc-item">

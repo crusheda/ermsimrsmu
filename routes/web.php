@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
         Route::get('pengajuan/surket', [App\Http\Controllers\Kepegawaian\SurketController::class, 'index'])->name('kepegawaian.surket.index');
 
         // IDCARD
-        Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'indexUser'])->name('kepegawaian.idcard.indexUser');
+        Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'index'])->name('kepegawaian.idcard.index');
 
     // MASUKAN / SARAN
     Route::get('feedback', [App\Http\Controllers\Kepegawaian\SaranController::class, 'index'])->name('kepegawaian.feedback.index');

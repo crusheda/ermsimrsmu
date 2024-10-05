@@ -5,16 +5,16 @@
     {{-- FOR DROPDOWN BEHIND CARD --}}
     <style>
         .dropdown {
-            margin-top: 30%;
+            /* margin-top: 30%; */
             transform-style: preserve-3d;
             transform: translate3d(0,0,10px) !important;
         }
 
-        .dropdown-menu{
+        /* .dropdown-menu{
             height: auto !important;
             position: relative !important;
             transform: translate3d(0,0,10px) !important;
-        }
+        } */
     </style>
 
     <div class="page-header">
@@ -48,12 +48,14 @@
                     <div class="row">
                         <div class="col-xl-12 col-xxl-12">
                             <div class="alert alert-secondary">
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Tidak dapat mengajukan <b>lebih dari 2x</b> apabila masih terdapat pengajuan yang belum Selesai<br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Wajib <b>memperbarui/upload</b> Foto Profil terlebih dahulu sebelum mengajukan ID Card<br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Mohon mengupload Foto Profil formal untuk kelengkapan proses verifikasi pengajuan, foto yang dimaksud <b>BUKAN</b> berfungsi sebagai foto ID Card<br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Proses pengajuan ini terdiri dari 3 tahap yaitu <span class="badge rounded-pill text-bg-primary">Pengajuan</span> ,
-                                                                                                                                <span class="badge rounded-pill text-bg-warning">Dalam Proses</span> ,
-                                                                                                                                <span class="badge rounded-pill text-bg-success">Selesai</span>
+                                <small>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Tidak dapat mengajukan <b>lebih dari 2x</b> apabila masih terdapat pengajuan yang belum Selesai<br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Wajib <b>memperbarui/upload</b> Foto Profil terlebih dahulu sebelum mengajukan ID Card<br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Mohon mengupload Foto Profil formal untuk kelengkapan proses verifikasi pengajuan, foto yang dimaksud <b>BUKAN</b> berfungsi sebagai foto ID Card<br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Proses pengajuan ini terdiri dari 3 tahap yaitu <span class="badge rounded-pill text-bg-primary">Pengajuan</span> ,
+                                                                                                                                    <span class="badge rounded-pill text-bg-warning">Dalam Proses</span> ,
+                                                                                                                                    <span class="badge rounded-pill text-bg-success">Selesai</span>
+                                </small>
                             </div>
                         </div>
                         <div class="col-xl-6 col-xxl-6">
@@ -122,7 +124,7 @@
                                 <div class="col-lg-8"><textarea class="form-control" name="alasan" rows="2" placeholder="Masukkan Alasan"></textarea></div>
                             </div>
                             <div class="text-end btn-page mb-0 mt-4">
-                                <button class="btn btn-outline-secondary" id="clear_text" onclick="bersihkan()">Kosongkan</button>
+                                <button class="btn btn-link-secondary" id="clear_text" onclick="bersihkan()">Kosongkan</button>
                                 <button class="btn btn-primary" id="btn-simpan" onclick="ajukan()">Ajukan Sekarang</button>
                             </div>
                         </div>
@@ -149,6 +151,7 @@
                             <li class="list-group-item"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></li>
                         </ul>
                     </div>
+                    <div class="card-footer"></div>
                 </div>
             </div>
         </div>
@@ -304,7 +307,7 @@
                                     if (item.progress == 2) {
                                         var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
                                     } else {
-                                        var status = `<span class="badge rounded-pill text-bg-danger">Tidak Ditemukan</span>`;
+                                        var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
                                     }
                                 }
                             }
@@ -327,7 +330,7 @@
                                             </h5>
                                         </div>
                                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-20"></i></a>
-                                        <ul class="dropdown-menu">${dropdown}</ul>
+                                        <ul class="dropdown-menu" style="">${dropdown}</ul>
                                     </div>
                                 </li>
                             `);
@@ -361,7 +364,7 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
-                    url: "/api/kepegawaian/pengajuan/idcard/"+id,
+                    url: "/api/kepegawaian/pengajuan/idcard/"+id+"/delete",
                     type: 'DELETE',
                     success: function(res) {
                         iziToast.success({

@@ -16,35 +16,40 @@ use Validator,Redirect,Response,File;
 
 class IDCardController extends Controller
 {
-    function indexUser()
+    // BOTH
+    function index()
     {
-        $id_user = Auth::user()->id;
-        $user  = users::where('id',$id_user)->first();
+        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
+            return view('pages.kepegawaian.idcard.index-admin');
+        } else {
+            $id_user = Auth::user()->id;
+            $user  = users::where('id',$id_user)->first();
 
-        $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('roles.name as nama_role','roles.deskripsi as nama_role2', 'users.id as id_user')
-            ->where('users.id',$id_user)
-            ->first();
+            $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->select('roles.name as nama_role','roles.deskripsi as nama_role2', 'users.id as id_user')
+                ->where('users.id',$id_user)
+                ->first();
 
-        $data = [
-            'user' => $user,
-            'role' => $role,
-        ];
+            $data = [
+                'user' => $user,
+                'role' => $role,
+            ];
 
-        return view('pages.kepegawaian.idcard.index-user')->with('list', $data);
+            return view('pages.kepegawaian.idcard.index-user')->with('list', $data);
+        }
     }
 
-    function indexAdmin()
-    {
-        $show  = idcard::get();
+    // function indexAdmin()
+    // {
+    //     $show  = idcard::get();
 
-        $data = [
-            'show' => $show,
-        ];
+    //     $data = [
+    //         'show' => $show,
+    //     ];
 
-        return response()->json($data, 200);
-    }
+    //     return response()->json($data, 200);
+    // }
 
     // USER
     function riwayat($id)
@@ -102,6 +107,36 @@ class IDCardController extends Controller
     }
 
     // ADMIN
+    function table()
+    {
+        $show  = idcard::get();
 
-    // BOTH
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function ubahStatus(Request $request)
+    {
+        // print_r($request->estimasi);
+        // die();
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = idcard::find($request->id);
+        if ($request->progress != 3) {
+            $data->progress = $request->progress;
+            if (!empty($request->estimasi)) {
+                $data->estimasi = $request->estimasi;
+            }
+            $data->save();
+        } else {
+            $data->progress = 3;
+            $data->estimasi = null;
+            $data->save();
+        }
+
+        return response()->json($tgl, 200);
+    }
 }
