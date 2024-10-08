@@ -19,10 +19,11 @@ class CreateTableKepegawaianSaran extends Migration
                 $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
-            $table->integer('kategori');
+            $table->integer('ref_kategori')->comment('ID from Table Referensi');
+            $table->string('judul');
             $table->longText('saran');
-            $table->string('title', 200);
-            $table->string('filename', 200);
+            $table->string('title', 200)->nullable();
+            $table->string('filename', 200)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // MASUKAN / SARAN
     Route::get('feedback', [App\Http\Controllers\Kepegawaian\SaranController::class, 'index'])->name('kepegawaian.feedback.index');
+    Route::post('feedback/store', [App\Http\Controllers\Kepegawaian\SaranController::class, 'store'])->name('kepegawaian.feedback.store');
 });
 
 // BERKAS

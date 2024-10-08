@@ -70,9 +70,22 @@ class RegulasiController extends Controller
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        $request->validate([
-            'file' => ['max:2000|mimes:pdf'],
-        ]);
+        if (
+            $request->jns_regulasi == 7 ||
+            $request->jns_regulasi == 8 ||
+            $request->jns_regulasi == 9 ||
+            $request->jns_regulasi == 10 ||
+            $request->jns_regulasi == 11 ||
+            $request->jns_regulasi == 12
+            ) {
+            $request->validate([
+                'file' => ['max:10000|mimes:pdf'],
+            ]);
+        } else {
+            $request->validate([
+                'file' => ['max:2000|mimes:pdf'],
+            ]);
+        }
 
         // tampung berkas yang sudah diunggah ke variabel baru
         // 'file' merupakan nama input yang ada pada form
@@ -143,9 +156,22 @@ class RegulasiController extends Controller
     {
         $tgl = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
 
-        $request->validate([
-            'file' => ['max:2000|mimes:pdf|nullable'],
-        ]);
+        if (
+            $request->jns_regulasi == 7 ||
+            $request->jns_regulasi == 8 ||
+            $request->jns_regulasi == 9 ||
+            $request->jns_regulasi == 10 ||
+            $request->jns_regulasi == 11 ||
+            $request->jns_regulasi == 12
+            ) {
+            $request->validate([
+                'file' => ['max:10000|mimes:pdf'],
+            ]);
+        } else {
+            $request->validate([
+                'file' => ['max:2000|mimes:pdf'],
+            ]);
+        }
 
         $uploadedFile = $request->file('file');
 
