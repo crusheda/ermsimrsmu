@@ -27,12 +27,12 @@ class CreateTableKepegawaianSurket extends Migration
             $table->string('pegawai_pendidikan')->comment('Pendidikan Terakhir');
             $table->string('pegawai_alamat');
 
-            $table->integer('progress')->comment('0=pengajuan;1=dalam_proses;2=selesai');
+            $table->integer('progress')->comment('0=pengajuan;1=dalam_proses;2=selesai;3=ditolak');
             $table->integer('valid')->comment('Verify from User Kepegawaian')->nullable();
             $table->dateTime('tgl_valid')->nullable();
 
-            $table->string('title', 200);
-            $table->string('filename', 200);
+            $table->string('title', 200)->nullable();
+            $table->string('filename', 200)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -125,7 +125,7 @@
                             </div>
                             <div class="text-end btn-page mb-0 mt-4">
                                 <button class="btn btn-link-secondary" id="clear_text" onclick="bersihkan()">Kosongkan</button>
-                                <button class="btn btn-primary" id="btn-simpan" onclick="ajukan()">Ajukan Sekarang</button>
+                                <button class="btn btn-primary" id="btn-simpan" onclick="ajukan()"><i class="fas fa-stamp me-2"></i> Ajukan Sekarang</button>
                             </div>
                         </div>
                     </div>
@@ -207,8 +207,8 @@
         });
 
         function ajukan() {
-            // $("#btn-simpan").prop('disabled', true);
-            // $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
+            $("#btn-simpan").prop('disabled', true);
+            $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
 
             // Definisi
             var save = new FormData();
@@ -280,8 +280,8 @@
                 });
             }
 
-            // $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
-            // $("#btn-simpan").prop('disabled', false);
+            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+            $("#btn-simpan").prop('disabled', false);
         }
 
         function showRiwayat() {

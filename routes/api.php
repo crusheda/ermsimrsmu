@@ -77,6 +77,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 // Route::get('kepegawaian/pengajuan/idcard/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahPenetapan'])->name('profilkaryawan.showUbahPenetapan');
                 // Route::post('kepegawaian/pengajuan/idcard/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahPenetapan'])->name('profilkaryawan.ubahPenetapan');
                 // Route::delete('kepegawaian/pengajuan/idcard/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusPenetapan'])->name('profilkaryawan.hapusPenetapan');
+            // SURAT KETERANGAN
+                // ADMIN
+                Route::get('kepegawaian/pengajuan/surket/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableAdmin'])->name('kepegawaian.surket.tableAdmin');
+                // USER
+                Route::get('kepegawaian/pengajuan/surket/{id}/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableUser'])->name('kepegawaian.surket.tableUser');
+                Route::post('kepegawaian/pengajuan/surket/tambah', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tambah'])->name('kepegawaian.idcard.tambah');
 
     // HAK AKSES
         // AKSES JABATAN
