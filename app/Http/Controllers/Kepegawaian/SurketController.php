@@ -118,6 +118,17 @@ class SurketController extends Controller
         }
     }
 
+    function hapus()
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = surket::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
+    }
+
     // ADMIN
     function tableAdmin()
     {

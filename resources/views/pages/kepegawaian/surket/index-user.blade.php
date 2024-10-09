@@ -149,7 +149,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus Pengajuan ID Card Saat Ini, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <p style="text-align: justify;">Anda akan melakukan penghapusan Pengajuan Surat Keterangan, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
                         <span class="switch-toggle-slider">
@@ -285,11 +285,13 @@
                                         <button type='button' class='btn btn-sm btn-link-secondary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (updet == date) {
-                                            content +=
-                                                `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            if (item.progress == 0) {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            } else {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            }
                                         } else {
-                                            content +=
-                                                `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
                         content += "<td>" + item.kategori + "</td>";
@@ -365,7 +367,7 @@
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
-                            message: 'Pengajuan ID Card Anda telah berhasil dihapus pada '+res,
+                            message: 'Pengajuan Surat Keterangan Anda telah berhasil dihapus pada '+res,
                             position: 'topRight'
                         });
                         $('#modalHapus').modal('hide');
@@ -374,30 +376,13 @@
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Pengajuan ID Card Anda gagal dihapus',
+                            message: 'Pengajuan Surat Keterangan Anda gagal dihapus',
                             position: 'topRight'
                         });
                     }
                 });
             }
         }
-
-        function bersihkan() {
-            $('input[name="pengajuan"]').prop('checked', false);
-            $('input[name="nama"]').val('');
-            $('input[name="panggilan"]').val('');
-            $('input[name="nip"]').val('');
-            $('input[name="jabatan"]').val('');
-            $('textarea[name=alasan]').val('');
-        }
-
-        // function saveData() {
-        //     $("#tambah").one('submit', function() {
-        //         $("#btn-simpan").attr('disabled', 'disabled');
-        //         $("#btn-simpan").find("i").toggleClass("fa-upload fa-sync fa-spin");
-        //         return true;
-        //     });
-        // }
 
         function getDateTime() {
             var now = new Date();
