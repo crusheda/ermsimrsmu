@@ -55,7 +55,8 @@
                                     <i class="ti ti-arrow-narrow-right me-1"></i> Tidak dapat mengajukan <b>lebih dari 2x</b> pada order yang sama apabila masih terdapat pengajuan/order yang belum diselesaikan<br>
                                     <i class="ti ti-arrow-narrow-right me-1"></i> Proses pengajuan ini terdiri dari 3 tahap yaitu <span class="badge rounded-pill text-bg-primary">Pengajuan</span> ,
                                                                                                                                     <span class="badge rounded-pill text-bg-warning">Dalam Proses</span> ,
-                                                                                                                                    <span class="badge rounded-pill text-bg-success">Selesai</span>
+                                                                                                                                    <span class="badge rounded-pill text-bg-success">Selesai</span> <br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan hanya dapat dihapus pada hari yang sama saat pengajuan tersebut<br>
                                 </small>
                             </div>
                         </div>
@@ -94,7 +95,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Daftar Pengajuan</h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20 me-2"></i></a>
+                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20"></i></a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -282,7 +283,7 @@
                         }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link-secondary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (updet == date) {
                                             if (item.progress == 0) {
@@ -308,7 +309,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>${item.valid?'Telah Diverifikasi oleh Kepegawaian':'Belum Terverifikasi'}</h6>
+                                                <h6 class='mb-0'>${item.valid?'Telah Diverifikasi oleh <b class="text-primary">Kepegawaian</b>':'Belum Terverifikasi'}</h6>
                                                 <small class='text-truncate text-muted'>${item.tgl_valid?'Pada '+item.tgl_valid:''}</small>
                                             </div>
                                         </div>

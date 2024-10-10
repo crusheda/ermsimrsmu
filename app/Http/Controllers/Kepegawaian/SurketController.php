@@ -16,17 +16,21 @@ class SurketController extends Controller
 {
     function index()
     {
-        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
-        // $show  = idcard::get();
-        $kategori = referensi::where('ref_jenis',13)->get();
+        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
+            return view('pages.kepegawaian.surket.index-admin');
+        } else {
+            $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+            // $show  = idcard::get();
+            $kategori = referensi::where('ref_jenis',13)->get();
 
-        $data = [
-            // 'show' => $show,
-            'users' => $users,
-            'kategori' => $kategori,
-        ];
+            $data = [
+                // 'show' => $show,
+                'users' => $users,
+                'kategori' => $kategori,
+            ];
 
-        return view('pages.kepegawaian.surket.index-user')->with('list', $data);
+            return view('pages.kepegawaian.surket.index-user')->with('list', $data);
+        }
     }
 
     // USER
@@ -132,12 +136,62 @@ class SurketController extends Controller
     // ADMIN
     function tableAdmin()
     {
-        $show  = surket::get();
+        $show  = surket::join('referensi','referensi.id','=','kepegawaian_surket.ref_id')->select('referensi.deskripsi as kategori','kepegawaian_surket.*')->get();
 
         $data = [
             'show' => $show,
         ];
 
         return response()->json($data, 200);
+    }
+
+    function verif($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = surket::find($id);
+        $data->valid = $user;
+        $data->tgl_valid = Carbon::now();
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function unverif($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = surket::find($id);
+        $data->valid = null;
+        $data->tgl_valid = null;
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function ubahStatus($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = surket::find($id);
+        $data->progress = $data->progress + 1;
+        $data->save();
+
+        return response()->json($tgl, 200);
+    }
+
+    function tolak($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = surket::find($id);
+        $data->progress = 3;
+        $data->save();
+
+        return response()->json($tgl, 200);
     }
 }

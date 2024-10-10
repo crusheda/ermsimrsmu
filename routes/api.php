@@ -80,6 +80,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             // SURAT KETERANGAN
                 // ADMIN
                 Route::get('kepegawaian/pengajuan/surket/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableAdmin'])->name('kepegawaian.surket.tableAdmin');
+                Route::get('kepegawaian/pengajuan/surket/{id}/verif/{user}', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'verif'])->name('kepegawaian.surket.verif');
+                Route::get('kepegawaian/pengajuan/surket/{id}/unverif', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'unverif'])->name('kepegawaian.surket.unverif');
+                Route::get('kepegawaian/pengajuan/surket/{id}/ubahstatus', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'ubahStatus'])->name('kepegawaian.surket.ubahStatus');
+                Route::get('kepegawaian/pengajuan/surket/{id}/tolak', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tolak'])->name('kepegawaian.surket.tolak');
                 // USER
                 Route::get('kepegawaian/pengajuan/surket/{id}/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableUser'])->name('kepegawaian.surket.tableUser');
                 Route::post('kepegawaian/pengajuan/surket/tambah', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tambah'])->name('kepegawaian.surket.tambah');
