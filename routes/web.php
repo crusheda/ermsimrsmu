@@ -73,6 +73,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
         // IDCARD
         Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'index'])->name('kepegawaian.idcard.index');
 
+    // SURAT TUGAS
+    Route::get('pd', [App\Http\Controllers\Kepegawaian\PDController::class, 'index'])->name('kepegawaian.pd.index');
+
     // MASUKAN / SARAN
     Route::get('feedback', [App\Http\Controllers\Kepegawaian\SaranController::class, 'index'])->name('kepegawaian.feedback.index');
     Route::post('feedback/store', [App\Http\Controllers\Kepegawaian\SaranController::class, 'store'])->name('kepegawaian.feedback.store');
