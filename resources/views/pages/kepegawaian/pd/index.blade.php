@@ -17,13 +17,12 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
-                        <li class="breadcrumb-item">Pengajuan</li>
-                        <li class="breadcrumb-item" aria-current="page">Surat Tugas</li>
+                        <li class="breadcrumb-item" aria-current="page">Perjalanan Dinas</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Surat Tugas</h2>
+                        <h2 class="mb-0">Surat Perjalanan Dinas</h2>
                     </div>
                 </div>
             </div>
@@ -54,7 +53,7 @@
                                 <small>
                                     {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
                                     <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b>5 mb</b>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b>
                                 </small>
                             </div>
                         </div>
@@ -91,7 +90,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="pegawai[]" id="pegawai[]" style="width: 100%" multiple>
+                                <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
                                     @if (count($list['users']) > 0)
                                         @foreach ($list['users'] as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -112,14 +111,14 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-end mb-3">
+            <div class="d-flex justify-content-end">
                 {{-- <button class="btn btn-link-primary"><i class="ti ti-arrow-narrow-left align-text-bottom me-2"></i>Back to Shipping Information</button> --}}
             </div>
         </div>
         <div class="col-xl-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Daftar Pengajuan</h5>
+                    <h5 class="mb-0">Riwayat</h5>
                     <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20"></i></a>
                     </div>
@@ -205,6 +204,7 @@
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
+
             showRiwayat();
         });
 
@@ -219,16 +219,15 @@
             save.append('tgl',$('#tgl').val());
             save.append('jenis',$('#jenis').val());
             save.append('lokasi',$('#lokasi').val());
-            save.append('pegawai',$('#pegawai').val());
+            save.append('pegawai',JSON.stringify($('#pegawai').val()));
             save.append('user','{{ Auth::user()->id }}');
-            save.append('file',filesAdded);
-
+            save.append('file',filesAdded[0]);
             if (
                 save.get('acara') == ""     ||
                 save.get('tgl') == ""       ||
                 save.get('jenis') == ""     ||
                 save.get('lokasi') == ""    ||
-                save.get('pegawai') == ""   ||
+                $('#pegawai').val() == ""   ||
                 filesAdded.length == 0 // (Jika Tidak Ada Gambar Yang Diupload)
                 ) {
                 iziToast.warning({
@@ -241,14 +240,22 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    method: 'POST',
-                    url: '/api/kepegawaian/pd/tambah',
+                    url: "{{route('kepegawaian.pd.tambah')}}",
+                    method: 'post',
+                    data: save,
+                    cache: false,
                     contentType: false,
                     processData: false,
                     dataType: 'json',
-                    data: save,
                     success: function(res) {
-                        if (res.code != 200) {
+                        if (res.code == 200) {
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'Submit Berkas Perjalanan Dinas telah berhasil dilakukan pada '+res,
+                                position: 'topRight'
+                            });
+                            showRiwayat();
+                        } else {
                             iziToast.error({
                                 title: 'Pesan Galat!',
                                 message: res.message,
@@ -264,13 +271,6 @@
                                     ]
                                 ]
                             });
-                        } else {
-                            iziToast.success({
-                                title: 'Pesan Sukses!',
-                                message: 'Submit Berkas Perjalanan Dinas telah berhasil dilakukan pada '+res,
-                                position: 'topRight'
-                            });
-                            showRiwayat();
                         }
                     },
                     error: function (res) {
@@ -297,19 +297,17 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
-                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
-                        var date = new Date().toLocaleString("sv-SE").substring(0, 10);
+                        var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var date = new Date().toLocaleDateString("sv-SE");
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (updet == date) {
-                                            if (item.progress == 0) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            } else {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            }
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
@@ -317,22 +315,33 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>` + item.acara + `</h6>
+                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-primary" onclick="window.open('/kepegawaian/pd/`+item.id+`/download')" data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Download (${item.title})"><u>` + item.acara + `</u></a>
+                                                </h6>
                                                 <small class='text-truncate text-muted'>` + item.lokasi + `</small>
                                                 <small class='text-truncate text-muted'>Diselenggarakan secara <b>${item.jenis==1?"Offline":"Online"}</b></small>
                                             </div>
                                         </div>
                                     </td>`;
+                        var pegawai = null;
+                        content += `<td><small><ul class='list-unstyled mt-2'>`;
+                        // console.log(JSON.parse(item.pegawai_id));
+                        res.users.forEach(us => {
+                            JSON.parse(item.pegawai_id).forEach(val => {
+                                if (val == us.id) {
+                                    content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
+                                }
+                            })
+                        })
+                        content += `</small></ul></td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>` + item.pegawai_id + `</h6>
-                                                <small class='text-truncate text-muted'>` + item.pegawai_id + `</small>
-                                                <small class='text-truncate text-muted'>` + item.pegawai_id + `</small>
+                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>` + item.nama_user + `</small>
                                             </div>
                                         </div>
                                     </td>`;
-                        content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td>";
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
                     });
@@ -343,12 +352,11 @@
                         ],
                         bAutoWidth: false,
                         aoColumns : [
-                            // { sWidth: '5%' },
-                            // { sWidth: '12%' },
-                            // { sWidth: '45%' },
-                            // { sWidth: '8%' },
-                            // { sWidth: '10%' },
-                            // { sWidth: '20%' },
+                            { sWidth: '5%' },
+                            { sWidth: '10%' },
+                            { sWidth: '45%' },
+                            { sWidth: '28%' },
+                            { sWidth: '12%' },
                         ],
                         columnDefs: [
                             // { visible: false, targets: [7] },
@@ -375,19 +383,19 @@
             if (checkboxHapus == false) {
                 iziToast.error({
                     title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan penghapusan pengajuan tersebut',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan berkas tersebut',
                     position: 'topRight'
                 });
             } else {
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
-                    url: "/api/kepegawaian/pengajuan/idcard/"+id+"/delete",
+                    url: "/api/kepegawaian/pd/"+id+"/hapus",
                     type: 'DELETE',
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
-                            message: 'Pengajuan Surat Keterangan Anda telah berhasil dihapus pada '+res,
+                            message: 'Berkas perjalanan dinas Anda telah berhasil dihapus pada '+res,
                             position: 'topRight'
                         });
                         $('#modalHapus').modal('hide');
@@ -396,7 +404,7 @@
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Pengajuan Surat Keterangan Anda gagal dihapus',
+                            message: 'Berkas perjalanan dinas Anda gagal dihapus',
                             position: 'topRight'
                         });
                     }

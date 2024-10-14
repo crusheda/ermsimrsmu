@@ -40,8 +40,8 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'hakakses', 'as' => ''], function () {
     // AKSES JABATAN
     Route::get('aksesjabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@index')->name('aksesjabatan.index');
-    Route::post('aksesjabatan/storeAkses', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeAkses')->name('akses.store');
-    Route::post('aksesjabatan/storeJabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeJabatan')->name('jabatan.store');
+    // Route::post('aksesjabatan/storeAkses', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeAkses')->name('akses.store');
+    // Route::post('aksesjabatan/storeJabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@storeJabatan')->name('jabatan.store');
     Route::delete('akses', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapusAkses')->name('akses.destroy');
     Route::delete('jabatan', '\App\Http\Controllers\HakAkses\AksesJabatanController@hapusJabatan')->name('jabatan.destroy');
     // AKUN PENGGUNA
@@ -59,11 +59,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // PROFIL KARYAWAN
     Route::get('profilkaryawan', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'index'])->name('profilkaryawan.index');
-    Route::get('profilkaryawan/{id}', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show');
+    Route::get('profilkaryawan/{id}', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'show'])->name('profilkaryawan.show.profilkaryawan');
     Route::get('profilkaryawan/detail/{id}', [App\Http\Controllers\Setting\Profil\ProfilController::class, 'indexKepegawaian'])->name('profilkaryawan.kepegawaian');
     Route::get('profilkaryawan/dokumen/download/{id}', [App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class,'downloadDokumen'])->name('profilkaryawan.downloadDokumen');
     Route::get('profilkaryawan/spkrkk/download/{id}', [App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class,'downloadSpkRkk'])->name('profilkaryawan.downloadSpkRkk');
-    Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.destroy');
+    Route::delete('profilkaryawan/{id}/nonaktif', [App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'destroy'])->name('profilkaryawan.hapus');
     Route::resource('profilkaryawan', '\App\Http\Controllers\Kepegawaian\ProfilKaryawanController');
 
     // PENGAJUAN
@@ -73,7 +73,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
         // IDCARD
         Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'index'])->name('kepegawaian.idcard.index');
 
-    // SURAT TUGAS
+    // PERJALANAN DINAS
+    Route::get('pd/{id}/download', [\App\Http\Controllers\Kepegawaian\PDController::class, 'download'])->name('kepegawaian.pd.download');
     Route::get('pd', [App\Http\Controllers\Kepegawaian\PDController::class, 'index'])->name('kepegawaian.pd.index');
 
     // MASUKAN / SARAN

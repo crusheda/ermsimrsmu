@@ -42,13 +42,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // PENETAPAN
         Route::get('profilkaryawan/penetapan/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tablePenetapan'])->name('profilkaryawan.tablePenetapan');
         Route::post('profilkaryawan/penetapan/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahPenetapan'])->name('profilkaryawan.tambahPenetapan');
-        Route::get('profilkaryawan/penetapan/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahPenetapan'])->name('profilkaryawan.showUbahPenetapan');
+        Route::get('profilkaryawan/penetapan/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahPenetapan'])->name('profilkaryawan.show.ubahPenetapan');
         Route::post('profilkaryawan/penetapan/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahPenetapan'])->name('profilkaryawan.ubahPenetapan');
         Route::delete('profilkaryawan/penetapan/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusPenetapan'])->name('profilkaryawan.hapusPenetapan');
         // ROTASI
         Route::get('profilkaryawan/rotasi/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableRotasi'])->name('profilkaryawan.tableRotasi');
         Route::post('profilkaryawan/rotasi/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahRotasi'])->name('profilkaryawan.tambahRotasi');
-        Route::get('profilkaryawan/rotasi/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahRotasi'])->name('profilkaryawan.showUbahRotasi');
+        Route::get('profilkaryawan/rotasi/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahRotasi'])->name('profilkaryawan.show.ubahRotasi');
         Route::post('profilkaryawan/rotasi/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahRotasi'])->name('profilkaryawan.ubahRotasi');
         Route::delete('profilkaryawan/rotasi/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusRotasi'])->name('profilkaryawan.hapusRotasi');
         // DOKUMEN
@@ -56,11 +56,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // SPK RKK
         Route::get('profilkaryawan/spkrkk/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableSpkRkk'])->name('profilkaryawan.tableSpkRkk');
         Route::post('profilkaryawan/spkrkk/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahSpkRkk'])->name('profilkaryawan.tambahSpkRkk');
-        Route::get('profilkaryawan/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahSpkRkk'])->name('profilkaryawan.showUbahSpkRkk');
+        Route::get('profilkaryawan/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahSpkRkk'])->name('profilkaryawan.show.ubahSpkRkk');
         Route::post('profilkaryawan/spkrkk/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahSpkRkk'])->name('profilkaryawan.ubahSpkRkk');
         Route::delete('profilkaryawan/spkrkk/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusSpkRkk'])->name('profilkaryawan.hapusSpkRkk');
         // KEPEGAWAIAN (NIP & KLASIFIKASI)
-        Route::get('profilkaryawan/kepegawaian/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showKepegawaian'])->name('profilkaryawan.showKepegawaian');
+        Route::get('profilkaryawan/kepegawaian/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showKepegawaian'])->name('profilkaryawan.show.kepegawaian');
         Route::post('profilkaryawan/kepegawaian/nip/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahNIP'])->name('profilkaryawan.tambahNIP');
         Route::post('profilkaryawan/kepegawaian/klasifikasi/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahKlasifikasi'])->name('profilkaryawan.tambahKlasifikasi');
 
@@ -74,7 +74,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::post('kepegawaian/pengajuan/idcard/tambah', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'tambahPengajuan'])->name('kepegawaian.idcard.tambahPengajuan');
                 Route::get('kepegawaian/pengajuan/idcard/riwayat/{id}', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'riwayat'])->name('kepegawaian.idcard.riwayat');
                 Route::delete('kepegawaian/pengajuan/idcard/{id}/delete', [\App\Http\Controllers\Kepegawaian\IDCardController::class, 'hapusPengajuan'])->name('kepegawaian.idcard.hapusPengajuan');
-                // Route::get('kepegawaian/pengajuan/idcard/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahPenetapan'])->name('profilkaryawan.showUbahPenetapan');
                 // Route::post('kepegawaian/pengajuan/idcard/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahPenetapan'])->name('profilkaryawan.ubahPenetapan');
                 // Route::delete('kepegawaian/pengajuan/idcard/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusPenetapan'])->name('profilkaryawan.hapusPenetapan');
             // SURAT KETERANGAN
@@ -88,9 +87,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/pengajuan/surket/{id}/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableUser'])->name('kepegawaian.surket.tableUser');
                 Route::post('kepegawaian/pengajuan/surket/tambah', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tambah'])->name('kepegawaian.surket.tambah');
                 Route::delete('kepegawaian/pengajuan/surket/{id}/delete', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'hapus'])->name('kepegawaian.surket.hapus');
-        // SURAT TUGAS
+        // PERJALANAN DINAS
             Route::get('kepegawaian/pd/table', [\App\Http\Controllers\Kepegawaian\PDController::class, 'table'])->name('kepegawaian.pd.table');
             Route::post('kepegawaian/pd/tambah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'tambah'])->name('kepegawaian.pd.tambah');
+            Route::delete('kepegawaian/pd/{id}/hapus', [\App\Http\Controllers\Kepegawaian\PDController::class, 'hapus'])->name('kepegawaian.pd.hapus');
             // USER
 
     // HAK AKSES
@@ -267,7 +267,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('inventaris/aset/refreshtoken', '\App\Http\Controllers\Inventaris\Aset\AsetController@refreshToken')->name('aset.refreshToken');
             Route::get('inventaris/aset/{token}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getAsetToken')->name('aset.getAsetToken');
             Route::get('inventaris/aset/ubah/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@getUbahAset')->name('aset.getUbahAset');
-            Route::post('inventaris/aset/update', '\App\Http\Controllers\Inventaris\Aset\AsetController@update')->name('aset.simpan');
+            Route::post('inventaris/aset/update', '\App\Http\Controllers\Inventaris\Aset\AsetController@update')->name('aset.update');
             Route::post('inventaris/aset/store', '\App\Http\Controllers\Inventaris\Aset\AsetController@store')->name('aset.simpan');
             Route::post('inventaris/aset/filter', '\App\Http\Controllers\Inventaris\Aset\AsetController@filter')->name('aset.filter');
             Route::delete('inventaris/aset/hapus/{id}', '\App\Http\Controllers\Inventaris\Aset\AsetController@hapus')->name('aset.hapus');

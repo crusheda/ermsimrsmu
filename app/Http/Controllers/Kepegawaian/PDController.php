@@ -9,6 +9,9 @@ use App\Models\users;
 use App\Models\kepegawaian\pd;
 use App\Models\kepegawaian\pd_ceklis;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Auth;
+use Validator,Redirect,Response,File,Storage;
 
 class PDController extends Controller
 {
@@ -33,8 +36,10 @@ class PDController extends Controller
 
     function table()
     {
-        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        $show  = pd::get();
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = pd::join('users','users.id','=','kepegawaian_pd.user_id')
+                    ->select('users.nama as nama_user','kepegawaian_pd.*')
+                    ->get();
 
         $data = [
             'show' => $show,
@@ -47,7 +52,7 @@ class PDController extends Controller
     function tambah(Request $request)
     {
         $request->validate([
-            'file' => ['max:10000|mimes:pdf'],
+            'file' => ['max:2000|mimes:pdf'],
         ]);
 
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
@@ -62,7 +67,7 @@ class PDController extends Controller
 
             $data = new pd;
             $data->user_id = $request->user;
-            $data->pegawai_id = $pegawai;
+            $data->pegawai_id = $request->pegawai;
             $data->jenis = $request->jenis;
             $data->tgl = $request->tgl;
             $data->acara = $request->acara;
@@ -78,5 +83,29 @@ class PDController extends Controller
                 'code' => 500,
             ));
         }
+    }
+
+    function download($id)
+    {
+        $data = pd::where('id', $id)->first();
+        $filename = $data->filename;
+        $title = $data->title;
+        return Storage::download($filename, $title);
+    }
+
+    function hapus($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = pd::find($id);
+
+        // Proses Hapus Lampiran
+        Storage::delete($data->filename);
+
+        // Hapus Record DB
+        $data->delete();
+
+        return response()->json($tgl, 200);
     }
 }

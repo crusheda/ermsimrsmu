@@ -163,6 +163,16 @@ class ProfilKaryawanController extends Controller
         return Redirect::back()->with('message','Anda berhasil menonaktifkan Karyawan pada '.$tgl);
     }
 
+    public function hapus($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = users::find($id);
+        $data->delete();
+
+        return Redirect::back()->with('message','Anda berhasil menonaktifkan Karyawan pada '.$tgl);
+    }
+
     // API
     function table()
     {
