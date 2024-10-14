@@ -75,7 +75,7 @@
                 <span class="pc-micon">
                     <i class="fas fa-shuttle-van"></i>
                 </span>
-                <span class="pc-mtext">Surat Tugas</span>
+                <span class="pc-mtext">Perjalanan Dinas</span>
             </a>
         </li>
         <li class="pc-item">

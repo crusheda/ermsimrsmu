@@ -69,13 +69,13 @@
                         <div class="col-md-2 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
-                                <input type="datetime-local" class="form-control" name="tgl" id="">
+                                <input type="datetime-local" class="form-control" name="tgl" id="tgl">
                             </div>
                         </div>
                         <div class="col-md-2 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
-                                <select class="form-control" name="jenis" id="kategori">
+                                <select class="form-control" name="jenis" id="jenis">
                                     <option value="">Pilih</option>
                                     <option value="1">Offline</option>
                                     <option value="2">Online</option>
@@ -91,7 +91,7 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="pegawai[]" style="width: 100%" multiple>
+                                <select class="form-select select2" name="pegawai[]" id="pegawai[]" style="width: 100%" multiple>
                                     @if (count($list['users']) > 0)
                                         @foreach ($list['users'] as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -129,14 +129,11 @@
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <center>#ID</center>
-                                    </th>
-                                    <th>KATEGORI</th>
+                                    <th><center>#ID</center></th>
+                                    <th><center>WAKTU</center></th>
+                                    <th>ACARA</th>
                                     <th>USER</th>
-                                    <th><center>PROGRESS</center></th>
                                     <th>UPDATE</th>
-                                    <th>VERIFIED</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
@@ -148,14 +145,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>
-                                        <center>#ID</center>
-                                    </th>
-                                    <th>KATEGORI</th>
+                                    <th><center>#ID</center></th>
+                                    <th><center>WAKTU</center></th>
+                                    <th>ACARA</th>
                                     <th>USER</th>
-                                    <th><center>PROGRESS</center></th>
                                     <th>UPDATE</th>
-                                    <th>VERIFIED</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -214,17 +208,29 @@
             showRiwayat();
         });
 
-        function ajukan() {
+        function simpan() {
             $("#btn-simpan").prop('disabled', true);
-            $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
+            $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
 
             // Definisi
             var save = new FormData();
-            save.append('kategori',$('#kategori').val());
-            save.append('pegawai','{{ Auth::user()->id }}');
+            var filesAdded = $('#filex')[0].files;
+            save.append('acara',$('#acara').val());
+            save.append('tgl',$('#tgl').val());
+            save.append('jenis',$('#jenis').val());
+            save.append('lokasi',$('#lokasi').val());
+            save.append('pegawai',$('#pegawai').val());
+            save.append('user','{{ Auth::user()->id }}');
+            save.append('file',filesAdded);
 
-            // console.log(save.get('pengajuan'));
-            if ($('#kategori').val() == "") {
+            if (
+                save.get('acara') == ""     ||
+                save.get('tgl') == ""       ||
+                save.get('jenis') == ""     ||
+                save.get('lokasi') == ""    ||
+                save.get('pegawai') == ""   ||
+                filesAdded.length == 0 // (Jika Tidak Ada Gambar Yang Diupload)
+                ) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
@@ -236,13 +242,13 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     method: 'POST',
-                    url: '/api/kepegawaian/pengajuan/surket/tambah',
+                    url: '/api/kepegawaian/pd/tambah',
                     contentType: false,
                     processData: false,
                     dataType: 'json',
                     data: save,
                     success: function(res) {
-                        if (res.code == 500) {
+                        if (res.code != 200) {
                             iziToast.error({
                                 title: 'Pesan Galat!',
                                 message: res.message,
@@ -261,7 +267,7 @@
                         } else {
                             iziToast.success({
                                 title: 'Pesan Sukses!',
-                                message: 'Pengajuan ID Card telah berhasil dilakukan pada '+res,
+                                message: 'Submit Berkas Perjalanan Dinas telah berhasil dilakukan pada '+res,
                                 position: 'topRight'
                             });
                             showRiwayat();
@@ -277,14 +283,14 @@
                 });
             }
 
-            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
             $("#btn-simpan").prop('disabled', false);
         }
 
         function showRiwayat() {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
-                url: "/api/kepegawaian/pengajuan/surket/{{ Auth::user()->id }}/table",
+                url: "/api/kepegawaian/pd/table",
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -293,20 +299,6 @@
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         var date = new Date().toLocaleString("sv-SE").substring(0, 10);
-                        // PROGRESS
-                        if (item.progress == 0) {
-                            var status = `<span class="badge rounded-pill text-bg-primary">Pengajuan</span>`;
-                        } else {
-                            if (item.progress == 1) {
-                                var status = `<span class="badge rounded-pill text-bg-warning">Dalam Proses</span>`;
-                            } else {
-                                if (item.progress == 2) {
-                                    var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
-                                } else {
-                                    var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
-                                }
-                            }
-                        }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
@@ -321,25 +313,26 @@
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
-                        content += "<td>" + item.kategori + "</td>";
+                        content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>` + item.pegawai_nama + ` (` + item.pegawai_ttl + `)</h6>
-                                                <small class='text-truncate text-muted'>` + item.pegawai_pendidikan + `</small>
-                                                <small class='text-truncate text-muted'>` + item.pegawai_alamat + `</small>
+                                                <h6 class='mb-0'>` + item.acara + `</h6>
+                                                <small class='text-truncate text-muted'>` + item.lokasi + `</small>
+                                                <small class='text-truncate text-muted'>Diselenggarakan secara <b>${item.jenis==1?"Offline":"Online"}</b></small>
                                             </div>
                                         </div>
                                     </td>`;
-                        content += "<td><center>" + status + "</center></td><td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td>";
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>${item.valid?'Telah Diverifikasi oleh <b class="text-primary">Kepegawaian</b>':'Belum Terverifikasi'}</h6>
-                                                <small class='text-truncate text-muted'>${item.tgl_valid?'Pada '+item.tgl_valid:''}</small>
+                                                <h6 class='mb-0'>` + item.pegawai_id + `</h6>
+                                                <small class='text-truncate text-muted'>` + item.pegawai_id + `</small>
+                                                <small class='text-truncate text-muted'>` + item.pegawai_id + `</small>
                                             </div>
                                         </div>
                                     </td>`;
+                        content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td>";
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
                     });
@@ -350,12 +343,12 @@
                         ],
                         bAutoWidth: false,
                         aoColumns : [
-                            { sWidth: '5%' },
-                            { sWidth: '12%' },
-                            { sWidth: '45%' },
-                            { sWidth: '8%' },
-                            { sWidth: '10%' },
-                            { sWidth: '20%' },
+                            // { sWidth: '5%' },
+                            // { sWidth: '12%' },
+                            // { sWidth: '45%' },
+                            // { sWidth: '8%' },
+                            // { sWidth: '10%' },
+                            // { sWidth: '20%' },
                         ],
                         columnDefs: [
                             // { visible: false, targets: [7] },

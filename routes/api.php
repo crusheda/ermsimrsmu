@@ -88,6 +88,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/pengajuan/surket/{id}/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableUser'])->name('kepegawaian.surket.tableUser');
                 Route::post('kepegawaian/pengajuan/surket/tambah', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tambah'])->name('kepegawaian.surket.tambah');
                 Route::delete('kepegawaian/pengajuan/surket/{id}/delete', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'hapus'])->name('kepegawaian.surket.hapus');
+        // SURAT TUGAS
+            Route::get('kepegawaian/pd/table', [\App\Http\Controllers\Kepegawaian\PDController::class, 'table'])->name('kepegawaian.pd.table');
+            Route::post('kepegawaian/pd/tambah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'tambah'])->name('kepegawaian.pd.tambah');
+            // USER
 
     // HAK AKSES
         // AKSES JABATAN
