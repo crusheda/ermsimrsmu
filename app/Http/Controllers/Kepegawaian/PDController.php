@@ -76,7 +76,10 @@ class PDController extends Controller
             $data->filename = $path;
             $data->save();
 
-            return response()->json($push, 200);
+            return Response::json(array(
+                'message' => $push,
+                'code' => 200,
+            ));
         } else {
             return Response::json(array(
                 'message' => 'File sudah ada/pernah diupload sebelumnya!',

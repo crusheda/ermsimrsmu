@@ -38,11 +38,11 @@
                     {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            {{-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
-                                    {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a> --}}
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
                     {{-- @endif --}}
                 </div>
@@ -106,6 +106,7 @@
                             </div>
                         </div>
                         <div class="text-end btn-page mt-2">
+                            <button class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
                             <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
                         </div>
                     </div>
@@ -120,7 +121,8 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Riwayat</h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20"></i></a>
+                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -251,10 +253,11 @@
                         if (res.code == 200) {
                             iziToast.success({
                                 title: 'Pesan Sukses!',
-                                message: 'Submit Berkas Perjalanan Dinas telah berhasil dilakukan pada '+res,
+                                message: 'Submit Berkas berhasil dilakukan pada '+res.message,
                                 position: 'topRight'
                             });
                             showRiwayat();
+                            clearInput();
                         } else {
                             iziToast.error({
                                 title: 'Pesan Galat!',
@@ -400,6 +403,7 @@
                         });
                         $('#modalHapus').modal('hide');
                         showRiwayat();
+                        clearInput();
                     },
                     error: function(res) {
                         iziToast.error({
@@ -410,6 +414,15 @@
                     }
                 });
             }
+        }
+
+        function clearInput() {
+            $('#filex').val('');
+            $('#acara').val('');
+            $('#tgl').val('');
+            $('#jenis').val('');
+            $('#lokasi').val('');
+            $('#pegawai').val('').change();
         }
 
         function getDateTime() {
