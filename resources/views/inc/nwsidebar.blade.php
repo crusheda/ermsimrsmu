@@ -24,7 +24,7 @@
     @if (Auth::user()->getPermission('profil_karyawan') == true || Auth::user()->getRole('it') == true)
         <li class="pc-item pc-caption"><label>Kepegawaian</label></li>
     @endif
-    @if (Auth::user()->getPermission('profil_karyawan') == true || Auth::user()->getRole('it') == true)
+    @if (Auth::user()->getPermission('profil_karyawan') == true || Auth::user()->getRole('it') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item">
             <a href="{{ route('profilkaryawan.index') }}" class="pc-link">
                 <span class="pc-micon">

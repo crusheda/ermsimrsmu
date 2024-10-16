@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-10 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
@@ -81,7 +81,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
@@ -161,58 +161,60 @@
     </div>
 
     {{-- MODAL START --}}
-    <div class="modal fade animate__animated animate__rubberBand" id="ubah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal fade animate__animated animate__rubberBand" id="modalUbah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Ubah&nbsp;&nbsp;&nbsp;
+                        Form Ubah
                     </h4>
-                    <div class="card-title-elements">
-                        <select class="form-select form-select-sm" id="user" required></select>
-                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_edit" hidden>
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-8 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="acara_edit" id="acara_edit" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
                             </div>
                         </div>
-                        <div class="col-md-2 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
                                 <input type="datetime-local" class="form-control" name="tgl_edit" id="tgl_edit">
                             </div>
                         </div>
-                        <div class="col-md-2 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
                                 <select class="form-control" name="jenis_edit" id="jenis_edit"></select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-8 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="lokasi_edit" id="lokasi_edit" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
                                 <select class="form-select select2" name="pegawai_edit[]" id="pegawai_edit" style="width: 100%" multiple></select>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label">Upload <a class="text-danger">*</a></label>
-                                <input type="file" class="form-control" id="filex_edit" name="filex_edit" accept="application/pdf">
+                                <label class="form-label">File Terupload</label>
+                                <div id="filex_edit"></div>
+                                <small>File yang telah terupload tidak dapat diubah kembali, lakukan penginputan ulang apabila diperlukan</small>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
+                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-save nav-icon"></i> Simpan Perubahan</button>
                 </div>
             </div>
         </div>
@@ -222,12 +224,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Hapus Pengajuan
+                        Form Hapus
                     </h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan penghapusan Pengajuan Surat Keterangan, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <p style="text-align: justify;">Anda akan melakukan penghapusan Berkas Perjalanan Dinas, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
                         <span class="switch-toggle-slider">
@@ -239,7 +241,7 @@
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                    <button type="reset" class="btn btn-link-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -394,29 +396,17 @@
                     dataType: 'json',
                     success: function(res) {
                         if (res.code == 200) {
-                            iziToast.success({
-                                title: 'Pesan Sukses!',
-                                message: 'Submit Berkas berhasil dilakukan pada '+res.message,
-                                position: 'topRight'
-                            });
+                            notifier.show(
+                                "Pesan Sukses!", "Submit Berkas berhasil dilakukan pada "+res.message,
+                                "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
+                            );
                             showRiwayat();
                             clearInput();
                         } else {
-                            iziToast.error({
-                                title: 'Pesan Galat!',
-                                message: res.message,
-                                position: 'topRight',
-                                buttons: [
-                                    [
-                                        '<button>Tutup</button>',
-                                        function (instance, toast) {
-                                            instance.hide({
-                                                transitionOut: 'fadeOutUp'
-                                            }, toast);
-                                        }
-                                    ]
-                                ]
-                            });
+                            notifier.show(
+                                "Pesan Galat!", res.message,
+                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                            );
                         }
                     },
                     error: function (res) {
@@ -432,22 +422,96 @@
             $("#btn-simpan").prop('disabled', false);
         }
 
-        function ubah() {
+        function ubah(id) {
             $.ajax(
             {
                 url: "/api/kepegawaian/pd/"+id,
                 type: 'GET',
-                dataType: 'json', // added data type
+                dataType: 'json',
                 success: function(res) {
-            $('#filex').val('');
-            $('#acara').val('');
-            $('#tgl').val('');
-            $('#jenis').val('');
-            $('#lokasi').val('');
-            $('#pegawai').val('').change();
-                    $('#ubah').modal('show');
+                    $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
+                    $('#id_edit').val(res.show.id);
+                    $('#acara_edit').val(res.show.acara);
+                    $('#tgl_edit').val(res.show.tgl);
+                    $('#lokasi_edit').val(res.show.lokasi);
+                    $("#jenis_edit").find('option').remove();
+                    $("#jenis_edit").append(`
+                        <option value="1" ${res.show.jenis==1?"selected":""}>Offline</option>
+                        <option value="2" ${res.show.jenis==2?"selected":""}>Online</option>
+                    `);
+                    var un = JSON.parse(res.show.pegawai_id);
+                    $("#pegawai_edit").find('option').remove();
+                    res.users.forEach(pounch => {
+                        $("#pegawai_edit").append(`
+                            <option value="${pounch.id}">${pounch.nama}</option>
+                        `);
+                    });
+                    $("#pegawai_edit").val(un).change();
+                    $('#modalUbah').modal('show');
                 }
             })
+        }
+
+        function prosesUbah() {
+            $("#btn-ubah").prop('disabled', true);
+            $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var save = new FormData();
+            var id = $('#id_edit').val();
+            save.append('id',id);
+            save.append('acara',$('#acara_edit').val());
+            save.append('tgl',$('#tgl_edit').val());
+            save.append('jenis',$('#jenis_edit').val());
+            save.append('lokasi',$('#lokasi_edit').val());
+            save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
+
+            if (
+                save.get('acara_edit') == ""   ||
+                save.get('tgl_edit') == ""     ||
+                save.get('jenis_edit') == ""   ||
+                save.get('lokasi_edit') == ""  ||
+                $('#pegawai_edit').val() == ""
+            ) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/kepegawaian/pd/"+id+"/ubah",
+                    method: 'post',
+                    data: save,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        notifier.show(
+                            "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
+                            "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
+                        );
+                        if (res) {
+                            $('#modalUbah').modal('hide');
+                            showRiwayat();
+                            clearInput();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        notifier.show(
+                            res.statusText + " (Code " + res.status + ")", res.responseText,
+                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                        );
+                    }
+                });
+            }
+
+            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-ubah").prop('disabled', false);
         }
 
         function hapus(id) {

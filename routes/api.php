@@ -90,6 +90,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // PERJALANAN DINAS
             Route::get('kepegawaian/pd/table', [\App\Http\Controllers\Kepegawaian\PDController::class, 'table'])->name('kepegawaian.pd.table');
             Route::get('kepegawaian/pd/{id}', [\App\Http\Controllers\Kepegawaian\PDController::class, 'show'])->name('kepegawaian.pd.show');
+            Route::post('kepegawaian/pd/{id}/ubah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'update'])->name('kepegawaian.pd.update');
             Route::post('kepegawaian/pd/tambah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'tambah'])->name('kepegawaian.pd.tambah');
             Route::delete('kepegawaian/pd/{id}/hapus', [\App\Http\Controllers\Kepegawaian\PDController::class, 'hapus'])->name('kepegawaian.pd.hapus');
             // USER

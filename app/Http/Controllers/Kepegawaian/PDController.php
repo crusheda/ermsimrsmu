@@ -101,6 +101,24 @@ class PDController extends Controller
         return response()->json($data, 200);
     }
 
+    function update(Request $request)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = pd::find($request->id);
+        $data->pegawai_id = $request->pegawai;
+        $data->jenis = $request->jenis;
+        $data->tgl = $request->tgl;
+        $data->acara = $request->acara;
+        $data->lokasi = $request->lokasi;
+        $data->save();
+
+        return Response::json(array(
+            'message' => $push,
+            'code' => 200,
+        ));
+    }
+
     function download($id)
     {
         $data = pd::where('id', $id)->first();
