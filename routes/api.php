@@ -89,6 +89,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::delete('kepegawaian/pengajuan/surket/{id}/delete', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'hapus'])->name('kepegawaian.surket.hapus');
         // PERJALANAN DINAS
             Route::get('kepegawaian/pd/table', [\App\Http\Controllers\Kepegawaian\PDController::class, 'table'])->name('kepegawaian.pd.table');
+            Route::get('kepegawaian/pd/{id}', [\App\Http\Controllers\Kepegawaian\PDController::class, 'show'])->name('kepegawaian.pd.show');
             Route::post('kepegawaian/pd/tambah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'tambah'])->name('kepegawaian.pd.tambah');
             Route::delete('kepegawaian/pd/{id}/hapus', [\App\Http\Controllers\Kepegawaian\PDController::class, 'hapus'])->name('kepegawaian.pd.hapus');
             // USER

@@ -52,9 +52,11 @@ class PDController extends Controller
     function tambah(Request $request)
     {
         $request->validate([
-            'file' => ['max:2000|mimes:pdf'],
+            'file' => ['max:2000','mimes:pdf'],
         ]);
 
+        // print_r($request->all());
+        // die();
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $uploadedFile = $request->file('file');
@@ -86,6 +88,17 @@ class PDController extends Controller
                 'code' => 500,
             ));
         }
+    }
+
+    function show($id)
+    {
+        $show = pd::where('id',$id)->first();
+        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+        $data = [
+            'show' => $show,
+            'users' => $users,
+        ];
+        return response()->json($data, 200);
     }
 
     function download($id)

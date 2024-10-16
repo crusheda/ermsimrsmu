@@ -161,6 +161,62 @@
     </div>
 
     {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="ubah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Ubah&nbsp;&nbsp;&nbsp;
+                    </h4>
+                    <div class="card-title-elements">
+                        <select class="form-select form-select-sm" id="user" required></select>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_edit" hidden>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" name="acara_edit" id="acara_edit" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
+                                <input type="datetime-local" class="form-control" name="tgl_edit" id="tgl_edit">
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
+                                <select class="form-control" name="jenis_edit" id="jenis_edit"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" name="lokasi_edit" id="lokasi_edit" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
+                                <select class="form-select select2" name="pegawai_edit[]" id="pegawai_edit" style="width: 100%" multiple></select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Upload <a class="text-danger">*</a></label>
+                                <input type="file" class="form-control" id="filex_edit" name="filex_edit" accept="application/pdf">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
@@ -209,6 +265,93 @@
 
             showRiwayat();
         });
+
+        function showRiwayat() {
+            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax({
+                url: "/api/kepegawaian/pd/table",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var date = new Date().toLocaleDateString("sv-SE");
+                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <ul class='dropdown-menu dropdown-menu-right'>`;
+                                        if (updet == date) {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                        } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                        }
+                        content += "</div></center></td>";
+                        content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-primary" onclick="window.open('/kepegawaian/pd/`+item.id+`/download')" data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Download (${item.title})"><u>` + item.acara + `</u></a>
+                                                </h6>
+                                                <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b></small>
+                                                <small class='text-truncate text-muted'>Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"}</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        var pegawai = null;
+                        content += `<td><small><ul class='list-unstyled mt-2'>`;
+                        // console.log(JSON.parse(item.pegawai_id));
+                        res.users.forEach(us => {
+                            JSON.parse(item.pegawai_id).forEach(val => {
+                                if (val == us.id) {
+                                    content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
+                                }
+                            })
+                        })
+                        content += `</small></ul></td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += "</tr>";
+                        $('#tampil-tbody').append(content);
+            // Showing Tooltip
+            $('[data-bs-toggle="tooltip"]').tooltip({
+                trigger: 'hover'
+            })
+                    });
+                    var table = $('#dttable').DataTable({
+                        // dom: 'Bfrtip',
+                        order: [
+                            [4, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '10%' },
+                            { sWidth: '45%' },
+                            { sWidth: '28%' },
+                            { sWidth: '12%' },
+                        ],
+                        columnDefs: [
+                            // { visible: false, targets: [7] },
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                }
+            })
+        }
 
         function simpan() {
             $("#btn-simpan").prop('disabled', true);
@@ -277,11 +420,10 @@
                         }
                     },
                     error: function (res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
-                            position: 'topRight'
-                        });
+                        notifier.show(
+                            res.statusText + " (Code " + res.status + ")", res.responseText,
+                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                        );
                     }
                 });
             }
@@ -290,85 +432,20 @@
             $("#btn-simpan").prop('disabled', false);
         }
 
-        function showRiwayat() {
-            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
-            $.ajax({
-                url: "/api/kepegawaian/pd/table",
+        function ubah() {
+            $.ajax(
+            {
+                url: "/api/kepegawaian/pd/"+id,
                 type: 'GET',
-                dataType: 'json',
+                dataType: 'json', // added data type
                 success: function(res) {
-                    $("#tampil-tbody").empty();
-                    $('#dttable').DataTable().clear().destroy();
-                    res.show.forEach(item => {
-                        var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
-                        var date = new Date().toLocaleDateString("sv-SE");
-                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
-                        content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
-                                        <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (updet == date) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                        } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                        }
-                        content += "</div></center></td>";
-                        content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-primary" onclick="window.open('/kepegawaian/pd/`+item.id+`/download')" data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Download (${item.title})"><u>` + item.acara + `</u></a>
-                                                </h6>
-                                                <small class='text-truncate text-muted'>` + item.lokasi + `</small>
-                                                <small class='text-truncate text-muted'>Diselenggarakan secara <b>${item.jenis==1?"Offline":"Online"}</b></small>
-                                            </div>
-                                        </div>
-                                    </td>`;
-                        var pegawai = null;
-                        content += `<td><small><ul class='list-unstyled mt-2'>`;
-                        // console.log(JSON.parse(item.pegawai_id));
-                        res.users.forEach(us => {
-                            JSON.parse(item.pegawai_id).forEach(val => {
-                                if (val == us.id) {
-                                    content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
-                                }
-                            })
-                        })
-                        content += `</small></ul></td>`;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>` + item.nama_user + `</small>
-                                            </div>
-                                        </div>
-                                    </td>`;
-                        content += "</tr>";
-                        $('#tampil-tbody').append(content);
-                    });
-                    var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
-                        order: [
-                            [4, "desc"]
-                        ],
-                        bAutoWidth: false,
-                        aoColumns : [
-                            { sWidth: '5%' },
-                            { sWidth: '10%' },
-                            { sWidth: '45%' },
-                            { sWidth: '28%' },
-                            { sWidth: '12%' },
-                        ],
-                        columnDefs: [
-                            // { visible: false, targets: [7] },
-                        ],
-                        displayLength: 7,
-                        lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
+            $('#filex').val('');
+            $('#acara').val('');
+            $('#tgl').val('');
+            $('#jenis').val('');
+            $('#lokasi').val('');
+            $('#pegawai').val('').change();
+                    $('#ubah').modal('show');
                 }
             })
         }

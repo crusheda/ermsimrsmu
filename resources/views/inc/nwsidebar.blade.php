@@ -175,7 +175,6 @@
             <li class="pc-item"><a class="pc-link" href="{{ route('aset.index') }}">Aset</a></li>
         </ul>
     </li>
-    @if (Auth::user()->getPermission('pengadaan') == true)
     <li class="pc-item">
         <a href="{{ route('pengadaan.index') }}" class="pc-link">
             <span class="pc-micon">
@@ -184,7 +183,6 @@
             <span class="pc-mtext">Pengadaan</span>
         </a>
     </li>
-    @endif
     <li class="pc-item">
         <a href="{{ route('eruang.index') }}" class="pc-link">
             <span class="pc-micon">

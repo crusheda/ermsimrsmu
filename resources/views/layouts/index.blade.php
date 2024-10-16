@@ -42,6 +42,7 @@
     <!-- cropper css -->
     {{-- <link rel="stylesheet" href="{{ asset('css/plugins/croppr.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/cropper.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/notifier.css') }}">
     <link href="{{ asset('libs/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
     {{-- INTRO JS --}}
     <link rel="stylesheet" href="{{ asset('css/plugins/introjs.min.css') }}">
@@ -179,6 +180,8 @@
     {{-- Cropped IMG JS --}}
     {{-- <script src="{{ asset('js/plugins/croppr.min.js') }}"></script> --}}
     <script src="{{ asset('js/cropper.js') }}"></script>
+    <script src="{{ asset('js/plugins/notifier.js') }}"></script>
+    {{-- <script src="{{ asset('js/pages/ac-notification.js') }}"></script> --}}
 
     <!-- BLOB js -->
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> --}}
