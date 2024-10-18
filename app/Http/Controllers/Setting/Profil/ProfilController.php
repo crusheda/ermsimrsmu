@@ -461,12 +461,13 @@ class ProfilController extends Controller
     }
 
     // API
-    public function storeImg(Request $request, $id)
+    public function storeImg(Request $request)
     {
         $this->validate($request,[
-            'file' => 'nullable|file|max:50000', // MAX 50 Mb
+            'file' => 'nullable|file|max:5000', // MAX 50 Mb
             ]);
 
+        $id = $request->id;
         $now = Carbon::now();
 
         // tampung berkas yang sudah diunggah ke variabel baru

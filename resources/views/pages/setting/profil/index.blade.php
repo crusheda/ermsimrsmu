@@ -1041,18 +1041,22 @@
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="bg-light px-4 py-3 mb-3">
-                                            <h5 class="mb-3">Pilih Foto</h5>
-                                            <input type="file" id="fileInput" accept="image/*" class="form-control mb-3"/>
-                                            <small>
-                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Silakan upload file foto formal<br>
-                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>File foto tidak boleh melebihi 5 mb<br>
-                                                <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Foto disarankan berasio 1:1<br>
-                                            </small>
-                                            <br>
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <button type="button" data-bs-toggle="modal" data-bs-target="#pratinjau" class="btn btn-link-danger">Pratinjau</button>
-                                                <button type="submit" id="btn-submit-fotoprofil" class="btn btn-outline-primary">Perbarui</button>
-                                            </div>
+                                            <form id="formUpdateFotoProfil" class="form-auth-small needs-validation" action="{{ route('profil.ubahfoto') }}" method="POST" enctype="multipart/form-data" novalidate>
+                                                {{ csrf_field() }}
+                                                <h5 class="mb-3">Pilih Foto</h5>
+                                                <input type="text" class="form-control" value="{{ $list['show']->id }}" name="id" hidden>
+                                                <input type="file" name="file" id="fileInput" accept="image/*" class="form-control mb-3" required/>
+                                                <small>
+                                                    <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Silakan upload file foto formal<br>
+                                                    <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>File foto tidak boleh melebihi 5 mb<br>
+                                                    <i class="fa-fw fas fa-caret-right nav-icon me-1"></i>Foto disarankan berasio 1:1<br>
+                                                </small>
+                                                <br>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#pratinjau" class="btn btn-link-danger">Pratinjau</a>
+                                                    <button type="submit" id="btn-submit-fotoprofil" class="btn btn-outline-primary">Perbarui</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -2498,6 +2502,10 @@
 
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        function ubahFotoProfil() {
+            $('#fileInput').val();
         }
 
         $("#fileInput").change(function() {
