@@ -25,7 +25,7 @@ class PengadaanController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->getPermission('pengadaan') == true) {
+        // if (Auth::user()->getPermission('pengadaan') == true) {
             $show = pengadaan::get();
 
             $data = [
@@ -35,9 +35,9 @@ class PengadaanController extends Controller
             // die();
 
             return view('pages.pengadaan.index')->with('list', $data);
-        } else {
-            return redirect()->back();
-        }
+        // } else {
+        //     return redirect()->back();
+        // }
     }
 
     /**
