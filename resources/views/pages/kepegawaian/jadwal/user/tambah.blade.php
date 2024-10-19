@@ -1,0 +1,281 @@
+@extends('layouts.index')
+
+@section('content')
+
+    {{-- FOR DROPDOWN BEHIND CARD --}}
+    <style>
+        .dropdown {
+            transform-style: preserve-3d;
+            transform: translate3d(0,0,10px) !important;
+        }
+    </style>
+
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
+                        <li class="breadcrumb-item">Kepegawaian</li>
+                        <li class="breadcrumb-item"><a href="{{ route('kepegawaian.jadwaldinas.index') }}">Jadwal Dinas</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Tambah</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <div class="page-header-title">
+                        <h2 class="mb-0">Form Tambah Jadwal Dinas</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- [ breadcrumb ] end -->
+
+    <!-- [ Main Content ] start -->
+    <div class="row pt-1">
+        <div class="col-xl-12">
+            <div class="card table-card">
+                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                    <h5 class="mb-0"><button class="btn btn-link-dark" onclick="window.location='{{ route('kepegawaian.jadwaldinas.index') }}'"><i class="fas fa-chevron-left me-2"></i>Kembali</button></h5>
+                    <div class="btn-group">
+                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="">#</a>
+                                <div class="divider pb-1"></div>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="">#</a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="">#</a>
+                            </li>
+                        </ul>
+                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
+                    </div>
+                </div>
+                <div class="card-body">
+                    @php
+                        $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                        $totalDay = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan)->format('t');
+                        $n = 1;
+                    @endphp
+                    <h4 class="text-center p-10 mb-0 mt-2">Bulan
+                        @foreach ($bulan as $key => $value)
+                            @if ($key == $list['jadwal']->bulan)
+                                <b class="text-primary">{{ $value }}</b>
+                            @endif
+                        @endforeach Tahun <b class="text-primary">{{ $list['jadwal']->tahun }}</b>
+                    </h4>
+                    <div class="table-responsive p-10 pb-0">
+                        <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" rowspan="2">NO</th>
+                                    <th class="text-center" rowspan="2">NAMA</th>
+                                    <th class="text-center" colspan="{{ $totalDay }}">TANGGAL</th>
+                                </tr>
+                                <tr>
+                                    @for ($i = 1; $i <= $totalDay; $i++)
+                                        @php $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
+                                        @if ($dayh == 'Minggu')
+                                            <th class="p-2 text-center" style="background-color: #fed8b9">
+                                        @else
+                                            <th class="p-2 text-center">
+                                        @endif
+                                                {{ sprintf("%02d", $i) }}
+                                            </th>
+                                    @endfor
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($list['ref_users'])
+                                    @foreach (json_decode($list['ref_users']->staf) as $item)
+                                    <tr>
+                                        <td>{{ $n++ }}</td>
+                                        <td>
+                                            @foreach ($list['users'] as $val)
+                                                @if ($item == $val->id)
+                                                    {{ $val->nick != null?$val->nick:$val->name }}
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                        @for ($i = 1; $i <= $totalDay; $i++)
+                                            @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
+                                            @if ($dayb == 'Minggu')
+                                                <th class="p-2" style="background-color: #fed8b9">
+                                            @else
+                                                <th class="p-2">
+                                            @endif
+                                                    <input type="text" class="form-control inputTgl text-center" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}" pattern="[A-Za-z]" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                </td>
+                                        @endfor
+                                    </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row p-10">
+                        <div class="col-md-8">
+                            <div class="alert alert-light">
+                                <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) yang sudah ditambahkan pada referensi <br>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Keterangan :</h5>
+                            <div class="list-group">
+                                <label class="list-group-item border-0 p-2">
+                                    <button class="btn btn-light me-2" style="background-color: #fed8b9"></button>
+                                    Hari Minggu
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="modalTambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Tambah
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-secondary mb-3">
+                        <small>
+                            {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b>
+                        </small>
+                    </div>
+                    <div class="position-relative">
+                        <label class="form-label">Pilih Bulan dan Tahun</label>
+                        <input type="month" class="form-control" value="" placeholder="" id="tgl" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
+                    <button class="btn btn-primary" id="btn-tambah" onclick="prosesTambah()"><i class="fa-fw fas fa-chevron-right nav-icon"></i> Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- MODAL END --}}
+
+    <script>
+        $(document).ready(function() {
+            // SELECT2
+            var t = $(".select2");
+            t.length && t.each(function() {
+                var e = $(this);
+                e.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: "Pilih",
+                    allowClear: true,
+                    dropdownParent: e.parent()
+                })
+            });
+
+            // $('.select2Tambah').select2({
+            //     dropdownParent: $('#tambah')
+            // });
+            $('.inputTgl').bind('keypress', onlyInput);
+            showRiwayat();
+        });
+
+        function checkShift(t) {
+            if (t.val().length <= 2 ) {
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/shift/"+t.val().toUpperCase()+"/user/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code == 200) {
+                            t.val(t.val().toUpperCase());
+                        } else {
+                            t.val('');
+                            notifier.show(
+                                "Pesan Galat!", res.message,
+                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                            );
+                        }
+                    },
+                    error: function (res) {
+                        // notifier.show(
+                        //     res.statusText + " (Code " + res.status + ")", res.responseText,
+                        //     "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                        // );
+                    }
+                });
+            } else {
+                t.val('');
+            }
+        }
+        function onlyInput(event) {
+            var value = String.fromCharCode(event.which);
+            var pattern = new RegExp(/[a-zåäö ]/i);
+            return pattern.test(value);
+        }
+
+        function tambah() {
+            $('#modalTambah').modal('show');
+        }
+
+        function prosesTambah() {
+            $("#btn-tambah").prop('disabled', true);
+            $("#btn-tambah").find("i").toggleClass("fa-chevron-right fa-sync fa-spin");
+
+            // Definisi
+            var save = new FormData();
+            save.append('tgl',$('#tgl').val());
+            save.append('pegawai','{{ Auth::user()->id }}');
+            if (save.get('tgl') == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('kepegawaian.jadwaldinas.storePengajuan')}}",
+                    method: 'post',
+                    data: save,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.code == 200) {
+                            window.location.href = '/kepegawaian/jadwaldinas/tambah/'+res.message.id;
+                        } else {
+                            notifier.show(
+                                "Pesan Galat!", res.message,
+                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                            );
+                        }
+                    },
+                    error: function (res) {
+                        notifier.show(
+                            res.statusText + " (Code " + res.status + ")", res.responseText,
+                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                        );
+                    }
+                });
+            }
+
+            $("#btn-tambah").find("i").removeClass("fa-sync fa-spin").addClass("fa-chevron-right");
+            $("#btn-tambah").prop('disabled', false);
+        }
+
+        function showRiwayat() {
+
+        }
+    </script>
+@endsection

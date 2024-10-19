@@ -80,6 +80,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     // MASUKAN / SARAN
     Route::get('feedback', [App\Http\Controllers\Kepegawaian\SaranController::class, 'index'])->name('kepegawaian.feedback.index');
     Route::post('feedback/store', [App\Http\Controllers\Kepegawaian\SaranController::class, 'store'])->name('kepegawaian.feedback.store');
+
+    // JADWAL DINAS
+    Route::get('jadwaldinas', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'index'])->name('kepegawaian.jadwaldinas.index');
+    Route::get('jadwaldinas/tambah/{id}', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'formTambah'])->name('kepegawaian.jadwaldinas.formTambah');
 });
 
 // BERKAS

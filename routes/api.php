@@ -94,6 +94,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::post('kepegawaian/pd/tambah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'tambah'])->name('kepegawaian.pd.tambah');
             Route::delete('kepegawaian/pd/{id}/hapus', [\App\Http\Controllers\Kepegawaian\PDController::class, 'hapus'])->name('kepegawaian.pd.hapus');
             // USER
+        // JADWAL DINAS
+            Route::post('kepegawaian/jadwaldinas/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'storePengajuan'])->name('kepegawaian.jadwaldinas.storePengajuan');
+            Route::get('kepegawaian/jadwaldinas/shift/{id}/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'cekShift'])->name('kepegawaian.jadwaldinas.cekShift');
+
 
     // HAK AKSES
         // AKSES JABATAN

@@ -46,11 +46,11 @@
     @endif
     @if (Auth::user()->getRole('karu-it') == true)
         <li class="pc-item">
-            <a href="javascript: void(0);" class="pc-link">
+            <a href="{{ route('kepegawaian.jadwaldinas.index') }}" class="pc-link">
                 <span class="pc-micon">
                     <i class="fas fa-calendar-alt"></i>
                 </span>
-                <span class="pc-mtext"><s>Jadwal Dinas</s></span>
+                <span class="pc-mtext">Jadwal Dinas</span>
             </a>
         </li>
         <li class="pc-item pc-hasmenu">

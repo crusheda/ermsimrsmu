@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class jadwal extends Model
+class ref_jadwal_users extends Model
 {
-    use HasFactory;
-    protected $table = 'kepegawaian_jadwal';
+    protected $table = 'referensi_jadwal_users';
     public $timestamps = true;
     use SoftDeletes;
+    use HasFactory;
 }
