@@ -36,6 +36,50 @@ class JadwalController extends Controller
         return view('pages.kepegawaian.jadwal.index-user')->with('list', $data);
     }
 
+    function formTambah($id)
+    {
+        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
+        $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->first();
+        $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
+
+        $data = [
+            // 'show' => $show,
+            'jadwal' => $jadwal,
+            'ref_shift' => $ref_shift,
+            'ref_users' => $ref_users,
+            'users' => $users,
+        ];
+
+        return view('pages.kepegawaian.jadwal.user.tambah')->with('list', $data);
+    }
+
+    function prosesTambah(Request $request)
+    {
+
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
+        $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
+        // print_r($tgl.$totalDay);
+        // die();
+
+        for ($i=0; $i < count($request->id_staf) ; $i++) {
+            $data = new jadwal_detail;
+            $data->id_jadwal = $request->id_jadwal;
+            $data->pegawai_id = $request->id_staf[$i];
+            $data->pegawai_nama = $request->nama_staf[$i];
+            for ($t = 1; $t <= $totalDay; $t++) {
+                $hit = 'tgl'.$t;
+                $data->$hit = $request->$hit[$i];
+            }
+            $data->save();
+        }
+
+        return Redirect::back()->with('message','Jadwal Dinas Karyawan berhasil disimpan pada '.$tgl);
+    }
+
+    // AJAX JSON ---------------------------------------------------------------------------------------------
+
     function storePengajuan(Request $request)
     {
         // $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
@@ -93,21 +137,23 @@ class JadwalController extends Controller
 
     }
 
-    function formTambah($id)
+    function table($id)
     {
-        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
-        $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->first();
-        $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
-
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
+                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->where('kepegawaian_jadwal.pegawai_id',$id)
+                ->get();
+        // print_r($show);
+        // die();
         $data = [
-            // 'show' => $show,
-            'jadwal' => $jadwal,
-            'ref_shift' => $ref_shift,
-            'ref_users' => $ref_users,
             'users' => $users,
+            'show' => $show,
+            // 'ref_shift' => $ref_shift,
+            // 'ref_users' => $ref_users,
         ];
 
-        return view('pages.kepegawaian.jadwal.user.tambah')->with('list', $data);
+        return response()->json($data, 200);
     }
+
 }

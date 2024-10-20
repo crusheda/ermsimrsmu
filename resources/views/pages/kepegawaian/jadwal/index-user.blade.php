@@ -57,8 +57,7 @@
                                 <tr>
                                     <th><center>#ID</center></th>
                                     <th>WAKTU</th>
-                                    <th>PETUGAS</th>
-                                    <th>WAKTU</th>
+                                    <th>STAF</th>
                                     <th>KETERANGAN</th>
                                     <th>STATUS</th>
                                     <th>DIPERBARUI</th>
@@ -75,8 +74,7 @@
                                 <tr>
                                     <th><center>#ID</center></th>
                                     <th>WAKTU</th>
-                                    <th>PETUGAS</th>
-                                    <th>WAKTU</th>
+                                    <th>STAF</th>
                                     <th>KETERANGAN</th>
                                     <th>STATUS</th>
                                     <th>DIPERBARUI</th>
@@ -84,6 +82,9 @@
                             </tfoot>
                         </table>
                     </div>
+                </div>
+                <div class="card-footer">
+
                 </div>
             </div>
         </div>
@@ -195,7 +196,100 @@
         }
 
         function showRiwayat() {
+            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/table/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var date = new Date().toLocaleDateString("sv-SE");
+                        var bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <ul class='dropdown-menu dropdown-menu-right'>`;
+                                        if (updet == date) {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Lihat</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                        } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Lihat</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                        }
+                        content += "</div></center></td>";
+                        for (let i = 1; i <= bulan.length; i++) {
+                            if (i == item.bulan) {
+                                content += `<td>${bulan[i]} ${item.tahun}</td>`;
+                            }
+                        }
+                        var pegawai = null;
+                        content += `<td><small><ul class='list-unstyled mt-2'>`;
+                        // console.log(JSON.parse(item.pegawai_id));
+                        res.users.forEach(us => {
+                            JSON.parse(item.staf).forEach(val => {
+                                if (val == us.id) {
+                                    content += `${us.nama?us.nama:'<b class="text-danger">'+us.name+'</b>'}; `;
+                                }
+                            })
+                        })
+                        content += `</small></ul></td>`;
+                        content += `<td>${item.keterangan?item.keterangan:''}</td>`;
+                        if (item.progress == 0) {
+                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
+                        } else {
+                            if (item.progress == 1) {
+                                var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
+                            } else {
+                                if (item.progress == 2) {
+                                    var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
+                                } else {
+                                    var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
+                                }
+                            }
+                        }
+                        content += `<td>${status}</td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>Oleh ` + item.nama_pegawai + `</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += "</tr>";
+                        $('#tampil-tbody').append(content);
 
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    });
+                    var table = $('#dttable').DataTable({
+                        // dom: 'Bfrtip',
+                        order: [
+                            [5, "desc"]
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '45%' },
+                        //     { sWidth: '28%' },
+                        //     { sWidth: '12%' },
+                        // ],
+                        columnDefs: [
+                            // { visible: false, targets: [7] },
+                        ],
+                        displayLength: 7,
+                        lengthChange: true,
+                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                }
+            })
         }
     </script>
 @endsection

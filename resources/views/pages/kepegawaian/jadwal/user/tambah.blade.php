@@ -50,87 +50,99 @@
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
                     </div>
                 </div>
-                <div class="card-body">
-                    @php
-                        $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                        $totalDay = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan)->format('t');
-                        $n = 1;
-                    @endphp
-                    <h4 class="text-center p-10 mb-0 mt-2">Bulan
-                        @foreach ($bulan as $key => $value)
-                            @if ($key == $list['jadwal']->bulan)
-                                <b class="text-primary">{{ $value }}</b>
-                            @endif
-                        @endforeach Tahun <b class="text-primary">{{ $list['jadwal']->tahun }}</b>
-                    </h4>
-                    <div class="table-responsive p-10 pb-0">
-                        <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" rowspan="2">NO</th>
-                                    <th class="text-center" rowspan="2">NAMA</th>
-                                    <th class="text-center" colspan="{{ $totalDay }}">TANGGAL</th>
-                                </tr>
-                                <tr>
-                                    @for ($i = 1; $i <= $totalDay; $i++)
-                                        @php $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                        @if ($dayh == 'Minggu')
-                                            <th class="p-2 text-center" style="background-color: #fed8b9">
-                                        @else
-                                            <th class="p-2 text-center">
-                                        @endif
-                                                {{ sprintf("%02d", $i) }}
-                                            </th>
-                                    @endfor
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($list['ref_users'])
-                                    @foreach (json_decode($list['ref_users']->staf) as $item)
+                <form action="{{ route('kepegawaian.jadwaldinas.prosesTambah') }}" id="formTambah" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate>
+                    @csrf
+                    <input type="text" class="form-control" name="id_jadwal" value="{{ $list["jadwal"]->id }}" hidden>
+                    <div class="card-body pb-0">
+                        @php
+                            $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                            $totalDay = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan)->format('t');
+                            $n = 1;
+                        @endphp
+                        <h4 class="text-center p-10 mb-0 mt-2">Bulan
+                            @foreach ($bulan as $key => $value)
+                                @if ($key == $list['jadwal']->bulan)
+                                    <b class="text-primary">{{ $value }}</b>
+                                @endif
+                            @endforeach Tahun <b class="text-primary">{{ $list['jadwal']->tahun }}</b>
+                        </h4>
+                        <div class="table-responsive p-10 pb-0">
+                            <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                <thead>
                                     <tr>
-                                        <td>{{ $n++ }}</td>
-                                        <td>
-                                            @foreach ($list['users'] as $val)
-                                                @if ($item == $val->id)
-                                                    {{ $val->nick != null?$val->nick:$val->name }}
-                                                @endif
-                                            @endforeach
-                                        </td>
+                                        <th class="text-center" rowspan="2">NO</th>
+                                        <th class="text-center" rowspan="2">NAMA</th>
+                                        <th class="text-center" colspan="{{ $totalDay }}">TANGGAL</th>
+                                    </tr>
+                                    <tr>
                                         @for ($i = 1; $i <= $totalDay; $i++)
-                                            @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                            @if ($dayb == 'Minggu')
-                                                <th class="p-2" style="background-color: #fed8b9">
+                                            @php $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
+                                            @if ($dayh == 'Minggu')
+                                                <th class="p-2 text-center" style="background-color: #fed8b9">
                                             @else
-                                                <th class="p-2">
+                                                <th class="p-2 text-center">
                                             @endif
-                                                    <input type="text" class="form-control inputTgl text-center" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}" pattern="[A-Za-z]" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                </td>
+                                                    {{ sprintf("%02d", $i) }}
+                                                </th>
                                         @endfor
                                     </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="row p-10">
-                        <div class="col-md-8">
-                            <div class="alert alert-light">
-                                <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) yang sudah ditambahkan pada referensi <br>
-                                <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit
+                                </thead>
+                                <tbody>
+                                    @if ($list['ref_users'])
+                                        @foreach (json_decode($list['ref_users']->staf) as $item)
+                                        <tr>
+                                            <td>{{ $n++ }}</td>
+                                            <td>
+                                                @foreach ($list['users'] as $val)
+                                                    @if ($item == $val->id)
+                                                        <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
+                                                        <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
+                                                        {{ $val->nick != null?$val->nick:$val->name }}
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            @for ($i = 1; $i <= $totalDay; $i++)
+                                                @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
+                                                @if ($dayb == 'Minggu')
+                                                    <th class="p-2" style="background-color: #fed8b9">
+                                                @else
+                                                    <th class="p-2">
+                                                @endif
+                                                        <input type="text" class="form-control inputTgl text-center" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" pattern="[A-Za-z]{1,2}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                    </td>
+                                            @endfor
+                                        </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row p-10">
+                            <div class="col-md-8">
+                                <div class="alert alert-light">
+                                    <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) yang sudah ditambahkan pada referensi <br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Keterangan :</h5>
+                                <div class="list-group">
+                                    <label class="list-group-item border-0 p-2">
+                                        <button class="btn btn-light me-2" style="background-color: #fed8b9"></button>
+                                        Hari Minggu
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <h5>Keterangan :</h5>
-                            <div class="list-group">
-                                <label class="list-group-item border-0 p-2">
-                                    <button class="btn btn-light me-2" style="background-color: #fed8b9"></button>
-                                    Hari Minggu
-                                </label>
-                            </div>
+                    </div>
+                    <div class="card-footer p-2">
+                        <div class="text-end btn-page mt-2">
+                            <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
+                            <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -184,7 +196,6 @@
             //     dropdownParent: $('#tambah')
             // });
             $('.inputTgl').bind('keypress', onlyInput);
-            showRiwayat();
         });
 
         function checkShift(t) {
@@ -215,66 +226,28 @@
                 t.val('');
             }
         }
+
         function onlyInput(event) {
             var value = String.fromCharCode(event.which);
             var pattern = new RegExp(/[a-zåäö ]/i);
             return pattern.test(value);
         }
 
-        function tambah() {
-            $('#modalTambah').modal('show');
+        // function tambah() {
+        //     $('#modalTambah').modal('show');
+        // }
+
+        function simpan() {
+            $("#formTambah").one('submit', function() {
+                //stop submitting the form to see the disabled button effect
+                // $("#btn-simpan").attr('disabled','disabled');
+                // $("#btn-simpan").find("i").toggleClass("fa-save fa-spinner fa-spin");
+
+                return true;
+            });
         }
 
-        function prosesTambah() {
-            $("#btn-tambah").prop('disabled', true);
-            $("#btn-tambah").find("i").toggleClass("fa-chevron-right fa-sync fa-spin");
-
-            // Definisi
-            var save = new FormData();
-            save.append('tgl',$('#tgl').val());
-            save.append('pegawai','{{ Auth::user()->id }}');
-            if (save.get('tgl') == "") {
-                iziToast.warning({
-                    title: 'Pesan Ambigu!',
-                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
-                    position: 'topRight'
-                });
-            } else {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{route('kepegawaian.jadwaldinas.storePengajuan')}}",
-                    method: 'post',
-                    data: save,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(res) {
-                        if (res.code == 200) {
-                            window.location.href = '/kepegawaian/jadwaldinas/tambah/'+res.message.id;
-                        } else {
-                            notifier.show(
-                                "Pesan Galat!", res.message,
-                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                            );
-                        }
-                    },
-                    error: function (res) {
-                        notifier.show(
-                            res.statusText + " (Code " + res.status + ")", res.responseText,
-                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-                        );
-                    }
-                });
-            }
-
-            $("#btn-tambah").find("i").removeClass("fa-sync fa-spin").addClass("fa-chevron-right");
-            $("#btn-tambah").prop('disabled', false);
-        }
-
-        function showRiwayat() {
+        function clearInput() {
 
         }
     </script>
