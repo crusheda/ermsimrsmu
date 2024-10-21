@@ -40,7 +40,7 @@ class JadwalController extends Controller
     {
         $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
-        $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->first();
+        $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
         $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
         $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
@@ -73,7 +73,7 @@ class JadwalController extends Controller
                         ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
                         ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai')
                         ->get();
-            $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->first();
+            $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
             $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
             $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
             // print_r($detail);
@@ -97,8 +97,6 @@ class JadwalController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
         $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
         $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
-        // print_r($tgl.$totalDay);
-        // die();
 
         for ($i=0; $i < count($request->id_staf) ; $i++) {
             $data = new jadwal_detail;
@@ -107,7 +105,7 @@ class JadwalController extends Controller
             $data->pegawai_nama = $request->nama_staf[$i];
             for ($t = 1; $t <= $totalDay; $t++) {
                 $hit = 'tgl'.$t;
-                $data->$hit = $request->$hit[$i];
+                $data->$hit = strtoupper($request->$hit[$i]);
             }
             $data->save();
         }
@@ -128,7 +126,7 @@ class JadwalController extends Controller
         for ($i=0; $i < count($getData) ; $i++) {
             for ($t = 1; $t <= $totalDay; $t++) {
                 $hit = 'tgl'.$t;
-                $data[$i]->$hit = $request->$hit[$i];
+                $data[$i]->$hit = strtoupper($request->$hit[$i]);
             }
             $data[$i]->save();
         }
@@ -159,24 +157,33 @@ class JadwalController extends Controller
                     'code' => 500,
                 ));
             } else {
-                $bulan = Carbon::parse($request->tgl)->isoFormat('MM');
-                $tahun = Carbon::parse($request->tgl)->isoFormat('YYYY');
-
-                $data = new jadwal;
-                $data->pegawai_id = $request->pegawai;
-                $data->staf = $users->staf;
-                $data->bulan = $bulan;
-                $data->tahun = $tahun;
-                $data->keterangan = $request->keterangan;
-                $data->progress = 1;
-                $data->save();
-
                 $getData = jadwal::where('pegawai_id',$request->pegawai)->where('progress',1)->orderBy('updated_at','desc')->first();
-                datalogs::record($request->pegawai, 'Baru saja mengajukan penambahan Jadwal Dinas Pegawai Bulan '.$bulan.' Tahun '.$tahun, $getData->staf, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
-                return Response::json(array(
-                    'message' => $getData,
-                    'code' => 200,
-                ));
+                if ($getData != null) {
+                    return Response::json(array(
+                        'message' => 'Masih terdapat pengajuan Jadwal Dinas yang berstatus <b><u>Pending</u></b>, silakan konfirmasi Bagian Kepegawaian! ',
+                        'code' => 500,
+                    ));
+                } else {
+                    $bulan = Carbon::parse($request->tgl)->isoFormat('MM');
+                    $tahun = Carbon::parse($request->tgl)->isoFormat('YYYY');
+
+                    $data = new jadwal;
+                    $data->pegawai_id = $request->pegawai;
+                    $data->staf = $users->staf;
+                    $data->bulan = $bulan;
+                    $data->tahun = $tahun;
+                    $data->keterangan = $request->keterangan;
+                    $data->progress = 1;
+                    $data->save();
+
+                    $getData = jadwal::where('pegawai_id',$request->pegawai)->where('progress',1)->orderBy('updated_at','desc')->first();
+                    datalogs::record($request->pegawai, 'Baru saja mengajukan penambahan Jadwal Dinas Pegawai Bulan '.$bulan.' Tahun '.$tahun, $getData->staf, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+                    return Response::json(array(
+                        'message' => $getData,
+                        'code' => 200,
+                    ));
+                }
+
             }
         }
     }
@@ -196,7 +203,27 @@ class JadwalController extends Controller
                 'code' => 200,
             ));
         }
+    }
 
+    function getShift($id,$user)
+    {
+        $shift = ref_jadwal_shift::where('pegawai_id',$user)->get();
+        $jadwal = jadwal::where('id',$id)->first();
+        $totalDay = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
+
+        for($i = 0; $i < count($shift); $i++)
+        {
+            $shiftArr[] = $shift[$i]->singkat;
+        }
+
+        $data = [
+            'shift' => $shift,
+            'shiftArr' => $shiftArr,
+            'jadwal' => $jadwal,
+            'totalDay' => $totalDay,
+        ];
+
+        return response()->json($data, 200);
     }
 
     // TAMPIL JADWAL
@@ -208,13 +235,23 @@ class JadwalController extends Controller
                 ->where('kepegawaian_jadwal.id',$id)
                 ->first();
         $totalDay = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
-        // print_r($totalDay);
-        // die();
+        for($i = 1; $i <= $totalDay; $i++)
+        {
+            $dataArray[] = Carbon::create($jadwal->tahun, $jadwal->bulan, $i)->dayName;
+        }
+        $getBulan = ['','Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        foreach ($getBulan as $key => $value) {
+            if ($key == $jadwal->bulan) {
+                $bulan = $value;
+            }
+        }
 
         $data = [
+            'bulan' => $bulan,
             'detail' => $detail,
             'jadwal' => $jadwal,
             'totalDay' => $totalDay,
+            'dataArray' => $dataArray,
         ];
 
         return response()->json($data, 200);

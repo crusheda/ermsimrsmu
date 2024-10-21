@@ -33,7 +33,7 @@
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
         <div class="col-xl-12">
-            <div class="card table-card">
+            <div class="card table-card mb-0">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0"><button class="btn btn-link-dark" onclick="window.location='{{ route('kepegawaian.jadwaldinas.index') }}'"><i class="fas fa-chevron-left me-2"></i>Kembali</button></h5>
                     <div class="btn-group">
@@ -50,7 +50,7 @@
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
                     </div>
                 </div>
-                <form action="{{ route('kepegawaian.jadwaldinas.prosesTambah') }}" id="formTambah" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate>
+                <form action="{{ route('kepegawaian.jadwaldinas.prosesTambah') }}" id="formTambah" class="needs-validation mb-0" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
                     <input type="text" class="form-control" name="id_jadwal" value="{{ $list["jadwal"]->id }}" hidden>
                     <div class="card-body pb-0">
@@ -108,7 +108,7 @@
                                                 @else
                                                     <td class="p-2">
                                                 @endif
-                                                        <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" pattern="[A-Za-z]{1,2}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                        <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" pattern="[A-Za-z]{1,2}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
                                                     </td>
                                             @endfor
                                         </tr>
@@ -118,14 +118,31 @@
                             </table>
                         </div>
                         <div class="row p-10">
-                            <div class="col-md-8">
+                            <div class="col-md-7">
                                 <div class="alert alert-light">
                                     <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) yang sudah ditambahkan pada referensi <br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit
+                                    <small>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat data gagal saat memproses Jadwal, silakan Refresh Browser <br>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Disarankan melakukan pengisian jadwal dinas menggunakan <b>Device Komputer</b> dan <b>Browser Google Chrome</b> <br>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) menyesuaikan kode shift pada referensi yang sudah ada <br>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Penulisan Huruf pada kolom isian Shift Jaga <i><b>Auto Capslock</b></i> meskipun sudah disimpan sekalipun <br>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit
+                                    </small>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <h5>Shift Jaga :</h5>
+                                <div class="list-group">
+                                    <label class="list-group-item border-0 p-2" id="kode-shift">
+                                        <ul>
+                                            @foreach ($list['ref_shift'] as $item)
+                                                <li><b class="me-1">{{ $item->singkat }}</b>(<u>{{ $item->shift }}</u>) : {{ \Carbon\Carbon::parse($item->berangkat)->isoFormat('HH:mm') }} - {{ \Carbon\Carbon::parse($item->pulang)->isoFormat('HH:mm') }} WIB</li>
+                                            @endforeach
+                                        </ul>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
                                 <h5>Keterangan :</h5>
                                 <div class="list-group">
                                     <label class="list-group-item border-0 p-2">
@@ -139,7 +156,7 @@
                     <div class="card-footer p-2">
                         <div class="text-end btn-page mt-2">
                             <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
-                            <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
+                            <a class="btn btn-primary" id="btn-simpan" href="javascript:void(0);" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</a>
                         </div>
                     </div>
                 </form>
@@ -182,15 +199,15 @@
     <script>
         $(document).ready(function() {
             // SELECT2
-            var t = $(".select2");
-            t.length && t.each(function() {
-                var e = $(this);
-                e.wrap('<div class="position-relative"></div>').select2({
-                    placeholder: "Pilih",
-                    allowClear: true,
-                    dropdownParent: e.parent()
-                })
-            });
+            // var t = $(".select2");
+            // t.length && t.each(function() {
+            //     var e = $(this);
+            //     e.wrap('<div class="position-relative"></div>').select2({
+            //         placeholder: "Pilih",
+            //         allowClear: true,
+            //         dropdownParent: e.parent()
+            //     })
+            // });
 
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
@@ -215,12 +232,7 @@
                             );
                         }
                     },
-                    error: function (res) {
-                        // notifier.show(
-                        //     res.statusText + " (Code " + res.status + ")", res.responseText,
-                        //     "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-                        // );
-                    }
+                    error: function (res) { }
                 });
             } else {
                 t.val('');
@@ -238,13 +250,38 @@
         // }
 
         function simpan() {
-            $("#formTambah").one('submit', function() {
-                //stop submitting the form to see the disabled button effect
-                // $("#btn-simpan").attr('disabled','disabled');
-                // $("#btn-simpan").find("i").toggleClass("fa-save fa-spinner fa-spin");
-
-                return true;
-            });
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/{{ $list['jadwal']->id }}/shift/user/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    var valid = 1;
+                    for (let t = 1; t <= JSON.parse(res.jadwal.staf).length; t++) {
+                        for (let i = 1; i <= res.totalDay; i++) {
+                            num = $("#"+t+"tgl"+i);
+                            if (res.shiftArr.includes(num.val()) == 0) {
+                                valid = 0;
+                                num.removeClass('is-valid').addClass('is-invalid');
+                            } else {
+                                num.removeClass('is-invalid').addClass('is-valid');
+                            }
+                        }
+                    }
+                    if (valid == 1) {
+                        console.log('berhasil');
+                        $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+                        $("#btn-simpan").prop('disabled', true);
+                        $("#formTambah").submit();
+                    } else {
+                        console.log('gagal');
+                        notifier.show(
+                            "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
+                            "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                        );
+                    }
+                },
+                error: function (res) { }
+            })
         }
 
         function clearInput() {

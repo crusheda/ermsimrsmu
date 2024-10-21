@@ -83,9 +83,9 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-footer">
+                {{-- <div class="card-footer">
 
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -105,7 +105,8 @@
                         <small>
                             {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
                             <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
-                            <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b>
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berstatus <span class="badge rounded-pill text-bg-warning">Pending</span> setelah pengajuan ini, maka dari itu segera lengkapi data jadwal dinas <br>
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Jadwal Dinas yang telah di <b class="text-success">Verifikasi</b> / <b class="text-danger">Ditolak</b> tidak dapat di ubah / hapus di kemudian waktu
                         </small>
                     </div>
                     <div class="position-relative mb-3">
@@ -137,7 +138,8 @@
                     <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon"></i></button>
+                    <button type="submit" id="btn-refresh-lihat" class="btn btn-link-warning me-sm-3 me-1"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
                 </div>
             </div>
         </div>
@@ -196,8 +198,20 @@
         }
 
         function ubah(id) {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/jadwal/"+id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    console.log(res.detail);
+                    if(res.detail.length == 0) {
+                        window.location.href = '/kepegawaian/jadwaldinas/tambah/'+res.jadwal.id;
+                    } else {
+                        window.location.href = '/kepegawaian/jadwaldinas/ubah/'+id;
+                    }
+                }
+            })
 
-            window.location.href = '/kepegawaian/jadwaldinas/ubah/'+id;
         }
 
         function prosesTambah() {
@@ -269,7 +283,7 @@
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (item.pegawai_id == userID) {
-                                            if (updet == date) {
+                                            if (item.progress == 1) {
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
@@ -308,7 +322,7 @@
                                 var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
                             } else {
                                 if (item.progress == 2) {
-                                    var status = `<span class="badge rounded-pill text-bg-success">Final</span>`;
+                                    var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
                                 } else {
                                     var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
                                 }
@@ -357,47 +371,108 @@
         }
 
         function lihat(id) {
+            $("#tampil-jadwal").empty().append(`<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`);
             $.ajax({
                 url: "/api/kepegawaian/jadwaldinas/jadwal/"+id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    $("#showUser").text(res.jadwal.nama_pegawai)
-                    $('#tampil-jadwal').empty();
-                    // INIT
-                    var n = 1;
-                    // PROCESS
-                    content = ``;
-                    content += `<div class="table-responsive p-10 pb-0">
-                                <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
-                                    <thead>
-                                    <tr>
-                                        <th class="text-center" rowspan="2">NO</th>
-                                        <th class="text-center" rowspan="2">NAMA</th>
-                                        <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
-                                    </tr>
-                                    <tr>`;
-                                    for (let i = 1; i <= res.totalDay; i++) {
-                                        content += `<th class="p-2 text-center">`+i+`</th>`;
+                    if (res.detail.length == 0) {
+                        notifier.show(
+                            "Pesan Galat!", "Data isian Jadwal Dinas tidak ditemukan, silakan melengkapi jadwal terlebih dahulu (Klik Ubah)",
+                            "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                        );
+                    } else {
+                        $("#showUser").text(res.jadwal.nama_pegawai)
+                        // INIT
+                        var n = 1;
+                        // PROCESS
+                        content = ``;
+                        content += `<h4 class="text-center mb-2">Jadwal Dinas Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h4>`;
+                        content += `<div class="table-responsive p-10 pb-0">
+                                    <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center" rowspan="2">NO</th>
+                                            <th class="text-center" rowspan="2">NAMA</th>
+                                            <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
+                                        </tr>
+                                        <tr>`;
+                                        for (let i = 1; i <= res.totalDay; i++) {
+                                            content += `<th class="p-2 text-center tgl${i}">${i < 10?'0'+i:i}</th>`;
+                                        }
+                        content += `    </tr>
+                                    </thead>
+                                    <tbody>`;
+                            for (let t = 0; t < res.detail.length; t++) {
+                                content += `<tr class="text-center">`;
+                                    content += `<td>${n++}</td>`;
+                                    content += `<td class="text-start">${res.detail[t].pegawai_nama}</td>`;
+                                    content += `<td class="p-2 tgl1">${res.detail[t].tgl1}</td>`;
+                                    content += `<td class="p-2 tgl2">${res.detail[t].tgl2}</td>`;
+                                    content += `<td class="p-2 tgl3">${res.detail[t].tgl3}</td>`;
+                                    content += `<td class="p-2 tgl4">${res.detail[t].tgl4}</td>`;
+                                    content += `<td class="p-2 tgl5">${res.detail[t].tgl5}</td>`;
+                                    content += `<td class="p-2 tgl6">${res.detail[t].tgl6}</td>`;
+                                    content += `<td class="p-2 tgl7">${res.detail[t].tgl7}</td>`;
+                                    content += `<td class="p-2 tgl8">${res.detail[t].tgl8}</td>`;
+                                    content += `<td class="p-2 tgl9">${res.detail[t].tgl9}</td>`;
+                                    content += `<td class="p-2 tgl10">${res.detail[t].tgl10}</td>`;
+                                    content += `<td class="p-2 tgl11">${res.detail[t].tgl11}</td>`;
+                                    content += `<td class="p-2 tgl12">${res.detail[t].tgl12}</td>`;
+                                    content += `<td class="p-2 tgl13">${res.detail[t].tgl13}</td>`;
+                                    content += `<td class="p-2 tgl14">${res.detail[t].tgl14}</td>`;
+                                    content += `<td class="p-2 tgl15">${res.detail[t].tgl15}</td>`;
+                                    content += `<td class="p-2 tgl16">${res.detail[t].tgl16}</td>`;
+                                    content += `<td class="p-2 tgl17">${res.detail[t].tgl17}</td>`;
+                                    content += `<td class="p-2 tgl18">${res.detail[t].tgl18}</td>`;
+                                    content += `<td class="p-2 tgl19">${res.detail[t].tgl19}</td>`;
+                                    content += `<td class="p-2 tgl20">${res.detail[t].tgl20}</td>`;
+                                    content += `<td class="p-2 tgl21">${res.detail[t].tgl21}</td>`;
+                                    content += `<td class="p-2 tgl22">${res.detail[t].tgl22}</td>`;
+                                    content += `<td class="p-2 tgl23">${res.detail[t].tgl23}</td>`;
+                                    content += `<td class="p-2 tgl24">${res.detail[t].tgl24}</td>`;
+                                    content += `<td class="p-2 tgl25">${res.detail[t].tgl25}</td>`;
+                                    content += `<td class="p-2 tgl26">${res.detail[t].tgl26}</td>`;
+                                    if (res.totalDay >= 27) {
+                                        content += `<td class="p-2 tgl27">${res.detail[t].tgl27}</td>`;
+                                        if (res.totalDay >= 28) {
+                                            content += `<td class="p-2 tgl28">${res.detail[t].tgl28}</td>`;
+                                            if (res.totalDay >= 29) {
+                                                content += `<td class="p-2 tgl29">${res.detail[t].tgl29}</td>`;
+                                                if (res.totalDay >= 30) {
+                                                    content += `<td class="p-2 tgl30">${res.detail[t].tgl30}</td>`;
+                                                    if (res.totalDay >= 31) {
+                                                        content += `<td class="p-2 tgl31">${res.detail[t].tgl31}</td>`;
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-                    content += `    </tr>
-                                </thead>
-                                <tbody>`;
-                        res.detail.forEach(item => {
-                            content += `<tr>`;
-                                content += `<td>${n++}</td>`;
-                                content += `<td>${item.pegawai_nama}</td>`;
-                                    for (let i = 1; i <= res.totalDay; i++) {
-                                        hit = 'tgl'+i;
-                                        console.log(hit);
-                                        console.log(item.hit);
-                                        content += `<td class="p-2">${item.hit}</td>`;
-                                    }
-                            content += `</tr>`;
-                        })
-                    content += `</tbody></table></div>`;
-                    $('#tampil-jadwal').append(content);
-                    $('#modalLihat').modal('show');
+                                content += `</tr>`;
+                            }
+                        content += `</tbody></table></div>`;
+
+                        // KETERANGAN
+                        content += `<div class="p-10">
+                                        <h5>Keterangan :</h5>
+                                        <div class="list-group">
+                                            <label class="list-group-item border-0 p-2">
+                                                <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>
+                                                Hari Minggu
+                                            </label>
+                                        </div>
+                                    </div>`;
+                        $('#tampil-jadwal').empty().append(content);
+                        for (let i = 0; i < res.totalDay; i++) {
+                            if (res.dataArray[i] == 'Minggu') {
+                                $('.tgl'+(i+1)).css('background-color','#fed8b9');
+                                // console.log(i+1);
+                            }
+                        }
+                        $('#btn-refresh-lihat').attr('onClick', 'lihat('+id+');');
+                        $('#modalLihat').modal('show');
+                    }
                 }
             })
         }
