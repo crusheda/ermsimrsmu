@@ -18,12 +18,12 @@
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
                         <li class="breadcrumb-item"><a href="{{ route('kepegawaian.jadwaldinas.index') }}">Jadwal Dinas</a></li>
-                        <li class="breadcrumb-item" aria-current="page">Tambah</li>
+                        <li class="breadcrumb-item" aria-current="page">Ubah</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Form Tambah Jadwal Dinas</h2>
+                        <h2 class="mb-0">Form Ubah Jadwal Dinas</h2>
                     </div>
                 </div>
             </div>
@@ -37,20 +37,10 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0"><button class="btn btn-link-dark" onclick="window.location='{{ route('kepegawaian.jadwaldinas.index') }}'"><i class="fas fa-chevron-left me-2"></i>Kembali</button></h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="">#</a>
-                                <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="">#</a>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="">#</a>
-                            </li>
-                        </ul>
-                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
+                        <h5>Perubahan Jadwal ID : <a class="text-primary">{{ $list["jadwal"]->id }}</a></h5>
                     </div>
                 </div>
-                <form action="{{ route('kepegawaian.jadwaldinas.prosesTambah') }}" id="formTambah" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate>
+                <form action="{{ route('kepegawaian.jadwaldinas.prosesUbah') }}" id="formUbah" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
                     <input type="text" class="form-control" name="id_jadwal" value="{{ $list["jadwal"]->id }}" hidden>
                     <div class="card-body pb-0">
@@ -88,32 +78,30 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($list['ref_users'])
-                                        @foreach (json_decode($list['ref_users']->staf) as $item)
-                                        <tr>
-                                            <td>{{ $n++ }}</td>
-                                            <td>
-                                                @foreach ($list['users'] as $val)
-                                                    @if ($item == $val->id)
-                                                        <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
-                                                        <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
-                                                        {{ $val->nick != null?$val->nick:$val->name }}
-                                                    @endif
-                                                @endforeach
-                                            </td>
-                                            @for ($i = 1; $i <= $totalDay; $i++)
-                                                @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                                @if ($dayb == 'Minggu')
-                                                    <td class="p-2" style="background-color: #fed8b9">
-                                                @else
-                                                    <td class="p-2">
-                                                @endif
-                                                        <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" pattern="[A-Za-z]{1,2}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                    </td>
-                                            @endfor
-                                        </tr>
-                                        @endforeach
-                                    @endif
+                                    {{-- @foreach (json_decode($list['ref_users']->staf) as $item) --}}
+                                    @foreach ($list['detail'] as $item)
+                                    <tr>
+                                        <td>{{ $n++ }}</td>
+                                        <td>
+                                            <input type="text" class="form-control" name="id_staf[]" value="{{ $item->pegawai_id }}" hidden>
+                                            <input type="text" class="form-control" name="nama_staf[]" value="{{ $item->pegawai_nama }}" hidden>
+                                            {{ $item->pegawai_nama }}
+                                        </td>
+                                        @for ($i = 1; $i <= $totalDay; $i++)
+                                            @php
+                                                $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
+                                                $hit = 'tgl'.$i;
+                                            @endphp
+                                            @if ($dayb == 'Minggu')
+                                                <td class="p-2" style="background-color: #fed8b9">
+                                            @else
+                                                <td class="p-2">
+                                            @endif
+                                                    <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" pattern="[A-Za-z]{1,2}" value="{{ $item->$hit }}" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                </td>
+                                        @endfor
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -238,7 +226,7 @@
         // }
 
         function simpan() {
-            $("#formTambah").one('submit', function() {
+            $("#formUbah").one('submit', function() {
                 //stop submitting the form to see the disabled button effect
                 // $("#btn-simpan").attr('disabled','disabled');
                 // $("#btn-simpan").find("i").toggleClass("fa-save fa-spinner fa-spin");

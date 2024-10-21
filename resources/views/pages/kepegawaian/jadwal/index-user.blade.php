@@ -42,8 +42,8 @@
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                                 <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="">Referensi Staf</a>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="">Referensi Jaga Shift</a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick=""><s>Referensi Staf</s></a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick=""><s>Referensi Jaga Shift</s></a>
                             </li>
                         </ul>
                         {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
@@ -56,7 +56,7 @@
                             <thead>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th>WAKTU</th>
+                                    <th>BLN / THN</th>
                                     <th>STAF</th>
                                     <th>KETERANGAN</th>
                                     <th>STATUS</th>
@@ -73,7 +73,7 @@
                             <tfoot>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th>WAKTU</th>
+                                    <th>BLN / THN</th>
                                     <th>STAF</th>
                                     <th>KETERANGAN</th>
                                     <th>STATUS</th>
@@ -108,14 +108,63 @@
                             <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b>
                         </small>
                     </div>
-                    <div class="position-relative">
-                        <label class="form-label">Pilih Bulan dan Tahun</label>
+                    <div class="position-relative mb-3">
+                        <label class="form-label">Pilih Bulan dan Tahun <a class="text-danger">*</a></label>
                         <input type="month" class="form-control" value="" placeholder="" id="tgl" />
+                    </div>
+                    <div class="position-relative">
+                        <label class="form-label">Keterangan</label>
+                        <textarea class="form-control" id="ket" cols="30" rows="2" placeholder="Optional"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
-                    <button class="btn btn-primary" id="btn-tambah" onclick="prosesTambah()"><i class="fa-fw fas fa-chevron-right nav-icon"></i> Lanjutkan</button>
+                    <button class="btn btn-primary" id="btn-tambah" onclick="prosesTambah()">Lanjutkan &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade animate__animated animate__rubberBand" id="modalLihat" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
+        <div class="modal-dialog modal-xxl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Ditambahkan oleh <a class="text-primary" id="showUser"></a>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="tampil-jadwal">
+                    <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Hapus
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_hapus" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus Jadwal Dinas tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -146,6 +195,11 @@
             $('#modalTambah').modal('show');
         }
 
+        function ubah(id) {
+
+            window.location.href = '/kepegawaian/jadwaldinas/ubah/'+id;
+        }
+
         function prosesTambah() {
             $("#btn-tambah").prop('disabled', true);
             $("#btn-tambah").find("i").toggleClass("fa-chevron-right fa-sync fa-spin");
@@ -153,6 +207,7 @@
             // Definisi
             var save = new FormData();
             save.append('tgl',$('#tgl').val());
+            save.append('keterangan',$('#ket').val());
             save.append('pegawai','{{ Auth::user()->id }}');
             if (save.get('tgl') == "") {
                 iziToast.warning({
@@ -205,6 +260,7 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
+                        var userID = "{{ Auth::user()->id }}";
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -212,14 +268,22 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (updet == date) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Lihat</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                        if (item.pegawai_id == userID) {
+                                            if (updet == date) {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            } else {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            }
                                         } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Lihat</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
-                        content += "</div></center></td>";
+                        content += "</ul></div></center></td>";
                         for (let i = 1; i <= bulan.length; i++) {
                             if (i == item.bulan) {
                                 content += `<td>${bulan[i]} ${item.tahun}</td>`;
@@ -244,7 +308,7 @@
                                 var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
                             } else {
                                 if (item.progress == 2) {
-                                    var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
+                                    var status = `<span class="badge rounded-pill text-bg-success">Final</span>`;
                                 } else {
                                     var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
                                 }
@@ -290,6 +354,94 @@
                     });
                 }
             })
+        }
+
+        function lihat(id) {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/jadwal/"+id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $("#showUser").text(res.jadwal.nama_pegawai)
+                    $('#tampil-jadwal').empty();
+                    // INIT
+                    var n = 1;
+                    // PROCESS
+                    content = ``;
+                    content += `<div class="table-responsive p-10 pb-0">
+                                <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center" rowspan="2">NO</th>
+                                        <th class="text-center" rowspan="2">NAMA</th>
+                                        <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
+                                    </tr>
+                                    <tr>`;
+                                    for (let i = 1; i <= res.totalDay; i++) {
+                                        content += `<th class="p-2 text-center">`+i+`</th>`;
+                                    }
+                    content += `    </tr>
+                                </thead>
+                                <tbody>`;
+                        res.detail.forEach(item => {
+                            content += `<tr>`;
+                                content += `<td>${n++}</td>`;
+                                content += `<td>${item.pegawai_nama}</td>`;
+                                    for (let i = 1; i <= res.totalDay; i++) {
+                                        hit = 'tgl'+i;
+                                        console.log(hit);
+                                        console.log(item.hit);
+                                        content += `<td class="p-2">${item.hit}</td>`;
+                                    }
+                            content += `</tr>`;
+                        })
+                    content += `</tbody></table></div>`;
+                    $('#tampil-jadwal').append(content);
+                    $('#modalLihat').modal('show');
+                }
+            })
+        }
+
+        function hapus(id) {
+            $("#id_hapus").val(id);
+            var inputs = document.getElementById('setujuhapus');
+            inputs.checked = false;
+            $('#modalHapus').modal('show');
+        }
+
+        function prosesHapus() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/"+id+"/hapus",
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas Anda telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalHapus').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas Anda gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
         }
     </script>
 @endsection
