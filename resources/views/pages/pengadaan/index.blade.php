@@ -32,11 +32,11 @@
                             <h5 class="card-title mb-3">Digital Pengadaan</h5>
                             <p class="text-muted">Semua data terintegrasi menjadi satu dengan tampilan yang baru hanya di
                                 Simrsmu</p>
-                            <div class="btn-group">
-                                <a href="javascript:void(0);" class="btn btn-light-dark btn-sm disabled">
-                                    <i class='fas fa-info-circle align-middle me-1'></i> Baca Panduan</a>
-                            </div>
                         </div>
+                        {{-- <div class="btn-group">
+                            <a href="javascript:void(0);" class="btn btn-light-dark btn-sm disabled">
+                                <i class='fas fa-info-circle align-middle me-1'></i> Baca Panduan</a>
+                        </div> --}}
                         <div>
                             <img src="{{ asset('images/jobs.png') }}" alt="" height="100">
                         </div>
@@ -44,17 +44,17 @@
                 </div>
             </div>
             <div class="card" id="riwayat_pengadaan">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 card-title flex-grow-1"><i class="ti ti-history me-1"></i> Riwayat Pengadaan</h5>
-                    <div class="flex-shrink-0">
-                        <div class="btn-group">
-                            <a onclick="refreshRiwayat()" class="text-warning" href="javascript:void(0);"
-                                data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                                title="Refresh Data Riwayat Pengadaan"><i class='fa-fw fas fa-sync nav-icon'></i></a>
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="mb-0 card-title flex-grow-1"><i class="ti ti-history me-1"></i> Riwayat Pengadaan</h5>
+                        <div class="flex-shrink-0">
+                            <div class="btn-group">
+                                <a onclick="refreshRiwayat()" class="text-warning" href="javascript:void(0);"
+                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                                    title="Refresh Data Riwayat Pengadaan"><i class='fa-fw fas fa-sync nav-icon'></i></a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
                     <div data-simplebar style="max-height: 500px;">
                         <div class="table-responsive">
                             <table class="table table-nowrap align-middle table-hover mb-0">
@@ -95,7 +95,7 @@
                             <li class="nav-item me-1">
                                 <button class="btn btn-icon btn-primary rounded" onclick="showKeranjang()" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Tampilkan Keranjang"><i class="ti ti-shopping-cart align-middle"></i></button>
+                                    title="Tampilkan Keranjang"><i class="ti ti-shopping-cart align-middle me-1"></i></button>
                             </li>
                             <li class="nav-item">
                                 <button class="btn btn-icon btn-warning rounded" onclick="refresh()" data-bs-toggle="tooltip"
@@ -104,14 +104,17 @@
                             </li>
                             {{-- IF SUPER USER --}}
                             @if (Auth::user()->getPermission('admin_pengadaan'))
+                            {{-- @if (Auth::user()->getRole('karu-it')) --}}
                                 <li class="nav-item">
                                     <div class="dropdown ms-2 dropend">
                                         <a class="text-muted btn btn-icon btn-secondary rounded" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-sliders-h font-size-18 text-light"></i>
+                                            <i class="fas fa-sliders-h font-size-18 text-light" data-bs-toggle="tooltip"
+                                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                            title="Menu Admin"></i>
                                         </a>
 
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="javascript:void(0);"><s>Daftar Barang</s></a>
+                                            <a class="dropdown-item" href="{{ route('pengadaan.barang.index') }}">Daftar Barang</a>
                                             <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
                                             data-bs-target="#rekap">Rekap Pengadaan</a>
                                         </div>
@@ -167,7 +170,7 @@
     <!--TAMBAH KERANJANG -->
     <div class="modal fade" tabindex="-1" id="addKeranjang" role="dialog" data-bs-backdrop="static"
         aria-labelledby="orderdetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="orderdetailsModalLabel">Tambah ke keranjang</h5>
@@ -245,7 +248,7 @@
                             </h5>
                             <span>
                                 <ul>
-                                    <li>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 25 setiap bulannya</li>
+                                    <li>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 20 setiap bulannya</li>
                                 </ul>
                             </span>
                         </div>
@@ -266,7 +269,7 @@
     <!-- TAMPIL RIWAYAT PER PENGADAAN -->
     <div class="modal fade" tabindex="-1" id="riwayat" role="dialog" aria-labelledby="orderdetailsModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="orderdetailsModalLabel">Riwayat Pengadaan <span class="badge bg-primary"
@@ -303,7 +306,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal"><i
                             class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -361,7 +364,7 @@
                     <button class="btn btn-secondary text-white" id="submit_filterAll" onclick="saveData()" disabled><i
                             class="fa-fw fas fa-filter nav-icon text-white"></i> Submit</button>
                     </form>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal"><i
                             class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
             </div>
@@ -408,9 +411,9 @@
                                         <div>
                                             <ul class="list-inline mb-0 font-size-16">
                                                 <li class="list-inline-item">
-                                                    <a href="javascript: void(0);" onclick="showRiwayat(` + item
-                            .id_pengadaan + `)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
-                                                            class="fas fa-shopping-bag"></i></a>
+                                                    <a href="javascript: void(0);" onclick="showRiwayat(` + item.id_pengadaan + `)" class="btn btn-link-primary p-1"
+                                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat">
+                                                    <i class="fas fa-shopping-bag"></i></a>
                                                 </li>
                                                 <li class="list-inline-item">`;
                         if (adminID) {
@@ -421,7 +424,7 @@
                             if (thnUpload == thn) { // TAHUN SAMA
                                 if (blnUpload == bln) { // BULAN SAMA
                                     if (tgl >= 1 && tgl <=
-                                        25) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 25 (Tgl 1-25)
+                                        20) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 20 (Tgl 1-25)
                                         content +=
                                             `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
                                             item.id_pengadaan +
@@ -535,7 +538,7 @@
                                             <ul class="list-inline mb-0 font-size-16">
                                                 <li class="list-inline-item">
                                                     <a href="javascript: void(0);" onclick="showRiwayat(` + item
-                            .id_pengadaan + `)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="Lihat Riwayat Pengadaan"><i
+                            .id_pengadaan + `)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat"><i
                                                             class="fas fa-shopping-bag"></i></a>
                                                 </li>
                                                 <li class="list-inline-item">`;
@@ -547,7 +550,7 @@
                             if (thnUpload == thn) { // TAHUN SAMA
                                 if (blnUpload == bln) { // BULAN SAMA
                                     if (tgl >= 1 && tgl <=
-                                        25) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 25 (Tgl 1-25)
+                                        20) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 25 (Tgl 1-25)
                                         content +=
                                             `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
                                             item.id_pengadaan +
@@ -621,8 +624,8 @@
                                             </td>
                                             <td id="ttl` + item.id + `">` + formatRupiah(item.total_barang, 'Rp ') + `</td>
                                             <td>
-                                                <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus ` + item.nama_barang + `">
-                                                    <a href="javascript: void(0);" onclick="hapusBarangKeranjang(` + item.id + `)" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18"></i></a>
+                                                <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Hapus ` + item.nama_barang + `">
+                                                    <a href="javascript: void(0);" onclick="hapusBarangKeranjang(` + item.id + `)" class="action-icon text-danger"> <i class="fa-fw fas fa-trash"></i></a>
                                                 </div>
                                             </td>
                                             <td hidden>
@@ -710,8 +713,8 @@
                 success: function(res) {
                     $("#showBarangKeranjang").empty();
                     content = `<div class="product-img position-relative">
-                                    <img class="img-fluid mx-auto d-block " alt=""
-                                        src="{{ asset('images/no-img.png') }}" width="80">
+                                    <img class="img-fluid mx-auto d-block wid-150" alt=""
+                                        src="${res.filename!=null?"/storage/"+res.filename.substr(7,1000):"{{ asset('images/no-img.png') }}"}">
                                 </div>
                                 <div class="mt-4 text-center">
                                     <h6 class="mb-3"><a href="javascript: void(0);" class="text-dark">` +
@@ -875,45 +878,28 @@
 
         // Hapus Barang di Keranjang
         function hapusBarangKeranjang(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: 'Hapus Barang ID : ' + id + ' dari keranjang',
-                icon: 'warning',
-                reverseButtons: false,
-                showDenyButton: false,
-                showCloseButton: false,
-                showCancelButton: true,
-                focusCancel: true,
-                confirmButtonColor: '#FF4845',
-                confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
-                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i>  Batal`,
-                backdrop: `rgba(26,27,41,0.8)`,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/api/pengadaan/keranjang/" + id + "/hapus",
-                        type: 'DELETE',
-                        dataType: 'json', // added data type
-                        success: function(res) {
-                            $('#keranjang').modal('hide');
-                            iziToast.success({
-                                title: 'Pesan Sukses!',
-                                message: 'Hapus Barang dari keranjang berhasil pada ' + res,
-                                position: 'topRight'
-                            });
-                            // setTimeout(function() {$('.modal').modal('hide')},1000);
-                            // showKeranjang();
-                        },
-                        error: function(res) {
-                            iziToast.error({
-                                title: 'Pesan Galat!',
-                                message: res.responseJSON.error,
-                                position: 'topRight'
-                            });
-                        }
-                    });
-                }
-            })
+                $.ajax({
+                    url: "/api/pengadaan/keranjang/" + id + "/hapus",
+                    type: 'DELETE',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $('#keranjang').modal('hide');
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Hapus Barang dari keranjang berhasil pada ' + res,
+                            position: 'topRight'
+                        });
+                        // setTimeout(function() {$('.modal').modal('hide')},1000);
+                        // showKeranjang();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.error,
+                            position: 'topRight'
+                        });
+                    }
+                });
         }
 
         function showRiwayat(id) {
@@ -962,9 +948,9 @@
                     $("#unit_r").text(res.pengadaan.unit.replace('["', '').replace('"]', '').replace('","',
                         ','));
                     $("#tgl_r").text(res.pengadaan.tgl_pengadaan);
+                    $('#riwayat').modal('show');
                 }
             });
-            $('#riwayat').modal('show');
         }
 
         // Hapus Riwayat
@@ -1065,8 +1051,8 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="product-img position-relative">
-                                                <img class="img-fluid mx-auto d-block " alt=""
-                                                    src="{{ asset('images/no-img.png') }}" width="150">
+                                                <img class="img-fluid mx-auto d-block wid-150" alt=""
+                                                    src="${item.filename!=null?"/storage/"+item.filename.substr(7,1000):"{{ asset('images/no-img.png') }}"}">
                                             </div>
                                             <div class="mt-4 text-center">
                                                 <h6 class="mb-3"><a href="javascript: void(0);" class="text-dark">` +
@@ -1117,8 +1103,8 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="product-img position-relative">
-                                                        <img class="img-fluid mx-auto d-block " alt=""
-                                                            src="{{ asset('images/no-img.png') }}" width="150">
+                                                        <img class="img-fluid mx-auto d-block wid-150" alt=""
+                                                    src="${item.filename!=null?"/storage/"+item.filename.substr(7,1000):"{{ asset('images/no-img.png') }}"}">
                                                     </div>
                                                     <div class="mt-4 text-center">
                                                         <h6 class="mb-3"><a href="javascript: void(0);" class="text-dark">` +

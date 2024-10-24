@@ -16,13 +16,14 @@
                 <div class="col-md-12">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Kepegawaian</li>
-                        <li class="breadcrumb-item" aria-current="page">Perjalanan Dinas</li>
+                        <li class="breadcrumb-item">Administrasi</li>
+                        <li class="breadcrumb-item"><a href="{{ route('pengadaan.index') }}">Pengadaan</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Barang</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Surat Perjalanan Dinas</h2>
+                        <h2 class="mb-0">Master Barang</h2>
                     </div>
                 </div>
             </div>
@@ -33,18 +34,19 @@
     <div class="row pt-1">
         <div class="col-xl-12">
             <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Formulir</h5>
-                    {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
-                        <div class="btn-group">
-                            <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                            {{-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a>
-                                </li>
-                            </ul> --}}
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h5 class="mb-0 card-title flex-grow-1">
+                            <div class="btn-group">
+                                <a class="btn btn-link-secondary" href="{{ route('pengadaan.index') }}" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Kembali"><i class="fas fa-angle-left me-1"></i> Kembali</a>
+                            </div>
+                        </h5>
+                        <div class="flex-shrink-0">
+                            <h5>Formulir Master Barang</h5>
                         </div>
-                    {{-- @endif --}}
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -53,56 +55,48 @@
                                 <small>
                                     {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
                                     <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b> dan berformat <b>.jpeg/.png/.jpg</b><br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Teks otomatis pada kolom isian <b>Nama Barang</b> menunjukkan barang yang sudah ada atau pernah ditambahkan
                                 </small>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-10 mb-3">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
-                                <input type="datetime-local" class="form-control" name="tgl" id="tgl">
-                            </div>
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
-                                <select class="form-control" name="jenis" id="jenis">
-                                    <option value="">Pilih</option>
-                                    <option value="1">Offline</option>
-                                    <option value="2">Online</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
-                                    @if (count($list['users']) > 0)
-                                        @foreach ($list['users'] as $item)
+                                <label class="form-label">Kategori Pengadaan <a class="text-danger">*</a></label>
+                                <select class="form-control" name="kategori" id="kategori">
+                                    @if ($list['ref'])
+                                        <option value="">Pilih</option>
+                                        @foreach ($list['ref'] as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @endforeach
                                     @endif
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-7 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Upload <a class="text-danger">*</a></label>
-                                <input type="file" class="form-control" id="filex" name="filex" accept="application/pdf">
+                                <label class="form-label">Nama Barang <a class="text-danger">*</a></label>
+                                <input type="text" name="barang" id="barang" class="form-control typeahead" placeholder="e.g. Tinta Spidol / Stempel / Bolpoin, etc" required />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Satuan <a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" name="satuan" id="satuan" placeholder="e.g. Pack / Pcs / Box, etc">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Harga <a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" name="harga" id="harga" onclick="$(this).val('')" placeholder="Rp. xxx.xxx" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Masukkan Hanya Angka Tanpa Titik (.) / Koma (,) /dsb">
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="form-label">Upload Lampiran</label>
+                                <input type="file" class="form-control" id="filex" name="filex" accept="image/*">
                             </div>
                         </div>
                         <div class="text-end btn-page mt-2">
@@ -117,9 +111,9 @@
             </div>
         </div>
         <div class="col-xl-12">
-            <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Riwayat</h5>
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Daftar</h5>
                     <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
@@ -131,9 +125,9 @@
                             <thead>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th><center>WAKTU</center></th>
-                                    <th>ACARA</th>
-                                    <th>USER</th>
+                                    <th><center>KATEGORI</center></th>
+                                    <th>NAMA BARANG (SATUAN)</th>
+                                    <th>HARGA</th>
                                     <th>UPDATE</th>
                                 </tr>
                             </thead>
@@ -147,9 +141,9 @@
                             <tfoot>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th><center>WAKTU</center></th>
-                                    <th>ACARA</th>
-                                    <th>USER</th>
+                                    <th><center>KATEGORI</center></th>
+                                    <th>NAMA BARANG (SATUAN)</th>
+                                    <th>HARGA</th>
                                     <th>UPDATE</th>
                                 </tr>
                             </tfoot>
@@ -166,48 +160,51 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Ubah
+                        Form Ubah ID#<a id="id_edit_show" class="text-primary"></a>
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_edit" hidden>
                     <div class="row">
-                        <div class="col-md-8 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="acara_edit" id="acara_edit" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
-                                <input type="datetime-local" class="form-control" name="tgl_edit" id="tgl_edit">
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
-                                <select class="form-control" name="jenis_edit" id="jenis_edit"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-8 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="lokasi_edit" id="lokasi_edit" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="pegawai_edit[]" id="pegawai_edit" style="width: 100%" multiple></select>
-                            </div>
-                        </div>
                         <div class="col-md-12">
+                            <div class="alert alert-secondary">
+                                <small>
+                                    {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b> dan berformat <b>.jpeg/.png/.jpg</b><br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Teks otomatis pada kolom isian <b>Nama Barang</b> menunjukkan barang yang sudah ada atau pernah ditambahkan
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">File Terupload</label>
-                                <div id="filex_edit"></div>
-                                <small>File yang telah terupload tidak dapat diubah kembali, lakukan penginputan ulang apabila diperlukan</small>
+                                <label class="form-label">Kategori Pengadaan <a class="text-danger">*</a></label>
+                                <select class="form-control" name="kategori_edit" id="kategori_edit"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-7 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nama Barang <a class="text-danger">*</a></label>
+                                <input type="text" name="barang_edit" id="barang_edit" class="form-control typeahead" placeholder="e.g. Tinta Spidol / Stempel / Bolpoin, etc" required />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Satuan <a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" name="satuan_edit" id="satuan_edit" placeholder="e.g. Pack / Pcs / Box, etc">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Harga <a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" name="harga_edit" id="harga_edit" onclick="$(this).val('')" placeholder="Rp. xxx.xxx" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Masukkan Hanya Angka Tanpa Titik (.) / Koma (,) /dsb">
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="form-label">File</label>
+                                <div id="filex_edit_show"></div>
                             </div>
                         </div>
                     </div>
@@ -229,7 +226,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan penghapusan Berkas Perjalanan Dinas, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <p style="text-align: justify;">Anda akan melakukan tindakan penghapusan Barang, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
                         <span class="switch-toggle-slider">
@@ -266,55 +263,68 @@
             // });
 
             showRiwayat();
+
+            var pathAcBarang = "{{ route('pengadaan.ac.barang') }}";
+            $('.typeahead').typeahead({
+                source: function(query, process) {
+                    return $.get(pathAcBarang, {
+                        barang : query
+                    }, function(data) {
+                        return process(data);
+                    });
+                }
+            });
+
+            // HARGA ADD
+            var rupiah1 = document.getElementById('harga');
+            rupiah1.addEventListener('change', function(e){
+                // tambahkan 'Rp.' pada saat form di ketik
+                // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+                rupiah1.value = formatRupiah(parseInt(this.value), 'Rp. ');
+            });
+            // HARGA EDIT
+            var rupiah2 = document.getElementById('harga_edit');
+            rupiah2.addEventListener('change', function(e){
+                // tambahkan 'Rp.' pada saat form di ketik
+                // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+                rupiah2.value = formatRupiah(parseInt(this.value), 'Rp. ');
+            });
         });
 
         function showRiwayat() {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
-                url: "/api/kepegawaian/pd/table",
+                url: "/api/pengadaan/barang/table",
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
-                    res.show.forEach(item => {
+                    res.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (updet == date) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                        } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                        }
+                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                         content += "</div></center></td>";
-                        content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
+                        content += `<td><center>${item.nama_ref}</center></td>`;
+                        if (item.filename == null) {
+                            file = `<a href="javascript:void(0);" class="text-dark"><u>` + item.nama + `</u></a>`;
+                        } else {
+                            file = `<a href="javascript:void(0);" class="text-primary" onclick="window.open('/pengadaan/barang/download/`+item.id+`')" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Download (${item.title})"><u>` + item.nama + `</u></a>`;
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-primary" onclick="window.open('/kepegawaian/pd/`+item.id+`/download')" data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Download (${item.title})"><u>` + item.acara + `</u></a>
-                                                </h6>
-                                                <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b></small>
-                                                <small class='text-truncate text-muted'>Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"}</small>
+                                                <h6 class='mb-0'>${file} (<a class="text-danger">${item.satuan}</a>)</h6>
                                             </div>
                                         </div>
                                     </td>`;
-                        var pegawai = null;
-                        content += `<td><small><ul class='list-unstyled mt-2'>`;
-                        // console.log(JSON.parse(item.pegawai_id));
-                        res.users.forEach(us => {
-                            JSON.parse(item.pegawai_id).forEach(val => {
-                                if (val == us.id) {
-                                    content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
-                                }
-                            })
-                        })
-                        content += `</small></ul></td>`;
+                        content += `<td>${formatRupiah(parseInt(item.harga), 'Rp. ')}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
@@ -331,7 +341,7 @@
             })
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
+                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -339,9 +349,9 @@
                         aoColumns : [
                             { sWidth: '5%' },
                             { sWidth: '10%' },
-                            { sWidth: '45%' },
-                            { sWidth: '28%' },
+                            { sWidth: '55%' },
                             { sWidth: '12%' },
+                            { sWidth: '18%' },
                         ],
                         columnDefs: [
                             // { visible: false, targets: [7] },
@@ -349,7 +359,7 @@
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        buttons: ['excel', 'pdf', 'colvis']
                     });
                 }
             })
@@ -362,20 +372,17 @@
             // Definisi
             var save = new FormData();
             var filesAdded = $('#filex')[0].files;
-            save.append('acara',$('#acara').val());
-            save.append('tgl',$('#tgl').val());
-            save.append('jenis',$('#jenis').val());
-            save.append('lokasi',$('#lokasi').val());
-            save.append('pegawai',JSON.stringify($('#pegawai').val()));
+            save.append('kategori',$('#kategori').val());
+            save.append('barang',$('#barang').val());
+            save.append('satuan',$('#satuan').val());
+            save.append('harga',$('#harga').val());
             save.append('user','{{ Auth::user()->id }}');
             save.append('file',filesAdded[0]);
             if (
-                save.get('acara') == ""     ||
-                save.get('tgl') == ""       ||
-                save.get('jenis') == ""     ||
-                save.get('lokasi') == ""    ||
-                $('#pegawai').val() == ""   ||
-                filesAdded.length == 0 // (Jika Tidak Ada Gambar Yang Diupload)
+                save.get('kategori') == ""     ||
+                save.get('barang') == ""       ||
+                save.get('satuan') == ""     ||
+                save.get('harga') == ""
                 ) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
@@ -387,7 +394,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{route('kepegawaian.pd.tambah')}}",
+                    url: "{{route('pengadaan.barang.tambah')}}",
                     method: 'post',
                     data: save,
                     cache: false,
@@ -397,7 +404,7 @@
                     success: function(res) {
                         if (res.code == 200) {
                             notifier.show(
-                                "Pesan Sukses!", "Submit Berkas berhasil dilakukan pada "+res.message,
+                                "Pesan Sukses!", "Submit Barang berhasil dilakukan pada "+res.message,
                                 "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
                             );
                             showRiwayat();
@@ -425,31 +432,33 @@
         function ubah(id) {
             $.ajax(
             {
-                url: "/api/kepegawaian/pd/"+id,
+                url: "/api/pengadaan/barang/ubah/"+id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
+                    if (res.show.filename == null) {
+                        $("#filex_edit_show").empty().append(`<input type="file" class="form-control" id="filex_edit" name="filex_edit" accept="image/*">`);
+                    } else {
+                        $("#filex_edit_show").empty().append(`<h6 class="text-primary"><a href="javascript:void(0);" onclick="window.open('/pengadaan/barang/download/`+res.show.id+`')"><u>${res.show.title}</u></a></h6><small><a href="javascript:void(0);" class="btn btn-sm btn-link-dark" onclick="ubahLampiran(${res.show.id})">Ubah Lampiran</a></small>`);
+                    }
+                    $('#id_edit_show').text(res.show.id);
                     $('#id_edit').val(res.show.id);
-                    $('#acara_edit').val(res.show.acara);
-                    $('#tgl_edit').val(res.show.tgl);
-                    $('#lokasi_edit').val(res.show.lokasi);
-                    $("#jenis_edit").find('option').remove();
-                    $("#jenis_edit").append(`
-                        <option value="1" ${res.show.jenis==1?"selected":""}>Offline</option>
-                        <option value="2" ${res.show.jenis==2?"selected":""}>Online</option>
-                    `);
-                    var un = JSON.parse(res.show.pegawai_id);
-                    $("#pegawai_edit").find('option').remove();
-                    res.users.forEach(pounch => {
-                        $("#pegawai_edit").append(`
-                            <option value="${pounch.id}">${pounch.nama}</option>
+                    $('#barang_edit').val(res.show.nama);
+                    $('#satuan_edit').val(res.show.satuan);
+                    $('#harga_edit').val(formatRupiah(parseInt(res.show.harga), 'Rp. '));
+                    $("#kategori_edit").find('option').remove();
+                    res.ref.forEach(pounch => {
+                        $("#kategori_edit").append(`
+                            <option value="1" ${res.show.ref_barang==pounch.id?"selected":""}>${pounch.nama}</option>
                         `);
                     });
-                    $("#pegawai_edit").val(un).change();
                     $('#modalUbah').modal('show');
                 }
             })
+        }
+
+        function ubahLampiran(id) {
+            $("#filex_edit_show").empty().append('<input type="file" class="form-control" id="filex_edit" name="filex_edit" accept="image/*">')
         }
 
         function prosesUbah() {
@@ -458,19 +467,22 @@
 
             var save = new FormData();
             var id = $('#id_edit').val();
+            var filesAdded = $('#filex_edit')[0].files;
             save.append('id',id);
-            save.append('acara',$('#acara_edit').val());
-            save.append('tgl',$('#tgl_edit').val());
-            save.append('jenis',$('#jenis_edit').val());
-            save.append('lokasi',$('#lokasi_edit').val());
-            save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
+            save.append('barang',$('#barang_edit').val());
+            save.append('satuan',$('#satuan_edit').val());
+            save.append('harga',$('#harga_edit').val());
+            save.append('kategori',$('#kategori_edit').val());
+            save.append('user','{{ Auth::user()->id }}');
+            if (filesAdded.length != 0) {
+                save.append('file',filesAdded[0]);
+            }
 
             if (
-                save.get('acara') == ""   ||
-                save.get('tgl') == ""     ||
-                save.get('jenis') == ""   ||
-                save.get('lokasi') == ""  ||
-                $('#pegawai_edit').val() == ""
+                save.get('barang') == ""  ||
+                save.get('satuan') == ""  ||
+                save.get('harga') == ""   ||
+                save.get('kategori') == ""
             ) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
@@ -483,7 +495,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "/api/kepegawaian/pd/"+id+"/ubah",
+                    url: "/api/pengadaan/barang/ubah/proses",
                     method: 'post',
                     data: save,
                     contentType: false,
@@ -491,7 +503,7 @@
                     dataType: 'json',
                     success: function(res){
                         notifier.show(
-                            "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
+                            "Pesan Sukses!", "Perubahan berhasil disimpan pada "+res.message,
                             "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
                         );
                         if (res) {
@@ -534,12 +546,12 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
-                    url: "/api/kepegawaian/pd/"+id+"/hapus",
+                    url: "/api/pengadaan/barang/"+id+"/hapus",
                     type: 'DELETE',
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
-                            message: 'Berkas perjalanan dinas Anda telah berhasil dihapus pada '+res,
+                            message: 'Penghapusan Barang telah berhasil dilakukan pada '+res,
                             position: 'topRight'
                         });
                         $('#modalHapus').modal('hide');
@@ -549,7 +561,7 @@
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Berkas perjalanan dinas Anda gagal dihapus',
+                            message: 'Penghapusan Barang gagal dilakukan',
                             position: 'topRight'
                         });
                     }
@@ -559,11 +571,10 @@
 
         function clearInput() {
             $('#filex').val('');
-            $('#acara').val('');
-            $('#tgl').val('');
-            $('#jenis').val('');
-            $('#lokasi').val('');
-            $('#pegawai').val('').change();
+            $('#kategori').val('').change();
+            $('#barang').val('');
+            $('#satuan').val('');
+            $('#harga').val('');
         }
 
         function getDateTime() {
@@ -579,6 +590,24 @@
             }
             var dateTime = year + '-' + month + '-' + day;
             return dateTime;
+        }
+
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
     </script>
 @endsection
