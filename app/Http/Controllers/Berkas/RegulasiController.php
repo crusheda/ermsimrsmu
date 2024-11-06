@@ -46,6 +46,15 @@ class RegulasiController extends Controller
     }
 
     // API
+    public function baca($id)
+    {
+        $show = berkas_regulasi::find($id);
+        // print_r($get);
+        // die();
+
+        return response()->json($show, 200);
+    }
+
     public function showTambah()
     {
         $unit = unit::orderBy('nama','asc')->get();

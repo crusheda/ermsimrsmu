@@ -10,7 +10,7 @@
                             <div class="p-4">
                                 <h5 class="text-white">Halo, Selamat {{ $list['waktu'] }}</h5>
                                 <h2 class="text-white">{{ $list['user']->nama ? $list['kelamin'].' '.$list['user']->nama : $list['kelamin'].' '.$list['user']->name }}</h2>
-                                <p class="text-white">Sudahkan Anda Membaca <b><u>Peraturan Kepegawaian</u></b> ?</p>
+                                <p class="text-white">Sudahkan Anda Membaca <kbd><b>Peraturan Kepegawaian</b></kbd> ?</p>
                                 <footer class="blockquote-footer font-size-12 text-white">
                                     Ditetapkan mulai <cite title="Source Title"><strong>1 Juli 2023</strong></cite>
                                 </footer>
@@ -35,7 +35,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <embed src="/doc/073_PR_PERATURAN_PERUSAHAAN_2024.pdf" type="application/pdf" height="700px" width="100%">
+                        <div class="_df_book" source="{{ asset('doc/073_PR_PERATURAN_PERUSAHAAN_2024.pdf') }}"></div>
                     </div>
                     {{-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

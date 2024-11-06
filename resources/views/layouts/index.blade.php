@@ -53,6 +53,10 @@
     <link href="{{ asset('libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('libs/@chenfengyuan/datepicker/datepicker.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    {{-- DEARFLIP / 3D FLIPBOOK --}}
+    {{-- <link href="https://cdn.jsdelivr.net/npm/@dearhive/dearflip-jquery-flipbook@1.7.3/dflip/css/dflip.min.css" rel="stylesheet"> --}}
+    <link href="{{ asset('css/dflip.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/@icon/themify-icons@1.0.1-alpha.3/themify-icons.min.css" rel="stylesheet" type="text/css">
     {{-- DATA TABLES --}}
     <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.1.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/b-print-3.1.0/datatables.min.css" rel="stylesheet">
     {{-- <link href="https://cdn.datatables.net/fixedcolumns/5.0.1/css/fixedColumns.dataTables.css" rel="stylesheet"> --}}
@@ -176,6 +180,10 @@
 
     {{-- INTRO JS --}}
     <script src="{{ asset('js/plugins/intro.min.js') }}"></script>
+
+    {{-- DEARFLIP / 3D FLIPBOOK --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/@dearhive/dearflip-jquery-flipbook@1.7.3/dflip/js/dflip.min.js"></script> --}}
+    <script src="{{ asset('js/dflip.js') }}"></script>
 
     {{-- Cropped IMG JS --}}
     {{-- <script src="{{ asset('js/plugins/croppr.min.js') }}"></script> --}}

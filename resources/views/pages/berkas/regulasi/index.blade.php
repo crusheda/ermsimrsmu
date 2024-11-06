@@ -515,6 +515,22 @@
         </div>
     </div>
 
+    {{-- BACA REGULASI --}}
+    <div id="bacaregulasi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Regulasi <kbd>ID : <a href="javascript:void(0);" class="text-light" id="show_id_regulasi"></a></kbd></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="pushregulasi"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             // SELECT2
@@ -616,10 +632,11 @@
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
-                                    + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/regulasi/`+item.id+`/download')"><i class='bx bx-download scaleX-n1-rtl'></i> Download</a>`;
+                                    + `<a href='javascript:void(0);' class='dropdown-item text-success' onclick="bacaRegulasi(`+item.id+`)"><i class='fas fa-book-open scaleX-n1-rtl'></i> Baca</a>`
+                                    + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/regulasi/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a>`;
                                     if (adminID == true) {
-                                        content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-edit scaleX-n1-rtl'></i> Ubah</a>`
-                                                + `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='bx bx-trash scaleX-n1-rtl'></i> Hapus</a>`;
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a>`
+                                                + `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a>`;
                                     }
                             content += `</div></center></td><td>`;
                             content += item.id + `</td><td>${item.sah?item.sah:'-'}</td><td style='white-space: normal !important;word-wrap: break-word;'>`
@@ -662,6 +679,23 @@
                     }
                 }
             );
+        }
+
+        function bacaRegulasi(id) {
+            $.ajax(
+            {
+                url: "/api/regulasi/baca/"+id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#show_id_regulasi').text(res.id);
+                    $('#pushregulasi').empty().append(`<div class="_df_book" id="fbook" source="/storage/`+res.filename.substring(7,1000)+`"></div>`);
+                    // var flipbook = jQuery("#fbook").flipBook();
+                    // flipbook.dispose();
+                    flipbook = jQuery("#fbook").flipBook();
+                    $('#bacaregulasi').modal('show');
+                }
+            });
         }
 
         function tambah() {

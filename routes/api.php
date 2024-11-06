@@ -138,6 +138,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::delete('rka/hapus/{id}', '\App\Http\Controllers\Berkas\RkaController@hapus');
 
         // REGULASI
+        Route::get('regulasi/baca/{id}', '\App\Http\Controllers\Berkas\RegulasiController@baca');
         Route::get('regulasi/showtambah', '\App\Http\Controllers\Berkas\RegulasiController@showTambah');
         Route::post('regulasi/tambah', '\App\Http\Controllers\Berkas\RegulasiController@tambah')->name('regulasi.tambah');
         Route::get('regulasi/showubah/{id}', '\App\Http\Controllers\Berkas\RegulasiController@showUbah');
