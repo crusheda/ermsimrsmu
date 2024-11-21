@@ -279,9 +279,12 @@ class DetailProfilKaryawanController extends Controller
     {
         $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
 
-        $getBulan = substr("19.12.314",3,2);
-        $getTahun = substr("19.12.314",0,2);
-        $urutan_masuk = substr("19.12.314",6,5);
+        $getBulan = substr($request->nip,3,2);
+        $getTahun = substr($request->nip,0,2);
+        $urutan_masuk = substr($request->nip,6,5);
+        // $getBulan = substr("19.12.314",3,2);
+        // $getTahun = substr("19.12.314",0,2);
+        // $urutan_masuk = substr("19.12.314",6,5);
         $masuk_kerja = Carbon::parse($getTahun.'-'.$getBulan.'-01')->isoFormat('YYYY-MM-DD');
 
         // print_r($masuk_kerja);
