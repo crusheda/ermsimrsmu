@@ -122,7 +122,14 @@ class DetailProfilKaryawanController extends Controller
     {
         $now = Carbon::now();
         $tgl = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
-        $tgl_berlaku = $now->isoFormat('YYYY-MM-DD');
+        $bln = $now->isoFormat('MM');
+        $thn = $now->isoFormat('YY');
+        // $tgl_berlaku = $now->isoFormat('YYYY-MM-DD');
+        $tgl_berlaku = $request->tgl_berlaku;
+
+        // CEK DATA & SAVE LOG
+        $cekData = referensi::find($request->ref_id);
+        $cekPegawai = users::find($request->pegawai_id);
 
         // VALIDASI DATA
         $validasi = users_status::where('pegawai_id',$request->pegawai_id)->orderBy('created_at','desc')->first();
@@ -133,20 +140,41 @@ class DetailProfilKaryawanController extends Controller
             //     'status'     => false,
             // ]);
         }
+        if ($cekData->queue == 3) {
+            $data = users::find($request->pegawai_id);
+            if ($data->nip == null) {
+                $maxNip = users::max('urutan_masuk');
+                $masuk_kerja = Carbon::parse($thn.'-'.$bln.'-01')->isoFormat('YYYY-MM-DD');
+                if ($maxNip) {
+                    $urutan_masuk = sprintf('%03d',$maxNip+1);
+                    $nip = $thn.'.'.$bln.'.'.$urutan_masuk;
+                    // SAVE NEW NIP
+                    $data->nip          = $nip;
+                    $data->masuk_kerja  = $masuk_kerja;
+                    $data->urutan_masuk = $urutan_masuk;
+                    $data->save();
+                } else {
+                    $urutan_masuk = sprintf('%03d',1);
+                    $nip = $thn.'.'.$bln.'.'.$urutan_masuk;
+                    // SAVE NEW NIP
+                    $data->nip          = $nip;
+                    $data->masuk_kerja  = $masuk_kerja;
+                    $data->urutan_masuk = $urutan_masuk;
+                    $data->save();
+                }
+            }
+        }
 
         // SAVING DATA
         $data = new users_status;
         $data->ref_id = $request->ref_id;
         $data->user_id = $request->user_id;
         $data->pegawai_id = $request->pegawai_id;
+        $data->tgl_berlaku = $tgl_berlaku;
         $data->keterangan = $request->ket;
-        $data->tgl_berlaku = $now;
         $data->status = true;
         $data->save();
 
-        // CEK DATA & SAVE LOG
-        $cekData = referensi::find($request->ref_id);
-        $cekPegawai = users::find($request->pegawai_id);
         datalogs::record($request->user_id, 'Baru saja melakukan penambahan Status Pegawai '.$cekPegawai->nama.' menjadi '.$cekData->deskripsi, 'Berlaku mulai tanggal '.$tgl_berlaku, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($tgl, 200);
@@ -181,7 +209,7 @@ class DetailProfilKaryawanController extends Controller
         $data->before = json_encode($roleBefore); // ["106","109"]
         $data->after = $request->jabatan; // ["105","106","109"]
         $data->keterangan = $request->ket;
-        $data->tgl_berlaku = $now;
+        $data->tgl_berlaku = $request->tgl_berlaku;
         $data->status = true;
         $data->save();
 
@@ -207,12 +235,11 @@ class DetailProfilKaryawanController extends Controller
     {
         $now = Carbon::now();
         $tgl = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
-
         // VALIDASI DATA
         $request->validate([
             'file' => ['max:5000'], // 'mimes:jpeg,jpg,png'
         ]);
-        $validasi = users_spkrkk::where('pegawai_id',$request->pegawai_id)->orderBy('created_at','desc')->first();
+        $validasi = users_spkrkk::where('pegawai_id',$request->pegawai_id)->where('jns_dokumen',$request->jns_dokumen)->orderBy('created_at','desc')->first();
         if (!empty($validasi) || $validasi != '') {
             $validasi->status = 0;
             $validasi->save();
@@ -262,7 +289,7 @@ class DetailProfilKaryawanController extends Controller
     // FUNCTION KEPEGAWAIAN
     function showKepegawaian($id)
     {
-        $maxNip = users::max('urutan_masuk');
+        $maxNip = sprintf('%03d',users::max('urutan_masuk'));
         $show = users::where('id', $id)->first();
         $ref_klasifikasi = referensi::where('ref_jenis',11)->get(); // 11 is Jenis Klasifikasi Pegawai
 
@@ -279,25 +306,33 @@ class DetailProfilKaryawanController extends Controller
     {
         $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
 
-        $getBulan = substr($request->nip,3,2);
-        $getTahun = substr($request->nip,0,2);
-        $urutan_masuk = substr($request->nip,6,5);
-        // $getBulan = substr("19.12.314",3,2);
-        // $getTahun = substr("19.12.314",0,2);
-        // $urutan_masuk = substr("19.12.314",6,5);
-        $masuk_kerja = Carbon::parse($getTahun.'-'.$getBulan.'-01')->isoFormat('YYYY-MM-DD');
+        if ($request->nip) {
+            $getBulan = substr($request->nip,3,2);
+            $getTahun = substr($request->nip,0,2);
+            $urutan_masuk = substr($request->nip,6,5);
+            // $getBulan = substr("19.12.314",3,2);
+            // $getTahun = substr("19.12.314",0,2);
+            // $urutan_masuk = substr("19.12.314",6,5);
+            $masuk_kerja = Carbon::parse($getTahun.'-'.$getBulan.'-01')->isoFormat('YYYY-MM-DD');
 
-        // print_r($masuk_kerja);
-        // die();
+            // print_r($masuk_kerja);
+            // die();
 
-        $data = users::find($request->pegawai_id);
-        $data->nip          = $request->nip;
-        $data->masuk_kerja  = $masuk_kerja;
-        $data->urutan_masuk = $urutan_masuk;
-        $data->save();
+            $data = users::find($request->pegawai_id);
+            $data->nip          = $getTahun.'.'.$getBulan.'.'.sprintf('%03d',$urutan_masuk);;
+            $data->masuk_kerja  = $masuk_kerja;
+            $data->urutan_masuk = $urutan_masuk;
+            $data->save();
 
-        // CEK DATA & SAVE LOG
-        datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            // CEK DATA & SAVE LOG
+            datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        } else {
+            $data = users::find($request->pegawai_id);
+            $data->nip          = null;
+            $data->masuk_kerja  = null;
+            $data->urutan_masuk = null;
+            $data->save();
+        }
 
         return response()->json($now, 200);
     }
@@ -317,11 +352,31 @@ class DetailProfilKaryawanController extends Controller
         return response()->json($now, 200);
     }
 
+    function tambahTattmt(Request $request)
+    {
+        $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+        $data = users::find($request->pegawai_id);
+        $data->tmt   = $request->tmt;
+        if ($request->tat || $request->tat != '') {
+            $tat = $request->tat;
+            $data->tat   = $request->tat;
+        } else {
+            $tat = '*';
+            $data->tat = null;
+        }
+        $data->save();
+
+        // CEK DATA & SAVE LOG
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan TMT ('.$request->tmt.') & TAT ('.$tat.') Pegawai', null, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+        return response()->json($now, 200);
+    }
+
     // FUNCTION SHOW UBAH
     function showUbahPenetapan($id)
     {
         $show = users_status::where('id', $id)->first();
-        $ref_penetapan = referensi::where('ref_jenis',10)->get(); // 10 is Jenis Penetapan Pegawai
+        $ref_penetapan = referensi::where('ref_jenis',10)->orderBy('queue','ASC')->get(); // 10 is Jenis Penetapan Pegawai
 
         $data = [
             'show' => $show,
@@ -364,6 +419,7 @@ class DetailProfilKaryawanController extends Controller
         $pushData = $data;
         $pushPegawai = users::where('id',$data->pegawai_id)->first();
         $data->ref_id       = $request->ref_id;
+        $data->tgl_berlaku  = $request->tgl_berlaku;
         $data->user_id      = $request->user_id;
         $data->keterangan   = $request->keterangan;
         $data->save();

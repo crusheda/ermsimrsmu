@@ -27929,6 +27929,12 @@ pre[class*=language-] {
     background-color: #fff
 }
 
+.btn-light-tiktok {
+    background: #f3f5f7;
+    color: #f3f5f7;
+    border-color: #f3f5f7
+}
+
 .btn-light-instagram {
     background: #f7f2ef;
     color: #aa7c62;

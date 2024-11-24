@@ -129,8 +129,9 @@ class ProfilController extends Controller
         $data->status_kawin = $request->status_kawin;
         $data->email = $request->email;
         $data->no_hp = $request->no_hp;
-        $data->ig = $request->ig;
         $data->fb = $request->fb;
+        $data->ig = $request->ig;
+        $data->tt = $request->tt;
 
             // ALAMAT KTP
             $data->alamat_ktp = $request->alamat_ktp;

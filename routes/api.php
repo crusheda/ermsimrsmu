@@ -59,10 +59,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('profilkaryawan/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahSpkRkk'])->name('profilkaryawan.show.ubahSpkRkk');
         Route::post('profilkaryawan/spkrkk/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahSpkRkk'])->name('profilkaryawan.ubahSpkRkk');
         Route::delete('profilkaryawan/spkrkk/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusSpkRkk'])->name('profilkaryawan.hapusSpkRkk');
-        // KEPEGAWAIAN (NIP & KLASIFIKASI)
+        // KEPEGAWAIAN (NIP, KLASIFIKASI, dan TAT/TMT)
         Route::get('profilkaryawan/kepegawaian/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showKepegawaian'])->name('profilkaryawan.show.kepegawaian');
         Route::post('profilkaryawan/kepegawaian/nip/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahNIP'])->name('profilkaryawan.tambahNIP');
         Route::post('profilkaryawan/kepegawaian/klasifikasi/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahKlasifikasi'])->name('profilkaryawan.tambahKlasifikasi');
+        Route::post('profilkaryawan/kepegawaian/tattmt/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahTattmt'])->name('profilkaryawan.tambahTattmt');
 
     // KEPEGAWAIAN
         // PENGAJUAN

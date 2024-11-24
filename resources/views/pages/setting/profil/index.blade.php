@@ -176,6 +176,23 @@
                                             </div>
                                         </a>
                                     </div>
+                                    <div class="mb-2">
+                                        <a href="{{ url('https://www.tiktok.com/@'.$list['show']->tt) }}" class="btn btn-link-secondary d-grid" target="_blank">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-tiktok">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                            <path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/>
+                                                        </svg>
+                                                        {{-- <i class="fab fa-tiktok f-16"></i> --}}
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-4 text-start">
+                                                    <h6 class="mb-0">Tiktok / <mark>{{ $list['show']->tt ? $list['show']->tt : 'xxx' }}</mark></h6>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
                                     <div class="mb-0">
                                         <a href="{{ url('https://www.youtube.com/@rspkumuhsukoharjo1801') }}" class="btn btn-link-secondary d-grid" target="_blank">
                                             <div class="d-flex align-items-center">
@@ -676,7 +693,7 @@
                                             </div>
                                             <input type="text" class="form-control" name="fb" value="{{ $list['show']->fb }}" placeholder="Tuliskan Username Facebook Anda">
                                         </div>
-                                        <div class="input-group">
+                                        <div class="input-group mb-3">
                                             <div class="d-flex align-items-center input-group-text">
                                                 <div class="flex-shrink-0">
                                                     <div class="avtar avtar-xs btn-light-instagram">
@@ -688,6 +705,21 @@
                                                 </div>
                                             </div>
                                             <input type="text" class="form-control" name="ig" value="{{ $list['show']->ig }}" placeholder="Tuliskan Username Instagram Anda">
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="d-flex align-items-center input-group-text">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-tiktok">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                            <path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-0">Tiktok / @&nbsp;&nbsp;&nbsp;</h6>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control" name="tt" value="{{ $list['show']->tt }}" placeholder="Tuliskan Username Tiktok Anda">
                                         </div>
                                     </div>
                                 </div>
@@ -834,7 +866,7 @@
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Sarjana 1</label>
+                                                    <label class="form-label">Strata 1</label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="s1" value="{{ $list['show']->s1 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_s1" value="{{ $list['show']->th_s1 }}" placeholder ="Tahun Lulus">
@@ -855,7 +887,7 @@
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Sarjana 1 <b>Khusus Profesi</b></label>
+                                                    <label class="form-label">Strata 1 <b>Khusus Profesi</b></label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="s1_profesi" value="{{ $list['show']->s1_profesi }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_s1_profesi" value="{{ $list['show']->th_s1_profesi }}" placeholder ="Tahun Lulus">
@@ -876,7 +908,7 @@
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Sarjana 2</label>
+                                                    <label class="form-label">Strata 2</label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="s2" value="{{ $list['show']->s2 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_s2" value="{{ $list['show']->th_s2 }}" placeholder ="Tahun Lulus">
@@ -897,7 +929,7 @@
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="">
-                                                    <label class="form-label">Sarjana 3</label>
+                                                    <label class="form-label">Strata 3</label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" class="form-control" name="s3" value="{{ $list['show']->s3 }}" placeholder="Nama Universitas">
                                                         <input type="number" class="form-control" name="th_s3" value="{{ $list['show']->th_s3 }}" placeholder="Tahun Lulus">
@@ -2083,7 +2115,7 @@
                     divswitchstr.prop('hidden',true);
                 }
 
-                if (jenis.val() == 141) { // BTCLS/ACLS
+                if (jenis.val() == 141 || jenis.val() == 153) { // BTCLS & ACLS
                     tgl_mulai.prop('disabled',true);
                     no_surat.prop('disabled',true);
                     deskripsi.prop('disabled',true);
@@ -2173,7 +2205,7 @@
                         }
                     }
                 } else {
-                    if (jenis == 141) { // BTCLS/ACLS
+                    if (jenis == 141 || jenis == 153) { // BTCLS/ACLS
                         if (jenis == '' || tgl_akhir == '' || filex == 0) {
                             validasi = false;
                         }

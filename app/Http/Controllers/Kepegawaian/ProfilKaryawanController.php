@@ -100,9 +100,9 @@ class ProfilKaryawanController extends Controller
         // print_r($users_status);
         // die();
         // REFERENSI
-        $ref_dokumen = referensi::where('ref_jenis',8)->get(); // 8 is Jenis Dokumen User
-        $ref_rotasi = referensi::where('ref_jenis',9)->get(); // 10 is Jenis Rotasi Pegawai
-        $ref_penetapan = referensi::where('ref_jenis',10)->get(); // 10 is Jenis Penetapan Pegawai
+        $ref_dokumen = referensi::where('ref_jenis',8)->orderBy('queue','ASC')->get(); // 8 is Jenis Dokumen User
+        $ref_rotasi = referensi::where('ref_jenis',9)->orderBy('queue','ASC')->get(); // 10 is Jenis Rotasi Pegawai
+        $ref_penetapan = referensi::where('ref_jenis',10)->orderBy('queue','ASC')->get(); // 10 is Jenis Penetapan Pegawai
 
         $data = [
             'id_user' => $id,

@@ -398,7 +398,7 @@
                                                     <h6 class="mb-0">NIP (Nomor Induk Pegawai)</h6>
                                                 </div>
                                                 <div class="flex-shrink-0">
-                                                    <h6 class="mb-0"><span class="badge bg-secondary">NIP Terakhir : <u id="show_nip_terakhir">0</u></span></h6>
+                                                    <h6 class="mb-0"><span class="badge bg-secondary">NIP Terakhir : <u id="show_nip_terakhir">000</u></span></h6>
                                                 </div>
                                             </div>
                                             <div class="mb-3 mt-3">
@@ -437,6 +437,33 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6" @if($list['show']->deleted_at != null) hidden @endif>
+                                    <div class="card shadow-none border mb-0 h-100">
+                                        <div class="card-body">
+                                            <div class="alert alert-secondary">
+                                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> TMT (Tanggal Mulai Tugas) <span class="text-danger">*</span><br>
+                                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> TAT (Tanggal Akhir Tugas)
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group mb-3">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">TMT <span class="text-danger">*</span></label>
+                                                                <input type="date" class="form-control" id="tmt">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label">TAT</label>
+                                                                <input type="date" class="form-control" id="tat">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto"><button class="btn btn-light-primary" onclick="prosesSimpanTattmt()" id="btn-simpan-tattmt"><i class="fas fa-save me-1"></i> Simpan</button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @if ($list['show']->deleted_at != null)
                                     <div class="col-md-12">
                                         <div class="card shadow-none border mb-0">
@@ -446,7 +473,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="card shadow-none border mb-0">
                                             <div class="card-body">
                                                 <h6 class="mb-3">Hapus Akun</h6>
@@ -506,7 +533,7 @@
                         </div>
                         <div class="card-body p-b-10">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Status Pegawai <span class="text-danger">*</span></label>
                                         <select class="form-control" id="ref_penetapan">
@@ -519,7 +546,13 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-3">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Tgl. Diberlakukan <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tgl_berlaku_penetapan">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Keterangan</label>
                                         <div class="row">
@@ -604,13 +637,19 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group mb-3">
                                         <label for="defaultFormControlInput" class="form-label">Jabatan <span class="text-danger">*</span></label>
                                         <div class="select2-dark mb-2">
                                             <select id="jabatan_rotasi" name="jabatan_rotasi[]" class="select2 form-select" data-bs-auto-close="outside" required multiple="multiple" data-placeholder="Pilih Jabatan ..." style="width: 100%"></select>
                                         </div>
                                         {{-- <sub><i class="ti ti-arrows-up-right text-primary me-1"></i> <u>Refresh Browser</u> apabila jabatan tidak sesuai</sub> --}}
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Tgl. Berlaku <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tgl_berlaku_rotasi">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -747,9 +786,15 @@
                                 <hr class="my-2"> --}}
                                 <div class="row status_true_spkrkk">
                                     <div class="col-md-12">
-                                        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
-                                            <center><strong class="mb-0"><i><b class="text-danger">Form ini</b> diisi oleh komite keperawatan, komite nakesla, dan komite medik</i></strong></center>
+                                        <div class="alert alert-secondary alert-dismissible fade show mb-3" role="alert">
+                                            <center><strong class="mb-0"><i><b class="text-danger">Form ini</b> diisi oleh komite keperawatan, komite nakesla, komite medik, dan Kepegawaian</i></strong></center>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                            <small>
+                                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Tanggal Berakhir (SPK) bersifat wajib diisi apabila karyawan tersebut berstatus THL / Kontrak <br>
+                                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> SPK / RKK dapat diubah / hapus apabila berstatus <span class="badge rounded-pill text-bg-success p-1">Aktif</span>
+                                            </small>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -1308,13 +1353,19 @@
                 <div class="modal-body">
                     <input type="text" id="id_edit_penetapan" hidden>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group mb-3">
                                 <label class="form-label">Status Pegawai <span class="text-danger">*</span></label>
                                 <select class="form-control" id="ref_penetapan_edit"></select>
                             </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-3">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Tgl. Diberlakukan <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="tgl_berlaku_penetapan_edit">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Keterangan</label>
                                 <div class="row">
@@ -1344,9 +1395,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_edit_rotasi" hidden>
-                    <div class="row">
-
-                    </div>
+                    <div class="row"> </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" id="btn-ubah-rotasi" onclick="prosesUbahRotasi()"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
@@ -1522,14 +1571,13 @@
             });
 
             $('#jns_spkrkk').on('change', function() {
+                console.log($('#validasi_tgl_akhir_spkrkk').val());
                 if ($(this).val() == 0) {
                     $('#wajib_tgl_akhir_spkrkk').prop('hidden',false);
                     $('#tgl_akhir_spkrkk').prop('disabled',false);
-                    $('#validasi_tgl_akhir_spkrkk').val('1');
                 } else {
                     $('#wajib_tgl_akhir_spkrkk').prop('hidden',true);
                     $('#tgl_akhir_spkrkk').prop('disabled',true);
-                    $('#validasi_tgl_akhir_spkrkk').val('0');
                 }
             });
 
@@ -1583,6 +1631,10 @@
                 success: function(res) {
                     $("#show_nip_terakhir").text(res.maxNip);
                     $("#nip_pgw").val(res.show.nip);
+                    $("#tmt").val(res.show.tmt);
+                    if (res.show.tat) {
+                        $("#tat").val(res.show.tat);
+                    }
                     $("#klasifikasi_pgw").find('option').remove();
                     res.ref_klasifikasi.forEach(item => {
                         $("#klasifikasi_pgw").append(`<option value="" hidden>Pilih Salah Satu</option>`);
@@ -1721,6 +1773,64 @@
             $("#btn-simpan-klasifikasi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
             $("#btn-simpan-klasifikasi").prop('disabled', false);
         }
+        function prosesSimpanTattmt() {
+            $("#btn-simpan-tattmt").prop('disabled', true);
+            $("#btn-simpan-tattmt").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var fd = new FormData();
+
+            // ISIAN FORM WAJIB
+            var tmt = $('#tmt').val();
+            var tat = $('#tat').val();
+
+            if (tmt == '') {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Masukkan Input TMT (Tanggal Mulai Tugas)',
+                    position: 'topRight'
+                });
+            } else {
+                // INISIALISASI
+                fd.append('tmt',tmt);
+                fd.append('tat',tat);
+                fd.append('user_id','{{ Auth::user()->id }}');
+                fd.append('pegawai_id','{{ $list["show"]->id }}');
+
+                // AJAX REQUEST
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/profilkaryawan/kepegawaian/tattmt/simpan",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'TMT / TAT pegawai berhasil disimpan pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            showKepegawaian();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+
+            $("#btn-simpan-tattmt").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-simpan-tattmt").prop('disabled', false);
+        }
 
         // FUNCTION TAMBAH
         function prosesTambahPenetapan() {
@@ -1731,9 +1841,10 @@
 
             // ISIAN FORM WAJIB
             var ref_id = $('#ref_penetapan').val();
+            var tgl_berlaku = $('#tgl_berlaku_penetapan').val();
             var ket = $('#ket_penetapan').val();
 
-            if (ref_id == '') {
+            if (ref_id == '' || tgl_berlaku == '') {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
@@ -1742,6 +1853,7 @@
             } else {
                 // INISIALISASI
                 fd.append('ref_id',ref_id);
+                fd.append('tgl_berlaku',tgl_berlaku);
                 fd.append('ket',ket);
                 fd.append('user_id','{{ Auth::user()->id }}');
                 fd.append('pegawai_id','{{ $list["show"]->id }}');
@@ -1792,9 +1904,10 @@
             // ISIAN FORM WAJIB
             var ref_id = $('#ref_rotasi').val();
             var jabatan = $('#jabatan_rotasi').val();
+            var tgl_berlaku = $('#tgl_berlaku_rotasi').val();
             var ket = $('#ket_rotasi').val();
 
-            if (ref_id == '' || jabatan == '') {
+            if (ref_id == '' || jabatan == '' || tgl_berlaku == '') {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
@@ -1804,6 +1917,7 @@
                 // INISIALISASI
                 fd.append('ref_id',ref_id);
                 fd.append('jabatan',JSON.stringify(jabatan));
+                fd.append('tgl_berlaku',tgl_berlaku);
                 fd.append('ket',ket);
                 fd.append('user_id','{{ Auth::user()->id }}');
                 fd.append('pegawai_id','{{ $list["show"]->id }}');
@@ -1851,76 +1965,155 @@
             var fd = new FormData();
 
             // ISIAN FORM WAJIB
-            var cekValidasi = $('#validasi_tgl_akhir_spkrkk').val();
+            var cekValidasi = $('#validasi_tgl_akhir_spkrkk').val(); // IF VAL (2 / 3) = THL & KONTRAK
             var jns_spkrkk = $('#jns_spkrkk').val();
-            var tgl_akhir_spkrkk = null;
-            if (cekValidasi == 1) {
-                tgl_akhir_spkrkk = $('#tgl_akhir_spkrkk').val();
-            }
             var deskripsi_spkrkk = $('#deskripsi_spkrkk').val();
-            var filesAdded = $('#upload_spkrkk')[0].files[0];
-            console.log($('#upload_spkrkk')[0].files[0]);
-            console.log(filesAdded.length);
-            // CEK VALIDASI
-            var validate1 = 0;
-            if (jns_spkrkk != '' || filesAdded.length != 0) {
-                validate1 = 1;
-            }
-            var validate2 = 0;
-            if (cekValidasi == 1) {
-                if (tgl_akhir_spkrkk != null) {
-                    validate2 = 1;
-                }
-            } else {
-                validate2 = 1;
-            }
+            var filesAdded = $('#upload_spkrkk')[0].files;
 
             // EXECUTE
-            if (validate1 == 0 || validate2 == 0) {
-                iziToast.warning({
-                    title: 'Pesan Ambigu!',
-                    message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
-                    position: 'topRight'
-                });
-            } else {
-                // INISIALISASI
-                fd.append('jns_dokumen',jns_spkrkk);
-                fd.append('deskripsi',deskripsi_spkrkk);
-                fd.append('tgl_berakhir',tgl_akhir_spkrkk);
-                fd.append('user_id','{{ Auth::user()->id }}');
-                fd.append('pegawai_id','{{ $list["show"]->id }}');
-                fd.append('file',filesAdded);
+            if (jns_spkrkk == 1) {
+                if (jns_spkrkk == '' || filesAdded.length == 0) {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
+                        position: 'topRight'
+                    });
+                } else {
+                    // INISIALISASI
+                    fd.append('jns_dokumen',jns_spkrkk);
+                    fd.append('deskripsi',deskripsi_spkrkk);
+                    fd.append('user_id','{{ Auth::user()->id }}');
+                    fd.append('pegawai_id','{{ $list["show"]->id }}');
+                    fd.append('file',filesAdded[0]);
 
-                // AJAX REQUEST
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "/api/profilkaryawan/spkrkk/tambah",
-                    method: 'post',
-                    data: fd,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(res){
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'SPK / RKK Pegawai berhasil diupload pada '+res,
+                    // AJAX REQUEST
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "/api/profilkaryawan/spkrkk/tambah",
+                        method: 'post',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function(res){
+                            iziToast.success({
+                                title: 'Pesan Sukses!',
+                                message: 'RKK Pegawai berhasil diupload pada '+res,
+                                position: 'topRight'
+                            });
+                            if (res) {
+                                refreshSpkRkk();
+                            }
+                        },
+                        error: function(res){
+                            console.log("error : " + JSON.stringify(res) );
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            } else {
+                // IF SPK
+                var tgl_akhir_spkrkk = $('#tgl_akhir_spkrkk').val();
+                if (cekValidasi == 2 || cekValidasi == 3) { // IF THL / KONTRAK
+                    if (jns_spkrkk == '' || tgl_akhir_spkrkk == '' || filesAdded.length == 0) {
+                        iziToast.warning({
+                            title: 'Pesan Ambigu!',
+                            message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
                             position: 'topRight'
                         });
-                        if (res) {
-                            refreshSpkRkk();
-                        }
-                    },
-                    error: function(res){
-                        console.log("error : " + JSON.stringify(res) );
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: res.responseJSON,
-                            position: 'topRight'
+                    } else {
+                        // INISIALISASI
+                        fd.append('jns_dokumen',jns_spkrkk);
+                        fd.append('deskripsi',deskripsi_spkrkk);
+                        fd.append('tgl_berakhir',tgl_akhir_spkrkk);
+                        fd.append('user_id','{{ Auth::user()->id }}');
+                        fd.append('pegawai_id','{{ $list["show"]->id }}');
+                        fd.append('file',filesAdded[0]);
+
+                        // AJAX REQUEST
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: "/api/profilkaryawan/spkrkk/tambah",
+                            method: 'post',
+                            data: fd,
+                            contentType: false,
+                            processData: false,
+                            dataType: 'json',
+                            success: function(res){
+                                iziToast.success({
+                                    title: 'Pesan Sukses!',
+                                    message: 'SPK Pegawai berhasil diupload pada '+res,
+                                    position: 'topRight'
+                                });
+                                if (res) {
+                                    refreshSpkRkk();
+                                }
+                            },
+                            error: function(res){
+                                console.log("error : " + JSON.stringify(res) );
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.responseJSON,
+                                    position: 'topRight'
+                                });
+                            }
                         });
                     }
-                });
+                } else {
+                    if (jns_spkrkk == '' || filesAdded.length == 0) {
+                        iziToast.warning({
+                            title: 'Pesan Ambigu!',
+                            message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
+                            position: 'topRight'
+                        });
+                    } else {
+                        // INISIALISASI
+                        fd.append('jns_dokumen',jns_spkrkk);
+                        fd.append('deskripsi',deskripsi_spkrkk);
+                        fd.append('user_id','{{ Auth::user()->id }}');
+                        fd.append('pegawai_id','{{ $list["show"]->id }}');
+                        fd.append('file',filesAdded[0]);
+
+                        // AJAX REQUEST
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: "/api/profilkaryawan/spkrkk/tambah",
+                            method: 'post',
+                            data: fd,
+                            contentType: false,
+                            processData: false,
+                            dataType: 'json',
+                            success: function(res){
+                                iziToast.success({
+                                    title: 'Pesan Sukses!',
+                                    message: 'SPK Pegawai berhasil diupload pada '+res,
+                                    position: 'topRight'
+                                });
+                                if (res) {
+                                    refreshSpkRkk();
+                                }
+                            },
+                            error: function(res){
+                                console.log("error : " + JSON.stringify(res) );
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.responseJSON,
+                                    position: 'topRight'
+                                });
+                            }
+                        });
+                    }
+                }
             }
 
             $("#btn-upload-spkrkk").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
@@ -1943,6 +2136,7 @@
                             <option value="${item.id}" ${item.id == res.show.ref_id? "selected":""}>${item.deskripsi}</option>
                         `);
                     });
+                    $('#tgl_berlaku_penetapan_edit').val(res.show.tgl_berlaku);
                     $('#ket_penetapan_edit').val(res.show.keterangan);
                     $('#ubahPenetapan').modal('show');
                 }
@@ -1956,9 +2150,10 @@
             $("#btn-ubah-penetapan").find("i").toggleClass("fa-edit fa-sync fa-spin");
 
             var jenis       = $("#ref_penetapan_edit").val();
+            var tgl_berlaku = $("#tgl_berlaku_penetapan_edit").val();
             var keterangan  = $("#ket_penetapan_edit").val();
 
-            if (jenis == "") {
+            if (jenis == "" || tgl_berlaku == "") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Mohon lengkapi kolom pengisian wajib *',
@@ -1970,6 +2165,7 @@
 
                 fd.append('id',id_edit);
                 fd.append('ref_id',jenis);
+                fd.append('tgl_berlaku',tgl_berlaku);
                 fd.append('keterangan',keterangan);
                 fd.append('user_id','{{ Auth::user()->id }}');
 
@@ -2007,11 +2203,13 @@
 
         // PROSES REFRESH
         function refreshPenetapan() {
-            var ref_id  = $("#ref_penetapan");
-            var ket     = $("#ket_penetapan");
+            var ref_id      = $("#ref_penetapan");
+            var tgl_berlaku = $("#tgl_berlaku_penetapan");
+            var ket         = $("#ket_penetapan");
 
             // INIT
             ref_id.val('');
+            tgl_berlaku.val('');
             ket.val('');
 
             // MULAI TABEL
@@ -2048,7 +2246,7 @@
                                         + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>"
                                         + "<h6 class='mb-0'>" + item.nama_referensi + "&nbsp;&nbsp;" + bgHapus + "</h6><small class='text-truncate text-muted'>Oleh " + item.nama_kepegawaian + "</small>"
                                         + "</div></div></td>";
-                            content += `<td>` + new Date(item.created_at).toLocaleString("sv-SE") + `</td>`;
+                            content += `<td>` + new Date(item.tgl_berlaku).toLocaleDateString("sv-SE") + `</td>`;
                             content += `<td>${item.keterangan?item.keterangan:'-'}</td>`;
                             content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
                             $('#tampil-tbody-penetapan').append(content);
@@ -2083,11 +2281,13 @@
         }
 
         function refreshRotasi() {
-            var ref_id  = $("#ref_rotasi");
-            var ket     = $("#ket_rotasi");
+            var ref_id       = $("#ref_rotasi");
+            var tgl_berlaku  = $("#tgl_berlaku_rotasi");
+            var ket          = $("#ket_rotasi");
 
             // INIT
             ref_id.val('');
+            tgl_berlaku.val('');
             ket.val('');
 
             // MULAI TABEL
@@ -2122,7 +2322,7 @@
                                         + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>"
                                         + "<h6 class='mb-0'>" + item.nama_referensi + "&nbsp;&nbsp;" + bgHapus + "</h6><small class='text-truncate text-muted'>Oleh " + item.nama_kepegawaian + "</small>"
                                         + "</div></div></td>";
-                            content += `<td>` + new Date(item.created_at).toLocaleString("sv-SE") + `</td>`;
+                            content += `<td>` + new Date(item.tgl_berlaku).toLocaleDateString("sv-SE") + `</td>`;
                             content += `<td>`;
                             if (item.before) {
                                 try {
@@ -2289,7 +2489,9 @@
                             $('#upload_spkrkk').val('');
                             $('.status_true_spkrkk').prop('hidden',false);
                             $('.status_false_spkrkk').prop('hidden',true);
-                            if (res.status.queue == 1 || res.status.queue == 2) {
+                            $('#validasi_tgl_akhir_spkrkk').val(res.status.queue);
+                            if (res.status.queue == 2 || res.status.queue == 3) {
+                                // IF STATUS = THL & KONTRAK
                                 $('.penetapan_true_spkrkk').prop('hidden',false);
                                 $('.penetapan_false_spkrkk').prop('hidden',true);
                             } else {
@@ -2325,11 +2527,16 @@
                             } else {
                                 bgHapus = ``;
                             }
+                            if (item.status != 0) {
+                                bgStatus = `<span class="badge rounded-pill text-bg-success p-1">Aktif</span>`;
+                            } else {
+                                bgStatus = ``;
+                            }
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>`
                                         + `<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>`
-                                        + `<h6 class='mb-0'>${item.jns_dokumen == 0?'<b class="text-primary">SPK</b>':'<b class="text-info">RKK</b>'}&nbsp;${item.nama_pegawai}&nbsp;&nbsp;` + bgHapus + `</h6><small class='text-truncate text-muted'>Oleh ` + item.nama_kepegawaian + `</small>`
+                                        + `<h6 class='mb-0'>${item.jns_dokumen == 0?'<b class="text-primary">SPK</b>':'<b class="text-info">RKK</b>'}&nbsp;${item.nama_pegawai}&nbsp;&nbsp;` +bgStatus+ `&nbsp;&nbsp;` + bgHapus + `</h6><small class='text-truncate text-muted'>Oleh ` + item.nama_kepegawaian + `</small>`
                                         + `</div></div></td>`;
-                            content += `<td>${item.tgl_berakhir}</td>`;
+                            content += `<td>${item.tgl_berakhir?item.tgl_berakhir:'-'}</td>`;
                             content += `<td>${item.deskripsi?item.deskripsi:'-'}</td>`;
                             content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
                             $('#tampil-tbody-spkrkk').append(content);
