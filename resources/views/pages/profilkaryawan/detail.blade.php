@@ -29,7 +29,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="profile-tab-1" data-bs-toggle="tab"
                                 href="#profil-pengguna" role="tab" aria-selected="true">
-                                <i class="ti ti-user me-2"></i>Profil
+                                <i class="ti ti-user-check me-2"></i>Profil
                             </a>
                         </li>
                         <li class="nav-item">
@@ -59,7 +59,7 @@
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
                                 href="#spkrkk" role="tab" aria-selected="true" onclick="refreshSpkRkk()">
-                                <i class="ti ti-lock me-2"></i>SPK & RKK
+                                <i class="ti ti-brand-docker me-2"></i>SPK & RKK
                             </a>
                         </li>
                         <li class="nav-item">
@@ -135,8 +135,8 @@
                                             <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Induk Pegawai">{{ $list['show']->nip?$list['show']->nip:'-' }}</p>
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
-                                            <i class="fas fa-address-card me-3" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Induk Kependudukan"></i>
-                                            <p class="mb-0">{{ $list['show']->nik?$list['show']->nik:'-' }}</p>
+                                            <i class="fas fa-address-card me-3"></i>
+                                            <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Induk Kependudukan">{{ $list['show']->nik?$list['show']->nik:'-' }}</p>
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-envelope me-3"></i>
@@ -189,6 +189,23 @@
                                                 </div>
                                                 <div class="flex-grow-1 ms-4 text-start">
                                                     <h6 class="mb-0">Instagram / <mark>{{ $list['show']->ig ? $list['show']->ig : 'xxx' }}</mark></h6>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="mb-2">
+                                        <a href="{{ url('https://www.tiktok.com/@'.$list['show']->tt) }}" class="btn btn-link-secondary d-grid" target="_blank">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avtar avtar-xs btn-light-tiktok">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                            <path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/>
+                                                        </svg>
+                                                        {{-- <i class="fab fa-tiktok f-16"></i> --}}
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-4 text-start">
+                                                    <h6 class="mb-0">Tiktok / <mark>{{ $list['show']->tt ? $list['show']->tt : 'xxx' }}</mark></h6>
                                                 </div>
                                             </div>
                                         </a>
@@ -449,11 +466,11 @@
                                                     <div class="form-group mb-3">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <label class="form-label">TMT <span class="text-danger">*</span></label>
+                                                                <label class="form-label"><b>TMT</b> <span class="text-danger">*</span></label>
                                                                 <input type="date" class="form-control" id="tmt">
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <label class="form-label">TAT</label>
+                                                                <label class="form-label"><b>TAT</b></label>
                                                                 <input type="date" class="form-control" id="tat">
                                                             </div>
                                                         </div>
@@ -797,7 +814,7 @@
                                             </small>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group mb-3">
                                             <label class="form-label">Jenis Dokumen <span class="text-danger">*</span></label>
                                             <select class="form-control" id="jns_spkrkk">
@@ -814,19 +831,19 @@
                                             <input type="date" class="form-control" id="tgl_akhir_spkrkk">
                                         </div>
                                     </div>
-                                    <div class="col-md-3 penetapan_true_spkrkk">
+                                    <div class="col-md-4 penetapan_true_spkrkk">
                                         <div class="form-group mb-3">
                                             <label class="form-label">Deskripsi</label>
                                             <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-md-5 penetapan_false_spkrkk" hidden>
+                                    <div class="col-md-4 penetapan_false_spkrkk" hidden>
                                         <div class="form-group mb-3">
                                             <label class="form-label">Deskripsi</label>
                                             <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
                                         </div>
                                     </div>
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         <div class="form-group mb-3">
                                             <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
                                             <div class="row">

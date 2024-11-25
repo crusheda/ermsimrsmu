@@ -75,7 +75,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
-                            <h5 class="m-0">Notifikasi (15 Data Terbaru)</h5><a href="javascript:void(0);" class="text-muted text-sm">Diperbarui {{ \Carbon\Carbon::now()->isoFormat('DD/MM/YYYY') }}</a>
+                            <h5 class="m-0">Ditampilkan ({{ count($notif) }} Pemberitahuan)</h5><a href="javascript:void(0);" class="text-muted text-sm">Diperbarui {{ \Carbon\Carbon::now()->isoFormat('DD/MM/YYYY') }}</a>
                         </div>
                         <div class="dropdown-body text-wrap header-notification-scroll position-relative"
                             style="max-height: calc(100vh - 215px)">

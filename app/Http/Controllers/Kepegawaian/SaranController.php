@@ -17,7 +17,7 @@ class SaranController extends Controller
     {
         $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
         $kategori = referensi::where('ref_jenis',12)->get();
-        $show  = saran::Join('referensi', 'referensi.id', '=', 'kepegawaian_saran.ref_kategori')->select('referensi.deskripsi as kategori','kepegawaian_saran.*')->orderBy('kepegawaian_saran.updated_at','desc')->get();
+        $show  = saran::Join('referensi', 'referensi.id', '=', 'kepegawaian_saran.kategori')->select('referensi.deskripsi as kategori','kepegawaian_saran.*')->orderBy('kepegawaian_saran.updated_at','desc')->get();
 
         // $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         //     ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')

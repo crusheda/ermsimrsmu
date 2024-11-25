@@ -185,6 +185,28 @@ class ProfilKaryawanController extends Controller
         return response()->json($data, 200);
     }
 
+    function tableAll()
+    {
+        $show = users::leftJoin('users_status as us','users.id','=','us.pegawai_id')
+                ->leftJoin('referensi as rf','rf.id','=','us.ref_id')
+                ->leftJoin('referensi as rp','rp.id','=','users.ref_profesi')
+                ->where('us.deleted_at',null)
+                ->where('users.status',null)
+                ->select('users.*','rf.deskripsi as profesi','rp.deskripsi as klasifikasi_user')
+                ->orderBy('users.nip','asc')
+                ->get();
+        $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->select('model_has_roles.model_id as id_user','roles.name as nama_role')
+                ->get();
+
+        $data = [
+            'show' => $show,
+            'role' => $role,
+        ];
+
+        return response()->json($data, 200);
+    }
+
     function tableNonaktif()
     {
         $show = users::onlyTrashed()->orderBy('deleted_at','desc')->get();

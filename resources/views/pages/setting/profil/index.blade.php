@@ -27,7 +27,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="profile-tab-1" data-bs-toggle="tab"
                                 href="#profil-pengguna" role="tab" aria-selected="true">
-                                <i class="ti ti-user me-2"></i>Profil Pengguna
+                                <i class="ti ti-user-check me-2"></i>Profil Pengguna
                             </a>
                         </li>
                         <li class="nav-item">
@@ -51,7 +51,7 @@
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
                                 href="#ubah-password" role="tab" aria-selected="true">
-                                <i class="ti ti-lock me-2"></i>Ubah Password
+                                <i class="ti ti-lock-open me-2"></i>Ubah Password
                             </a>
                         </li>
                         {{-- <li class="nav-item">
@@ -388,7 +388,7 @@
                                         <h5>Deskripsi Pengalaman Kerja</h5>
                                     </div>
                                     <div class="card-body">
-                                        <textarea class="form-control" name="pengalaman_kerja" placeholder="e.g. Saya pernah bekerja pada suatu instansi swasta ternama yang bertempat di Kota X dan berprofesi sebagai X . . ."><?php echo htmlspecialchars($list['show']->pengalaman_kerja); ?></textarea>
+                                        <textarea class="form-control" name="pengalaman_kerja" rows="5" placeholder="e.g. Saya pernah bekerja pada suatu instansi swasta ternama yang bertempat di Kota X dan berprofesi sebagai X . . ."><?php echo htmlspecialchars($list['show']->pengalaman_kerja); ?></textarea>
                                     </div>
                                 </div>
                             </div>

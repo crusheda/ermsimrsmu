@@ -27,12 +27,12 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <div class="btn-group shadow">
-                        <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Akun Pengguna Baru" disabled>
-                            <i class="fas fa-plus me-1"></i> Tambah Pengguna</button>
-                        <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel">
-                            <i class="fas fa-sync"></i></button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()" disabled>
-                            <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tampilkan Semua</button>
+                        {{-- <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Akun Pengguna Baru" disabled>
+                            <i class="fas fa-plus me-1"></i> Tambah Pengguna</button> --}}
+                        <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Data Simpel Profil Karyawan">
+                            <i class="fas fa-sync me-1"></i> Tabel Simpel</button>
+                        <button type="button" class="btn btn-light-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()">
+                            <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tabel Lengkap</button>
                         {{-- <button class="btn btn-light-info" onclick="" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan">
                             <i class="fas fa-history me-1"></i></button> --}}
                     </div>
@@ -51,7 +51,7 @@
                         <small><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Refresh browser Anda apabila terjadi Error saat pengambilan data karyawan</small><br>
                         <small><i class="fa-fw fas fa-caret-right nav-icon me-1"></i> Klik pada <u class="text-primary"><b>#ID Karyawan</b></u> untuk melihat Profil</small>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="table1">
                         <table id="dttable" class="table align-middle dt-responsive table-hover nowrap w-100">
                             <thead>
                                 <tr>
@@ -76,46 +76,56 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div class="table-responsive" hidden>
+                    <div class="table-responsive" id="table2" hidden>
                         <table id="dttable-all" class="table align-middle dt-responsive table-hover nowrap w-100">
                             <thead>
                                 <tr>
-                                    <th class="cell-fit">ID</th>
+                                    <th class="cell-fit">ID</th> {{-- 0 --}}
                                     <th>NIP</th>
                                     <th>NIK</th>
+                                    <th>USERNAME</th>
                                     <th>NAMA LENGKAP</th>
                                     <th>PANGGILAN</th>
                                     <th>TMPT/TGL LAHIR</th>
                                     <th>JENIS KELAMIN</th>
                                     <th>STATUS KAWIN</th>
+                                    <th>PROFESI</th>
+                                    <th>JABATAN</th> {{-- 10 --}}
+                                    <th>KLASIFIKASI</th>
+                                    <th>MASUK KERJA</th>
+                                    <th>URUTAN MASUK</th>
+                                    <th>TMT</th>
+                                    <th>TAT</th> {{-- 15 --}}
+                                    <th>NO.HP</th>
                                     <th>EMAIL</th>
-                                    <th>HP</th>
                                     <th>FB</th>
                                     <th>IG</th>
+                                    <th>TT</th> {{-- 20 --}}
                                     <th>KELURAHAN (KTP)</th>
                                     <th>KECAMATAN (KTP)</th>
                                     <th>KABUPATEN (KTP)</th>
                                     <th>PROVINSI (KTP)</th>
-                                    <th class="cell-fit">ALAMAT (KTP)</th>
+                                    <th class="cell-fit">ALAMAT (KTP)</th> {{-- 25 --}}
                                     <th>KELURAHAN (DOM)</th>
                                     <th>KECAMATAN (DOM)</th>
                                     <th>KABUPATEN (DOM)</th>
                                     <th>PROVINSI (DOM)</th>
-                                    <th class="cell-fit">ALAMAT (DOM)</th>
+                                    <th class="cell-fit">ALAMAT (DOM)</th> {{-- 30 --}}
                                     <th>SD</th>
                                     <th>SMP</th>
                                     <th>SMA</th>
                                     <th>D1</th>
-                                    <th>D2</th>
+                                    <th>D2</th> {{-- 35 --}}
                                     <th>D3</th>
                                     <th>D4</th>
                                     <th>S1</th>
-                                    <th>S2</th>
+                                    <th>S1 PROFESI</th>
+                                    <th>S2</th> {{-- 40 --}}
                                     <th>S3</th>
                                     <th class="cell-fit">PENGALAMAN KERJA</th>
                                     <th>RIWAYAT PENYAKIT</th>
                                     <th>RIWAYAT PENYAKIT KELUARGA</th>
-                                    <th>RIWAYAT OPERASI</th>
+                                    <th>RIWAYAT OPERASI</th> {{-- 45 --}}
                                     <th>RIWAYAT PENGGUNAAN OBAT</th>
                                     <th class="cell-fit">UPDATE</th>
                                 </tr>
@@ -132,15 +142,24 @@
                                     <th class="cell-fit">ID</th>
                                     <th>NIP</th>
                                     <th>NIK</th>
+                                    <th>USERNAME</th>
                                     <th>NAMA LENGKAP</th>
                                     <th>PANGGILAN</th>
                                     <th>TMPT/TGL LAHIR</th>
                                     <th>JENIS KELAMIN</th>
                                     <th>STATUS KAWIN</th>
+                                    <th>PROFESI</th>
+                                    <th>JABATAN</th>
+                                    <th>KLASIFIKASI</th>
+                                    <th>MASUK KERJA</th>
+                                    <th>URUTAN MASUK</th>
+                                    <th>TMT</th>
+                                    <th>TAT</th>
+                                    <th>NO.HP</th>
                                     <th>EMAIL</th>
-                                    <th>HP</th>
                                     <th>FB</th>
                                     <th>IG</th>
+                                    <th>TT</th>
                                     <th>KELURAHAN (KTP)</th>
                                     <th>KECAMATAN (KTP)</th>
                                     <th>KABUPATEN (KTP)</th>
@@ -159,6 +178,7 @@
                                     <th>D3</th>
                                     <th>D4</th>
                                     <th>S1</th>
+                                    <th>S1 PROFESI</th>
                                     <th>S2</th>
                                     <th>S3</th>
                                     <th class="cell-fit">PENGALAMAN KERJA</th>
@@ -393,6 +413,155 @@
                         lengthChange: true,
                         lengthMenu: [10, 25, 50, 75, 100],
                     });
+
+                    // Set True / False Table
+                    $("#table1").prop('hidden',false);
+                    $("#table2").prop('hidden',true);
+                }
+            });
+        }
+        function showAll() {
+            $("#tampil-tbody-all").empty().append(
+                `<tr><td colspan="20" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/profilkaryawan/tableall",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $("#tampil-tbody-all").empty();
+                    $('#dttable-all').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        // var us = JSON.parse(res.user);
+                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-link dropdown-toggle hide-arrow ${item.nik?'text-primary':'text-danger'}' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <ul class='dropdown-menu dropdown-menu-right'>`;
+                            content += `<li><a href="/kepegawaian/profilkaryawan/${item.id}" class='dropdown-item text-primary'><i class="fa-fw fas fa-search nav-icon me-1"></i> Lihat Profil</a></li>`;
+                        content += `</div></center></td>`;
+                        content += `<td>${item.nip?item.nip:'-'}</td>`;
+                        content += `<td>${item.nik?item.nik:'-'}</td>`;
+                        content += `<td>${item.name}</td>`;
+                        content += `<td>${item.nama_lengkap?item.nama_lengkap:'-'}</td>`;
+                        content += `<td>${item.nick?item.nick:'-'}</td>`;
+                        content += `<td>${item.temp_lahir?item.temp_lahir:'-'}${item.tgl_lahir?', '+item.tgl_lahir:''}</td>`;
+                        content += `<td>${item.jns_kelamin?item.jns_kelamin:'-'}</td>`;
+                        content += `<td>${item.status_kawin?item.status_kawin:'-'}</td>`;
+                        content += `<td>${item.profesi?item.profesi:'-'}</td>`;
+                        content += `<td>`;
+                        res.role.forEach(val => {
+                            if (item.id == val.id_user) {
+                                content += "<span class='badge bg-light-secondary'>" + val.nama_role + "</span>";
+                            }
+                        })
+                        content += `</td>`;
+                        content += `<td>${item.klasifikasi_user?item.klasifikasi_user:'-'}</td>`;
+                        content += `<td>${item.masuk_kerja?item.masuk_kerja:'-'}</td>`;
+                        content += `<td>${item.urutan_masuk?item.urutan_masuk:'-'}</td>`;
+                        content += `<td>${item.tmt?item.tmt:'-'}</td>`;
+                        content += `<td>${item.tat?item.tat:'-'}</td>`;
+                        content += `<td>${item.no_hp?item.no_hp:'-'}</td>`;
+                        content += `<td>${item.email?item.email:'-'}</td>`;
+                        content += `<td>${item.fb?item.fb:'-'}</td>`;
+                        content += `<td>${item.ig?item.ig:'-'}</td>`;
+                        content += `<td>${item.tt?item.tt:'-'}</td>`;
+                        content += `<td>${item.ktp_kelurahan?item.ktp_kelurahan:'-'}</td>`;
+                        content += `<td>${item.ktp_kecamatan?item.ktp_kecamatan:'-'}</td>`;
+                        content += `<td>${item.ktp_kabupaten?item.ktp_kabupaten:'-'}</td>`;
+                        content += `<td>${item.ktp_provinsi?item.ktp_provinsi:'-'}</td>`;
+                        content += `<td>${item.alamat_ktp?item.alamat_ktp:'-'}</td>`;
+                        content += `<td>${item.dom_kelurahan?item.dom_kelurahan:'-'}</td>`;
+                        content += `<td>${item.dom_kecamatan?item.dom_kecamatan:'-'}</td>`;
+                        content += `<td>${item.dom_kabupaten?item.dom_kabupaten:'-'}</td>`;
+                        content += `<td>${item.dom_provinsi?item.dom_provinsi:'-'}</td>`;
+                        content += `<td>${item.alamat_dom?item.alamat_dom:'-'}</td>`;
+                        content += `<td>${item.sd?item.sd:'-'} ${item.th_sd?' ('+item.th_sd+')':''}</td>`;
+                        content += `<td>${item.smp?item.smp:'-'} ${item.th_smp?' ('+item.th_smp+')':''}</td>`;
+                        content += `<td>${item.sma?item.sma:'-'} ${item.th_sma?' ('+item.th_sma+')':''}</td>`;
+                        content += `<td>${item.d1?item.d1:'-'} ${item.th_d1?' ('+item.th_d1+')':''}</td>`;
+                        content += `<td>${item.d2?item.d2:'-'} ${item.th_d2?' ('+item.th_d2+')':''}</td>`;
+                        content += `<td>${item.d3?item.d3:'-'} ${item.th_d3?' ('+item.th_d3+')':''}</td>`;
+                        content += `<td>${item.d4?item.d4:'-'} ${item.th_d4?' ('+item.th_d4+')':''}</td>`;
+                        content += `<td>${item.s1?item.s1:'-'} ${item.th_s1?' ('+item.th_s1+')':''}</td>`;
+                        content += `<td>${item.s1_profesi?item.s1_profesi:'-'} ${item.th_s1_profesi?' ('+item.th_s1_profesi+')':''}</td>`;
+                        content += `<td>${item.s2?item.s2:'-'} ${item.th_s2?' ('+item.th_s2+')':''}</td>`;
+                        content += `<td>${item.s3?item.s3:'-'} ${item.th_s3?' ('+item.th_s3+')':''}</td>`;
+                        content += `<td>${item.pengalaman_kerja?item.pengalaman_kerja:'-'}</td>`;
+                        content += `<td>${item.riwayat_penyakit?item.riwayat_penyakit:'-'}</td>`;
+                        content += `<td>${item.riwayat_penyakit_keluarga?item.riwayat_penyakit_keluarga:'-'}</td>`;
+                        content += `<td>${item.riwayat_operasi?item.riwayat_operasi:'-'}</td>`;
+                        content += `<td>${item.riwayat_penggunaan_obat?item.riwayat_penggunaan_obat:'-'}</td>`;
+                        content += '<td>' + new Date(item.updated_at).toLocaleString("sv-SE") + '</td>';
+                        content += `</tr>`;
+                        $('#tampil-tbody-all').append(content);
+                    });
+                    var table = $('#dttable-all').DataTable({
+                        dom: 'Bfrtip',
+                        order: [
+                            [1, "asc"]
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '55%' },
+                        //     { sWidth: '15%' },
+                        // ],
+                        columnDefs: [
+                            { visible: false, targets: [5] },
+                            { visible: false, targets: [7] },
+                            { visible: false, targets: [8] },
+                            { visible: false, targets: [11] },
+                            { visible: false, targets: [12] },
+                            { visible: false, targets: [13] },
+                            { visible: false, targets: [14] },
+                            { visible: false, targets: [15] },
+                            { visible: false, targets: [17] },
+                            { visible: false, targets: [18] },
+                            { visible: false, targets: [19] },
+                            { visible: false, targets: [20] },
+                            { visible: false, targets: [21] },
+                            { visible: false, targets: [22] },
+                            { visible: false, targets: [23] },
+                            { visible: false, targets: [24] },
+                            { visible: false, targets: [26] },
+                            { visible: false, targets: [27] },
+                            { visible: false, targets: [28] },
+                            { visible: false, targets: [29] },
+                            { visible: false, targets: [30] },
+                            { visible: false, targets: [31] },
+                            { visible: false, targets: [32] },
+                            { visible: false, targets: [33] },
+                            { visible: false, targets: [34] },
+                            { visible: false, targets: [35] },
+                            { visible: false, targets: [36] },
+                            { visible: false, targets: [37] },
+                            { visible: false, targets: [38] },
+                            { visible: false, targets: [39] },
+                            { visible: false, targets: [40] },
+                            { visible: false, targets: [41] },
+                            { visible: false, targets: [42] },
+                            { visible: false, targets: [43] },
+                            { visible: false, targets: [44] },
+                            { visible: false, targets: [45] },
+                            { visible: false, targets: [46] },
+                        ],
+                        displayLength: 20,
+                        lengthChange: true,
+                        lengthMenu: [20, 50, 75, 100, 300, 500],
+                        buttons: [
+                            // { extend: 'copy', className: 'btn btn-primary' },
+                            // { extend: 'csv', className: 'btn btn-primary' },
+                            { extend: 'excel', className: 'btn btn-success', text: 'Export Excell' },
+                            { extend: 'pdf', className: 'btn btn-primary', text: 'Export PDF' },
+                            // { extend: 'print', className: 'btn btn-primary' },
+                            { extend: 'colvis', className: 'btn btn-dark', text: 'Filter Kolom' },
+                        ]
+                    });
+
+                    // Set True / False Table
+                    $("#table1").prop('hidden',true);
+                    $("#table2").prop('hidden',false);
                 }
             });
         }

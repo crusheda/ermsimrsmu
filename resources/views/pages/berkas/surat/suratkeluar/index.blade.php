@@ -605,7 +605,7 @@
                         $("#tampil-tbody").empty();
                         $('#dttable').DataTable().clear().destroy();
                         res.show.forEach(item => {
-                            var us = JSON.parse(res.user);
+                            // var us = JSON.parse(res.user);
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
