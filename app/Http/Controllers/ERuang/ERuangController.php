@@ -450,7 +450,11 @@ class ERuangController extends Controller
         $data->deskripsi = $request->deskripsi;
         $data->kapasitas = $request->kapasitas;
         $data->fasilitas = $request->fasilitas;
-        $data->akses = json_encode($request->akses);
+        if ($request->akses) {
+            $data->akses = json_encode($request->akses);
+        } else {
+            $data->akses = null;
+        }
         $data->save();
 
         return response()->json($tgl, 200);
