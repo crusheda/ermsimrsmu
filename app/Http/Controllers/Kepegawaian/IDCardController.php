@@ -72,20 +72,47 @@ class IDCardController extends Controller
             // Verifikasi Duplikat Pengajuan
             $verif = idcard::where('pegawai_id',$request->pegawai)->whereIn('progress',['0','1'])->first();
             if (empty($verif)) {
-                $data = new idcard;
-                $data->pegawai_id           = $request->pegawai;
-                $data->pegawai_nip          = $request->nip;
-                $data->pegawai_nama         = $request->nama;
-                $data->pegawai_panggilan    = $request->panggilan;
-                $data->pegawai_jabatan      = $request->jabatan;
-                $data->progress             = 0;
-                $data->pengajuan            = $request->pengajuan;
-                $data->alasan               = $request->alasan;
-                $data->title                = $fotouser->title;
-                $data->filename             = $fotouser->filename;
-                $data->save();
+                // Verifikasi Upload File Kwitansi
+                $uploadedFile = $request->file('file');
+                if ($uploadedFile) { // JIKA ADA FILE UPLOAD
+                    $title = $uploadedFile->getClientOriginalName();
+                    $validasiFile = pd::where('title',$title)->first();
+                    // simpan berkas yang diunggah ke sub-direktori 'public/files'
+                    // direktori 'files' otomatis akan dibuat jika belum ad
+                    $path = $uploadedFile->store('public/files/kepegawaian/idcard/kwitansi/'.$request->user);
 
-                return response()->json($push);
+                    $data = new idcard;
+                    $data->pegawai_id           = $request->pegawai;
+                    $data->pegawai_nip          = $request->nip;
+                    $data->pegawai_nama         = $request->nama;
+                    $data->pegawai_panggilan    = $request->panggilan;
+                    $data->pegawai_jabatan      = $request->jabatan;
+                    $data->progress             = 0;
+                    $data->pengajuan            = $request->pengajuan;
+                    $data->alasan               = $request->alasan;
+                    $data->title                = $fotouser->title; // fotouser
+                    $data->filename             = $fotouser->filename; // fotouser
+                    $data->kwitansi_title       = $title; // kwitansi
+                    $data->kwitansi_filename    = $path; // kwitansi
+                    $data->save();
+
+                    return response()->json($push);
+                } else { // Jika tidak ada file upload kwitansi
+                    $data = new idcard;
+                    $data->pegawai_id           = $request->pegawai;
+                    $data->pegawai_nip          = $request->nip;
+                    $data->pegawai_nama         = $request->nama;
+                    $data->pegawai_panggilan    = $request->panggilan;
+                    $data->pegawai_jabatan      = $request->jabatan;
+                    $data->progress             = 0;
+                    $data->pengajuan            = $request->pengajuan;
+                    $data->alasan               = $request->alasan;
+                    $data->title                = $fotouser->title; // fotouser
+                    $data->filename             = $fotouser->filename; // fotouser
+                    $data->save();
+
+                    return response()->json($push);
+                }
             } else {
                 return Response::json(array(
                     'message' => 'Terdapat pengajuan ID Card yang masih Aktif/Belum Diselesaikan!',

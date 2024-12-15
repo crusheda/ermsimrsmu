@@ -123,6 +123,12 @@
                                 </label>
                                 <div class="col-lg-8"><textarea class="form-control" name="alasan" rows="2" placeholder="Masukkan Alasan"></textarea></div>
                             </div>
+                            <div class="mb-3 row" id="lampiran" hidden>
+                                <label class="col-lg-4 col-form-label">Lampiran <a class="text-danger">*</a>
+                                    <small class="text-muted d-block">Upload bukti pembayaran (<b>Kwitansi</b>) dari Kasir</small>
+                                </label>
+                                <div class="col-lg-8"><input type="file" name="filex" id="filex" class="form-control"></div>
+                            </div>
                             <div class="text-end btn-page mb-0 mt-4">
                                 <button class="btn btn-link-secondary" id="clear_text" onclick="bersihkan()">Kosongkan</button>
                                 <button class="btn btn-primary" id="btn-simpan" onclick="ajukan()"><i class="fas fa-stamp me-2"></i> Ajukan Sekarang</button>
@@ -204,6 +210,14 @@
             //     dropdownParent: $('#tambah')
             // });
             showRiwayat();
+            $('input[name="pengajuan"]:radio').change(function () {
+                var i = $("input[name='pengajuan']:checked").val();
+                if (i != 0) {
+                    $('#lampiran').prop('hidden',false);
+                } else {
+                    $('#lampiran').prop('hidden',true);
+                }
+            });
         });
 
         function ajukan() {
@@ -212,6 +226,7 @@
 
             // Definisi
             var save = new FormData();
+            var filesAdded = $('#filex')[0].files;
             save.append('pengajuan',$('input[name="pengajuan"]:checked').val());
             save.append('nama',$('input[name="nama"]').val());
             save.append('panggilan',$('input[name="panggilan"]').val());
@@ -219,6 +234,9 @@
             save.append('jabatan',$('input[name="jabatan"]').val());
             save.append('alasan',$('textarea[name=alasan]').val());
             save.append('pegawai','{{ Auth::user()->id }}');
+            if (filesAdded) {
+                save.append('file',filesAdded[0]);
+            }
 
             // console.log(save.get('pengajuan'));
             if (
@@ -227,6 +245,7 @@
                 save.get('panggilan') == "" ||
                 save.get('nip') == "" ||
                 save.get('jabatan') == ""
+                // || filesAdded.length == 0 // (Jika Tidak Ada File Yang Diupload)
             ) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',

@@ -59,19 +59,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-10 mb-3">
+                        <div class="col-md-9 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
                             </div>
                         </div>
-                        <div class="col-md-2 mb-3">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
                                 <input type="datetime-local" class="form-control" name="tgl" id="tgl">
                             </div>
                         </div>
-                        <div class="col-md-2 mb-3">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
                                 <select class="form-control" name="jenis" id="jenis">
@@ -81,7 +81,29 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
+                                <select class="form-control" name="kendaraan" id="kendaraan">
+                                    <option value="">Pilih</option>
+                                    <option value="1">[Pribadi] Motor</option>
+                                    <option value="2">[Pribadi] Mobil</option>
+                                    <option value="3">[Rumah Sakit] Mobil</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
+                            <div class="input-group">
+                                <select class="form-control" name="lama1" id="lama1">
+                                    <option value="">Pilih</option>
+                                    <option value="1">< 4 Jam (Kurang dari 4 jam)</option>
+                                    <option value="2">> 4 Jam (Lebih dari 4 jam)</option>
+                                </select>
+                                <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2" id="lama2">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
@@ -99,9 +121,15 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-9 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Upload <a class="text-danger">*</a></label>
+                                <label class="form-label">Deskripsi Perjalanan</label>
+                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="1" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Upload</label>
                                 <input type="file" class="form-control" id="filex" name="filex" accept="application/pdf">
                             </div>
                         </div>
@@ -173,37 +201,56 @@
                 <div class="modal-body">
                     <input type="text" id="id_edit" hidden>
                     <div class="row">
-                        <div class="col-md-8 mb-3">
+                        <div class="col-md-9 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="acara_edit" id="acara_edit" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
                                 <input type="datetime-local" class="form-control" name="tgl_edit" id="tgl_edit">
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
                                 <select class="form-control" name="jenis_edit" id="jenis_edit"></select>
                             </div>
                         </div>
-                        <div class="col-md-8 mb-3">
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
+                                <select class="form-control" name="kendaraan_edit" id="kendaraan_edit"></select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
+                            <div class="input-group">
+                                <select class="form-control" name="lama1_edit" id="lama1_edit"></select>
+                                <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2_edit" id="lama2_edit">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
                                 <input type="text" class="form-control" name="lokasi_edit" id="lokasi_edit" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
                                 <select class="form-select select2" name="pegawai_edit[]" id="pegawai_edit" style="width: 100%" multiple></select>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-9 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Deskripsi Perjalanan</label>
+                                <textarea class="form-control" name="deskripsi_edit" id="deskripsi_edit" rows="1" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">File Terupload</label>
                                 <div id="filex_edit"></div>
@@ -365,17 +412,26 @@
             save.append('acara',$('#acara').val());
             save.append('tgl',$('#tgl').val());
             save.append('jenis',$('#jenis').val());
+            save.append('kendaraan',$('#kendaraan').val());
+            save.append('lama1',$('#lama1').val());
+            save.append('lama2',$('#lama2').val());
             save.append('lokasi',$('#lokasi').val());
             save.append('pegawai',JSON.stringify($('#pegawai').val()));
+            save.append('deskripsi',$('#deskripsi').val());
             save.append('user','{{ Auth::user()->id }}');
-            save.append('file',filesAdded[0]);
+            if (filesAdded) {
+                save.append('file',filesAdded[0]);
+            }
             if (
                 save.get('acara') == ""     ||
                 save.get('tgl') == ""       ||
                 save.get('jenis') == ""     ||
+                save.get('kendaraan') == "" ||
+                save.get('lama1') == ""     ||
+                save.get('lama2') == ""     ||
                 save.get('lokasi') == ""    ||
-                $('#pegawai').val() == ""   ||
-                filesAdded.length == 0 // (Jika Tidak Ada Gambar Yang Diupload)
+                $('#pegawai').val() == ""
+                // || filesAdded.length == 0 // (Jika Tidak Ada File Yang Diupload)
                 ) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
@@ -429,7 +485,11 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
+                    if (res.show.title) {
+                        $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
+                    } else {
+                        $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-dark"><a>Tidak ada file terupload</a></h6>`);
+                    }
                     $('#id_edit').val(res.show.id);
                     $('#acara_edit').val(res.show.acara);
                     $('#tgl_edit').val(res.show.tgl);
@@ -439,6 +499,17 @@
                         <option value="1" ${res.show.jenis==1?"selected":""}>Offline</option>
                         <option value="2" ${res.show.jenis==2?"selected":""}>Online</option>
                     `);
+                    $("#kendaraan_edit").find('option').remove();
+                    $("#kendaraan_edit").append(`
+                        <option value="1" ${res.show.kendaraan==1?"selected":""}>[Pribadi] Motor</option>
+                        <option value="2" ${res.show.kendaraan==2?"selected":""}>[Pribadi] Mobil</option>
+                        <option value="3" ${res.show.kendaraan==3?"selected":""}>[Rumah Sakit] Mobil/option>
+                    `);
+                    $("#lama1_edit").find('option').remove();
+                    $("#lama1_edit").append(`
+                        <option value="1" ${res.show.lama1==1?"selected":""}>< 4 Jam (Kurang dari 4 jam)</option>
+                        <option value="2" ${res.show.lama1==2?"selected":""}>> 4 Jam (Lebih dari 4 jam)</option>
+                    `);
                     var un = JSON.parse(res.show.pegawai_id);
                     $("#pegawai_edit").find('option').remove();
                     res.users.forEach(pounch => {
@@ -447,6 +518,7 @@
                         `);
                     });
                     $("#pegawai_edit").val(un).change();
+                    $('#deskripsi_edit').val(res.show.deskripsi);
                     $('#modalUbah').modal('show');
                 }
             })
@@ -462,13 +534,20 @@
             save.append('acara',$('#acara_edit').val());
             save.append('tgl',$('#tgl_edit').val());
             save.append('jenis',$('#jenis_edit').val());
+            save.append('kendaraan',$('#kendaraan_edit').val());
+            save.append('lama1',$('#lama1_edit').val());
+            save.append('lama2',$('#lama2_edit').val());
             save.append('lokasi',$('#lokasi_edit').val());
             save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
+            save.append('deskripsi',$('#deskripsi_edit').val());
 
             if (
                 save.get('acara') == ""   ||
                 save.get('tgl') == ""     ||
                 save.get('jenis') == ""   ||
+                save.get('kendaraan') == ""   ||
+                save.get('lama1') == ""   ||
+                save.get('lama2') == ""   ||
                 save.get('lokasi') == ""  ||
                 $('#pegawai_edit').val() == ""
             ) {

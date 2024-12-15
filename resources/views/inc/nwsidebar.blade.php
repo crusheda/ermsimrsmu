@@ -34,7 +34,7 @@
             </a>
         </li>
     @endif
-    @if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('it') == true)
+    @if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item">
             <a href="{{ route('strukturorganisasi.index') }}" class="pc-link">
                 <span class="pc-micon">
@@ -44,7 +44,7 @@
             </a>
         </li>
     @endif
-    @if (Auth::user()->getRole('karu-it') == true)
+    @if (Auth::user()->getPermission('jadwal_dinas') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item">
             <a href="{{ route('kepegawaian.jadwaldinas.index') }}" class="pc-link">
                 <span class="pc-micon">
@@ -53,6 +53,8 @@
                 <span class="pc-mtext">Jadwal Dinas</span>
             </a>
         </li>
+    @endif
+    @if (Auth::user()->getPermission('pengajuan_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
                 <span class="pc-micon">
@@ -70,6 +72,8 @@
                 <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.idcard.index') }}">ID Card</a></li>
             </ul>
         </li>
+    @endif
+    @if (Auth::user()->getPermission('perjalanan_dinas') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item">
             <a href="{{ route('kepegawaian.pd.index') }}" class="pc-link">
                 <span class="pc-micon">
@@ -78,15 +82,15 @@
                 <span class="pc-mtext">Perjalanan Dinas</span>
             </a>
         </li>
-        <li class="pc-item">
-            <a href="{{ route('kepegawaian.feedback.index') }}" class="pc-link">
-                <span class="pc-micon">
-                    <i class="fas fa-theater-masks"></i>
-                </span>
-                <span class="pc-mtext">Masukan / Saran</span>
-            </a>
-        </li>
     @endif
+    <li class="pc-item">
+        <a href="{{ route('kepegawaian.feedback.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="fas fa-theater-masks"></i>
+            </span>
+            <span class="pc-mtext">Masukan / Saran</span>
+        </a>
+    </li>
     @if (
             Auth::user()->getPermission('akses_jabatan') == true ||
             Auth::user()->getPermission('akun_pengguna') == true ||
