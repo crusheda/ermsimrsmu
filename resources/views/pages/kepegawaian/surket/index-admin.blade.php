@@ -119,7 +119,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_batal_verif" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan penolakan Pengajuan Surat Keterangan tersebut status akan berubah menjadi <kbd>DITOLAK</kbd>, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan proses.</p>
+                    <p style="text-align: justify;">Anda akan melakukan pembatalan verifikasi Pengajuan Surat Keterangan tersebut sehingga status akan berubah menjadi <kbd>PENGAJUAN</kbd>, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan proses.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujubatalverif">
                         <span class="switch-toggle-slider">
@@ -130,23 +130,23 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-batal-verif" class="btn btn-danger me-sm-3 me-1" onclick="prosesBatalVerif()"><i class="fas fa-undo me-1" style="font-size:13px"></i> Batalkan Verifikasi</button>
+                    <button type="submit" id="btn-batal-verif" class="btn btn-warning me-sm-3 me-1" onclick="prosesBatalVerif()"><i class="fas fa-undo me-1" style="font-size:13px"></i> Batalkan Verifikasi</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal animate__animated animate__rubberBand fade" id="modalStatus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal animate__animated animate__rubberBand fade" id="modalBatalTolak" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Perubahan Status Pengajuan
+                        Form Pembatalan Penolakan Pengajuan
                     </h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_status" hidden>
-                    <p>Tahapan proses otomatis berurutan dari mulai Pengajuan, Dalam Proses, dan Proses Selesai. Ceklis dibawah untuk melanjutkan proses Perubahan Status ke tahap selanjutnya.</p>
+                    <p style="text-align: justify;">Anda akan melakukan pembatalan penolakan Pengajuan Surat Keterangan tersebut sehingga status akan berubah menjadi <kbd>PENGAJUAN</kbd>, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan proses.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujustatus">
                         <span class="switch-toggle-slider">
@@ -157,7 +157,7 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-status" class="btn btn-success me-sm-3 me-1" onclick="prosesUbahStatus()"><i class="fas fa-flag-checkered me-1" style="font-size:13px"></i> Perbarui Status</button>
+                    <button type="submit" id="btn-status" class="btn btn-danger me-sm-3 me-1" onclick="prosesBatalTolak()"><i class="fas fa-flag-checkered me-1" style="font-size:13px"></i> Batalkan Penolakan</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
@@ -214,7 +214,7 @@
         function showRiwayat() {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
-                url: "/api/kepegawaian/pengajuan/surket/{{ Auth::user()->id }}/table",
+                url: "/api/kepegawaian/pengajuan/surket/table",
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -228,65 +228,53 @@
                             var status = `<span class="badge rounded-pill text-bg-primary">Pengajuan</span>`;
                         } else {
                             if (item.progress == 1) {
-                                var status = `<span class="badge rounded-pill text-bg-warning">Dalam Proses</span>`;
+                                var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
                             } else {
-                                if (item.progress == 2) {
-                                    var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
-                                } else {
-                                    var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
-                                }
+                                var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
                             }
                         }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
-                        if (item.valid == null) {
-                            if (item.progress == 3) {
-                                clrbtn = 'text-secondary';
-                            } else {
-                                clrbtn = 'text-primary';
-                            }
+                        if (item.progress == 2) {
+                            clrbtn = 'text-danger';
                         } else {
-                            if (item.progress == 3) {
-                                clrbtn = 'text-danger';
+                            if (item.progress == 1) {
+                                clrbtn = 'text-success';
                             } else {
-                                if (item.progress == 2) {
-                                    clrbtn = 'text-secondary';
+                                if (item.progress == 0) {
+                                    clrbtn = 'text-primary';
                                 } else {
-                                    clrbtn = 'text-warning';
+                                    clrbtn = 'text-secondary';
                                 }
                             }
                         }
                         content += `<td><center><div class='btn-group'>`;
                             content += `<button type='button' class='btn btn-sm avtar avtar-s btn-link ${clrbtn} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (item.valid == null) {
-                                            if (item.progress == 3) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item btn btn-link text-secondary'><i class="fa-fw fas fa-check-square nav-icon me-1"></i>Verif</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info'><i class="fa-fw fas fa-check-square nav-icon me-1"></i>Download</a></li>`;
+                                        if (item.progress == 2) {
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-check-square nav-icon me-1"></i>Verif</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="batalTolak(` + item.id + `)"><i class="fa-fw fas fas fa-reply nav-icon me-1"></i>Batal Tolak</a></li>`;
+                                        } else {
+                                            if (item.progress == 1) {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="batalVerif(` + item.id + `)"><i class="fa-fw fas fas fa-reply nav-icon me-1"></i>Batal Verif</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-times-circle nav-icon me-1"></i>Tolak</a></li>`;
                                             } else {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item btn btn-link text-primary' onclick="verif(` + item.id + `)"><i class="fa-fw fas fa-check-square nav-icon me-1"></i>Verif</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="tolak(` + item.id + `)"><i class="fa-fw fas fa-times-circle nav-icon me-1"></i>Tolak</a></li>`;
-                                            }
-                                        } else {
-                                            if (item.progress == 3) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-flag-checkered nav-icon me-1"></i>Perbarui Status</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-times-circle nav-icon me-1"></i>Batal Verif</a></li>`;
-                                            } else {
-                                                if (item.progress >= 1) {
-                                                    if (item.progress <= 2) {
-                                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-flag-checkered nav-icon me-1"></i>Perbarui Status</a></li>`;
-                                                    } else {
-                                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="ubahStatus(` + item.id + `)"><i class="fa-fw fas fa-flag-checkered nav-icon me-1"></i>Perbarui Status</a></li>`;
-                                                    }
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-times-circle nav-icon me-1"></i>Batal Verif</a></li>`;
-                                                } else {
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="ubahStatus(` + item.id + `)"><i class="fa-fw fas fa-flag-checkered nav-icon me-1"></i>Perbarui Status</a></li>`;
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="batalVerif(` + item.id + `)"><i class="fa-fw fas fa-times-circle nav-icon me-1"></i>Batal Verif</a></li>`;
+                                                if (item.progress == 0) {
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="verif(` + item.id + `)"><i class="fa-fw fas fa-check-square nav-icon me-1"></i>Verif</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="tolak(` + item.id + `)"><i class="fa-fw fas fa-times-circle nav-icon me-1"></i>Tolak</a></li>`;
                                                 }
                                             }
                                         }
                             content += `</ul>`;
                         content += "</div></center></td>";
-                        content += "<td>" + item.kategori + "</td>";
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>` + item.kategori + `</h6>
+                                                <small class='text-truncate text-muted'>No. Surat ` + zeroPad(item.no_surat,100) + `</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
@@ -301,7 +289,7 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>${item.valid?'Telah Diverifikasi oleh <b class="text-primary">Kepegawaian</b>':'Belum Terverifikasi'}</h6>
-                                                <small class='text-truncate text-muted'>${item.tgl_valid?'Pada '+item.tgl_valid:''}</small>
+                                                <small class='text-truncate text-muted'>${item.progress==2?'Ditolak':''} ${item.tgl_valid?'Pada '+item.tgl_valid:''}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -370,6 +358,49 @@
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Pengajuan Surat Keterangan Anda gagal ditolak',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
+        function batalTolak(id) {
+            $("#id_status").val(id);
+            var inputs = document.getElementById('setujustatus');
+            inputs.checked = false;
+            $('#modalBatalTolak').modal('show');
+        }
+
+        function prosesBatalTolak(id) {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujustatus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan pembatalan status penolakan pengajuan tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_status").val();
+                $.ajax({
+                    url: "/api/kepegawaian/pengajuan/surket/"+id+"/bataltolak",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Penolakan Pengajuan Surat Keterangan telah berhasil dibatalkan pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalBatalTolak').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Pembatalan Penolakan Pengajuan Surat Keterangan gagal dilakukan',
                             position: 'topRight'
                         });
                     }
@@ -464,49 +495,6 @@
             }
         }
 
-        function ubahStatus(id) {
-            $("#id_status").val(id);
-            var inputs = document.getElementById('setujustatus');
-            inputs.checked = false;
-            $('#modalStatus').modal('show');
-        }
-
-        function prosesUbahStatus(id) {
-            // SWITCH BTN HAPUS
-            var checkboxHapus = $('#setujustatus').is(":checked");
-            if (checkboxHapus == false) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan perubahan status pengajuan tersebut',
-                    position: 'topRight'
-                });
-            } else {
-                // PROSES HAPUS
-                var id = $("#id_status").val();
-                $.ajax({
-                    url: "/api/kepegawaian/pengajuan/surket/"+id+"/ubahstatus",
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Pengajuan Surat Keterangan Anda telah berhasil diperbarui pada '+res,
-                            position: 'topRight'
-                        });
-                        $('#modalStatus').modal('hide');
-                        showRiwayat();
-                    },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Pengajuan Surat Keterangan Anda gagal diperbarui',
-                            position: 'topRight'
-                        });
-                    }
-                });
-            }
-        }
-
         function getDateTime() {
             var now = new Date();
             var year = now.getFullYear();
@@ -520,6 +508,11 @@
             }
             var dateTime = year + '-' + month + '-' + day;
             return dateTime;
+        }
+
+        function zeroPad(nr,base){ // 1 => 001 (1,100)
+            var  len = (String(base).length - String(nr).length)+1;
+            return len > 0? new Array(len).join('0')+nr : nr;
         }
     </script>
 @endsection

@@ -64,8 +64,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
-                                href="javascript: void(0);" role="tab" aria-selected="true">
-                                <i class="ti ti-plane me-2"></i><s>Surat Tugas</s>
+                                href="#surtug" role="tab" aria-selected="true" onclick="refreshSurtug()">
+                                <i class="ti ti-plane me-2"></i>Surat Tugas
                             </a>
                         </li>
                         {{-- <li class="nav-item">
@@ -882,6 +882,95 @@
                                             </td>
                                         </tr>
                                     </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- FORM SURAT TUGAS --}}
+                <div class="tab-pane" id="surtug" role="tabpanel" aria-labelledby="profile-tab-2">
+                    <div class="card" @if($list['show']->deleted_at != null) hidden @endif>
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Surat Tugas</h5>
+                            <div class="flex-shrink-0">
+                            </div>
+                        </div>
+                        <div class="card-body p-b-10">
+                            <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                                <small>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Batas maksimal upload dokumen <kbd>3 mb</kbd> dan hanya berformat <b>PDF</b> <br>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pegawai-pegawai yang sudah ditambahkan akan mendapatkan akses download dokumen Surat Tugas tersebut pada masing-masing halaman surat tugas pegawai beserta notifikasi
+                                    {{-- <i class="ti ti-arrow-narrow-right text-primary me-1"></i>  --}}
+                                </small>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Daftar Pegawai <span class="text-danger">*</span></label>
+                                        <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
+                                            @if (count($list['users']) > 0)
+                                                @foreach ($list['users'] as $item)
+                                                    <option value="{{ $item->id }}">{{ $item->nama?$item->nama:$item->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                        <div class="row">
+                                            <div class="col"><input type="file" class="form-control" id="upload_surtug" accept="application/pdf"></div>
+                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahSurtug()" id="btn-upload-surtug" disabled><i class="fas fa-upload me-1"></i> Upload & Share</button></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card table-card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">Tabel Riwayat</h5>
+                            <div class="flex-shrink-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="Refresh Tabel Surat Tugas Pegawai" onclick="refreshSurtug()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-b-0 p-3">
+                            {{-- <div class="alert alert-secondary">
+                                <small>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data record yang dapat di <mark>ubah/hapus</mark> adalah data paling terakhir<br>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data terhapus diabaikan dan tidak dapat dikembalikan lagi atau dibatalkan<br>
+                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pembatalan data akan menonaktifkan data record dan rotasi jabatan pegawai pada baris yang dipilih dan akan digantikan oleh data jabatan pada record terakhir apabila terdapat data lebih dari 1
+                                </small>
+                            </div> --}}
+                            <div class="table-responsive">
+                                <table id="dttable-surtug" class="table dt-responsive table-hover w-100 align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th class="cell-fit">#ID</th>
+                                            <th class="cell-fit">DOKUMEN</th>
+                                            <th class="cell-fit">PEGAWAI</th>
+                                            <th class="cell-fit">DIPERBARUI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tampil-tbody-surtug">
+                                        <tr>
+                                            <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="cell-fit">#ID</th>
+                                            <th class="cell-fit">DOKUMEN</th>
+                                            <th class="cell-fit">PEGAWAI</th>
+                                            <th class="cell-fit">DIPERBARUI</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -2580,6 +2669,62 @@
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Dokumen tidak ditemukan.',
+                            position: 'topRight'
+                        });
+                    }
+                }
+            );
+        }
+
+        function refreshSurtug() {
+            $("#tampil-tbody-surtug").empty();
+            $("#tampil-tbody-surtug").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/profilkaryawan/surtug/table",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        // VALIDATION FORM
+                        // ------------------------------------------------------
+                        $("#tampil-tbody-surtug").empty();
+                        $('#dttable-surtug').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                                if (item.deleted_at == null) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/kepegawaian/profilkaryawan/surtug/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusSurtug(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-download me-1'></i> Download</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                }
+                            content += `</div></center></td>`;
+                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
+                            $('#tampil-tbody-surtug').append(content);
+                        });
+                        var table = $('#dttable-surtug').DataTable({
+                            order: [
+                                [3, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '40%' },
+                                { sWidth: '10%' },
+                                { sWidth: '30%' },
+                                { sWidth: '15%' },
+                            ],
+                            displayLength: 10,
+                            lengthChange: true,
+                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Riwayat tidak ditemukan',
                             position: 'topRight'
                         });
                     }

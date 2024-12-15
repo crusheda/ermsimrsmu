@@ -22,12 +22,19 @@ class CreateTableKepegawaianSurket extends Migration
                 $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
+            $table->integer('no_surat');
+            $table->integer('th_surat');
+            $table->date('tgl_surat');
             $table->string('pegawai_nama');
             $table->string('pegawai_ttl');
             $table->string('pegawai_pendidikan')->comment('Pendidikan Terakhir');
             $table->string('pegawai_alamat');
+            $table->date('pegawai_tmt');
+            $table->date('pegawai_tat')->nullable();
+            $table->string('profesi')->comment('Perawat/Bidan/Petugas Kasir/dll')->nullable();
+            $table->longText('deskripsi')->nullable();
 
-            $table->integer('progress')->comment('0=pengajuan;1=dalam_proses;2=selesai;3=ditolak');
+            $table->boolean('progress')->comment('0=pengajuan;1=diverifikasi;2=ditolak');
             $table->integer('valid')->comment('Verify from User Kepegawaian')->nullable();
             $table->dateTime('tgl_valid')->nullable();
 

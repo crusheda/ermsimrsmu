@@ -61,9 +61,47 @@
                             </div>
                         </div>
                     </div>
-                    <div class="divider"><span>Formulir</span></div>
+                    <div class="divider mb-3"><span>Periksa Kelengkapan Data Diri Anda</span></div>
                     <div class="row">
-                        <div class="col-12 mt-2">
+                        <div class="col-6 mb-3">
+                            <div class="form-group">
+                                <label for="form-label">Nama Lengkap + Gelar <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['user']->nama }}" class="form-control" disabled>
+                                <input type="text" name="nama" id="nama" value="{{ $list['user']->nama }}" class="form-control" hidden>
+                            </div>
+                        </div>
+                        <div class="col-2 mb-3">
+                            <div class="form-group">
+                                <label for="form-label">Tempat, Tanggal Lahir <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['user']->temp_lahir }}, {{ $list['user']->tgl_lahir }}" class="form-control" disabled>
+                                <input type="text" name="ttl" id="ttl" value="{{ $list['user']->temp_lahir }}, {{ $list['user']->tgl_lahir }}" class="form-control" hidden>
+                            </div>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <div class="form-group">
+                                <label for="form-label">Pendidikan <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['pendidikan'] }}" class="form-control" disabled>
+                                <input type="text" name="pendidikan" id="pendidikan" value="{{ $list['pendidikan'] }}" class="form-control" hidden>
+                            </div>
+                        </div>
+                        <div class="col-8 mb-3">
+                            <div class="form-group">
+                                <label for="form-label">Alamat Lengkap <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['user']->alamat_dom?$list['user']->alamat_dom:$list['user']->alamat_ktp }}" class="form-control" disabled>
+                                <input type="text" name="alamat" id="alamat" value="{{ $list['user']->alamat_dom?$list['user']->alamat_dom:$list['user']->alamat_ktp }}" class="form-control" hidden>
+                                <small>Apabila terdapat <b>ketidaksesuaian</b> data, silakan mengubah data diri Anda di menu Profil</small>
+                            </div>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <div class="form-group">
+                                <label for="form-label">TMT (Tanggal Mulai Tugas) <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['user']->tmt }}" class="form-control" disabled>
+                                <input type="text" name="tmt" id="tmt" value="{{ $list['user']->tmt }}" class="form-control" hidden>
+                                <small>Apabila TMT <b class="text-danger">Masih Kosong</b>, silakan menghubungi bagian Kepegawaian</small>
+                            </div>
+                        </div>
+                        <div class="divider mb-3"><span>Formulir</span></div>
+                        <div class="col-12">
                             <div class="mb-2 row">
                                 <label class="col-lg-3 col-form-label">Kategori Order Surat <a class="text-danger">*</a>
                                     <small class="text-muted d-block">Silakan order bagi yang berkepentingan</small>
@@ -194,14 +232,24 @@
 
             // Definisi
             var save = new FormData();
+            save.append('nama',$('#nama').val());
+            save.append('ttl',$('#ttl').val());
+            save.append('pendidikan',$('#pendidikan').val());
+            save.append('alamat',$('#alamat').val());
+            save.append('tmt',$('#tmt').val());
             save.append('kategori',$('#kategori').val());
             save.append('pegawai','{{ Auth::user()->id }}');
 
             // console.log(save.get('pengajuan'));
-            if ($('#kategori').val() == "") {
+            if ($('#nama').val() == "" ||
+                $('#ttl').val() == "" ||
+                $('#pendidikan').val() == "" ||
+                $('#alamat').val() == "" ||
+                $('#tmt').val() == "" ||
+                $('#kategori').val() == "") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
-                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    message: 'Pastikan tidak ada data yang kosong, silakan membaca keterangan pengisian',
                     position: 'topRight'
                 });
             } else {
@@ -235,7 +283,7 @@
                         } else {
                             iziToast.success({
                                 title: 'Pesan Sukses!',
-                                message: 'Pengajuan ID Card telah berhasil dilakukan pada '+res,
+                                message: 'Pengajuan Surat Keterangan telah berhasil dilakukan pada '+res,
                                 position: 'topRight'
                             });
                             showRiwayat();
@@ -295,7 +343,14 @@
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
-                        content += "<td>" + item.kategori + "</td>";
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>` + item.kategori + `</h6>
+                                                <small class='text-truncate text-muted'>No. Surat ` + zeroPad(item.no_surat,100) + `</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
@@ -363,7 +418,7 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
-                    url: "/api/kepegawaian/pengajuan/idcard/"+id+"/delete",
+                    url: "/api/kepegawaian/pengajuan/surket/"+id+"/delete",
                     type: 'DELETE',
                     success: function(res) {
                         iziToast.success({
@@ -398,6 +453,11 @@
             }
             var dateTime = year + '-' + month + '-' + day;
             return dateTime;
+        }
+
+        function zeroPad(nr,base){ // 1 => 001 (1,100)
+            var  len = (String(base).length - String(nr).length)+1;
+            return len > 0? new Array(len).join('0')+nr : nr;
         }
     </script>
 @endsection

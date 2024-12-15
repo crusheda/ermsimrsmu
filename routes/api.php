@@ -60,6 +60,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('profilkaryawan/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahSpkRkk'])->name('profilkaryawan.show.ubahSpkRkk');
         Route::post('profilkaryawan/spkrkk/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahSpkRkk'])->name('profilkaryawan.ubahSpkRkk');
         Route::delete('profilkaryawan/spkrkk/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusSpkRkk'])->name('profilkaryawan.hapusSpkRkk');
+        // SURAT TUGAS
+            // ADMIN
+            Route::get('profilkaryawan/surtug/table', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableAdminSurtug'])->name('profilkaryawan.tableAdminSurtug');
+            // USER
+            Route::get('profilkaryawan/surtug/table/{id}', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableUserSurtug'])->name('profilkaryawan.tableUserSurtug');
         // KEPEGAWAIAN (NIP, KLASIFIKASI, dan TAT/TMT)
         Route::get('profilkaryawan/kepegawaian/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showKepegawaian'])->name('profilkaryawan.show.kepegawaian');
         Route::post('profilkaryawan/kepegawaian/nip/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahNIP'])->name('profilkaryawan.tambahNIP');
@@ -83,8 +88,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/pengajuan/surket/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableAdmin'])->name('kepegawaian.surket.tableAdmin');
                 Route::get('kepegawaian/pengajuan/surket/{id}/verif/{user}', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'verif'])->name('kepegawaian.surket.verif');
                 Route::get('kepegawaian/pengajuan/surket/{id}/unverif', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'unverif'])->name('kepegawaian.surket.unverif');
-                Route::get('kepegawaian/pengajuan/surket/{id}/ubahstatus', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'ubahStatus'])->name('kepegawaian.surket.ubahStatus');
                 Route::get('kepegawaian/pengajuan/surket/{id}/tolak', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tolak'])->name('kepegawaian.surket.tolak');
+                Route::get('kepegawaian/pengajuan/surket/{id}/bataltolak', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'batalTolak'])->name('kepegawaian.surket.batalTolak');
                 // USER
                 Route::get('kepegawaian/pengajuan/surket/{id}/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableUser'])->name('kepegawaian.surket.tableUser');
                 Route::post('kepegawaian/pengajuan/surket/tambah', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tambah'])->name('kepegawaian.surket.tambah');

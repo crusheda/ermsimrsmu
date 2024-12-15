@@ -82,6 +82,7 @@ class ProfilKaryawanController extends Controller
         $show = DB::table('users')
                 ->where('users.id','=', $id)
                 ->first();
+        $users = users::where('nik','!=',null)->where('nik','!=',0)->orderBy('nama', 'asc')->get();
         $foto = DB::table('users_foto')->where('user_id', '=', $id)->first();
         $showlog = logs::where('user_id', $id)->where('log_type', '=', 'login')->select('log_date')->orderBy('log_date', 'DESC')->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
@@ -109,7 +110,7 @@ class ProfilKaryawanController extends Controller
             'showlog' => $showlog,
             'model' => $model,
             'show' => $show,
-            // 'status' => $status,
+            'users' => $users,
             'foto' => $foto,
             'role' => $role,
             'onlyRole' => $onlyRole,

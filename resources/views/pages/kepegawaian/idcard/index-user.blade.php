@@ -226,7 +226,6 @@
 
             // Definisi
             var save = new FormData();
-            var filesAdded = $('#filex')[0].files;
             save.append('pengajuan',$('input[name="pengajuan"]:checked').val());
             save.append('nama',$('input[name="nama"]').val());
             save.append('panggilan',$('input[name="panggilan"]').val());
@@ -234,7 +233,8 @@
             save.append('jabatan',$('input[name="jabatan"]').val());
             save.append('alasan',$('textarea[name=alasan]').val());
             save.append('pegawai','{{ Auth::user()->id }}');
-            if (filesAdded) {
+            if ($('input[name="pengajuan"]:checked').val() == 1) {
+                var filesAdded = $('#filex')[0].files;
                 save.append('file',filesAdded[0]);
             }
 
@@ -253,50 +253,105 @@
                     position: 'topRight'
                 });
             } else {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: 'POST',
-                    url: '/api/kepegawaian/pengajuan/idcard/tambah',
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    data: save,
-                    success: function(res) {
-                        if (res.code == 500) {
-                            iziToast.error({
-                                title: 'Pesan Galat!',
-                                message: res.message,
-                                position: 'topRight',
-                                buttons: [
-                                    [
-                                        '<button>Tutup</button>',
-                                        function (instance, toast) {
-                                            instance.hide({
-                                                transitionOut: 'fadeOutUp'
-                                            }, toast);
-                                        }
-                                    ]
-                                ]
-                            });
-                        } else {
-                            iziToast.success({
-                                title: 'Pesan Sukses!',
-                                message: 'Pengajuan ID Card telah berhasil dilakukan pada '+res,
-                                position: 'topRight'
-                            });
-                            showRiwayat();
-                        }
-                    },
-                    error: function (res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
+                if ($('input[name="pengajuan"]:checked').val() == 1) {
+                    if (filesAdded.length == 0) {
+                        iziToast.warning({
+                            title: 'Pesan Ambigu!',
+                            message: 'Pastikan Anda mengupload kwitansi',
                             position: 'topRight'
                         });
+                    } else {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            method: 'POST',
+                            url: '/api/kepegawaian/pengajuan/idcard/tambah',
+                            contentType: false,
+                            processData: false,
+                            dataType: 'json',
+                            data: save,
+                            success: function(res) {
+                                if (res.code == 500) {
+                                    iziToast.error({
+                                        title: 'Pesan Galat!',
+                                        message: res.message,
+                                        position: 'topRight',
+                                        buttons: [
+                                            [
+                                                '<button>Tutup</button>',
+                                                function (instance, toast) {
+                                                    instance.hide({
+                                                        transitionOut: 'fadeOutUp'
+                                                    }, toast);
+                                                }
+                                            ]
+                                        ]
+                                    });
+                                } else {
+                                    iziToast.success({
+                                        title: 'Pesan Sukses!',
+                                        message: 'Pengajuan ID Card telah berhasil dilakukan pada '+res,
+                                        position: 'topRight'
+                                    });
+                                    showRiwayat();
+                                }
+                            },
+                            error: function (res) {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.responseJSON.error,
+                                    position: 'topRight'
+                                });
+                            }
+                        });
                     }
-                });
+                } else {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: '/api/kepegawaian/pengajuan/idcard/tambah',
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        data: save,
+                        success: function(res) {
+                            if (res.code == 500) {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.message,
+                                    position: 'topRight',
+                                    buttons: [
+                                        [
+                                            '<button>Tutup</button>',
+                                            function (instance, toast) {
+                                                instance.hide({
+                                                    transitionOut: 'fadeOutUp'
+                                                }, toast);
+                                            }
+                                        ]
+                                    ]
+                                });
+                            } else {
+                                iziToast.success({
+                                    title: 'Pesan Sukses!',
+                                    message: 'Pengajuan ID Card telah berhasil dilakukan pada '+res,
+                                    position: 'topRight'
+                                });
+                                showRiwayat();
+                            }
+                        },
+                        error: function (res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
             }
 
             $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
@@ -332,11 +387,11 @@
                             }
                             // DROPDOWN BUTTON
                             if (input == date) {
-                                var dropdown = `<a class="dropdown-item text-warning" href="javascript:void(0);" onclick="ubah(${item.id})"><i class="ti ti-edit me-2"></i> Ubah</a>
-                                                <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="hapus(${item.id})"><i class="ti ti-trash me-2"></i> Hapus</a>`;
+                                var dropdown = `<a class="dropdown-item text-warning" href="javascript:void(0);" onclick="ubah(${item.id})"><i class="fas fa-edit me-2"></i> Ubah</a>
+                                                <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="hapus(${item.id})"><i class="fas fa-trash me-2"></i> Hapus</a>`;
                             } else {
-                                var dropdown = `<a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="ti ti-edit me-2"></i> Ubah</a>
-                                                <a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="ti ti-trash me-2"></i> Hapus</a>`;
+                                var dropdown = `<a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="fas fa-edit me-2"></i> Ubah</a>
+                                                <a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="fas fa-trash me-2"></i> Hapus</a>`;
                             }
                             $('#riwayat_pengajuan').append(`
                                 <li class="list-group-item" id="list${item.id}">

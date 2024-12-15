@@ -54,7 +54,7 @@ class IDCardController extends Controller
     // USER
     function riwayat($id)
     {
-        $data = idcard::where('pegawai_id',$id)->get();
+        $data = idcard::where('pegawai_id',$id)->orderBy('updated_at','desc')->get();
         return response()->json($data);
     }
 
