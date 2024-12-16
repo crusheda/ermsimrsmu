@@ -62,12 +62,12 @@
                                 <i class="ti ti-brand-docker me-2"></i>SPK & RKK
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
                                 href="#surtug" role="tab" aria-selected="true" onclick="refreshSurtug()">
                                 <i class="ti ti-plane me-2"></i>Surat Tugas
                             </a>
-                        </li>
+                        </li> --}}
                         {{-- <li class="nav-item">
                             <a class="nav-link" id="profile-tab-6" data-bs-toggle="tab"
                                 href="#profile-6" role="tab" aria-selected="true">
@@ -442,7 +442,7 @@
                                             </div>
                                             <div class="mb-3 mt-3">
                                                 <div class="alert alert-secondary">
-                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Nakes (dokter, perawat, bidan)<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Nakes (dokter, perawat, bidan, penata anestesi, dll)<br>
                                                     <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Nakesla (Ahli gizi, Rehab Medik, ATLM, Apoteker, TTK, Radiografer, Rekam Medik)<br>
                                                     <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Non Nakes (Selain Nakes dan Nakesla)
                                                 </div>
@@ -809,7 +809,8 @@
                                         </div>
                                         <div class="alert alert-secondary alert-dismissible fade show" role="alert">
                                             <small>
-                                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Tanggal Berakhir (SPK) bersifat wajib diisi apabila karyawan tersebut berstatus THL / Kontrak <br>
+                                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> SPK adalah Surat Penugasan Klinis dan RKK adalah Rincian Kewenangan Klinis<br>
+                                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Batas maksimum ukuran file yang upload sebesar 3 mb (<b>PDF</b>)<br>
                                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> SPK / RKK dapat diubah / hapus apabila berstatus <span class="badge rounded-pill text-bg-success p-1">Aktif</span>
                                             </small>
                                         </div>
@@ -818,26 +819,19 @@
                                         <div class="form-group mb-3">
                                             <label class="form-label">Jenis Dokumen <span class="text-danger">*</span></label>
                                             <select class="form-control" id="jns_spkrkk">
-                                                <option value="" selected hidden>Pilih Kategori Rotasi</option>
-                                                <option value="0">SPK (Surat Penugasan Klinis)</option>
-                                                <option value="1">RKK (Rincian Kewenangan Klinis)</option>
+                                                <option value="" selected hidden>Pilih</option>
+                                                <option value="0">SPK & RKK</option>
+                                                {{-- <option value="1">RKK (Rincian Kewenangan Klinis)</option> --}}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 penetapan_true_spkrkk">
+                                    <div class="col-md-2">
                                         <div class="form-group mb-3">
-                                            <label class="form-label">Tgl. Berakhir SPK <span id="wajib_tgl_akhir_spkrkk" class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="validasi_tgl_akhir_spkrkk" hidden>
+                                            <label class="form-label">Tgl. Masa Berlaku <span class="text-danger">*</span></label>
                                             <input type="date" class="form-control" id="tgl_akhir_spkrkk">
                                         </div>
                                     </div>
-                                    <div class="col-md-4 penetapan_true_spkrkk">
-                                        <div class="form-group mb-3">
-                                            <label class="form-label">Deskripsi</label>
-                                            <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 penetapan_false_spkrkk" hidden>
+                                    <div class="col-md-4">
                                         <div class="form-group mb-3">
                                             <label class="form-label">Deskripsi</label>
                                             <textarea id="deskripsi_spkrkk" class="form-control" placeholder="Tuliskan Keterangan (Optional)" rows="1"></textarea>
@@ -882,95 +876,6 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- FORM SURAT TUGAS --}}
-                <div class="tab-pane" id="surtug" role="tabpanel" aria-labelledby="profile-tab-2">
-                    <div class="card" @if($list['show']->deleted_at != null) hidden @endif>
-                        <div class="card-header d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 card-title flex-grow-1">Surat Tugas</h5>
-                            <div class="flex-shrink-0">
-                            </div>
-                        </div>
-                        <div class="card-body p-b-10">
-                            <div class="alert alert-secondary alert-dismissible fade show" role="alert">
-                                <small>
-                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Batas maksimal upload dokumen <kbd>3 mb</kbd> dan hanya berformat <b>PDF</b> <br>
-                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pegawai-pegawai yang sudah ditambahkan akan mendapatkan akses download dokumen Surat Tugas tersebut pada masing-masing halaman surat tugas pegawai beserta notifikasi
-                                    {{-- <i class="ti ti-arrow-narrow-right text-primary me-1"></i>  --}}
-                                </small>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Daftar Pegawai <span class="text-danger">*</span></label>
-                                        <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
-                                            @if (count($list['users']) > 0)
-                                                @foreach ($list['users'] as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->nama?$item->nama:$item->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
-                                        <div class="row">
-                                            <div class="col"><input type="file" class="form-control" id="upload_surtug" accept="application/pdf"></div>
-                                            <div class="col-auto"><button class="btn btn-primary" onclick="prosesTambahSurtug()" id="btn-upload-surtug" disabled><i class="fas fa-upload me-1"></i> Upload & Share</button></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card table-card">
-                        <div class="card-header d-flex align-items-center justify-content-between py-3">
-                            <h5 class="mb-0 card-title flex-grow-1">Tabel Riwayat</h5>
-                            <div class="flex-shrink-0">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                        title="Refresh Tabel Surat Tugas Pegawai" onclick="refreshSurtug()">
-                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body p-b-0 p-3">
-                            {{-- <div class="alert alert-secondary">
-                                <small>
-                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data record yang dapat di <mark>ubah/hapus</mark> adalah data paling terakhir<br>
-                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data terhapus diabaikan dan tidak dapat dikembalikan lagi atau dibatalkan<br>
-                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pembatalan data akan menonaktifkan data record dan rotasi jabatan pegawai pada baris yang dipilih dan akan digantikan oleh data jabatan pada record terakhir apabila terdapat data lebih dari 1
-                                </small>
-                            </div> --}}
-                            <div class="table-responsive">
-                                <table id="dttable-surtug" class="table dt-responsive table-hover w-100 align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th class="cell-fit">#ID</th>
-                                            <th class="cell-fit">DOKUMEN</th>
-                                            <th class="cell-fit">PEGAWAI</th>
-                                            <th class="cell-fit">DIPERBARUI</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tampil-tbody-surtug">
-                                        <tr>
-                                            <td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th class="cell-fit">#ID</th>
-                                            <th class="cell-fit">DOKUMEN</th>
-                                            <th class="cell-fit">PEGAWAI</th>
-                                            <th class="cell-fit">DIPERBARUI</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -2068,158 +1973,59 @@
             $("#btn-upload-spkrkk").prop('disabled', true);
             $("#btn-upload-spkrkk").find("i").toggleClass("fa-upload fa-sync fa-spin");
 
-            var fd = new FormData();
-
             // ISIAN FORM WAJIB
-            var cekValidasi = $('#validasi_tgl_akhir_spkrkk').val(); // IF VAL (2 / 3) = THL & KONTRAK
             var jns_spkrkk = $('#jns_spkrkk').val();
+            var tgl_akhir_spkrkk = $('#tgl_akhir_spkrkk').val();
             var deskripsi_spkrkk = $('#deskripsi_spkrkk').val();
             var filesAdded = $('#upload_spkrkk')[0].files;
 
             // EXECUTE
-            if (jns_spkrkk == 1) {
-                if (jns_spkrkk == '' || filesAdded.length == 0) {
-                    iziToast.warning({
-                        title: 'Pesan Ambigu!',
-                        message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
-                        position: 'topRight'
-                    });
-                } else {
-                    // INISIALISASI
-                    fd.append('jns_dokumen',jns_spkrkk);
-                    fd.append('deskripsi',deskripsi_spkrkk);
-                    fd.append('user_id','{{ Auth::user()->id }}');
-                    fd.append('pegawai_id','{{ $list["show"]->id }}');
-                    fd.append('file',filesAdded[0]);
-
-                    // AJAX REQUEST
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: "/api/profilkaryawan/spkrkk/tambah",
-                        method: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        dataType: 'json',
-                        success: function(res){
-                            iziToast.success({
-                                title: 'Pesan Sukses!',
-                                message: 'RKK Pegawai berhasil diupload pada '+res,
-                                position: 'topRight'
-                            });
-                            if (res) {
-                                refreshSpkRkk();
-                            }
-                        },
-                        error: function(res){
-                            console.log("error : " + JSON.stringify(res) );
-                            iziToast.error({
-                                title: 'Pesan Galat!',
-                                message: res.responseJSON,
-                                position: 'topRight'
-                            });
-                        }
-                    });
-                }
+            if (jns_spkrkk == '' || tgl_akhir_spkrkk == '' || filesAdded.length == 0) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
+                    position: 'topRight'
+                });
             } else {
-                // IF SPK
-                var tgl_akhir_spkrkk = $('#tgl_akhir_spkrkk').val();
-                if (cekValidasi == 2 || cekValidasi == 3) { // IF THL / KONTRAK
-                    if (jns_spkrkk == '' || tgl_akhir_spkrkk == '' || filesAdded.length == 0) {
-                        iziToast.warning({
-                            title: 'Pesan Ambigu!',
-                            message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
+                // INISIALISASI
+                var fd = new FormData();
+                fd.append('jns_dokumen',jns_spkrkk);
+                fd.append('deskripsi',deskripsi_spkrkk);
+                fd.append('tgl_berakhir',tgl_akhir_spkrkk);
+                fd.append('user_id','{{ Auth::user()->id }}');
+                fd.append('pegawai_id','{{ $list["show"]->id }}');
+                fd.append('file',filesAdded[0]);
+
+                // AJAX REQUEST
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/profilkaryawan/spkrkk/tambah",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'SPK & RKK Pegawai berhasil diupload pada '+res,
                             position: 'topRight'
                         });
-                    } else {
-                        // INISIALISASI
-                        fd.append('jns_dokumen',jns_spkrkk);
-                        fd.append('deskripsi',deskripsi_spkrkk);
-                        fd.append('tgl_berakhir',tgl_akhir_spkrkk);
-                        fd.append('user_id','{{ Auth::user()->id }}');
-                        fd.append('pegawai_id','{{ $list["show"]->id }}');
-                        fd.append('file',filesAdded[0]);
-
-                        // AJAX REQUEST
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            url: "/api/profilkaryawan/spkrkk/tambah",
-                            method: 'post',
-                            data: fd,
-                            contentType: false,
-                            processData: false,
-                            dataType: 'json',
-                            success: function(res){
-                                iziToast.success({
-                                    title: 'Pesan Sukses!',
-                                    message: 'SPK Pegawai berhasil diupload pada '+res,
-                                    position: 'topRight'
-                                });
-                                if (res) {
-                                    refreshSpkRkk();
-                                }
-                            },
-                            error: function(res){
-                                console.log("error : " + JSON.stringify(res) );
-                                iziToast.error({
-                                    title: 'Pesan Galat!',
-                                    message: res.responseJSON,
-                                    position: 'topRight'
-                                });
-                            }
-                        });
-                    }
-                } else {
-                    if (jns_spkrkk == '' || filesAdded.length == 0) {
-                        iziToast.warning({
-                            title: 'Pesan Ambigu!',
-                            message: 'Mohon lengkapi semua data (<span class="text-danger">*</span>) terlebih dahulu dan pastikan tidak ada yang kosong',
+                        if (res) {
+                            refreshSpkRkk();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
                             position: 'topRight'
                         });
-                    } else {
-                        // INISIALISASI
-                        fd.append('jns_dokumen',jns_spkrkk);
-                        fd.append('deskripsi',deskripsi_spkrkk);
-                        fd.append('user_id','{{ Auth::user()->id }}');
-                        fd.append('pegawai_id','{{ $list["show"]->id }}');
-                        fd.append('file',filesAdded[0]);
-
-                        // AJAX REQUEST
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            url: "/api/profilkaryawan/spkrkk/tambah",
-                            method: 'post',
-                            data: fd,
-                            contentType: false,
-                            processData: false,
-                            dataType: 'json',
-                            success: function(res){
-                                iziToast.success({
-                                    title: 'Pesan Sukses!',
-                                    message: 'SPK Pegawai berhasil diupload pada '+res,
-                                    position: 'topRight'
-                                });
-                                if (res) {
-                                    refreshSpkRkk();
-                                }
-                            },
-                            error: function(res){
-                                console.log("error : " + JSON.stringify(res) );
-                                iziToast.error({
-                                    title: 'Pesan Galat!',
-                                    message: res.responseJSON,
-                                    position: 'topRight'
-                                });
-                            }
-                        });
                     }
-                }
+                });
             }
 
             $("#btn-upload-spkrkk").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
@@ -2344,13 +2150,13 @@
                                 }
                             content += `</div></center></td>`;
                             if (item.deleted_at != null) {
-                                bgHapus = `<span class="badge rounded-pill text-bg-secondary p-1">Terhapus</span>`;
+                                bgHapus = `<span class="badge rounded-pill text-bg-danger p-1">Terhapus</span>`;
                             } else {
                                 bgHapus = ``;
                             }
                             content += "<td style='white-space: normal !important;word-wrap: break-word;'>"
                                         + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>"
-                                        + "<h6 class='mb-0'>" + item.nama_referensi + "&nbsp;&nbsp;" + bgHapus + "</h6><small class='text-truncate text-muted'>Oleh " + item.nama_kepegawaian + "</small>"
+                                        + "<h6 class='mb-0'>" + item.nama_referensi + `&nbsp;&nbsp;${item.status != 0?'<span class="badge rounded-pill text-bg-success p-1">Berlaku/Aktif</span>':'<span class="badge rounded-pill text-bg-secondary p-1">Nonaktif</span>'}&nbsp;&nbsp;` + bgHapus + "</h6><small class='text-truncate text-muted'>Oleh " + item.nama_kepegawaian + "</small>"
                                         + "</div></div></td>";
                             content += `<td>` + new Date(item.tgl_berlaku).toLocaleDateString("sv-SE") + `</td>`;
                             content += `<td>${item.keterangan?item.keterangan:'-'}</td>`;
@@ -2595,15 +2401,15 @@
                             $('#upload_spkrkk').val('');
                             $('.status_true_spkrkk').prop('hidden',false);
                             $('.status_false_spkrkk').prop('hidden',true);
-                            $('#validasi_tgl_akhir_spkrkk').val(res.status.queue);
-                            if (res.status.queue == 2 || res.status.queue == 3) {
-                                // IF STATUS = THL & KONTRAK
-                                $('.penetapan_true_spkrkk').prop('hidden',false);
-                                $('.penetapan_false_spkrkk').prop('hidden',true);
-                            } else {
-                                $('.penetapan_true_spkrkk').prop('hidden',true);
-                                $('.penetapan_false_spkrkk').prop('hidden',false);
-                            }
+                            // $('#validasi_tgl_akhir_spkrkk').val(res.status.queue);
+                            // if (res.status.queue == 2 || res.status.queue == 3) {
+                            //     // IF STATUS = THL & KONTRAK
+                            //     $('.penetapan_true_spkrkk').prop('hidden',false);
+                            //     $('.penetapan_false_spkrkk').prop('hidden',true);
+                            // } else {
+                            //     $('.penetapan_true_spkrkk').prop('hidden',true);
+                            //     $('.penetapan_false_spkrkk').prop('hidden',false);
+                            // }
                         } else {
                             $('.status_true_spkrkk').prop('hidden',true);
                             $('.status_false_spkrkk').prop('hidden',false);
@@ -2629,18 +2435,18 @@
                                 }
                             content += `</div></center></td>`;
                             if (item.deleted_at != null) {
-                                bgHapus = `<span class="badge rounded-pill text-bg-secondary p-1">Terhapus</span>`;
+                                bgHapus = `<span class="badge rounded-pill text-bg-danger p-1">Terhapus</span>`;
                             } else {
                                 bgHapus = ``;
                             }
                             if (item.status != 0) {
                                 bgStatus = `<span class="badge rounded-pill text-bg-success p-1">Aktif</span>`;
                             } else {
-                                bgStatus = ``;
+                                bgStatus = `<span class="badge rounded-pill text-bg-secondary p-1">Nonaktif</span>`;
                             }
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>`
                                         + `<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>`
-                                        + `<h6 class='mb-0'>${item.jns_dokumen == 0?'<b class="text-primary">SPK</b>':'<b class="text-info">RKK</b>'}&nbsp;${item.nama_pegawai}&nbsp;&nbsp;` +bgStatus+ `&nbsp;&nbsp;` + bgHapus + `</h6><small class='text-truncate text-muted'>Oleh ` + item.nama_kepegawaian + `</small>`
+                                        + `<h6 class='mb-0'><b class="${item.status != 0?'text-primary':'text-secondary'}">${item.jns_dokumen == 0?'SPK & RKK':'Dokumen Lain'}</b>&nbsp;${item.nama_pegawai}&nbsp;&nbsp;` +bgStatus+ `&nbsp;&nbsp;` + bgHapus + `</h6><small class='text-truncate text-muted'>Oleh ` + item.nama_kepegawaian + `</small>`
                                         + `</div></div></td>`;
                             content += `<td>${item.tgl_berakhir?item.tgl_berakhir:'-'}</td>`;
                             content += `<td>${item.deskripsi?item.deskripsi:'-'}</td>`;
@@ -2669,62 +2475,6 @@
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Dokumen tidak ditemukan.',
-                            position: 'topRight'
-                        });
-                    }
-                }
-            );
-        }
-
-        function refreshSurtug() {
-            $("#tampil-tbody-surtug").empty();
-            $("#tampil-tbody-surtug").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
-            $.ajax(
-                {
-                    url: "/api/profilkaryawan/surtug/table",
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        // VALIDATION FORM
-                        // ------------------------------------------------------
-                        $("#tampil-tbody-surtug").empty();
-                        $('#dttable-surtug').DataTable().clear().destroy();
-                        res.show.forEach(item => {
-                            content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
-                                if (item.deleted_at == null) {
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/kepegawaian/profilkaryawan/surtug/download/`+item.id+`')"><i class='fas fa-download me-1'></i> Download</a>`;
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusSurtug(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
-                                } else {
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-download me-1'></i> Download</a>`;
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a>`;
-                                }
-                            content += `</div></center></td>`;
-                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
-                            $('#tampil-tbody-surtug').append(content);
-                        });
-                        var table = $('#dttable-surtug').DataTable({
-                            order: [
-                                [3, "desc"]
-                            ],
-                            bAutoWidth: false,
-                            aoColumns : [
-                                { sWidth: '5%' },
-                                { sWidth: '40%' },
-                                { sWidth: '10%' },
-                                { sWidth: '30%' },
-                                { sWidth: '15%' },
-                            ],
-                            displayLength: 10,
-                            lengthChange: true,
-                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
-                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
-                        });
-                    },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Riwayat tidak ditemukan',
                             position: 'topRight'
                         });
                     }

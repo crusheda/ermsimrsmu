@@ -84,6 +84,14 @@
         </li>
     @endif
     <li class="pc-item">
+        <a href="{{ route('kepegawaian.surtug.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="ti ti-plane"></i>
+            </span>
+            <span class="pc-mtext">Surat Tugas</span>
+        </a>
+    </li>
+    <li class="pc-item">
         <a href="{{ route('kepegawaian.feedback.index') }}" class="pc-link">
             <span class="pc-micon">
                 <i class="fas fa-theater-masks"></i>

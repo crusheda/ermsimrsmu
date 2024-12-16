@@ -52,8 +52,8 @@
                             <div class="alert alert-secondary">
                                 <small>
                                     {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi
+                                    {{-- <br><i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b> --}}
                                 </small>
                             </div>
                         </div>
@@ -92,6 +92,18 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3" id="showing" hidden>
+                            <div class="form-group">
+                                <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
+                                <select class="form-select select2" name="kendaraan_pegawai[]" id="kendaraan_pegawai" style="width: 100%" multiple>
+                                    @if (count($list['users']) > 0)
+                                        @foreach ($list['users'] as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
                             <div class="input-group">
@@ -109,7 +121,7 @@
                                 <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3" id="slide">
                             <div class="form-group">
                                 <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
                                 <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
@@ -121,18 +133,18 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-9 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Deskripsi Perjalanan</label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="1" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
+                                <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
+                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        {{-- <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Upload</label>
                                 <input type="file" class="form-control" id="filex" name="filex" accept="application/pdf">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="text-end btn-page mt-2">
                             <button class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
                             <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
@@ -161,7 +173,7 @@
                                     <th><center>#ID</center></th>
                                     <th><center>WAKTU</center></th>
                                     <th>ACARA</th>
-                                    <th>USER</th>
+                                    <th>PEGAWAI PELAKSANA</th>
                                     <th>UPDATE</th>
                                 </tr>
                             </thead>
@@ -177,7 +189,7 @@
                                     <th><center>#ID</center></th>
                                     <th><center>WAKTU</center></th>
                                     <th>ACARA</th>
-                                    <th>USER</th>
+                                    <th>PEGAWAI PELAKSANA</th>
                                     <th>UPDATE</th>
                                 </tr>
                             </tfoot>
@@ -190,7 +202,7 @@
 
     {{-- MODAL START --}}
     <div class="modal fade animate__animated animate__rubberBand" id="modalUbah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-xxl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
@@ -225,6 +237,18 @@
                                 <select class="form-control" name="kendaraan_edit" id="kendaraan_edit"></select>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3" id="showing_edit" hidden>
+                            <div class="form-group">
+                                <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
+                                <select class="form-select select2" name="kendaraan_pegawai_edit[]" id="kendaraan_pegawai_edit" style="width: 100%" multiple>
+                                    @if (count($list['users']) > 0)
+                                        @foreach ($list['users'] as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
                             <div class="input-group">
@@ -238,25 +262,25 @@
                                 <input type="text" class="form-control" name="lokasi_edit" id="lokasi_edit" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3" id="slide_edit">
                             <div class="form-group">
                                 <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
                                 <select class="form-select select2" name="pegawai_edit[]" id="pegawai_edit" style="width: 100%" multiple></select>
                             </div>
                         </div>
-                        <div class="col-md-9 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Deskripsi Perjalanan</label>
+                                <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
                                 <textarea class="form-control" name="deskripsi_edit" id="deskripsi_edit" rows="1" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">File Terupload</label>
                                 <div id="filex_edit"></div>
                                 <small>File yang telah terupload tidak dapat diubah kembali, lakukan penginputan ulang apabila diperlukan</small>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -308,6 +332,26 @@
                 })
             });
 
+            $('#kendaraan').change(function () {
+                var i = $(this).val();
+                if (i == 1 || i == 2) {
+                    var o = $("#kendaraan_pegawai");
+                    o.length && o.each(function() {
+                        var e = $(this);
+                        e.wrap('<div class="position-relative"></div>').select2({
+                            placeholder: "Pilih",
+                            allowClear: true,
+                            dropdownParent: e.parent()
+                        })
+                    });
+                    $('#kendaraan_pegawai').val('').change();
+                    $('#showing').prop('hidden',false);
+                    $('#slide').removeClass('col-md-6').addClass('col-md-12');
+                } else {
+                    $('#showing').prop('hidden',true);
+                    $('#slide').removeClass('col-md-12').addClass('col-md-6');
+                }
+            });
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
@@ -332,22 +376,44 @@
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (updet == date) {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
                         content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
+                        //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
+                        if (item.kendaraan == 1) {
+                            kendaraan = '[Pribadi] Motor';
+                        } else {
+                            if (item.kendaraan == 2) {
+                                kendaraan = '[Pribadi] Mobil';
+                            } else {
+                                kendaraan = '[Rumah Sakit] Mobil';
+                            }
+                        }
+                        kendaraan_pegawai = '';
+                        if (item.kendaraan_pegawai) {
+                            res.users.forEach(is => {
+                                JSON.parse(item.kendaraan_pegawai).forEach(val => {
+                                    if (val == is.id) {
+                                        kendaraan_pegawai += is.nama + `; `;
+                                    }
+                                })
+                            })
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-primary" onclick="window.open('/kepegawaian/pd/`+item.id+`/download')" data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Download (${item.title})"><u>` + item.acara + `</u></a>
+                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-primary" data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara"><u>` + item.acara + `</u></a>
                                                 </h6>
-                                                <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b></small>
-                                                <small class='text-truncate text-muted'>Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"}</small>
+                                                <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b> dan Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small>
+                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan_pegawai?`Milik<br>(<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`:``}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -408,27 +474,28 @@
 
             // Definisi
             var save = new FormData();
-            var filesAdded = $('#filex')[0].files;
+            // var filesAdded = $('#filex')[0].files;
             save.append('acara',$('#acara').val());
             save.append('tgl',$('#tgl').val());
             save.append('jenis',$('#jenis').val());
             save.append('kendaraan',$('#kendaraan').val());
+            save.append('kendaraan_pegawai',JSON.stringify($('#kendaraan_pegawai').val()));
             save.append('lama1',$('#lama1').val());
             save.append('lama2',$('#lama2').val());
             save.append('lokasi',$('#lokasi').val());
             save.append('pegawai',JSON.stringify($('#pegawai').val()));
             save.append('deskripsi',$('#deskripsi').val());
             save.append('user','{{ Auth::user()->id }}');
-            if (filesAdded) {
-                save.append('file',filesAdded[0]);
-            }
+            // if (filesAdded) {
+            //     save.append('file',filesAdded[0]);
+            // }
             if (
                 save.get('acara') == ""     ||
                 save.get('tgl') == ""       ||
                 save.get('jenis') == ""     ||
                 save.get('kendaraan') == "" ||
                 save.get('lama1') == ""     ||
-                save.get('lama2') == ""     ||
+                // save.get('lama2') == ""     ||
                 save.get('lokasi') == ""    ||
                 $('#pegawai').val() == ""
                 // || filesAdded.length == 0 // (Jika Tidak Ada File Yang Diupload)
@@ -485,11 +552,38 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    if (res.show.title) {
-                        $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
+                    // if (res.show.title) {
+                    //     $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
+                    // } else {
+                    //     $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-dark"><a>Tidak ada file terupload</a></h6>`);
+                    // }
+                    if (res.show.kendaraan == 1 || res.show.kendaraan == 2) {
+                        $('#showing_edit').prop('hidden',false);
+                        $('#slide_edit').removeClass('col-md-6').addClass('col-md-12');
                     } else {
-                        $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-dark"><a>Tidak ada file terupload</a></h6>`);
+                        $('#showing_edit').prop('hidden',true);
+                        $('#slide_edit').removeClass('col-md-12').addClass('col-md-6');
                     }
+                    $('#kendaraan_edit').change(function () {
+                        var i = $(this).val();
+                        if (i == 1 || i == 2) {
+                            var o = $("#kendaraan_pegawai_edit");
+                            o.length && o.each(function() {
+                                var e = $(this);
+                                e.wrap('<div class="position-relative"></div>').select2({
+                                    placeholder: "Pilih",
+                                    allowClear: true,
+                                    dropdownParent: e.parent()
+                                })
+                            });
+                            $('#kendaraan_pegawai_edit').val('').change();
+                            $('#showing_edit').prop('hidden',false);
+                            $('#slide_edit').removeClass('col-md-6').addClass('col-md-12');
+                        } else {
+                            $('#showing_edit').prop('hidden',true);
+                            $('#slide_edit').removeClass('col-md-12').addClass('col-md-6');
+                        }
+                    });
                     $('#id_edit').val(res.show.id);
                     $('#acara_edit').val(res.show.acara);
                     $('#tgl_edit').val(res.show.tgl);
@@ -505,11 +599,20 @@
                         <option value="2" ${res.show.kendaraan==2?"selected":""}>[Pribadi] Mobil</option>
                         <option value="3" ${res.show.kendaraan==3?"selected":""}>[Rumah Sakit] Mobil/option>
                     `);
+                    var up = JSON.parse(res.show.kendaraan_pegawai);
+                    $("#kendaraan_pegawai_edit").find('option').remove();
+                    res.users.forEach(pouch => {
+                        $("#kendaraan_pegawai_edit").append(`
+                            <option value="${pouch.id}">${pouch.nama}</option>
+                        `);
+                    });
+                    $("#kendaraan_pegawai_edit").val(up).change();
                     $("#lama1_edit").find('option').remove();
                     $("#lama1_edit").append(`
                         <option value="1" ${res.show.lama1==1?"selected":""}>< 4 Jam (Kurang dari 4 jam)</option>
                         <option value="2" ${res.show.lama1==2?"selected":""}>> 4 Jam (Lebih dari 4 jam)</option>
                     `);
+                    $('#lama2_edit').val(res.show.lama2);
                     var un = JSON.parse(res.show.pegawai_id);
                     $("#pegawai_edit").find('option').remove();
                     res.users.forEach(pounch => {
@@ -535,6 +638,7 @@
             save.append('tgl',$('#tgl_edit').val());
             save.append('jenis',$('#jenis_edit').val());
             save.append('kendaraan',$('#kendaraan_edit').val());
+            save.append('kendaraan_pegawai',JSON.stringify($('#kendaraan_pegawai_edit').val()));
             save.append('lama1',$('#lama1_edit').val());
             save.append('lama2',$('#lama2_edit').val());
             save.append('lokasi',$('#lokasi_edit').val());
@@ -547,7 +651,7 @@
                 save.get('jenis') == ""   ||
                 save.get('kendaraan') == ""   ||
                 save.get('lama1') == ""   ||
-                save.get('lama2') == ""   ||
+                // save.get('lama2') == ""   ||
                 save.get('lokasi') == ""  ||
                 $('#pegawai_edit').val() == ""
             ) {
@@ -637,12 +741,17 @@
         }
 
         function clearInput() {
-            $('#filex').val('');
+            // $('#filex').val('');
             $('#acara').val('');
             $('#tgl').val('');
+            $('#kendaraan').val('');
+            $('#kendaraan_pegawai').val('');
+            $('#lama1').val('');
+            $('#lama2').val('');
             $('#jenis').val('');
             $('#lokasi').val('');
             $('#pegawai').val('').change();
+            $('#deskripsi').val('');
         }
 
         function getDateTime() {

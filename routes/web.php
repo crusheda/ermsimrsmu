@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // PENGAJUAN
         // SURAT KETERANGAN (SURKET)
+
         Route::get('pengajuan/surket', [App\Http\Controllers\Kepegawaian\SurketController::class, 'index'])->name('kepegawaian.surket.index');
 
         // IDCARD
@@ -87,6 +88,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     Route::get('jadwaldinas/ubah/{id}', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'formUbah'])->name('kepegawaian.jadwaldinas.formUbah');
     Route::post('jadwaldinas/tambah/proses', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'prosesTambah'])->name('kepegawaian.jadwaldinas.prosesTambah');
     Route::post('jadwaldinas/ubah/proses', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'prosesUbah'])->name('kepegawaian.jadwaldinas.prosesUbah');
+
+    // SURAT TUGAS
+    Route::get('surtug', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'index'])->name('kepegawaian.surtug.index');
 });
 
 // BERKAS

@@ -237,7 +237,7 @@ class DetailProfilKaryawanController extends Controller
         $tgl = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
         // VALIDASI DATA
         $request->validate([
-            'file' => ['max:5000'], // 'mimes:jpeg,jpg,png'
+            'file' => ['max:3000'], // 'mimes:jpeg,jpg,png'
         ]);
         $validasi = users_spkrkk::where('pegawai_id',$request->pegawai_id)->where('jns_dokumen',$request->jns_dokumen)->orderBy('created_at','desc')->first();
         if (!empty($validasi) || $validasi != '') {
@@ -252,10 +252,10 @@ class DetailProfilKaryawanController extends Controller
         $data->pegawai_id = $request->pegawai_id;
         if (!empty($getStatusPegawai) || $getStatusPegawai != '') {
             $data->pegawai_status = $getStatusPegawai->ref_id;
+        } else {
+            $data->pegawai_status = null;
         }
-        if ($request->tgl_berakhir != null) {
-            $data->tgl_berakhir = $request->tgl_berakhir;
-        }
+        $data->tgl_berakhir = $request->tgl_berakhir;
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = $file->store('public/files/kepegawaian/spkrkk/'.$request->pegawai_id);
@@ -263,7 +263,6 @@ class DetailProfilKaryawanController extends Controller
             $data->filename = json_encode($filename);
             $data->title = json_encode($title);
         }
-
         $data->jns_dokumen = $request->jns_dokumen;
         $data->deskripsi = $request->deskripsi;
         $data->status = true;
@@ -272,9 +271,9 @@ class DetailProfilKaryawanController extends Controller
         // CEK DATA & SAVE LOG
         $cekPegawai = users::find($request->pegawai_id);
         if ($request->jns_dokumen == 0) {
-            $jns = 'SPK';
+            $jns = 'SPK & RKK';
         } else {
-            $jns = 'RKK';
+            $jns = 'Dokumen';
         }
         $berakhir = null;
         if (!empty($request->tgl_berakhir) || $request->tgl_berakhir != '') {
@@ -438,14 +437,10 @@ class DetailProfilKaryawanController extends Controller
         $data = users_spkrkk::find($request->id);
         $pushData = $data;
         $pushPegawai = users::where('id',$data->pegawai_id)->first();
-
         if ($request->pegawai_status) {
             $data->pegawai_status   = $request->pegawai_status;
         }
-        if ($request->tgl_berakhir) {
-            $data->tgl_berakhir   = $request->tgl_berakhir;
-        }
-
+        $data->tgl_berakhir   = $request->tgl_berakhir;
         $data->jns_dokumen    = $request->jns_dokumen;
         $data->user_id        = $request->user_id;
         $data->deskripsi      = $request->deskripsi;

@@ -51,67 +51,32 @@ class PDController extends Controller
 
     function tambah(Request $request)
     {
-        $request->validate([
-            'file' => ['max:2000','mimes:pdf'],
-        ]);
+        // $request->validate([
+        //     'file' => ['max:2000','mimes:pdf'],
+        // ]);
 
         // print_r($request->all());
         // die();
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        $uploadedFile = $request->file('file');
-        if ($uploadedFile) { // JIKA ADA FILE UPLOAD
-            $title = $uploadedFile->getClientOriginalName();
-            $validasiFile = pd::where('title',$title)->first();
-            if (empty($validasiFile)) {
-                // simpan berkas yang diunggah ke sub-direktori 'public/files'
-                // direktori 'files' otomatis akan dibuat jika belum ad
-                $path = $uploadedFile->store('public/files/kepegawaian/pd/'.$request->user);
+        $data = new pd;
+        $data->user_id = $request->user;
+        $data->pegawai_id = $request->pegawai;
+        $data->jenis = $request->jenis;
+        $data->kendaraan = $request->kendaraan;
+        $data->kendaraan_pegawai = $request->kendaraan_pegawai;
+        $data->lama1 = $request->lama1;
+        $data->lama2 = $request->lama2;
+        $data->tgl = $request->tgl;
+        $data->acara = $request->acara;
+        $data->lokasi = $request->lokasi;
+        $data->deskripsi = $request->deskripsi;
+        $data->save();
 
-                $data = new pd;
-                $data->user_id = $request->user;
-                $data->pegawai_id = $request->pegawai;
-                $data->jenis = $request->jenis;
-                $data->kendaraan = $request->kendaraan;
-                $data->lama1 = $request->lama1;
-                $data->lama2 = $request->lama2;
-                $data->tgl = $request->tgl;
-                $data->acara = $request->acara;
-                $data->lokasi = $request->lokasi;
-                $data->deskripsi = $request->deskripsi;
-                $data->title = $title;
-                $data->filename = $path;
-                $data->save();
-
-                return Response::json(array(
-                    'message' => $push,
-                    'code' => 200,
-                ));
-            } else {
-                return Response::json(array(
-                    'message' => 'File sudah ada/pernah diupload sebelumnya!',
-                    'code' => 500,
-                ));
-            }
-        } else { // JIKA TIDAK ADA FILE UPLOAD
-            $data = new pd;
-            $data->user_id = $request->user;
-            $data->pegawai_id = $request->pegawai;
-            $data->jenis = $request->jenis;
-            $data->kendaraan = $request->kendaraan;
-            $data->lama1 = $request->lama1;
-            $data->lama2 = $request->lama2;
-            $data->tgl = $request->tgl;
-            $data->acara = $request->acara;
-            $data->lokasi = $request->lokasi;
-            $data->deskripsi = $request->deskripsi;
-            $data->save();
-
-            return Response::json(array(
-                'message' => $push,
-                'code' => 200,
-            ));
-        }
+        return Response::json(array(
+            'message' => $push,
+            'code' => 200,
+        ));
     }
 
     function show($id)
@@ -133,6 +98,7 @@ class PDController extends Controller
         $data->pegawai_id = $request->pegawai;
         $data->jenis = $request->jenis;
         $data->kendaraan = $request->kendaraan;
+        $data->kendaraan_pegawai = $request->kendaraan_pegawai;
         $data->lama1 = $request->lama1;
         $data->lama2 = $request->lama2;
         $data->tgl = $request->tgl;

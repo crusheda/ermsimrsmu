@@ -60,11 +60,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('profilkaryawan/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahSpkRkk'])->name('profilkaryawan.show.ubahSpkRkk');
         Route::post('profilkaryawan/spkrkk/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahSpkRkk'])->name('profilkaryawan.ubahSpkRkk');
         Route::delete('profilkaryawan/spkrkk/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusSpkRkk'])->name('profilkaryawan.hapusSpkRkk');
-        // SURAT TUGAS
-            // ADMIN
-            Route::get('profilkaryawan/surtug/table', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableAdminSurtug'])->name('profilkaryawan.tableAdminSurtug');
-            // USER
-            Route::get('profilkaryawan/surtug/table/{id}', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableUserSurtug'])->name('profilkaryawan.tableUserSurtug');
         // KEPEGAWAIAN (NIP, KLASIFIKASI, dan TAT/TMT)
         Route::get('profilkaryawan/kepegawaian/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showKepegawaian'])->name('profilkaryawan.show.kepegawaian');
         Route::post('profilkaryawan/kepegawaian/nip/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahNIP'])->name('profilkaryawan.tambahNIP');
@@ -109,7 +104,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('kepegawaian/jadwaldinas/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'table'])->name('kepegawaian.jadwaldinas.table');
             Route::get('kepegawaian/jadwaldinas/jadwal/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'jadwal'])->name('kepegawaian.jadwaldinas.jadwal');
             Route::delete('kepegawaian/jadwaldinas/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapus'])->name('kepegawaian.jadwaldinas.hapus');
-
+        // SURAT TUGAS
+            // ADMIN
+            Route::get('kepegawaian/surtug/table', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableAdmin'])->name('kepegawaian.surtug.tableAdmin');
+            // USER
+            Route::get('kepegawaian/surtug/table/{id}', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableUser'])->name('kepegawaian.surtug.tableUser');
 
     // HAK AKSES
         // AKSES JABATAN
