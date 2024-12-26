@@ -88,6 +88,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     Route::get('jadwaldinas/ubah/{id}', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'formUbah'])->name('kepegawaian.jadwaldinas.formUbah');
     Route::post('jadwaldinas/tambah/proses', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'prosesTambah'])->name('kepegawaian.jadwaldinas.prosesTambah');
     Route::post('jadwaldinas/ubah/proses', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'prosesUbah'])->name('kepegawaian.jadwaldinas.prosesUbah');
+        // REF SHIFT
+        Route::get('jadwaldinas/shift', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'indexShift'])->name('kepegawaian.jadwaldinas.indexShift');
+        // REF STAFF
+        Route::get('jadwaldinas/staf', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'indexStaf'])->name('kepegawaian.jadwaldinas.indexStaf');
 
     // SURAT TUGAS
     Route::get('surtug', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'index'])->name('kepegawaian.surtug.index');

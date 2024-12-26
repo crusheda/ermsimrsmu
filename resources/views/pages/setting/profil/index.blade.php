@@ -38,7 +38,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab"
-                                href="#upload-dokumen" role="tab" aria-selected="true">
+                                href="#upload-dokumen" role="tab" aria-selected="true" onclick="refreshDokumen()">
                                 <i class="ti ti-cloud-upload me-2"></i>Dokumen
                             </a>
                         </li>
@@ -54,13 +54,13 @@
                                 <i class="ti ti-lock-open me-2"></i>Ubah Password
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
-                                href="#profile-5" role="tab" aria-selected="true">
-                                <i class="ti ti-users me-2"></i><s>Role</s>
+                                href="#spkrkk" role="tab" aria-selected="true" onclick="refreshSpkrkk()">
+                                <i class="ti ti-brand-docker me-2"></i>SPK & RKK
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" id="profile-tab-6" data-bs-toggle="tab"
                                 href="#profile-6" role="tab" aria-selected="true">
                                 <i class="ti ti-settings me-2"></i><s>Settings</s>
@@ -1232,6 +1232,57 @@
                             </div>
                     </div>
                 </div>
+
+                {{-- SPK & RKK --}}
+                <div class="tab-pane" id="spkrkk" role="tabpanel" aria-labelledby="spkrkk-tab-3">
+                    <div class="card table-card">
+                        <div class="card-header d-flex align-items-center justify-content-between py-3">
+                            <h5 class="mb-0 card-title flex-grow-1">SPK RKK</h5>
+                            <div class="flex-shrink-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-link-warning" id="btn-refresh"
+                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Refresh Tabel Dokumen" onclick="refreshSpkrkk()">
+                                        <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table mb-0 table-hover" id="dttable-spkrkk">
+                                    <thead>
+                                        <tr>
+                                            <th><center>AKSI</center></th>
+                                            <th>RECORD</th>
+                                            <th>TGL BERAKHIR</th>
+                                            <th>DESKRIPSI</th>
+                                            <th class="text-end">TERAKHIR DIUBAH</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tampil-tbody-spkrkk">
+                                        <tr>
+                                            <td colspan="9" style="font-size:13px">
+                                                <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th><center>AKSI</center></th>
+                                            <th>RECORD</th>
+                                            <th>TGL BERAKHIR</th>
+                                            <th>DESKRIPSI</th>
+                                            <th class="text-end">TERAKHIR DIUBAH</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        {{-- <div class="card-footer text-end btn-page">
+                            <div class="btn btn-link-danger">Cancel</div>
+                            <div class="btn btn-primary">Update Profile</div>
+                        </div> --}}
+                    </div>
+                </div>
                 {{-- <div class="tab-pane" id="profile-5" role="tabpanel" aria-labelledby="profile-tab-5">
                     <div class="card">
                         <div class="card-header">
@@ -2132,12 +2183,12 @@
                     tgl_mulai.prop('disabled',true);
                     tgl_akhir.prop('disabled',true);
                     deskripsi.prop('disabled',true);
-                    upload.prop('disabled',true);
+                    // upload.prop('disabled',true);
                 } else {
                     tgl_mulai.prop('disabled',false);
                     tgl_akhir.prop('disabled',false);
                     deskripsi.prop('disabled',false);
-                    upload.prop('disabled',false);
+                    // upload.prop('disabled',false);
                 }
             })
 
@@ -2187,7 +2238,7 @@
             } else {
                 if (jenis == 139) { // STR
                     if (switchstr) { // STR SEUMUR HIDUP
-                        if (jenis == '' || no_surat == '') {
+                        if (jenis == '' || no_surat == '' || filex == 0) {
                             validasi = false;
                         }
                     } else { // STR BELUM SEUMUR HIDUP
@@ -2516,6 +2567,77 @@
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Dokumen tidak ditemukan.',
+                            position: 'topRight'
+                        });
+                    }
+                }
+            );
+        }
+
+        function refreshSpkrkk() {
+            // MULAI TABEL
+            $("#tampil-tbody-spkrkk").empty();
+            $("#tampil-tbody-spkrkk").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+                {
+                    url: "/api/profil/spkrkk/table/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        var adminID = "{{ Auth::user()->getManyRole(['it','kabag-kepegawaian']) }}";
+                        var userID = "{{ Auth::user()->id }}";
+                        $("#tampil-tbody-spkrkk").empty();
+                        $('#dttable-spkrkk').DataTable().clear().destroy();
+                        res.show.forEach(item => {
+                            content = "<tr id='data"+ item.id +"'>";
+                            content += `<td><center>`;
+                                if (item.deleted_at == null) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/kepegawaian/profilkaryawan/spkrkk/download/`+item.id+`')"><i class='fas fa-download'></i></a>`;
+                                } else {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-download'></i></a>`;
+                                }
+                            content += `</center></td>`;
+                            if (item.deleted_at != null) {
+                                bgHapus = `<span class="badge rounded-pill text-bg-danger p-1">Terhapus</span>`;
+                            } else {
+                                bgHapus = ``;
+                            }
+                            if (item.status != 0) {
+                                bgStatus = `<span class="badge rounded-pill text-bg-success p-1">Aktif</span>`;
+                            } else {
+                                bgStatus = `<span class="badge rounded-pill text-bg-secondary p-1">Nonaktif</span>`;
+                            }
+                            content += `<td style='white-space: normal !important;word-wrap: break-word;'>`
+                                        + `<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>`
+                                        + `<h6 class='mb-0'><b class="${item.status != 0?'text-primary':'text-secondary'}">${item.jns_dokumen == 0?'SPK & RKK':'Dokumen Lain'}</b>&nbsp;${item.nama_pegawai}&nbsp;&nbsp;` +bgStatus+ `&nbsp;&nbsp;` + bgHapus + `</h6><small class='text-truncate text-muted'>Oleh ` + item.nama_kepegawaian + `</small>`
+                                        + `</div></div></td>`;
+                            content += `<td>${item.tgl_berakhir?item.tgl_berakhir:'-'}</td>`;
+                            content += `<td>${item.deskripsi?item.deskripsi:'-'}</td>`;
+                            content += "<td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td></tr>";
+                            $('#tampil-tbody-spkrkk').append(content);
+                        });
+                        var table = $('#dttable-spkrkk').DataTable({
+                            order: [
+                                [4, "desc"]
+                            ],
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '40%' },
+                                { sWidth: '10%' },
+                                { sWidth: '30%' },
+                                { sWidth: '15%' },
+                            ],
+                            displayLength: 10,
+                            lengthChange: true,
+                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        });
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'SPK & RKK tidak ditemukan.',
                             position: 'topRight'
                         });
                     }

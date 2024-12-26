@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\users_foto;
 use App\Models\referensi;
 use App\Models\users_doc;
+use App\Models\users_spkrkk;
 use App\Models\users;
 use App\Models\logs;
 use App\Models\alamat;
@@ -753,5 +754,22 @@ class ProfilController extends Controller
     {
         $data = users_doc::find($id);
         return Storage::download($data->filename, $data->title);
+    }
+
+    function tableSpkrkk($id)
+    {
+        $show = users_spkrkk::withTrashed()
+                ->join('users as u','u.id','=','users_spkrkk.pegawai_id')
+                ->join('users as us','us.id','=','users_spkrkk.user_id')
+                ->select('u.nama as nama_pegawai','us.nama as nama_kepegawaian','users_spkrkk.*')
+                ->where('users_spkrkk.pegawai_id',$id)
+                ->orderBy('users_spkrkk.updated_at','desc')
+                ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
     }
 }

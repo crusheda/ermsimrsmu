@@ -644,7 +644,7 @@
 
         function riwayat() {
             $("#tampil-tbody").empty().append(
-                `<tr><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+                `<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             $.ajax({
                 url: "/api/eruang",

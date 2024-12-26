@@ -42,8 +42,8 @@
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                                 <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick=""><s>Referensi Staf</s></a>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick=""><s>Referensi Jaga Shift</s></a>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
                             </li>
                         </ul>
                         {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"

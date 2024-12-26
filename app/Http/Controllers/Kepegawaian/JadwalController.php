@@ -36,6 +36,16 @@ class JadwalController extends Controller
         return view('pages.kepegawaian.jadwal.index-user')->with('list', $data);
     }
 
+    function indexShift()
+    {
+        return view('pages.kepegawaian.jadwal.ref.shift');
+    }
+
+    function indexStaf()
+    {
+        return view('pages.kepegawaian.jadwal.ref.staf');
+    }
+
     function formTambah($id)
     {
         $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
@@ -286,5 +296,111 @@ class JadwalController extends Controller
         $detail = jadwal_detail::where('id_jadwal',$id)->delete();
 
         return response()->json($tgl, 200);
+    }
+
+    // REFERENSI SHIFT -----------------------------------------------------------------------------------------------------------
+    function tableShift($id)
+    {
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = ref_jadwal_shift::join('users','users.id','=','referensi_jadwal_shift.pegawai_id')
+                ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai')
+                ->where('referensi_jadwal_shift.pegawai_id',$id)
+                ->get();
+
+        $data = [
+            'users' => $users,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tambahShift(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $getDuplicate = ref_jadwal_shift::where('pegawai_id', $request->pegawai)->where('singkat',$request->singkat)->first();
+
+        if (!empty($getDuplicate)) {
+            return Response::json(array(
+                'message' => 'Terdapat datarecord yang sama pada pengisian Nama Singkat Shift ('.$request->singkat.'), mohon tambahkan data shift lainnya!',
+                'code' => 500,
+            ));
+        } else {
+            $data = new ref_jadwal_shift;
+            $data->pegawai_id = $request->pegawai;
+            $data->singkat = $request->singkat;
+            $data->shift = $request->shift;
+            $data->berangkat = Carbon::parse($request->berangkat)->isoFormat('HH:mm');
+            $data->pulang = Carbon::parse($request->pulang)->isoFormat('HH:mm');
+            $data->ket = $request->ket;
+            $data->save();
+        }
+
+        return response()->json($tgl);
+    }
+
+    function showUbahShift($id)
+    {
+        $show  = ref_jadwal_shift::join('users','users.id','=','referensi_jadwal_shift.pegawai_id')
+                                ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai')
+                                ->where('referensi_jadwal_shift.id',$id)
+                                ->first();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function ubahShift(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $getDuplicate = ref_jadwal_shift::where('pegawai_id', $request->pegawai)->where('singkat',$request->singkat)->count();
+
+        if ($getDuplicate > 1) {
+            return Response::json(array(
+                'message' => 'Terdapat datarecord yang sama pada pengisian Nama Singkat Shift ('.$request->singkat.'), mohon tambahkan data shift lainnya!',
+                'code' => 500,
+            ));
+        } else {
+            $data = ref_jadwal_shift::find($request->id);
+            $data->singkat = $request->singkat;
+            $data->shift = $request->shift;
+            $data->berangkat = Carbon::parse($request->berangkat)->isoFormat('HH:mm');
+            $data->pulang = Carbon::parse($request->pulang)->isoFormat('HH:mm');
+            $data->ket = $request->ket;
+            $data->save();
+        }
+
+        return response()->json($tgl);
+    }
+
+    function hapusShift($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = ref_jadwal_shift::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
+    }
+
+    // REFERENSI STAFF -----------------------------------------------------------------------------------------------------------
+    function tableStaf($id)
+    {
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
+                ->select('referensi_jadwal_users.*','users.nama as nama_pegawai')
+                ->where('referensi_jadwal_users.pegawai_id',$id)
+                ->get();
+
+        $data = [
+            'users' => $users,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
     }
 }
