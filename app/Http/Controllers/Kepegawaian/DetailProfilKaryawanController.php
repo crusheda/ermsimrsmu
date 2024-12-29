@@ -291,11 +291,13 @@ class DetailProfilKaryawanController extends Controller
         $maxNip = sprintf('%03d',users::max('urutan_masuk'));
         $show = users::where('id', $id)->first();
         $ref_klasifikasi = referensi::where('ref_jenis',11)->get(); // 11 is Jenis Klasifikasi Pegawai
+        $ref_subprofesi = referensi::where('ref_jenis',14)->get(); // 14 is Jenis Profesi / Sub Klasifikasi Pegawai
 
         $data = [
             'show' => $show,
             'maxNip' => $maxNip,
             'ref_klasifikasi' => $ref_klasifikasi,
+            'ref_subprofesi' => $ref_subprofesi,
         ];
 
         return response()->json($data, 200);
@@ -347,6 +349,21 @@ class DetailProfilKaryawanController extends Controller
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_profesi); // 11 is Jenis Klasifikasi Pegawai
         datalogs::record($request->user_id, 'Baru saja melakukan perubahan Klasifikasi Pegawai menjadi '.$cekData->deskripsi, $request->ref_profesi, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+        return response()->json($now, 200);
+    }
+
+    function tambahProfesi(Request $request)
+    {
+        $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+
+        $data = users::find($request->pegawai_id);
+        $data->ref_subprofesi = $request->ref_subprofesi;
+        $data->save();
+
+        // CEK DATA & SAVE LOG
+        $cekData = referensi::find($request->ref_subprofesi); // 11 is Jenis Klasifikasi Pegawai
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Profesi / Sub Klasifikasi Pegawai menjadi '.$cekData->deskripsi, $request->ref_profesi, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
         return response()->json($now, 200);
     }

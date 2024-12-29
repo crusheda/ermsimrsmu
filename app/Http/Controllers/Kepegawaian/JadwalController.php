@@ -43,7 +43,12 @@ class JadwalController extends Controller
 
     function indexStaf()
     {
-        return view('pages.kepegawaian.jadwal.ref.staf');
+        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $data = [
+            // 'show' => $show,
+            'users' => $users,
+        ];
+        return view('pages.kepegawaian.jadwal.ref.staf')->with('list', $data);
     }
 
     function formTambah($id)
@@ -392,7 +397,7 @@ class JadwalController extends Controller
     {
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
-                ->select('referensi_jadwal_users.*','users.nama as nama_pegawai')
+                ->select('referensi_jadwal_users.*','users.nama as nama_user')
                 ->where('referensi_jadwal_users.pegawai_id',$id)
                 ->get();
 
@@ -402,5 +407,59 @@ class JadwalController extends Controller
         ];
 
         return response()->json($data, 200);
+    }
+
+    function tambahStaf(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $getDuplicate = ref_jadwal_users::where('pegawai_id', $request->pegawai)->count();
+        // printf($getDuplicate);
+        // die();
+        if ($getDuplicate > 0) {
+            ref_jadwal_users::where('pegawai_id', $request->pegawai)->delete();
+        }
+
+        $data = new ref_jadwal_users;
+        $data->pegawai_id = $request->pegawai;
+        $data->staf = $request->staf;
+        $data->save();
+
+        return response()->json($tgl);
+    }
+
+    function showUbahStaf($id)
+    {
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = ref_jadwal_users::where('id',$id)->first();
+
+        $data = [
+            'users' => $users,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function ubahStaf(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = ref_jadwal_users::find($request->id);
+        $data->pegawai_id = $request->pegawai;
+        $data->staf = $request->staf;
+        $data->save();
+
+        return response()->json($tgl);
+    }
+
+    function hapusStaf($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = ref_jadwal_users::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
     }
 }

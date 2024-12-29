@@ -481,6 +481,40 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6" @if($list['show']->deleted_at != null) hidden @endif>
+                                    <div class="card shadow-none border mb-0 h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 me-3">
+                                                    <h6 class="mb-0">Profesi Pegawai (<b class="text-info">Sub Klasifikasi</b>)</h6>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 mt-3">
+                                                <div class="alert alert-secondary">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <center><h6>Contoh <mark>Profesi</mark> seperti di bawah ini</h6></center><hr>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Dokter<br>
+                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Perawat<br>
+                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Bidan<br>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Penata Anestesi<br>
+                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Apoteker<br>
+                                                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> dll
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col"><select class="form-control" id="profesi_pgw"></select></div>
+                                                    <div class="col-auto"><button class="btn btn-light-primary" onclick="prosesSimpanProfesiPgw()" id="btn-simpan-profesi"><i class="fas fa-save me-1"></i> Simpan</button></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 @if ($list['show']->deleted_at != null)
                                     <div class="col-md-12">
                                         <div class="card shadow-none border mb-0">
@@ -490,7 +524,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="card shadow-none border mb-0">
                                             <div class="card-body">
                                                 <h6 class="mb-3">Hapus Akun</h6>
@@ -1653,6 +1687,13 @@
                             <option value="${item.id}" ${item.id == res.show.ref_profesi? "selected":""}>${item.deskripsi}</option>
                         `);
                     });
+                    $("#profesi_pgw").find('option').remove();
+                    res.ref_subprofesi.forEach(item => {
+                        $("#profesi_pgw").append(`<option value="" hidden>Pilih Salah Satu</option>`);
+                        $("#profesi_pgw").append(`
+                            <option value="${item.id}" ${item.id == res.show.ref_subprofesi? "selected":""}>${item.deskripsi}</option>
+                        `);
+                    });
                 },
                 error: function(res) {
                     console.log("error : " + JSON.stringify(res) );
@@ -1841,6 +1882,62 @@
 
             $("#btn-simpan-tattmt").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
             $("#btn-simpan-tattmt").prop('disabled', false);
+        }
+        function prosesSimpanProfesiPgw() {
+            $("#btn-simpan-profesi").prop('disabled', true);
+            $("#btn-simpan-profesi").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+            var fd = new FormData();
+
+            // ISIAN FORM WAJIB
+            var ref_subprofesi = $('#profesi_pgw').val();
+
+            if (ref_subprofesi == '') {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pilih Profesi pegawai terlebih dahulu',
+                    position: 'topRight'
+                });
+            } else {
+                // INISIALISASI
+                fd.append('ref_subprofesi',ref_subprofesi);
+                fd.append('user_id','{{ Auth::user()->id }}');
+                fd.append('pegawai_id','{{ $list["show"]->id }}');
+
+                // AJAX REQUEST
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/profilkaryawan/kepegawaian/profesi/simpan",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Profesi Pegawai (Sub Klasifikasi) berhasil disimpan pada '+res,
+                            position: 'topRight'
+                        });
+                        if (res) {
+                            showKepegawaian();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON,
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+
+            $("#btn-simpan-profesi").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-simpan-profesi").prop('disabled', false);
         }
 
         // FUNCTION TAMBAH

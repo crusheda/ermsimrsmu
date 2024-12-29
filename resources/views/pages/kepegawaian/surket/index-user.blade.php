@@ -57,20 +57,22 @@
                                                                                                                                     <span class="badge rounded-pill text-bg-warning">Dalam Proses</span> ,
                                                                                                                                     <span class="badge rounded-pill text-bg-success">Selesai</span> <br>
                                     <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan hanya dapat dihapus pada hari yang sama saat pengajuan tersebut<br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> <mark>TAT</mark> Wajib terisi apabila Surat yang dipilih adalah Surat Pemenuhan SKP dan/atau Paklaring<br>
+                                    <i class="ti ti-arrow-narrow-right me-1"></i> Apabila <mark>TMT</mark> <b class="text-danger">Masih Kosong</b>, silakan menghubungi bagian Kepegawaian
                                 </small>
                             </div>
                         </div>
                     </div>
                     <div class="divider mb-3"><span>Periksa Kelengkapan Data Diri Anda</span></div>
                     <div class="row">
-                        <div class="col-6 mb-3">
+                        <div class="col-5 mb-3">
                             <div class="form-group">
                                 <label for="form-label">Nama Lengkap + Gelar <a class="text-danger">*</a></label>
                                 <input type="text" value="{{ $list['user']->nama }}" class="form-control" disabled>
                                 <input type="text" name="nama" id="nama" value="{{ $list['user']->nama }}" class="form-control" hidden>
                             </div>
                         </div>
-                        <div class="col-2 mb-3">
+                        <div class="col-3 mb-3">
                             <div class="form-group">
                                 <label for="form-label">Tempat, Tanggal Lahir <a class="text-danger">*</a></label>
                                 <input type="text" value="{{ $list['user']->temp_lahir }}, {{ $list['user']->tgl_lahir }}" class="form-control" disabled>
@@ -84,26 +86,39 @@
                                 <input type="text" name="pendidikan" id="pendidikan" value="{{ $list['pendidikan'] }}" class="form-control" hidden>
                             </div>
                         </div>
-                        <div class="col-8 mb-3">
+                        <div class="col-12 mb-3">
                             <div class="form-group">
                                 <label for="form-label">Alamat Lengkap <a class="text-danger">*</a></label>
                                 <input type="text" value="{{ $list['user']->alamat_dom?$list['user']->alamat_dom:$list['user']->alamat_ktp }}" class="form-control" disabled>
                                 <input type="text" name="alamat" id="alamat" value="{{ $list['user']->alamat_dom?$list['user']->alamat_dom:$list['user']->alamat_ktp }}" class="form-control" hidden>
-                                <small>Apabila terdapat <b>ketidaksesuaian</b> data, silakan mengubah data diri Anda di menu Profil</small>
+                                <small>Apabila terdapat <b class="text-danger">ketidaksesuaian</b> data, silakan mengubah data diri Anda di menu Profil</small>
                             </div>
                         </div>
-                        <div class="col-4 mb-3">
+                        <div class="col-6 mb-3">
+                            <div class="form-group">
+                                <label for="form-label">Profesi <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['user']->nama_subprofesi }}" class="form-control" disabled>
+                                <input type="text" name="profesi" id="profesi" value="{{ $list['user']->ref_subprofesi }}" class="form-control" hidden>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
                             <div class="form-group">
                                 <label for="form-label">TMT (Tanggal Mulai Tugas) <a class="text-danger">*</a></label>
                                 <input type="text" value="{{ $list['user']->tmt }}" class="form-control" disabled>
                                 <input type="text" name="tmt" id="tmt" value="{{ $list['user']->tmt }}" class="form-control" hidden>
-                                <small>Apabila TMT <b class="text-danger">Masih Kosong</b>, silakan menghubungi bagian Kepegawaian</small>
+                            </div>
+                        </div>
+                        <div class="col-3 mb-3">
+                            <div class="form-group">
+                                <label for="form-label">TAT (Tanggal Akhir Tugas) <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['user']->tat }}" class="form-control" disabled>
+                                <input type="text" name="tat" id="tat" value="{{ $list['user']->tat }}" class="form-control" hidden>
                             </div>
                         </div>
                         <div class="divider mb-3"><span>Formulir</span></div>
                         <div class="col-12">
                             <div class="mb-2 row">
-                                <label class="col-lg-3 col-form-label">Kategori Order Surat <a class="text-danger">*</a>
+                                <label class="col-lg-3 col-form-label">Kategori Permintaan Surat <a class="text-danger">*</a>
                                     <small class="text-muted d-block">Silakan order bagi yang berkepentingan</small>
                                 </label>
                                 <div class="col-lg-9">
@@ -236,7 +251,9 @@
             save.append('ttl',$('#ttl').val());
             save.append('pendidikan',$('#pendidikan').val());
             save.append('alamat',$('#alamat').val());
+            save.append('profesi',$('#profesi').val());
             save.append('tmt',$('#tmt').val());
+            save.append('tat',$('#tat').val());
             save.append('kategori',$('#kategori').val());
             save.append('pegawai','{{ Auth::user()->id }}');
 
@@ -245,7 +262,9 @@
                 $('#ttl').val() == "" ||
                 $('#pendidikan').val() == "" ||
                 $('#alamat').val() == "" ||
+                $('#profesi').val() == "" ||
                 $('#tmt').val() == "" ||
+                // $('#tat').val() == "" ||
                 $('#kategori').val() == "") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',

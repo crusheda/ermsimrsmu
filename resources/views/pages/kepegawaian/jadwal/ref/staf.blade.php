@@ -10,12 +10,12 @@
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
                         <li class="breadcrumb-item">Jadwal Dinas</li>
-                        <li class="breadcrumb-item" aria-current="page">Daftar Shift</li>
+                        <li class="breadcrumb-item" aria-current="page">Daftar Staf</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Daftar Shift (Jaga)</h2>
+                        <h2 class="mb-0">Daftar Staf</h2>
                     </div>
                 </div>
             </div>
@@ -50,10 +50,7 @@
                         <thead>
                             <tr>
                                 <th class="cell-fit">Aksi</th>
-                                <th>(<b class="text-warning">KODE</b>) Nama Shift</th>
-                                <th class="cell-fit">Jam Berangkat (24h)</th>
-                                <th class="cell-fit">Jam Pulang (24h)</th>
-                                <th>Keterangan</th>
+                                <th>Nama Staf</th>
                                 <th class="cell-fit">Diperbarui</th>
                             </tr>
                         </thead>
@@ -67,10 +64,7 @@
                         <tfoot>
                             <tr>
                                 <th class="cell-fit">Aksi</th>
-                                <th>(<b class="text-warning">KODE</b>) Nama Shift</th>
-                                <th class="cell-fit">Jam Berangkat (24h)</th>
-                                <th class="cell-fit">Jam Pulang (24h)</th>
-                                <th>Keterangan</th>
+                                <th>Nama Staf</th>
                                 <th class="cell-fit">Diperbarui</th>
                             </tr>
                         </tfoot>
@@ -87,7 +81,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah Shift</h5>
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Tambah / Perbarui Data Staf</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -97,47 +91,23 @@
                                 <div class="alert alert-secondary">
                                     <small>
                                         <h6><center>Mohon Diperhatikan <b class="text-danger">Panduan Di Bawah</b> Sebelum Melakukan Pengisian!</center></h6>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Perhatikan penulisan Nama Singkat Shift karena kata tersebut akan menjadi pilihan dalam penentuan Jadwal Dinas<br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Penulisan Nama Singkat Shift hanya diperbolehkan <kbd>2 HURUF</kbd><br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Shift yang akan ditambahkan tidak boleh sama dengan yang sudah ada<br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Format Waktu/Jam Shift = <u><b>JAM (24 Jam) : MENIT</b></u><br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Waktu/Jam Shift Berangkat dan Pulang tidak boleh sama<br>
-                                        <i class="fas fa-caret-right text-primary me-1 mb-3"></i> Contoh memasukkan Jam Berangkat & Pulang (Khusus Lewat HARI)<br>
-                                        <h6><span class="border border-dark border-top-2">&nbsp;Berangkat <i class="fas fa-long-arrow-alt-right text-danger"></i> Pulang&nbsp;</span>
-                                        <i class="fas fa-grip-lines me-1">
-                                        </i><span class="border border-dark border-top-2">&nbsp;21:00 <i class="fas fa-long-arrow-alt-right text-danger"></i> 05:00&nbsp;</span></h6>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Staf yang ditambahkan di bawah adalah staf yang akan ditampilkan pada Jadwal Dinas Anda<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Apabila terdapat pengurangan / penambahan staf di Unit Anda, segera lakukan pembaruan data<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Apabila nama Staf <mark>TIDAK DITEMUKAN</mark> pada isian di bawah, silakan memperbarui profil karyawan bersangkutan dengan masuk/login Simrsmu menggunakan akun yang telah diberikan oleh Kepegawaian sebelumnya
                                     </small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama <mark>Singkat</mark> Shift <a class="text-danger">*</a></label>
-                                <input type="text" id="singkat_add" class="form-control inputTgl" onkeyup="checkShift($(this))" pattern="[A-Za-z]{1,2}" placeholder="e.g. P / PS / P6 / etc">
-                            </div>
-                        </div>
-                        <div class="col-md-9 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama <mark>Lengkap</mark> Shift <a class="text-danger">*</a></label>
-                                <input type="text" id="shift_add" class="form-control" placeholder="e.g. PAGI / PAGI SIANG / PAGI JAM 6 / etc">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jam Berangkat / <b>Masuk</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="berangkat_add" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Masuk Kerja" placeholder="Format Waktu H:i">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jam Pulang / <b>Keluar</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="pulang_add" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Pulang Kerja" placeholder="Format Waktu H:i">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Keterangan</label>
-                                <textarea rows="2" class="form-control" id="ket_add" placeholder="Optional"></textarea>
+                                <label class="form-label">Staf / Pegawai di Unit Anda <a class="text-danger">*</a></label>
+                                <select class="form-select select2" name="staf[]" id="staf_add" style="width: 100%" multiple>
+                                    @if (count($list['users']) > 0)
+                                        @foreach ($list['users'] as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -171,47 +141,23 @@
                                 <div class="alert alert-secondary">
                                     <small>
                                         <h6><center>Mohon Diperhatikan <b class="text-danger">Panduan Di Bawah</b> Sebelum Melakukan Pengisian!</center></h6>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Perhatikan penulisan Nama Singkat Shift karena kata tersebut akan menjadi pilihan dalam penentuan Jadwal Dinas<br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Penulisan Nama Singkat Shift hanya diperbolehkan <kbd>2 HURUF</kbd><br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Shift yang akan diubah tidak boleh sama dengan yang sudah ada<br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Format Waktu/Jam Shift = <u><b>JAM (24 Jam) : MENIT</b></u><br>
-                                        <i class="fas fa-caret-right text-primary me-1"></i> Waktu/Jam Shift Berangkat dan Pulang tidak boleh sama<br>
-                                        <i class="fas fa-caret-right text-primary me-1 mb-3"></i> Contoh memasukkan Jam Berangkat & Pulang (Khusus Lewat HARI)<br>
-                                        <h6><span class="border border-dark border-top-2">&nbsp;Berangkat <i class="fas fa-long-arrow-alt-right text-danger"></i> Pulang&nbsp;</span>
-                                        <i class="fas fa-grip-lines me-1">
-                                        </i><span class="border border-dark border-top-2">&nbsp;21:00 <i class="fas fa-long-arrow-alt-right text-danger"></i> 05:00&nbsp;</span></h6>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Staf yang ditambahkan di bawah adalah staf yang akan ditampilkan pada Jadwal Dinas Anda<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Apabila terdapat pengurangan / penambahan staf di Unit Anda, segera lakukan pembaruan data<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Apabila nama Staf <mark>TIDAK DITEMUKAN</mark> pada isian di bawah, silakan memperbarui profil karyawan bersangkutan dengan masuk/login Simrsmu menggunakan akun yang telah diberikan oleh Kepegawaian sebelumnya
                                     </small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Nama <mark>Singkat</mark> Shift <a class="text-danger">*</a></label>
-                                <input type="text" id="singkat_edit" class="form-control inputTgl" onkeyup="checkShift($(this))" pattern="[A-Za-z]{1,2}" placeholder="e.g. P / PS / P6 / etc">
-                            </div>
-                        </div>
-                        <div class="col-md-9 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama <mark>Lengkap</mark> Shift <a class="text-danger">*</a></label>
-                                <input type="text" id="shift_edit" class="form-control" placeholder="e.g. PAGI / PAGI SIANG / PAGI JAM 6 / etc">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jam Berangkat / <b>Masuk</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="berangkat_edit" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Masuk Kerja" placeholder="Format Waktu H:i">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jam Pulang / <b>Keluar</b> <a class="text-danger">*</a></label>
-                                <input type="text" id="pulang_edit" class="form-control pilihJam" data-provide="timepicker" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Waktu/Jam Pulang Kerja" placeholder="Format Waktu H:i">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Keterangan</label>
-                                <textarea rows="2" class="form-control" id="ket_edit" placeholder="Optional"></textarea>
+                                <label class="form-label">Staf/Pegawai di Unit Anda <a class="text-danger">*</a></label>
+                                <select class="form-select select2" name="staf[]" id="staf_edit" style="width: 100%" multiple>
+                                    @if (count($list['users']) > 0)
+                                        @foreach ($list['users'] as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -236,7 +182,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus Daftar Shift tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <p style="text-align: justify;">Anda akan menghapus Daftar Staf tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuhapus">
                         <span class="switch-toggle-slider">
@@ -256,25 +202,19 @@
 
     <script>
         $(document).ready(function() {
-            $('.inputTgl').bind('keypress', onlyInput);
+            // SELECT2
+            var t = $(".select2");
+            t.length && t.each(function() {
+                var e = $(this);
+                e.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: "Pilih",
+                    allowClear: true,
+                    dropdownParent: e.parent()
+                })
+            });
+
             refresh();
-            $('.pilihJam').timepicker({ showInputs: false, showMeridian: false, timeFormat: 'HH:mm', use24hours: true });
         })
-
-        // IMPORTANT FUNCTION
-        function checkShift(t) {
-            if (t.val().length <= 2 ) {
-                t.val(t.val().toUpperCase());
-            } else {
-                t.val('');
-            }
-        }
-
-        function onlyInput(event) {
-            var value = String.fromCharCode(event.which);
-            var pattern = new RegExp(/[a-zåäö ]/i);
-            return pattern.test(value);
-        }
 
         // FUNCTION AREA
         function refresh() {
@@ -283,7 +223,7 @@
                 `<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
             $.ajax({
-                url: "/api/kepegawaian/jadwaldinas/shift/table/{{ Auth::user()->id }}",
+                url: "/api/kepegawaian/jadwaldinas/staf/table/{{ Auth::user()->id }}",
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
@@ -294,32 +234,39 @@
                                             <div class="dropdown">
                                                 <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown">` + item.id + `</a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
                                                     <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                 </div>
                                             </div>
-                                        </div></td>`;
-                        content += `<td><kbd class="bg-warning text-white me-1">${item.singkat}</kbd> <u><b class='text-dark'>`+item.shift+`</b></u></td>`;
-                        content += `<td>`+item.berangkat+`</td>`;
-                        content += `<td>`+item.pulang+`</td>`;
-                        content += `<td>${item.ket?item.ket:'-'}</td>`;
-                        content += `<td>`;
-                            if(item.updated_at) { content += new Date(item.updated_at).toLocaleString("sv-SE"); } else { content += `-`; }
-                        content += `</td></tr>`;
+                                        </div></td>`; // <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
+                        content += `<td><small><ul class='list-unstyled mt-2'>`;
+                        res.users.forEach(us => {
+                            JSON.parse(item.staf).forEach(val => {
+                                if (val == us.id) {
+                                    content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
+                                }
+                            })
+                        })
+                        content += `</small></ul></td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>Diperbarui Oleh` + item.nama_user + `</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        content += "</tr>";
                         $('#tampil-tbody').append(content);
                     })
                     var table = $('#dttable').DataTable({
                         order: [
-                            [5, "desc"]
+                            [2, "desc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '5%' },
+                            { sWidth: '65%' },
                             { sWidth: '30%' },
-                            { sWidth: '15%' },
-                            { sWidth: '15%' },
-                            { sWidth: '20%' },
-                            { sWidth: '15%' },
                         ],
                         displayLength: 7,
                         lengthChange: true,
@@ -335,22 +282,15 @@
         }
 
         function tambah() {
-            $("#singkat_add").val("");
-            $("#shift_add").val("");
-            $("#berangkat_add").val("");
-            $("#pulang_add").val("");
+            $("#staf").val("").change();
             $('#modalTambah').modal('show');
         }
 
         function simpan() {
-            var singkat = $("#singkat_add").val();
-            var shift = $("#shift_add").val();
-            var berangkat = $("#berangkat_add").val();
-            var pulang = $("#pulang_add").val();
-            var ket = $("#ket_add").val();
+            var staf = JSON.stringify($('#staf_add').val());
             var pegawai = "{{ Auth::user()->id }}";
 
-            if (singkat == "" || shift == "" || berangkat == "" || pulang == "") {
+            if ($('#staf_add').val() == "") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib',
@@ -362,20 +302,16 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     method: 'POST',
-                    url: '/api/kepegawaian/jadwaldinas/shift/tambah',
+                    url: '/api/kepegawaian/jadwaldinas/staf/tambah',
                     dataType: 'json',
                     data: {
-                        singkat: singkat,
-                        shift: shift,
-                        berangkat: berangkat,
-                        pulang: pulang,
-                        ket: ket,
+                        staf: staf,
                         pegawai: pegawai,
                     },
                     success: function(res) {
                         iziToast.success({
                             title: 'Sukses!',
-                            message: 'Tambah Shift berhasil pada '+ res,
+                            message: 'Tambah Staf berhasil pada '+ res,
                             position: 'topRight'
                         });
                         if (res) {
@@ -396,23 +332,24 @@
 
         function ubah(id) {
             $("#id_edit").val("");
-            $("#singkat_edit").val("");
-            $("#shift_edit").val("");
-            $("#berangkat_edit").val("");
-            $("#pulang_edit").val("");
-            $("#ket_edit").val("");
+            $("#staf_edit").val("");
             $.ajax(
             {
-                url: "/api/kepegawaian/jadwaldinas/shift/"+id,
+                url: "/api/kepegawaian/jadwaldinas/staf/"+id,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#id_edit").val(res.show.id);
-                    $("#singkat_edit").val(res.show.singkat);
-                    $("#shift_edit").val(res.show.shift);
-                    $("#berangkat_edit").val(res.show.berangkat.substring(0,5)).change();
-                    $("#pulang_edit").val(res.show.pulang.substring(0,5)).change();
-                    $("#ket_edit").val(res.show.ket);
+
+                    var un = JSON.parse(res.show.staf);
+                    $("#staf_edit").find('option').remove();
+                    res.users.forEach(pounch => {
+                        $("#staf_edit").append(`
+                            <option value="${pounch.id}">${pounch.nama}</option>
+                        `);
+                    });
+                    $("#staf_edit").val(un).change();
+
                     $('#modalUbah').modal('show');
                 }
             });
@@ -424,14 +361,10 @@
 
             var fd = new FormData();
             fd.append('id',$("#id_edit").val());
-            fd.append('singkat',$("#singkat_edit").val());
-            fd.append('shift',$("#shift_edit").val());
-            fd.append('berangkat',$("#berangkat_edit").val());
-            fd.append('pulang',$("#pulang_edit").val());
-            fd.append('ket',$("#ket_edit").val());
+            fd.append('staf_edit',JSON.stringify($('#staf_edit').val()));
             fd.append('pegawai',"{{ Auth::user()->id }}");
 
-            if (fd.get('singkat') == "" || fd.get('shift') == "" || fd.get('berangkat') == "" || fd.get('pulang') == "") {
+            if ($('#staf_edit').val() == "") {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
                     message: 'Pastikan Anda tidak mengosongi semua isian wajib',
@@ -443,7 +376,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "/api/kepegawaian/jadwaldinas/shift/"+fd.get('id')+"/ubah",
+                    url: "/api/kepegawaian/jadwaldinas/staf/"+fd.get('id')+"/ubah",
                     method: 'post',
                     data: fd,
                     contentType: false,
@@ -452,7 +385,7 @@
                     success: function(res){
                         iziToast.success({
                             title: 'Pesan Sukses! ID : '+fd.get('id'),
-                            message: 'Shift berhasil diperbarui pada '+res,
+                            message: 'Staf berhasil diperbarui pada '+res,
                             position: 'topRight'
                         });
                         if (res) {
@@ -490,22 +423,21 @@
                 // PROSES HAPUS
                 var id = $("#id_hapus").val();
                 $.ajax({
-                    url: "/api/kepegawaian/jadwaldinas/shift/"+id+"/hapus",
+                    url: "/api/kepegawaian/jadwaldinas/staf/"+id+"/hapus",
                     type: 'DELETE',
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
-                            message: 'Shift telah berhasil dihapus pada '+res,
+                            message: 'Staf telah berhasil dihapus pada '+res,
                             position: 'topRight'
                         });
                         $('#hapus').modal('hide');
                         refresh();
-                        // window.location.reload();
                     },
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Shift gagal dihapus',
+                            message: 'Staf gagal dihapus',
                             position: 'topRight'
                         });
                     }

@@ -19,7 +19,10 @@ class SurketController extends Controller
         if (Auth::user()->getPermission('admin_kepegawaian') == true) {
             return view('pages.kepegawaian.surket.index-admin');
         } else {
-            $user = users::where('id',Auth::user()->id)->first();
+            $user = users::join('referensi','referensi.id','=','users.ref_subprofesi')
+                            ->select('users.*','referensi.deskripsi as nama_subprofesi')
+                            ->where('users.id',Auth::user()->id)
+                            ->first();
             $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
             // $show  = idcard::get();
             $kategori = referensi::where('ref_jenis',13)->get();
@@ -98,7 +101,7 @@ class SurketController extends Controller
         $validasi = surket::where('ref_id',$request->kategori)->where('pegawai_id',$request->pegawai)->get();
         $valid = 0;
         foreach ($validasi as $key => $value) {
-            if ($value->progress == 0 || $value->progress == 1) {
+            if ($value->progress == 0 || $value->progress == 1 || $value->progress == 2) {
                 $valid = 1;
             }
         }
@@ -108,23 +111,24 @@ class SurketController extends Controller
                 'code' => 500,
             ));
         } else {
-            $validasi_no = surket::orderBy('no_surat','desc')->first();
-            if (empty($validasi_no)) {
-                $no_surat = 1;
-            } else {
-                $no_surat = $validasi_no->no_surat + 1; // sprintf("%02d", $num)
-            }
+            // $validasi_no = surket::orderBy('no_surat','desc')->first();
+            // if (empty($validasi_no)) {
+            //     $no_surat = 1;
+            // } else {
+            //     $no_surat = $validasi_no->no_surat + 1; // sprintf("%02d", $num)
+            // }
 
             $data = new surket;
             $data->ref_id               = $request->kategori;
             $data->pegawai_id           = $request->pegawai;
-            $data->no_surat             = $no_surat;
-            $data->th_surat             = Carbon::now()->isoFormat('YYYY');
+            // $data->no_surat             = $no_surat;
+            // $data->th_surat             = Carbon::now()->isoFormat('YYYY');
             $data->tgl_surat            = Carbon::now()->isoFormat('YYYY-MM-DD');
             $data->pegawai_nama         = $request->nama;
             $data->pegawai_ttl          = $request->ttl;
             $data->pegawai_pendidikan   = $request->pendidikan;
             $data->pegawai_alamat       = $request->alamat;
+            $data->profesi              = $request->profesi;
             $data->pegawai_tmt          = $request->tmt;
             if ($user->tat) {
                 $data->pegawai_tat      = $user->tat;
@@ -195,7 +199,7 @@ class SurketController extends Controller
 
         // Inisialisasi
         $data = surket::find($id);
-        $data->progress = 2;
+        $data->progress = 3;
         $data->tgl_valid = Carbon::now();
         $data->save();
 
