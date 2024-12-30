@@ -68,8 +68,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // PENGAJUAN
         // SURAT KETERANGAN (SURKET)
-
         Route::get('pengajuan/surket', [App\Http\Controllers\Kepegawaian\SurketController::class, 'index'])->name('kepegawaian.surket.index');
+        Route::get('pengajuan/surket/{id}/generate', [App\Http\Controllers\Kepegawaian\SurketController::class, 'generateFile'])->name('kepegawaian.surket.generate');
 
         // IDCARD
         Route::get('pengajuan/idcard', [App\Http\Controllers\Kepegawaian\IDCardController::class, 'index'])->name('kepegawaian.idcard.index');

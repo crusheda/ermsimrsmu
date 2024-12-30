@@ -192,7 +192,7 @@
             <span class="pc-micon">
                 <i class="fas fa-shopping-cart"></i>
             </span>
-            <span class="pc-mtext">Pengadaan</span>
+            <span class="pc-mtext">E-Pengadaan</span>
         </a>
     </li>
     <li class="pc-item">

@@ -46,6 +46,8 @@
     <link href="{{ asset('libs/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
     {{-- INTRO JS --}}
     <link rel="stylesheet" href="{{ asset('css/plugins/introjs.min.css') }}">
+    {{-- DATEPICKER (RANGE PICKER) --}}
+    <link rel="stylesheet" href="{{ asset('css/plugins/datepicker-bs5.min.css') }}">
     {{-- DATEPICKER --}}
     <link href="{{ asset('libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('libs/spectrum-colorpicker2/spectrum.min.css') }}" rel="stylesheet" type="text/css">
@@ -180,6 +182,9 @@
 
     {{-- INTRO JS --}}
     <script src="{{ asset('js/plugins/intro.min.js') }}"></script>
+
+    <!-- DatePicker js -->
+    <script src="{{ asset('js/plugins/datepicker-full.min.js') }}"></script>
 
     {{-- DEARFLIP / 3D FLIPBOOK --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/@dearhive/dearflip-jquery-flipbook@1.7.3/dflip/js/dflip.min.js"></script> --}}

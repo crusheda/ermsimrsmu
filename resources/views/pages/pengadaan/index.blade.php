@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Pengadaan Rutin</h2>
+                        <h2 class="mb-0">E-Pengadaan</h2>
                     </div>
                 </div>
             </div>
@@ -29,9 +29,8 @@
                 <div class="card-body">
                     <div class="d-flex">
                         <div>
-                            <h5 class="card-title mb-3">Digital Pengadaan</h5>
-                            <p class="text-muted">Semua data terintegrasi menjadi satu dengan tampilan yang baru hanya di
-                                Simrsmu</p>
+                            <h5 class="card-title mb-3">Elektronik Pengadaan</h5>
+                            <p class="text-muted">Semua data terintegrasi menjadi satu dengan tampilan yang baru dan lebih menarik..</p>
                         </div>
                         {{-- <div class="btn-group">
                             <a href="javascript:void(0);" class="btn btn-light-dark btn-sm disabled">
@@ -95,7 +94,7 @@
                             <li class="nav-item me-1">
                                 <button class="btn btn-icon btn-primary rounded" onclick="showKeranjang()" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Tampilkan Keranjang"><i class="ti ti-shopping-cart align-middle me-1"></i></button>
+                                    title="Tampilkan Keranjang"><i class="fas fa-shopping-cart align-middle me-1"></i></button>
                             </li>
                             <li class="nav-item">
                                 <button class="btn btn-icon btn-warning rounded" onclick="refresh()" data-bs-toggle="tooltip"
@@ -537,7 +536,7 @@
                                         <td>
                                             <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);"
                                                     class="text-dark">` + formatRupiah(item.total, 'Rp ') + ` ,-</a></h5>
-                                            <p class="text-muted mb-0">` + item.tgl_pengadaan + `</p>
+                                            <p class="text-muted mb-0"><small>` + item.tgl_pengadaan + `</small></p>
                                         </td>
                                         <td style="width: 90px;">
                                             <div>

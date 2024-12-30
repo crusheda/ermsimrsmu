@@ -59,10 +59,9 @@
                             <use xlink:href="#custom-flash"></use>
                         </svg></a></li> --}}
                 @php
-                    // $notif = \DB::table('datalogs')->get();
                     $notif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('users.nama','datalogs.*')->orderBy('created_at','desc')->limit(15)->get();
                     $jmlnotif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('datalogs.id')->orderBy('created_at','desc')->count();
-                    // $time = \Carbon\Carbon::now()->isoFormat('H');
+                    $jmlnotif = '*';
                 @endphp
                 <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle arrow-none me-0 waves-effect" data-bs-toggle="fullscreen" href="javascript:void(0);" onclick="toggle_fullscreen()" id="fullscreen-btn">
@@ -106,7 +105,8 @@
                                             </svg></div>
                                             <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">∞</span>
                                                 <h5 class="text-body mb-2">Update System v3.1</h5>
-                                                <p class="mb-0">Simrsmu sedang dalam pengembangan menjadi lebih baik lagi..</p>
+                                                {{-- <p class="mb-0">Simrsmu sedang dalam pengembangan menjadi lebih baik lagi..</p> --}}
+                                                <p class="mb-0">Akan ada dalam beberapa saat lagi..</p>
                                             </div>
                                         </div>
                                     </div>

@@ -34,7 +34,7 @@ class CreateTableKepegawaianSurket extends Migration
             $table->integer('profesi')->comment('ID dari tabel referensi 14')->nullable();
             $table->longText('deskripsi')->nullable();
 
-            $table->boolean('progress')->comment('0=pengajuan;1=diverifikasi;2=diproses;3=ditolak');
+            $table->boolean('progress')->comment('0=pengajuan;1=diverifikasi;2=diproses;3=selesai;4=ditolak');
             $table->integer('valid')->comment('Verify from User Kepegawaian')->nullable();
             $table->dateTime('tgl_valid')->nullable();
             $table->dateTime('tgl_proses')->nullable();

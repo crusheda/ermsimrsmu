@@ -228,29 +228,50 @@
                             var status = `<span class="badge rounded-pill text-bg-primary">Pengajuan</span>`;
                         } else {
                             if (item.progress == 1) {
-                                var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
+                                var status = `<span class="badge rounded-pill text-bg-warning">Diverifikasi</span>`;
                             } else {
-                                var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
-                            }
-                        }
-                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
-                        if (item.progress == 2) {
-                            clrbtn = 'text-danger';
-                        } else {
-                            if (item.progress == 1) {
-                                clrbtn = 'text-success';
-                            } else {
-                                if (item.progress == 0) {
-                                    clrbtn = 'text-primary';
+                                if (item.progress == 2) {
+                                    var status = `<span class="badge rounded-pill text-bg-info">Dalam Proses</span>`;
                                 } else {
-                                    clrbtn = 'text-secondary';
+                                    if (item.progress == 3) {
+                                        var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
+                                    } else {
+                                        if (item.progress == 4) {
+                                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
+                                        } else {
+                                            var status = `<span class="badge rounded-pill text-bg-secondary">Dibatalkan/Dihapus</span>`;
+                                        }
+                                    }
                                 }
                             }
                         }
+                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        if (item.progress == 4) { // Ditolak
+                            clrbtn = 'text-danger';
+                        } else {
+                            if (item.progress == 3) { // Selesai
+                                clrbtn = 'text-success';
+                            } else {
+                                if (item.progress == 2) { // Dalam Proses
+                                    clrbtn = 'text-info';
+                                } else {
+                                    if (item.progress == 1) { // Diverifikasi
+                                        clrbtn = 'text-primary';
+                                    } else {
+                                        if (item.progress == 0) { // Pengajuan
+                                            clrbtn = 'text-primary';
+                                        } else {
+                                            clrbtn = 'text-secondary';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //
                         content += `<td><center><div class='btn-group'>`;
                             content += `<button type='button' class='btn btn-sm avtar avtar-s btn-link ${clrbtn} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info'><i class="fa-fw fas fa-check-square nav-icon me-1"></i>Download</a></li>`;
+                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick='window.open("/kepegawaian/pengajuan/surket/` + item.id + `/generate")'><i class="fa-fw fas fa-paperclip nav-icon me-1"></i>Generate File</a></li>`;
                                         if (item.progress == 2) {
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-check-square nav-icon me-1"></i>Verif</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="batalTolak(` + item.id + `)"><i class="fa-fw fas fas fa-reply nav-icon me-1"></i>Batal Tolak</a></li>`;
@@ -271,7 +292,7 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>` + item.kategori + `</h6>
-                                                <small class='text-truncate text-muted'>No. Surat ` + zeroPad(item.no_surat,100) + `</small>
+                                                <small class='text-truncate text-muted'></small>
                                             </div>
                                         </div>
                                     </td>`;

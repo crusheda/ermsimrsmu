@@ -41,7 +41,7 @@
                             <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()"><s>Daftar Kategori</s></a>
                                 </li>
                             </ul>
                         </div>
@@ -51,14 +51,27 @@
                     <div class="row">
                         <div class="col-xl-12 col-xxl-12">
                             <div class="alert alert-secondary">
+                                <div class="row">
+                                    <h6><center>Mohon Diperhatikan <b class="text-danger">Panduan Di Bawah</b> Sebelum Melakukan Pengisian!</center></h6>
+                                    <div class="col-md-6">
+                                        <small>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Tanda <a class="text-danger">*</a> berarti pengisian <b class="text-danger">WAJIB</b> diisi / tidak boleh dikosongi<br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Proses pengajuan ini terdiri dari 3 tahap yaitu <span class="badge rounded-pill text-bg-primary">Pengajuan</span> ,
+                                                                                                                                            <span class="badge rounded-pill text-bg-warning">Dalam Proses</span> ,
+                                                                                                                                            <span class="badge rounded-pill text-bg-success">Selesai</span> <br>
+                                                                                                                                            <i class="ti ti-arrow-narrow-right me-1"></i> Tidak dapat mengajukan <b>lebih dari 2x</b> pada order yang sama apabila masih terdapat pengajuan/order yang belum diselesaikan<br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan hanya dapat dihapus/dibatalkan pada hari yang sama saat data diajukan dan masih berstatus Pengajuan
+                                        </small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> <mark>TAT</mark> Wajib terisi apabila Surat yang dipilih adalah Surat Paklaring<br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> <mark>TMK & TAK</mark> Wajib terisi apabila Surat yang dipilih adalah Surat Pemenuhan SKP<br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila <mark>TMT</mark> <b class="text-danger">Masih Kosong</b>, silakan menghubungi bagian Kepegawaian
+                                        </small>
+                                    </div>
+                                </div>
                                 <small>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Tidak dapat mengajukan <b>lebih dari 2x</b> pada order yang sama apabila masih terdapat pengajuan/order yang belum diselesaikan<br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Proses pengajuan ini terdiri dari 3 tahap yaitu <span class="badge rounded-pill text-bg-primary">Pengajuan</span> ,
-                                                                                                                                    <span class="badge rounded-pill text-bg-warning">Dalam Proses</span> ,
-                                                                                                                                    <span class="badge rounded-pill text-bg-success">Selesai</span> <br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan hanya dapat dihapus pada hari yang sama saat pengajuan tersebut<br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> <mark>TAT</mark> Wajib terisi apabila Surat yang dipilih adalah Surat Pemenuhan SKP dan/atau Paklaring<br>
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Apabila <mark>TMT</mark> <b class="text-danger">Masih Kosong</b>, silakan menghubungi bagian Kepegawaian
                                 </small>
                             </div>
                         </div>
@@ -75,8 +88,8 @@
                         <div class="col-3 mb-3">
                             <div class="form-group">
                                 <label for="form-label">Tempat, Tanggal Lahir <a class="text-danger">*</a></label>
-                                <input type="text" value="{{ $list['user']->temp_lahir }}, {{ $list['user']->tgl_lahir }}" class="form-control" disabled>
-                                <input type="text" name="ttl" id="ttl" value="{{ $list['user']->temp_lahir }}, {{ $list['user']->tgl_lahir }}" class="form-control" hidden>
+                                <input type="text" value="{{ $list['user']->temp_lahir }}, {{ \Carbon\Carbon::parse($list['user']->tgl_lahir)->isoFormat('D MMMM Y') }}" class="form-control" disabled>
+                                <input type="text" name="ttl" id="ttl" value="{{ $list['user']->temp_lahir }}, {{ \Carbon\Carbon::parse($list['user']->tgl_lahir)->isoFormat('D MMMM Y') }}" class="form-control" hidden>
                             </div>
                         </div>
                         <div class="col-4 mb-3">
@@ -110,8 +123,8 @@
                         </div>
                         <div class="col-3 mb-3">
                             <div class="form-group">
-                                <label for="form-label">TAT (Tanggal Akhir Tugas) <a class="text-danger">*</a></label>
-                                <input type="text" value="{{ $list['user']->tat }}" class="form-control" disabled>
+                                <label for="form-label">TAT (Tanggal Akhir Tugas) <a class="text-danger" id="mandatory_paklaring" hidden>*</a></label>
+                                <input type="text" value="{{ $list['user']->tat }}" class="form-control" placeholder="Terisi Apabila Telah Pensiun / Purna Tugas" disabled>
                                 <input type="text" name="tat" id="tat" value="{{ $list['user']->tat }}" class="form-control" hidden>
                             </div>
                         </div>
@@ -130,6 +143,19 @@
                                             @endforeach
                                         @endif
                                     </select>
+                                </div>
+                            </div>
+                            <div class="mb-2 row mandatory1" hidden>
+                                <label class="col-lg-3 col-form-label">Masukkan TMK & TAK <a class="text-danger">*</a>
+                                    <small class="text-muted d-block">Mohon memasukkan tgl sesuai <mark>tahun terbit <b>SIP</b></mark> Anda</small>
+                                </label>
+                                <div class="col-lg-9">
+                                    <div class="input-daterange input-group" id="pc-datepicker-5">
+                                        <span class="input-group-text">Dari</span>
+                                        <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Mulai Kegiatan Pelayanan" name="range-start" id="tmk">
+                                        <span class="input-group-text">Sampai</span>
+                                        <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Akhir Kegiatan Pelayanan" name="range-end" id="tak">
+                                    </div>
                                 </div>
                             </div>
                             <div class="text-end btn-page mb-0">
@@ -224,6 +250,11 @@
 
     <script>
         $(document).ready(function() {
+            const datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
+                buttonClass: 'btn',
+                // todayBtn: true,
+                clearBtn: true
+            });
             // SELECT2
             var t = $(".select2");
             t.length && t.each(function() {
@@ -238,6 +269,19 @@
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
+            $('#kategori').on('change', function() {
+                if (this.value == 159) {
+                    $('.mandatory1').prop('hidden',false);
+                } else {
+                    $('.mandatory1').prop('hidden',true);
+                }
+
+                if (this.value == 160) {
+                    $('#mandatory_paklaring').prop('hidden',false);
+                } else {
+                    $('#mandatory_paklaring').prop('hidden',true);
+                }
+            });
             showRiwayat();
         });
 
@@ -254,21 +298,52 @@
             save.append('profesi',$('#profesi').val());
             save.append('tmt',$('#tmt').val());
             save.append('tat',$('#tat').val());
+            save.append('tmk',$('#tmk').val());
+            save.append('tak',$('#tak').val());
             save.append('kategori',$('#kategori').val());
             save.append('pegawai','{{ Auth::user()->id }}');
 
-            // console.log(save.get('pengajuan'));
-            if ($('#nama').val() == "" ||
-                $('#ttl').val() == "" ||
-                $('#pendidikan').val() == "" ||
-                $('#alamat').val() == "" ||
-                $('#profesi').val() == "" ||
-                $('#tmt').val() == "" ||
-                // $('#tat').val() == "" ||
-                $('#kategori').val() == "") {
+            console.log(save.get('tmk'));
+            // INITIALIZE VALIDATION
+            var validation = false;
+            if (save.get('kategori') == 159) { // PEMENUHAN SKP
+                if ($('#nama').val() == "" ||
+                    $('#ttl').val() == "" ||
+                    $('#pendidikan').val() == "" ||
+                    $('#alamat').val() == "" ||
+                    $('#profesi').val() == "" ||
+                    $('#tmk').val() == "" ||
+                    $('#tak').val() == "") {
+                    validation = true;
+                }
+            } else {
+                if (save.get('kategori') == 160) { // PAKLARING
+                    if ($('#nama').val() == "" ||
+                        $('#ttl').val() == "" ||
+                        $('#pendidikan').val() == "" ||
+                        $('#alamat').val() == "" ||
+                        $('#profesi').val() == "" ||
+                        $('#tmt').val() == "" ||
+                        $('#tat').val() == "") {
+                        validation = true;
+                    }
+                } else {
+                    if ($('#nama').val() == "" ||
+                        $('#ttl').val() == "" ||
+                        $('#pendidikan').val() == "" ||
+                        $('#alamat').val() == "" ||
+                        $('#profesi').val() == "" ||
+                        $('#tmt').val() == "") {
+                        validation = true;
+                    }
+                }
+            }
+
+            // CHECKING VALIDATION
+            if (validation == true) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
-                    message: 'Pastikan tidak ada data yang kosong, silakan membaca keterangan pengisian',
+                    message: 'Pastikan tidak ada data yang kosong, silakan membaca keterangan pengisian dan periksa data Anda sekali lagi :)',
                     position: 'topRight'
                 });
             } else {
@@ -339,12 +414,20 @@
                             var status = `<span class="badge rounded-pill text-bg-primary">Pengajuan</span>`;
                         } else {
                             if (item.progress == 1) {
-                                var status = `<span class="badge rounded-pill text-bg-warning">Dalam Proses</span>`;
+                                var status = `<span class="badge rounded-pill text-bg-warning">Diverifikasi</span>`;
                             } else {
                                 if (item.progress == 2) {
-                                    var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
+                                    var status = `<span class="badge rounded-pill text-bg-info">Dalam Proses</span>`;
                                 } else {
-                                    var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
+                                    if (item.progress == 3) {
+                                        var status = `<span class="badge rounded-pill text-bg-success">Selesai</span>`;
+                                    } else {
+                                        if (item.progress == 4) {
+                                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
+                                        } else {
+                                            var status = `<span class="badge rounded-pill text-bg-secondary">Dibatalkan/Dihapus</span>`;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -366,7 +449,17 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>` + item.kategori + `</h6>
-                                                <small class='text-truncate text-muted'>No. Surat ` + zeroPad(item.no_surat,100) + `</small>
+                                                <small class='text-truncate text-muted'>`;
+                                                    if (item.ref_id == 159) {
+                                                        content += item.pegawai_tmk+' <i class="fas fa-long-arrow-alt-right text-primary"></i> '+item.pegawai_tak;
+                                                    } else {
+                                                        if (item.ref_id == 160) {
+                                                            content += '<b>TMT</b> : '+item.pegawai_tmt+'<br>'+'<b>TAT</b> : '+item.pegawai_tat;
+                                                        } else {
+                                                            content += '<b>TMT</b> : '+item.pegawai_tmt;
+                                                        }
+                                                    }
+                        content +=              `</small>
                                             </div>
                                         </div>
                                     </td>`;
