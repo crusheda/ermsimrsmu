@@ -99,25 +99,32 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::delete('kepegawaian/pd/{id}/hapus', [\App\Http\Controllers\Kepegawaian\PDController::class, 'hapus'])->name('kepegawaian.pd.hapus');
             // USER
         // JADWAL DINAS
-            Route::post('kepegawaian/jadwaldinas/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'storePengajuan'])->name('kepegawaian.jadwaldinas.storePengajuan');
-            Route::post('kepegawaian/jadwaldinas/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'updatePengajuan'])->name('kepegawaian.jadwaldinas.updatePengajuan');
-            Route::get('kepegawaian/jadwaldinas/shift/{id}/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'cekShift'])->name('kepegawaian.jadwaldinas.cekShift');
-            Route::get('kepegawaian/jadwaldinas/{id}/shift/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'getShift'])->name('kepegawaian.jadwaldinas.getShift');
-            Route::get('kepegawaian/jadwaldinas/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'table'])->name('kepegawaian.jadwaldinas.table');
-            Route::get('kepegawaian/jadwaldinas/jadwal/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'jadwal'])->name('kepegawaian.jadwaldinas.jadwal');
-            Route::delete('kepegawaian/jadwaldinas/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapus'])->name('kepegawaian.jadwaldinas.hapus');
-            // REFERENSI SHIFT
-                Route::get('kepegawaian/jadwaldinas/shift/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableShift'])->name('kepegawaian.jadwaldinas.shift.table');
-                Route::get('kepegawaian/jadwaldinas/shift/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showUbahShift'])->name('kepegawaian.jadwaldinas.shift.show');
-                Route::post('kepegawaian/jadwaldinas/shift/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'ubahShift'])->name('kepegawaian.jadwaldinas.shift.update');
-                Route::post('kepegawaian/jadwaldinas/shift/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tambahShift'])->name('kepegawaian.jadwaldinas.shift.tambah');
-                Route::delete('kepegawaian/jadwaldinas/shift/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusShift'])->name('kepegawaian.jadwaldinas.shift.hapus');
-            // REFERENSI STAFF
-                Route::get('kepegawaian/jadwaldinas/staf/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableStaf'])->name('kepegawaian.jadwaldinas.staf.table');
-                Route::get('kepegawaian/jadwaldinas/staf/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showUbahStaf'])->name('kepegawaian.jadwaldinas.staf.show');
-                Route::post('kepegawaian/jadwaldinas/staf/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'ubahStaf'])->name('kepegawaian.jadwaldinas.staf.update');
-                Route::post('kepegawaian/jadwaldinas/staf/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tambahStaf'])->name('kepegawaian.jadwaldinas.staf.tambah');
-                Route::delete('kepegawaian/jadwaldinas/staf/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusStaf'])->name('kepegawaian.jadwaldinas.staf.hapus');
+            // ADMIN
+                Route::get('kepegawaian/jadwaldinas/table', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableAll'])->name('kepegawaian.jadwaldinas.tableAll');
+                Route::get('kepegawaian/jadwaldinas/{id}/verif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'verif'])->name('kepegawaian.jadwaldinas.verif');
+                Route::get('kepegawaian/jadwaldinas/{id}/tolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tolak'])->name('kepegawaian.jadwaldinas.tolak');
+                Route::get('kepegawaian/jadwaldinas/{id}/batalverif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalVerif'])->name('kepegawaian.jadwaldinas.batalVerif');
+                Route::get('kepegawaian/jadwaldinas/{id}/bataltolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalTolak'])->name('kepegawaian.jadwaldinas.batalTolak');
+            // USER
+                Route::post('kepegawaian/jadwaldinas/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'storePengajuan'])->name('kepegawaian.jadwaldinas.storePengajuan');
+                Route::post('kepegawaian/jadwaldinas/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'updatePengajuan'])->name('kepegawaian.jadwaldinas.updatePengajuan');
+                Route::get('kepegawaian/jadwaldinas/shift/{id}/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'cekShift'])->name('kepegawaian.jadwaldinas.cekShift');
+                Route::get('kepegawaian/jadwaldinas/{id}/shift/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'getShift'])->name('kepegawaian.jadwaldinas.getShift');
+                Route::get('kepegawaian/jadwaldinas/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'table'])->name('kepegawaian.jadwaldinas.table');
+                Route::get('kepegawaian/jadwaldinas/jadwal/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'jadwal'])->name('kepegawaian.jadwaldinas.jadwal');
+                Route::delete('kepegawaian/jadwaldinas/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapus'])->name('kepegawaian.jadwaldinas.hapus');
+                // REFERENSI SHIFT
+                    Route::get('kepegawaian/jadwaldinas/shift/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableShift'])->name('kepegawaian.jadwaldinas.shift.table');
+                    Route::get('kepegawaian/jadwaldinas/shift/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showUbahShift'])->name('kepegawaian.jadwaldinas.shift.show');
+                    Route::post('kepegawaian/jadwaldinas/shift/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'ubahShift'])->name('kepegawaian.jadwaldinas.shift.update');
+                    Route::post('kepegawaian/jadwaldinas/shift/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tambahShift'])->name('kepegawaian.jadwaldinas.shift.tambah');
+                    Route::delete('kepegawaian/jadwaldinas/shift/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusShift'])->name('kepegawaian.jadwaldinas.shift.hapus');
+                // REFERENSI STAFF
+                    Route::get('kepegawaian/jadwaldinas/staf/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableStaf'])->name('kepegawaian.jadwaldinas.staf.table');
+                    Route::get('kepegawaian/jadwaldinas/staf/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showUbahStaf'])->name('kepegawaian.jadwaldinas.staf.show');
+                    Route::post('kepegawaian/jadwaldinas/staf/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'ubahStaf'])->name('kepegawaian.jadwaldinas.staf.update');
+                    Route::post('kepegawaian/jadwaldinas/staf/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tambahStaf'])->name('kepegawaian.jadwaldinas.staf.tambah');
+                    Route::delete('kepegawaian/jadwaldinas/staf/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusStaf'])->name('kepegawaian.jadwaldinas.staf.hapus');
         // SURAT TUGAS
             // ADMIN
             Route::get('kepegawaian/surtug/table', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableAdmin'])->name('kepegawaian.surtug.tableAdmin');

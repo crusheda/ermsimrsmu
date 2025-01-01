@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Jadwal Dinas</h2>
+                        <h2 class="mb-0">Daftar Jadwal Dinas</h2>
                     </div>
                 </div>
             </div>
@@ -91,40 +91,6 @@
     </div>
 
     {{-- MODAL START --}}
-    <div class="modal fade animate__animated animate__rubberBand" id="modalTambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Tambah
-                    </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-secondary mb-3">
-                        <small>
-                            {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
-                            <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
-                            <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berstatus <span class="badge rounded-pill text-bg-warning">Pending</span> setelah pengajuan ini, maka dari itu segera lengkapi data jadwal dinas <br>
-                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Jadwal Dinas yang telah di <b class="text-success">Verifikasi</b> / <b class="text-danger">Ditolak</b> tidak dapat di ubah / hapus di kemudian waktu
-                        </small>
-                    </div>
-                    <div class="position-relative mb-3">
-                        <label class="form-label">Pilih Bulan dan Tahun <a class="text-danger">*</a></label>
-                        <input type="month" class="form-control" value="" placeholder="" id="tgl" />
-                    </div>
-                    <div class="position-relative">
-                        <label class="form-label">Keterangan</label>
-                        <textarea class="form-control" id="ket" cols="30" rows="2" placeholder="Optional"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
-                    <button class="btn btn-primary" id="btn-tambah" onclick="prosesTambah()">Lanjutkan &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalLihat" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
         <div class="modal-dialog modal-xxl modal-dialog-centered">
             <div class="modal-content">
@@ -167,6 +133,116 @@
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- FORM VERIF & BATAL VERIF --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="modalVerif" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Verif
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_verif" hidden>
+                    <p style="text-align: justify;">Anda akan melakukan verifikasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVERIFIKASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuverif">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-verif" class="btn btn-success me-sm-3 me-1" onclick="prosesVerif()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Verifikasi</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="modalBatalVerif" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Batal Verif
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_batal_verif" hidden>
+                    <p style="text-align: justify;">Anda akan melakukan pembatalan verifikasi Jadwal Dinas tersebut, status akan berubah ke <kbd>PENDING</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujubatalverif">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-batal-verif" class="btn btn-warning me-sm-3 me-1" onclick="prosesBatalVerif()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Batalkan Verifikasi</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- FORM TOLAK & BATAL TOLAK --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="modalTolak" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Penolakan
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_tolak" hidden>
+                    <p style="text-align: justify;">Anda akan melakukan penolakan Jadwal Dinas tersebut, status akan berubah ke <kbd>DITOLAK</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujutolak">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-tolak" class="btn btn-danger me-sm-3 me-1" onclick="prosesTolak()"><i class="fa fa-calendar-times me-1" style="font-size:13px"></i> Tolak</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="modalBatalTolak" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Batal Penolakan
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_batal_tolak" hidden>
+                    <p style="text-align: justify;">Anda akan melakukan pembatalan penolakan Jadwal Dinas tersebut, status akan berubah ke <kbd>PENDING</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujubataltolak">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-batal-verif" class="btn btn-danger me-sm-3 me-1" onclick="prosesBatalTolak()"><i class="fa fa-calendar-times me-1" style="font-size:13px"></i> Batalkan Penolakan</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Tutup</button>
                 </div>
             </div>
         </div>
@@ -267,14 +343,13 @@
         function showRiwayat() {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
-                url: "/api/kepegawaian/jadwaldinas/table/{{ Auth::user()->id }}",
+                url: "/api/kepegawaian/jadwaldinas/table/",
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
-                        var userID = "{{ Auth::user()->id }}";
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -282,21 +357,19 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (item.pegawai_id == userID) {
-                                            if (item.progress == 1) {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            } else {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
+                                            if (item.progress == 1) { // SEBELUM VERIFIKASI/PENDING
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-success" onclick="verif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-danger" onclick="tolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
+                                            } else { // SETELAH DITERIMA/DIVERIFIKASI
+                                                if (item.progress == 2) {
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Verif</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
+                                                } else { // DITOLAK
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalTolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Tolak</a></li>`;
+                                                }
                                             }
-                                        } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                        }
                         content += "</ul></div></center></td>";
                         for (let i = 1; i <= bulan.length; i++) {
                             if (i == item.bulan) {
@@ -512,6 +585,176 @@
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Jadwal Dinas Anda gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
+        // VERIFIKASI
+        function verif(id) {
+            $("#id_verif").val(id);
+            var inputs = document.getElementById('setujuverif');
+            inputs.checked = false;
+            $('#modalVerif').modal('show');
+        }
+        function batalVerif(id) {
+            $("#id_batal_verif").val(id);
+            var inputs = document.getElementById('setujubatalverif');
+            inputs.checked = false;
+            $('#modalBatalVerif').modal('show');
+        }
+
+        function prosesVerif() {
+            // SWITCH BTN
+            var checkbox = $('#setujuverif').is(":checked");
+            if (checkbox == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan verifikasi jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES
+                var id = $("#id_verif").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/"+id+"/verif/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas telah berhasil diverifikasi pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalVerif').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas gagal diverifikasi',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+        function prosesBatalVerif() {
+            // SWITCH BTN
+            var checkbox = $('#setujubatalverif').is(":checked");
+            if (checkbox == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan pembatalan verifikasi jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES
+                var id = $("#id_batal_verif").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/"+id+"/batalverif/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas telah berhasil dibatalkan verifikasi pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalBatalVerif').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas gagal batal verifikasi',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
+        // PENOLAKAN
+        function tolak(id) {
+            $("#id_tolak").val(id);
+            var inputs = document.getElementById('setujutolak');
+            inputs.checked = false;
+            $('#modalTolak').modal('show');
+        }
+        function batalTolak(id) {
+            $("#id_batal_tolak").val(id);
+            var inputs = document.getElementById('setujubataltolak');
+            inputs.checked = false;
+            $('#modalBatalTolak').modal('show');
+        }
+
+        function prosesTolak() {
+            // SWITCH BTN
+            var checkbox = $('#setujutolak').is(":checked");
+            if (checkbox == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penolakan jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES
+                var id = $("#id_tolak").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/"+id+"/tolak/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas telah berhasil ditolak pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalTolak').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas gagal ditolak',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+        function prosesBatalTolak() {
+            // SWITCH BTN
+            var checkbox = $('#setujubataltolak').is(":checked");
+            if (checkbox == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan pembatalan penolakan jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES
+                var id = $("#id_batal_tolak").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/"+id+"/bataltolak/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas telah berhasil dibatal tolak pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalBatalTolak').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas gagal dibatal tolak',
                             position: 'topRight'
                         });
                     }

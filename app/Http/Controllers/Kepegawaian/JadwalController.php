@@ -19,21 +19,16 @@ class JadwalController extends Controller
 {
     function index()
     {
-        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        // $show  = jadwal::get();
-
-        // $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        //     ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        //     ->select('roles.name as nama_role', 'users.id as id_user')
-        //     ->get();
-
-        $data = [
-            // 'show' => $show,
-            'users' => $users,
-            // 'role' => $role,
-        ];
-
-        return view('pages.kepegawaian.jadwal.index-user')->with('list', $data);
+        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
+            return view('pages.kepegawaian.jadwal.index-admin');
+        } else {
+            $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+            $data = [
+                // 'show' => $show,
+                'users' => $users,
+            ];
+            return view('pages.kepegawaian.jadwal.index-user')->with('list', $data);
+        }
     }
 
     function indexShift()
@@ -153,7 +148,6 @@ class JadwalController extends Controller
     }
 
     // AJAX JSON ---------------------------------------------------------------------------------------------
-
     function storePengajuan(Request $request)
     {
         // $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
@@ -289,6 +283,21 @@ class JadwalController extends Controller
         return response()->json($data, 200);
     }
 
+    function tableAll()
+    {
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
+                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->get();
+
+        $data = [
+            'users' => $users,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
     function hapus($id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
@@ -299,6 +308,68 @@ class JadwalController extends Controller
         // Delete
         $jadwal->delete();
         $detail = jadwal_detail::where('id_jadwal',$id)->delete();
+
+        return response()->json($tgl, 200);
+    }
+
+    // PROSES VERIFIKASI DAN PENOLAKAN
+    function verif($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $jadwal = jadwal::find($id);
+
+        // Change
+        $jadwal->progress = 2;
+        $jadwal->valid = $user;
+        $jadwal->tgl_valid = Carbon::now();
+        $jadwal->save();
+
+        return response()->json($tgl, 200);
+    }
+    function batalVerif($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $jadwal = jadwal::find($id);
+
+        // Change
+        $jadwal->progress = 1;
+        $jadwal->valid = $user;
+        $jadwal->tgl_valid = Carbon::now();
+        $jadwal->save();
+
+        return response()->json($tgl, 200);
+    }
+    function tolak($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $jadwal = jadwal::find($id);
+
+        // Change
+        $jadwal->progress = 0;
+        $jadwal->valid = $user;
+        $jadwal->tgl_valid = Carbon::now();
+        $jadwal->save();
+
+        return response()->json($tgl, 200);
+    }
+    function batalTolak($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $jadwal = jadwal::find($id);
+
+        // Change
+        $jadwal->progress = 1;
+        $jadwal->valid = $user;
+        $jadwal->tgl_valid = Carbon::now();
+        $jadwal->save();
 
         return response()->json($tgl, 200);
     }
