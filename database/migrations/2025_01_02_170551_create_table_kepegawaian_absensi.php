@@ -26,7 +26,7 @@ class CreateTableKepegawaianAbsensi extends Migration
             $table->datetime('tgl_in')->comment('Waktu Masuk Absen');
             $table->datetime('tgl_out')->comment('Waktu Pulang Absen')->nullable();
             $table->integer('selisih_jam')->comment('Selisih Jam Masuk Sampai Pulang')->nullable();
-            $table->string('foto_in')->comment('Selfi Masuk');
+            $table->string('foto_in')->comment('Selfi Masuk')->nullable();
             $table->string('foto_out')->comment('Selfi Pulang')->nullable();
             $table->longText('lokasi_in')->comment('Latitude, Longitude');
             $table->longText('lokasi_out')->comment('Latitude, Longitude')->nullable();
