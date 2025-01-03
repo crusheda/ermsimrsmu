@@ -109,8 +109,8 @@
                         </div>
                         <div class="col-6 mb-3">
                             <div class="form-group">
-                                <label for="form-label">Profesi <a class="text-danger">*</a></label>
-                                <input type="text" value="{{ $list['user']->nama_subprofesi }}" class="form-control" disabled>
+                                <label for="form-label">Sub Profesi <a class="text-danger">*</a></label>
+                                <input type="text" value="{{ $list['user']->nama_subprofesi }}" class="form-control" placeholder="Apabila masih kosong, silakan hubungi Kepegawaian" disabled>
                                 <input type="text" name="profesi" id="profesi" value="{{ $list['user']->ref_subprofesi }}" class="form-control" hidden>
                             </div>
                         </div>

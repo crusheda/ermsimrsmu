@@ -20,7 +20,7 @@ class SurketController extends Controller
         if (Auth::user()->getPermission('admin_kepegawaian') == true) {
             return view('pages.kepegawaian.surket.index-admin');
         } else {
-            $user = users::join('referensi','referensi.id','=','users.ref_subprofesi')
+            $user = users::leftJoin('referensi','referensi.id','=','users.ref_subprofesi')
                             ->select('users.*','referensi.deskripsi as nama_subprofesi')
                             ->where('users.id',Auth::user()->id)
                             ->first();
