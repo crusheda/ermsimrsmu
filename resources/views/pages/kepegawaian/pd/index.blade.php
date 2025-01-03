@@ -32,134 +32,132 @@
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
         <div class="col-xl-12">
-            <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Formulir</h5>
-                    {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
-                        <div class="btn-group">
-                            <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                            {{-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a>
-                                </li>
-                            </ul> --}}
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <div class="card">
+                        <div class="card-header accordion-header d-flex align-items-center justify-content-between py-3 ">
+                            <h5 class="mb-0"><button
+                                class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                aria-expanded="false" aria-controls="flush-collapseOne"><b style="font-size: 1rem">Formulir Tambah</b>&nbsp;&nbsp;</button>
+                            </h5>
                         </div>
-                    {{-- @endif --}}
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-xl-12 col-xxl-12">
-                            <div class="alert alert-secondary">
-                                <small>
-                                    {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
-                                    <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi
-                                    {{-- <br><i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b> --}}
-                                </small>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+
+                                <div class="row">
+                                    <div class="col-xl-12 col-xxl-12">
+                                        <div class="alert alert-secondary">
+                                            <small>
+                                                {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
+                                                <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi
+                                                {{-- <br><i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b> --}}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9 mb-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
+                                            <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
+                                            <input type="datetime-local" class="form-control" name="tgl" id="tgl">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
+                                            <select class="form-control" name="jenis" id="jenis">
+                                                <option value="">Pilih</option>
+                                                <option value="1">Offline</option>
+                                                <option value="2">Online</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
+                                            <select class="form-control" name="kendaraan" id="kendaraan">
+                                                <option value="">Pilih</option>
+                                                <option value="1">[Pribadi] Motor</option>
+                                                <option value="2">[Pribadi] Mobil</option>
+                                                <option value="3">[Rumah Sakit] Mobil</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3" id="showing" hidden>
+                                        <div class="form-group">
+                                            <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
+                                            <select class="form-select select2" name="kendaraan_pegawai[]" id="kendaraan_pegawai" style="width: 100%" multiple>
+                                                @if (count($list['users']) > 0)
+                                                    @foreach ($list['users'] as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="lama1" id="lama1">
+                                                <option value="">Pilih</option>
+                                                <option value="1">< 4 Jam (Kurang dari 4 jam)</option>
+                                                <option value="2">> 4 Jam (Lebih dari 4 jam)</option>
+                                            </select>
+                                            <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2" id="lama2">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
+                                            <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3" id="slide">
+                                        <div class="form-group">
+                                            <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
+                                            <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
+                                                @if (count($list['users']) > 0)
+                                                    @foreach ($list['users'] as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
+                                            <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="col-md-3 mb-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Upload</label>
+                                            <input type="file" class="form-control" id="filex" name="filex" accept="application/pdf">
+                                        </div>
+                                    </div> --}}
+                                    <div class="text-end btn-page mt-2">
+                                        <button class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
+                                        <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-9 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
-                                <input type="datetime-local" class="form-control" name="tgl" id="tgl">
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
-                                <select class="form-control" name="jenis" id="jenis">
-                                    <option value="">Pilih</option>
-                                    <option value="1">Offline</option>
-                                    <option value="2">Online</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
-                                <select class="form-control" name="kendaraan" id="kendaraan">
-                                    <option value="">Pilih</option>
-                                    <option value="1">[Pribadi] Motor</option>
-                                    <option value="2">[Pribadi] Mobil</option>
-                                    <option value="3">[Rumah Sakit] Mobil</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3" id="showing" hidden>
-                            <div class="form-group">
-                                <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="kendaraan_pegawai[]" id="kendaraan_pegawai" style="width: 100%" multiple>
-                                    @if (count($list['users']) > 0)
-                                        @foreach ($list['users'] as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
-                            <div class="input-group">
-                                <select class="form-control" name="lama1" id="lama1">
-                                    <option value="">Pilih</option>
-                                    <option value="1">< 4 Jam (Kurang dari 4 jam)</option>
-                                    <option value="2">> 4 Jam (Lebih dari 4 jam)</option>
-                                </select>
-                                <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2" id="lama2">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3" id="slide">
-                            <div class="form-group">
-                                <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
-                                    @if (count($list['users']) > 0)
-                                        @foreach ($list['users'] as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Upload</label>
-                                <input type="file" class="form-control" id="filex" name="filex" accept="application/pdf">
-                            </div>
-                        </div> --}}
-                        <div class="text-end btn-page mt-2">
-                            <button class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
-                            <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
-                        </div>
-                    </div>
                 </div>
-            </div>
-            <div class="d-flex justify-content-end">
-                {{-- <button class="btn btn-link-primary"><i class="ti ti-arrow-narrow-left align-text-bottom me-2"></i>Back to Shipping Information</button> --}}
             </div>
         </div>
         <div class="col-xl-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Riwayat</h5>
+                    <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Riwayat Perjalanan</b></h5>
                     <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
@@ -201,6 +199,31 @@
     </div>
 
     {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="modalRincian" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Rincian Perjalanan
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover dt-responsive align-middle table-borderless">
+                            <tbody style="font-size:13px" id="tbody-rincian">
+                                <tr>
+                                    <td colspan="9">
+                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalUbah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-xxl modal-dialog-centered">
             <div class="modal-content">
@@ -370,17 +393,19 @@
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var adminID = "{{ Auth::user()->getManyPermission(['admin_kepegawaian','admin_keuangan']) }}";
                         var date = new Date().toLocaleDateString("sv-SE");
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
+                                        if (adminID == true) {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
+                                        }
                                         if (updet == date) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
@@ -409,8 +434,8 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-primary" data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara"><u>` + item.acara + `</u></a>
+                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara">` + item.acara + `</u> ${item.paid == 0?'<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>':'<span class="badge bg-light-success rounded-pill ms-2">PAID</span>'}</a>
                                                 </h6>
                                                 <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b> dan Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small>
                                                 <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan_pegawai?`Milik<br>(<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`:``}</small>
@@ -543,6 +568,57 @@
 
             $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
             $("#btn-simpan").prop('disabled', false);
+        }
+
+        function rincian(id) {
+            $("#tbody-rincian").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax(
+            {
+                url: "/api/kepegawaian/pd/"+id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $('#tbody-rincian').empty();
+                    if (res.show.kendaraan == 1) {
+                        kendaraan = '[Pribadi] Motor';
+                    } else {
+                        if (res.show.kendaraan == 2) {
+                            kendaraan = '[Pribadi] Mobil';
+                        } else {
+                            kendaraan = '[Rumah Sakit] Mobil';
+                        }
+                    }
+                    kendaraan_pegawai = '';
+                    if (res.show.kendaraan_pegawai) {
+                        res.users.forEach(is => {
+                            JSON.parse(res.show.kendaraan_pegawai).forEach(val => {
+                                if (val == is.id) {
+                                    kendaraan_pegawai += is.nama + `; `;
+                                }
+                            })
+                        })
+                    }
+                    pegawai = ``;
+                    res.users.forEach(us => {
+                        JSON.parse(res.show.pegawai_id).forEach(val => {
+                            if (val == us.id) {
+                                pegawai += `<li>` + us.nama + `</li>`;
+                            }
+                        })
+                    })
+                    $('#tbody-rincian').append(`
+                        <tr><th><u>STATUS PEMBAYARAN/FEE (Bag. Keuangan)</u></th><td>${res.show.paid == 0?'<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>':'<span class="badge bg-light-success rounded-pill ms-2">PAID</span>'}</td></tr>
+                        <tr><th>Nama Acara</th><td>${res.show.acara} (${res.show.jenis})</td></tr>
+                        <tr><th>Lokasi Acara</th><td>${res.show.lokasi}</td></tr>
+                        <tr><th>Tanggal</th><td>Pada ${res.show.tgl} Selama ${res.show.lama1 == 1?'< 4 Jam':'> 4 Jam'} ${res.show.lama2?'('+res.show.lama2+' Jam)':''}</td></tr>
+                        <tr><th>Peserta</th><td>${pegawai}</td></tr>
+                        <tr><th>Transportasi</th><td>${kendaraan}</td></tr>
+                        <tr><th>Pemilik Kendaraan</th><td>${kendaraan_pegawai}</td></tr>
+                        <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi}</td></tr>
+                    `);
+                    $('#modalRincian').modal('show');
+                }
+            })
         }
 
         function ubah(id) {
@@ -745,7 +821,7 @@
             $('#acara').val('');
             $('#tgl').val('');
             $('#kendaraan').val('');
-            $('#kendaraan_pegawai').val('');
+            $('#kendaraan_pegawai').val('').change();
             $('#lama1').val('');
             $('#lama2').val('');
             $('#jenis').val('');

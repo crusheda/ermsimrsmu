@@ -71,6 +71,7 @@ class PDController extends Controller
         $data->acara = $request->acara;
         $data->lokasi = $request->lokasi;
         $data->deskripsi = $request->deskripsi;
+        $data->paid = false;
         $data->save();
 
         return Response::json(array(
@@ -135,5 +136,21 @@ class PDController extends Controller
         $data->delete();
 
         return response()->json($tgl, 200);
+    }
+
+    function paid(Request $request)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = pd::find($request->id);
+        $data->paid = true;
+        $data->user_paid = $request->pegawai;
+        $data->tgl_paid = Carbon::now();
+        $data->save();
+
+        return Response::json(array(
+            'message' => $push,
+            'code' => 200,
+        ));
     }
 }
