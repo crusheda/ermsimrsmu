@@ -8,7 +8,6 @@
                 <div class="col-md-12">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item">Kepegawaian</li>
                         <li class="breadcrumb-item" aria-current="page">Feedback</li>
                     </ul>
                 </div>
@@ -27,23 +26,19 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h6 class="mb-0">Formulir</h6>
+                    @if (Auth::user()->getPermission(['admin_kepegawaian']) == true)
                     <div class="btn-group">
                         <button class="btn btn-light-warning" data-bs-toggle="modal" data-bs-target="#riwayat">
                             <i class="fa-fw fas fa-history nav-icon"></i>&nbsp;&nbsp;Riwayat Masukan
                         </button>
                     </div>
+                    @endif
                 </div>
                 <div class="card-body">
                     <form class="form-auth-small" name="formTambah" action="{{ route('kepegawaian.feedback.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <div class="form-group">
-                                    <label class="form-label">Judul <a class="text-danger">*</a></label>
-                                    <input class="form-control" type="text" name="judul" placeholder="e.g. Mohon untuk lebih ditingkatkan lagi kualitas pelayanan di Unit xxx">
-                                </div>
-                            </div>
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label class="form-label">Kategori <a class="text-danger">*</a></label>
@@ -57,19 +52,27 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-8 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">Judul Pembahasan <a class="text-danger">*</a></label>
+                                    <input class="form-control" type="text" name="judul" placeholder="e.g. Mohon untuk lebih ditingkatkan lagi kualitas pelayanan di Unit xxx">
+                                </div>
+                            </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="form-label">Saran <a class="text-danger">*</a></label>
-                                    <textarea class="form-control" name="saran" rows="2" placeholder="Tuliskan Masukan/Saran Anda"></textarea>
+                                    <label class="form-label">Deskripsi <a class="text-danger">*</a></label>
+                                    <textarea class="form-control" name="saran" rows="2" placeholder="Tuliskan Masukan/Saran Anda berdasarkan Kategori yang sudah dipilih"></textarea>
+                                    <small>Masukan/Saran Anda akan disampaikan ke bagian <b>Kepegawaian</b></small>
                                 </div>
                             </div>
                         </div>
                 </div>
                 <div class="card-footer">
                     <div class="d-flex align-items-center justify-content-between">
-                        <a class="mb-0">Login User : {{ Auth::user()->nama }}</a>
+                        {{-- <a class="mb-0">User Input : {{ Auth::user()->nama }}</a> --}}
+                        <a class="mb-0"><b>Catatan :</b> Data diri Anda <b class="text-danger">TIDAK AKAN</b> tersimpan oleh sistem guna Privasi masing-masing Karyawan</a>
                         <div class="btn-group">
-                            <button class="btn btn-primary btn-shadow"><i class="fa-fw fas fa-upload nav-icon me-2"></i>Submit</button>
+                            <button class="btn btn-primary btn-shadow"><i class="fa-fw fas fa-paper-plane nav-icon me-2"></i>Submit</button>
                         </div>
                     </div>
                     </form>

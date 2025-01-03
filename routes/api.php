@@ -97,6 +97,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::post('kepegawaian/pd/{id}/ubah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'update'])->name('kepegawaian.pd.update');
             Route::post('kepegawaian/pd/tambah', [\App\Http\Controllers\Kepegawaian\PDController::class, 'tambah'])->name('kepegawaian.pd.tambah');
             Route::delete('kepegawaian/pd/{id}/hapus', [\App\Http\Controllers\Kepegawaian\PDController::class, 'hapus'])->name('kepegawaian.pd.hapus');
+            Route::post('kepegawaian/pd/paid', [\App\Http\Controllers\Kepegawaian\PDController::class, 'confirmPaid'])->name('kepegawaian.pd.confirmPaid');
+            Route::post('kepegawaian/pd/unpaid', [\App\Http\Controllers\Kepegawaian\PDController::class, 'cancelPaid'])->name('kepegawaian.pd.cancelPaid');
             // USER
         // JADWAL DINAS
             // ADMIN
@@ -126,6 +128,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                     Route::post('kepegawaian/jadwaldinas/staf/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tambahStaf'])->name('kepegawaian.jadwaldinas.staf.tambah');
                     Route::delete('kepegawaian/jadwaldinas/staf/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusStaf'])->name('kepegawaian.jadwaldinas.staf.hapus');
         // SURAT TUGAS
+            Route::post('kepegawaian/surtug/simpan', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'simpan'])->name('kepegawaian.surtug.simpan');
+            Route::delete('kepegawaian/surtug/{id}/hapus', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'hapus'])->name('kepegawaian.surtug.hapus');
             // ADMIN
             Route::get('kepegawaian/surtug/table', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableAdmin'])->name('kepegawaian.surtug.tableAdmin');
             // USER

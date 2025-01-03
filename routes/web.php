@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // SURAT TUGAS
     Route::get('surtug', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'index'])->name('kepegawaian.surtug.index');
+    Route::get('surtug/{id}/download', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'download'])->name('kepegawaian.surtug.download');
 });
 
 // BERKAS

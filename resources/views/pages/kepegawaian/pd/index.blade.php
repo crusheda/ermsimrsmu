@@ -199,7 +199,7 @@
     </div>
 
     {{-- MODAL START --}}
-    <div class="modal fade animate__animated animate__rubberBand" id="modalRincian" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade animate__animated animate__rubberBand" id="modalRincian" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,6 +209,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <input type="text" class="form-control" name="id_rincian" id="id_rincian" hidden>
                     <div class="table-responsive">
                         <table class="table table-hover dt-responsive align-middle table-borderless">
                             <tbody style="font-size:13px" id="tbody-rincian">
@@ -220,6 +221,12 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="modal-footer" id="keu-only" hidden>
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden>Confirm Paid</button>
+                    <button type="button" class="btn btn-warning" onclick="cancelPaid()" id="btn-cancel" data-bs-toggle="tooltip"
+                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden>Cancel Paid</button>
                 </div>
             </div>
         </div>
@@ -393,21 +400,27 @@
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
-                        var adminID = "{{ Auth::user()->getManyPermission(['admin_kepegawaian','admin_keuangan']) }}";
+                        var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
+                        var keuID = "{{ Auth::user()->getPermission(['admin_keuangan']) }}";
                         var date = new Date().toLocaleDateString("sv-SE");
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (adminID == true) {
+                                        if (adminID == true || keuID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                         }
-                                        if (updet == date) {
+                                        if (adminID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            if (updet == date) {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            } else {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            }
                                         }
                         content += "</div></center></td>";
                         content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
@@ -431,11 +444,18 @@
                                 })
                             })
                         }
+                        if (adminID == true || keuID == true) {
+                            if (item.paid == 0) {
+                                statusPaid = `<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>`;
+                            } else {
+                                statusPaid = `<span class="badge bg-light-success rounded-pill ms-2">PAID</span>`;
+                            }
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara">` + item.acara + `</u> ${item.paid == 0?'<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>':'<span class="badge bg-light-success rounded-pill ms-2">PAID</span>'}</a>
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara">` + item.acara + `</u> ${statusPaid}</a>
                                                 </h6>
                                                 <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b> dan Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small>
                                                 <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan_pegawai?`Milik<br>(<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`:``}</small>
@@ -607,18 +627,119 @@
                         })
                     })
                     $('#tbody-rincian').append(`
-                        <tr><th><u>STATUS PEMBAYARAN/FEE (Bag. Keuangan)</u></th><td>${res.show.paid == 0?'<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>':'<span class="badge bg-light-success rounded-pill ms-2">PAID</span>'}</td></tr>
+                        <tr>
+                            <th colspan="2">
+                                <div class="shadow-lg p-3 bg-body rounded" role="alert">
+                                    <h5 class="alert-heading fw-bold mb-2 text-center">
+                                        Status Pembayaran Dari <b class="text-primary">Bagian Keuangan</b>
+                                    </h5>
+                                    <h6 class="text-center mb-0" style="font-size:20px">${res.show.paid == 0?'<span class="badge bg-light-danger rounded-pill">U N P A I D</span>':'<span class="badge bg-light-success rounded-pill ms-2">P A I D</span>'}</h6>
+                                </div>
+                            </th>
+                        </tr>
                         <tr><th>Nama Acara</th><td>${res.show.acara} (${res.show.jenis})</td></tr>
                         <tr><th>Lokasi Acara</th><td>${res.show.lokasi}</td></tr>
                         <tr><th>Tanggal</th><td>Pada ${res.show.tgl} Selama ${res.show.lama1 == 1?'< 4 Jam':'> 4 Jam'} ${res.show.lama2?'('+res.show.lama2+' Jam)':''}</td></tr>
                         <tr><th>Peserta</th><td>${pegawai}</td></tr>
                         <tr><th>Transportasi</th><td>${kendaraan}</td></tr>
-                        <tr><th>Pemilik Kendaraan</th><td>${kendaraan_pegawai}</td></tr>
-                        <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi}</td></tr>
+                        ${res.show.kendaraan_pegawai?`<tr><th>Pemilik Kendaraan</th><td>`+kendaraan_pegawai+`</td></tr>`:``}
+                        <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
+                        ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh `+res.show.nama_user_paid+` pada `+res.show.tgl_paid+`</td></tr>`:``}
                     `);
+                    var adminID = "{{ Auth::user()->getManyPermission(['admin_keuangan']) }}";
+                    if (adminID == true) {
+                        $('#keu-only').prop('hidden',false);
+                    } else {
+                        $('#keu-only').prop('hidden',true);
+                    }
+                    $('#id_rincian').val(res.show.id);
+                    if (res.show.paid == 0) {
+                        $('#btn-confirm').prop('hidden',false);
+                        $('#btn-cancel').prop('hidden',true);
+                    } else {
+                        haripaid = new Date(res.show.tgl_paid).toLocaleDateString("sv-SE");
+                        hariini = new Date().toLocaleDateString("sv-SE");
+                        if (haripaid == hariini) {
+                            $('#btn-confirm').prop('hidden',true);
+                            $('#btn-cancel').prop('hidden',false);
+                        } else {
+                            $('#btn-confirm').prop('hidden',true);
+                            $('#btn-cancel').prop('hidden',true);
+                        }
+                    }
                     $('#modalRincian').modal('show');
                 }
             })
+        }
+
+        function confirmPaid() {
+            // PROSES
+            var save = new FormData();
+            save.append('id',$("#id_rincian").val());
+            save.append('pegawai','{{ Auth::user()->id }}');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('kepegawaian.pd.confirmPaid')}}",
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: 'Rincian Perjalanan Dinas telah berhasil dibayarkan pada '+res,
+                        position: 'topRight'
+                    });
+                    $('#modalRincian').modal('hide');
+                    showRiwayat();
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Rincian Perjalanan Dinas gagal dibayarkan',
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        function cancelPaid() {
+            // PROSES
+            var save = new FormData();
+            save.append('id',$("#id_rincian").val());
+            save.append('pegawai','{{ Auth::user()->id }}');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('kepegawaian.pd.cancelPaid')}}",
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: 'Rincian Perjalanan Dinas telah berhasil diselesaikan pembayaran pada '+res,
+                        position: 'topRight'
+                    });
+                    $('#modalRincian').modal('hide');
+                    showRiwayat();
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Batal Pembayaran Fee Perjalanan Dinas gagal dilakukan',
+                        position: 'topRight'
+                    });
+                }
+            });
         }
 
         function ubah(id) {

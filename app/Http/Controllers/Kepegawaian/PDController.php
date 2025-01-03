@@ -82,7 +82,10 @@ class PDController extends Controller
 
     function show($id)
     {
-        $show = pd::where('id',$id)->first();
+        $show = pd::leftJoin('users','users.id','=','kepegawaian_pd.user_paid')
+                    ->select('kepegawaian_pd.*','users.nama as nama_user_paid')
+                    ->where('kepegawaian_pd.id',$id)
+                    ->first();
         $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
         $data = [
             'show' => $show,
@@ -138,7 +141,7 @@ class PDController extends Controller
         return response()->json($tgl, 200);
     }
 
-    function paid(Request $request)
+    function confirmPaid(Request $request)
     {
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
@@ -148,9 +151,19 @@ class PDController extends Controller
         $data->tgl_paid = Carbon::now();
         $data->save();
 
-        return Response::json(array(
-            'message' => $push,
-            'code' => 200,
-        ));
+        return response()->json($push, 200);
+    }
+
+    function cancelPaid(Request $request)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = pd::find($request->id);
+        $data->paid = false;
+        $data->user_paid = $request->pegawai;
+        $data->tgl_paid = Carbon::now();
+        $data->save();
+
+        return response()->json($push, 200);
     }
 }

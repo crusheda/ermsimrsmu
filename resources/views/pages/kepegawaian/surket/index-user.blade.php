@@ -302,8 +302,6 @@
             save.append('tak',$('#tak').val());
             save.append('kategori',$('#kategori').val());
             save.append('pegawai','{{ Auth::user()->id }}');
-
-            console.log(save.get('tmk'));
             // INITIALIZE VALIDATION
             var validation = false;
             if (save.get('kategori') == 159) { // PEMENUHAN SKP
@@ -328,12 +326,16 @@
                         validation = true;
                     }
                 } else {
-                    if ($('#nama').val() == "" ||
-                        $('#ttl').val() == "" ||
-                        $('#pendidikan').val() == "" ||
-                        $('#alamat').val() == "" ||
-                        $('#profesi').val() == "" ||
-                        $('#tmt').val() == "") {
+                    if (save.get('kategori') != '') { // KATEGORI TIDAK BOLEH KOSONG
+                        if ($('#nama').val() == "" ||
+                            $('#ttl').val() == "" ||
+                            $('#pendidikan').val() == "" ||
+                            $('#alamat').val() == "" ||
+                            $('#profesi').val() == "" ||
+                            $('#tmt').val() == "") {
+                            validation = true;
+                        }
+                    } else {
                         validation = true;
                     }
                 }

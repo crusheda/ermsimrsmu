@@ -21,10 +21,16 @@
             <span class="pc-mtext">Dashboard</span>
         </a>
     </li>
-    @if (Auth::user()->getPermission('profil_karyawan') == true || Auth::user()->getRole('it') == true)
-        <li class="pc-item pc-caption"><label>Kepegawaian</label></li>
-    @endif
-    @if (Auth::user()->getPermission('profil_karyawan') == true || Auth::user()->getRole('it') == true || Auth::user()->getRole('karu-it') == true)
+    <li class="pc-item">
+        <a href="{{ route('kepegawaian.feedback.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="fas fa-theater-masks"></i>
+            </span>
+            <span class="pc-mtext">Masukan / Saran</span>
+        </a>
+    </li>
+    <li class="pc-item pc-caption"><label>Kepegawaian</label></li>
+    @if (Auth::user()->getPermission(['admin_kepegawaian']) == true)
         <li class="pc-item">
             <a href="{{ route('profilkaryawan.index') }}" class="pc-link">
                 <span class="pc-micon">
@@ -34,7 +40,8 @@
             </a>
         </li>
     @endif
-    @if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('karu-it') == true)
+    {{-- Auth::user()->getPermission('struktur_organisasi') == true --}}
+    @if (Auth::user()->getRole('it') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item">
             <a href="{{ route('strukturorganisasi.index') }}" class="pc-link">
                 <span class="pc-micon">
@@ -44,59 +51,45 @@
             </a>
         </li>
     @endif
-    @if (Auth::user()->getPermission('jadwal_dinas') == true || Auth::user()->getRole('karu-it') == true)
-        <li class="pc-item">
-            <a href="{{ route('kepegawaian.jadwaldinas.index') }}" class="pc-link">
-                <span class="pc-micon">
-                    <i class="fas fa-calendar-alt"></i>
-                </span>
-                <span class="pc-mtext">Jadwal Dinas</span>
-            </a>
-        </li>
-    @endif
-    @if (Auth::user()->getPermission('pengajuan_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
-        <li class="pc-item pc-hasmenu">
-            <a href="javascript: void(0);" class="pc-link">
-                <span class="pc-micon">
-                    <i class="fas fa-puzzle-piece"></i>
-                </span>
-                <span class="pc-mtext">Pengajuan</span>
-                <span class="pc-arrow mt-1">
-                    <i data-feather="chevron-right"></i>
-                </span>
-            </a>
-            <ul class="pc-submenu">
-                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.surket.index') }}">Surat Keterangan</a></li>
-                <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Surat Ijin</s></a></li>
-                <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Cuti</s></a></li>
-                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.idcard.index') }}">ID Card</a></li>
-            </ul>
-        </li>
-    @endif
-    @if (Auth::user()->getPermission('perjalanan_dinas') == true || Auth::user()->getRole('karu-it') == true)
-        <li class="pc-item">
-            <a href="{{ route('kepegawaian.pd.index') }}" class="pc-link">
-                <span class="pc-micon">
-                    <i class="fas fa-shuttle-van"></i>
-                </span>
-                <span class="pc-mtext">Perjalanan Dinas</span>
-            </a>
-        </li>
-    @endif
+    <li class="pc-item">
+        <a href="{{ route('kepegawaian.jadwaldinas.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="fas fa-calendar-alt"></i>
+            </span>
+            <span class="pc-mtext">Jadwal Dinas</span>
+        </a>
+    </li>
+    <li class="pc-item pc-hasmenu">
+        <a href="javascript: void(0);" class="pc-link">
+            <span class="pc-micon">
+                <i class="fas fa-puzzle-piece"></i>
+            </span>
+            <span class="pc-mtext">Pengajuan</span>
+            <span class="pc-arrow mt-1">
+                <i data-feather="chevron-right"></i>
+            </span>
+        </a>
+        <ul class="pc-submenu">
+            <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.surket.index') }}">Surat Keterangan</a></li>
+            <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Surat Ijin</s></a></li>
+            <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Cuti</s></a></li>
+            <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.idcard.index') }}">ID Card</a></li>
+        </ul>
+    </li>
+    <li class="pc-item">
+        <a href="{{ route('kepegawaian.pd.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="fas fa-shuttle-van"></i>
+            </span>
+            <span class="pc-mtext">Perjalanan Dinas</span>
+        </a>
+    </li>
     <li class="pc-item">
         <a href="{{ route('kepegawaian.surtug.index') }}" class="pc-link">
             <span class="pc-micon">
                 <i class="ti ti-plane"></i>
             </span>
             <span class="pc-mtext">Surat Tugas</span>
-        </a>
-    </li>
-    <li class="pc-item">
-        <a href="{{ route('kepegawaian.feedback.index') }}" class="pc-link">
-            <span class="pc-micon">
-                <i class="fas fa-theater-masks"></i>
-            </span>
-            <span class="pc-mtext">Masukan / Saran</span>
         </a>
     </li>
     @if (
