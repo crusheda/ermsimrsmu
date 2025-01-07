@@ -17,6 +17,9 @@ class AddColumnTableKepegawaianAbsensi extends Migration
             $table->integer('jenis')->after('id')->comment('1:Shift; 2:Dinas Luar; 3:Tugas Khusus;');
             $table->time('lembur')->after('ref_jam_pulang')->nullable();
             $table->time('keterlambatan')->after('ref_jam_pulang')->nullable();
+            $table->datetime('ref_jam_masuk')->change();
+            $table->datetime('ref_jam_pulang')->change();
+            $table->time('selisih_jam')->change();
         });
     }
 
