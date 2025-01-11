@@ -325,7 +325,7 @@
                     <form action="{{ route('pengadaanrekap.index') }}" name="formRekap" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col">
+                            <div class="col-md-6 mb-3">
                                 <div class="form-group" style="width: 100%">
                                     <select onchange="rekapBtn()" class="form-control" name="bulan" id="bulan_all">
                                         <option hidden>Pilih Bulan</option>
@@ -344,7 +344,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-md-6 mb-3">
                                 <div class="form-group" style="width: 100%">
                                     <select onchange="rekapBtn()" class="form-control" name="tahun" id="tahun_all">
                                         <option hidden>Pilih Tahun</option>
@@ -353,6 +353,18 @@
                                                 echo "<option value=$i> $i </option>";
                                             }
                                         @endphp
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group" style="width: 100%">
+                                    <select onchange="rekapBtn()" class="form-control" name="kategori" id="kategori">
+                                        <option hidden>Pilih Kategori</option>
+                                        @if ($list['ref'])
+                                            @foreach ($list['ref'] as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -1275,8 +1287,9 @@
             // var unit = $("#unit_cari").val();
             var bulan = $("#bulan_all").val();
             var tahun = $("#tahun_all").val();
+            var kategori = $("#kategori").val();
 
-            if (bulan != 'Pilih Bulan' && tahun != 'Pilih Tahun') {
+            if (bulan != 'Pilih Bulan' && tahun != 'Pilih Tahun' && kategori != 'Pilih Kategori') {
                 $('#submit_filterAll').prop('disabled', false).removeClass('btn-secondary').addClass('btn-primary');
             }
         }
@@ -1286,10 +1299,11 @@
                 //stop submitting the form to see the disabled button effect
                 let x = document.forms["formRekap"]["bulan"].value;
                 let y = document.forms["formRekap"]["tahun"].value;
-                if (x == "" || y == "") {
+                let z = document.forms["formRekap"]["kategori"].value;
+                if (x == "" || y == "" || z == "") {
                     iziToast.error({
                         title: 'Pesan Galat!',
-                        message: 'Mohon isi tanggal rapat',
+                        message: 'Mohon lengkapi semua isian',
                         position: 'topRight'
                     });
                     return false;

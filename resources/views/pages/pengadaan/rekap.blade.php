@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Pengadaan - Rekapitulasi Bulanan</h4>
+                <h4 class="mb-sm-0 font-size-18">Pengadaan - Rekapitulasi Bulanan (<b class="text-danger">{{ $list['ref']->nama }}</b>)</h4>
             </div>
         </div>
     </div>
@@ -31,7 +31,7 @@
                             <th rowspan="2">HARGA</th>
                             <th rowspan="2">SATUAN</th>
                             @foreach ($list['unit'] as $item)
-                                <th colspan="2" style="text-transform:uppercase">
+                                <th colspan="3" style="text-transform:uppercase">
                                     {{ str_replace('","', ' , ', str_replace('-', ' ', str_replace(['["', '"]'], '', $item->unit))) }}<br>(<a class="text-danger" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                                     title="Tanggal Pengadaan">{{ \Carbon\Carbon::parse($item->tgl_pengadaan)->isoFormat('D MMM Y') }}</a>)
@@ -42,6 +42,7 @@
                             @foreach ($list['unit'] as $item)
                                 <th>JML</th>
                                 <th>NOM</th>
+                                <th>KET</th>
                             @endforeach
                         </tr>
                     </thead>
@@ -64,6 +65,11 @@
                                             ->where('pengadaan_detail.id_pengadaan', $val1->id_pengadaan)
                                             ->where('pengadaan_detail.id_barang', $item->id_barang)
                                             ->first();
+                                        $ket = App\Models\pengadaan_detail::join('pengadaan', 'pengadaan_detail.id_pengadaan', '=', 'pengadaan.id_pengadaan')
+                                            ->select('pengadaan_detail.ket')
+                                            ->where('pengadaan_detail.id_pengadaan', $val1->id_pengadaan)
+                                            ->where('pengadaan_detail.id_barang', $item->id_barang)
+                                            ->first();
                                         // $totalAll[] = $total->total;
                                     @endphp
                                     <td>
@@ -77,12 +83,18 @@
                                             {{ number_format((int) str_replace(['{"total":', '}'], '', $total), 2, ',', '.') }}
                                         @endif
                                     </td>
+                                    <td style="white-space: normal !important;word-wrap: break-word;">
+                                        @if (!empty($ket))
+                                            {{  str_replace(['{"ket":', '}'], '', $ket)=='null'?'':str_replace(['{"ket":"', '"}'], '', $ket) }}
+                                        @endif
+                                    </td>
+
                                     {{-- <td>{{ $totalAll }}</td> --}}
                                 @endforeach
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
+                    {{-- <tfoot>
                         <th colspan="4"><kbd>TOTAL</kbd></th>
                         @foreach ($list['total'] as $item)
                             <th colspan="2">
@@ -91,7 +103,7 @@
                                 @endif
                             </th>
                         @endforeach
-                    </tfoot>
+                    </tfoot> --}}
                 </table>
             </div>
         </div>

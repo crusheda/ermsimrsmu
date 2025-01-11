@@ -20,6 +20,7 @@ class PengadaanRekapController extends Controller
         if (Auth::user()->getPermission('admin_pengadaan') == true) {
             $bulan = $request->bulan;
             $tahun = $request->tahun;
+            $kategori = $request->kategori;
 
             $bln = Carbon::create()->month($bulan)->isoFormat('MMMM');
 
@@ -33,11 +34,12 @@ class PengadaanRekapController extends Controller
 
             $barang = pengadaan_detail::join('pengadaan_barang','pengadaan_detail.id_barang','=','pengadaan_barang.id')
                             ->join('pengadaan','pengadaan_detail.id_pengadaan','=','pengadaan.id_pengadaan')
-                            ->select('pengadaan_detail.id_barang','pengadaan_barang.nama as nama_barang','pengadaan_detail.satuan as satuan_barang','pengadaan_detail.harga as harga_barang')
+                            ->select('pengadaan_detail.id_barang','pengadaan_barang.nama as nama_barang','pengadaan_detail.satuan as satuan_barang','pengadaan_detail.harga as harga_barang','pengadaan_detail.ket as ket_barang')
                             ->whereYear('pengadaan.tgl_pengadaan', $tahun)
                             ->whereMonth('pengadaan.tgl_pengadaan', $bulan)
+                            ->where('pengadaan_barang.ref_barang', $kategori)
                             ->orderBy('pengadaan_barang.nama','ASC')
-                            ->groupBy('pengadaan_detail.id_barang','pengadaan_barang.nama','pengadaan_detail.satuan','pengadaan_detail.harga')
+                            ->groupBy('pengadaan_detail.id_barang','pengadaan_barang.nama','pengadaan_detail.satuan','pengadaan_detail.harga','pengadaan_detail.ket')
                             ->get();
 
             $total = pengadaan::select('total')
@@ -47,6 +49,8 @@ class PengadaanRekapController extends Controller
                             ->orderBy('unit','ASC')
                             ->get();
 
+            $ref = pengadaan_ref::where('id',$kategori)->first();
+
             $data = [
                 'bln' => $bln,
                 'bulan' => $bulan,
@@ -54,6 +58,7 @@ class PengadaanRekapController extends Controller
                 'total' => $total,
                 'unit' => $unit,
                 'barang' => $barang,
+                'ref' => $ref,
             ];
 
             // $unit = pengadaan::join('users','pengadaan.id_user','=','users.id')

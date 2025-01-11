@@ -26,9 +26,11 @@ class PengadaanController extends Controller
     public function index()
     {
         $show = pengadaan::get();
+        $ref = pengadaan_ref::get();
 
         $data = [
-            'show' => $show
+            'show' => $show,
+            'ref' => $ref
         ];
 
         return view('pages.pengadaan.index')->with('list', $data);
