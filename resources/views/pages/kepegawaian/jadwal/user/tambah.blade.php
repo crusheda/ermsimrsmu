@@ -138,6 +138,8 @@
                                             @foreach ($list['ref_shift'] as $item)
                                                 <li><b class="me-1">{{ $item->singkat }}</b>(<u>{{ $item->shift }}</u>) : {{ \Carbon\Carbon::parse($item->berangkat)->isoFormat('HH:mm') }} - {{ \Carbon\Carbon::parse($item->pulang)->isoFormat('HH:mm') }} WIB</li>
                                             @endforeach
+                                            <li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
+                                            <li><b class="me-1">C</b>(<u>CUTI</u>)</li>
                                         </ul>
                                     </label>
                                 </div>
@@ -256,15 +258,38 @@
                 dataType: 'json',
                 success: function(res) {
                     var valid = 1;
-                    for (let t = 1; t <= JSON.parse(res.jadwal.staf).length; t++) {
-                        for (let i = 1; i <= res.totalDay; i++) {
+                    var par = JSON.parse(res.jadwal.staf);
+                    var pur = par.toString().split(',');
+                    for (let t = 1; t <= par.length; t++) { // LOOPING STAF
+                        var cuti = 0;
+                        for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
-                            if (res.shiftArr.includes(num.val()) == 0) {
-                                valid = 0;
-                                num.removeClass('is-valid').addClass('is-invalid');
+                            if (res.shiftArr.includes(num.val().toUpperCase()) == 0) {
+                                if (num.val().toUpperCase() == 'L' || num.val().toUpperCase() == 'C') {
+                                    num.removeClass('is-invalid').addClass('is-valid');
+                                } else {
+                                    valid = 0;
+                                    num.removeClass('is-valid').addClass('is-invalid');
+                                }
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
+                            if (num.val().toUpperCase() == 'C') {
+                                cuti++;
+                            }
+                        }
+                        // VALIDASI CUTI LEBIH DARI 4x DALAM 1 BULAN
+                        if (cuti > 4) {
+                            res.users.forEach(us => {
+                                if (us.id == pur[t-1]) {
+                                    notifier.show(
+                                        "Pesan Larangan!", "Terdapat Cuti pada karyawan "+us.nama+" yang melebihi 4x dalam sebulan",
+                                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                                    );
+                                    console.log(us.nama);
+                                }
+                            })
+                            valid = 0;
                         }
                     }
                     if (valid == 1) {

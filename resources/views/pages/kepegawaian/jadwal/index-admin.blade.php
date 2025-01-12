@@ -44,6 +44,9 @@
                                 <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
+                                <a class="dropdown-item" href="javascript:void(0);"><s>Referensi Hari Libur Nasional</s></a>
+                                <div class="divider pb-1"></div>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan</a>
                             </li>
                         </ul>
                         {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
@@ -91,6 +94,41 @@
     </div>
 
     {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="modalTambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Tambah
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-secondary mb-3">
+                        <small>
+                            {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi<br>
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berstatus <span class="badge rounded-pill text-bg-warning">Pending</span> setelah pengajuan ini, maka dari itu segera lengkapi data jadwal dinas <br>
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila pengajuan masih dalam status <b class="text-success">Verifikasi</b> masih dapat diubah namun Anda sudah tidak dapat menghapusnya (Konfirmasi atasan apabila diperlukan)<br>
+                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengajuan Jadwal Dinas yang telah di <b class="text-primary">Validasi</b> sudah tidak dapat diubah / hapus di kemudian waktu (Konfirmasi Kepegawaian apabila diperlukan)
+                        </small>
+                    </div>
+                    <div class="position-relative mb-3">
+                        <label class="form-label">Pilih Bulan dan Tahun <a class="text-danger">*</a></label>
+                        <input type="month" class="form-control" value="" placeholder="" id="tgl" />
+                    </div>
+                    <div class="position-relative">
+                        <label class="form-label">Keterangan</label>
+                        <textarea class="form-control" id="ket" cols="30" rows="2" placeholder="Optional"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
+                    <button class="btn btn-primary" id="btn-tambah" onclick="prosesTambah()">Lanjutkan &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalLihat" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
         <div class="modal-dialog modal-xxl modal-dialog-centered">
             <div class="modal-content">
@@ -110,7 +148,7 @@
             </div>
         </div>
     </div>
-    <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    {{-- <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -136,19 +174,19 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- FORM VERIF & BATAL VERIF --}}
     <div class="modal animate__animated animate__rubberBand fade" id="modalVerif" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Verif
+                        Form Validasi
                     </h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_verif" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan verifikasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVERIFIKASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <p style="text-align: justify;">Anda akan melakukan validasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVALIDASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuverif">
                         <span class="switch-toggle-slider">
@@ -159,7 +197,7 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-verif" class="btn btn-success me-sm-3 me-1" onclick="prosesVerif()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Verifikasi</button>
+                    <button type="submit" id="btn-verif" class="btn btn-primary me-sm-3 me-1" onclick="prosesValidasi()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Validasi</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
@@ -170,12 +208,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Batal Verif
+                        Form Batal Validasi
                     </h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_batal_verif" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan pembatalan verifikasi Jadwal Dinas tersebut, status akan berubah ke <kbd>PENDING</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <p style="text-align: justify;">Anda akan melakukan pembatalan validasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVERIFIKASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujubatalverif">
                         <span class="switch-toggle-slider">
@@ -186,14 +224,14 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-batal-verif" class="btn btn-warning me-sm-3 me-1" onclick="prosesBatalVerif()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Batalkan Verifikasi</button>
+                    <button type="submit" id="btn-batal-verif" class="btn btn-warning me-sm-3 me-1" onclick="prosesBatalValidasi()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Batalkan Validasi</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
     </div>
     {{-- FORM TOLAK & BATAL TOLAK --}}
-    <div class="modal animate__animated animate__rubberBand fade" id="modalTolak" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    {{-- <div class="modal animate__animated animate__rubberBand fade" id="modalTolak" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -246,7 +284,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- MODAL END --}}
 
     <script>
@@ -357,17 +395,20 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                            if (item.progress == 1) { // SEBELUM VERIFIKASI/PENDING
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-success" onclick="verif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-danger" onclick="tolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
-                                            } else { // SETELAH DITERIMA/DIVERIFIKASI
-                                                if (item.progress == 2) {
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Verif</a></li>`;
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
-                                                } else { // DITOLAK
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalTolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Tolak</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
+                                            if ("{{ Auth::user()->id }}" == item.pegawai_id) {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                            }
+                                            if (item.progress == 2) { // SEBELUM VALIDASI / SUDAH DIVERIFIKASI ATASAN
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="validasi(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
+                                                // content += `<li><a href="javascript:void(0);" class="dropdown-item text-danger" onclick="tolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
+                                            } else { // SETELAH DIVALIDASI
+                                                if (item.progress == 3) {
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalValidasi(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Validasi</a></li>`;
+                                                    // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
+                                                } else { // BELUM DIVERIFIKASI OLEH ATASAN LANGSUNG
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
+                                                    // content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalTolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Tolak</a></li>`;
                                                 }
                                             }
                         content += "</ul></div></center></td>";
@@ -376,15 +417,17 @@
                                 content += `<td>${bulan[i]} ${item.tahun}</td>`;
                             }
                         }
-                        var pegawai = null;
+                        var nama_verif = null;
                         content += `<td><small><ul class='list-unstyled mt-2'>`;
-                        // console.log(JSON.parse(item.pegawai_id));
                         res.users.forEach(us => {
                             JSON.parse(item.staf).forEach(val => {
                                 if (val == us.id) {
                                     content += `${us.nama?us.nama:'<b class="text-danger">'+us.name+'</b>'}; `;
                                 }
                             })
+                            if (us.id == item.verif) {
+                                nama_verif = us.nama;
+                            }
                         })
                         content += `</small></ul></td>`;
                         content += `<td>${item.keterangan?item.keterangan:''}</td>`;
@@ -397,7 +440,11 @@
                                 if (item.progress == 2) {
                                     var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
                                 } else {
-                                    var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
+                                    if (item.progress == 3) {
+                                        var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
+                                    } else {
+                                        var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
+                                    }
                                 }
                             }
                         }
@@ -406,7 +453,8 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>Oleh ` + item.nama_pegawai + `</small>
+                                                <small class='text-truncate text-muted'>Ditambahkan Oleh ` + item.nama_pegawai + `</small>
+                                                ${nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+nama_verif+'</small>':''}
                                             </div>
                                         </div>
                                     </td>`;
@@ -550,69 +598,69 @@
             })
         }
 
-        function hapus(id) {
-            $("#id_hapus").val(id);
-            var inputs = document.getElementById('setujuhapus');
-            inputs.checked = false;
-            $('#modalHapus').modal('show');
-        }
+        // function hapus(id) {
+        //     $("#id_hapus").val(id);
+        //     var inputs = document.getElementById('setujuhapus');
+        //     inputs.checked = false;
+        //     $('#modalHapus').modal('show');
+        // }
 
-        function prosesHapus() {
-            // SWITCH BTN HAPUS
-            var checkboxHapus = $('#setujuhapus').is(":checked");
-            if (checkboxHapus == false) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan penghapusan jadwal dinas tersebut',
-                    position: 'topRight'
-                });
-            } else {
-                // PROSES HAPUS
-                var id = $("#id_hapus").val();
-                $.ajax({
-                    url: "/api/kepegawaian/jadwaldinas/"+id+"/hapus",
-                    type: 'DELETE',
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Jadwal Dinas Anda telah berhasil dihapus pada '+res,
-                            position: 'topRight'
-                        });
-                        $('#modalHapus').modal('hide');
-                        showRiwayat();
-                    },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Jadwal Dinas Anda gagal dihapus',
-                            position: 'topRight'
-                        });
-                    }
-                });
-            }
-        }
+        // function prosesHapus() {
+        //     // SWITCH BTN HAPUS
+        //     var checkboxHapus = $('#setujuhapus').is(":checked");
+        //     if (checkboxHapus == false) {
+        //         iziToast.error({
+        //             title: 'Pesan Galat!',
+        //             message: 'Mohon menyetujui untuk dilakukan penghapusan jadwal dinas tersebut',
+        //             position: 'topRight'
+        //         });
+        //     } else {
+        //         // PROSES HAPUS
+        //         var id = $("#id_hapus").val();
+        //         $.ajax({
+        //             url: "/api/kepegawaian/jadwaldinas/"+id+"/hapus",
+        //             type: 'DELETE',
+        //             success: function(res) {
+        //                 iziToast.success({
+        //                     title: 'Pesan Sukses!',
+        //                     message: 'Jadwal Dinas Anda telah berhasil dihapus pada '+res,
+        //                     position: 'topRight'
+        //                 });
+        //                 $('#modalHapus').modal('hide');
+        //                 showRiwayat();
+        //             },
+        //             error: function(res) {
+        //                 iziToast.error({
+        //                     title: 'Pesan Galat!',
+        //                     message: 'Jadwal Dinas Anda gagal dihapus',
+        //                     position: 'topRight'
+        //                 });
+        //             }
+        //         });
+        //     }
+        // }
 
         // VERIFIKASI
-        function verif(id) {
+        function validasi(id) {
             $("#id_verif").val(id);
             var inputs = document.getElementById('setujuverif');
             inputs.checked = false;
             $('#modalVerif').modal('show');
         }
-        function batalVerif(id) {
+        function batalValidasi(id) {
             $("#id_batal_verif").val(id);
             var inputs = document.getElementById('setujubatalverif');
             inputs.checked = false;
             $('#modalBatalVerif').modal('show');
         }
 
-        function prosesVerif() {
+        function prosesValidasi() {
             // SWITCH BTN
             var checkbox = $('#setujuverif').is(":checked");
             if (checkbox == false) {
                 iziToast.error({
                     title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan verifikasi jadwal dinas tersebut',
+                    message: 'Mohon menyetujui untuk dilakukan validasi jadwal dinas tersebut',
                     position: 'topRight'
                 });
             } else {
@@ -625,7 +673,7 @@
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
-                            message: 'Jadwal Dinas telah berhasil diverifikasi pada '+res,
+                            message: 'Jadwal Dinas telah berhasil divalidasi pada '+res,
                             position: 'topRight'
                         });
                         $('#modalVerif').modal('hide');
@@ -634,20 +682,20 @@
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Jadwal Dinas gagal diverifikasi',
+                            message: 'Jadwal Dinas gagal divalidasi',
                             position: 'topRight'
                         });
                     }
                 });
             }
         }
-        function prosesBatalVerif() {
+        function prosesBatalValidasi() {
             // SWITCH BTN
             var checkbox = $('#setujubatalverif').is(":checked");
             if (checkbox == false) {
                 iziToast.error({
                     title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan pembatalan verifikasi jadwal dinas tersebut',
+                    message: 'Mohon menyetujui untuk dilakukan pembatalan validasi jadwal dinas tersebut',
                     position: 'topRight'
                 });
             } else {
@@ -660,7 +708,7 @@
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
-                            message: 'Jadwal Dinas telah berhasil dibatalkan verifikasi pada '+res,
+                            message: 'Jadwal Dinas telah berhasil dibatalkan validasi pada '+res,
                             position: 'topRight'
                         });
                         $('#modalBatalVerif').modal('hide');
@@ -669,7 +717,7 @@
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Jadwal Dinas gagal batal verifikasi',
+                            message: 'Jadwal Dinas gagal batal validasi',
                             position: 'topRight'
                         });
                     }
@@ -678,88 +726,88 @@
         }
 
         // PENOLAKAN
-        function tolak(id) {
-            $("#id_tolak").val(id);
-            var inputs = document.getElementById('setujutolak');
-            inputs.checked = false;
-            $('#modalTolak').modal('show');
-        }
-        function batalTolak(id) {
-            $("#id_batal_tolak").val(id);
-            var inputs = document.getElementById('setujubataltolak');
-            inputs.checked = false;
-            $('#modalBatalTolak').modal('show');
-        }
+        // function tolak(id) {
+        //     $("#id_tolak").val(id);
+        //     var inputs = document.getElementById('setujutolak');
+        //     inputs.checked = false;
+        //     $('#modalTolak').modal('show');
+        // }
+        // function batalTolak(id) {
+        //     $("#id_batal_tolak").val(id);
+        //     var inputs = document.getElementById('setujubataltolak');
+        //     inputs.checked = false;
+        //     $('#modalBatalTolak').modal('show');
+        // }
 
-        function prosesTolak() {
-            // SWITCH BTN
-            var checkbox = $('#setujutolak').is(":checked");
-            if (checkbox == false) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan penolakan jadwal dinas tersebut',
-                    position: 'topRight'
-                });
-            } else {
-                // PROSES
-                var id = $("#id_tolak").val();
-                $.ajax({
-                    url: "/api/kepegawaian/jadwaldinas/"+id+"/tolak/{{ Auth::user()->id }}",
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Jadwal Dinas telah berhasil ditolak pada '+res,
-                            position: 'topRight'
-                        });
-                        $('#modalTolak').modal('hide');
-                        showRiwayat();
-                    },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Jadwal Dinas gagal ditolak',
-                            position: 'topRight'
-                        });
-                    }
-                });
-            }
-        }
-        function prosesBatalTolak() {
-            // SWITCH BTN
-            var checkbox = $('#setujubataltolak').is(":checked");
-            if (checkbox == false) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan pembatalan penolakan jadwal dinas tersebut',
-                    position: 'topRight'
-                });
-            } else {
-                // PROSES
-                var id = $("#id_batal_tolak").val();
-                $.ajax({
-                    url: "/api/kepegawaian/jadwaldinas/"+id+"/bataltolak/{{ Auth::user()->id }}",
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Jadwal Dinas telah berhasil dibatal tolak pada '+res,
-                            position: 'topRight'
-                        });
-                        $('#modalBatalTolak').modal('hide');
-                        showRiwayat();
-                    },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Jadwal Dinas gagal dibatal tolak',
-                            position: 'topRight'
-                        });
-                    }
-                });
-            }
-        }
+        // function prosesTolak() {
+        //     // SWITCH BTN
+        //     var checkbox = $('#setujutolak').is(":checked");
+        //     if (checkbox == false) {
+        //         iziToast.error({
+        //             title: 'Pesan Galat!',
+        //             message: 'Mohon menyetujui untuk dilakukan penolakan jadwal dinas tersebut',
+        //             position: 'topRight'
+        //         });
+        //     } else {
+        //         // PROSES
+        //         var id = $("#id_tolak").val();
+        //         $.ajax({
+        //             url: "/api/kepegawaian/jadwaldinas/"+id+"/tolak/{{ Auth::user()->id }}",
+        //             type: 'GET',
+        //             dataType: 'json',
+        //             success: function(res) {
+        //                 iziToast.success({
+        //                     title: 'Pesan Sukses!',
+        //                     message: 'Jadwal Dinas telah berhasil ditolak pada '+res,
+        //                     position: 'topRight'
+        //                 });
+        //                 $('#modalTolak').modal('hide');
+        //                 showRiwayat();
+        //             },
+        //             error: function(res) {
+        //                 iziToast.error({
+        //                     title: 'Pesan Galat!',
+        //                     message: 'Jadwal Dinas gagal ditolak',
+        //                     position: 'topRight'
+        //                 });
+        //             }
+        //         });
+        //     }
+        // }
+        // function prosesBatalTolak() {
+        //     // SWITCH BTN
+        //     var checkbox = $('#setujubataltolak').is(":checked");
+        //     if (checkbox == false) {
+        //         iziToast.error({
+        //             title: 'Pesan Galat!',
+        //             message: 'Mohon menyetujui untuk dilakukan pembatalan penolakan jadwal dinas tersebut',
+        //             position: 'topRight'
+        //         });
+        //     } else {
+        //         // PROSES
+        //         var id = $("#id_batal_tolak").val();
+        //         $.ajax({
+        //             url: "/api/kepegawaian/jadwaldinas/"+id+"/bataltolak/{{ Auth::user()->id }}",
+        //             type: 'GET',
+        //             dataType: 'json',
+        //             success: function(res) {
+        //                 iziToast.success({
+        //                     title: 'Pesan Sukses!',
+        //                     message: 'Jadwal Dinas telah berhasil dibatal tolak pada '+res,
+        //                     position: 'topRight'
+        //                 });
+        //                 $('#modalBatalTolak').modal('hide');
+        //                 showRiwayat();
+        //             },
+        //             error: function(res) {
+        //                 iziToast.error({
+        //                     title: 'Pesan Galat!',
+        //                     message: 'Jadwal Dinas gagal dibatal tolak',
+        //                     position: 'topRight'
+        //                 });
+        //             }
+        //         });
+        //     }
+        // }
     </script>
 @endsection

@@ -248,18 +248,43 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
+                    var adminID = "{{ Auth::user()->getPermission('admin-kepegawaian') }}";
                     var valid = 1;
-                    for (let t = 1; t <= JSON.parse(res.jadwal.staf).length; t++) {
-                        for (let i = 1; i <= res.totalDay; i++) {
+                    var par = JSON.parse(res.jadwal.staf);
+                    var pur = par.toString().split(',');
+                    for (let t = 1; t <= par.length; t++) { // LOOPING STAF
+                        var cuti = 0;
+                        for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
-                            if (res.shiftArr.includes(num.val()) == 0) {
-                                valid = 0;
-                                num.removeClass('is-valid').addClass('is-invalid');
+                            if (res.shiftArr.includes(num.val().toUpperCase()) == 0) {
+                                if (num.val().toUpperCase() == 'L' || num.val().toUpperCase() == 'C') {
+                                    num.removeClass('is-invalid').addClass('is-valid');
+                                } else {
+                                    valid = 0;
+                                    num.removeClass('is-valid').addClass('is-invalid');
+                                }
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
+                            if (num.val().toUpperCase() == 'C') {
+                                cuti++;
+                            }
+                        }
+                        // VALIDASI CUTI LEBIH DARI 4x DALAM 1 BULAN
+                        if (cuti > 4) {
+                            res.users.forEach(us => {
+                                if (us.id == pur[t-1]) {
+                                    notifier.show(
+                                        "Pesan Larangan!", "Terdapat Cuti pada karyawan "+us.nama+" yang melebihi 4x dalam sebulan",
+                                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                                    );
+                                    console.log(us.nama);
+                                }
+                            })
+                            valid = 0;
                         }
                     }
+                    // PROSES SUBMIT JADWAL
                     if (valid == 1) {
                         console.log('berhasil');
                         $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");

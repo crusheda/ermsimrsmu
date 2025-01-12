@@ -16,7 +16,7 @@ class CreateTableKepegawaianAbsensi extends Migration
         Schema::create('kepegawaian_absensi', function (Blueprint $table) {
             $table->id();
 
-                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->string('kd_shift')->comment('Kode Shift');

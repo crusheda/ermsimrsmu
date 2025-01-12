@@ -10,6 +10,7 @@ use App\Models\kepegawaian\jadwal;
 use App\Models\kepegawaian\jadwal_detail;
 use App\Models\kepegawaian\ref_jadwal_shift;
 use App\Models\kepegawaian\ref_jadwal_users;
+use App\Models\struktur_organisasi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
@@ -28,6 +29,21 @@ class JadwalController extends Controller
                 'users' => $users,
             ];
             return view('pages.kepegawaian.jadwal.index-user')->with('list', $data);
+        }
+    }
+
+    function indexBawahan()
+    {
+        $jabatan = struktur_organisasi::where('id_user',Auth::user()->id)->orderBy('updated_at','desc')->first();
+        if ($jabatan) {
+            $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+            $data = [
+                // 'show' => $show,
+                'users' => $users,
+            ];
+            return view('pages.kepegawaian.jadwal.index-bawahan')->with('list', $data);
+        } else {
+            return redirect()->back()->withErrors("Pengguna tidak memiliki akses verifikasi / tidak mempunyai bawahan");
         }
     }
 
@@ -69,14 +85,14 @@ class JadwalController extends Controller
     function formUbah($id)
     {
         $jadwal  = jadwal::where('id',$id)->first();
-        if ($jadwal->progress == 0 || $jadwal->progress == 2) {
+        if ($jadwal->progress == 0 || $jadwal->progress == 3) {
             if ($jadwal->progress == 0) {
                 $status = 'Ditolak';
             } else {
-                $status = 'Diterima/Diverifikasi';
+                $status = 'Divalidasi';
             }
 
-            return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status.' oleh Kepegawaian']);
+            return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status]);
         } else {
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
             $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
@@ -166,30 +182,44 @@ class JadwalController extends Controller
                     'code' => 500,
                 ));
             } else {
-                $getData = jadwal::where('pegawai_id',$request->pegawai)->where('progress',1)->orderBy('updated_at','desc')->first();
-                if ($getData != null) {
-                    return Response::json(array(
-                        'message' => 'Masih terdapat pengajuan Jadwal Dinas yang berstatus <b><u>Pending</u></b>, silakan konfirmasi Bagian Kepegawaian! ',
-                        'code' => 500,
-                    ));
+                // Get Reference
+                $now = Carbon::now();
+                $getData = jadwal::where('pegawai_id',$request->pegawai)->whereIn('progress',[1,2,3])->orderBy('updated_at','desc')->first();
+                // $submonth = $now->subMonth()->isoFormat('YYYY-MM');
+                $thisDate = $now->isoFormat('YYYY-MM-DD');
+                // Init
+                $tgl = $now->isoFormat('DD');
+                $bulan = Carbon::parse($request->tgl)->isoFormat('MM');
+                $tahun = Carbon::parse($request->tgl)->isoFormat('YYYY');
+                $setDate = Carbon::parse($tahun.'-'.$bulan.'-27')->isoFormat('YYYY-MM-DD');
+
+                if ($thisDate <= $setDate) { // JIKA PENGAJUAN MELEBIHI TGL 27 PADA BULAN/TAHUN YANG DIPILIH
+                    if ($getData != null) { // JIKA TIDAK ADA PENGAJUAN YANG MASIH DALAM PROSES (PENDING/VERIFIKASI/VALIDASI)
+                        return Response::json(array(
+                            'message' => 'Masih terdapat proses pengajuan Jadwal Dinas yang belum diselesaikan, silakan konfirmasi Atasan Langsung/Bagian Kepegawaian atau hapus pengajuan sebelumnya <b>BILA PERLU</b>! ',
+                            'code' => 500,
+                        ));
+                    } else {
+                        $data = new jadwal;
+                        $data->pegawai_id = $request->pegawai;
+                        $data->staf = $users->staf;
+                        $data->bulan = $bulan;
+                        $data->tahun = $tahun;
+                        $data->keterangan = $request->keterangan;
+                        $data->progress = 1;
+                        $data->save();
+
+                        $getData = jadwal::where('pegawai_id',$request->pegawai)->where('progress',1)->orderBy('updated_at','desc')->first();
+                        datalogs::record($request->pegawai, 'Baru saja mengajukan penambahan Jadwal Dinas Pegawai Bulan '.$bulan.' Tahun '.$tahun, $getData->staf, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+                        return Response::json(array(
+                            'message' => $getData,
+                            'code' => 200,
+                        ));
+                    }
                 } else {
-                    $bulan = Carbon::parse($request->tgl)->isoFormat('MM');
-                    $tahun = Carbon::parse($request->tgl)->isoFormat('YYYY');
-
-                    $data = new jadwal;
-                    $data->pegawai_id = $request->pegawai;
-                    $data->staf = $users->staf;
-                    $data->bulan = $bulan;
-                    $data->tahun = $tahun;
-                    $data->keterangan = $request->keterangan;
-                    $data->progress = 1;
-                    $data->save();
-
-                    $getData = jadwal::where('pegawai_id',$request->pegawai)->where('progress',1)->orderBy('updated_at','desc')->first();
-                    datalogs::record($request->pegawai, 'Baru saja mengajukan penambahan Jadwal Dinas Pegawai Bulan '.$bulan.' Tahun '.$tahun, $getData->staf, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
                     return Response::json(array(
-                        'message' => $getData,
-                        'code' => 200,
+                        'message' => 'Pengajuan Jadwal Dinas maksimal tanggal 27 setiap bulannya. Silakan pilih Bulan dan Tahun lainnya!',
+                        'code' => 500,
                     ));
                 }
 
@@ -199,25 +229,36 @@ class JadwalController extends Controller
 
     function cekShift($id,$user)
     {
-        $ref_shift = ref_jadwal_shift::where('singkat',$id)->where('pegawai_id',$user)->first();
-
-        if (empty($ref_shift)) {
+        if ($id == 'L' || $id == 'C') {
             return Response::json(array(
-                'message' => 'Shift Tidak Ditemukan',
-                'code' => 500,
-            ));
-        } else {
-            return Response::json(array(
-                'message' => $ref_shift,
+                'message' => $id,
                 'code' => 200,
             ));
+        } else {
+            $ref_shift = ref_jadwal_shift::where('singkat',$id)->where('pegawai_id',$user)->first();
+
+            if (empty($ref_shift)) {
+                return Response::json(array(
+                    'message' => 'Shift Tidak Ditemukan',
+                    'code' => 500,
+                ));
+            } else {
+                return Response::json(array(
+                    'message' => $ref_shift,
+                    'code' => 200,
+                ));
+            }
         }
     }
 
     function getShift($id,$user)
     {
         $shift = ref_jadwal_shift::where('pegawai_id',$user)->get();
-        $jadwal = jadwal::where('id',$id)->first();
+        $jadwal = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
+                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->where('kepegawaian_jadwal.id',$id)
+                ->first();
+        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $totalDay = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
         for($i = 0; $i < count($shift); $i++)
@@ -226,6 +267,7 @@ class JadwalController extends Controller
         }
 
         $data = [
+            'users' => $users,
             'shift' => $shift,
             'shiftArr' => $shiftArr,
             'jadwal' => $jadwal,
@@ -283,14 +325,37 @@ class JadwalController extends Controller
         return response()->json($data, 200);
     }
 
+    // SHOW TABLE ADMIN
     function tableAll()
     {
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->whereIn('kepegawaian_jadwal.progress',[2,3])
                 ->get();
 
         $data = [
+            'users' => $users,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    // SHOW TABLE ATASAN LANGSUNG
+    function tableAllBawahan($user)
+    {
+        $jabatan = struktur_organisasi::where('id_user',$user)->orderBy('updated_at','desc')->first();
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
+                ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
+                // ->whereIn('kepegawaian_jadwal.progress',[0,1,2,3])
+                ->get();
+
+        $data = [
+            'jabatan' => $jabatan,
             'users' => $users,
             'show' => $show,
         ];
@@ -312,7 +377,7 @@ class JadwalController extends Controller
         return response()->json($tgl, 200);
     }
 
-    // PROSES VERIFIKASI DAN PENOLAKAN
+    // ADMIN == PROSES VERIFIKASI DAN PENOLAKAN
     function verif($id,$user)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
@@ -321,7 +386,7 @@ class JadwalController extends Controller
         $jadwal = jadwal::find($id);
 
         // Change
-        $jadwal->progress = 2;
+        $jadwal->progress = 3;
         $jadwal->valid = $user;
         $jadwal->tgl_valid = Carbon::now();
         $jadwal->save();
@@ -336,14 +401,76 @@ class JadwalController extends Controller
         $jadwal = jadwal::find($id);
 
         // Change
-        $jadwal->progress = 1;
+        $jadwal->progress = 2;
         $jadwal->valid = $user;
         $jadwal->tgl_valid = Carbon::now();
         $jadwal->save();
 
         return response()->json($tgl, 200);
     }
-    function tolak($id,$user)
+    // function tolak($id,$user)
+    // {
+    //     $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+    //     // Inisialisasi
+    //     $jadwal = jadwal::find($id);
+
+    //     // Change
+    //     $jadwal->progress = 0;
+    //     $jadwal->valid = $user;
+    //     $jadwal->tgl_valid = Carbon::now();
+    //     $jadwal->save();
+
+    //     return response()->json($tgl, 200);
+    // }
+    // function batalTolak($id,$user)
+    // {
+    //     $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+    //     // Inisialisasi
+    //     $jadwal = jadwal::find($id);
+
+    //     // Change
+    //     $jadwal->progress = 1;
+    //     $jadwal->valid = $user;
+    //     $jadwal->tgl_valid = Carbon::now();
+    //     $jadwal->save();
+
+    //     return response()->json($tgl, 200);
+    // }
+
+    // ATASAN LANGSUNG == PROSES VERIFIKASI DAN PENOLAKAN
+    function verifBawahan($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $jadwal = jadwal::find($id);
+
+        // Change
+        $jadwal->progress = 2;
+        $jadwal->verif = $user;
+        $jadwal->tgl_verif = Carbon::now();
+        $jadwal->save();
+
+        return response()->json($tgl, 200);
+    }
+    function batalVerifBawahan($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $jadwal = jadwal::find($id);
+
+        // Change
+        $jadwal->progress = 1;
+        $jadwal->verif = $user;
+        $jadwal->tgl_verif = Carbon::now();
+        $jadwal->save();
+
+        return response()->json($tgl, 200);
+    }
+    function tolakBawahan($id,$user)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
@@ -352,13 +479,13 @@ class JadwalController extends Controller
 
         // Change
         $jadwal->progress = 0;
-        $jadwal->valid = $user;
-        $jadwal->tgl_valid = Carbon::now();
+        $jadwal->verif = $user;
+        $jadwal->tgl_verif = Carbon::now();
         $jadwal->save();
 
         return response()->json($tgl, 200);
     }
-    function batalTolak($id,$user)
+    function batalTolakBawahan($id,$user)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
@@ -367,8 +494,8 @@ class JadwalController extends Controller
 
         // Change
         $jadwal->progress = 1;
-        $jadwal->valid = $user;
-        $jadwal->tgl_valid = Carbon::now();
+        $jadwal->verif = $user;
+        $jadwal->tgl_verif = Carbon::now();
         $jadwal->save();
 
         return response()->json($tgl, 200);

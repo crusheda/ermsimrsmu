@@ -19,7 +19,7 @@ class CreateTableKepegawaianSurket extends Migration
                 $table->unsignedBigInteger('ref_id')->comment('ID from Table Referensi');
                 $table->foreign('ref_id')->references('id')->on('referensi');
 
-                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->integer('no_surat')->comment('Optional')->nullable();

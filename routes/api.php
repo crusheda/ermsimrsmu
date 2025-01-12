@@ -104,9 +104,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             // ADMIN
                 Route::get('kepegawaian/jadwaldinas/table', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableAll'])->name('kepegawaian.jadwaldinas.tableAll');
                 Route::get('kepegawaian/jadwaldinas/{id}/verif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'verif'])->name('kepegawaian.jadwaldinas.verif');
-                Route::get('kepegawaian/jadwaldinas/{id}/tolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tolak'])->name('kepegawaian.jadwaldinas.tolak');
+                // Route::get('kepegawaian/jadwaldinas/{id}/tolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tolak'])->name('kepegawaian.jadwaldinas.tolak');
                 Route::get('kepegawaian/jadwaldinas/{id}/batalverif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalVerif'])->name('kepegawaian.jadwaldinas.batalVerif');
-                Route::get('kepegawaian/jadwaldinas/{id}/bataltolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalTolak'])->name('kepegawaian.jadwaldinas.batalTolak');
+                // Route::get('kepegawaian/jadwaldinas/{id}/bataltolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalTolak'])->name('kepegawaian.jadwaldinas.batalTolak');
+            // VERIFIKASI BAWAHAN
+                Route::get('kepegawaian/jadwaldinas/bawahan/table/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableAllBawahan'])->name('kepegawaian.jadwaldinas.tableAllBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/verif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'verifBawahan'])->name('kepegawaian.jadwaldinas.verifBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/tolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tolakBawahan'])->name('kepegawaian.jadwaldinas.tolakBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/batalverif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalVerifBawahan'])->name('kepegawaian.jadwaldinas.batalVerifBawahan');
+                Route::get('kepegawaian/jadwaldinas/bawahan/{id}/bataltolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalTolakBawahan'])->name('kepegawaian.jadwaldinas.batalTolakBawahan');
             // USER
                 Route::post('kepegawaian/jadwaldinas/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'storePengajuan'])->name('kepegawaian.jadwaldinas.storePengajuan');
                 Route::post('kepegawaian/jadwaldinas/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'updatePengajuan'])->name('kepegawaian.jadwaldinas.updatePengajuan');

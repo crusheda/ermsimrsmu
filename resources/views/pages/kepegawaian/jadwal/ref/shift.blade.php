@@ -308,6 +308,24 @@
                         content += `</td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
+                                                </div>
+                                            </div>
+                                        </div></td><td><kbd class="bg-danger text-white me-1">L</kbd> <u><b class='text-dark'>LIBUR</b></u></td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
+                                                </div>
+                                            </div>
+                                        </div></td><td><kbd class="bg-danger text-white me-1">C</kbd> <u><b class='text-dark'>CUTI</b></u></td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
                     var table = $('#dttable').DataTable({
                         order: [
                             [5, "desc"]

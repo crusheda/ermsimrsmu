@@ -16,15 +16,15 @@ class CreateTableJadwalDinas extends Migration
         Schema::create('kepegawaian_jadwal', function (Blueprint $table) {
             $table->id();
 
-                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->longText('staf')->comment('Daftar Anggota Jadwal')->nullable();
             $table->longText('bulan');
             $table->longText('tahun');
             $table->longText('keterangan')->nullable();
-            $table->integer('progress')->comment('0=ditolak;1=pending;2=diterima;');
-            $table->integer('valid')->comment('Verify from User Kepegawaian')->nullable();
+            $table->integer('progress')->comment('0=ditolak;1=pending;2=diverifikasi;3=divalidasi;');
+            $table->integer('valid')->comment('Validation from User Kepegawaian')->nullable();
             $table->dateTime('tgl_valid')->nullable();
             $table->timestamps();
             $table->softDeletes();

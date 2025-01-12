@@ -17,7 +17,7 @@ class CreateTableVerifJadwal extends Migration
             $table->id();
             $table->integer('id_jadwal');
 
-                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->longText('nama')->nullable();

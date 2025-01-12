@@ -88,6 +88,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     Route::get('jadwaldinas/ubah/{id}', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'formUbah'])->name('kepegawaian.jadwaldinas.formUbah');
     Route::post('jadwaldinas/tambah/proses', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'prosesTambah'])->name('kepegawaian.jadwaldinas.prosesTambah');
     Route::post('jadwaldinas/ubah/proses', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'prosesUbah'])->name('kepegawaian.jadwaldinas.prosesUbah');
+        // VERIFIKASI JADWAL BAWAHAN
+        Route::get('jadwaldinas/bawahan', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'indexBawahan'])->name('kepegawaian.jadwaldinas.indexBawahan');
         // REF SHIFT
         Route::get('jadwaldinas/shift', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'indexShift'])->name('kepegawaian.jadwaldinas.indexShift');
         // REF STAFF
