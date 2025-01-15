@@ -76,7 +76,7 @@ class IDCardController extends Controller
                 $uploadedFile = $request->file('file');
                 if ($uploadedFile) { // JIKA ADA FILE UPLOAD
                     $title = $uploadedFile->getClientOriginalName();
-                    $validasiFile = pd::where('title',$title)->first();
+                    $validasiFile = idcard::where('title',$title)->first();
                     // simpan berkas yang diunggah ke sub-direktori 'public/files'
                     // direktori 'files' otomatis akan dibuat jika belum ad
                     $path = $uploadedFile->store('public/files/kepegawaian/idcard/kwitansi/'.$request->user);

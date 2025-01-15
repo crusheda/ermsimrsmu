@@ -121,7 +121,7 @@
                                 <label class="col-lg-4 col-form-label">Alasan
                                     <small class="text-muted d-block">Tuliskan alasan Anda membuat ID Card</small>
                                 </label>
-                                <div class="col-lg-8"><textarea class="form-control" name="alasan" rows="2" placeholder="Masukkan Alasan"></textarea></div>
+                                <div class="col-lg-8"><textarea class="form-control" id="alasan" name="alasan" rows="2" placeholder="Masukkan Alasan"></textarea></div>
                             </div>
                             <div class="mb-3 row" id="lampiran" hidden>
                                 <label class="col-lg-4 col-form-label">Lampiran <a class="text-danger">*</a>
@@ -294,6 +294,7 @@
                                         message: 'Pengajuan ID Card telah berhasil dilakukan pada '+res,
                                         position: 'topRight'
                                     });
+                                    bersihkan();
                                     showRiwayat();
                                 }
                             },
@@ -340,6 +341,7 @@
                                     message: 'Pengajuan ID Card telah berhasil dilakukan pada '+res,
                                     position: 'topRight'
                                 });
+                                bersihkan();
                                 showRiwayat();
                             }
                         },
@@ -461,12 +463,14 @@
         }
 
         function bersihkan() {
-            $('input[name="pengajuan"]').prop('checked', false);
-            $('input[name="nama"]').val('');
-            $('input[name="panggilan"]').val('');
-            $('input[name="nip"]').val('');
-            $('input[name="jabatan"]').val('');
-            $('textarea[name=alasan]').val('');
+            // $('input[name="pengajuan"]').prop('checked', false);
+            // $('input[name="nama"]').val('');
+            // $('input[name="panggilan"]').val('');
+            // $('input[name="nip"]').val('');
+            // $('input[name="filex"]').val('');
+            // $('textarea[name=alasan]').val('');
+            $('#filex').val('');
+            $('#alasan').val('');
         }
 
         // function saveData() {
