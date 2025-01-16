@@ -71,11 +71,17 @@
         </a>
         <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.surket.index') }}">Surat Keterangan</a></li>
-            <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Surat Ijin</s></a></li>
+            {{-- <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Surat Ijin</s></a></li> --}}
             <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Cuti</s></a></li>
             <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.idcard.index') }}">ID Card</a></li>
         </ul>
     </li>
+    @if (
+        Auth::user()->getPermission('admin_kepegawaian') == true ||
+        Auth::user()->getPermission('admin_keuangan') == true ||
+        Auth::user()->getRole('karu-it') == true ||
+        Auth::user()->id == '391' // CHYNTIA KEUANGAN
+    )
     <li class="pc-item">
         <a href="{{ route('kepegawaian.pd.index') }}" class="pc-link">
             <span class="pc-micon">
@@ -84,6 +90,7 @@
             <span class="pc-mtext">Perjalanan Dinas</span>
         </a>
     </li>
+    @endif
     <li class="pc-item">
         <a href="{{ route('kepegawaian.surtug.index') }}" class="pc-link">
             <span class="pc-micon">

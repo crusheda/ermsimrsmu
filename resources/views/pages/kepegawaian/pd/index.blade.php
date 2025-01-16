@@ -31,121 +31,123 @@
 
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
-        <div class="col-xl-12">
-            <div class="accordion accordion-flush" id="accordionFlushExample">
-                <div class="accordion-item">
-                    <div class="card">
-                        <div class="card-header accordion-header d-flex align-items-center justify-content-between py-3 ">
-                            <h5 class="mb-0"><button
-                                class="accordion-button collapsed" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-                                aria-expanded="false" aria-controls="flush-collapseOne"><b style="font-size: 1rem">Formulir Tambah</b>&nbsp;&nbsp;</button>
-                            </h5>
-                        </div>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">
+        @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
+            <div class="col-xl-12">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <div class="card">
+                            <div class="card-header accordion-header d-flex align-items-center justify-content-between py-3 ">
+                                <h5 class="mb-0"><button
+                                    class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                    aria-expanded="false" aria-controls="flush-collapseOne"><b style="font-size: 1rem">Formulir Tambah</b>&nbsp;&nbsp;</button>
+                                </h5>
+                            </div>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
 
-                                <div class="row">
-                                    <div class="col-xl-12 col-xxl-12">
-                                        <div class="alert alert-secondary">
-                                            <small>
-                                                {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
-                                                <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi
-                                                {{-- <br><i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b> --}}
-                                            </small>
+                                    <div class="row">
+                                        <div class="col-xl-12 col-xxl-12">
+                                            <div class="alert alert-secondary">
+                                                <small>
+                                                    {{-- <i class="ti ti-arrow-narrow-right me-1"></i> <br> --}}
+                                                    <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi
+                                                    {{-- <br><i class="ti ti-arrow-narrow-right me-1"></i> Batas ukuran file upload maksimal <b class="text-danger">2 mb</b> --}}
+                                                </small>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-9 mb-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
-                                            <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
+                                    <div class="row">
+                                        <div class="col-md-9 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
+                                                <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
-                                            <input type="datetime-local" class="form-control" name="tgl" id="tgl">
+                                        <div class="col-md-3 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
+                                                <input type="datetime-local" class="form-control" name="tgl" id="tgl">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
-                                            <select class="form-control" name="jenis" id="jenis">
-                                                <option value="">Pilih</option>
-                                                <option value="1">Offline</option>
-                                                <option value="2">Online</option>
-                                            </select>
+                                        <div class="col-md-3 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
+                                                <select class="form-control" name="jenis" id="jenis">
+                                                    <option value="">Pilih</option>
+                                                    <option value="1">Offline</option>
+                                                    <option value="2">Online</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
-                                            <select class="form-control" name="kendaraan" id="kendaraan">
-                                                <option value="">Pilih</option>
-                                                <option value="1">[Pribadi] Motor</option>
-                                                <option value="2">[Pribadi] Mobil</option>
-                                                <option value="3">[Rumah Sakit] Mobil</option>
-                                            </select>
+                                        <div class="col-md-3 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
+                                                <select class="form-control" name="kendaraan" id="kendaraan">
+                                                    <option value="">Pilih</option>
+                                                    <option value="1">[Pribadi] Motor</option>
+                                                    <option value="2">[Pribadi] Mobil</option>
+                                                    <option value="3">[Rumah Sakit] Mobil</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3" id="showing" hidden>
-                                        <div class="form-group">
-                                            <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
-                                            <select class="form-select select2" name="kendaraan_pegawai[]" id="kendaraan_pegawai" style="width: 100%" multiple>
-                                                @if (count($list['users']) > 0)
-                                                    @foreach ($list['users'] as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                        <div class="col-md-6 mb-3" id="showing" hidden>
+                                            <div class="form-group">
+                                                <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
+                                                <select class="form-select select2" name="kendaraan_pegawai[]" id="kendaraan_pegawai" style="width: 100%" multiple>
+                                                    @if (count($list['users']) > 0)
+                                                        @foreach ($list['users'] as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
-                                        <div class="input-group">
-                                            <select class="form-control" name="lama1" id="lama1">
-                                                <option value="">Pilih</option>
-                                                <option value="1">< 4 Jam (Kurang dari 4 jam)</option>
-                                                <option value="2">> 4 Jam (Lebih dari 4 jam)</option>
-                                            </select>
-                                            <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2" id="lama2">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
+                                            <div class="input-group">
+                                                <select class="form-control" name="lama1" id="lama1">
+                                                    <option value="">Pilih</option>
+                                                    <option value="1">< 4 Jam (Kurang dari 4 jam)</option>
+                                                    <option value="2">> 4 Jam (Lebih dari 4 jam)</option>
+                                                </select>
+                                                <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2" id="lama2">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
-                                            <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
+                                                <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3" id="slide">
-                                        <div class="form-group">
-                                            <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                            <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
-                                                @if (count($list['users']) > 0)
-                                                    @foreach ($list['users'] as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
+                                        <div class="col-md-6 mb-3" id="slide">
+                                            <div class="form-group">
+                                                <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
+                                                <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
+                                                    @if (count($list['users']) > 0)
+                                                        @foreach ($list['users'] as $item)
+                                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12 mb-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
-                                            <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
+                                        <div class="col-md-12 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
+                                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    {{-- <div class="col-md-3 mb-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Upload</label>
-                                            <input type="file" class="form-control" id="filex" name="filex" accept="application/pdf">
+                                        {{-- <div class="col-md-3 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Upload</label>
+                                                <input type="file" class="form-control" id="filex" name="filex" accept="application/pdf">
+                                            </div>
+                                        </div> --}}
+                                        <div class="text-end btn-page mt-2">
+                                            <button class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
+                                            <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
                                         </div>
-                                    </div> --}}
-                                    <div class="text-end btn-page mt-2">
-                                        <button class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
-                                        <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
                                     </div>
                                 </div>
                             </div>
@@ -153,9 +155,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
         <div class="col-xl-12">
-            <div class="card table-card">
+            <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Riwayat Perjalanan</b></h5>
                     <div class="btn-group">
@@ -224,9 +226,11 @@
                 </div>
                 <div class="modal-footer" id="keu-only" hidden>
                     <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden>Confirm Paid</button>
-                    <button type="button" class="btn btn-warning" onclick="cancelPaid()" id="btn-cancel" data-bs-toggle="tooltip"
-                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden>Cancel Paid</button>
+                    @if (Auth::user()->getPermission('admin_keuangan') == true || Auth::user()->id == '391')
+                        <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden>Confirm Paid</button>
+                        <button type="button" class="btn btn-warning" onclick="cancelPaid()" id="btn-cancel" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden>Cancel Paid</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -400,27 +404,33 @@
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var date = new Date().toLocaleDateString("sv-SE");
+                        var userID = "{{ Auth::user()->id }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
                         var keuID = "{{ Auth::user()->getPermission(['admin_keuangan']) }}";
-                        var date = new Date().toLocaleDateString("sv-SE");
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (adminID == true || keuID == true) {
+                                        if (adminID == true || keuID == true || userID == '391') {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                         }
                                         if (adminID == true) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                        } else {
-                                            if (updet == date) {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            } else {
+                                            if (item.paid == 1) {
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            } else {
+                                                if (updet == date) {
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                } else {
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                }
                                             }
+                                        } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
                         content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
@@ -444,12 +454,10 @@
                                 })
                             })
                         }
-                        if (adminID == true || keuID == true) {
-                            if (item.paid == 0) {
-                                statusPaid = `<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>`;
-                            } else {
-                                statusPaid = `<span class="badge bg-light-success rounded-pill ms-2">PAID</span>`;
-                            }
+                        if (item.paid == 0) {
+                            statusPaid = `<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>`;
+                        } else {
+                            statusPaid = `<span class="badge bg-light-success rounded-pill ms-2">PAID</span>`;
                         }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
@@ -489,7 +497,7 @@
             })
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
+                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -646,8 +654,9 @@
                         <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
                         ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh `+res.show.nama_user_paid+` pada `+res.show.tgl_paid+`</td></tr>`:``}
                     `);
-                    var adminID = "{{ Auth::user()->getManyPermission(['admin_keuangan']) }}";
-                    if (adminID == true) {
+                    var keuID = "{{ Auth::user()->getManyPermission(['admin_keuangan']) }}";
+                    var userID = "{{ Auth::user()->id }}";
+                    if (keuID == true || userID == '391') {
                         $('#keu-only').prop('hidden',false);
                     } else {
                         $('#keu-only').prop('hidden',true);

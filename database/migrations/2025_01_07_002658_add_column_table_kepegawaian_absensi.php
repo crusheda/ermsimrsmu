@@ -14,7 +14,7 @@ class AddColumnTableKepegawaianAbsensi extends Migration
     public function up()
     {
         Schema::table('kepegawaian_absensi', function (Blueprint $table) {
-            $table->integer('jenis')->after('id')->comment('1:Shift; 2:Dinas Luar; 3:Tugas Khusus;');
+            $table->integer('jenis')->after('id')->comment('1:Shift; 2:Cuti; 3:Ijin Sakit; 4:OnCall;');
             $table->time('lembur')->after('ref_jam_pulang')->nullable();
             $table->time('keterlambatan')->after('ref_jam_pulang')->nullable();
             $table->datetime('ref_jam_masuk')->change();

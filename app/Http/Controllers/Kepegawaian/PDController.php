@@ -17,28 +17,29 @@ class PDController extends Controller
 {
     function index()
     {
-        $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        // $show  = pd::get();
+        if (
+                Auth::user()->getPermission('admin_kepegawaian') == true ||
+                Auth::user()->getPermission('admin_keuangan') == true ||
+                Auth::user()->getRole('karu-it') == true ||
+                Auth::user()->id == '391' // CHYNTIA KEUANGAN
+            ) {
+            $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
 
-        // $role = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        //     ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        //     ->select('roles.name as nama_role', 'users.id as id_user')
-        //     ->get();
+            $data = [
+                'users' => $users,
+            ];
 
-        $data = [
-            // 'show' => $show,
-            'users' => $users,
-            // 'role' => $role,
-        ];
-
-        return view('pages.kepegawaian.pd.index')->with('list', $data);
+            return view('pages.kepegawaian.pd.index')->with('list', $data);
+        } else {
+            return redirect()->back()->withErrors("Maaf, Anda tidak memiliki akses untuk membuka halaman Perjalanan Dinas!");
+        }
     }
 
     function table()
     {
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = pd::join('users','users.id','=','kepegawaian_pd.user_id')
-                    ->select('users.nama as nama_user','kepegawaian_pd.*')
+                    ->select('users.name as name_user','users.nama as nama_user','kepegawaian_pd.*')
                     ->get();
 
         $data = [
@@ -80,7 +81,7 @@ class PDController extends Controller
         ));
     }
 
-    function show($id)
+    function show($id) // TAMPIL RINCIAN
     {
         $show = pd::leftJoin('users','users.id','=','kepegawaian_pd.user_paid')
                     ->select('kepegawaian_pd.*','users.nama as nama_user_paid')
