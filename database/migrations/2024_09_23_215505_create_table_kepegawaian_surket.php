@@ -16,7 +16,7 @@ class CreateTableKepegawaianSurket extends Migration
         Schema::create('kepegawaian_surket', function (Blueprint $table) {
             $table->id();
 
-                $table->unsignedInteger('ref_id')->comment('ID from Table Referensi');
+                $table->unsignedBigInteger('ref_id')->comment('ID from Table Referensi');
                 $table->foreign('ref_id')->references('id')->on('referensi');
 
                 $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');

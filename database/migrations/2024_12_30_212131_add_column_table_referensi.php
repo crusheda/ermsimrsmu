@@ -14,7 +14,7 @@ class AddColumnTableReferensi extends Migration
     public function up()
     {
         Schema::table('referensi', function (Blueprint $table) {
-            $table->date('keterangan')->after('deskripsi')->nullable();
+            $table->longText('keterangan')->after('deskripsi')->nullable();
             $table->string('filename',200)->after('status')->nullable();
             $table->string('title',200)->after('status')->nullable();
         });
