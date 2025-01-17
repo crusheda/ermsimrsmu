@@ -16,7 +16,7 @@ class CreateTableJadwalDinas extends Migration
         Schema::create('kepegawaian_jadwal', function (Blueprint $table) {
             $table->id();
 
-                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->longText('staf')->comment('Daftar Anggota Jadwal')->nullable();

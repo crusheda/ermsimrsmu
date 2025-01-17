@@ -16,7 +16,7 @@ class CreateTableKepegawaianIdCard extends Migration
         Schema::create('kepegawaian_idcard', function (Blueprint $table) {
             $table->id();
 
-                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users'); // unsignedBigInteger
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->string('pegawai_nip');

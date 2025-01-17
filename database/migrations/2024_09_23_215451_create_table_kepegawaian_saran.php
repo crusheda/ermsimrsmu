@@ -16,7 +16,7 @@ class CreateTableKepegawaianSaran extends Migration
         Schema::create('kepegawaian_saran', function (Blueprint $table) {
             $table->id();
 
-                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->integer('ref_kategori')->comment('ID from Table Referensi');

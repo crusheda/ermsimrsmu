@@ -17,7 +17,7 @@ class CreateTableJadwalDinasDetail extends Migration
             $table->id();
             $table->integer('id_jadwal');
 
-                $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
+                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 $table->foreign('pegawai_id')->references('id')->on('users');
 
             $table->string('pegawai_nama');

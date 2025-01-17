@@ -15,8 +15,10 @@ class CreateTableReferensiJadwalDinas extends Migration
     {
         Schema::create('referensi_jadwal_shift', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pegawai_id')->comment('ID from Table Users');
-            $table->foreign('pegawai_id')->references('id')->on('users');
+
+                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                $table->foreign('pegawai_id')->references('id')->on('users');
+
             $table->longText('unit')->nullable();
             $table->string('shift');
             $table->string('singkat');
