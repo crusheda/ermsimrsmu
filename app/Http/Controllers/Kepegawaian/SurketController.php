@@ -26,7 +26,7 @@ class SurketController extends Controller
                             ->first();
             $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
             // $show  = idcard::get();
-            $kategori = referensi::where('ref_jenis',13)->get();
+            $kategori = referensi::where('ref_jenis',13)->where('status',1)->get();
             if ($user->s3) {
                 $pendidikan = 'S3 - '.$user->s3;
             } else {
@@ -245,6 +245,7 @@ class SurketController extends Controller
 
         $templateProcessor->setValues([
             'th_surat' => $data->th_surat,
+            'nbm' => $rs->nbm,
             'nama_direktur' => $rs->nama_direktur,
             'jabatan_direktur' => $rs->jabatan_direktur,
             'nama_rs' => $rs->nama_rs,
