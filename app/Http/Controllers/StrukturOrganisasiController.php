@@ -17,7 +17,7 @@ class StrukturOrganisasiController extends Controller
 {
     function index()
     {
-        if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('it') == true) {
+        if (Auth::user()->getPermission('struktur_organisasi') == true || Auth::user()->getRole('karu-it') == true) {
             $user  = users::where('status',null)->get();
             $roles  = roles::get();
             $struktur_organisasi  = struktur_organisasi::orderBy('updated_at','desc')->get();

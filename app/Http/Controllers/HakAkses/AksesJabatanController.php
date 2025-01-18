@@ -20,7 +20,7 @@ class AksesJabatanController extends Controller
 {
     function index()
     {
-        if (Auth::user()->getPermission('akses_jabatan') == true) {
+        if (Auth::user()->getPermission('akses_jabatan') == true || Auth::user()->getRole('karu-it') == true) {
             $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
             $permissions = permissions::orderBy('updated_at','desc')->get();
 

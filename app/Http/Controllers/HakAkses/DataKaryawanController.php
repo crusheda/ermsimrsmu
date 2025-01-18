@@ -20,15 +20,19 @@ class DataKaryawanController extends Controller
      */
     public function index()
     {
-        $user = users::select('id','name','nama','updated_at')->orderBy('nama', 'asc')->where('users.name', '<>','admin')->where('users.name', '<>','it')->where('users.name', '<>','demo')->get();
-        $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
+        if (Auth::user()->getPermission('akun_pengguna') == true || Auth::user()->getRole('karu-it') == true) {
+            $user = users::select('id','name','nama','updated_at')->orderBy('nama', 'asc')->where('users.name', '<>','admin')->where('users.name', '<>','it')->where('users.name', '<>','demo')->get();
+            $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
 
-        $data = [
-            'user' => $user,
-            'role' => $role,
-        ];
+            $data = [
+                'user' => $user,
+                'role' => $role,
+            ];
 
-        return view('pages.hakakses.akunpengguna.index')->with('list', $data);
+            return view('pages.hakakses.akunpengguna.index')->with('list', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
