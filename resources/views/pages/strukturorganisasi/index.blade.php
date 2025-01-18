@@ -10,6 +10,7 @@
         </div>
     </div>
 
+    @if (Auth::user()->getPermission(['struktur_organisasi']) == true)
     <div class="card card-body table-responsive text-nowrap">
         <h4 classs="card-title">
             <button class="btn btn-outline-primary"
@@ -116,6 +117,8 @@
             </tfoot>
         </table>
     </div>
+    @else
+    @endif
     <script>
         $(document).ready(function() {
             var table = $('#dttable').DataTable({

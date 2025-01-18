@@ -510,7 +510,7 @@
                     })
                     var table = $('#dttable-akses').DataTable({
                         order: [
-                            [2, "asc"]
+                            [2, "desc"]
                         ],
                         displayLength: 7,
                         lengthChange: true,
@@ -555,7 +555,7 @@
                     })
                     var table = $('#dttable-jabatan').DataTable({
                         order: [
-                            [2, "asc"]
+                            [2, "desc"]
                         ],
                         displayLength: 7,
                         lengthChange: true,

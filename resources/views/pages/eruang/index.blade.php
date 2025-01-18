@@ -50,7 +50,7 @@
 
                                 <div class="dropdown-divider"></div>
 
-                                @if (Auth::user()->getManyRole(['kasubag-tata-usaha','it']))
+                                @if (Auth::user()->getManyRole(['kasubag-tata-usaha','karu-it']))
                                     <a class="dropdown-item text-primary text-center" href="javascript:;" onclick="window.location='{{ route('eruang.ruangan') }}'">
                                         Lihat Daftar Ruangan
                                     </a>
@@ -86,7 +86,7 @@
                                     Daftar Riwayat
                                 </a>
                             </li>
-                            @if (Auth::user()->getManyRole(['kasubag-tata-usaha','it','gizi','ahli-gizi','karu-gizi']))
+                            @if (Auth::user()->getManyRole(['kasubag-tata-usaha','karu-it','gizi','ahli-gizi','karu-gizi']))
                             <li class="nav-item">
                                 <a class="nav-link text-dark" id="link_display" data-bs-toggle="tab" href="#display" role="tab">
                                     Display Gizi
@@ -654,7 +654,7 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-tata-usaha']) }}";
+                    var adminID = "{{ Auth::user()->getManyRole(['karu-it','kasubag-tata-usaha']) }}";
                     var date = new Date().toLocaleDateString('en-ZA');
                     // console.log('ini tgl sekarang : '+date);
                     res.show.forEach(item => {

@@ -139,7 +139,8 @@
                     var date = getDateTime();
                     var userID = "{{ Auth::user()->id }}";
                     var adminID = "{{ Auth::user()->getPermission('admin_rka') }}";
-                    var downloader = "{{ Auth::user()->getManyRole(['it','kabag-perencanaan','kasubag-perencanaan-it','direktur-pelayanan-keperawatan-penunjang']) }}";
+                    // var downloader = "{{ Auth::user()->getManyRole(['it','kabag-perencanaan','kasubag-perencanaan-it','direktur-pelayanan-keperawatan-penunjang']) }}";
+                    var downloader = "{{ Auth::user()->getPermission('downloader_rka') }}";
                     res.forEach(item => {
                         if (item.unit) {
                             try {

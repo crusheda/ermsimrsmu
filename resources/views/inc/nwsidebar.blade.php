@@ -41,7 +41,7 @@
         </li>
     @endif
     {{-- Auth::user()->getPermission('struktur_organisasi') == true --}}
-    @if (Auth::user()->getRole('it') == true || Auth::user()->getRole('karu-it') == true)
+    @if (Auth::user()->getPermission(['struktur_organisasi']) == true)
         <li class="pc-item">
             <a href="{{ route('strukturorganisasi.index') }}" class="pc-link">
                 <span class="pc-micon">
@@ -101,8 +101,7 @@
     </li>
     @if (
             Auth::user()->getPermission('akses_jabatan') == true ||
-            Auth::user()->getPermission('akun_pengguna') == true ||
-            Auth::user()->getRole('it') == true
+            Auth::user()->getPermission('akun_pengguna') == true
         )
         <li class="pc-item pc-caption"><label>Atur Pengguna</label></li>
         @if (Auth::user()->getPermission('akses_jabatan') == true || Auth::user()->getPermission('akun_pengguna') == true)
@@ -117,10 +116,10 @@
                     </span>
                 </a>
                 <ul class="pc-submenu">
-                    @if (Auth::user()->getPermission('akses_jabatan') == true || Auth::user()->getRole('it') == true)
+                    @if (Auth::user()->getPermission('akses_jabatan') == true)
                         <li class="pc-item"><a class="pc-link" href="{{ route('aksesjabatan.index') }}">Akses Jabatan</a></li>
                     @endif
-                    @if (Auth::user()->getPermission('akun_pengguna') == true || Auth::user()->getRole('it') == true)
+                    @if (Auth::user()->getPermission('akun_pengguna') == true)
                         <li class="pc-item"><a class="pc-link" href="{{ route('akunpengguna.index') }}">Akun Pengguna</a></li>
                     @endif
                 </ul>
@@ -206,10 +205,7 @@
             <span class="pc-mtext">E-Ruang</span>
         </a>
     </li>
-    @if (Auth::user()->getPermission('perbaikan_ipsrs') == true)
     <li class="pc-item pc-caption"><label>Pengaduan</label></li>
-    @endif
-    @if (Auth::user()->getPermission('perbaikan_ipsrs') == true)
     <li class="pc-item pc-hasmenu">
         <a href="javascript: void(0);" class="pc-link">
             <span class="pc-micon">
@@ -224,11 +220,8 @@
             <li class="pc-item"><a class="pc-link" href="{{ route('ipsrs.index') }}">IPSRS</a></li>
         </ul>
     </li>
-    @endif
     @if (Auth::user()->getPermission('skl') == true)
     <li class="pc-item pc-caption"><label>Pelayanan</label></li>
-    @endif
-    @if (Auth::user()->getPermission('skl') == true)
     <li class="pc-item">
         <a href="{{ route('skl.index') }}" class="pc-link">
             <span class="pc-micon">

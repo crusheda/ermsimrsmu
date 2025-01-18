@@ -397,7 +397,7 @@
                 success: function(res) {
                     var date = new Date().toLocaleDateString("sv-SE"); // 2022-05-23
                     var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->hasRole('sekretaris-direktur|it') }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_pengadaan') }}";
                     var suID = "{{ Auth::user()->hasRole('it') }}";
                     var tgl = date.substring(8, 10);
                     var bln = date.substring(5, 7);
@@ -528,7 +528,7 @@
                 success: function(res) {
                     var date = new Date().toLocaleDateString("sv-SE"); // 2022-05-23
                     var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->hasRole('sekretaris-direktur|it') }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_pengadaan') }}";
                     var suID = "{{ Auth::user()->hasRole('it') }}";
                     var tgl = date.substring(8, 10);
                     var bln = date.substring(5, 7);
