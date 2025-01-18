@@ -31,7 +31,7 @@
 
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
-        @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
+        @if (Auth::user()->getRole('kabag-kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
             <div class="col-xl-12">
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
@@ -236,7 +236,7 @@
         </div>
     </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalUbah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xxl modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
@@ -408,6 +408,7 @@
                         var date = new Date().toLocaleDateString("sv-SE");
                         var userID = "{{ Auth::user()->id }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
+                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
                         var keuID = "{{ Auth::user()->getPermission(['admin_keuangan']) }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
@@ -416,18 +417,13 @@
                                         if (adminID == true || keuID == true || userID == '391') {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                         }
-                                        if (adminID == true) {
+                                        if (superID == true) {
                                             if (item.paid == 1) {
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                             } else {
-                                                if (updet == date) {
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                                } else {
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                                }
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                             }
                                         } else {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
@@ -467,7 +463,7 @@
                                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara">` + item.acara + `</u> ${statusPaid}</a>
                                                 </h6>
                                                 <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b> dan Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small>
-                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan_pegawai?`Milik<br>(<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`:``}</small>
+                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan == 3?``:`Milik<br>(<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -804,7 +800,7 @@
                     $("#kendaraan_edit").append(`
                         <option value="1" ${res.show.kendaraan==1?"selected":""}>[Pribadi] Motor</option>
                         <option value="2" ${res.show.kendaraan==2?"selected":""}>[Pribadi] Mobil</option>
-                        <option value="3" ${res.show.kendaraan==3?"selected":""}>[Rumah Sakit] Mobil/option>
+                        <option value="3" ${res.show.kendaraan==3?"selected":""}>[Rumah Sakit] Mobil</option>
                     `);
                     var up = JSON.parse(res.show.kendaraan_pegawai);
                     $("#kendaraan_pegawai_edit").find('option').remove();
