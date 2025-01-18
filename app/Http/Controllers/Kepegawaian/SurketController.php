@@ -59,6 +59,8 @@ class SurketController extends Controller
                                                 } else {
                                                     if ($user->sd) {
                                                         $pendidikan = $user->sd;
+                                                    } else {
+                                                        $pendidikan = '';
                                                     }
                                                 }
                                             }

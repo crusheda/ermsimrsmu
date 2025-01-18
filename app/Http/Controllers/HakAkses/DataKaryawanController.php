@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\users;
 use App\Models\roles;
 use App\Models\model_has_roles;
-use Redirect;
 use Carbon\Carbon;
+use Auth, Redirect;
 
 class DataKaryawanController extends Controller
 {
