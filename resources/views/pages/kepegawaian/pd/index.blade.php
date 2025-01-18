@@ -404,6 +404,7 @@
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var paiddate = new Date(item.tgl_paid).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var userID = "{{ Auth::user()->id }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
@@ -420,7 +421,7 @@
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                             } else {
-                                                if (updet == date) {
+                                                if (paiddate == date) {
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                                     content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                                 } else {
