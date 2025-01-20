@@ -174,6 +174,8 @@
                 <div class="modal-body">
                     <input type="text" id="id_tolak" hidden>
                     <p style="text-align: justify;">Anda akan melakukan penolakan Pengajuan Surat Keterangan tersebut status akan berubah menjadi <kbd>DITOLAK</kbd>, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penolakan.</p>
+                    <label class="form-label"><b>Masukkan Alasan Penolakan</b> <a class="text-danger">*</a></label>
+                    <textarea id="ket" rows="2" id="kettolak" class="form-control mb-3"></textarea>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujutolak">
                         <span class="switch-toggle-slider">
@@ -353,7 +355,7 @@
         function prosesTolak() {
             // SWITCH BTN HAPUS
             var checkboxHapus = $('#setujutolak').is(":checked");
-            if (checkboxHapus == false) {
+            if (checkboxHapus == false || $('#kettolak').val() == '') {
                 iziToast.error({
                     title: 'Pesan Galat!',
                     message: 'Mohon menyetujui untuk dilakukan penolakan pengajuan tersebut',
@@ -361,11 +363,20 @@
                 });
             } else {
                 // PROSES HAPUS
+                var save = new FormData();
                 var id = $("#id_tolak").val();
+                save.append('id',id);
+                save.append('ket',$('#kettolak').val());
                 $.ajax({
-                    url: "/api/kepegawaian/pengajuan/surket/"+id+"/tolak",
-                    type: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    method: 'POST',
+                    url: "/api/kepegawaian/pengajuan/surket/tolak",
+                    contentType: false,
+                    processData: false,
                     dataType: 'json',
+                    data: save,
                     success: function(res) {
                         iziToast.success({
                             title: 'Pesan Sukses!',
@@ -375,7 +386,7 @@
                         $('#modalTolak').modal('hide');
                         showRiwayat();
                     },
-                    error: function(res) {
+                    error: function (res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Pengajuan Surat Keterangan Anda gagal ditolak',
@@ -383,6 +394,27 @@
                         });
                     }
                 });
+                // $.ajax({
+                //     url: "/api/kepegawaian/pengajuan/surket/"+id+"/tolak",
+                //     type: 'GET',
+                //     dataType: 'json',
+                //     success: function(res) {
+                //         iziToast.success({
+                //             title: 'Pesan Sukses!',
+                //             message: 'Pengajuan Surat Keterangan Anda telah berhasil ditolak pada '+res,
+                //             position: 'topRight'
+                //         });
+                //         $('#modalTolak').modal('hide');
+                //         showRiwayat();
+                //     },
+                //     error: function(res) {
+                //         iziToast.error({
+                //             title: 'Pesan Galat!',
+                //             message: 'Pengajuan Surat Keterangan Anda gagal ditolak',
+                //             position: 'topRight'
+                //         });
+                //     }
+                // });
             }
         }
 

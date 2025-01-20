@@ -202,13 +202,14 @@ class SurketController extends Controller
         return response()->json($tgl, 200);
     }
 
-    function tolak($id)
+    function tolak(Request $request)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
-        $data = surket::find($id);
-        $data->progress = 3;
+        $data = surket::find($request->id);
+        $data->alasan_tolak = $request->ket;
+        $data->progress = 4;
         $data->tgl_valid = Carbon::now();
         $data->save();
 

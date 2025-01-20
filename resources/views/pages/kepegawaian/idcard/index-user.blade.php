@@ -389,11 +389,13 @@
                             }
                             // DROPDOWN BUTTON
                             if (input == date) {
-                                var dropdown = `<a class="dropdown-item text-warning" href="javascript:void(0);" onclick="ubah(${item.id})"><i class="fas fa-edit me-2"></i> Ubah</a>
-                                                <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="hapus(${item.id})"><i class="fas fa-trash me-2"></i> Hapus</a>`;
+                                if (item.progress > 0) {
+                                    var dropdown = `<a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="fas fa-trash me-2"></i> Hapus</a>`;
+                                } else {
+                                    var dropdown = `<a class="dropdown-item text-danger" href="javascript:void(0);" onclick="hapus(${item.id})"><i class="fas fa-trash me-2"></i> Hapus</a>`;
+                                }
                             } else {
-                                var dropdown = `<a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="fas fa-edit me-2"></i> Ubah</a>
-                                                <a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="fas fa-trash me-2"></i> Hapus</a>`;
+                                var dropdown = `<a class="dropdown-item text-secondary" href="javascript:void(0);"><i class="fas fa-trash me-2"></i> Hapus</a>`;
                             }
                             $('#riwayat_pengajuan').append(`
                                 <li class="list-group-item" id="list${item.id}">
