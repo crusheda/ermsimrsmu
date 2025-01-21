@@ -87,6 +87,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/pengajuan/surket/{id}/unverif', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'unverif'])->name('kepegawaian.surket.unverif');
                 Route::post('kepegawaian/pengajuan/surket/tolak', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tolak'])->name('kepegawaian.surket.tolak');
                 Route::get('kepegawaian/pengajuan/surket/{id}/bataltolak', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'batalTolak'])->name('kepegawaian.surket.batalTolak');
+                Route::post('kepegawaian/pengajuan/surket/proses', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'prosesUpload'])->name('kepegawaian.surket.prosesUpload');
+                Route::get('kepegawaian/pengajuan/surket/{id}/batalproses', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'batalProsesUpload'])->name('kepegawaian.surket.batalProsesUpload');
                 // USER
                 Route::get('kepegawaian/pengajuan/surket/{id}/table', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tableUser'])->name('kepegawaian.surket.tableUser');
                 Route::post('kepegawaian/pengajuan/surket/tambah', [\App\Http\Controllers\Kepegawaian\SurketController::class, 'tambah'])->name('kepegawaian.surket.tambah');

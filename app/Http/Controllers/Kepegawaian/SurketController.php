@@ -17,51 +17,47 @@ class SurketController extends Controller
 {
     function index()
     {
-        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
-            return view('pages.kepegawaian.surket.index-admin');
+        $user = users::leftJoin('referensi','referensi.id','=','users.ref_subprofesi')
+                        ->select('users.*','referensi.deskripsi as nama_subprofesi')
+                        ->where('users.id',Auth::user()->id)
+                        ->first();
+        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+        // $show  = idcard::get();
+        $kategori = referensi::where('ref_jenis',13)->where('status',1)->get();
+        if ($user->s3) {
+            $pendidikan = 'S3 - '.$user->s3;
         } else {
-            $user = users::leftJoin('referensi','referensi.id','=','users.ref_subprofesi')
-                            ->select('users.*','referensi.deskripsi as nama_subprofesi')
-                            ->where('users.id',Auth::user()->id)
-                            ->first();
-            $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
-            // $show  = idcard::get();
-            $kategori = referensi::where('ref_jenis',13)->where('status',1)->get();
-            if ($user->s3) {
-                $pendidikan = 'S3 - '.$user->s3;
+            if ($user->s2) {
+                $pendidikan = 'S2 - '.$user->s2;
             } else {
-                if ($user->s2) {
-                    $pendidikan = 'S2 - '.$user->s2;
+                if ($user->s1_profesi) {
+                    $pendidikan = 'S1 Profesi - '.$user->s1_profesi;
                 } else {
-                    if ($user->s1_profesi) {
-                        $pendidikan = 'S1 Profesi - '.$user->s1_profesi;
+                    if ($user->s1) {
+                        $pendidikan = 'S1 - '.$user->s1;
                     } else {
-                        if ($user->s1) {
-                            $pendidikan = 'S1 - '.$user->s1;
+                        if ($user->d4) {
+                            $pendidikan = 'D4 - '.$user->d4;
                         } else {
-                            if ($user->d4) {
-                                $pendidikan = 'D4 - '.$user->d4;
+                            if ($user->d3) {
+                                $pendidikan = 'D3 - '.$user->d3;
                             } else {
-                                if ($user->d3) {
-                                    $pendidikan = 'D3 - '.$user->d3;
+                                if ($user->d2) {
+                                    $pendidikan = 'D2 - '.$user->d2;
                                 } else {
-                                    if ($user->d2) {
-                                        $pendidikan = 'D2 - '.$user->d2;
+                                    if ($user->d1) {
+                                        $pendidikan = 'D1 - '.$user->d1;
                                     } else {
-                                        if ($user->d1) {
-                                            $pendidikan = 'D1 - '.$user->d1;
+                                        if ($user->sma) {
+                                            $pendidikan = $user->sma;
                                         } else {
-                                            if ($user->sma) {
-                                                $pendidikan = $user->sma;
+                                            if ($user->smp) {
+                                                $pendidikan = $user->smp;
                                             } else {
-                                                if ($user->smp) {
-                                                    $pendidikan = $user->smp;
+                                                if ($user->sd) {
+                                                    $pendidikan = $user->sd;
                                                 } else {
-                                                    if ($user->sd) {
-                                                        $pendidikan = $user->sd;
-                                                    } else {
-                                                        $pendidikan = '';
-                                                    }
+                                                    $pendidikan = '';
                                                 }
                                             }
                                         }
@@ -72,14 +68,18 @@ class SurketController extends Controller
                     }
                 }
             }
-            $data = [
-                // 'show' => $show,
-                'pendidikan' => $pendidikan,
-                'user' => $user,
-                'users' => $users,
-                'kategori' => $kategori,
-            ];
+        }
+        $data = [
+            // 'show' => $show,
+            'pendidikan' => $pendidikan,
+            'user' => $user,
+            'users' => $users,
+            'kategori' => $kategori,
+        ];
 
+        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
+            return view('pages.kepegawaian.surket.index-admin')->with('list', $data);
+        } else {
             return view('pages.kepegawaian.surket.index-user')->with('list', $data);
         }
     }
@@ -210,7 +210,8 @@ class SurketController extends Controller
         $data = surket::find($request->id);
         $data->alasan_tolak = $request->ket;
         $data->progress = 4;
-        $data->tgl_valid = Carbon::now();
+        $data->valid = $request->pegawai_id;
+        $data->tgl_tolak = Carbon::now();
         $data->save();
 
         return response()->json($tgl, 200);
@@ -223,7 +224,8 @@ class SurketController extends Controller
         // Inisialisasi
         $data = surket::find($id);
         $data->progress = 0;
-        $data->tgl_valid = null;
+        $data->valid = null;
+        $data->tgl_tolak = null;
         $data->save();
 
         return response()->json($tgl, 200);
@@ -240,6 +242,12 @@ class SurketController extends Controller
 
         $tgl_surat = Carbon::parse($data->tgl_surat)->isoFormat('D MMMM');
         $tgl_file = Carbon::parse($data->tgl_surat)->isoFormat('YYYY-MM-DD');
+
+        // UPDATE PROGRESS
+        $change = surket::find($id);
+        $change->progress = 2;
+        $change->tgl_proses = Carbon::now();
+        $change->save();
 
         // print_r(Storage::path($data->filename_referensi));
         // die();
@@ -265,10 +273,63 @@ class SurketController extends Controller
             'tgl_surat' => $tgl_surat,
         ]);
 
-        // print_r($templateProcessor);
-        // die();
         header("Content-Disposition: attachment; filename=$filename.docx");
 
         $templateProcessor->saveAs('php://output');
+    }
+
+    function prosesUpload(Request $request)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $request->validate([
+            'file' => ['max:3000','mimes:pdf'],
+        ]);
+        $uploadedFile = $request->file('file');
+        $title = $uploadedFile->getClientOriginalName();
+        $validasi = surket::where('title',$title)->count();
+        if ($validasi > 0) {
+            return Response::json(array(
+                'message' => 'File sudah pernah diupload, periksa dokumen Anda sekali lagi.',
+                'code' => 400,
+            ));
+        } else {
+            $path = $uploadedFile->store('public/files/kepegawaian/surket');
+
+            $data = surket::find($request->id);
+            $data->title = $title;
+            $data->filename = $path;
+            $data->progress = 3;
+            $data->tgl_selesai = Carbon::now();
+            $data->save();
+
+            // datalogs::record($request->user, 'Baru saja melakukan penambahan Surat Tugas', $request->pegawai_id, null, $title, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+
+            return Response::json(array(
+                'message' => $push,
+                'code' => 200,
+            ));
+        }
+    }
+
+    function batalProsesUpload($id)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $data = surket::find($id);
+        Storage::delete($data->filename);
+        $data->title = null;
+        $data->filename = null;
+        $data->tgl_selesai = null;
+        $data->progress = 2;
+        $data->save();
+        return Response::json(array(
+            'message' => $push,
+            'code' => 200,
+        ));
+    }
+
+    function download($id)
+    {
+        $data = surket::find($id);
+        return Storage::download($data->filename, $data->title);
     }
 }

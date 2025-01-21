@@ -36,16 +36,6 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Form Pengajuan</h5>
-                    {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
-                        <div class="btn-group">
-                            <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()"><s>Daftar Kategori</s></a>
-                                </li>
-                            </ul>
-                        </div>
-                    {{-- @endif --}}
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -67,7 +57,8 @@
                                         <small>
                                             <i class="ti ti-arrow-narrow-right me-1"></i> <mark>TAT</mark> Wajib terisi apabila Surat yang dipilih adalah Surat Paklaring<br>
                                             <i class="ti ti-arrow-narrow-right me-1"></i> <mark>TMK & TAK</mark> Wajib terisi apabila Surat yang dipilih adalah Surat Pemenuhan SKP<br>
-                                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila <mark>TMT</mark> <b class="text-danger">Masih Kosong</b>, silakan menghubungi bagian Kepegawaian
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila <mark>TMT</mark> <b class="text-danger">Masih Kosong</b>, silakan menghubungi bagian Kepegawaian<br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Dokumen Final dapat <b>didownload</b> masing-masing karyawan apabila status telah berubah menjadi <span class="badge rounded-pill text-bg-success">Selesai</span>
                                         </small>
                                     </div>
                                 </div>
@@ -273,6 +264,8 @@
                 if (this.value == 159) {
                     $('.mandatory1').prop('hidden',false);
                 } else {
+                    $('#tmk').val('');
+                    $('#tak').val('');
                     $('.mandatory1').prop('hidden',true);
                 }
 
@@ -439,12 +432,15 @@
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (updet == date) {
                                             if (item.progress == 0) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>`;
                                             } else {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                if (item.progress == 3 || item.title != null) {
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick='downloadFile(${item.id})'><i class="fa-fw fas fa-download nav-icon me-1"></i> Download Dokumen Final</a></li>`;
+                                                }
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>`;
                                             }
                                         } else {
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
@@ -475,10 +471,27 @@
                                         </div>
                                     </td>`;
                         content += "<td><center>" + status + "</center></td><td>" + new Date(item.updated_at).toLocaleString("sv-SE") + "</td>";
+                        if (item.progress == 4) {
+                            valid = 'Ditolak';
+                        } else {
+                            if (item.progress == 3) {
+                                valid = 'Diselesaikan';
+                            } else {
+                                if (item.progress == 2) {
+                                    valid = 'Diproses';
+                                } else {
+                                    if (item.progress == 1) {
+                                        valid = 'Diverifikasi';
+                                    } else {
+                                        valid = 'Diterima';
+                                    }
+                                }
+                            }
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>${item.valid?'Telah Diverifikasi oleh <b class="text-primary">Kepegawaian</b>':'Belum Terverifikasi'}</h6>
+                                                <h6 class='mb-0'>${item.valid?'Telah '+valid+' oleh <b class="text-primary">Kepegawaian</b>':'Belum Terverifikasi'}</h6>
                                                 <small class='text-truncate text-muted'>${item.tgl_valid?'Pada '+item.tgl_valid:''}</small>
                                             </div>
                                         </div>
@@ -510,6 +523,10 @@
                     });
                 }
             })
+        }
+
+        function downloadFile(id) {
+            window.open("/kepegawaian/pengajuan/surket/"+id+"/download");
         }
 
         function hapus(id) {
