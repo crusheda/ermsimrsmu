@@ -46,7 +46,7 @@ return [
     'email' => 'The :attribute must be a valid email address.',
     'ends_with' => 'The :attribute must end with one of the following: :values.',
     'enum' => 'Isian :attribute tidak sesuai.',
-    'exists' => 'Isian :attribute tidak ditemukan.',
+    'exists' => ':attribute tersebut tidak ditemukan pada Database Rumah Sakit.',
     'file' => 'The :attribute must be a file.',
     'filled' => 'The :attribute field must have a value.',
     'gt' => [
