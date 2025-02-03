@@ -18,7 +18,7 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="Tuliskan E-Mail Aktif Anda" required autofocus>
                         </div> --}}
                         <div class="mb-3"><label class="form-label">Password Baru</label>
-                            <input type="password" class="form-control is-invalid" id="newPassword" name="password" placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" required>
+                            <input type="password" class="form-control is-invalid" id="newPassword" name="password" placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" onpaste="return false" required>
                         </div>
                         @if($errors->has('password'))
                             <em class="invalid-feedback">
@@ -26,7 +26,7 @@
                             </em>
                         @endif
                         <div class="mb-3"><label class="form-label">Konfirmasi Password Baru</label>
-                            <input type="password" class="form-control is-invalid" id="confirmPassword" name="password_confirmation" placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" required>
+                            <input type="password" class="form-control is-invalid" id="confirmPassword" name="password_confirmation" placeholder="&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;&nbsp;&#xb7;" onpaste="return false" required>
                         </div>
                         @if($errors->has('password_confirmation'))
                             <em class="invalid-feedback">
