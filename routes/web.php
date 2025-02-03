@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,14 @@ Route::get('/', function () {
     return view('pages.index');
 })->name('portal');
 
-Route::get('/masuk', [App\Http\Controllers\LoginController::class, 'index'])->name('auth.login');
+Route::get('masuk', [App\Http\Controllers\LoginController::class, 'index'])->name('auth.login');
+Route::get('lupapassword', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('lupa.password.get');
+Route::post('lupapassword', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('lupa.password.post');
+Route::get('resetpassword/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('resetpassword', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
-Route::get('/dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
-Route::get('/clear-cache', [App\Http\Controllers\Dashboard\DefaultController::class, 'clearCache'])->name('clearcache');
+Route::get('dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
+Route::get('clear-cache', [App\Http\Controllers\Dashboard\DefaultController::class, 'clearCache'])->name('clearcache');
 
 Route::group(['middleware' => ['auth']], function () {
     // PROFIL

@@ -46,7 +46,7 @@
                                 <input class="form-check-input input-primary" type="checkbox" name="remember" id="remember {{ old('remember') ? 'checked' : '' }}">
                                 <label class="form-check-label text-muted" for="customCheckc1">Ingat Saya</label>
                             </div>
-                            <h6 class="text-secondary f-w-400 mb-0"><a href="javascript: void(0);" onclick="forgotPassword()">Lupa Password?</a></h6>
+                            <h6 class="text-secondary f-w-400 mb-0"><a href="{{ route('lupa.password.get') }}">Lupa Password?</a></h6>
                         </div>
                         <div class="saprator my-2"><span>Selesaikan Captcha</span></div>
                         <div id="reloadedCaptcha" class="mb-3 text-center"><span>{!! captcha_img('math') !!}</span></div>
