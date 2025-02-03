@@ -61,7 +61,7 @@ class ForgotPasswordController extends Controller
 
         Mail::send('emails.forgetPassword', ['token' => $token], function ($message) use ($request) {
             $message->to($request->email);
-            $message->subject('Link Reset Password');
+            $message->subject('Reset Password Akun Simrsmu');
         });
 
         return view('pages.auth.check_email_password')->with('message', 'Email Reset Password telah berhasil dikirim ke Email Anda : '.$request->email);
@@ -87,14 +87,14 @@ class ForgotPasswordController extends Controller
     public function submitResetPasswordForm(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users',
+            // 'email' => 'required|email|exists:users',
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required'
         ]);
 
         $updatePassword = DB::table('password_resets')
             ->where([
-                    'email' => $request->email,
+                    // 'email' => $request->email,
                     'token' => $request->token
                 ])
             ->first();
@@ -103,9 +103,9 @@ class ForgotPasswordController extends Controller
             return back()->withInput()->with('error', 'Invalid token!');
         }
 
-        User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
+        User::where('email', $updatePassword->email)->update(['password' => Hash::make($request->password)]);
 
-        DB::table('password_resets')->where(['email' => $request->email])->delete();
+        DB::table('password_resets')->where(['email' => $updatePassword->email])->delete();
 
         return redirect('/masuk')->with('message', 'Your password has been changed!');
     }
