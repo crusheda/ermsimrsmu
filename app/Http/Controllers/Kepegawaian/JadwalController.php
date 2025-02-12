@@ -184,13 +184,19 @@ class JadwalController extends Controller
             } else {
                 // Get Reference
                 $now = Carbon::now();
-                $getData = jadwal::where('pegawai_id',$request->pegawai)->whereIn('progress',[1,2,3])->orderBy('updated_at','desc')->first();
-                // $submonth = $now->subMonth()->isoFormat('YYYY-MM');
-                $thisDate = $now->isoFormat('YYYY-MM-DD');
                 // Init
                 $tgl = $now->isoFormat('DD');
                 $bulan = Carbon::parse($request->tgl)->isoFormat('MM');
                 $tahun = Carbon::parse($request->tgl)->isoFormat('YYYY');
+                // $getData = jadwal::where('pegawai_id',$request->pegawai)->whereIn('progress',[1,2,3])->orderBy('updated_at','desc')->first();
+                $getData = jadwal::where('pegawai_id',$request->pegawai)
+                                    ->where('bulan',$bulan)
+                                    ->where('tahun',$tahun)
+                                    ->whereIn('progress',[1,2,3])
+                                    ->orderBy('updated_at','desc')
+                                    ->first();
+                // $submonth = $now->subMonth()->isoFormat('YYYY-MM');
+                $thisDate = $now->isoFormat('YYYY-MM-DD');
                 $setDate = Carbon::parse($tahun.'-'.$bulan.'-27')->isoFormat('YYYY-MM-DD');
 
                 if ($thisDate <= $setDate) { // JIKA PENGAJUAN MELEBIHI TGL 27 PADA BULAN/TAHUN YANG DIPILIH

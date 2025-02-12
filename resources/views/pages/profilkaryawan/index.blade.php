@@ -442,7 +442,7 @@
                         content += `<td>${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nik?item.nik:'-'}</td>`;
                         content += `<td>${item.name}</td>`;
-                        content += `<td>${item.nama_lengkap?item.nama_lengkap:'-'}</td>`;
+                        content += `<td>${item.nama_lengkap?item.nama_lengkap:item.nama}</td>`;
                         content += `<td>${item.nick?item.nick:'-'}</td>`;
                         content += `<td>${item.temp_lahir?item.temp_lahir:'-'}${item.tgl_lahir?', '+item.tgl_lahir:''}</td>`;
                         content += `<td>${item.jns_kelamin?item.jns_kelamin:'-'}</td>`;
