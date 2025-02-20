@@ -88,11 +88,11 @@ class RegulasiController extends Controller
             $request->jns_regulasi == 12
             ) {
             $request->validate([
-                'file' => ['max:10000|mimes:pdf'],
+                'file' => ['max:10000','mimes:pdf'],
             ]);
         } else {
             $request->validate([
-                'file' => ['max:2000|mimes:pdf'],
+                'file' => ['max:2000','mimes:pdf'],
             ]);
         }
 
@@ -174,11 +174,11 @@ class RegulasiController extends Controller
             $request->jns_regulasi == 12
             ) {
             $request->validate([
-                'file' => ['max:10000|mimes:pdf'],
+                'file' => ['max:10000','mimes:pdf'],
             ]);
         } else {
             $request->validate([
-                'file' => ['max:2000|mimes:pdf'],
+                'file' => ['max:2000','mimes:pdf'],
             ]);
         }
 
