@@ -44,6 +44,7 @@ class CreateTableRekrutmenRegistrasi extends Migration
             $table->string('p_cv', 200)->nullable();
             $table->string('p_foto', 200)->nullable();
 
+            $table->integer('status');
             $table->timestamps();
             $table->softDeletes();
         });
