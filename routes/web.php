@@ -109,6 +109,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 // BERKAS
 Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], function () {
     // RKA
+        // Route::get('rka/final/download', [App\Http\Controllers\Berkas\RkaController::class, 'downloadFinalRKA'])->name('rka.final');
         Route::post('rka/fileupload', [App\Http\Controllers\Berkas\RkaController::class, 'fileupload'])->name('rka.upload');
         Route::resource('rka', '\App\Http\Controllers\Berkas\RkaController');
     // RAPAT

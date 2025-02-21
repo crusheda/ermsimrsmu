@@ -23,6 +23,8 @@ class CreateTableRekrutmenPengumuman extends Migration
             $table->longText('tugas')->comment('Uraian Tugas/Jabatan');
             $table->longText('keahlian')->comment('Keahlian Spesifik Yang Diharapkan');
             $table->longText('persyaratan')->comment('Nama Shift');
+            $table->integer('umur_min')->comment('Batas Umur Minimal')->nullable();
+            $table->integer('umur_max')->comment('Batas Umur Maksimal')->nullable();
             $table->integer('kuota')->comment('Kuota Peserta')->nullable();
             $table->datetime('mulai')->comment('Waktu Rekrutmen Dibuka');
             $table->datetime('selesai')->comment('Waktu Rekrutmen Ditutup');

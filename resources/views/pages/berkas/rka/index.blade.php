@@ -27,11 +27,15 @@
         <div class="">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h6 class="mb-0">Pengumpulan RKA Th.{{ \Carbon\Carbon::now()->isoFormat('YYYY') }} Pada<br>Bulan <b class="text-primary">***</b>@if(\Carbon\Carbon::now()->isoFormat('MM') <= '09') (<b class="text-danger">Segera</b>) @endif</h6>
+                    {{-- <h6 class="mb-0">Pengumpulan RKA Th.{{ \Carbon\Carbon::now()->isoFormat('YYYY') }} Pada<br>Bulan <b class="text-primary">***</b>@if(\Carbon\Carbon::now()->isoFormat('MM') <= '09') (<b class="text-danger">Segera</b>) @endif</h6> --}}
+                    {{-- <h6 class="mb-0"></h6> --}}
+                    <button class="btn btn-danger btn-shadow" onclick="window.open('/doc/rka_2025.xlsx')">
+                        <i class="fa-fw fas fa-download nav-icon"></i>&nbsp;&nbsp;Download RKA 2025 FINAL
+                    </button>
                     <div class="btn-group">
                         {{-- @if (\Carbon\Carbon::now()->isoFormat('MM') <= '09') --}}
                             <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
-                                <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas
+                                <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas RKA 2026 Unit
                             </button>
                         {{-- @else
                             <button class="btn btn-secondary btn-shadow" disabled>
