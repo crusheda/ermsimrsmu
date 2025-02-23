@@ -142,6 +142,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('kepegawaian/surtug/table', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableAdmin'])->name('kepegawaian.surtug.tableAdmin');
             // USER
             Route::get('kepegawaian/surtug/table/{id}', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableUser'])->name('kepegawaian.surtug.tableUser');
+        // REKRUTMEN
+            // PENGUMUMAN
+            Route::get('kepegawaian/rekrutmen/pengumuman/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'table'])->name('kepegawaian.rekrutmen.tablePengumuman');
+            // REGISTRASI/LOKER
+            Route::get('kepegawaian/rekrutmen/registrasi/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'table'])->name('kepegawaian.rekrutmen.tableRegistrasi');
 
     // HAK AKSES
         // AKSES JABATAN

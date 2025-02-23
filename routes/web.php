@@ -104,6 +104,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     // SURAT TUGAS
     Route::get('surtug', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'index'])->name('kepegawaian.surtug.index');
     Route::get('surtug/{id}/download', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'download'])->name('kepegawaian.surtug.download');
+
+    // REKRUTMEN
+        // PENGUMUMAN
+        Route::get('rekrutmen/pengumuman', [App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'index'])->name('kepegawaian.rekrutmen.indexPengumuman');
+        // REGISTRASI
+        Route::get('rekrutmen/registrasi', [App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'index'])->name('kepegawaian.rekrutmen.indexRegistrasi');
 });
 
 // BERKAS

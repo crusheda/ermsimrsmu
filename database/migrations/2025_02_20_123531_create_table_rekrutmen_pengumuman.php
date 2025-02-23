@@ -19,7 +19,7 @@ class CreateTableRekrutmenPengumuman extends Migration
             $table->string('unit')->comment('Nama Unit Kerja/Penempatan')->nullable();
             $table->string('nama')->comment('Nama Kebutuhan');
             $table->integer('jumlah')->comment('Jumlah Kebutuhan');
-            $table->string('kualifikasi')->comment('Kualifikasi Pendidikan');
+            $table->longText('kualifikasi')->comment('Kualifikasi Pendidikan');
             $table->longText('tugas')->comment('Uraian Tugas/Jabatan');
             $table->longText('keahlian')->comment('Keahlian Spesifik Yang Diharapkan');
             $table->longText('persyaratan')->comment('Nama Shift');

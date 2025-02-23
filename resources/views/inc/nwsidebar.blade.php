@@ -99,6 +99,23 @@
             <span class="pc-mtext">Surat Tugas</span>
         </a>
     </li>
+    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
+        <li class="pc-item pc-hasmenu">
+            <a href="javascript: void(0);" class="pc-link">
+                <span class="pc-micon">
+                    <i class="fas fa-puzzle-piece"></i>
+                </span>
+                <span class="pc-mtext">Rekrutmen</span>
+                <span class="pc-arrow mt-1">
+                    <i data-feather="chevron-right"></i>
+                </span>
+            </a>
+            <ul class="pc-submenu">
+                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.rekrutmen.indexPengumuman') }}">Lowongan Kerja</a></li>
+                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.rekrutmen.indexRegistrasi') }}">Peserta</a></li>
+            </ul>
+        </li>
+    @endif
     @if (
             Auth::user()->getPermission('akses_jabatan') == true ||
             Auth::user()->getPermission('akun_pengguna') == true
