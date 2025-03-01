@@ -76,6 +76,8 @@ class sklController extends Controller
             $data->no_surat = $request->no_surat;
             $data->tgl = $tgl;
             $data->hari = $tgl->isoFormat('dddd');
+            $data->nik_ibu = $request->nik_ibu;
+            $data->nik_ayah = $request->nik_ayah;
             $data->ibu = 'NY. '.$request->ibu;
             $data->ayah = 'TN. '.$request->ayah;
             $data->anak = $request->anak;
@@ -140,6 +142,8 @@ class sklController extends Controller
 
         $data->tgl = $tgl;
         $data->hari = $tgl->isoFormat('dddd');
+        $data->nik_ibu = $request->nik_ibu;
+        $data->nik_ayah = $request->nik_ayah;
         $data->ibu = $request->ibu;
         $data->ayah = $request->ayah;
         $data->anak = $request->anak;
@@ -226,6 +230,8 @@ class sklController extends Controller
         $data->no_surat = $request->no_surat_edit;
         $data->tgl = $ubahFormatTgl;
         $data->hari = $ubahFormatTgl->isoFormat('dddd');
+        $data->nik_ibu = $request->nik_ibu;
+        $data->nik_ayah = $request->nik_ayah;
         $data->ibu = 'NY. '.$request->ibu_edit;
         $data->ayah = 'TN. '.$request->ayah_edit;
         $data->anak = $request->anak_edit;
@@ -294,6 +300,8 @@ class sklController extends Controller
             'thn' => $thn,
             'jam' => $jam,
             'kelamin' => $kelamin,
+            'nik_ibu' => $data->nik_ibu,
+            'nik_ayah' => $data->nik_ayah,
             'ibu' => $data->ibu,
             'ayah' => $data->ayah,
             'alamat' => $data->alamat,

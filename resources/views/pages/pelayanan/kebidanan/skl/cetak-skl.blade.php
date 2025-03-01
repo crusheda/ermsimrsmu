@@ -62,12 +62,16 @@
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-3">
+                NIK Ibu<br>
                 Nama Ibu<br>
+                NIK Ayah<br>
                 Nama Ayah<br>
                 Alamat
             </div>
             <div class="col-md-8">
+                : {{ $list['show']->nik_ibu }}<br>
                 : {{ $list['show']->ibu }}<br>
+                : {{ $list['show']->nik_ayah }}<br>
                 : {{ $list['show']->ayah }}<br>
                 : {{ $list['show']->alamat }}<br>
             </div>

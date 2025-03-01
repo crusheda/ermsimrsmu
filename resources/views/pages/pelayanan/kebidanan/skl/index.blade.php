@@ -36,7 +36,7 @@
                                     <span class="align-middle">Tambah</span>
                                 </button>
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                                    data-bs-placement="bottom" data-bs-html="true" title="<span>Refresh Tabel</span>" onclick="refresh()">
+                                    data-bs-placement="bottom" data-bs-html="true" title="<span>Tampilkan 30 Data SKL Terbaru</span>" onclick="refresh()">
                                     <i class="fa-fw fas fa-sync nav-icon"></i></button>
                                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                     data-bs-placement="bottom" id="btn-showall" data-bs-html="true" title="<span>Tampilkan Semua Data SKL</span>" onclick="showAll()">
@@ -167,6 +167,24 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="form-group">
+                                    <label class="form-label">NIK Ibu <a class="text-danger">*</a></label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="number" class="form-control" name="nik_ibu" id="basic-url3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            aria-describedby="basic-addon34" maxlength="16" placeholder="Nomor Induk Kependudukan Ibu" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label">NIK Ayah <a class="text-danger">*</a></label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="number" class="form-control" name="nik_ayah" id="basic-url3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            aria-describedby="basic-addon34" maxlength="16" placeholder="Nomor Induk Kependudukan Ayah" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
                                     <label class="form-label">Nama Ibu <a class="text-danger">*</a></label>
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text" id="basic-addon34">NY.</span>
@@ -283,6 +301,24 @@
                             <div class="form-group">
                                 <label class="form-label">Waktu <a class="text-danger">*</a></label>
                                 <input type="datetime-local" id="tgl_edit" class="form-control" placeholder="" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">NIK Ibu <a class="text-danger">*</a></label>
+                                <div class="input-group input-group-merge">
+                                    <input type="number" class="form-control" name="nik_ibu_edit" id="nik_ibu_edit" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        aria-describedby="basic-addon34" maxlength="16" placeholder="Nomor Induk Kependudukan Ibu" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">NIK Ayah <a class="text-danger">*</a></label>
+                                <div class="input-group input-group-merge">
+                                    <input type="number" class="form-control" name="nik_ayah_edit" id="nik_ayah_edit" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                        aria-describedby="basic-addon34" maxlength="16" placeholder="Nomor Induk Kependudukan Ayah" required />
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -436,10 +472,20 @@
                             item.id +
                             `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
-                        content += item.no_surat + "</td><td>" +
-                            item.tgl + "</td><td>" +
-                            item.ibu + "</td><td>" +
-                            item.ayah + "</td><td>";
+                        content += item.no_surat + "</td><td>" + item.tgl + "</td>";
+                        if (item.nik_ibu) {
+                            nik_ibu = 'NIK - ' + item.nik_ibu;
+                        } else {
+                            nik_ibu = '';
+                        }
+                        if (item.nik_ayah) {
+                            nik_ayah = 'NIK - ' + item.nik_ayah;
+                        } else {
+                            nik_ayah = '';
+                        }
+                        content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ibu + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ibu + "</small></div></div></td>";
+                        content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ayah + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ayah + "</small></div></div></td>";
+                        content += "<td>";
                         if (item.anak == null)
                             content += "";
                         else
@@ -589,10 +635,20 @@
                                 item.id +
                                 `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
                                 `</ul></center></td><td>`;
-                            content += item.no_surat + "</td><td>" +
-                                item.tgl + "</td><td>" +
-                                item.ibu + "</td><td>" +
-                                item.ayah + "</td><td>";
+                            content += item.no_surat + "</td><td>" + item.tgl + "</td>";
+                            if (item.nik_ibu) {
+                                nik_ibu = 'NIK - ' + item.nik_ibu;
+                            } else {
+                                nik_ibu = '';
+                            }
+                            if (item.nik_ayah) {
+                                nik_ayah = 'NIK - ' + item.nik_ayah;
+                            } else {
+                                nik_ayah = '';
+                            }
+                            content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ibu + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ibu + "</small></div></div></td>";
+                            content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ayah + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ayah + "</small></div></div></td>";
+                            content += "<td>";
                             if (item.anak == null)
                                 content += "";
                             else
@@ -676,10 +732,20 @@
                             item.id +
                             `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
-                        content += item.no_surat + "</td><td>" +
-                            item.tgl + "</td><td>" +
-                            item.ibu + "</td><td>" +
-                            item.ayah + "</td><td>";
+                        content += item.no_surat + "</td><td>" + item.tgl + "</td>";
+                        if (item.nik_ibu) {
+                            nik_ibu = 'NIK - ' + item.nik_ibu;
+                        } else {
+                            nik_ibu = '';
+                        }
+                        if (item.nik_ayah) {
+                            nik_ayah = 'NIK - ' + item.nik_ayah;
+                        } else {
+                            nik_ayah = '';
+                        }
+                        content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ibu + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ibu + "</small></div></div></td>";
+                        content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ayah + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ayah + "</small></div></div></td>";
+                        content += "<td>";
                         if (item.anak == null)
                             content += "";
                         else
@@ -773,10 +839,20 @@
                             item.id +
                             `)"><i class='fas fa-trash'></i> Hapus</a></li>` +
                             `</ul></center></td><td>`;
-                        content += item.no_surat + "</td><td>" +
-                            item.tgl + "</td><td>" +
-                            item.ibu + "</td><td>" +
-                            item.ayah + "</td><td>";
+                        content += item.no_surat + "</td><td>" + item.tgl + "</td>";
+                        if (item.nik_ibu) {
+                            nik_ibu = 'NIK - ' + item.nik_ibu;
+                        } else {
+                            nik_ibu = '';
+                        }
+                        if (item.nik_ayah) {
+                            nik_ayah = 'NIK - ' + item.nik_ayah;
+                        } else {
+                            nik_ayah = '';
+                        }
+                        content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ibu + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ibu + "</small></div></div></td>";
+                        content += "<td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='javascript:void(0);' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' class='text-dark'><u>" + item.ayah + "</u></a></h6><small class='text-truncate text-muted'>" + nik_ayah + "</small></div></div></td>";
+                        content += "<td>";
                         if (item.anak == null)
                             content += "";
                         else
@@ -861,6 +937,12 @@
                     document.getElementById('show_id').innerHTML = res.show.id;
                     $("#id_edit").val(res.show.id);
                     $("#no_surat_edit").val(res.show.no_surat);
+                    if (res.show.nik_ibu) {
+                        $("#nik_ibu_edit").val(res.show.nik_ibu);
+                    }
+                    if (res.show.nik_ayah) {
+                        $("#nik_ayah_edit").val(res.show.nik_ayah);
+                    }
                     $("#ibu_edit").val(res.show.ibu.slice(4, 199));
                     $("#ayah_edit").val(res.show.ayah.slice(4, 199));
                     $("#anak_edit").val(res.show.anak);
@@ -888,6 +970,8 @@
             var id_edit = $("#id_edit").val();
             var no_surat_edit = $("#no_surat_edit").val();
             var tgl_edit = $("#tgl_edit").val();
+            var nik_ibu_edit = $("#nik_ibu_edit").val();
+            var nik_ayah_edit = $("#nik_ayah_edit").val();
             var ibu_edit = $("#ibu_edit").val();
             var ayah_edit = $("#ayah_edit").val();
             var anak_edit = $("#anak_edit").val();
@@ -898,19 +982,24 @@
             var alamat_edit = $("#alamat_edit").val();
 
             // console.log(tgl_edit+' - '+ibu_edit+' - '+ayah_edit+' - '+anak_edit+' - '+dr_edit+' - '+bb_edit+' - '+tb_edit+' - '+kelamin_edit+' - '+alamat_edit);
-            if (no_surat_edit == "" || tgl_edit == "" || ibu_edit == "" || ayah_edit == "" || dr_edit == "" || bb_edit == "" || tb_edit == "" || kelamin_edit  == "" || alamat_edit == "") {
-                Swal.fire({
+            if (no_surat_edit == "" || tgl_edit == "" || nik_ibu_edit == "" || nik_ayah_edit == "" || ibu_edit == "" || ayah_edit == "" || dr_edit == "" || bb_edit == "" || tb_edit == "" || kelamin_edit  == "" || alamat_edit == "") {
+                iziToast.error({
                     title: 'Pesan Galat!',
-                    text: 'Mohon lengkapi semua data terlebih dahulu',
-                    icon: 'error',
-                    showConfirmButton: false,
-                    showCancelButton: false,
-                    allowOutsideClick: true,
-                    allowEscapeKey: true,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    backdrop: `rgba(26,27,41,0.8)`,
+                    message: 'Mohon lengkapi semua data terlebih dahulu',
+                    position: 'topRight'
                 });
+                // Swal.fire({
+                //     title: 'Pesan Galat!',
+                //     text: 'Mohon lengkapi semua data terlebih dahulu',
+                //     icon: 'error',
+                //     showConfirmButton: false,
+                //     showCancelButton: false,
+                //     allowOutsideClick: true,
+                //     allowEscapeKey: true,
+                //     timer: 3000,
+                //     timerProgressBar: true,
+                //     backdrop: `rgba(26,27,41,0.8)`,
+                // });
             } else {
                 $.ajax({
                     headers: {
@@ -924,6 +1013,8 @@
                         id_edit: id_edit,
                         no_surat_edit: no_surat_edit,
                         tgl_edit: tgl_edit,
+                        nik_ibu_edit: nik_ibu_edit,
+                        nik_ayah_edit: nik_ayah_edit,
                         ibu_edit: ibu_edit,
                         ayah_edit: ayah_edit,
                         anak_edit: anak_edit,
@@ -970,25 +1061,35 @@
                         dataType: 'json', // added data type
                         success: function(res) {
                             iziToast.success({
-                                title: 'Sukses!',
+                                title: 'Pesan Sukses!',
                                 message: 'Hapus Data SKL berhasil pada ' + res,
                                 position: 'topRight'
                             });
+                            // iziToast.success({
+                            //     title: 'Sukses!',
+                            //     message: 'Hapus Data SKL berhasil pada ' + res,
+                            //     position: 'topRight'
+                            // });
                             refresh();
                         },
                         error: function(res) {
-                            Swal.fire({
-                                title: `Gagal di hapus!`,
-                                text: 'Pada ' + res,
-                                icon: `error`,
-                                showConfirmButton: false,
-                                showCancelButton: false,
-                                allowOutsideClick: true,
-                                allowEscapeKey: true,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                backdrop: `rgba(26,27,41,0.8)`,
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: 'Gagal di hapus pada ' + res,
+                                position: 'topRight'
                             });
+                            // Swal.fire({
+                            //     title: `Gagal di hapus!`,
+                            //     text: 'Pada ' + res,
+                            //     icon: `error`,
+                            //     showConfirmButton: false,
+                            //     showCancelButton: false,
+                            //     allowOutsideClick: true,
+                            //     allowEscapeKey: true,
+                            //     timer: 3000,
+                            //     timerProgressBar: true,
+                            //     backdrop: `rgba(26,27,41,0.8)`,
+                            // });
                         }
                     });
                 }
