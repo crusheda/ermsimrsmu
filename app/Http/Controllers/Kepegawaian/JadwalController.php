@@ -337,7 +337,7 @@ class JadwalController extends Controller
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
-                ->whereIn('kepegawaian_jadwal.progress',[2,3])
+                ->whereIn('kepegawaian_jadwal.progress',[1,2,3])
                 ->get();
 
         $data = [

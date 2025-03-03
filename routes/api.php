@@ -145,6 +145,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // REKRUTMEN
             // PENGUMUMAN
             Route::get('kepegawaian/rekrutmen/pengumuman/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'table'])->name('kepegawaian.rekrutmen.tablePengumuman');
+            Route::post('kepegawaian/rekrutmen/pengumuman/simpan', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'simpan'])->name('kepegawaian.rekrutmen.simpan');
+            Route::delete('kepegawaian/rekrutmen/pengumuman/{id}/hapus', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'hapus'])->name('kepegawaian.rekrutmen.hapus');
             // REGISTRASI/LOKER
             Route::get('kepegawaian/rekrutmen/registrasi/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'table'])->name('kepegawaian.rekrutmen.tableRegistrasi');
 

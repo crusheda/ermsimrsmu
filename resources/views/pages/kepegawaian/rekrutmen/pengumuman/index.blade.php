@@ -82,16 +82,25 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="alert alert-secondary">
+                                <small>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Tgl Buka Lowongan</b> tidak lebih dari <b>Tgl Tutup Lowongan</b><br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Tanda <a class="text-danger">*</a> berarti isian <b>Wajib</b> diisi<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menggunakan <b>Huruf Besar/Capital/Uppercase</b> saat pengisian
+                                </small>
+                            </div>
+                        </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Buka Lowongan <a class="text-danger">*</a></label>
-                                <input type="date" id="mulai" value="" class="form-control">
+                                <input type="date" id="mulai" value="" class="form-control notnull">
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tutup Lowongan <a class="text-danger">*</a></label>
-                                <input type="date" id="mulai" value="" class="form-control">
+                                <input type="date" id="selesai" value="" class="form-control notnull">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -103,37 +112,37 @@
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Kebutuhan <a class="text-danger">*</a></label>
-                                <input type="text" id="nama" value="" class="form-control" placeholder="e.g. IT Support">
+                                <input type="text" id="nama" value="" class="form-control notnull" placeholder="e.g. IT Support">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Umur Minimal <a class="text-danger">*</a></label>
-                                <input type="number" id="umur_min" value="" class="form-control">
+                                <input type="number" id="umur_min" value="" class="form-control notnull" placeholder="e.g. 20">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Umur Maksimal</label>
-                                <input type="number" id="umur_max" value="" class="form-control">
+                                <label class="form-label">Umur Maksimal <a class="text-danger">*</a></label>
+                                <input type="number" id="umur_max" value="" class="form-control notnull" placeholder="e.g. 35">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jumlah Kebutuhan <a class="text-danger">*</a></label>
-                                <input type="number" id="jumlah" value="" class="form-control">
+                                <input type="number" id="jumlah" value="" class="form-control notnull" placeholder="e.g. 5">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Maksimal Kuota Pendaftar</label>
-                                <input type="number" id="kuota" value="" class="form-control">
+                                <input type="number" id="kuota" value="" class="form-control" placeholder="e.g. 100">
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenjang Pendidikan <a class="text-danger">*</a></label>
-                                <select class="select-multiple form-select" name="tujuan[]" id="tujuan1_add_req" data-allow-clear="true" data-bs-auto-close="outside" style="width: 100%" required multiple>
+                                <select class="select-multiple form-select notnull" name="pendidikan[]" id="pendidikan" data-allow-clear="true" data-bs-auto-close="outside" style="width: 100%" required multiple>
                                     {{-- <option value="" selected>Pilih</option> --}}
                                     @if(count($list['pendidikan']) > 0)
                                         @foreach($list['pendidikan'] as $item)
@@ -146,53 +155,60 @@
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Uraian Tugas <a class="text-danger">*</a></label>
-                                <textarea id="tugas" rows="4" class="form-control" placeholder="e.g. Pengelolaan infrastruktur teknologi, keamanan data pasien, pemeliharaan sistem informasi rumah sakit, serta memberikan dukungan teknis dan integrasi antar sistem untuk mendukung pelayanan medis yang efisien."></textarea>
+                                <textarea id="tugas" rows="4" class="form-control notnull" placeholder="e.g. Pengelolaan infrastruktur teknologi, keamanan data pasien, pemeliharaan sistem informasi rumah sakit, serta memberikan dukungan teknis dan integrasi antar sistem untuk mendukung pelayanan medis yang efisien."></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Keahlian <a class="text-danger">*</a></label>
-                                <textarea id="keahlian" rows="4" class="form-control" placeholder="e.g. keamanan siber untuk melindungi data pasien, manajemen jaringan untuk memastikan konektivitas yang stabil, serta pemrograman untuk pengembangan dan pemeliharaan perangkat lunak. Selain itu, kemampuan dalam memberikan support teknis, manajemen sistem informasi rumah sakit, dan analisis data juga penting untuk mendukung kelancaran operasional dan meningkatkan kualitas layanan medis."></textarea>
+                                <textarea id="keahlian" rows="4" class="form-control notnull" placeholder="e.g. keamanan siber untuk melindungi data pasien, manajemen jaringan untuk memastikan konektivitas yang stabil, serta pemrograman untuk pengembangan dan pemeliharaan perangkat lunak. Selain itu, kemampuan dalam memberikan support teknis, manajemen sistem informasi rumah sakit, dan analisis data juga penting untuk mendukung kelancaran operasional dan meningkatkan kualitas layanan medis."></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Persyaratan <a class="text-danger">*</a></label>
-                                <textarea id="persyaratan" rows="4" class="form-control" placeholder="e.g. Muslim (Laki-laki), usia max 30th, memiliki sertifikat ahli K3 umum/K3RS, manajemen resiko, mampu berkomunikasi dengan baik, sehat jasmani & rohani, mampu bekerjasama dalam tim, menguasai analisa/pengolahan/penyajian data dalam komputer"></textarea>
+                                <textarea id="persyaratan" rows="4" class="form-control notnull" placeholder="e.g. Muslim (Laki-laki), usia max 30th, memiliki sertifikat ahli K3 umum/K3RS, manajemen resiko, mampu berkomunikasi dengan baik, sehat jasmani & rohani, mampu bekerjasama dalam tim, menguasai analisa/pengolahan/penyajian data dalam komputer"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label">Keterangan <a class="text-danger">*</a></label>
-                                <textarea id="persyaratan" rows="2" class="form-control" placeholder="Optional"></textarea>
+                                <label class="form-label">Keterangan</label>
+                                <textarea id="keterangan" rows="2" class="form-control notnull" placeholder="Optional"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="prosesSimpan()"><i class="fa-fw fas fa-save nav-icon"></i> Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="prosesSimpan()" id="btn-simpan"><i class="fa-fw fas fa-save nav-icon"></i> Submit</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalHapus" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="text-center">
-                        <h3>Hapus Berkas Anda?</h3>
-                    </div>
+                    <h4 class="modal-title">
+                        Form Hapus Lowongan Kerja
+                    </h4>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="tampungHapus" hidden>
-                    <p>File yang sudah anda Upload akan terhapus oleh Sistem. Anda hanya memiliki kesempatan menghapus pada
-                        Hari saat Anda mengupload file tersebut.</p>
+                    <input type="text" id="id_hapus" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus Lowongan Pekerjaan tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" onclick="hapus()"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa-fw fas fa-times nav-icon me-1"></i> Batal</button>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -229,41 +245,41 @@
 
                         res.show.forEach(item => {
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn ${item.progress==2 || item.progress==3?'btn-light':'btn-light-primary'} btn-sm font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
-                                if (item.progress == 3 || item.progress == 2) {
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='ti ti-edit me-1'></i> Ubah Status</a>`;
+                            content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                                if (item.deleted_at == null) {
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
                                 } else {
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahStatus(`+item.id+`,`+item.progress+`)" value="animate__rubberBand"><i class='ti ti-edit me-1'></i> Ubah Status</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a>`;
                                 }
-                                    // content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapus(`+item.id+`)" value="animate__rubberBand"><i class='ti ti-trash me-1'></i> Hapus</a>`;
                             content += `</div></center></td>`;
-                            if (item.pengajuan == 0) {
-                                stt = `<small><span class="badge rounded-pill text-bg-success p-1">Baru</span></small>`;
-                            } else {
-                                stt = `<small><span class="badge rounded-pill text-bg-primary p-1">Ganti</span></small>`;
-                            }
-                            content += `<td>${item.pegawai_nip?item.pegawai_nip:'-'}</td>`;
-                            content += "<td style='white-space: normal !important;word-wrap: break-word;'>"
-                                    + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'>"
-                                        + "<h6 class='mb-0'>" + item.pegawai_panggilan + "&nbsp;&nbsp;" + stt + "</h6><small class='text-truncate text-muted'>Oleh " + item.pegawai_nama + "</small>"
-                                    + "</div></div></td>";
-                            content += `<td>${item.pegawai_jabatan?item.pegawai_jabatan:'-'}</td>`;
-                            if (item.progress == 0) {
-                                pg = `<center><span class="badge text-bg-primary p-1">Pengajuan</span></center>`;
-                            } else {
-                                if (item.progress == 1) {
-                                    pg = `<center><span class="badge text-bg-warning p-1">Sedang Diproses</span></center>`;
-                                } else {
-                                    if (item.progress == 2) {
-                                        pg = `<center><span class="badge text-bg-success p-1">Selesai</span></center>`;
-                                    } else {
-                                        pg = `<center><span class="badge text-bg-danger p-1">Ditolak</span></center>`;
+                            content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                            <div class='d-flex justify-content-start align-items-center'>
+                                                <div class='d-flex flex-column'>
+                                                    <a class='mb-0'>` + item.nama + ` (` + item.kuota + `)</a>
+                                                    <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                                </div>
+                                            </div>
+                                        </td>`;
+                            content += `<td>${item.tgl}</td>`;
+                            content += `<td><small><ul class='list-unstyled mt-2'>`;
+                            res.users.forEach(us => {
+                                JSON.parse(item.pegawai_id).forEach(val => {
+                                    if (val == us.id) {
+                                        content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
                                     }
-                                }
-                            }
-                            content += `<td>${pg}</td>`;
-                            content += `<td>${item.estimasi?item.estimasi:'Belum Ditentukan'}</td>`;
-                            content += `<td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td>`;
+                                })
+                            })
+                            content += `</small></ul></td>`;
+                            // content += `<td>${item.keterangan?item.keterangan:''}</td>`;
+                            content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                            <div class='d-flex justify-content-start align-items-center'>
+                                                <div class='d-flex flex-column'>
+                                                    <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                    <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                                </div>
+                                            </div>
+                                        </td>`;
+                            content += "</tr>";
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
@@ -297,5 +313,134 @@
                 }
             );
         }
+
+        function prosesSimpan() {
+            $("#btn-simpan").prop('disabled', true);
+            $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
+
+            // Definisi
+            var save = new FormData();
+            save.append('mulai',$('#mulai').val());
+            save.append('selesai',$('#selesai').val());
+            save.append('unit',$('#unit').val());
+            save.append('nama',$('#nama').val());
+            save.append('umur_min',$('#umur_min').val());
+            save.append('umur_max',$('#umur_max').val());
+            save.append('jumlah',$('#jumlah').val());
+            save.append('kuota',$('#kuota').val());
+            save.append('kualifikasi',JSON.stringify($('#pendidikan').val()));
+            save.append('tugas',$('#tugas').val());
+            save.append('keahlian',$('#keahlian').val());
+            save.append('persyaratan',$('#persyaratan').val());
+            save.append('pegawai','{{ Auth::user()->id }}');
+
+            if ($('.notnull').val() == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                if ($('#selesai').val() < $('#mulai').val()) {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Tgl Tutup Lowongan harus lebih dari Tgl Buka Lowongan',
+                        position: 'topRight'
+                    });
+                } else {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: '/api/kepegawaian/rekrutmen/pengumuman/simpan',
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        data: save,
+                        success: function(res) {
+                            if (res.code == 400) {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.message,
+                                    position: 'topRight',
+                                    buttons: [
+                                        [
+                                            '<button>Tutup</button>',
+                                            function (instance, toast) {
+                                                instance.hide({
+                                                    transitionOut: 'fadeOutUp'
+                                                }, toast);
+                                            }
+                                        ]
+                                    ]
+                                });
+                            } else {
+                                iziToast.success({
+                                    title: 'Pesan Sukses!',
+                                    message: 'Penambahan Lowongan Pekerjaan berhasil pada '+res,
+                                    position: 'topRight'
+                                });
+                                refresh();
+                                $('#tambah').modal('hide');
+                            }
+                        },
+                        error: function (res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                        }
+                    });
+                }
+            }
+
+            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+            $("#btn-simpan").prop('disabled', false);
+        }
+
+        function hapus(id) {
+            $("#id_hapus").val(id);
+            var inputs = document.getElementById('setujuhapus');
+            inputs.checked = false;
+            $('#modalHapus').modal('show');
+        }
+
+        function prosesHapus() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan lowongan kerja tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus").val();
+                $.ajax({
+                    url: "/api/kepegawaian/rekrutmen/pengumuman/"+id+"/hapus",
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Lowongan Pekerjaan telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalHapus').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Lowongan Pekerjaan gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+
     </script>
 @endsection
