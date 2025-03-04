@@ -230,8 +230,8 @@ class sklController extends Controller
         $data->no_surat = $request->no_surat_edit;
         $data->tgl = $ubahFormatTgl;
         $data->hari = $ubahFormatTgl->isoFormat('dddd');
-        $data->nik_ibu = $request->nik_ibu;
-        $data->nik_ayah = $request->nik_ayah;
+        $data->nik_ibu = $request->nik_ibu_edit;
+        $data->nik_ayah = $request->nik_ayah_edit;
         $data->ibu = 'NY. '.$request->ibu_edit;
         $data->ayah = 'TN. '.$request->ayah_edit;
         $data->anak = $request->anak_edit;

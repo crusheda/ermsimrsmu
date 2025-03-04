@@ -14,8 +14,8 @@ class AddColumnTableSKL extends Migration
     public function up()
     {
         Schema::table('pelayanan_skl', function (Blueprint $table) {
-            $table->integer('nik_ayah')->after('hari');
-            $table->integer('nik_ibu')->after('hari');
+            $table->bigInteger('nik_ayah',16)->after('hari');
+            $table->bigInteger('nik_ibu',16)->after('hari');
         });
     }
 
