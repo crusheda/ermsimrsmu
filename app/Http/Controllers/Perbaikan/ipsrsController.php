@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\perbaikan_ipsrs;
 use App\Models\perbaikan_ipsrs_catatan;
 use App\Models\role_has_permissions;
+use App\Models\struktur_organisasi;
 use App\Models\unit;
 use App\Models\users;
 use App\Models\users_foto;
@@ -75,7 +76,18 @@ class ipsrsController extends Controller
 
     function tableUser($id)
     {
-        $show = perbaikan_ipsrs::where('user_id', $id)->get();
+        $validation = struktur_organisasi::where('id_user',$id)->first();
+        $show = perbaikan_ipsrs::join('users','users.id','=','perbaikan_ipsrs.user_id')
+                ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id');
+                if ($validation) {
+                    $show->whereIn('model_has_roles.role_id',json_decode($validation->bawahan));
+                } else {
+                    $show->where('perbaikan_ipsrs.user_id', $id);
+                }
+        $show = $show->select('perbaikan_ipsrs.*','users.nama as nama_pegawai')
+                ->orderBy('perbaikan_ipsrs.tgl_pengaduan','DESC')
+                ->get();
+
         $catatan = perbaikan_ipsrs_catatan::get();
 
         $data = [
@@ -88,7 +100,20 @@ class ipsrsController extends Controller
 
     function tableAdmin()
     {
-        $show = perbaikan_ipsrs::get();
+        $show = perbaikan_ipsrs::limit(100)->orderBy('tgl_pengaduan','DESC')->get();
+        $catatan = perbaikan_ipsrs_catatan::get();
+
+        $data = [
+            'show' => $show,
+            'catatan' => $catatan,
+        ];
+
+        return response()->json($data);
+    }
+
+    function tableAdminAll()
+    {
+        $show = perbaikan_ipsrs::orderBy('tgl_pengaduan','DESC')->get();
         $catatan = perbaikan_ipsrs_catatan::get();
 
         $data = [

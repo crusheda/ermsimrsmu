@@ -105,6 +105,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     Route::get('surtug', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'index'])->name('kepegawaian.surtug.index');
     Route::get('surtug/{id}/download', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'download'])->name('kepegawaian.surtug.download');
 
+    // ABSENSI
+    Route::get('absensi', [App\Http\Controllers\Kepegawaian\AbsensiController::class, 'index'])->name('kepegawaian.absensi.index');
+
     // REKRUTMEN
         // PENGUMUMAN
         Route::get('rekrutmen/pengumuman', [App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'index'])->name('kepegawaian.rekrutmen.indexPengumuman');

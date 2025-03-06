@@ -26,15 +26,23 @@
     <div class="row pt-1">
         <div class="col-md-4">
             <div class="card mb-4">
-                <div class="card-header d-flex align-items-center justify-content-between border border-0 py-2">
+                <div class="card-header d-flex align-items-center justify-content-between border border-0 py-3">
                     <div class=" flex-grow-1">
                         <div class="btn-group">
-                            <button class="btn btn-link-dark btn-sm" onclick="window.location='{{ route('ipsrs.index') }}'">
+                            <button class="btn btn-link-dark" onclick="window.location='{{ route('ipsrs.index') }}'">
                                 <i class="ti ti-arrow-back-up me-1"></i> Kembali</button>
                         </div>
                     </div>
                     {{-- <h5 class="mb-0 card-title flex-shrink-0 float-end"></h5> --}}
-                    <div class="dropdown ms-2 dropend">
+                    <div class="btn-group dropend">
+                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a> --}}
+                            </li>
+                        </ul>
+                    </div>
+                    {{-- <div class="dropdown ms-2 dropend">
                         <a class="text-muted btn-icon" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="ti ti-dots-vertical font-size-18"></i>
                         </a>
@@ -44,9 +52,9 @@
                             <a class="dropdown-item" href="javascript:void(0);">#</a>
                             <a class="dropdown-item" href="javascript:void(0);">#</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="card-body">
+                <div class="card-body border-top">
                     <div class="d-flex">
                         <div class="flex-shrink-0 me-4">
                             @if (empty($list['fotouser']->filename))
@@ -98,7 +106,7 @@
         </div>
         <div class="col-md-8">
             <div class="card card-action mb-4">
-                <div class="card-header align-middle bg-transparent border-bottom py-3">
+                <div class="card-header align-middle bg-transparent border-bottom">
                     <div class="d-flex flex-wrap align-items-start">
                         <div class="me-2">
                             <h5 class="card-title mt-1 mb-0">Proses Pengaduan</h5>

@@ -107,23 +107,23 @@
         </div>
         {{-- BARIS 2 --}}
         <div class="col-lg-12">
-            <div class="card table-card">
+            <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel Pengaduan</h5>
                     <div class="btn-group">
                         <button type="button" class="btn btn-light-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="Segarkan Tabel Pengaduan" onclick="refresh()">
-                                <i class="fa-fw fas fa-sync nav-icon"></i></button>
-                        <button type="button" class="btn btn-light-info" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Segarkan Tabel Pengaduan (100 Data Terakhir)" onclick="refresh()">
+                                <i class="fa-fw fas fa-sync nav-icon me-1"></i> 100 Data Terakhir</button>
+                        {{-- <button type="button" class="btn btn-light-info" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Tampilkan 100 Data Terakhir" onclick="showHalf()">
-                                <i class="fa-fw fas fa-history nav-icon"></i></button>
+                                <i class="fa-fw fas fa-history nav-icon"></i></button> --}}
                         <button type="button" class="btn btn-light-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Tampilkan Seluruh Data" onclick="showAll()">
-                            <i class="fa-fw fas fa-infinity nav-icon"></i></button>
+                            <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Seluruh Data</button>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="table">
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
@@ -150,6 +150,58 @@
                                     <th>UNIT</th>
                                     <th>LOKASI</th>
                                     <th>TGL PENGADUAN</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="table-responsive" id="tableAll" hidden>
+                        <div class="alert alert-secondary">
+                            <small>
+                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Anda dapat melakukan Export Data menjadi <mark>EXCEL/PDF</mark> melalui tombol pada tabel di bawah ini <br>
+                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua kolom, silakan <mark>CENTANG</mark> pilihan kolom pada tombol "<b>Column Visibility</b>" di bawah ini <br>
+                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Silakan melakukan pencarian / filtering data melalui kolom isian <mark>Search : .....</mark>
+                            </small>
+                        </div>
+                        <table id="dttableAll" class="table table-hover dt-responsive align-middle">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th><center>STATUS</center></th>
+                                    <th>NAMA</th>
+                                    <th>UNIT</th>
+                                    <th>LOKASI</th>
+                                    <th>TGL PENGADUAN</th>
+                                    <th>KETERANGAN PENGADUAN</th>
+                                    <th>TGL DITERIMA</th>
+                                    <th>KETERANGAN DITERIMA</th>
+                                    <th>TGL DIKERJAKAN</th>
+                                    <th>KETERANGAN DIKERJAKAN</th>
+                                    <th>TGL SELESAI</th>
+                                    <th>KETERANGAN SELESAI</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-all">
+                                <tr>
+                                    <td colspan="9" style="font-size:13px">
+                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th><center>STATUS</center></th>
+                                    <th>NAMA</th>
+                                    <th>UNIT</th>
+                                    <th>LOKASI</th>
+                                    <th>TGL PENGADUAN</th>
+                                    <th>KETERANGAN PENGADUAN</th>
+                                    <th>TGL DITERIMA</th>
+                                    <th>KETERANGAN DITERIMA</th>
+                                    <th>TGL DIKERJAKAN</th>
+                                    <th>KETERANGAN DIKERJAKAN</th>
+                                    <th>TGL SELESAI</th>
+                                    <th>KETERANGAN SELESAI</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -186,6 +238,8 @@
 
         // FUNCTION
         function refresh() {
+            $("#table").prop('hidden',false);
+            $("#tableAll").prop('hidden',true);
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="20" style="font-size: 13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -273,6 +327,114 @@
                         lengthChange: true,
                         lengthMenu: [10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                }
+            })
+        }
+
+        function showAll() {
+            $("#table").prop('hidden',true);
+            $("#tableAll").prop('hidden',false);
+            $("#tampil-tbody-all").empty().append(
+                `<tr><td colspan="20" style="font-size: 13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses seluruh data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/perbaikan/ipsrs/admin/tableAll",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-tbody-all").empty();
+                    $('#dttableAll').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        if (item.unit) {
+                            try {
+                                var un = JSON.parse(item.unit);
+                            } catch (e) {
+                                var un = item.unit;
+                            }
+                        }
+                        if (un !== null) {
+                            un = un.toString().replaceAll(',', ', ').replaceAll('-', ' ');
+                        } else {
+                            un = '';
+                        }
+                        var status = '';
+                        if (item.tgl_selesai != null && item.ket_penolakan == null) {
+                            status = '<td><center><kbd style="background-color: turquoise">Selesai</kbd></center></td>';
+                        } else {
+                            if (item.ket_penolakan != null) {
+                                status = '<td><center><kbd style="background-color: red">Ditolak</kbd></center></td>';
+                            } else {
+                                if (item.tgl_diterima == null) {
+                                    status = '<td><center><kbd style="background-color: rebeccapurple">Diverifikasi</kbd></center></td>';
+                                } else {
+                                    if (item.tgl_dikerjakan == null) {
+                                        status = '<td><center><kbd style="background-color: salmon">Diterima</kbd></center></td>';
+                                    } else {
+                                        if (item.tgl_selesai == null) {
+                                            status = '<td><center><kbd style="background-color: orange">Dikerjakan</kbd></center></td>';
+                                        } else {
+                                            status = '<td><center><kbd style="background-color: dark">Tidak Ditemukan</kbd></center></td>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        content = `<tr><td><div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <a href="javascript:;" class="btn btn-sm btn-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown">${item.id}</a>
+                                            <div class="dropdown-menu dropdown-menu-right">`;
+                                                if (item.filename_pengaduan != null && item.filename_pengaduan != '') {
+                                                    content += `<a href="javascript:;" onclick="showLampiran(${item.id})" class="dropdown-item text-info"><i class='fas fa-image me-2'></i> Lampiran</a>`;
+                                                } else {
+                                                    content += `<a href="javascript:;" class="dropdown-item text-secondary disabled" disabled><i class='fas fa-image me-2'></i> Lampiran</a>`;
+                                                }
+                                                content += `<a href="/perbaikan/ipsrs/detail/${item.id}" class="dropdown-item text-primary"><i class='fa fa-wrench me-2'></i> Lihat Pengaduan</a>`;
+                        content += `</div></div></div></td>`;
+                        // LANJUT CONTENT
+                        content += status;
+                        content += `<td>${item.nama?item.nama:'<s class="text-danger">Nama Tidak Valid</s>'}</td>`;
+                        content += `<td>`+un+`</td>`;
+                        content += `<td>${item.lokasi}</td>`;
+                        content += `<td>`+new Date(item.tgl_pengaduan).toLocaleString("sv-SE")+`</td>`;
+                        content += `<td>${item.ket_pengaduan?item.ket_pengaduan:'-'}</td>`;
+                        content += `<td>`+new Date(item.tgl_diterima).toLocaleString("sv-SE")+`</td>`;
+                        content += `<td>${item.ket_diterima?item.ket_diterima:'-'}</td>`;
+                        content += `<td>`+new Date(item.tgl_dikerjakan).toLocaleString("sv-SE")+`</td>`;
+                        content += `<td>${item.ket_dikerjakan?item.ket_dikerjakan:'-'}</td>`;
+                        content += `<td>`+new Date(item.tgl_selesai).toLocaleString("sv-SE")+`</td>`;
+                        content += `<td>${item.ket_selesai?item.ket_selesai:'-'}</td></tr>`;
+                        $('#tampil-tbody-all').append(content);
+                    })
+
+                    var table = $('#dttableAll').DataTable({
+                        dom: 'Bfrtip',
+                        order: [
+                            [5, "desc"]
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '8%' },
+                        //     { sWidth: '8%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '24%' },
+                        //     { sWidth: '30%' },
+                        //     { sWidth: '10%' },
+                        // ],
+                        columnDefs: [
+                            { visible: false, targets: [6] },
+                            { visible: false, targets: [7] },
+                            { visible: false, targets: [8] },
+                            { visible: false, targets: [9] },
+                            { visible: false, targets: [10] },
+                            { visible: false, targets: [11] },
+                            { visible: false, targets: [12] },
+                        ],
+                        displayLength: 100,
+                        lengthChange: true,
+                        lengthMenu: [100, 300, 500, 1000, 5000, 10000],
+                        buttons: ['excel', 'pdf', 'colvis']
                     });
                 }
             })

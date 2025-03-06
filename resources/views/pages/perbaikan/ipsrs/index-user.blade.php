@@ -200,11 +200,11 @@
                     <h5 class="mb-0 card-title flex-grow-1">Riwayat Pengaduan <a class="text-primary">IPSRS</a></h5>
                     <div class="flex-shrink-0">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-link-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            <button type="button" class="btn btn-light-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Refresh Tabel Riwayat Pengaduan IPSRS" onclick="refresh()">
                                 <i class="fa-fw fas fa-sync nav-icon me-1"></i> Refresh</button>
-                            <button type="button" class="btn btn-link-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                title="Tampilkan Semua Data" onclick="showAll()">
+                            <button type="button" class="btn btn-light-danger border-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Tampilkan Semua Data" onclick="showAll()" disabled>
                                 <i class="fa-fw fas fa-infinity nav-icon me-1"></i> All</button>
                             {{-- <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Informasi Sistem Disposisi" disabled>
@@ -215,8 +215,9 @@
                 <div class="card-body">
                     <div class="alert alert-secondary m-2">
                         <small>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi <b>100 data</b> pengaduan <br>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol <i class="fa-fw fas fa-infinity nav-icon text-danger"></i> di atas
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data default yang ditampilkan dibatasi <b>100 data</b> pengaduan terakhir saja <br>
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua data, klik tombol <i class="fa-fw fas fa-infinity nav-icon text-danger"></i> di atas <br>
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk sementara waktu, hak akses untuk <mark><b>Monitoring Pengaduan Per Unit/Bagian</b></mark> hanya dapat dilakukan oleh Atasan Langsung
                         </small>
                     </div>
                     <div class="table-responsive">
@@ -473,7 +474,7 @@
                         if (item.tgl_selesai == null) {
                             if (item.tgl_diterima != null) {
                                 content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                if (item.filename_pengaduan != null) {
+                                if (item.filename_pengaduan != null || item.filename_pengaduan != '') {
                                     content += `<a href="javascript:;" onclick="showLampiran(${item.id})" class="dropdown-item text-info"><i class='fas fa-image me-1'></i> Lampiran</a>`;
                                 } else {
                                     content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-image me-1'></i> Lampiran</a>`;
@@ -481,7 +482,7 @@
                                 content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
                             } else {
                                 content += `<a href="javascript:;" onclick="ubah(${item.id})" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                if (item.filename_pengaduan != null) {
+                                if (item.filename_pengaduan != null || item.filename_pengaduan != '') {
                                     content += `<a href="javascript:;" onclick="showLampiran(${item.id})" class="dropdown-item text-info"><i class='fas fa-image me-1'></i> Lampiran</a>`;
                                 } else {
                                     content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-image me-1'></i> Lampiran</a>`;
@@ -490,7 +491,7 @@
                             }
                         } else {
                             content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                            if (item.filename_pengaduan != null) {
+                            if (item.filename_pengaduan != null || item.filename_pengaduan != '') {
                                 content += `<a href="javascript:;" onclick="showLampiran(${item.id})" class="dropdown-item text-info"><i class='fas fa-image me-1'></i> Lampiran</a>`;
                             } else {
                                 content += `<a href="javascript:;" class="dropdown-item text-secondary disabled"><i class='fas fa-image me-1'></i> Lampiran</a>`;
@@ -499,7 +500,17 @@
                         }
                         content += `</div></div></div></td>`;
                         // LANJUT CONTENT
-                        content += `<td>${item.lokasi}</td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lokasi Perbaikan">${item.lokasi}</u></a>
+                                                </h6>
+                                                <small class='text-truncate text-muted'>Oleh ${item.nama_pegawai}</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        // content += `<td>${item.lokasi}</td>`;
                         content += status;
                         content += `<td>`+new Date(item.tgl_pengaduan).toLocaleString("sv-SE")+`</td></tr>`;
                         $('#tampil-tbody').append(content);

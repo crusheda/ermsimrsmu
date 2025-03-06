@@ -142,6 +142,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('kepegawaian/surtug/table', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableAdmin'])->name('kepegawaian.surtug.tableAdmin');
             // USER
             Route::get('kepegawaian/surtug/table/{id}', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'tableUser'])->name('kepegawaian.surtug.tableUser');
+        // ABSENSI
+            Route::get('kepegawaian/absensi/table', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'table'])->name('kepegawaian.absensi.table');
+            Route::get('kepegawaian/absensi/{id}', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'show'])->name('kepegawaian.absensi.show');
         // REKRUTMEN
             // PENGUMUMAN
             Route::get('kepegawaian/rekrutmen/pengumuman/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'table'])->name('kepegawaian.rekrutmen.tablePengumuman');
@@ -264,6 +267,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::post('perbaikan/ipsrs/user/ubah', '\App\Http\Controllers\Perbaikan\ipsrsController@prosesUbah')->name('ipsrs.user.prosesUbah');
                 Route::delete('perbaikan/ipsrs/user/hapus/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@prosesHapus')->name('ipsrs.user.prosesHapus');
             // ADMIN
+                Route::get('perbaikan/ipsrs/admin/tableAll', '\App\Http\Controllers\Perbaikan\ipsrsController@tableAdminAll')->name('ipsrs.admin.tableAll');
                 Route::get('perbaikan/ipsrs/admin/table', '\App\Http\Controllers\Perbaikan\ipsrsController@tableAdmin')->name('ipsrs.admin.table');
                 Route::get('perbaikan/ipsrs/admin/lampiran/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@lampiranAdmin')->name('ipsrs.admin.lampiran');
                 Route::post('perbaikan/ipsrs/filter', '\App\Http\Controllers\Perbaikan\ipsrsController@filter')->name('ipsrs.filter');

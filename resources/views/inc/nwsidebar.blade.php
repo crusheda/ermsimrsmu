@@ -99,6 +99,22 @@
             <span class="pc-mtext">Surat Tugas</span>
         </a>
     </li>
+    @if (Auth::user()->getPermission('admin_kepegawaian') == true)
+        <li class="pc-item pc-hasmenu">
+            <a href="javascript: void(0);" class="pc-link">
+                <span class="pc-micon">
+                    <i class="fas fa-user-clock"></i>
+                </span>
+                <span class="pc-mtext">Absensi Karyawan</span>
+                <span class="pc-arrow mt-1">
+                    <i data-feather="chevron-right"></i>
+                </span>
+            </a>
+            <ul class="pc-submenu">
+                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.absensi.index') }}">Rekapitulasi</a></li>
+            </ul>
+        </li>
+    @endif
     @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
