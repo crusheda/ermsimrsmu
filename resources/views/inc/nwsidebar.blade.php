@@ -99,7 +99,7 @@
             <span class="pc-mtext">Surat Tugas</span>
         </a>
     </li>
-    @if (Auth::user()->getPermission('admin_kepegawaian') == true)
+    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
                 <span class="pc-micon">
@@ -240,6 +240,9 @@
     </li>
     <li class="pc-item pc-caption"><label>Pengaduan</label></li>
     <li class="pc-item pc-hasmenu">
+        @php
+            $pengaduanMasuk = \App\Models\perbaikan_ipsrs::whereNotNull('tgl_pengaduan')->where('tgl_diterima', null)->where('tgl_dikerjakan', null)->where('tgl_selesai', null)->where('ket_penolakan', null)->count();
+        @endphp
         <a href="javascript: void(0);" class="pc-link">
             <span class="pc-micon">
                 <i class="fas fa-wrench"></i>
@@ -248,9 +251,15 @@
             <span class="pc-arrow mt-1">
                 <i data-feather="chevron-right"></i>
             </span>
+            @if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true)
+                @if ($pengaduanMasuk > 0)
+                    <span class="pc-badge"><i class="fas fa-bell"></i></span>
+                @endif
+            @endif
         </a>
         <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="{{ route('ipsrs.index') }}">IPSRS</a></li>
+            <li class="pc-item">
+                <a class="pc-link" href="{{ route('ipsrs.index') }}">IPSRS @if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true) @if ($pengaduanMasuk > 0)<span class="pc-badge">{{ $pengaduanMasuk }}</span>@endif @endif</a></li>
         </ul>
     </li>
     @if (Auth::user()->getPermission('skl') == true)

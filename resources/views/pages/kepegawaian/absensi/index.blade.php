@@ -141,7 +141,7 @@
                                             <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
                                         </div>
                                     </div> --}}
-                                    <a>masih tahap development (50%) :)</a>
+                                    <a>masih tahap development :)</a>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Filter</h5>
+                    <h5 class="mb-0 ms-3">Filter</h5>
                     {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
@@ -165,11 +165,10 @@
                     {{-- @endif --}}
                 </div>
                 <div class="card-body p-b-10">
-                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                    {{-- <div class="alert alert-secondary alert-dismissible fade show" role="alert">
                         <small>
                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Batas maksimal upload dokumen <b><u>3 mb</u></b> dan hanya berformat <b>PDF</b> <br>
                             <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pegawai-pegawai yang sudah ditambahkan akan mendapatkan akses download dokumen Surat Tugas tersebut pada masing-masing halaman surat tugas pegawai beserta notifikasi
-                            {{-- <i class="ti ti-arrow-narrow-right text-primary me-1"></i>  --}}
                         </small>
                     </div>
                     <div class="row">
@@ -194,7 +193,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+                    <a>masih tahap development :)</a>
                 </div>
             </div>
         </div>
@@ -208,7 +208,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    {{-- <div class="table-responsive">
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
@@ -236,7 +236,8 @@
                                 </tr>
                             </tfoot>
                         </table>
-                    </div>
+                    </div> --}}
+                    <a>masih tahap development :)</a>
                 </div>
             </div>
         </div>
@@ -433,6 +434,12 @@
             // });
 
             showRiwayat();
+
+            iziToast.success({
+                title: 'Pesan Developer!',
+                message: 'Sabar yaa, sistem masih tahap development. Tenang aja kok, produk kami gak pernah GAGAL.. :)',
+                position: 'topCenter'
+            });
         });
 
         function showRiwayat() {

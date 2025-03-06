@@ -42,6 +42,7 @@ class ipsrsController extends Controller
             $totalDikerjakan = perbaikan_ipsrs::whereNotNull('tgl_dikerjakan')->where('tgl_selesai', null)->where('ket_penolakan', null)->count();
             $totalSelesai = perbaikan_ipsrs::whereNotNull('tgl_selesai')->where('ket_penolakan', null)->count();
             $totalDitolak = perbaikan_ipsrs::whereNotNull('ket_penolakan')->count();
+            $tahun = Carbon::now()->isoFormat('YYYY');
 
             $data = [
                 // 'show' => $show,
@@ -52,6 +53,7 @@ class ipsrsController extends Controller
                 'totaldikerjakan' => $totalDikerjakan,
                 'totalselesai' => $totalSelesai,
                 'totalditolak' => $totalDitolak,
+                'tahun' => $tahun
             ];
 
             return view('pages.perbaikan.ipsrs.index-admin')->with('list', $data);
@@ -100,7 +102,7 @@ class ipsrsController extends Controller
 
     function tableAdmin()
     {
-        $show = perbaikan_ipsrs::limit(100)->orderBy('tgl_pengaduan','DESC')->get();
+        $show = perbaikan_ipsrs::where('tgl_selesai',null)->limit(100)->orderBy('tgl_pengaduan','DESC')->get();
         $catatan = perbaikan_ipsrs_catatan::get();
 
         $data = [
@@ -119,6 +121,24 @@ class ipsrsController extends Controller
         $data = [
             'show' => $show,
             'catatan' => $catatan,
+        ];
+
+        return response()->json($data);
+    }
+
+    function diagram($tahun)
+    {
+        // $show = [];
+        for ($i=1; $i<=12 ; $i++) {
+            $selesai[] = perbaikan_ipsrs::whereMonth('tgl_pengaduan',$i)->whereYear('tgl_pengaduan',$tahun)->where('ket_penolakan',"=",null)->count();
+        }
+        for ($i=1; $i<=12 ; $i++) {
+            $ditolak[] = perbaikan_ipsrs::whereMonth('tgl_pengaduan',$i)->whereYear('tgl_pengaduan',$tahun)->where('ket_penolakan',"!=",null)->count();
+        }
+
+        $data = [
+            'selesai' => $selesai,
+            'ditolak' => $ditolak,
         ];
 
         return response()->json($data);

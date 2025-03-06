@@ -267,6 +267,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::post('perbaikan/ipsrs/user/ubah', '\App\Http\Controllers\Perbaikan\ipsrsController@prosesUbah')->name('ipsrs.user.prosesUbah');
                 Route::delete('perbaikan/ipsrs/user/hapus/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@prosesHapus')->name('ipsrs.user.prosesHapus');
             // ADMIN
+                Route::get('perbaikan/ipsrs/admin/diagram/{tahun}', '\App\Http\Controllers\Perbaikan\ipsrsController@diagram')->name('ipsrs.admin.diagram');
                 Route::get('perbaikan/ipsrs/admin/tableAll', '\App\Http\Controllers\Perbaikan\ipsrsController@tableAdminAll')->name('ipsrs.admin.tableAll');
                 Route::get('perbaikan/ipsrs/admin/table', '\App\Http\Controllers\Perbaikan\ipsrsController@tableAdmin')->name('ipsrs.admin.table');
                 Route::get('perbaikan/ipsrs/admin/lampiran/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@lampiranAdmin')->name('ipsrs.admin.lampiran');

@@ -108,12 +108,46 @@
         {{-- BARIS 2 --}}
         <div class="col-lg-12">
             <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-0">Diagram Pengaduan <a id="show_tahun" class="text-primary">Tahun {{ $list['tahun'] }}</a></h5>
+                        </div>
+                        <div class="flex-shrink-0 ms-3">
+                            <div class="dropdown">
+                                <a class="btn btn-link-secondary dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-haspopup="true">
+                                    Tahun Lainnya
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    @php
+                                        for ($i=2023; $i <= $list['tahun']; $i++) {
+                                            if ($i == $list['tahun']) {
+                                                echo"<button class='dropdown-item' onclick='diagram($i)'>Tahun $i (<a class='text-primary'>Saat Ini</a>)</button>";
+                                            } else {
+                                                echo"<button class='dropdown-item' onclick='diagram($i)'>Tahun $i</button>";
+                                            }
+                                        }
+                                    @endphp
+                                    {{-- <a class="dropdown-item" href="#">Today</a>
+                                    <a class="dropdown-item" href="#">Weekly</a>
+                                    <a class="dropdown-item" href="#">Monthly</a> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <h5 class="text-end my-2">5.44% <span class="badge bg-success">+2.6%</span></h5> --}}
+                    <div id="diagram">
+                        <div class="d-flex justify-content-center align-items-center"><span class="spinner-border spinner-border-sm text-primary me-2" role="status"></span>Loading...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel Pengaduan</h5>
                     <div class="btn-group">
                         <button type="button" class="btn btn-light-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Segarkan Tabel Pengaduan (100 Data Terakhir)" onclick="refresh()">
-                                <i class="fa-fw fas fa-sync nav-icon me-1"></i> 100 Data Terakhir</button>
+                                <i class="fa-fw fas fa-sync nav-icon me-1"></i> 100 Data Aktif Terakhir</button>
                         {{-- <button type="button" class="btn btn-light-info" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Tampilkan 100 Data Terakhir" onclick="showHalf()">
                                 <i class="fa-fw fas fa-history nav-icon"></i></button> --}}
@@ -124,6 +158,11 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive" id="table">
+                        <div class="alert alert-secondary">
+                            <small>
+                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Data pengaduan yang ditampilkan di bawah adalah <mark><b>100 Data</b> Pengaduan yang masih Aktif</mark> <br>
+                            </small>
+                        </div>
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
@@ -157,7 +196,7 @@
                     <div class="table-responsive" id="tableAll" hidden>
                         <div class="alert alert-secondary">
                             <small>
-                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Anda dapat melakukan Export Data menjadi <mark>EXCEL/PDF</mark> melalui tombol pada tabel di bawah ini <br>
+                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Export Data <mark>EXCEL/PDF</mark> dapat melalui tombol pada tabel di bawah ini <br>
                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Untuk menampilkan semua kolom, silakan <mark>CENTANG</mark> pilihan kolom pada tombol "<b>Column Visibility</b>" di bawah ini <br>
                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Silakan melakukan pencarian / filtering data melalui kolom isian <mark>Search : .....</mark>
                             </small>
@@ -178,6 +217,7 @@
                                     <th>KETERANGAN DIKERJAKAN</th>
                                     <th>TGL SELESAI</th>
                                     <th>KETERANGAN SELESAI</th>
+                                    <th>KETERANGAN PENOLAKAN</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody-all">
@@ -202,6 +242,7 @@
                                     <th>KETERANGAN DIKERJAKAN</th>
                                     <th>TGL SELESAI</th>
                                     <th>KETERANGAN SELESAI</th>
+                                    <th>KETERANGAN PENOLAKAN</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -232,8 +273,10 @@
     </div>
 
     <script>
+        let chart;
         $(document).ready(function() {
             refresh();
+            diagram(new Date().getFullYear());
         });
 
         // FUNCTION
@@ -323,10 +366,10 @@
                         // columnDefs: [
                         //     { visible: false, targets: [7] },
                         // ],
-                        displayLength: 10,
+                        displayLength: 20,
                         lengthChange: true,
-                        lengthMenu: [10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        lengthMenu: [20, 50, 75, 100, 300, 500],
+                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 }
             })
@@ -404,7 +447,8 @@
                         content += `<td>`+new Date(item.tgl_dikerjakan).toLocaleString("sv-SE")+`</td>`;
                         content += `<td>${item.ket_dikerjakan?item.ket_dikerjakan:'-'}</td>`;
                         content += `<td>`+new Date(item.tgl_selesai).toLocaleString("sv-SE")+`</td>`;
-                        content += `<td>${item.ket_selesai?item.ket_selesai:'-'}</td></tr>`;
+                        content += `<td>${item.ket_selesai?item.ket_selesai:'-'}</td>`;
+                        content += `<td>${item.ket_penolakan?item.ket_penolakan:'-'}</td></tr>`;
                         $('#tampil-tbody-all').append(content);
                     })
 
@@ -430,6 +474,7 @@
                             { visible: false, targets: [10] },
                             { visible: false, targets: [11] },
                             { visible: false, targets: [12] },
+                            { visible: false, targets: [13] },
                         ],
                         displayLength: 100,
                         lengthChange: true,
@@ -450,6 +495,76 @@
                     $('#titleImgPush').text(res.title_pengaduan);
                     $('#imgPush').append(`<center><img src="/storage/`+res.filename_pengaduan.substring(7,1000)+`" class="img-fluid" alt=""></center>`);
                     $('#modalLampiran').modal('show');
+                }
+            })
+        }
+
+        function diagram(tahun) {
+            $('#diagram').empty();
+            $('#diagram').append(`<div class="d-flex justify-content-center align-items-center"><span class="spinner-border spinner-border-sm text-primary me-2" role="status"></span>Loading...</div>`);
+            $.ajax({
+                url: "/api/perbaikan/ipsrs/admin/diagram/"+tahun,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    // console.log(res);
+                    $('#diagram').empty();
+                    $('#show_tahun').text('Tahun '+tahun);
+                    new ApexCharts(document.querySelector("#diagram"), {
+                        chart: {
+                            type: "area",
+                            height: 300,
+                            toolbar: {
+                                show: !1
+                            }
+                        },
+                        colors: ["#0d6efd","#F80F30"],
+                        fill: {
+                            type: "gradient",
+                            gradient: {
+                                shadeIntensity: 1,
+                                type: "vertical",
+                                inverseColors: !1,
+                                opacityFrom: .5,
+                                opacityTo: 0
+                            }
+                        },
+                        dataLabels: {
+                            enabled: !1
+                        },
+                        stroke: {
+                            width: 1
+                        },
+                        plotOptions: {
+                            bar: {
+                                columnWidth: "45%",
+                                borderRadius: 4
+                            }
+                        },
+                        grid: {
+                            strokeDashArray: 4
+                        },
+                        series: [
+                            {
+                                name: 'Pengaduan Selesai',
+                                data: res.selesai
+                            },
+                            {
+                                name: 'Pengaduan Ditolak',
+                                // data: [30, 60, 40, 70, 50, 90, 50, 55, 45, 60, 50, 65]
+                                data: res.ditolak
+                            }
+                        ],
+                        xaxis: {
+                            categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                            axisBorder: {
+                                show: !1
+                            },
+                            axisTicks: {
+                                show: !1
+                            }
+                        }
+                    }).render();
                 }
             })
         }
