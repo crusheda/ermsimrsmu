@@ -113,7 +113,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama <mark>Singkat</mark> Shift <a class="text-danger">*</a></label>
-                                <input type="text" id="singkat_add" class="form-control inputTgl" onkeyup="checkShift($(this))" pattern="[A-Za-z]{1,2}" placeholder="e.g. P / PS / P6 / etc">
+                                <input type="text" id="singkat_add" class="form-control inputTgl" onkeyup="checkShift($(this))" placeholder="e.g. P / PS / P6 / etc">
                             </div>
                         </div>
                         <div class="col-md-9 mb-3">
@@ -187,7 +187,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama <mark>Singkat</mark> Shift <a class="text-danger">*</a></label>
-                                <input type="text" id="singkat_edit" class="form-control inputTgl" onkeyup="checkShift($(this))" pattern="[A-Za-z]{1,2}" placeholder="e.g. P / PS / P6 / etc">
+                                <input type="text" id="singkat_edit" class="form-control inputTgl" onkeyup="checkShift($(this))" placeholder="e.g. P / PS / P6 / etc">
                             </div>
                         </div>
                         <div class="col-md-9 mb-3">
@@ -256,7 +256,12 @@
 
     <script>
         $(document).ready(function() {
-            $('.inputTgl').bind('keypress', onlyInput);
+            // $('.inputTgl').bind('keypress', onlyInput);
+            $('.inputTgl').keypress(function() {
+                let input = $(this).val();
+                let cleanedInput = cleanInput(input);
+                $(this).val(cleanedInput);
+            });
             refresh();
             $('.pilihJam').timepicker({ showInputs: false, showMeridian: false, timeFormat: 'HH:mm', use24hours: true });
         })
@@ -270,10 +275,24 @@
             }
         }
 
-        function onlyInput(event) {
-            var value = String.fromCharCode(event.which);
-            var pattern = new RegExp(/[a-zåäö ]/i);
-            return pattern.test(value);
+        // function onlyInput(event) {
+        //     var value = String.fromCharCode(event.which);
+        //     var pattern = new RegExp(/[a-zåäö ]/i);
+        //     return pattern.test(value);
+        // }
+
+        function cleanInput(input) {
+            // let tests = [/[a-z]/i, /[a-z]/i, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+            let tests = [/[a-z]/i, /\d/];
+            // let tests2 = [/[a-z]/i, /[a-z]/i];
+            for (let i = 0; i < tests.length; i++) {
+                console.log(tests[i]);
+                if (input[i] == undefined || !tests[i].test(input[i])) {
+                    return input.substring(0, i);
+                }
+            }
+
+            return input.substring(0, tests.length);
         }
 
         // FUNCTION AREA

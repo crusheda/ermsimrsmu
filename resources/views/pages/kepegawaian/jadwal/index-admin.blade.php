@@ -28,7 +28,20 @@
             </div>
         </div>
     </div><!-- [ breadcrumb ] end -->
-
+    @php
+        $jabatan = \App\Models\struktur_organisasi::where('id_user',Auth::user()->id)->orderBy('updated_at','desc')->first();
+        if ($jabatan) {
+            $validasi  = \App\Models\kepegawaian\jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
+                    ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->select('kepegawaian_jadwal.id','users.nama as nama_pegawai')
+                    ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
+                    ->where('kepegawaian_jadwal.progress',1)
+                    // ->whereIn('kepegawaian_jadwal.progress',[0,1,2,3])
+                    ->count();
+        } else {
+            $validasi = 0;
+        }
+    @endphp
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
         <div class="col-xl-12">
@@ -36,7 +49,14 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel Riwayat</h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
+                        <a href="javascript:void(0);" class="btn btn-light-secondary dropdown-toggle position-relative" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Menu
+                            @if ($validasi != 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-primary">
+                                    {{ $validasi }}<span class="visually-hidden">unread messages</span>
+                                </span>
+                            @endif
+                        </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
@@ -46,7 +66,7 @@
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
                                 <a class="dropdown-item" href="javascript:void(0);"><s>Referensi Hari Libur Nasional</s></a>
                                 <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan</a>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan @if ($validasi != 0)<span class="badge bg-primary ms-2">{{ $validasi }}</span>@endif</a>
                             </li>
                         </ul>
                         {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
@@ -510,7 +530,7 @@
                         // PROCESS
                         content = ``;
                         content += `<h4 class="text-center mb-2">Jadwal Dinas Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h4>`;
-                        content += `<div class="table-responsive p-10 pb-0">
+                        content += `<div class="row"><div class="col-md-12"><div class="table-responsive p-10 pb-0">
                                     <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
                                         <thead>
                                         <tr>
@@ -572,10 +592,24 @@
                                     }
                                 content += `</tr>`;
                             }
-                        content += `</tbody></table></div>`;
+                        content += `</tbody></table></div></div>`;
 
                         // KETERANGAN
-                        content += `<div class="p-10">
+                        content += `<div class="col-md-6"><div class="p-10">
+                                        <h5>Shift Jaga :</h5>
+                                        <div class="list-group">
+                                            <label class="list-group-item border-0 p-2">
+                                                <ul>`;
+                                    res.shift.forEach(item => {
+                                        content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
+                                    });
+                                        content += `<li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
+                                                    <li><b class="me-1">C</b>(<u>CUTI</u>)</li>
+                                                </ul>
+                                            </label>
+                                        </div>
+                                    </div></div>`;
+                        content += `<div class="col-md-6"><div class="p-10">
                                         <h5>Keterangan :</h5>
                                         <div class="list-group">
                                             <label class="list-group-item border-0 p-2">
@@ -583,7 +617,7 @@
                                                 Hari Minggu
                                             </label>
                                         </div>
-                                    </div>`;
+                                    </div></div></div>`;
                         $('#tampil-jadwal').empty().append(content);
                         for (let i = 0; i < res.totalDay; i++) {
                             if (res.dataArray[i] == 'Minggu') {

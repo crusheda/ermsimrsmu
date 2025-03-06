@@ -200,7 +200,7 @@ class JadwalController extends Controller
                 $setDate = Carbon::parse($tahun.'-'.$bulan.'-27')->isoFormat('YYYY-MM-DD');
 
                 if ($thisDate <= $setDate) { // JIKA PENGAJUAN MELEBIHI TGL 27 PADA BULAN/TAHUN YANG DIPILIH
-                    if ($getData != null) { // JIKA TIDAK ADA PENGAJUAN YANG MASIH DALAM PROSES (PENDING/VERIFIKASI/VALIDASI)
+                    if ($getData != null) { // JIKA ADA PENGAJUAN YANG MASIH DALAM PROSES (PENDING/VERIFIKASI/VALIDASI)
                         return Response::json(array(
                             'message' => 'Masih terdapat proses pengajuan Jadwal Dinas yang belum diselesaikan, silakan konfirmasi Atasan Langsung/Bagian Kepegawaian atau hapus pengajuan sebelumnya <b>BILA PERLU</b>! ',
                             'code' => 500,
@@ -291,6 +291,12 @@ class JadwalController extends Controller
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
                 ->where('kepegawaian_jadwal.id',$id)
                 ->first();
+        $shift  = ref_jadwal_shift::join('kepegawaian_jadwal','kepegawaian_jadwal.pegawai_id','=','referensi_jadwal_shift.pegawai_id')
+                ->select('referensi_jadwal_shift.*')
+                ->where('kepegawaian_jadwal.id',$id)
+                ->get();
+                // print_r($shift);
+                // die();
         $totalDay = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
         for($i = 1; $i <= $totalDay; $i++)
         {
@@ -306,6 +312,7 @@ class JadwalController extends Controller
         $data = [
             'bulan' => $bulan,
             'detail' => $detail,
+            'shift' => $shift,
             'jadwal' => $jadwal,
             'totalDay' => $totalDay,
             'dataArray' => $dataArray,
@@ -317,12 +324,32 @@ class JadwalController extends Controller
     // TABEL RIWAYAT JADWAL
     function table($id)
     {
+        $getStaf = ref_jadwal_users::get();
+        // $staf[] = '';
+        foreach ($getStaf as $key => $value) {
+            // print_r(json_decode($value->staf));
+            // if ($value->pegawai_id == $id) {
+            // }
+            // $staf = $value->pegawai_id;
+            if (in_array($id,json_decode($value->staf))) {
+                $staf[] = $value->pegawai_id;
+            }
+        }
+        if ($staf) {
+            $staf = $staf;
+        } else {
+            $staf = '';
+        }
+
+        // print_r($staf);
+        // die();
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
-                ->where('kepegawaian_jadwal.pegawai_id',$id)
+                ->where('kepegawaian_jadwal.pegawai_id',$staf)
                 ->get();
-
+        // print_r($show);
+        // die();
         $data = [
             'users' => $users,
             'show' => $show,
@@ -531,7 +558,7 @@ class JadwalController extends Controller
 
         if (!empty($getDuplicate)) {
             return Response::json(array(
-                'message' => 'Terdapat datarecord yang sama pada pengisian Nama Singkat Shift ('.$request->singkat.'), mohon tambahkan data shift lainnya!',
+                'message' => 'Terdapat datarecord yang sama pada pengisian Nama Singkat Shift ('.$request->singkat.'), mohon ubah shift dengan penamaan lainnya!',
                 'code' => 500,
             ));
         } else {

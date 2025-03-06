@@ -35,17 +35,18 @@
         <div class="col-xl-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Tabel Jadwal Dinas</h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
+                        <a href="{{ route('kepegawaian.jadwaldinas.index') }}" class="btn btn-light-dark align-items-center" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kembali ke Halaman Sebelumnya"><i class="ti ti-arrow-back-up me-2"></i> Kembali</a>
+                        <button class="btn btn-light-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20 me-2"></i> Refresh Tabel</button>
+                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                             </li>
-                        </ul>
-                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
+                        </ul> --}}
                     </div>
+                    <h5 class="mb-0">Tabel Jadwal Dinas</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -359,7 +360,7 @@
                 success: function(res) {
                     if (res.detail.length == 0) {
                         notifier.show(
-                            "Pesan Galat!", "Data isian Jadwal Dinas tidak ditemukan, silakan melengkapi jadwal terlebih dahulu (Klik Ubah)",
+                            "Pesan Galat!", "Data isian Jadwal Dinas tidak ditemukan, silakan melakukan konfirmasi ulang kepada bagian terkait",
                             "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
                         );
                     } else {

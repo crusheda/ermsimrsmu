@@ -108,7 +108,7 @@
                                                 @else
                                                     <td class="p-2">
                                                 @endif
-                                                        <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" pattern="[A-Za-z]{1,2}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                        <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
                                                     </td>
                                             @endfor
                                         </tr>
@@ -214,8 +214,34 @@
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
-            $('.inputTgl').bind('keypress', onlyInput);
+            // $('.inputTgl').bind('keypress', onlyInput);
+            $('.inputTgl').keypress(function(e) {
+                console.log(e.which);
+                if(e.which === 47 || e.which === 92 || e.which === 96) {
+                    // alert(e.which);
+                    // console.log($(this).clear());
+                    $(this).val('');
+                } else {
+                    let input = $(this).val();
+                    let cleanedInput = cleanInput(input);
+                    $(this).val(cleanedInput);
+                }
+            });
         });
+
+        function cleanInput(input) {
+            // let tests = [/[a-z]/i, /[a-z]/i, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/];
+            let tests = [/[a-z]/i, /\d/];
+            // let tests2 = [/[a-z]/i, /[a-z]/i];
+            for (let i = 0; i < tests.length; i++) {
+                console.log(tests[i]);
+                if (input[i] == undefined || !tests[i].test(input[i])) {
+                    return input.substring(0, i);
+                }
+            }
+
+            return input.substring(0, tests.length);
+        }
 
         function checkShift(t) {
             if (t.val().length <= 2 ) {
@@ -241,11 +267,11 @@
             }
         }
 
-        function onlyInput(event) {
-            var value = String.fromCharCode(event.which);
-            var pattern = new RegExp(/[a-zåäö ]/i);
-            return pattern.test(value);
-        }
+        // function onlyInput(event) {
+        //     var value = String.fromCharCode(event.which);
+        //     var pattern = new RegExp(/[a-zåäö ]/i);
+        //     return pattern.test(value);
+        // }
 
         // function tambah() {
         //     $('#modalTambah').modal('show');
@@ -257,6 +283,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
+                    var adminID = "{{ Auth::user()->getPermission('admin-kepegawaian') }}";
                     var valid = 1;
                     var par = JSON.parse(res.jadwal.staf);
                     var pur = par.toString().split(',');
@@ -264,8 +291,11 @@
                         var cuti = 0;
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
-                            if (res.shiftArr.includes(num.val().toUpperCase()) == 0) {
-                                if (num.val().toUpperCase() == 'L' || num.val().toUpperCase() == 'C') {
+                            up = num.val();
+                            upper = up.toString().toUpperCase();
+                            console.log(up+' - '+up);
+                            if (res.shiftArr.includes(upper) == 0) {
+                                if (upper == 'L' || upper == 'C') {
                                     num.removeClass('is-invalid').addClass('is-valid');
                                 } else {
                                     valid = 0;
@@ -274,7 +304,7 @@
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
-                            if (num.val().toUpperCase() == 'C') {
+                            if (upper == 'C') {
                                 cuti++;
                             }
                         }
