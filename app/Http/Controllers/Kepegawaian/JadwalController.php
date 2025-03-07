@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\referensi;
 use App\Models\datalogs;
 use App\Models\users;
+use App\Models\users_foto;
 use App\Models\kepegawaian\jadwal;
 use App\Models\kepegawaian\jadwal_detail;
 use App\Models\kepegawaian\ref_jadwal_shift;
 use App\Models\kepegawaian\ref_jadwal_users;
+use App\Models\kepegawaian\ref_jadwal_jabatan;
 use App\Models\struktur_organisasi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -626,14 +628,39 @@ class JadwalController extends Controller
     // REFERENSI STAFF -----------------------------------------------------------------------------------------------------------
     function tableStaf($id)
     {
-        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        $show  = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
-                ->select('referensi_jadwal_users.*','users.nama as nama_user')
-                ->where('referensi_jadwal_users.pegawai_id',$id)
-                ->get();
+        // $users  = users::select('id','nama')
+        //                 ->leftJoin('users_foto','users_foto.user_id','=','users.id')
+        //                 ->select('users.*','users_foto.title','users_foto.filename')
+        //                 ->get();
+        $foto_user = users_foto::get();
+        $jabatan = ref_jadwal_jabatan::where('pegawai_id',$id)->get();
+        $check = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
+                        ->select('referensi_jadwal_users.*','users.nama as nama_user')
+                        ->where('referensi_jadwal_users.pegawai_id',$id)
+                        ->first();
+        $show = '';
+        if ($check) {
+            $show = $check;
+        } else {
+            $getData = ref_jadwal_users::get();
+            foreach ($getData as $key => $value) {
+                foreach (json_decode($value->staf) as $ul => $item) {
+                    if ($item == $id) {
+                        $show = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
+                                        ->select('referensi_jadwal_users.*','users.nama as nama_user')
+                                        ->where('referensi_jadwal_users.pegawai_id',$value->pegawai_id)
+                                        ->first();
+                    }
+                }
+            }
+        }
+        // print_r($show);
+        // die();
 
         $data = [
-            'users' => $users,
+            // 'users' => $users,
+            'foto_user' => $foto_user,
+            'jabatan' => $jabatan,
             'show' => $show,
         ];
 
@@ -642,20 +669,41 @@ class JadwalController extends Controller
 
     function tambahStaf(Request $request)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
-        $getDuplicate = ref_jadwal_users::where('pegawai_id', $request->pegawai)->count();
-        // printf($getDuplicate);
-        // die();
-        if ($getDuplicate > 0) {
-            ref_jadwal_users::where('pegawai_id', $request->pegawai)->delete();
+        // print_r(json_decode($request->staf));
+        $getData = ref_jadwal_users::get();
+        $user = '';
+        $input = '';
+        $count = 0;
+        foreach ($getData as $key => $value) {
+            foreach (json_decode($request->staf) as $loop => $item) {
+                if (in_array($item,json_decode($value->staf))) {
+                    $user = users::select('nama')->where('id',$item)->first();
+                    $input = users::select('nama')->where('id',$value->pegawai_id)->first();
+                    $count++;
+                }
+            }
+        }
+        if ($count > 0) {
+            // ref_jadwal_users::where('pegawai_id', $request->pegawai)->delete();
+            $status = 400;
+            $message = "Karyawan bernama ".$user->nama." sudah pernah dimasukkan oleh ".$input->nama.". Silakan menambahkan Staf lain atau konfirmasi kepada yang bersangkutan.";
+        } else {
+            $status = 200;
+            $message = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+            $data = new ref_jadwal_users;
+            $data->pegawai_id = $request->pegawai;
+            $data->staf = $request->staf;
+            $data->unit = $request->unit;
+            $data->save();
         }
 
-        $data = new ref_jadwal_users;
-        $data->pegawai_id = $request->pegawai;
-        $data->staf = $request->staf;
-        $data->save();
+        $results = array(
+            'status' => $status,
+            'message' => $message,
+        );
 
-        return response()->json($tgl);
+        return response()->json($results);
     }
 
     function showUbahStaf($id)
@@ -673,14 +721,40 @@ class JadwalController extends Controller
 
     function ubahStaf(Request $request)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $getData = ref_jadwal_users::where('id','!=',$request->id)->get();
+        $user = '';
+        $input = '';
+        $count = 0;
+        foreach ($getData as $key => $value) {
+            foreach (json_decode($request->staf) as $loop => $item) {
+                if (in_array($item,json_decode($value->staf))) {
+                    $user = users::select('nama')->where('id',$item)->first();
+                    $input = users::select('nama')->where('id',$value->pegawai_id)->first();
+                    $count++;
+                }
+            }
+        }
+        if ($count > 0) {
+            // ref_jadwal_users::where('pegawai_id', $request->pegawai)->delete();
+            $status = 400;
+            $message = "Karyawan bernama ".$user->nama." sudah pernah dimasukkan oleh ".$input->nama.". Silakan menambahkan Staf lain atau konfirmasi kepada yang bersangkutan.";
+        } else {
+            $status = 200;
+            $message = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        $data = ref_jadwal_users::find($request->id);
-        $data->pegawai_id = $request->pegawai;
-        $data->staf = $request->staf;
-        $data->save();
+            $data = ref_jadwal_users::find($request->id);
+            $data->pegawai_id = $request->pegawai;
+            $data->staf = $request->staf;
+            $data->unit = $request->unit;
+            $data->save();
+        }
 
-        return response()->json($tgl);
+        $results = array(
+            'status' => $status,
+            'message' => $message,
+        );
+
+        return response()->json($results);
     }
 
     function hapusStaf($id)
