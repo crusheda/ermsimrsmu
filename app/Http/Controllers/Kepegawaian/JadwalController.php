@@ -325,7 +325,7 @@ class JadwalController extends Controller
     function table($id)
     {
         $getStaf = ref_jadwal_users::get();
-        // $staf[] = '';
+        $staf = null;
         foreach ($getStaf as $key => $value) {
             // print_r(json_decode($value->staf));
             // if ($value->pegawai_id == $id) {

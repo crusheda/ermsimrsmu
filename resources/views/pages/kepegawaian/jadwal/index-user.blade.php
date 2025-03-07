@@ -386,14 +386,15 @@
                         order: [
                             [5, "desc"]
                         ],
-                        // bAutoWidth: false,
-                        // aoColumns : [
-                        //     { sWidth: '5%' },
-                        //     { sWidth: '10%' },
-                        //     { sWidth: '45%' },
-                        //     { sWidth: '28%' },
-                        //     { sWidth: '12%' },
-                        // ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '10%' },
+                            { sWidth: '35%' },
+                            { sWidth: '20%' },
+                            { sWidth: '20%' },
+                            { sWidth: '10%' },
+                        ],
                         columnDefs: [
                             // { visible: false, targets: [7] },
                         ],
