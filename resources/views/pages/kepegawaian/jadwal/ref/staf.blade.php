@@ -40,7 +40,7 @@
                     <div class="flex-shrink-0" id="btn-link"></div>
                 </div>
             </div>
-            <div class="card-body pb-0">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
                         <thead>
@@ -320,7 +320,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-shrink-0"><img
                                                             src="${foto_user}" alt="user image"
-                                                            class="img-radius wid-40 align-top m-r-15"></div>
+                                                            class="img-radius wid-40 hei-40 align-top m-r-15"></div>
                                                     <div class="flex-grow-1 ms-3">
                                                         <h6 class="mb-0">${nama_user}</h6>
                                                     </div>
