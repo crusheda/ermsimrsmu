@@ -279,7 +279,7 @@
                                 }
                             })
                             var nama_user = '';
-                            var foto_user = '';
+                            var foto_user = '/images/pku/user.png';
                             res.users.forEach(item => {
                                 if (val == item.id) {
                                     if (item.nama) {
