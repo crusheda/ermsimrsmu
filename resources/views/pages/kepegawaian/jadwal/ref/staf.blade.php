@@ -265,7 +265,6 @@
                     var urutan = '-';
                     var jabatan = '-';
                     var color = '-';
-                    var foto_user = '';
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     // console.log(JSON.parse(res.show.staf));
@@ -279,9 +278,24 @@
                                     color = jab.color;
                                 }
                             })
-                            res.foto_user.forEach(item => {
-                                if (val == item.user_id) {
-                                    foto_user = '/storage/'+item.filename.substr(7,10000);
+                            var nama_user = '';
+                            var foto_user = '';
+                            res.users.forEach(item => {
+                                if (val == item.id) {
+                                    if (item.nama) {
+                                        nama_user = item.nama;
+                                    } else {
+                                        nama_user = item.name+' (Belum Melengkapi Profil)';
+                                    }
+                                    res.foto_user.forEach(lis => {
+                                        if (lis.user_id == item.id) {
+                                            foto_user = '/storage/'+item.filename.substr(7,10000);
+                                            // if (item.filename) {
+                                            // } else {
+                                            //     foto_user = '';
+                                            // }
+                                        }
+                                    })
                                 }
                             })
                             content = ``;
@@ -308,7 +322,7 @@
                                                             src="${foto_user}" alt="user image"
                                                             class="img-radius wid-40 align-top m-r-15"></div>
                                                     <div class="flex-grow-1 ms-3">
-                                                        <h6 class="mb-0">Airi Satou</h6>
+                                                        <h6 class="mb-0">${nama_user}</h6>
                                                     </div>
                                                 </div>
                                             </td>

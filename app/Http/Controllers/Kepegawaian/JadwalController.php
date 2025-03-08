@@ -628,10 +628,10 @@ class JadwalController extends Controller
     // REFERENSI STAFF -----------------------------------------------------------------------------------------------------------
     function tableStaf($id)
     {
-        // $users  = users::select('id','nama')
-        //                 ->leftJoin('users_foto','users_foto.user_id','=','users.id')
-        //                 ->select('users.*','users_foto.title','users_foto.filename')
-        //                 ->get();
+        $users  = users::select('id','nama')
+                        ->leftJoin('users_foto','users_foto.user_id','=','users.id')
+                        ->select('users.*','users_foto.title','users_foto.filename')
+                        ->get();
         $foto_user = users_foto::get();
         $jabatan = ref_jadwal_jabatan::where('pegawai_id',$id)->get();
         $check = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
@@ -658,7 +658,7 @@ class JadwalController extends Controller
         // die();
 
         $data = [
-            // 'users' => $users,
+            'users' => $users,
             'foto_user' => $foto_user,
             'jabatan' => $jabatan,
             'show' => $show,
