@@ -70,6 +70,7 @@ class JadwalController extends Controller
         $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
         $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
         $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
+        $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->get();
         $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
         $data = [
@@ -77,6 +78,7 @@ class JadwalController extends Controller
             'jadwal' => $jadwal,
             'ref_shift' => $ref_shift,
             'ref_users' => $ref_users,
+            'ref_jabatan' => $ref_jabatan,
             'users' => $users,
             'jml_tgl' => $jml_tgl,
         ];
@@ -99,19 +101,20 @@ class JadwalController extends Controller
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
             $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
                         ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
-                        ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai')
+                        ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai','users.nick','users.name')
                         ->get();
             $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
             $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
+            $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->get();
             $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
-            // print_r($detail);
-            // die();
+
             $data = [
                 // 'show' => $show,
                 'jadwal' => $jadwal,
                 'detail' => $detail,
                 'ref_shift' => $ref_shift,
                 'ref_users' => $ref_users,
+                'ref_jabatan' => $ref_jabatan,
                 'users' => $users,
                 'jml_tgl' => $jml_tgl,
             ];
@@ -237,7 +240,7 @@ class JadwalController extends Controller
 
     function cekShift($id,$user)
     {
-        if ($id == 'L' || $id == 'C') {
+        if ($id == 'L' || $id == 'C' || $id == 'CM' || $id == 'CU' || $id == 'CH' || $id == 'CD') {
             return Response::json(array(
                 'message' => $id,
                 'code' => 200,
@@ -266,6 +269,10 @@ class JadwalController extends Controller
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
                 ->where('kepegawaian_jadwal.id',$id)
                 ->first();
+        $staf = ref_jadwal_jabatan::join('users','users.id','=','referensi_jadwal_users_jabatan.id_staf')
+                ->select('referensi_jadwal_users_jabatan.*','users.nama as nama_pegawai')
+                ->where('referensi_jadwal_users_jabatan.pegawai_id',$user)
+                ->get();
         $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $totalDay = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
@@ -278,6 +285,7 @@ class JadwalController extends Controller
             'users' => $users,
             'shift' => $shift,
             'shiftArr' => $shiftArr,
+            'staf' => $staf,
             'jadwal' => $jadwal,
             'totalDay' => $totalDay,
         ];
@@ -288,7 +296,10 @@ class JadwalController extends Controller
     // TAMPIL JADWAL
     function jadwal($id)
     {
-        $detail = jadwal_detail::where('id_jadwal',$id)->get();
+        $detail = jadwal_detail::leftJoin('referensi_jadwal_users_jabatan','referensi_jadwal_users_jabatan.id_staf','=','kepegawaian_jadwal_detail.pegawai_id')
+                ->select('kepegawaian_jadwal_detail.*','referensi_jadwal_users_jabatan.urutan','referensi_jadwal_users_jabatan.jabatan','referensi_jadwal_users_jabatan.color')
+                ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
+                ->get();
         $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
                 ->where('kepegawaian_jadwal.id',$id)
@@ -766,5 +777,61 @@ class JadwalController extends Controller
         $data->delete();
 
         return response()->json($tgl, 200);
+    }
+
+    function showAturStaf($id)
+    {
+        // $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $show  = ref_jadwal_jabatan::where('id_staf',$id)->first();
+        return response()->json($show, 200);
+    }
+
+    function aturStaf(Request $request)
+    {
+        $getData = ref_jadwal_jabatan::where('id_staf',$request->staf)->get();
+
+        // print_r(count($getData));
+        // die();
+        if (count($getData)>0) { // IF getData EXIST !!
+            foreach ($getData as $key => $value) {
+                # code...
+            }
+            $del = ref_jadwal_jabatan::find($value->id);
+            // $getData->deleted_at=Carbon::now();
+            // $getData->save();
+            $del->delete();
+        }
+
+        $getUrutan = ref_jadwal_jabatan::where('pegawai_id',$request->pegawai)->get();
+
+        foreach ($getUrutan as $key => $value) {
+            if ($value->urutan == $request->urutan) {
+                $status = 400;
+                $message = 'Nomor Urutan sudah terpakai pada Unit Anda, silakan ganti urutan lainnya.';
+                $results = array(
+                    'status' => $status,
+                    'message' => $message,
+                );
+                return response()->json($results);
+            }
+        }
+
+        $data = new ref_jadwal_jabatan;
+        $data->urutan = $request->urutan;
+        $data->pegawai_id = $request->pegawai;
+        $data->id_staf = $request->staf;
+        $data->jabatan = $request->jabatan;
+        $data->color = $request->color;
+        $data->save();
+
+        $status = 200;
+        $message = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $results = array(
+            'status' => $status,
+            'message' => $message,
+        );
+
+        return response()->json($results);
     }
 }

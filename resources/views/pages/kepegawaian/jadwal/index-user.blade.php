@@ -500,7 +500,11 @@
                                         content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
                                     });
                                         content += `<li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
-                                                    <li><b class="me-1">C</b>(<u>CUTI</u>)</li>
+                                                    <li><b class="me-1">C</b>(<u>CUTI TAHUNAN</u>)</li>
+                                                    <li><b class="me-1">CM</b>(<u>CUTI MELAHIRKAN</u>)</li>
+                                                    <li><b class="me-1">CU</b>(<u>CUTI UMROH</u>)</li>
+                                                    <li><b class="me-1">CH</b>(<u>CUTI HAJI</u>)</li>
+                                                    <li><b class="me-1">CD</b>(<u>CUTI DILUAR TANGGUNGAN</u>)</li>
                                                 </ul>
                                             </label>
                                         </div>

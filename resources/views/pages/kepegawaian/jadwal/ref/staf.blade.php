@@ -41,6 +41,16 @@
                 </div>
             </div>
             <div class="card-body">
+                <div class="alert alert-light mb-3">
+                    <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
+                    <small>
+                        Setelah berhasil menambahkan semua Staf pada Unit Anda, <mark>DIWAJIBKAN</mark> segera melengkapi Data (No.Urutan pada Jadwal) pada masing-masing staf (Klik Atur Karyawan). <br>Tombol Atur Karyawan ada pada masing-masing baris Staf Anda, Kolom <mark>AKSI</mark>. <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Pastikan Staf ditambahkan oleh Admin Jadwal (<mark>Setiap Unit/Bagian hanya 1 orang</mark>), berkaitan dengan kelengkapan data saat pembuatan Jadwal Dinas <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Ubah</b> maupun <b>Hapus</b> Data Referensi Staf hanya dapat dilakukan oleh Admin Jadwal (User Admin Ref.Staf) <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Penambahan Staf hanya dilakukan sekali saja dan dapat digunakan untuk seterusnya, terkecuali apabila terdapat pergantian Data Staf <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Hapus Data Staf <mark>Dapat Menghapus</mark> riwayat jadwal yang berhubungan dengan karyawan terhapus, lakukan dengan hati-hati atau gunakan Ubah Data apabila diperlukan perubahan data karyawan
+                    </small>
+                </div>
                 <div class="table-responsive">
                     <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
                         <thead>
@@ -208,8 +218,8 @@
                     <div class="row">
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Urutan Karyawan</label>
-                                <input type="number" class="form-control" id="urutan" placeholder="e.g. 1 / 5 / 9 dst">
+                                <label class="form-label">Urutan Karyawan <a class="text-danger">*</a></label>
+                                <input type="number" class="form-control" id="urutan" maxlength="2" placeholder="e.g. 1 / 5 / 9 dst">
                             </div>
                         </div>
                         <div class="col-md-7 mb-3">
@@ -221,13 +231,18 @@
                         <div class="col-md-2 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Warna</label>
-                                <input type="color" class="form-control form-control-color w-100" id="color" value="#563d7c" title="Pilih warna sesuai keinginan Anda">
+                                <input type="color" class="form-control form-control-color w-100" id="color" value="#3ec9d6" title="Pilih warna sesuai keinginan Anda">
                             </div>
+                        </div>
+                        <hr>
+                        <div class="col-md-12 d-grid gap-2">
+                            <center><label class="form-label">Tes/Contoh Warna (Pilih <mark>Warna</mark> TANPA MENUTUPI <mark>Tulisan</mark>)</label></center>
+                            <center><button class="btn btn-block text-dark text-center shadow" id="tes_color">Dr. Ir. H. Sunaryo, S.T., M.T., M.B.A., Ph.D., IPM, ASEAN Eng.</button></center>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesAtur()" disabled><i class="fas fa-user-check nav-icon me-1"></i> Terapkan</button>
+                    <button class="btn btn-primary" id="btn-atur" onclick="prosesAtur()"><i class="fas fa-user-check nav-icon me-1"></i> Terapkan</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon me-1"></i> Tutup</button>
                 </div>
             </div>
@@ -261,15 +276,15 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    // INITIATE
-                    var urutan = '-';
-                    var jabatan = '-';
-                    var color = '-';
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     // console.log(JSON.parse(res.show.staf));
                     if (res.show) {
                         JSON.parse(res.show.staf).forEach(val => {
+                            // INITIATE
+                            var urutan = '-';
+                            var jabatan = '-';
+                            var color = '-';
                             console.log(val);
                             res.jabatan.forEach(jab => {
                                 if (val == jab.id_staf) {
@@ -306,9 +321,9 @@
                                                         <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow arrow-none text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">`;
                                                             if (res.show.pegawai_id == "{{ Auth::user()->id }}") {
-                                                                content += `<a href="javascript:;" onclick="atur(${val})" class="dropdown-item text-primary"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;
+                                                                content += `<a href="javascript:void(0);" onclick="atur(${val})" class="dropdown-item text-primary"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;
                                                             } else {
-                                                                content += `<a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;
+                                                                content += `<a href="javascript:void(0);" class="dropdown-item text-secondary"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;
                                                             }
                             content += `                </div>
                                                     </div>
@@ -447,21 +462,87 @@
 
         function atur(id) {
             $("#show_id_atur").text(id);
-            $("#id_atur").val("");
+            $("#id_atur").val(id);
             $("#urutan").val("");
             $("#jabatan").val("");
-            $("#color").val("");
-            $('#modalAtur').modal('show');
+            $("#color").val("#3ec9d6");
+            // $('#modalAtur').modal('show');
             $.ajax(
             {
-                url: "/api/kepegawaian/jadwaldinas/staf/"+id,
+                url: "/api/kepegawaian/jadwaldinas/staf/atur/"+id,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
+                    $("#urutan").val(res.urutan);
+                    $("#jabatan").val(res.jabatan);
+                    $("#color").val(res.color?res.color:'#ffffff');
+                    $('#tes_color').css('background-color', res.color?res.color:'#ffffff');
                     // $("#id_atur").val(res.show.id);
-                    // $('#modalAtur').modal('show');
+                    $('#modalAtur').modal('show');
                 }
             });
+            $('#color').on('change', function() {
+                $('#tes_color').css('background-color', this.value);
+                // console.log(this.value);
+            });
+        }
+
+        function prosesAtur() {
+            $("#btn-atur").prop('disabled', true);
+            $("#btn-atur").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+
+            if ($("#urutan").val() == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian wajib',
+                    position: 'topRight'
+                });
+            } else {
+                var fd = new FormData();
+                fd.append('urutan',$("#urutan").val());
+                fd.append('jabatan',$("#jabatan").val());
+                fd.append('color',$("#color").val());
+                fd.append('staf',$("#id_atur").val());
+                fd.append('pegawai',"{{ Auth::user()->id }}");
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/kepegawaian/jadwaldinas/staf/atur/"+fd.get('staf')+"/ubah",
+                    method: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        if (res.status == 200) {
+                            iziToast.success({
+                                title: 'Pesan Sukses! IDSTAF : '+fd.get('staf'),
+                                message: 'Staf berhasil diperbarui pada '+res,
+                                position: 'topRight'
+                            });
+                            if (res) {
+                                $('#modalAtur').modal('hide');
+                                refresh();
+                            }
+                        } else {
+                            iziToast.error({
+                                title: 'Pesan Error!',
+                                message: res.message,
+                                position: 'topRight'
+                            });
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                    }
+                });
+            }
+
+            $("#btn-atur").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+            $("#btn-atur").prop('disabled', false);
         }
 
         function tambah() {

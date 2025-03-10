@@ -89,29 +89,29 @@
                                 </thead>
                                 <tbody>
                                     @if ($list['ref_users'])
-                                        @foreach (json_decode($list['ref_users']->staf) as $item)
-                                        <tr>
-                                            <td>{{ $n++ }}</td>
-                                            <td>
-                                                @foreach ($list['users'] as $val)
-                                                    @if ($item == $val->id)
-                                                        <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
-                                                        <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
-                                                        {{ $val->nick != null?$val->nick:$val->name }}
+                                        @foreach ($list['ref_jabatan'] as $item)
+                                            <tr style="background-color: @if($item->color) {{ $item->color }} @endif">
+                                                <td>{{ $n++ }}</td>
+                                                <td style='white-space: normal !important;word-wrap: break-word;'>
+                                                    @foreach ($list['users'] as $val)
+                                                        @if ($item->id_staf == $val->id)
+                                                            <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
+                                                            <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
+                                                            <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $val->nick != null?$val->nick:$val->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small>
+                                                        @endif
+                                                    @endforeach
+                                                </td>
+                                                @for ($i = 1; $i <= $totalDay; $i++)
+                                                    @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
+                                                    @if ($dayb == 'Minggu')
+                                                        <td class="p-2" style="background-color: #fed8b9">
+                                                    @else
+                                                        <td class="p-2">
                                                     @endif
-                                                @endforeach
-                                            </td>
-                                            @for ($i = 1; $i <= $totalDay; $i++)
-                                                @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                                @if ($dayb == 'Minggu')
-                                                    <td class="p-2" style="background-color: #fed8b9">
-                                                @else
-                                                    <td class="p-2">
-                                                @endif
-                                                        <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                    </td>
-                                            @endfor
-                                        </tr>
+                                                            <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                        </td>
+                                                @endfor
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -139,7 +139,11 @@
                                                 <li><b class="me-1">{{ $item->singkat }}</b>(<u>{{ $item->shift }}</u>) : {{ \Carbon\Carbon::parse($item->berangkat)->isoFormat('HH:mm') }} - {{ \Carbon\Carbon::parse($item->pulang)->isoFormat('HH:mm') }} WIB</li>
                                             @endforeach
                                             <li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
-                                            <li><b class="me-1">C</b>(<u>CUTI</u>)</li>
+                                            <li><b class="me-1">C</b>(<u>CUTI TAHUNAN</u>)</li>
+                                            <li><b class="me-1">CM</b>(<u>CUTI MELAHIRKAN</u>)</li>
+                                            <li><b class="me-1">CU</b>(<u>CUTI UMROH</u>)</li>
+                                            <li><b class="me-1">CH</b>(<u>CUTI HAJI</u>)</li>
+                                            <li><b class="me-1">CD</b>(<u>CUTI DILUAR TANGGUNGAN</u>)</li>
                                         </ul>
                                     </label>
                                 </div>
@@ -285,17 +289,21 @@
                 success: function(res) {
                     var adminID = "{{ Auth::user()->getPermission('admin-kepegawaian') }}";
                     var valid = 1;
-                    var par = JSON.parse(res.jadwal.staf);
-                    var pur = par.toString().split(',');
-                    for (let t = 1; t <= par.length; t++) { // LOOPING STAF
+                    // var t = 1;
+                    // var par = JSON.parse(res.jadwal.staf);
+                    // var par = res.jadwal;
+                    // var pur = par.toString().split(',');
+                    // for (let t = 1; t <= par.length; t++) { // LOOPING STAF
+                    t=1;
+                    res.staf.forEach(item => { // LOOPING STAF
                         var cuti = 0;
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
                             up = num.val();
+                            console.log(up);
                             upper = up.toString().toUpperCase();
-                            console.log(up+' - '+up);
                             if (res.shiftArr.includes(upper) == 0) {
-                                if (upper == 'L' || upper == 'C') {
+                                if (upper == 'L' || upper == 'C' || upper == 'CM' || upper == 'CU' || upper == 'CH' || upper == 'CD') {
                                     num.removeClass('is-invalid').addClass('is-valid');
                                 } else {
                                     valid = 0;
@@ -310,18 +318,14 @@
                         }
                         // VALIDASI CUTI LEBIH DARI 4x DALAM 1 BULAN
                         if (cuti > 4) {
-                            res.users.forEach(us => {
-                                if (us.id == pur[t-1]) {
-                                    notifier.show(
-                                        "Pesan Larangan!", "Terdapat Cuti pada karyawan "+us.nama+" yang melebihi 4x dalam sebulan",
-                                        "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-                                    );
-                                    console.log(us.nama);
-                                }
-                            })
+                            notifier.show(
+                                "Pesan Larangan!", "Terdapat Cuti pada karyawan "+item.nama_pegawai+" yang melebihi 4x dalam sebulan",
+                                "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                            );
                             valid = 0;
                         }
-                    }
+                        t++;
+                    })
                     if (valid == 1) {
                         console.log('berhasil');
                         $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
