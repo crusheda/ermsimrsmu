@@ -329,6 +329,10 @@ class JadwalController extends Controller
                 ->select('referensi_jadwal_shift.*')
                 ->where('kepegawaian_jadwal.id',$id)
                 ->get();
+        $staf = ref_jadwal_users::join('kepegawaian_jadwal','kepegawaian_jadwal.pegawai_id','=','referensi_jadwal_users.pegawai_id')
+                ->select('referensi_jadwal_users.*')
+                ->where('kepegawaian_jadwal.id',$id)
+                ->first();
         $jabatan = ref_jadwal_jabatan::join('kepegawaian_jadwal','kepegawaian_jadwal.pegawai_id','=','referensi_jadwal_users_jabatan.pegawai_id')
                 ->select('referensi_jadwal_users_jabatan.*')
                 ->where('kepegawaian_jadwal.id',$id)
@@ -351,6 +355,7 @@ class JadwalController extends Controller
             'bulan' => $bulan,
             'detail' => $detail,
             'shift' => $shift,
+            'staf' => $staf,
             'jabatan' => $jabatan,
             'jadwal' => $jadwal,
             'totalDay' => $totalDay,
@@ -364,9 +369,10 @@ class JadwalController extends Controller
     function table($id)
     {
         $getStaf = ref_jadwal_users::get();
-        $staf = '';
+        $staf = array();
         foreach ($getStaf as $key => $value) {
             if (in_array($id,json_decode($value->staf))) {
+                // print_r($value->pegawai_id);
                 $staf[] = $value->pegawai_id;
             }
         }
@@ -382,6 +388,7 @@ class JadwalController extends Controller
                 ->join('referensi_jadwal_users','referensi_jadwal_users.pegawai_id','=','kepegawaian_jadwal.pegawai_id')
                 ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
                 ->where('kepegawaian_jadwal.pegawai_id',$staf)
+                ->whereNotNull('referensi_jadwal_users.unit')
                 ->get();
 
         $data = [
@@ -420,8 +427,10 @@ class JadwalController extends Controller
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                 ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->join('referensi_jadwal_users','referensi_jadwal_users.pegawai_id','=','kepegawaian_jadwal.pegawai_id')
+                ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
                 ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
+                ->whereNotNull('referensi_jadwal_users.unit')
                 // ->whereIn('kepegawaian_jadwal.progress',[0,1,2,3])
                 ->get();
 
@@ -575,14 +584,25 @@ class JadwalController extends Controller
     // REFERENSI SHIFT -----------------------------------------------------------------------------------------------------------
     function tableShift($id)
     {
+        $getStaf = ref_jadwal_users::get();
+        $staf = array();
+        $atasan = null;
+        foreach ($getStaf as $key => $value) {
+            if (in_array($id,json_decode($value->staf))) {
+                // print_r($value->pegawai_id);
+                $staf[] = $value->pegawai_id;
+                $atasan = $value->pegawai_id;
+            }
+        }
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = ref_jadwal_shift::join('users','users.id','=','referensi_jadwal_shift.pegawai_id')
                 ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai')
-                ->where('referensi_jadwal_shift.pegawai_id',$id)
+                ->where('referensi_jadwal_shift.pegawai_id',$staf)
                 ->get();
 
         $data = [
             'users' => $users,
+            'atasan' => $atasan,
             'show' => $show,
         ];
 

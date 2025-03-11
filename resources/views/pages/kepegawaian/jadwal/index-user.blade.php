@@ -337,7 +337,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>Unit ${item.unit?item.unit:'<s class="text-danger">Tidak Valid</s>'}</h6>
+                                                <h6 class='mb-0'>Unit ${item.unit?'<b class="text-primary">'+item.unit+'</b>':'<s class="text-danger">Tidak Valid</s>'}</h6>
                                                 <small class='text-muted'>`;
                         res.users.forEach(us => {
                             JSON.parse(item.staf).forEach(val => {
@@ -430,7 +430,7 @@
                         var n = 1;
                         // PROCESS
                         content = ``;
-                        content += `<h4 class="text-center mb-2">Jadwal Dinas Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h4>`;
+                        content += `<h4 class="text-center mb-2">Jadwal Dinas Unit <b class="text-primary">${res.staf.unit?res.staf.unit:'<s>Tidak Valid</s>'}</b></h4><h5 class="text-center mb-2">Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h5>`;
                         content += `<div class="row"><div class="col-md-12"><div class="table-responsive p-10 pb-0">
                                     <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
                                         <thead>
@@ -453,7 +453,7 @@
                                                     <div class='d-flex justify-content-start align-items-center'>
                                                         <div class='d-flex flex-column'>
                                                             <h6 class='mb-0'>${res.detail[t].pegawai_nama}</h6>
-                                                            <small class='text-truncate text-muted'>${res.detail[t].jabatan}</small>
+                                                            <small class='text-truncate text-muted'>${res.detail[t].jabatan?res.detail[t].jabatan:''}</small>
                                                         </div>
                                                     </div>
                                                 </td>`;

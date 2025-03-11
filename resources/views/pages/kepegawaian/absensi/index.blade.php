@@ -437,7 +437,7 @@
 
             iziToast.success({
                 title: 'Pesan Developer!',
-                message: 'Sabar yaa, sistem masih tahap development. Tenang aja kok, produk kami gak pernah GAGAL.. :)',
+                message: 'Sabar yaa, sistem masih tahap development. Tenang aja kok, produk Developer kali ini gak akan GAGAL.. :)',
                 position: 'topCenter'
             });
         });

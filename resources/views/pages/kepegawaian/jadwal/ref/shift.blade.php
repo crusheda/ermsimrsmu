@@ -34,7 +34,7 @@
                             title="Kembali"><i class="fas fa-angle-left me-1"></i> Kembali</a>
                             <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Form Tambah"><i class='ti ti-calendar-plus me-1'></i> Tambah</button>
+                            title="Form Tambah" id="btn-tambah" disabled><i class='ti ti-calendar-plus me-1'></i> Tambah</button>
                         </div>
                     </h5>
                     <div class="flex-shrink-0">
@@ -308,23 +308,42 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
+                    if (res.atasan == null) {
+                        $('#btn-tambah').prop('disabled',false);
+                    } else {
+                        if (res.atasan == "{{ Auth::user()->id }}") {
+                            $('#btn-tambah').prop('disabled',false);
+                        } else {
+                            $('#btn-tambah').prop('disabled',true);
+                        }
+                    }
                     res.show.forEach(item => {
                         content = `<tr><td><div class="d-flex align-items-center">
                                             <div class="dropdown">
                                                 <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown">` + item.id + `</a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>
-                                                    <a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
-                                                </div>
+                                                <div class="dropdown-menu dropdown-menu-right">`;
+                                                    if (item.pegawai_id == "{{ Auth::user()->id }}") {
+                                                        content += `<a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                                        content += `<a href="javascript:;" onclick="hapus(` + item.id + `)" class="dropdown-item text-danger"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
+                                                    } else {
+                                                        content += `<a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                                        content += `<a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>`;
+                                                    }
+                                    content += `</div>
                                             </div>
                                         </div></td>`;
                         content += `<td><kbd class="bg-warning text-white me-1">${item.singkat}</kbd> <u><b class='text-dark'>`+item.shift+`</b></u></td>`;
                         content += `<td>`+item.berangkat+`</td>`;
                         content += `<td>`+item.pulang+`</td>`;
                         content += `<td>${item.ket?item.ket:'-'}</td>`;
-                        content += `<td>`;
-                            if(item.updated_at) { content += new Date(item.updated_at).toLocaleString("sv-SE"); } else { content += `-`; }
-                        content += `</td></tr>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
+                                                <small class='text-truncate text-muted'>Diperbarui Oleh ` + item.nama_pegawai + `</small>
+                                            </div>
+                                        </div>
+                                    </td></tr>`;
                         $('#tampil-tbody').append(content);
                     })
                     $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">

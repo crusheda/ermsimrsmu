@@ -46,7 +46,7 @@
                             </li>
                         </ul> --}}
                     </div>
-                    <h5 class="mb-0">Tabel Jadwal Dinas</h5>
+                    <h5 class="mb-0">Tabel Verifikasi Jadwal Dinas</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -280,15 +280,21 @@
                                 content += `<td>${bulan[i]} ${item.tahun}</td>`;
                             }
                         }
-                        var pegawai = null;
-                        content += `<td><small><ul class='list-unstyled mt-2'>`;
-                        // console.log(JSON.parse(item.pegawai_id));
+                        var nama_verif = null;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>Unit ${item.unit?'<b class="text-primary">'+item.unit+'</b>':'<s class="text-danger">Tidak Valid</s>'}</h6>
+                                                <small class='text-muted'>`;
                         res.users.forEach(us => {
                             JSON.parse(item.staf).forEach(val => {
                                 if (val == us.id) {
                                     content += `${us.nama?us.nama:'<b class="text-danger">'+us.name+'</b>'}; `;
                                 }
                             })
+                            if (us.id == item.verif) {
+                                nama_verif = us.nama;
+                            }
                         })
                         content += `</small></ul></td>`;
                         content += `<td>${item.keterangan?item.keterangan:''}</td>`;
@@ -314,7 +320,8 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>Oleh ` + item.nama_pegawai + `</small>
+                                                <small class='text-truncate text-muted'>Ditambahkan Oleh ` + item.nama_pegawai + `</small>
+                                                ${nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+nama_verif+'</small>':''}
                                             </div>
                                         </div>
                                     </td>`;
@@ -369,8 +376,8 @@
                         var n = 1;
                         // PROCESS
                         content = ``;
-                        content += `<h4 class="text-center mb-2">Jadwal Dinas Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h4>`;
-                        content += `<div class="table-responsive p-10 pb-0">
+                        content += `<h4 class="text-center mb-2">Jadwal Dinas Unit <b class="text-primary">${res.staf.unit?res.staf.unit:'<s>Tidak Valid</s>'}</b></h4><h5 class="text-center mb-2">Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h5>`;
+                        content += `<div class="row"><div class="col-md-12"><div class="table-responsive p-10 pb-0">
                                     <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
                                         <thead>
                                         <tr>
@@ -392,7 +399,7 @@
                                                     <div class='d-flex justify-content-start align-items-center'>
                                                         <div class='d-flex flex-column'>
                                                             <h6 class='mb-0'>${res.detail[t].pegawai_nama}</h6>
-                                                            <small class='text-truncate text-muted'>${res.detail[t].jabatan}</small>
+                                                            <small class='text-truncate text-muted'>${res.detail[t].jabatan?res.detail[t].jabatan:''}</small>
                                                         </div>
                                                     </div>
                                                 </td>`;
@@ -439,7 +446,7 @@
                                     }
                                 content += `</tr>`;
                             }
-                        content += `</tbody></table></div>`;
+                        content += `</tbody></table></div></div>`;
 
                         // KETERANGAN
                         content += `<div class="col-md-6"><div class="p-10">

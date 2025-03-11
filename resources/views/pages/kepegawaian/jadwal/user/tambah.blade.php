@@ -89,32 +89,38 @@
                                 </thead>
                                 <tbody>
                                     @if ($list['ref_users'])
-                                        @foreach ($list['ref_jabatan'] as $item)
-                                            <tr style="background-color: @if($item->color) {{ $item->color }} @endif">
-                                                <td>{{ $n++ }}</td>
-                                                <td style='white-space: normal !important;word-wrap: break-word;'>
-                                                    @foreach ($list['users'] as $val)
-                                                        @if ($item->id_staf == $val->id)
-                                                            <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
-                                                            <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
-                                                            <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
-                                                            <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
-                                                            <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $val->nick != null?$val->nick:$val->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div>
+                                        @if ($list['ref_jabatan'])
+                                            @foreach ($list['ref_jabatan'] as $item)
+                                                <tr style="background-color: @if($item->color) {{ $item->color }} @endif">
+                                                    <td>{{ $n++ }}</td>
+                                                    <td style='white-space: normal !important;word-wrap: break-word;'>
+                                                        @foreach ($list['users'] as $val)
+                                                            @if ($item->id_staf == $val->id)
+                                                                <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
+                                                                <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
+                                                                <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
+                                                                <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
+                                                                <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $val->nick != null?$val->nick:$val->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div>
+                                                            @endif
+                                                        @endforeach
+                                                    </td>
+                                                    @for ($i = 1; $i <= $totalDay; $i++)
+                                                        @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
+                                                        @if ($dayb == 'Minggu')
+                                                            <td class="p-2" style="background-color: #fed8b9">
+                                                        @else
+                                                            <td class="p-2">
                                                         @endif
-                                                    @endforeach
-                                                </td>
-                                                @for ($i = 1; $i <= $totalDay; $i++)
-                                                    @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                                    @if ($dayb == 'Minggu')
-                                                        <td class="p-2" style="background-color: #fed8b9">
-                                                    @else
-                                                        <td class="p-2">
-                                                    @endif
-                                                            <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                        </td>
-                                                @endfor
+                                                                <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                            </td>
+                                                    @endfor
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="35"><center>Mohon lengkapi Data <b>Jabatan & Urutan</b> Staf pada halaman Referensi Staf terlebih dahulu</center></td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     @endif
                                 </tbody>
                             </table>
