@@ -179,7 +179,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="prosesSimpan()" id="btn-simpan"><i class="fa-fw fas fa-save nav-icon"></i> Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="prosesSimpan()" id="btn-simpan" disabled><i class="fa-fw fas fa-save nav-icon"></i> Submit</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                 </div>

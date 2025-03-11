@@ -26,10 +26,10 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Form Tambah</h5>
+                    <h5 class="mb-0">Registrasi Peserta</h5>
                 </div>
                 <div class="card-body">
-
+                    <a>masih tahap development :)</a>
                 </div>
             </div>
         </div>

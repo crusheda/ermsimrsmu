@@ -152,7 +152,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 ms-3">Filter</h5>
+                    <h5 class="mb-0 ms-3">Filter <b class="text-primary">Riwayat</b></h5>
                     {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
                         <div class="btn-group">
                             <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
@@ -165,43 +165,77 @@
                     {{-- @endif --}}
                 </div>
                 <div class="card-body p-b-10">
-                    {{-- <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
                         <small>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Batas maksimal upload dokumen <b><u>3 mb</u></b> dan hanya berformat <b>PDF</b> <br>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pegawai-pegawai yang sudah ditambahkan akan mendapatkan akses download dokumen Surat Tugas tersebut pada masing-masing halaman surat tugas pegawai beserta notifikasi
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Contoh Alert
                         </small>
                     </div>
                     <div class="row">
-                        <div class="col-md-7">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Daftar Pegawai <span class="text-danger">*</span></label>
+                        <div class="col-md-7 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Pilihan Filter</label>
+                                <select class="form-select select2" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                    <option value="" selected hidden>Pilih</option>
+                                    <option value="1">Daftar Absensi Karyawan Lengkap</option>
+                                    <option value="2">Absensi Terlambat</option>
+                                    <option value="3">Absensi Hangus</option>
+                                    <option value="4">Absensi Ijin/Tidak Masuk</option>
+                                    <option value="5">Absensi Lembur</option>
+                                    <option value="6">Kehadiran Karyawan</option>
+                                    <option value="7">Jam Kerja Tidak Lebih/Sama Dengan 7 Jam (Per Hari)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Daftar Unit</label>
                                 <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
-                                    @if (count($list['users']) > 0)
-                                        @foreach ($list['users'] as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama?$item->nama:$item->name }}</option>
+                                    @if (!empty($list['jabatan']))
+                                        @foreach ($list['jabatan'] as $item)
+                                            <option value="{{ $item->id }}">{{ $item->unit }}</option>
                                         @endforeach
                                     @endif
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-5">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
-                                <div class="row">
-                                    <div class="col"><input type="file" class="form-control" id="filex" accept="application/pdf"></div>
-                                    <div class="col-auto"><button class="btn btn-primary" onclick="prosesSimpan()" id="btn-simpan"><i class="fas fa-upload me-1"></i> Upload & Share</button></div>
+                        <div class="col-md-12 mb-3" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Pilih Rentang Tanggal">
+                            <div class="form-group">
+                                <label class="form-label">Rentang Tanggal <span class="text-danger">*</span></label>
+                                <div class="input-daterange input-group" id="pc-datepicker-5">
+                                    <span class="input-group-text">Dari</span>
+                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Mulai Kegiatan Pelayanan" name="range-start" id="tmk">
+                                    <span class="input-group-text">Sampai</span>
+                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Akhir Kegiatan Pelayanan" name="range-end" id="tak">
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
-                    <a>masih tahap development :)</a>
+                        {{-- <div class="col-md-3" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Pilih Jenis Sarana">
+                            <select class="selectFilter form-select" id="filterJenis" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                <option value="" selected hidden>Pilih Jenis</option>
+                                <option value="1">Medis</option>
+                                <option value="2">Non Medis</option>
+                            </select>
+                        </div> --}}
+                    </div>
+                </div>
+                <div class="card-footer p-3">
+                    <div class="text-end btn-page mb-0">
+                        <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
+                        <button type="button" class="btn btn-shadow btn-primary " onclick="filter()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                        title="Menampilkan Daftar/Filter Aset" id="tombol-tampilkan" disabled><i class="fas fa-sync fa-spin align-middle me-2"></i> Tampilkan</button>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Riwayat</b></h5>
+                    <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Tabel <a class="text-primary">Riwayat</a></b></h5>
                     <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
@@ -398,6 +432,11 @@
 
     <script>
         $(document).ready(function() {
+            const datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
+                buttonClass: 'btn',
+                // todayBtn: true,
+                clearBtn: true
+            });
             // SELECT2
             var t = $(".select2");
             t.length && t.each(function() {

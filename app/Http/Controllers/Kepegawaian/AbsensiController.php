@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Kepegawaian;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Models\referensi;
 use App\Models\datalogs;
 use App\Models\users;
 use App\Models\users_foto;
-use App\Models\kepegawaian\absensi\absensi;
-use App\Models\kepegawaian\absensi\jadwal;
-use App\Models\kepegawaian\absensi\jadwal_detail;
-use App\Models\kepegawaian\absensi\ref_staf;
-use App\Models\kepegawaian\absensi\ref_jaga;
+use App\Models\kepegawaian\jadwal;
+use App\Models\kepegawaian\jadwal_detail;
+use App\Models\kepegawaian\ref_jadwal_shift;
+use App\Models\kepegawaian\ref_jadwal_users;
+use App\Models\kepegawaian\ref_jadwal_jabatan;
+use App\Models\struktur_organisasi;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
-use Validator,Redirect,Response,File;
+use Validator,Redirect,Response,File,Storage;
 
 class AbsensiController extends Controller
 {
@@ -27,9 +27,11 @@ class AbsensiController extends Controller
                 Auth::user()->getRole('karu-it') == true
             ) {
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+            $jabatan = ref_jadwal_users::select('id','unit')->groupBy('id','unit')->get();
 
             $data = [
                 'users' => $users,
+                'jabatan' => $jabatan,
             ];
 
             return view('pages.kepegawaian.absensi.index')->with('list', $data);

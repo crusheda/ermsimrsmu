@@ -16,6 +16,6 @@ class RegistrasiController extends Controller
 {
     function index()
     {
-        return view('pages.kepegawaian.rekrutmen.pengumuman.index');
+        return view('pages.kepegawaian.rekrutmen.peserta.index');
     }
 }
