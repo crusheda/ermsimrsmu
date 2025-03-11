@@ -97,7 +97,9 @@
                                                         @if ($item->id_staf == $val->id)
                                                             <input type="text" class="form-control" name="id_staf[]" value="{{ $val->id }}" hidden>
                                                             <input type="text" class="form-control" name="nama_staf[]" value="{{ $val->nick != null?$val->nick:$val->name }}" hidden>
-                                                            <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $val->nick != null?$val->nick:$val->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small>
+                                                            <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
+                                                            <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
+                                                            <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $val->nick != null?$val->nick:$val->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div>
                                                         @endif
                                                     @endforeach
                                                 </td>
@@ -126,7 +128,8 @@
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Disarankan melakukan pengisian jadwal dinas menggunakan <b>Device Komputer</b> dan <b>Browser Google Chrome</b> <br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) menyesuaikan kode shift pada referensi yang sudah ada <br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Penulisan Huruf pada kolom isian Shift Jaga <i><b>Auto Capslock</b></i> meskipun sudah disimpan sekalipun <br>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit<br>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut
                                     </small>
                                 </div>
                             </div>

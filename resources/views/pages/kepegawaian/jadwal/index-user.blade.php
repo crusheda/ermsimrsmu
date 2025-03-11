@@ -79,7 +79,7 @@
                                 <tr>
                                     <th><center>#ID</center></th>
                                     <th>BLN / THN</th>
-                                    <th>STAF</th>
+                                    <th>UNIT / STAF</th>
                                     <th>KETERANGAN</th>
                                     <th>STATUS</th>
                                     <th>DIPERBARUI</th>
@@ -96,7 +96,7 @@
                                 <tr>
                                     <th><center>#ID</center></th>
                                     <th>BLN / THN</th>
-                                    <th>STAF</th>
+                                    <th>UNIT / STAF</th>
                                     <th>KETERANGAN</th>
                                     <th>STATUS</th>
                                     <th>DIPERBARUI</th>
@@ -334,7 +334,11 @@
                             }
                         }
                         var nama_verif = null;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'><small>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <h6 class='mb-0'>Unit ${item.unit?item.unit:'<s class="text-danger">Tidak Valid</s>'}</h6>
+                                                <small class='text-muted'>`;
                         res.users.forEach(us => {
                             JSON.parse(item.staf).forEach(val => {
                                 if (val == us.id) {
@@ -345,7 +349,7 @@
                                 nama_verif = us.nama;
                             }
                         })
-                        content += `</small></td>`;
+                        content += `</small></div></div></td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.keterangan?item.keterangan:''}</td>`;
                         if (item.progress == 0) {
                             var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
@@ -369,7 +373,8 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>${nama_verif!=null?'Diverifikasi Oleh '+nama_verif:''}</small>
+                                                <small class='text-truncate text-muted'>Ditambahkan Oleh ` + item.nama_pegawai + `</small>
+                                                ${nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+nama_verif+'</small>':''}
                                             </div>
                                         </div>
                                     </td>`;
@@ -442,9 +447,16 @@
                                     </thead>
                                     <tbody>`;
                             for (let t = 0; t < res.detail.length; t++) {
-                                content += `<tr class="text-center">`;
+                                content += `<tr class="text-center" style="background-color: ${res.detail[t].color}">`;
                                     content += `<td>${n++}</td>`;
-                                    content += `<td class="text-start">${res.detail[t].pegawai_nama}</td>`;
+                                    content += `<td class="text-start">
+                                                    <div class='d-flex justify-content-start align-items-center'>
+                                                        <div class='d-flex flex-column'>
+                                                            <h6 class='mb-0'>${res.detail[t].pegawai_nama}</h6>
+                                                            <small class='text-truncate text-muted'>${res.detail[t].jabatan}</small>
+                                                        </div>
+                                                    </div>
+                                                </td>`;
                                     content += `<td class="p-2 tgl1">${res.detail[t].tgl1}</td>`;
                                     content += `<td class="p-2 tgl2">${res.detail[t].tgl2}</td>`;
                                     content += `<td class="p-2 tgl3">${res.detail[t].tgl3}</td>`;

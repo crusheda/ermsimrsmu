@@ -60,7 +60,7 @@
                                 <th>Urutan</th>
                                 <th>Nama Staf</th>
                                 <th>Jabatan</th>
-                                <th>Warna Kolom</th>
+                                <th>Warna Baris</th>
                                 <th class="cell-fit">Diperbarui</th>
                             </tr>
                         </thead>
@@ -341,8 +341,12 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>${jabatan}</td>
-                                            <td>${color}</td>`;
+                                            <td>${jabatan}</td>`;
+                            if (color != "-") {
+                                content += `<td><span class="badge border text-dark" style="background-color: ${color}">TEXT HERE</span></td>`;
+                            } else {
+                                content += `<td>-</td>`;
+                            }
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                             <div class='d-flex justify-content-start align-items-center'>
                                                 <div class='d-flex flex-column'>

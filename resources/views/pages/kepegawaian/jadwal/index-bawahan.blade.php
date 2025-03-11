@@ -386,9 +386,16 @@
                                     </thead>
                                     <tbody>`;
                             for (let t = 0; t < res.detail.length; t++) {
-                                content += `<tr class="text-center">`;
+                                content += `<tr class="text-center" style="background-color: ${res.detail[t].color}">`;
                                     content += `<td>${n++}</td>`;
-                                    content += `<td class="text-start">${res.detail[t].pegawai_nama}</td>`;
+                                    content += `<td class="text-start">
+                                                    <div class='d-flex justify-content-start align-items-center'>
+                                                        <div class='d-flex flex-column'>
+                                                            <h6 class='mb-0'>${res.detail[t].pegawai_nama}</h6>
+                                                            <small class='text-truncate text-muted'>${res.detail[t].jabatan}</small>
+                                                        </div>
+                                                    </div>
+                                                </td>`;
                                     content += `<td class="p-2 tgl1">${res.detail[t].tgl1}</td>`;
                                     content += `<td class="p-2 tgl2">${res.detail[t].tgl2}</td>`;
                                     content += `<td class="p-2 tgl3">${res.detail[t].tgl3}</td>`;
@@ -435,7 +442,25 @@
                         content += `</tbody></table></div>`;
 
                         // KETERANGAN
-                        content += `<div class="p-10">
+                        content += `<div class="col-md-6"><div class="p-10">
+                                        <h5>Shift Jaga :</h5>
+                                        <div class="list-group">
+                                            <label class="list-group-item border-0 p-2">
+                                                <ul>`;
+                                    res.shift.forEach(item => {
+                                        content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
+                                    });
+                                        content += `<li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
+                                                    <li><b class="me-1">C</b>(<u>CUTI TAHUNAN</u>)</li>
+                                                    <li><b class="me-1">CM</b>(<u>CUTI MELAHIRKAN</u>)</li>
+                                                    <li><b class="me-1">CU</b>(<u>CUTI UMROH</u>)</li>
+                                                    <li><b class="me-1">CH</b>(<u>CUTI HAJI</u>)</li>
+                                                    <li><b class="me-1">CD</b>(<u>CUTI DILUAR TANGGUNGAN</u>)</li>
+                                                </ul>
+                                            </label>
+                                        </div>
+                                    </div></div>`;
+                        content += `<div class="col-md-6"><div class="p-10">
                                         <h5>Keterangan :</h5>
                                         <div class="list-group">
                                             <label class="list-group-item border-0 p-2">
@@ -443,7 +468,7 @@
                                                 Hari Minggu
                                             </label>
                                         </div>
-                                    </div>`;
+                                    </div></div></div>`;
                         $('#tampil-jadwal').empty().append(content);
                         for (let i = 0; i < res.totalDay; i++) {
                             if (res.dataArray[i] == 'Minggu') {

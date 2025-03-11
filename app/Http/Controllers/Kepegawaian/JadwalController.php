@@ -73,6 +73,14 @@ class JadwalController extends Controller
         $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->get();
         $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
+        if ($jadwal->staf != $ref_users->staf) {
+            $jadwal->staf = $ref_users->staf;
+            $jadwal->save();
+
+            // REINITIATE
+            $jadwal = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
+        }
+
         $data = [
             // 'show' => $show,
             'jadwal' => $jadwal,
@@ -98,14 +106,23 @@ class JadwalController extends Controller
 
             return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status]);
         } else {
+            $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
+            $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
+            $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->get();
+
+            if ($jadwal->staf != $ref_users->staf) {
+                $jadwal->staf = $ref_users->staf;
+                $jadwal->save();
+
+                // REINITIATE
+                $jadwal = jadwal::where('id',$id)->first();
+            }
+
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
             $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
                         ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
                         ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai','users.nick','users.name')
                         ->get();
-            $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
-            $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
-            $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->get();
             $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
             $data = [
@@ -134,6 +151,8 @@ class JadwalController extends Controller
             $data->id_jadwal = $request->id_jadwal;
             $data->pegawai_id = $request->id_staf[$i];
             $data->pegawai_nama = $request->nama_staf[$i];
+            $data->jabatan = $request->jabatan_staf[$i];
+            $data->color = $request->color_staf[$i];
             for ($t = 1; $t <= $totalDay; $t++) {
                 $hit = 'tgl'.$t;
                 $data->$hit = strtoupper($request->$hit[$i]);
@@ -152,9 +171,11 @@ class JadwalController extends Controller
         $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
         $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
         $getData = jadwal_detail::where('id_jadwal',$request->id_jadwal)->get();
-
+        // print_r($request->id_staf);
+        // die();
         $data = jadwal_detail::where('id_jadwal',$request->id_jadwal)->get();
         for ($i=0; $i < count($getData) ; $i++) {
+        // for ($i=0; $i < count($request->id_staf) ; $i++) {
             for ($t = 1; $t <= $totalDay; $t++) {
                 $hit = 'tgl'.$t;
                 $data[$i]->$hit = strtoupper($request->$hit[$i]);
@@ -308,6 +329,10 @@ class JadwalController extends Controller
                 ->select('referensi_jadwal_shift.*')
                 ->where('kepegawaian_jadwal.id',$id)
                 ->get();
+        $jabatan = ref_jadwal_jabatan::join('kepegawaian_jadwal','kepegawaian_jadwal.pegawai_id','=','referensi_jadwal_users_jabatan.pegawai_id')
+                ->select('referensi_jadwal_users_jabatan.*')
+                ->where('kepegawaian_jadwal.id',$id)
+                ->get();
                 // print_r($shift);
                 // die();
         $totalDay = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
@@ -326,6 +351,7 @@ class JadwalController extends Controller
             'bulan' => $bulan,
             'detail' => $detail,
             'shift' => $shift,
+            'jabatan' => $jabatan,
             'jadwal' => $jadwal,
             'totalDay' => $totalDay,
             'dataArray' => $dataArray,
@@ -340,10 +366,6 @@ class JadwalController extends Controller
         $getStaf = ref_jadwal_users::get();
         $staf = null;
         foreach ($getStaf as $key => $value) {
-            // print_r(json_decode($value->staf));
-            // if ($value->pegawai_id == $id) {
-            // }
-            // $staf = $value->pegawai_id;
             if (in_array($id,json_decode($value->staf))) {
                 $staf[] = $value->pegawai_id;
             }
@@ -358,7 +380,8 @@ class JadwalController extends Controller
         // die();
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->join('referensi_jadwal_users','referensi_jadwal_users.pegawai_id','=','kepegawaian_jadwal.pegawai_id')
+                ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
                 ->where('kepegawaian_jadwal.pegawai_id',$staf)
                 ->get();
         // print_r($show);
@@ -376,7 +399,8 @@ class JadwalController extends Controller
     {
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                ->join('referensi_jadwal_users','referensi_jadwal_users.pegawai_id','=','kepegawaian_jadwal.pegawai_id')
+                ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
                 ->whereIn('kepegawaian_jadwal.progress',[1,2,3])
                 ->get();
 
@@ -733,6 +757,7 @@ class JadwalController extends Controller
     function ubahStaf(Request $request)
     {
         $getData = ref_jadwal_users::where('id','!=',$request->id)->get();
+        // $getData = ref_jadwal_users::get();
         $user = '';
         $input = '';
         $count = 0;
@@ -752,6 +777,14 @@ class JadwalController extends Controller
         } else {
             $status = 200;
             $message = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+            // $validate = ref_jadwal_jabatan::where('pegawai_id',$request->pegawai)->get();
+            $validate = ref_jadwal_jabatan::where('pegawai_id',$request->pegawai)->whereNotIn('id_staf',json_decode($request->staf))->get();
+            if ($validate) {
+                foreach ($validate as $key => $value) {
+                    $delete = ref_jadwal_jabatan::find($value->id);
+                    $delete->delete();
+                }
+            }
 
             $data = ref_jadwal_users::find($request->id);
             $data->pegawai_id = $request->pegawai;
