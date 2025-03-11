@@ -364,17 +364,16 @@ class JadwalController extends Controller
     function table($id)
     {
         $getStaf = ref_jadwal_users::get();
-        $staf = null;
+        $staf = '';
         foreach ($getStaf as $key => $value) {
             if (in_array($id,json_decode($value->staf))) {
                 $staf[] = $value->pegawai_id;
             }
         }
-        if ($staf) {
-            $staf = $staf;
-        } else {
-            $staf = '';
-        }
+        // if ($staf) {
+        //     $staf = $staf;
+        // } else {
+        // }
 
         // print_r($staf);
         // die();
@@ -384,8 +383,7 @@ class JadwalController extends Controller
                 ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
                 ->where('kepegawaian_jadwal.pegawai_id',$staf)
                 ->get();
-        // print_r($show);
-        // die();
+
         $data = [
             'users' => $users,
             'show' => $show,
@@ -402,8 +400,11 @@ class JadwalController extends Controller
                 ->join('referensi_jadwal_users','referensi_jadwal_users.pegawai_id','=','kepegawaian_jadwal.pegawai_id')
                 ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
                 ->whereIn('kepegawaian_jadwal.progress',[1,2,3])
+                ->whereNotNull('referensi_jadwal_users.unit')
+                // ->orderBy('kepegawaian_jadwal.created_at','desc')
                 ->get();
 
+        // dd($show);
         $data = [
             'users' => $users,
             'show' => $show,

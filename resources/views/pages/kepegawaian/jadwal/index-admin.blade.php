@@ -408,6 +408,7 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
+                        // console.log(item);
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -441,7 +442,7 @@
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'>Unit ${item.unit?item.unit:'<s class="text-danger">Tidak Valid</s>'}</h6>
+                                                <h6 class='mb-0'>Unit ${item.unit?'<b class="text-primary">'+item.unit+'</b>':'<s class="text-danger">Tidak Valid</s>'}</h6>
                                                 <small class='text-muted'>`;
                         res.users.forEach(us => {
                             JSON.parse(item.staf).forEach(val => {
