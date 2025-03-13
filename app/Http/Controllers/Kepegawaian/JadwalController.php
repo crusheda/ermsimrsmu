@@ -101,6 +101,7 @@ class JadwalController extends Controller
     }
 
     function formUbah($id)
+
     {
         $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
 
@@ -331,6 +332,8 @@ class JadwalController extends Controller
         $detail = jadwal_detail::leftJoin('referensi_jadwal_users_jabatan','referensi_jadwal_users_jabatan.id_staf','=','kepegawaian_jadwal_detail.pegawai_id')
                 ->select('kepegawaian_jadwal_detail.*','referensi_jadwal_users_jabatan.urutan','referensi_jadwal_users_jabatan.jabatan','referensi_jadwal_users_jabatan.color')
                 ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
+                ->where('referensi_jadwal_users_jabatan.deleted_at',null)
+                ->orderBy('referensi_jadwal_users_jabatan.urutan','ASC')
                 ->get();
         $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
@@ -339,13 +342,16 @@ class JadwalController extends Controller
         $shift  = ref_jadwal_shift::join('kepegawaian_jadwal','kepegawaian_jadwal.pegawai_id','=','referensi_jadwal_shift.pegawai_id')
                 ->select('referensi_jadwal_shift.*')
                 ->where('kepegawaian_jadwal.id',$id)
+                ->where('referensi_jadwal_shift.deleted_at',null)
                 ->get();
         $staf = ref_jadwal_users::join('kepegawaian_jadwal','kepegawaian_jadwal.pegawai_id','=','referensi_jadwal_users.pegawai_id')
                 ->select('referensi_jadwal_users.*')
                 ->where('kepegawaian_jadwal.id',$id)
+                ->where('referensi_jadwal_users.deleted_at',null)
                 ->first();
         $jabatan = ref_jadwal_jabatan::join('kepegawaian_jadwal','kepegawaian_jadwal.pegawai_id','=','referensi_jadwal_users_jabatan.pegawai_id')
                 ->select('referensi_jadwal_users_jabatan.*')
+                ->where('referensi_jadwal_users_jabatan.deleted_at',null)
                 ->where('kepegawaian_jadwal.id',$id)
                 ->get();
                 // print_r($shift);
