@@ -451,9 +451,9 @@
                             { sWidth: '10%' },
                             { sWidth: '15%' },
                         ],
-                        displayLength: 7,
+                        displayLength: 25,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [25, 50, 75, 100],
                     });
 
                     // Showing Tooltip

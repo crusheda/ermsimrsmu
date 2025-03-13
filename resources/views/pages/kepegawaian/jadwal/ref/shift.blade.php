@@ -402,7 +402,7 @@
                                         </div></td><td><kbd class="bg-danger text-white me-1">CD</kbd> <u><b class='text-dark'>CUTI DILUAR TANGGUNGAN</b></u></td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
                     var table = $('#dttable').DataTable({
                         order: [
-                            [5, "desc"]
+                            [5, "asc"]
                         ],
                         bAutoWidth: false,
                         aoColumns : [
@@ -413,9 +413,9 @@
                             { sWidth: '20%' },
                             { sWidth: '15%' },
                         ],
-                        displayLength: 7,
+                        displayLength: 20,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [20, 35, 50, 75, 100],
                     });
 
                     // Showing Tooltip

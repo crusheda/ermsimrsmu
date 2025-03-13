@@ -68,67 +68,25 @@ class JadwalController extends Controller
     {
         $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
-        $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
-        $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
-        $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->get();
-        $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
-
-        if ($jadwal->staf != $ref_users->staf) {
-            $jadwal->staf = $ref_users->staf;
-            $jadwal->save();
-
-            // REINITIATE
-            $jadwal = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
-        }
-
-        $data = [
-            // 'show' => $show,
-            'jadwal' => $jadwal,
-            'ref_shift' => $ref_shift,
-            'ref_users' => $ref_users,
-            'ref_jabatan' => $ref_jabatan,
-            'users' => $users,
-            'jml_tgl' => $jml_tgl,
-        ];
-
-        return view('pages.kepegawaian.jadwal.user.tambah')->with('list', $data);
-    }
-
-    function formUbah($id)
-    {
-        $jadwal  = jadwal::where('id',$id)->first();
-        if ($jadwal->progress == 0 || $jadwal->progress == 3) {
-            if ($jadwal->progress == 0) {
-                $status = 'Ditolak';
-            } else {
-                $status = 'Divalidasi';
-            }
-
-            return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status]);
-        } else {
+        // print_r($jadwal);
+        // die();
+        if (!empty($jadwal)) {
             $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
             $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
-            $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->get();
+            $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->orderBy('urutan','ASC')->get();
+            $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
             if ($jadwal->staf != $ref_users->staf) {
                 $jadwal->staf = $ref_users->staf;
                 $jadwal->save();
 
                 // REINITIATE
-                $jadwal = jadwal::where('id',$id)->first();
+                $jadwal = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
             }
-
-            $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-            $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
-                        ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
-                        ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai','users.nick','users.name')
-                        ->get();
-            $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
             $data = [
                 // 'show' => $show,
                 'jadwal' => $jadwal,
-                'detail' => $detail,
                 'ref_shift' => $ref_shift,
                 'ref_users' => $ref_users,
                 'ref_jabatan' => $ref_jabatan,
@@ -136,7 +94,60 @@ class JadwalController extends Controller
                 'jml_tgl' => $jml_tgl,
             ];
 
-            return view('pages.kepegawaian.jadwal.user.ubah')->with('list', $data);
+            return view('pages.kepegawaian.jadwal.user.tambah')->with('list', $data);
+        } else {
+            return redirect()->back()->withErrors('Akses Jadwal tidak disetujui!');
+        }
+    }
+
+    function formUbah($id)
+    {
+        $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
+
+        if (!empty($jadwal)) {
+            if ($jadwal->progress == 0 || $jadwal->progress == 3) {
+                if ($jadwal->progress == 0) {
+                    $status = 'Ditolak';
+                } else {
+                    $status = 'Divalidasi';
+                }
+
+                return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status]);
+            } else {
+                $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
+                $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
+                $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->orderBy('urutan','ASC')->get();
+
+                if ($jadwal->staf != $ref_users->staf) {
+                    $jadwal->staf = $ref_users->staf;
+                    $jadwal->save();
+
+                    // REINITIATE
+                    $jadwal = jadwal::where('id',$id)->first();
+                }
+
+                $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+                $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
+                            ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
+                            ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai','users.nick','users.name')
+                            ->get();
+                $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
+
+                $data = [
+                    // 'show' => $show,
+                    'jadwal' => $jadwal,
+                    'detail' => $detail,
+                    'ref_shift' => $ref_shift,
+                    'ref_users' => $ref_users,
+                    'ref_jabatan' => $ref_jabatan,
+                    'users' => $users,
+                    'jml_tgl' => $jml_tgl,
+                ];
+
+                return view('pages.kepegawaian.jadwal.user.ubah')->with('list', $data);
+            }
+        } else {
+            return redirect()->back()->withErrors('Akses Jadwal tidak disetujui!');
         }
     }
 
