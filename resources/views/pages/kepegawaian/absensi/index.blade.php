@@ -520,7 +520,7 @@
                         content += `<td>
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0"><img
-                                                    src="${item.foto_user}" alt="user image"
+                                                    src="${item.foto_user?`/storage/`+item.foto_user.substring(7,10000):'/images/pku/user.png'}" alt="user image"
                                                     class="img-radius wid-40 hei-40 align-top m-r-15"></div>
                                             <div class="flex-grow-1 ms-3">
                                                 <h6 class="mb-1">${item.nama_pegawai}</h6>
@@ -546,8 +546,8 @@
                                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Berangkat Sampai Pulang">
                                                     <span class="badge text-bg-primary">${new Date(item.tgl_in).toLocaleString("sv-SE")}</span> ${item.tgl_out?'<i class="ti ti-arrows-right text-primary"></i> <span class="badge text-bg-secondary">'+new Date(item.tgl_out).toLocaleString("sv-SE")+'</span>':'<i class="ti ti-arrows-right text-dark"></i> <span class="badge text-bg-info">Belum/Tidak Absen Pulang</span>'}</a>
                                                 </h6>
-                                                <small class='text-truncate text-muted'>Keterlambatan : ${item.keterlambatan} ${item.terlambat==1?`<span class="badge text-bg-danger" style="padding:3px">Terlambat</span>`:`<span class="badge text-bg-success" style="padding:3px">Disiplin</span>`}</small>
-                                                <small class='text-truncate text-muted'>Lembur : ${item.lembur}</small>
+                                                <small class='text-truncate text-muted'>Keterlambatan : <b>${item.keterlambatan} ${item.terlambat==1?`<span class="badge text-bg-danger" style="padding:3px">Terlambat</span>`:`<span class="badge text-bg-success" style="padding:3px">Disiplin</span>`}</b></small>
+                                                <small class='text-truncate text-muted'>Lembur : <b>${item.lembur?item.lembur:'-'}</b></small>
                                             </div>
                                         </div>
                                     </td>`;
