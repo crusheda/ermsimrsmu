@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\kepegawaian\absensi;
+namespace App\Models\kepegawaian;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;

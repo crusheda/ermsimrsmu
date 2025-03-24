@@ -242,15 +242,15 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {{-- <div class="table-responsive">
+                    <div class="table-responsive">
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th><center>WAKTU</center></th>
-                                    <th>ACARA</th>
-                                    <th>PEGAWAI PELAKSANA</th>
-                                    <th>UPDATE</th>
+                                    <th>PEGAWAI</th>
+                                    <th>STATUS</th>
+                                    <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
+                                    <th>TGL ABSEN</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
@@ -263,15 +263,14 @@
                             <tfoot>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th><center>WAKTU</center></th>
-                                    <th>ACARA</th>
-                                    <th>PEGAWAI PELAKSANA</th>
-                                    <th>UPDATE</th>
+                                    <th>PEGAWAI</th>
+                                    <th>STATUS</th>
+                                    <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
+                                    <th>TGL ABSEN</th>
                                 </tr>
                             </tfoot>
                         </table>
-                    </div> --}}
-                    <a>masih tahap development :)</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -500,42 +499,82 @@
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (superID == true || adminID == true) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            // content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            // content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
-                        content += `<td>${new Date(item.tgl_in).toLocaleString("sv-SE")} ${new Date(item.tgl_out).toLocaleString("sv-SE")}</td>`;
-                        res.users.forEach(us => {
-                            JSON.parse(item.pegawai_id).forEach(val => {
-                                if (val == us.id) {
-                                    content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
-                                }
-                            })
+                        role = '';
+                        res.role.forEach(us => {
+                            if (us.id_user == item.pegawai_id) {
+                                role += `<span class="badge bg-light-secondary me-1">${us.nama_role}</span>`;
+                            }
                         })
-                        //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara"></u></a>
-                                                </h6>
-                                                <small class='text-truncate text-muted'>Bertempat di <b>sadsad</b> dan Diselenggarakan secara"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama sada</small>
-                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi </b></u> (<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>asdsa</b></a>)</small>
+                        content += `<td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0"><img
+                                                    src="${item.foto_user}" alt="user image"
+                                                    class="img-radius wid-40 hei-40 align-top m-r-15"></div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h6 class="mb-1">${item.nama_pegawai}</h6>
+                                                <small class='text-truncate text-muted'>${role}</small>
                                             </div>
                                         </div>
                                     </td>`;
-                        var pegawai = null;
-                        content += `<td><small><ul class='list-unstyled mt-2'>`;
-                        // console.log(JSON.parse(item.pegawai_id));
-                        content += `</small></ul></td>`;
+                        jenis = '';
+                        if (item.jenis == 1) {
+                            jenis = `<h6>Masuk <b class="text-primary">Shift</b></h6>`;
+                        } else {
+                            if (item.jenis == 3) {
+                                jenis = `<h6>Tidak Masuk/<b class="text-warning">Ijin</b></h6>`;
+                            } else {
+                                jenis = `<h6>Tidak <b class="text-danger">Terdefinisi</b></h6>`;
+                            }
+                        }
+                        content += `<td>${jenis}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                                <h6 class='mb-1'><a href="javascript:void(0);" class="text-dark" data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Berangkat Sampai Pulang">
+                                                    <span class="badge text-bg-primary">${new Date(item.tgl_in).toLocaleString("sv-SE")}</span> ${item.tgl_out?'<i class="ti ti-arrows-right text-primary"></i> <span class="badge text-bg-secondary">'+new Date(item.tgl_out).toLocaleString("sv-SE")+'</span>':'<i class="ti ti-arrows-right text-dark"></i> <span class="badge text-bg-info">Belum/Tidak Absen Pulang</span>'}</a>
+                                                </h6>
+                                                <small class='text-truncate text-muted'>Keterlambatan : ${item.keterlambatan} ${item.terlambat==1?`<span class="badge text-bg-danger" style="padding:3px">Terlambat</span>`:`<span class="badge text-bg-success" style="padding:3px">Disiplin</span>`}</small>
+                                                <small class='text-truncate text-muted'>Lembur : ${item.lembur}</small>
+                                            </div>
+                                        </div>
+                                    </td>`;
+                        // res.users.forEach(us => {
+                        //     JSON.parse(item.pegawai_id).forEach(val => {
+                        //         if (val == us.id) {
+                        //             content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
+                        //         }
+                        //     })
+                        // })
+                        //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
+                        // content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                        //                 <div class='d-flex justify-content-start align-items-center'>
+                        //                     <div class='d-flex flex-column'>
+                        //                         <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
+                        //                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara"></u></a>
+                        //                         </h6>
+                        //                         <small class='text-truncate text-muted'>Bertempat di <b>sadsad</b> dan Diselenggarakan secara"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama sada</small>
+                        //                         <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi </b></u> (<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>asdsa</b></a>)</small>
+                        //                     </div>
+                        //                 </div>
+                        //             </td>`;
+                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <div class='d-flex flex-column'>
+                                                <a class='mb-0'>` + moment(item.ref_jam_masuk).format('YYYY-MM-DD') + `</a>
+                                                ${item.selisih_jam?`<small class='text-truncate text-muted'>Bekerja selama : `+item.selisih_jam+`</small>`:''}
                                             </div>
                                         </div>
                                     </td>`;
@@ -553,18 +592,18 @@
                         ],
                         bAutoWidth: false,
                         aoColumns : [
-                            { sWidth: '5%' },
                             { sWidth: '10%' },
-                            { sWidth: '45%' },
-                            { sWidth: '28%' },
-                            { sWidth: '12%' },
+                            { sWidth: '40%' },
+                            { sWidth: '10%' },
+                            { sWidth: '30%' },
+                            { sWidth: '10%' },
                         ],
                         columnDefs: [
                             // { visible: false, targets: [7] },
                         ],
-                        displayLength: 7,
+                        displayLength: 100,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 }
