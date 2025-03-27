@@ -149,7 +149,7 @@
                 </div>
             </div>
         @endif
-        <div class="col-xl-12">
+        <div class="col-xl-12" id="show_filter" hidden>
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 ms-3">Filter <b class="text-primary">Riwayat</b></h5>
@@ -167,15 +167,17 @@
                 <div class="card-body p-b-10">
                     <div class="alert alert-secondary alert-dismissible fade show" role="alert">
                         <small>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Contoh Alert
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Kosongi semua filter isian untuk mendapatkan seluruh data
+                            {{-- <i class="ti ti-arrow-narrow-right text-primary me-1"></i>  <br> --}}
                         </small>
                     </div>
                     <div class="row">
-                        <div class="col-md-7 mb-3">
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pilihan Filter</label>
-                                <select class="form-select select2" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                                    <option value="" selected hidden>Pilih</option>
+                                <select class="form-select select2" id="filter_pilihan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                    {{-- <option value="">Pilih</option> --}}
+                                    <option value="1" selected hidden>Monitoring Absensi</option>
                                     <option value="1">Daftar Absensi Karyawan Lengkap</option>
                                     <option value="2">Absensi Terlambat</option>
                                     <option value="3">Absensi Hangus</option>
@@ -186,15 +188,27 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-5 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Daftar Unit</label>
-                                <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
+                                <select class="form-select select2" name="filter_unit[]" id="filter_unit" style="width: 100%" multiple>
                                     @if (!empty($list['jabatan']))
                                         @foreach ($list['jabatan'] as $item)
                                             <option value="{{ $item->id }}">{{ $item->unit }}</option>
                                         @endforeach
                                     @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenis Absensi</label>
+                                <select class="form-select" name="filter_jenis" id="filter_jenis" style="width: 100%">
+                                    <option value="" selected hidden>Pilih</option>
+                                    <option value="1">Shift/Masuk</option>
+                                    <option value="2"><s>Cuti</s></option>
+                                    <option value="3">Ijin/TIdak Masuk</option>
+                                    <option value="4"><s>OnCall</s></option>
                                 </select>
                             </div>
                         </div>
@@ -205,9 +219,9 @@
                                 <label class="form-label">Rentang Tanggal <span class="text-danger">*</span></label>
                                 <div class="input-daterange input-group" id="pc-datepicker-5">
                                     <span class="input-group-text">Dari</span>
-                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Mulai Kegiatan Pelayanan" name="range-start" id="tmk">
+                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-start" id="filter_dari">
                                     <span class="input-group-text">Sampai</span>
-                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Akhir Kegiatan Pelayanan" name="range-end" id="tak">
+                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-end" id="filter_sampai">
                                 </div>
                             </div>
                         </div>
@@ -224,35 +238,27 @@
                 </div>
                 <div class="card-footer p-3">
                     <div class="text-end btn-page mb-0">
-                        <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
+                        <a class="btn btn-link-secondary" id="clear_text" href="" onclick="clearInput()">Kosongkan</a>
                         <button type="button" class="btn btn-shadow btn-primary " onclick="filter()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Menampilkan Daftar/Filter Aset" id="tombol-tampilkan" disabled><i class="fas fa-sync fa-spin align-middle me-2"></i> Tampilkan</button>
+                        title="Menampilkan Daftar/Filter Absensi" id="tombol-tampilkan"><i class="fas fa-filter align-middle me-2"></i> Tampilkan</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-12">
+        <div class="col-xl-12" id="table" hidden>
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Tabel <a class="text-primary">Riwayat</a></b></h5>
-                    <div class="btn-group">
+                    {{-- <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
-                            <thead>
-                                <tr>
-                                    <th><center>#ID</center></th>
-                                    <th>PEGAWAI</th>
-                                    <th>STATUS</th>
-                                    <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
-                                    <th>TGL ABSEN</th>
-                                </tr>
-                            </thead>
+                            <thead id="tampil-thead"></thead>
                             <tbody id="tampil-tbody">
                                 <tr>
                                     <td colspan="9" style="font-size:13px">
@@ -260,7 +266,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot>
+                            {{-- <tfoot>
                                 <tr>
                                     <th><center>#ID</center></th>
                                     <th>PEGAWAI</th>
@@ -268,7 +274,7 @@
                                     <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
                                     <th>TGL ABSEN</th>
                                 </tr>
-                            </tfoot>
+                            </tfoot> --}}
                         </table>
                     </div>
                 </div>
@@ -470,18 +476,40 @@
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
-
-            showRiwayat();
-
-            iziToast.success({
-                title: 'Pesan Developer!',
-                message: 'Sabar yaa, sistem masih tahap development. Tenang aja kok, produk Developer kali ini gak akan GAGAL.. :)',
-                position: 'topCenter'
-            });
+            $('#show_filter').prop('hidden',false);
         });
 
+        function clearInput() {
+            $('#filter_pilihan').val('');
+            $('#filter_jenis').val('');
+            $('#filter_unit').val('');
+            $('#filter_dari').val('');
+            $('#filter_sampai').val('');
+            $('#table').prop('hidden',true);
+        }
+
+        function filter() {
+            $('#filter_pilihan').val();
+            $('#filter_jenis').val();
+            $('#filter_unit').val();
+            $('#filter_dari').val();
+            $('#filter_sampai').val();
+
+            showRiwayat();
+        }
+
         function showRiwayat() {
+            $("#tampil-thead").empty().append(`
+                <tr>
+                    <th><center>#ID</center></th>
+                    <th>PEGAWAI</th>
+                    <th>STATUS</th>
+                    <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
+                    <th>TGL ABSEN</th>
+                </tr>
+            `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#table').prop('hidden',false);
             $.ajax({
                 url: "/api/kepegawaian/absensi/table",
                 type: 'GET',
@@ -580,13 +608,13 @@
                                     </td>`;
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
-            // Showing Tooltip
-            $('[data-bs-toggle="tooltip"]').tooltip({
-                trigger: 'hover'
-            })
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
+                        // dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -605,6 +633,11 @@
                         lengthChange: true,
                         lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                    iziToast.success({
+                        title: 'System Message!',
+                        message: 'Berhasil menampilkan data Absensi',
+                        position: 'topRight'
                     });
                 }
             })
