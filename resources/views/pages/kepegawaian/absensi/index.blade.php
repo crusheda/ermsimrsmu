@@ -614,7 +614,7 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
+                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -632,7 +632,7 @@
                         displayLength: 100,
                         lengthChange: true,
                         lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                     iziToast.success({
                         title: 'System Message!',
