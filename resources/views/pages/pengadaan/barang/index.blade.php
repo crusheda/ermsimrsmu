@@ -44,7 +44,7 @@
                             </div>
                         </h5>
                         <div class="flex-shrink-0">
-                            <h5>Formulir Master Barang</h5>
+                            <h5>Formulir Barang</h5>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                         </div>
                         <div class="col-md-9">
                             <div class="form-group">
-                                <label class="form-label">Upload Lampiran</label>
+                                <label class="form-label">Upload Lampiran (<mark>Optional</mark>)</label>
                                 <input type="file" class="form-control" id="filex" name="filex" accept="image/*">
                             </div>
                         </div>
@@ -115,8 +115,8 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">Daftar</h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
+                        <a href="javascript:void(0);" class="btn btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20 me-2"></i> Refresh</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -307,6 +307,7 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
+                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary" onclick="lampiran(${item.id})"><i class="fa-fw fas fa-download me-2"></i> Lampiran</a></li>`;
                                         content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                         content += "</div></center></td>";
@@ -449,7 +450,7 @@
                     $("#kategori_edit").find('option').remove();
                     res.ref.forEach(pounch => {
                         $("#kategori_edit").append(`
-                            <option value="1" ${res.show.ref_barang==pounch.id?"selected":""}>${pounch.nama}</option>
+                            <option value="${pounch.id}" ${res.show.ref_barang==pounch.id?"selected":""}>${pounch.nama}</option>
                         `);
                     });
                     $('#modalUbah').modal('show');
