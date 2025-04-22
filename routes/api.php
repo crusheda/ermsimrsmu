@@ -138,6 +138,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                     // ATUR STAF
                     Route::get('kepegawaian/jadwaldinas/staf/atur/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showAturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.show');
                     Route::post('kepegawaian/jadwaldinas/staf/atur/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'aturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.update');
+        // ABSENSI
+            // ADMIN
+                Route::get('kepegawaian/absensi/table', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'table'])->name('kepegawaian.absensi.table');
         // SURAT TUGAS
             Route::post('kepegawaian/surtug/simpan', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'simpan'])->name('kepegawaian.surtug.simpan');
             Route::delete('kepegawaian/surtug/{id}/hapus', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'hapus'])->name('kepegawaian.surtug.hapus');

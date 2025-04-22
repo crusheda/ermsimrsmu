@@ -171,7 +171,7 @@
                         </small>
                     </div>
                     <div class="row">
-                        <div class="col-md-7 mb-3">
+                        <div class="col-md-8 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pilihan Filter</label>
                                 <select class="form-select select2" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
@@ -186,7 +186,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-5 mb-3">
+                        <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Daftar Unit</label>
                                 <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
@@ -242,15 +242,17 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {{-- <div class="table-responsive">
-                        <table id="dttable" class="table table-hover dt-responsive align-middle">
+                    <div class="table-responsive">
+                        <table id="dttable-all" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th><center>WAKTU</center></th>
-                                    <th>ACARA</th>
-                                    <th>PEGAWAI PELAKSANA</th>
-                                    <th>UPDATE</th>
+                                    <th>NAMA PEGAWAI</th>
+                                    <th><center>MASUK/BERANGKAT</center></th>
+                                    <th><center>KELUAR/PULANG</center></th>
+                                    <th>KETERLAMBATAN</th>
+                                    <th>KELEBIHAN JAM/LEMBUR</th>
+                                    <th>TOTAL JAM KERJA</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
@@ -263,15 +265,17 @@
                             <tfoot>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th><center>WAKTU</center></th>
-                                    <th>ACARA</th>
-                                    <th>PEGAWAI PELAKSANA</th>
-                                    <th>UPDATE</th>
+                                    <th>NAMA PEGAWAI</th>
+                                    <th><center>MASUK/BERANGKAT</center></th>
+                                    <th><center>KELUAR/PULANG</center></th>
+                                    <th>KETERLAMBATAN</th>
+                                    <th>KELEBIHAN JAM/LEMBUR</th>
+                                    <th>TOTAL JAM KERJA</th>
                                 </tr>
                             </tfoot>
                         </table>
-                    </div> --}}
-                    <a>masih tahap development :)</a>
+                    </div>
+                    {{-- <a>masih tahap development :)</a> --}}
                 </div>
             </div>
         </div>
@@ -448,31 +452,28 @@
                 })
             });
 
-            $('#kendaraan').change(function () {
-                var i = $(this).val();
-                if (i == 1 || i == 2) {
-                    var o = $("#kendaraan_pegawai");
-                    o.length && o.each(function() {
-                        var e = $(this);
-                        e.wrap('<div class="position-relative"></div>').select2({
-                            placeholder: "Pilih",
-                            allowClear: true,
-                            dropdownParent: e.parent()
-                        })
-                    });
-                    $('#kendaraan_pegawai').val('').change();
-                    $('#showing').prop('hidden',false);
-                    $('#slide').removeClass('col-md-6').addClass('col-md-12');
-                } else {
-                    $('#showing').prop('hidden',true);
-                    $('#slide').removeClass('col-md-12').addClass('col-md-6');
-                }
-            });
-            // $('.select2Tambah').select2({
-            //     dropdownParent: $('#tambah')
+            // $('#kendaraan').change(function () {
+            //     var i = $(this).val();
+            //     if (i == 1 || i == 2) {
+            //         var o = $("#kendaraan_pegawai");
+            //         o.length && o.each(function() {
+            //             var e = $(this);
+            //             e.wrap('<div class="position-relative"></div>').select2({
+            //                 placeholder: "Pilih",
+            //                 allowClear: true,
+            //                 dropdownParent: e.parent()
+            //             })
+            //         });
+            //         $('#kendaraan_pegawai').val('').change();
+            //         $('#showing').prop('hidden',false);
+            //         $('#slide').removeClass('col-md-6').addClass('col-md-12');
+            //     } else {
+            //         $('#showing').prop('hidden',true);
+            //         $('#slide').removeClass('col-md-12').addClass('col-md-6');
+            //     }
             // });
 
-            showRiwayat();
+            showAll();
 
             iziToast.success({
                 title: 'Pesan Developer!',
@@ -481,7 +482,7 @@
             });
         });
 
-        function showRiwayat() {
+        function showAll() {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
                 url: "/api/kepegawaian/absensi/table",
@@ -491,6 +492,27 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
+                        // res.users.forEach(item => {
+                        //     if (val == item.id) {
+                        //         if (item.nama) {
+                        //             nama_user = item.nama;
+                        //         } else {
+                        //             nama_user = item.name+' (Belum Melengkapi Profil)';
+                        //         }
+                        //         res.foto_user.forEach(lis => {
+                        //             if (lis.user_id == item.id) {
+                        //                 foto_user = '/storage/'+item.filename.substr(7,10000);
+                        //             }
+                        //         })
+                        //     }
+                        // })
+                                    // <th><center>#ID</center></th>
+                                    // <th>NAMA PEGAWAI</th>
+                                    // <th><center>MASUK/BERANGKAT</center></th>
+                                    // <th><center>KELUAR/PULANG</center></th>
+                                    // <th>KETERLAMBATAN</th>
+                                    // <th>KELEBIHAN JAM/LEMBUR</th>
+                                    // <th>TOTAL JAM KERJA</th>
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
@@ -499,22 +521,28 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (superID == true || adminID == true) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="detail(${item.id})"><i class="fa-fw fas fa-search me-2"></i> Detail</a></li>`;
+                                        if (superID == true) {
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         } else {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
-                        content += `<td>${new Date(item.tgl_in).toLocaleString("sv-SE")} ${new Date(item.tgl_out).toLocaleString("sv-SE")}</td>`;
-                        res.users.forEach(us => {
-                            JSON.parse(item.pegawai_id).forEach(val => {
-                                if (val == us.id) {
-                                    content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
-                                }
-                            })
-                        })
+                        if (item.filename_foto_profil) {
+                            foto_user = '/storage/'+item.filename_foto_profil.substr(7,10000);
+                        } else {
+                            foto_user = '/images/pku/user.png';
+                        }
+                        content += `<td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0"><img
+                                                    src="${foto_user}" alt="user image"
+                                                    class="img-radius wid-40 hei-40 align-top m-r-15"></div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h6 class="mb-0">${item.nama_pegawai}</h6>
+                                            </div>
+                                        </div>
+                                    </td>`;
                         //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
@@ -541,10 +569,10 @@
                                     </td>`;
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
-            // Showing Tooltip
-            $('[data-bs-toggle="tooltip"]').tooltip({
-                trigger: 'hover'
-            })
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
                     });
                     var table = $('#dttable').DataTable({
                         dom: 'Bfrtip',
