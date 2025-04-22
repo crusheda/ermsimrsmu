@@ -32,7 +32,7 @@
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
         @if (Auth::user()->getRole('kabag-kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
-            <div class="col-xl-12">
+            <div class="col-xl-12" hidden>
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
                         <div class="card">
@@ -40,7 +40,7 @@
                                 <h5 class="mb-0"><button
                                     class="accordion-button collapsed" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-                                    aria-expanded="false" aria-controls="flush-collapseOne"><b style="font-size: 1rem">Form Manual Ijin Sakit</b>&nbsp;&nbsp;</button>
+                                    aria-expanded="false" aria-controls="flush-collapseOne"><b style="font-size: 1rem">Form Manual <a class="text-primary">Ijin Sakit</a></b>&nbsp;&nbsp;</button>
                                 </h5>
                             </div>
                             <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
@@ -174,17 +174,17 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Pilihan Filter</label>
+                                <label class="form-label">Pilihan Filter <a class="text-danger">*</a></label>
                                 <select class="form-select select2" id="filter_pilihan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                                     {{-- <option value="">Pilih</option> --}}
                                     <option value="1" selected hidden>Monitoring Absensi</option>
-                                    <option value="1">Daftar Absensi Karyawan Lengkap</option>
-                                    <option value="2">Absensi Terlambat</option>
-                                    <option value="3">Absensi Hangus</option>
-                                    <option value="4">Absensi Ijin/Tidak Masuk</option>
-                                    <option value="5">Absensi Lembur</option>
-                                    <option value="6">Kehadiran Karyawan</option>
-                                    <option value="7">Jam Kerja Tidak Lebih/Sama Dengan 7 Jam (Per Hari)</option>
+                                    {{-- <option value="2">Daftar Absensi Karyawan Lengkap</option>
+                                    <option value="3">Absensi Terlambat</option>
+                                    <option value="4">Absensi Hangus</option>
+                                    <option value="5">Absensi Ijin/Tidak Masuk</option>
+                                    <option value="6">Absensi Lembur</option>
+                                    <option value="7">Kehadiran Karyawan</option>
+                                    <option value="8">Jam Kerja Tidak Lebih/Sama Dengan 7 Jam (Per Hari)</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -204,11 +204,11 @@
                             <div class="form-group">
                                 <label class="form-label">Jenis Absensi</label>
                                 <select class="form-select" name="filter_jenis" id="filter_jenis" style="width: 100%">
-                                    <option value="" selected hidden>Pilih</option>
+                                    <option value="0" selected>Semua Jenis</option>
                                     <option value="1">Shift/Masuk</option>
-                                    <option value="2"><s>Cuti</s></option>
+                                    {{-- <option value="2"><s>Cuti</s></option> --}}
                                     <option value="3">Ijin/TIdak Masuk</option>
-                                    <option value="4"><s>OnCall</s></option>
+                                    {{-- <option value="4"><s>OnCall</s></option> --}}
                                 </select>
                             </div>
                         </div>
@@ -238,8 +238,8 @@
                 </div>
                 <div class="card-footer p-3">
                     <div class="text-end btn-page mb-0">
-                        <a class="btn btn-link-secondary" id="clear_text" href="" onclick="clearInput()">Kosongkan</a>
-                        <button type="button" class="btn btn-shadow btn-primary " onclick="filter()" data-bs-toggle="tooltip"
+                        <button type="button" class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
+                        <button type="button" class="btn btn-shadow btn-primary" onclick="filter()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                         title="Menampilkan Daftar/Filter Absensi" id="tombol-tampilkan"><i class="fas fa-filter align-middle me-2"></i> Tampilkan</button>
                     </div>
@@ -439,7 +439,7 @@
         $(document).ready(function() {
             const datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
                 buttonClass: 'btn',
-                // todayBtn: true,
+                todayBtn: true,
                 clearBtn: true
             });
             // SELECT2
@@ -476,26 +476,21 @@
             $('#show_filter').prop('hidden',false);
         });
 
-        function clearInput() {
-            $('#filter_pilihan').val('');
-            $('#filter_jenis').val('');
-            $('#filter_unit').val('');
-            $('#filter_dari').val('');
-            $('#filter_sampai').val('');
-            $('#table').prop('hidden',true);
-        }
-
         function filter() {
-            $('#filter_pilihan').val();
-            $('#filter_jenis').val();
-            $('#filter_unit').val();
-            $('#filter_dari').val();
-            $('#filter_sampai').val();
+            pilihan = $('#filter_pilihan').val();
+            jenis = $('#filter_jenis').val();
+            unit = $('#filter_unit').val();
+            dari = $('#filter_dari').val();
+            sampai = $('#filter_sampai').val();
 
-            showRiwayat();
+            if (pilihan == 1) {
+                showMonitoring();
+            } else {
+                showRiwayatLengkap();
+            }
         }
 
-        function showRiwayat() {
+        function showMonitoring() {
             $("#tampil-thead").empty().append(`
                 <tr>
                     <th><center>#ID</center></th>
@@ -507,35 +502,27 @@
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $('#table').prop('hidden',false);
+            // INITIALIZIE
+            var save = new FormData();
+            save.append('jenis',$('#filter_jenis').val());
+            save.append('unit',JSON.stringify($('#filter_unit').val()));
+            save.append('dari',$('#filter_dari').val());
+            save.append('sampai',$('#filter_sampai').val());
             $.ajax({
-                url: "/api/kepegawaian/absensi/table",
-                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/kepegawaian/absensi/table/monitoring`,
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
                 dataType: 'json',
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
-                        // res.users.forEach(item => {
-                        //     if (val == item.id) {
-                        //         if (item.nama) {
-                        //             nama_user = item.nama;
-                        //         } else {
-                        //             nama_user = item.name+' (Belum Melengkapi Profil)';
-                        //         }
-                        //         res.foto_user.forEach(lis => {
-                        //             if (lis.user_id == item.id) {
-                        //                 foto_user = '/storage/'+item.filename.substr(7,10000);
-                        //             }
-                        //         })
-                        //     }
-                        // })
-                                    // <th><center>#ID</center></th>
-                                    // <th>NAMA PEGAWAI</th>
-                                    // <th><center>MASUK/BERANGKAT</center></th>
-                                    // <th><center>KELUAR/PULANG</center></th>
-                                    // <th>KETERLAMBATAN</th>
-                                    // <th>KELEBIHAN JAM/LEMBUR</th>
-                                    // <th>TOTAL JAM KERJA</th>
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
@@ -585,37 +572,39 @@
                             }
                         }
                         content += `<td>${jenis}</td>`;
+                        if (item.terlambat == 1) {
+                            colorTglIn = 'text-bg-primary';
+                            terlambat = '<span class="badge text-bg-danger" style="padding:3px">Terlambat</span>';
+                        } else {
+                            if (item.terlambat == 0) {
+                                colorTglIn = 'text-bg-primary';
+                                terlambat = '<span class="badge text-bg-success" style="padding:3px">Disiplin</span>';
+                            } else {
+                                colorTglIn = 'text-bg-warning';
+                                terlambat = '';
+                            }
+                        }
+                        if (item.tgl_out) {
+                            tgl_out = '<i class="ti ti-arrows-right text-primary"></i> <span class="badge text-bg-secondary">'+new Date(item.tgl_out).toLocaleString("sv-SE")+'</span>';
+                        } else {
+                            if (item.jenis != 3) {
+                                tgl_out = '<i class="ti ti-arrows-right text-dark"></i> <span class="badge text-bg-info">Belum/Tidak Absen Pulang</span>';
+                            } else {
+                                tgl_out = '';
+                            }
+                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-1'><a href="javascript:void(0);" class="text-dark" data-bs-toggle="tooltip"
                                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Berangkat Sampai Pulang">
-                                                    <span class="badge text-bg-primary">${new Date(item.tgl_in).toLocaleString("sv-SE")}</span> ${item.tgl_out?'<i class="ti ti-arrows-right text-primary"></i> <span class="badge text-bg-secondary">'+new Date(item.tgl_out).toLocaleString("sv-SE")+'</span>':'<i class="ti ti-arrows-right text-dark"></i> <span class="badge text-bg-info">Belum/Tidak Absen Pulang</span>'}</a>
+                                                    <span class="badge ${colorTglIn}">${new Date(item.tgl_in).toLocaleString("sv-SE")}</span> ${tgl_out}</a>
                                                 </h6>
-                                                <small class='text-truncate text-muted'>Keterlambatan : <b>${item.keterlambatan} ${item.terlambat==1?`<span class="badge text-bg-danger" style="padding:3px">Terlambat</span>`:`<span class="badge text-bg-success" style="padding:3px">Disiplin</span>`}</b></small>
+                                                <small class='text-truncate text-muted'>Keterlambatan : <b>${item.keterlambatan?item.keterlambatan:'-'} ${terlambat}</b></small>
                                                 <small class='text-truncate text-muted'>Lembur : <b>${item.lembur?item.lembur:'-'}</b></small>
                                             </div>
                                         </div>
                                     </td>`;
-                        // res.users.forEach(us => {
-                        //     JSON.parse(item.pegawai_id).forEach(val => {
-                        //         if (val == us.id) {
-                        //             content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
-                        //         }
-                        //     })
-                        // })
-                        //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
-                        // content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                        //                 <div class='d-flex justify-content-start align-items-center'>
-                        //                     <div class='d-flex flex-column'>
-                        //                         <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
-                        //                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara"></u></a>
-                        //                         </h6>
-                        //                         <small class='text-truncate text-muted'>Bertempat di <b>sadsad</b> dan Diselenggarakan secara"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama sada</small>
-                        //                         <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi </b></u> (<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>asdsa</b></a>)</small>
-                        //                     </div>
-                        //                 </div>
-                        //             </td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
@@ -632,7 +621,7 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
+                        // dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -650,7 +639,7 @@
                         displayLength: 100,
                         lengthChange: true,
                         lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                     iziToast.success({
                         title: 'System Message!',
@@ -661,443 +650,12 @@
             })
         }
 
-        function simpan() {
-            $("#btn-simpan").prop('disabled', true);
-            $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
-
-            // Definisi
-            var save = new FormData();
-            // var filesAdded = $('#filex')[0].files;
-            save.append('acara',$('#acara').val());
-            save.append('tgl',$('#tgl').val());
-            save.append('jenis',$('#jenis').val());
-            save.append('kendaraan',$('#kendaraan').val());
-            save.append('kendaraan_pegawai',JSON.stringify($('#kendaraan_pegawai').val()));
-            save.append('lama1',$('#lama1').val());
-            save.append('lama2',$('#lama2').val());
-            save.append('lokasi',$('#lokasi').val());
-            save.append('pegawai',JSON.stringify($('#pegawai').val()));
-            save.append('deskripsi',$('#deskripsi').val());
-            save.append('user','{{ Auth::user()->id }}');
-            // if (filesAdded) {
-            //     save.append('file',filesAdded[0]);
-            // }
-            if (
-                save.get('acara') == ""     ||
-                save.get('tgl') == ""       ||
-                save.get('jenis') == ""     ||
-                save.get('kendaraan') == "" ||
-                save.get('lama1') == ""     ||
-                // save.get('lama2') == ""     ||
-                save.get('lokasi') == ""    ||
-                $('#pegawai').val() == ""
-                // || filesAdded.length == 0 // (Jika Tidak Ada File Yang Diupload)
-                ) {
-                iziToast.warning({
-                    title: 'Pesan Ambigu!',
-                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
-                    position: 'topRight'
-                });
-            } else {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{route('kepegawaian.pd.tambah')}}",
-                    method: 'post',
-                    data: save,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(res) {
-                        if (res.code == 200) {
-                            notifier.show(
-                                "Pesan Sukses!", "Submit Berkas berhasil dilakukan pada "+res.message,
-                                "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
-                            );
-                            showRiwayat();
-                            clearInput();
-                        } else {
-                            notifier.show(
-                                "Pesan Galat!", res.message,
-                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                            );
-                        }
-                    },
-                    error: function (res) {
-                        notifier.show(
-                            res.statusText + " (Code " + res.status + ")", res.responseText,
-                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-                        );
-                    }
-                });
-            }
-
-            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-simpan").prop('disabled', false);
-        }
-
-        function rincian(id) {
-            $("#tbody-rincian").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
-            $.ajax(
-            {
-                url: "/api/kepegawaian/pd/"+id,
-                type: 'GET',
-                dataType: 'json',
-                success: function(res) {
-                    $('#tbody-rincian').empty();
-                    if (res.show.kendaraan == 1) {
-                        kendaraan = '[Pribadi] Motor';
-                    } else {
-                        if (res.show.kendaraan == 2) {
-                            kendaraan = '[Pribadi] Mobil';
-                        } else {
-                            kendaraan = '[Rumah Sakit] Mobil';
-                        }
-                    }
-                    kendaraan_pegawai = '';
-                    if (res.show.kendaraan_pegawai) {
-                        res.users.forEach(is => {
-                            JSON.parse(res.show.kendaraan_pegawai).forEach(val => {
-                                if (val == is.id) {
-                                    kendaraan_pegawai += is.nama + `; `;
-                                }
-                            })
-                        })
-                    }
-                    pegawai = ``;
-                    res.users.forEach(us => {
-                        JSON.parse(res.show.pegawai_id).forEach(val => {
-                            if (val == us.id) {
-                                pegawai += `<li>` + us.nama + `</li>`;
-                            }
-                        })
-                    })
-                    $('#tbody-rincian').append(`
-                        <tr>
-                            <th colspan="2">
-                                <div class="shadow-lg p-3 bg-body rounded" role="alert">
-                                    <h5 class="alert-heading fw-bold mb-2 text-center">
-                                        Status Pembayaran Dari <b class="text-primary">Bagian Keuangan</b>
-                                    </h5>
-                                    <h6 class="text-center mb-0" style="font-size:20px">${res.show.paid == 0?'<span class="badge bg-light-danger rounded-pill">U N P A I D</span>':'<span class="badge bg-light-success rounded-pill ms-2">P A I D</span>'}</h6>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr><th>Nama Acara</th><td>${res.show.acara} (${res.show.jenis})</td></tr>
-                        <tr><th>Lokasi Acara</th><td>${res.show.lokasi}</td></tr>
-                        <tr><th>Tanggal</th><td>Pada ${res.show.tgl} Selama ${res.show.lama1 == 1?'< 4 Jam':'> 4 Jam'} ${res.show.lama2?'('+res.show.lama2+' Jam)':''}</td></tr>
-                        <tr><th>Peserta</th><td>${pegawai}</td></tr>
-                        <tr><th>Transportasi</th><td>${kendaraan}</td></tr>
-                        ${res.show.kendaraan_pegawai?`<tr><th>Pemilik Kendaraan</th><td>`+kendaraan_pegawai+`</td></tr>`:``}
-                        <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
-                        ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh `+res.show.nama_user_paid+` pada `+res.show.tgl_paid+`</td></tr>`:``}
-                    `);
-                    var keuID = "{{ Auth::user()->getManyPermission(['admin_keuangan']) }}";
-                    var userID = "{{ Auth::user()->id }}";
-                    if (keuID == true || userID == '391') {
-                        $('#keu-only').prop('hidden',false);
-                    } else {
-                        $('#keu-only').prop('hidden',true);
-                    }
-                    $('#id_rincian').val(res.show.id);
-                    if (res.show.paid == 0) {
-                        $('#btn-confirm').prop('hidden',false);
-                        $('#btn-cancel').prop('hidden',true);
-                    } else {
-                        haripaid = new Date(res.show.tgl_paid).toLocaleDateString("sv-SE");
-                        hariini = new Date().toLocaleDateString("sv-SE");
-                        if (haripaid == hariini) {
-                            $('#btn-confirm').prop('hidden',true);
-                            $('#btn-cancel').prop('hidden',false);
-                        } else {
-                            $('#btn-confirm').prop('hidden',true);
-                            $('#btn-cancel').prop('hidden',true);
-                        }
-                    }
-                    $('#modalRincian').modal('show');
-                }
-            })
-        }
-
-        function confirmPaid() {
-            // PROSES
-            var save = new FormData();
-            save.append('id',$("#id_rincian").val());
-            save.append('pegawai','{{ Auth::user()->id }}');
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{{route('kepegawaian.pd.confirmPaid')}}",
-                method: 'post',
-                data: save,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(res) {
-                    iziToast.success({
-                        title: 'Pesan Sukses!',
-                        message: 'Rincian Perjalanan Dinas telah berhasil dibayarkan pada '+res,
-                        position: 'topRight'
-                    });
-                    $('#modalRincian').modal('hide');
-                    showRiwayat();
-                },
-                error: function(res) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: 'Rincian Perjalanan Dinas gagal dibayarkan',
-                        position: 'topRight'
-                    });
-                }
-            });
-        }
-
-        function cancelPaid() {
-            // PROSES
-            var save = new FormData();
-            save.append('id',$("#id_rincian").val());
-            save.append('pegawai','{{ Auth::user()->id }}');
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{{route('kepegawaian.pd.cancelPaid')}}",
-                method: 'post',
-                data: save,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                success: function(res) {
-                    iziToast.success({
-                        title: 'Pesan Sukses!',
-                        message: 'Rincian Perjalanan Dinas telah berhasil diselesaikan pembayaran pada '+res,
-                        position: 'topRight'
-                    });
-                    $('#modalRincian').modal('hide');
-                    showRiwayat();
-                },
-                error: function(res) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: 'Batal Pembayaran Fee Perjalanan Dinas gagal dilakukan',
-                        position: 'topRight'
-                    });
-                }
-            });
-        }
-
-        function ubah(id) {
-            $.ajax(
-            {
-                url: "/api/kepegawaian/pd/"+id,
-                type: 'GET',
-                dataType: 'json',
-                success: function(res) {
-                    // if (res.show.title) {
-                    //     $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-primary"><a href="javascript:void(0);" onclick="window.open('/kepegawaian/pd/`+res.show.id+`/download')"><u>${res.show.title}</u></a></h6>`);
-                    // } else {
-                    //     $("#filex_edit").empty().append(`<h6 id="filex_edit" class="text-dark"><a>Tidak ada file terupload</a></h6>`);
-                    // }
-                    if (res.show.kendaraan == 1 || res.show.kendaraan == 2) {
-                        $('#showing_edit').prop('hidden',false);
-                        $('#slide_edit').removeClass('col-md-6').addClass('col-md-12');
-                    } else {
-                        $('#showing_edit').prop('hidden',true);
-                        $('#slide_edit').removeClass('col-md-12').addClass('col-md-6');
-                    }
-                    $('#kendaraan_edit').change(function () {
-                        var i = $(this).val();
-                        if (i == 1 || i == 2) {
-                            var o = $("#kendaraan_pegawai_edit");
-                            o.length && o.each(function() {
-                                var e = $(this);
-                                e.wrap('<div class="position-relative"></div>').select2({
-                                    placeholder: "Pilih",
-                                    allowClear: true,
-                                    dropdownParent: e.parent()
-                                })
-                            });
-                            $('#kendaraan_pegawai_edit').val('').change();
-                            $('#showing_edit').prop('hidden',false);
-                            $('#slide_edit').removeClass('col-md-6').addClass('col-md-12');
-                        } else {
-                            $('#showing_edit').prop('hidden',true);
-                            $('#slide_edit').removeClass('col-md-12').addClass('col-md-6');
-                        }
-                    });
-                    $('#id_edit').val(res.show.id);
-                    $('#acara_edit').val(res.show.acara);
-                    $('#tgl_edit').val(res.show.tgl);
-                    $('#lokasi_edit').val(res.show.lokasi);
-                    $("#jenis_edit").find('option').remove();
-                    $("#jenis_edit").append(`
-                        <option value="1" ${res.show.jenis==1?"selected":""}>Offline</option>
-                        <option value="2" ${res.show.jenis==2?"selected":""}>Online</option>
-                    `);
-                    $("#kendaraan_edit").find('option').remove();
-                    $("#kendaraan_edit").append(`
-                        <option value="1" ${res.show.kendaraan==1?"selected":""}>[Pribadi] Motor</option>
-                        <option value="2" ${res.show.kendaraan==2?"selected":""}>[Pribadi] Mobil</option>
-                        <option value="3" ${res.show.kendaraan==3?"selected":""}>[Rumah Sakit] Mobil</option>
-                    `);
-                    var up = JSON.parse(res.show.kendaraan_pegawai);
-                    $("#kendaraan_pegawai_edit").find('option').remove();
-                    res.users.forEach(pouch => {
-                        $("#kendaraan_pegawai_edit").append(`
-                            <option value="${pouch.id}">${pouch.nama}</option>
-                        `);
-                    });
-                    $("#kendaraan_pegawai_edit").val(up).change();
-                    $("#lama1_edit").find('option').remove();
-                    $("#lama1_edit").append(`
-                        <option value="1" ${res.show.lama1==1?"selected":""}>< 4 Jam (Kurang dari 4 jam)</option>
-                        <option value="2" ${res.show.lama1==2?"selected":""}>> 4 Jam (Lebih dari 4 jam)</option>
-                    `);
-                    $('#lama2_edit').val(res.show.lama2);
-                    var un = JSON.parse(res.show.pegawai_id);
-                    $("#pegawai_edit").find('option').remove();
-                    res.users.forEach(pounch => {
-                        $("#pegawai_edit").append(`
-                            <option value="${pounch.id}">${pounch.nama}</option>
-                        `);
-                    });
-                    $("#pegawai_edit").val(un).change();
-                    $('#deskripsi_edit').val(res.show.deskripsi);
-                    $('#modalUbah').modal('show');
-                }
-            })
-        }
-
-        function prosesUbah() {
-            $("#btn-ubah").prop('disabled', true);
-            $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
-
-            var save = new FormData();
-            var id = $('#id_edit').val();
-            save.append('id',id);
-            save.append('acara',$('#acara_edit').val());
-            save.append('tgl',$('#tgl_edit').val());
-            save.append('jenis',$('#jenis_edit').val());
-            save.append('kendaraan',$('#kendaraan_edit').val());
-            save.append('kendaraan_pegawai',JSON.stringify($('#kendaraan_pegawai_edit').val()));
-            save.append('lama1',$('#lama1_edit').val());
-            save.append('lama2',$('#lama2_edit').val());
-            save.append('lokasi',$('#lokasi_edit').val());
-            save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
-            save.append('deskripsi',$('#deskripsi_edit').val());
-
-            if (
-                save.get('acara') == ""   ||
-                save.get('tgl') == ""     ||
-                save.get('jenis') == ""   ||
-                save.get('kendaraan') == ""   ||
-                save.get('lama1') == ""   ||
-                // save.get('lama2') == ""   ||
-                save.get('lokasi') == ""  ||
-                $('#pegawai_edit').val() == ""
-            ) {
-                iziToast.warning({
-                    title: 'Pesan Ambigu!',
-                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
-                    position: 'topRight'
-                });
-            } else {
-                // AJAX request
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "/api/kepegawaian/pd/"+id+"/ubah",
-                    method: 'post',
-                    data: save,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(res){
-                        notifier.show(
-                            "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
-                            "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
-                        );
-                        if (res) {
-                            $('#modalUbah').modal('hide');
-                            showRiwayat();
-                            clearInput();
-                        }
-                    },
-                    error: function(res){
-                        console.log("error : " + JSON.stringify(res) );
-                        notifier.show(
-                            res.statusText + " (Code " + res.status + ")", res.responseText,
-                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-                        );
-                    }
-                });
-            }
-
-            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-ubah").prop('disabled', false);
-        }
-
-        function hapus(id) {
-            $("#id_hapus").val(id);
-            var inputs = document.getElementById('setujuhapus');
-            inputs.checked = false;
-            $('#modalHapus').modal('show');
-        }
-
-        function prosesHapus() {
-            // SWITCH BTN HAPUS
-            var checkboxHapus = $('#setujuhapus').is(":checked");
-            if (checkboxHapus == false) {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Mohon menyetujui untuk dilakukan penghapusan berkas tersebut',
-                    position: 'topRight'
-                });
-            } else {
-                // PROSES HAPUS
-                var id = $("#id_hapus").val();
-                $.ajax({
-                    url: "/api/kepegawaian/pd/"+id+"/hapus",
-                    type: 'DELETE',
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Berkas perjalanan dinas Anda telah berhasil dihapus pada '+res,
-                            position: 'topRight'
-                        });
-                        $('#modalHapus').modal('hide');
-                        showRiwayat();
-                        clearInput();
-                    },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: 'Berkas perjalanan dinas Anda gagal dihapus',
-                            position: 'topRight'
-                        });
-                    }
-                });
-            }
-        }
-
         function clearInput() {
-            // $('#filex').val('');
-            $('#acara').val('');
-            $('#tgl').val('');
-            $('#kendaraan').val('');
-            $('#kendaraan_pegawai').val('').change();
-            $('#lama1').val('');
-            $('#lama2').val('');
-            $('#jenis').val('');
-            $('#lokasi').val('');
-            $('#pegawai').val('').change();
-            $('#deskripsi').val('');
+            // $('#filter_pilihan').val('').change();
+            $('#filter_unit').val('').change();
+            $('#filter_jenis').val('0');
+            $('#filter_dari').val('').change();
+            $('#filter_sampai').val('').change();
         }
 
         function getDateTime() {

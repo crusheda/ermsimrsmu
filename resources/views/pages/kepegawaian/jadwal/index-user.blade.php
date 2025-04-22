@@ -161,7 +161,8 @@
                     <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" id="btn-refresh-lihat" class="btn btn-link-warning me-sm-3 me-1"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
+                    <button type="button" id="btn-cetak" class="btn btn-link-primary me-sm-3 me-1" onclick="printJadwal()"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
+                    <button type="submit" id="btn-refresh-lihat" class="btn btn-link-warning me-sm-2"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
                     <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
                 </div>
             </div>
@@ -542,6 +543,49 @@
                     }
                 }
             })
+        }
+
+        function printJadwal() {
+            // Ambil elemen dengan ID 'tampil-jadwal'
+            var content = document.getElementById('tampil-jadwal').innerHTML;
+
+            // Buka jendela print baru
+            var myWindow = window.open('', '', 'height=800,width=600');
+
+            // Isi konten jendela print dengan konten yang akan dicetak
+            myWindow.document.write('<html><head><title>Print Preview</title>');
+            myWindow.document.write(`
+                <style>
+                    table, th, td {
+                        border: 1px solid black;
+                        border-collapse: collapse;
+                    }
+                    tbody td {
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    h4 {
+                        text-align: center;
+                    }
+                    h5 {
+                        text-align: center;
+                    }
+                    h6 {
+                        font-size: 15px;
+                        margin-bottom:0px;
+                    }
+                </style>
+            `);
+            myWindow.document.write('</head><body>');
+            myWindow.document.write(content); // Sisipkan konten yang diambil
+            myWindow.document.write('</body></html>');
+
+            // Tunggu hingga halaman baru siap dan cetak
+            myWindow.document.close(); // Tutup dokumen untuk memastikan semuanya dimuat
+            myWindow.print(); // Panggil fungsi print pada jendela baru
+            // myWindow.onafterprint = function() {
+            //     myWindow.close();
+            // }
         }
 
         function hapus(id) {
