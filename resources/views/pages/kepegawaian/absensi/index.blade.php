@@ -149,7 +149,7 @@
                 </div>
             </div>
         @endif
-        <div class="col-xl-12">
+        <div class="col-xl-12" id="show_filter" hidden>
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 ms-3">Filter <b class="text-primary">Riwayat</b></h5>
@@ -167,15 +167,17 @@
                 <div class="card-body p-b-10">
                     <div class="alert alert-secondary alert-dismissible fade show" role="alert">
                         <small>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Contoh Alert
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Kosongi semua filter isian untuk mendapatkan seluruh data
+                            {{-- <i class="ti ti-arrow-narrow-right text-primary me-1"></i>  <br> --}}
                         </small>
                     </div>
                     <div class="row">
-                        <div class="col-md-8 mb-3">
+                        <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pilihan Filter</label>
-                                <select class="form-select select2" id="filterLokasi" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                                    <option value="" selected hidden>Pilih</option>
+                                <select class="form-select select2" id="filter_pilihan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                    {{-- <option value="">Pilih</option> --}}
+                                    <option value="1" selected hidden>Monitoring Absensi</option>
                                     <option value="1">Daftar Absensi Karyawan Lengkap</option>
                                     <option value="2">Absensi Terlambat</option>
                                     <option value="3">Absensi Hangus</option>
@@ -189,12 +191,24 @@
                         <div class="col-md-4 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Daftar Unit</label>
-                                <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
+                                <select class="form-select select2" name="filter_unit[]" id="filter_unit" style="width: 100%" multiple>
                                     @if (!empty($list['jabatan']))
                                         @foreach ($list['jabatan'] as $item)
                                             <option value="{{ $item->id }}">{{ $item->unit }}</option>
                                         @endforeach
                                     @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenis Absensi</label>
+                                <select class="form-select" name="filter_jenis" id="filter_jenis" style="width: 100%">
+                                    <option value="" selected hidden>Pilih</option>
+                                    <option value="1">Shift/Masuk</option>
+                                    <option value="2"><s>Cuti</s></option>
+                                    <option value="3">Ijin/TIdak Masuk</option>
+                                    <option value="4"><s>OnCall</s></option>
                                 </select>
                             </div>
                         </div>
@@ -205,9 +219,9 @@
                                 <label class="form-label">Rentang Tanggal <span class="text-danger">*</span></label>
                                 <div class="input-daterange input-group" id="pc-datepicker-5">
                                     <span class="input-group-text">Dari</span>
-                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Mulai Kegiatan Pelayanan" name="range-start" id="tmk">
+                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-start" id="filter_dari">
                                     <span class="input-group-text">Sampai</span>
-                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tgl Akhir Kegiatan Pelayanan" name="range-end" id="tak">
+                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-end" id="filter_sampai">
                                 </div>
                             </div>
                         </div>
@@ -224,37 +238,27 @@
                 </div>
                 <div class="card-footer p-3">
                     <div class="text-end btn-page mb-0">
-                        <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
+                        <a class="btn btn-link-secondary" id="clear_text" href="" onclick="clearInput()">Kosongkan</a>
                         <button type="button" class="btn btn-shadow btn-primary " onclick="filter()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                        title="Menampilkan Daftar/Filter Aset" id="tombol-tampilkan" disabled><i class="fas fa-sync fa-spin align-middle me-2"></i> Tampilkan</button>
+                        title="Menampilkan Daftar/Filter Absensi" id="tombol-tampilkan"><i class="fas fa-filter align-middle me-2"></i> Tampilkan</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-12">
+        <div class="col-xl-12" id="table" hidden>
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Tabel <a class="text-primary">Riwayat</a></b></h5>
-                    <div class="btn-group">
+                    {{-- <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="dttable-all" class="table table-hover dt-responsive align-middle">
-                            <thead>
-                                <tr>
-                                    <th><center>#ID</center></th>
-                                    <th>NAMA PEGAWAI</th>
-                                    <th><center>MASUK/BERANGKAT</center></th>
-                                    <th><center>KELUAR/PULANG</center></th>
-                                    <th>KETERLAMBATAN</th>
-                                    <th>KELEBIHAN JAM/LEMBUR</th>
-                                    <th>TOTAL JAM KERJA</th>
-                                </tr>
-                            </thead>
+                        <table id="dttable" class="table table-hover dt-responsive align-middle">
+                            <thead id="tampil-thead"></thead>
                             <tbody id="tampil-tbody">
                                 <tr>
                                     <td colspan="9" style="font-size:13px">
@@ -262,20 +266,17 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot>
+                            {{-- <tfoot>
                                 <tr>
                                     <th><center>#ID</center></th>
-                                    <th>NAMA PEGAWAI</th>
-                                    <th><center>MASUK/BERANGKAT</center></th>
-                                    <th><center>KELUAR/PULANG</center></th>
-                                    <th>KETERLAMBATAN</th>
-                                    <th>KELEBIHAN JAM/LEMBUR</th>
-                                    <th>TOTAL JAM KERJA</th>
+                                    <th>PEGAWAI</th>
+                                    <th>STATUS</th>
+                                    <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
+                                    <th>TGL ABSEN</th>
                                 </tr>
-                            </tfoot>
+                            </tfoot> --}}
                         </table>
                     </div>
-                    {{-- <a>masih tahap development :)</a> --}}
                 </div>
             </div>
         </div>
@@ -472,18 +473,40 @@
             //         $('#slide').removeClass('col-md-12').addClass('col-md-6');
             //     }
             // });
-
-            showAll();
-
-            iziToast.success({
-                title: 'Pesan Developer!',
-                message: 'Sabar yaa, sistem masih tahap development. Tenang aja kok, produk Developer kali ini gak akan GAGAL.. :)',
-                position: 'topCenter'
-            });
+            $('#show_filter').prop('hidden',false);
         });
 
-        function showAll() {
+        function clearInput() {
+            $('#filter_pilihan').val('');
+            $('#filter_jenis').val('');
+            $('#filter_unit').val('');
+            $('#filter_dari').val('');
+            $('#filter_sampai').val('');
+            $('#table').prop('hidden',true);
+        }
+
+        function filter() {
+            $('#filter_pilihan').val();
+            $('#filter_jenis').val();
+            $('#filter_unit').val();
+            $('#filter_dari').val();
+            $('#filter_sampai').val();
+
+            showRiwayat();
+        }
+
+        function showRiwayat() {
+            $("#tampil-thead").empty().append(`
+                <tr>
+                    <th><center>#ID</center></th>
+                    <th>PEGAWAI</th>
+                    <th>STATUS</th>
+                    <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
+                    <th>TGL ABSEN</th>
+                </tr>
+            `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#table').prop('hidden',false);
             $.ajax({
                 url: "/api/kepegawaian/absensi/table",
                 type: 'GET',
@@ -521,49 +544,83 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="detail(${item.id})"><i class="fa-fw fas fa-search me-2"></i> Detail</a></li>`;
-                                        if (superID == true) {
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                        if (superID == true || adminID == true) {
+                                            // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            // content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            // content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
-                        if (item.filename_foto_profil) {
-                            foto_user = '/storage/'+item.filename_foto_profil.substr(7,10000);
-                        } else {
-                            foto_user = '/images/pku/user.png';
-                        }
+                        role = '';
+                        res.role.forEach(us => {
+                            if (us.id_user == item.pegawai_id) {
+                                role += `<span class="badge bg-light-secondary me-1">${us.nama_role}</span>`;
+                            }
+                        })
                         content += `<td>
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0"><img
-                                                    src="${foto_user}" alt="user image"
+                                                    src="${item.foto_user?`/storage/`+item.foto_user.substring(7,10000):'/images/pku/user.png'}" alt="user image"
                                                     class="img-radius wid-40 hei-40 align-top m-r-15"></div>
                                             <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-0">${item.nama_pegawai}</h6>
+                                                <h6 class="mb-1">${item.nama_pegawai}</h6>
+                                                <small class='text-truncate text-muted'>${role}</small>
                                             </div>
                                         </div>
                                     </td>`;
-                        //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
+                        jenis = '';
+                        if (item.jenis == 1) {
+                            jenis = `<h6>Masuk <b class="text-primary">Shift</b></h6>`;
+                        } else {
+                            if (item.jenis == 3) {
+                                jenis = `<h6>Tidak Masuk/<b class="text-warning">Ijin</b></h6>`;
+                            } else {
+                                jenis = `<h6>Tidak <b class="text-danger">Terdefinisi</b></h6>`;
+                            }
+                        }
+                        content += `<td>${jenis}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
-                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara"></u></a>
+                                                <h6 class='mb-1'><a href="javascript:void(0);" class="text-dark" data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Berangkat Sampai Pulang">
+                                                    <span class="badge text-bg-primary">${new Date(item.tgl_in).toLocaleString("sv-SE")}</span> ${item.tgl_out?'<i class="ti ti-arrows-right text-primary"></i> <span class="badge text-bg-secondary">'+new Date(item.tgl_out).toLocaleString("sv-SE")+'</span>':'<i class="ti ti-arrows-right text-dark"></i> <span class="badge text-bg-info">Belum/Tidak Absen Pulang</span>'}</a>
                                                 </h6>
-                                                <small class='text-truncate text-muted'>Bertempat di <b>sadsad</b> dan Diselenggarakan secara"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama sada</small>
-                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi </b></u> (<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>asdsa</b></a>)</small>
+                                                <small class='text-truncate text-muted'>Keterlambatan : <b>${item.keterlambatan} ${item.terlambat==1?`<span class="badge text-bg-danger" style="padding:3px">Terlambat</span>`:`<span class="badge text-bg-success" style="padding:3px">Disiplin</span>`}</b></small>
+                                                <small class='text-truncate text-muted'>Lembur : <b>${item.lembur?item.lembur:'-'}</b></small>
                                             </div>
                                         </div>
                                     </td>`;
-                        var pegawai = null;
-                        content += `<td><small><ul class='list-unstyled mt-2'>`;
-                        // console.log(JSON.parse(item.pegawai_id));
-                        content += `</small></ul></td>`;
+                        // res.users.forEach(us => {
+                        //     JSON.parse(item.pegawai_id).forEach(val => {
+                        //         if (val == us.id) {
+                        //             content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
+                        //         }
+                        //     })
+                        // })
+                        //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
+                        // content += `<td style='white-space: normal !important;word-wrap: break-word;'>
+                        //                 <div class='d-flex justify-content-start align-items-center'>
+                        //                     <div class='d-flex flex-column'>
+                        //                         <h6 class='mb-0'><a href="javascript:void(0);" class="text-dark"><u data-bs-toggle="tooltip"
+                        //                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara"></u></a>
+                        //                         </h6>
+                        //                         <small class='text-truncate text-muted'>Bertempat di <b>sadsad</b> dan Diselenggarakan secara"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama sada</small>
+                        //                         <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi </b></u> (<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>asdsa</b></a>)</small>
+                        //                     </div>
+                        //                 </div>
+                        //             </td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
-                                                <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                                <a class='mb-0'>` + moment(item.ref_jam_masuk).format('YYYY-MM-DD') + `</a>
+                                                ${item.selisih_jam?`<small class='text-truncate text-muted'>Bekerja selama : `+item.selisih_jam+`</small>`:''}
                                             </div>
                                         </div>
                                     </td>`;
@@ -581,19 +638,24 @@
                         ],
                         bAutoWidth: false,
                         aoColumns : [
-                            { sWidth: '5%' },
                             { sWidth: '10%' },
-                            { sWidth: '45%' },
-                            { sWidth: '28%' },
-                            { sWidth: '12%' },
+                            { sWidth: '40%' },
+                            { sWidth: '10%' },
+                            { sWidth: '30%' },
+                            { sWidth: '10%' },
                         ],
                         columnDefs: [
                             // { visible: false, targets: [7] },
                         ],
-                        displayLength: 7,
+                        displayLength: 100,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                    iziToast.success({
+                        title: 'System Message!',
+                        message: 'Berhasil menampilkan data Absensi',
+                        position: 'topRight'
                     });
                 }
             })

@@ -54,7 +54,7 @@
                             </div>
                         </div>
                     </div>
-                    <div data-simplebar style="max-height: 500px;">
+                    <div data-simplebar style="max-height: 1000px;">
                         <div class="table-responsive">
                             <table class="table table-nowrap align-middle table-hover mb-0">
                                 <tbody id="tampil-tbody">
@@ -83,7 +83,7 @@
                     <div class="mt-4 mt-sm-0 float-sm-end d-sm-flex align-items-center">
                         <div class="search-box me-2">
                             <div class="position-relative">
-                                <input type="text" class="form-control border-0 typeahead" id="caribarang"
+                                <input type="text" class="form-control border-2 typeahead" id="caribarang"
                                     autocomplete="off" placeholder="Cari Barang..." data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="Tekan ENTER untuk Submit">
@@ -111,7 +111,6 @@
                                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                             title="Menu Admin"></i>
                                         </a>
-
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="{{ route('pengadaan.barang.index') }}">Daftar Barang</a>
                                             <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
@@ -182,8 +181,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label>Jumlah Permintaan <a class="text-danger">*</a></label>
-                                <input type="text" id="jml_k" value="0" class="input-quantity form-control"
-                                    width="100%">
+                                <input type="text" id="jml_k" value="0" class="input-quantity form-control" width="100%">
                             </div>
                             <div class="form-group">
                                 <label>Keterangan</label>
@@ -412,7 +410,7 @@
                             var thnUpload = item.updated_at.substring(0, 4);
                             content = `<tr id="pengadaan` + item.id_pengadaan + `" style="font-size:13px">
                                         <td style="width: 50px;">
-                                            <span class="badge bg-primary">ID : ` + item.id_pengadaan + `</span>
+                                            <span class="badge bg-secondary">ID : ` + item.id_pengadaan + `</span>
                                         </td>
                                         <td>
                                             <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);"
@@ -640,7 +638,7 @@
                                             <td>` + formatRupiah(item.harga_barang, 'Rp ') + `</td>
                                             <td>
                                                 <div class="me-3" style="width: 120px;">
-                                                    <input type="text" value="` + item.jml_permintaan + `" id="jml_set` + item.id + `" onchange="hitungUlang(${item.id})" class="input-quantity form-control idJumlah` + urutan + `" name="demo_vertical">
+                                                    <input type="text" value="0" id="jml_set` + item.id + `" onchange="hitungUlang(${item.id})" class="input-quantity form-control idJumlah` + urutan + `" name="demo_vertical">
                                                 </div>
                                             </td>
                                             <td id="ttl` + item.id + `">` + formatRupiah(item.total_barang, 'Rp ') + `</td>
@@ -695,9 +693,10 @@
                                 verticalbuttons: true
                             });
                             $("#jml_set" + item.id).trigger("touchspin.updatesettings", {
-                                max: 1000,
+                                max: 10000,
                                 min: 1
                             });
+                            $("#jml_set" + item.id).val(item.jml_permintaan);
                         })
                         content2 = `<tr style="font-size:13px">
                                         <th colspan="4">TOTAL KESELURUHAN</th>
@@ -853,7 +852,7 @@
         function addKeranjang(id) {
             $("#get_id_barang").val(id);
             $("#jml_k").val(1).trigger("touchspin.updatesettings", {
-                max: 1000,
+                max: 10000,
                 min: 1
             });
             $("#ket_k").text('');
@@ -863,15 +862,26 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#showBarangKeranjang").empty();
+                    if (res.ref_barang == 1) {
+                        stt = '<span class="badge rounded-pill text-bg-primary align-middle">ATK</span>'
+                    } else {
+                        if (res.ref_barang == 2) {
+                            stt = '<span class="badge rounded-pill text-bg-warning text-white align-middle">CETAK</span>'
+                        } else {
+                            if (res.ref_barang == 3) {
+                                stt = '<span class="badge rounded-pill text-bg-info align-middle">BHP</span>'
+                            } else {
+                                stt = '<span class="badge rounded-pill text-bg-danger align-middle">Tidak Terkategori</span>'
+                            }
+                        }
+                    }
                     content = `<div class="product-img position-relative">
                                     <img class="img-fluid mx-auto d-block wid-150" alt=""
                                         src="${res.filename!=null?"/storage/"+res.filename.substr(7,1000):"{{ asset('images/no-img.png') }}"}">
                                 </div>
                                 <div class="mt-4 text-center">
-                                    <h6 class="mb-3"><a href="javascript: void(0);" class="text-dark">` +
-                        res.nama + `</a></h6>
-                                    <h5 class="my-0 mb-3"><b class="text-success">` + formatRupiah(res.harga, 'Rp ') +
-                        `</b> <span class="text-muted me-2">/ ` + res.satuan + `</span></h5>
+                                    <h6 class="mb-3"><a href="javascript: void(0);" class="text-dark me-2">` + res.nama + `</a>${stt}</h6>
+                                    <h5 class="my-0 mb-3"><b class="text-success">` + formatRupiah(res.harga, 'Rp ') + `</b> <span class="text-muted me-2">/ ` + res.satuan + `</span></h5>
                                 </div>`;
                     $('#showBarangKeranjang').append(content);
                 }

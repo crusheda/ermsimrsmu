@@ -201,12 +201,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Validasi
+                        Form Verif
                     </h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_verif" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan validasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVALIDASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <p style="text-align: justify;">Anda akan melakukan verifikasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVERIFIKASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujuverif">
                         <span class="switch-toggle-slider">
@@ -217,7 +217,7 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-verif" class="btn btn-primary me-sm-3 me-1" onclick="prosesValidasi()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Validasi</button>
+                    <button type="submit" id="btn-verif" class="btn btn-success me-sm-3 me-1" onclick="prosesVerif()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Verifikasi</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
@@ -228,12 +228,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Batal Validasi
+                        Form Batal Verif
                     </h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_batal_verif" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan pembatalan validasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVERIFIKASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <p style="text-align: justify;">Anda akan melakukan pembatalan verifikasi Jadwal Dinas tersebut, status akan berubah ke <kbd>PENDING</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
                     <label class="switch">
                         <input type="checkbox" class="switch-input" id="setujubatalverif">
                         <span class="switch-toggle-slider">
@@ -244,12 +244,68 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-batal-verif" class="btn btn-warning me-sm-3 me-1" onclick="prosesBatalValidasi()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Batalkan Validasi</button>
+                    <button type="submit" id="btn-batal-verif" class="btn btn-warning me-sm-3 me-1" onclick="prosesBatalVerif()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Batalkan Verifikasi</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
     </div>
+    {{-- FORM VERIF & BATAL VALIDASI --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="modalValidasi" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Validasi
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_validasi" hidden>
+                    <p style="text-align: justify;">Anda akan melakukan validasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVALIDASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuvalidasi">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-validasi" class="btn btn-primary me-sm-3 me-1" onclick="prosesValidasi()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Validasi</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="modalBatalValidasi" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Batal Validasi
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_batal_validasi" hidden>
+                    <p style="text-align: justify;">Anda akan melakukan pembatalan validasi Jadwal Dinas tersebut, status akan berubah ke <kbd>DIVERIFIKASI</kbd>. Lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan pemrosesan data.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujubatalvalidasi">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-batal-validasi" class="btn btn-warning me-sm-3 me-1" onclick="prosesBatalValidasi()"><i class="fa fa-calendar-check me-1" style="font-size:13px"></i> Batalkan Validasi</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- FORM HAPUS --}}
     <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
@@ -444,8 +500,10 @@
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                            if ("{{ Auth::user()->id }}" == item.pegawai_id) {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
+                                            if (item.progress == 1) { // BELUM DIVERIFIKASI ATASAN
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-success" onclick="verif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
+                                            } else {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Verif</a></li>`;
                                             }
                                             if (item.progress == 2) { // SEBELUM VALIDASI / SUDAH DIVERIFIKASI ATASAN
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="validasi(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
@@ -460,6 +518,7 @@
                                                 }
                                             }
                                             if ("{{ Auth::user()->id }}" == item.pegawai_id) {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                             }
                         content += "</ul></div></center></td>";
@@ -723,12 +782,24 @@
 
         // VERIFIKASI
         function validasi(id) {
+            $("#id_validasi").val(id);
+            var inputs = document.getElementById('setujuvalidasi');
+            inputs.checked = false;
+            $('#modalValidasi').modal('show');
+        }
+        function batalValidasi(id) {
+            $("#id_batal_validasi").val(id);
+            var inputs = document.getElementById('setujubatalvalidasi');
+            inputs.checked = false;
+            $('#modalBatalValidasi').modal('show');
+        }
+        function verif(id) {
             $("#id_verif").val(id);
             var inputs = document.getElementById('setujuverif');
             inputs.checked = false;
             $('#modalVerif').modal('show');
         }
-        function batalValidasi(id) {
+        function batalVerif(id) {
             $("#id_batal_verif").val(id);
             var inputs = document.getElementById('setujubatalverif');
             inputs.checked = false;
@@ -737,7 +808,7 @@
 
         function prosesValidasi() {
             // SWITCH BTN
-            var checkbox = $('#setujuverif').is(":checked");
+            var checkbox = $('#setujuvalidasi').is(":checked");
             if (checkbox == false) {
                 iziToast.error({
                     title: 'Pesan Galat!',
@@ -746,7 +817,7 @@
                 });
             } else {
                 // PROSES
-                var id = $("#id_verif").val();
+                var id = $("#id_validasi").val();
                 $.ajax({
                     url: "/api/kepegawaian/jadwaldinas/"+id+"/verif/{{ Auth::user()->id }}",
                     type: 'GET',
@@ -757,7 +828,7 @@
                             message: 'Jadwal Dinas telah berhasil divalidasi pada '+res,
                             position: 'topRight'
                         });
-                        $('#modalVerif').modal('hide');
+                        $('#modalValidasi').modal('hide');
                         showRiwayat();
                     },
                     error: function(res) {
@@ -772,7 +843,7 @@
         }
         function prosesBatalValidasi() {
             // SWITCH BTN
-            var checkbox = $('#setujubatalverif').is(":checked");
+            var checkbox = $('#setujubatalvalidasi').is(":checked");
             if (checkbox == false) {
                 iziToast.error({
                     title: 'Pesan Galat!',
@@ -781,7 +852,7 @@
                 });
             } else {
                 // PROSES
-                var id = $("#id_batal_verif").val();
+                var id = $("#id_batal_validasi").val();
                 $.ajax({
                     url: "/api/kepegawaian/jadwaldinas/"+id+"/batalverif/{{ Auth::user()->id }}",
                     type: 'GET',
@@ -792,13 +863,83 @@
                             message: 'Jadwal Dinas telah berhasil dibatalkan validasi pada '+res,
                             position: 'topRight'
                         });
-                        $('#modalBatalVerif').modal('hide');
+                        $('#modalBatalValidasi').modal('hide');
                         showRiwayat();
                     },
                     error: function(res) {
                         iziToast.error({
                             title: 'Pesan Galat!',
                             message: 'Jadwal Dinas gagal batal validasi',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+        function prosesVerif() {
+            // SWITCH BTN
+            var checkbox = $('#setujuverif').is(":checked");
+            if (checkbox == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan verifikasi jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES
+                var id = $("#id_verif").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/bawahan/"+id+"/verif/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas telah berhasil diverifikasi pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalVerif').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas gagal diverifikasi',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
+        }
+        function prosesBatalVerif() {
+            // SWITCH BTN
+            var checkbox = $('#setujubatalverif').is(":checked");
+            if (checkbox == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan pembatalan verifikasi jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES
+                var id = $("#id_batal_verif").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/bawahan/"+id+"/batalverif/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas telah berhasil dibatalkan verifikasi pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalBatalVerif').modal('hide');
+                        showRiwayat();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas gagal batal verifikasi',
                             position: 'topRight'
                         });
                     }
