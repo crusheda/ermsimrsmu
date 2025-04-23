@@ -71,8 +71,8 @@ class JadwalController extends Controller
         // print_r($jadwal);
         // die();
         if (!empty($jadwal)) {
-            $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
-            $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
+            $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->get();
+            $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->first();
             $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->orderBy('urutan','ASC')->get();
             $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 
@@ -103,7 +103,7 @@ class JadwalController extends Controller
     function formUbah($id)
 
     {
-        $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->first();
+        $jadwal  = jadwal::where('id',$id)->where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->first();
 
         if (!empty($jadwal)) {
             if ($jadwal->progress == 0 || $jadwal->progress == 3) {
@@ -115,8 +115,8 @@ class JadwalController extends Controller
 
                 return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status]);
             } else {
-                $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->get();
-                $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->first();
+                $ref_shift = ref_jadwal_shift::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->get();
+                $ref_users = ref_jadwal_users::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->first();
                 $ref_jabatan = ref_jadwal_jabatan::where('pegawai_id',Auth::user()->id)->where('deleted_at',null)->orderBy('urutan','ASC')->get();
 
                 if ($jadwal->staf != $ref_users->staf) {
@@ -859,18 +859,17 @@ class JadwalController extends Controller
 
     function aturStaf(Request $request)
     {
-        $getData = ref_jadwal_jabatan::where('id_staf',$request->staf)->get();
+        $getData = ref_jadwal_jabatan::where('id_staf',$request->staf)->where('deleted_at',null)->get();
 
         // print_r(count($getData));
         // die();
         if (count($getData)>0) { // IF getData EXIST !!
             foreach ($getData as $key => $value) {
-                # code...
+                $del = ref_jadwal_jabatan::find($value->id);
+                // $getData->deleted_at=Carbon::now();
+                // $getData->save();
+                $del->delete();
             }
-            $del = ref_jadwal_jabatan::find($value->id);
-            // $getData->deleted_at=Carbon::now();
-            // $getData->save();
-            $del->delete();
         }
 
         $getUrutan = ref_jadwal_jabatan::where('pegawai_id',$request->pegawai)->get();
