@@ -151,7 +151,7 @@
         @endif
         <div class="col-xl-12" id="show_filter" hidden>
             <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                <div class="card-header d-flex align-items-center justify-content-between px-3">
                     <h5 class="mb-0 ms-3">Filter <b class="text-primary">Riwayat</b></h5>
                     {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
                         <div class="btn-group">
@@ -178,8 +178,8 @@
                                 <select class="form-select select2" id="filter_pilihan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                                     {{-- <option value="">Pilih</option> --}}
                                     <option value="1" selected hidden>Monitoring Absensi</option>
-                                    {{-- <option value="2">Daftar Absensi Karyawan Lengkap</option>
-                                    <option value="3">Absensi Terlambat</option>
+                                    <option value="2">Absensi Karyawan Lengkap</option>
+                                    {{-- <option value="3">Absensi Terlambat</option>
                                     <option value="4">Absensi Hangus</option>
                                     <option value="5">Absensi Ijin/Tidak Masuk</option>
                                     <option value="6">Absensi Lembur</option>
@@ -248,7 +248,7 @@
         </div>
         <div class="col-xl-12" id="table" hidden>
             <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                <div class="card-header d-flex align-items-center justify-content-between px-3">
                     <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Tabel <a class="text-primary">Riwayat</a></b></h5>
                     {{-- <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
@@ -261,20 +261,11 @@
                             <thead id="tampil-thead"></thead>
                             <tbody id="tampil-tbody">
                                 <tr>
-                                    <td colspan="9" style="font-size:13px">
+                                    <td colspan="20" style="font-size:13px">
                                         <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                                     </td>
                                 </tr>
                             </tbody>
-                            {{-- <tfoot>
-                                <tr>
-                                    <th><center>#ID</center></th>
-                                    <th>PEGAWAI</th>
-                                    <th>STATUS</th>
-                                    <th>BERANGKAT <i class="ti ti-arrow-narrow-right text-primary"></i> PULANG</th>
-                                    <th>TGL ABSEN</th>
-                                </tr>
-                            </tfoot> --}}
                         </table>
                     </div>
                 </div>
@@ -486,7 +477,11 @@
             if (pilihan == 1) {
                 showMonitoring();
             } else {
-                showRiwayatLengkap();
+                if (pilihan == 2) {
+                    showRiwayatLengkap();
+                } else {
+
+                }
             }
         }
 
@@ -500,7 +495,7 @@
                     <th>TGL ABSEN</th>
                 </tr>
             `);
-            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $('#table').prop('hidden',false);
             // INITIALIZIE
             var save = new FormData();
@@ -643,7 +638,217 @@
                     });
                     iziToast.success({
                         title: 'System Message!',
-                        message: 'Berhasil menampilkan data Absensi',
+                        message: 'Berhasil menampilkan data Monitoring Absensi',
+                        position: 'topRight'
+                    });
+                }
+            })
+        }
+
+        function showRiwayatLengkap() {
+            $("#tampil-thead").empty().append(`
+                <tr>
+                    <th><center>#ID</center></th>
+                    <th>TGL ABSEN</th>
+                    <th>ID PEGAWAI</th>
+                    <th>NIP PEGAWAI</th>
+                    <th>NAMA PEGAWAI</th>
+                    <th>UNIT</th>
+                    <th>STATUS</th>
+                    <th>SHIFT</th>
+                    <th>JAM MASUK - PULANG</th>
+                    <th>ABSEN BERANGKAT</th>
+                    <th>ABSEN PULANG</th>
+                    <th>TERLAMBAT</th>
+                    <th>LEMBUR</th>
+                    <th>TOTAL BEKERJA</th>
+                </tr>
+            `);
+            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#table').prop('hidden',false);
+            // INITIALIZIE
+            var save = new FormData();
+            save.append('jenis',$('#filter_jenis').val());
+            save.append('unit',JSON.stringify($('#filter_unit').val()));
+            save.append('dari',$('#filter_dari').val());
+            save.append('sampai',$('#filter_sampai').val());
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/kepegawaian/absensi/table/all`,
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.show.forEach(item => {
+                        var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var date = new Date().toLocaleDateString("sv-SE");
+                        var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
+                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <ul class='dropdown-menu dropdown-menu-right'>`;
+                                        if (adminID == true) {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            if (superID == true) {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            }
+                                        } else {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                        }
+                        content += "</div></center></td>";
+                        content += `<td>${moment(item.ref_jam_masuk).format('YYYY-MM-DD')}</td>`;
+                        content += `<td>${item.id_pegawai}</td>`;
+                        content += `<td class="text-end">${item.nip_pegawai?item.nip_pegawai:'-'}</td>`;
+                        content += `<td>${item.nama_pegawai}</td>`;
+                        role = '';
+                        res.role.forEach(us => {
+                            if (us.id_user == item.pegawai_id) {
+                                role += `<span class="badge bg-light-secondary me-1">${us.nama_role}</span>`;
+                            }
+                        })
+                        content += `<td>${role}</td>`;
+                        jenis = '';
+                        if (item.jenis == 1) {
+                            jenis = `<h6>Masuk <b class="text-primary">Shift</b></h6>`;
+                        } else {
+                            if (item.jenis == 3) {
+                                jenis = `<h6>Tidak Masuk/<b class="text-warning">Ijin</b></h6>`;
+                            } else {
+                                jenis = `<h6>Tidak <b class="text-danger">Terdefinisi</b></h6>`;
+                            }
+                        }
+                        content += `<td>${jenis}</td>`;
+                        content += `<td>${item.nm_shift} (${item.kd_shift})</td>`;
+                        content += `<td>${moment(item.ref_jam_masuk).format('HH:mm') +" - "+ moment(item.ref_jam_pulang).format('HH:mm')}</td>`;
+                        if (item.terlambat == 1) {
+                            colorTglIn = 'text-bg-primary';
+                        } else {
+                            if (item.terlambat == 0) {
+                                colorTglIn = 'text-bg-primary';
+                            } else {
+                                colorTglIn = 'text-bg-warning';
+                            }
+                        }
+                        content += `<td><span class="badge ${colorTglIn}">${new Date(item.tgl_in).toLocaleString("sv-SE")}</span></td>`;
+                        if (item.tgl_out) {
+                            tgl_out = '<span class="badge text-bg-secondary">'+new Date(item.tgl_out).toLocaleString("sv-SE")+'</span>';
+                        } else {
+                            if (item.jenis != 3) {
+                                tgl_out = '<span class="badge text-bg-info">Belum/Tidak Absen Pulang</span>';
+                            } else {
+                                tgl_out = '-';
+                            }
+                        }
+                        content += `<td>${tgl_out}</td>`;
+                        content += `<td class="text-end">${item.keterlambatan?toTime(item.keterlambatan):'-'}</td>`;
+                        content += `<td class="text-end">${item.lembur?toTime(item.lembur):'-'}</td>`;
+                        content += `<td class="text-end">${item.selisih_jam?toTime(item.selisih_jam):'-'}</td>`;
+                        content += "</tr>";
+                        $('#tampil-tbody').append(content);
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    });
+                    var table = $('#dttable').DataTable({
+                        dom: 'Bfrtip',
+                        order: [
+                            // [1, "desc"],
+                            [4, "asc"],
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '30%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '5%' },
+                        //     { sWidth: '5%' },
+                        // ],
+                        columnDefs: [
+                            { visible: false, targets: [2] },
+                        ],
+                        displayLength: 100,
+                        lengthChange: true,
+                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Export Excel',
+                                orientation: 'landscape',
+                                pageSize: 'A4',
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9] // hanya kolom tertentu
+                                },
+                                className: 'btn btn-success'
+                            },
+                            {
+                                extend: 'pdf',
+                                text: 'Export PDF',
+                                orientation: 'landscape',
+                                pageSize: 'A4',  // F4 dalam milimeter
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9] // hanya kolom tertentu
+                                },
+                                className: 'btn btn-danger',
+                                customize: function (doc) {
+                                    // Menambahkan judul di atas tabel
+                                    doc.content.unshift({
+                                        text: 'Laporan Data Absensi Pegawai',  // Judul yang ingin ditambahkan
+                                        fontSize: 18,   // Ukuran font
+                                        bold: true,     // Menebalkan teks
+                                        alignment: 'center', // Menyelaraskan teks ke tengah
+                                        margin: [0, 0, 0, 10]  // Margin bawah (untuk memberi jarak antara judul dan tabel)
+                                    });
+
+                                    // Pastikan header tabel tetap disembunyikan jika diinginkan
+                                    if (doc.content && doc.content[1] && doc.content[1].table) {
+                                        doc.content[1].table.headerRows = 0;
+                                    }
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: 'Cetak',
+                                orientation: 'landscape',
+                                pageSize: 'A4',  // F4 dalam milimeter
+                                className: 'btn btn-warning',
+                                customize: function (win) {
+                                    // Sembunyikan semua selain tabel
+                                    $(win.document.body).find('*').not('table, table *').hide();
+
+                                    $(win.document.body).find('table')
+                                        .addClass('compact')
+                                        .css('font-size', 'inherit');
+                                },
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9] // hanya kolom tertentu
+                                },
+                            },
+                            {
+                                extend: 'colvis',
+                                text: 'Sembunyikan Kolom',
+                                className: 'btn btn-dark',
+                            }
+                        ],
+                    });
+                    iziToast.success({
+                        title: 'System Message!',
+                        message: 'Berhasil menampilkan data Absensi keseluruhan',
                         position: 'topRight'
                     });
                 }
@@ -671,6 +876,18 @@
             }
             var dateTime = year + '-' + month + '-' + day;
             return dateTime;
+        }
+
+        function toTime(waktu) {
+            if (waktu == "00:00:00") {
+                var hasil = '-';
+            } else {
+                var parts = waktu.split(':'); // pisah jadi array ['07','04','20']
+
+                var hasil = parseInt(parts[0]) + 'j ' + parseInt(parts[1]) + 'm ' + parseInt(parts[2]) + 'd';
+            }
+
+            return hasil; // Output: "7j 4m 20d"
         }
     </script>
 @endsection

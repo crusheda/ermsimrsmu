@@ -141,6 +141,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // ABSENSI
             // ADMIN
                 Route::post('kepegawaian/absensi/table/monitoring', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableMonitoring'])->name('kepegawaian.absensi.tableMonitoring');
+                Route::post('kepegawaian/absensi/table/all', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableAll'])->name('kepegawaian.absensi.tableAll');
         // SURAT TUGAS
             Route::post('kepegawaian/surtug/simpan', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'simpan'])->name('kepegawaian.surtug.simpan');
             Route::delete('kepegawaian/surtug/{id}/hapus', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'hapus'])->name('kepegawaian.surtug.hapus');
