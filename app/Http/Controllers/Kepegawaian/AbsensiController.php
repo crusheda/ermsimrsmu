@@ -57,8 +57,8 @@ class AbsensiController extends Controller
         // ============ JENIS ==================================================
         $jenis = $request->jenis;
         // =====================================================================
-        $show = absensi::join('users', 'users.id', '=', 'kepegawaian_absensi.pegawai_id')
-                        ->join('users_foto', 'users.id', '=', 'users_foto.user_id')
+        $show = absensi::leftJoin('users', 'users.id', '=', 'kepegawaian_absensi.pegawai_id')
+                        ->leftJoin('users_foto', 'users.id', '=', 'users_foto.user_id')
                         ->select('kepegawaian_absensi.*', 'users.nama as nama_pegawai', 'users_foto.filename as foto_user')
                         // Menambahkan kondisi untuk memeriksa apakah unit_ids tidak kosong
                         ->when(!empty($unit_ids), function ($query) use ($unit_ids) {
@@ -107,8 +107,8 @@ class AbsensiController extends Controller
         // ============ JENIS ==================================================
         $jenis = $request->jenis;
         // =====================================================================
-        $show = absensi::join('users', 'users.id', '=', 'kepegawaian_absensi.pegawai_id')
-                        ->join('users_foto', 'users.id', '=', 'users_foto.user_id')
+        $show = absensi::leftJoin('users', 'users.id', '=', 'kepegawaian_absensi.pegawai_id')
+                        ->leftJoin('users_foto', 'users.id', '=', 'users_foto.user_id')
                         ->select('kepegawaian_absensi.*', 'users.id as id_pegawai','users.nama as nama_pegawai','users.nip as nip_pegawai', 'users_foto.filename as foto_user')
                         // Menambahkan kondisi untuk memeriksa apakah unit_ids tidak kosong
                         ->when(!empty($unit_ids), function ($query) use ($unit_ids) {

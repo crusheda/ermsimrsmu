@@ -188,12 +188,19 @@ class ProfilKaryawanController extends Controller
 
     function tableAll()
     {
-        $show = users::leftJoin('users_status as us','users.id','=','us.pegawai_id')
-                ->leftJoin('referensi as rf','rf.id','=','us.ref_id')
-                ->leftJoin('referensi as rp','rp.id','=','users.ref_profesi')
+        $show = users::leftJoin('referensi as rp','rp.id','=','users.ref_profesi')
+                ->leftJoin('users_status as us', function($join) {
+                    $join->on('us.pegawai_id', '=', 'users.id')
+                            ->where('us.status', '=', 1)
+                            ->whereNull('us.deleted_at');
+                })
+                ->leftJoin('referensi as rus', function($join) {
+                    $join->on('rus.id', '=', 'us.ref_id')
+                            ->where('rus.ref_jenis', '=', 10);
+                })
                 ->where('us.deleted_at',null)
                 ->where('users.status',null)
-                ->select('users.*','rf.deskripsi as profesi','rp.deskripsi as klasifikasi_user')
+                ->select('users.*','rus.deskripsi as profesi','rp.deskripsi as klasifikasi_user','rus.deskripsi as status_pegawai')
                 ->orderBy('users.nip','asc')
                 ->get();
         $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')

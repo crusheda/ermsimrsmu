@@ -25,6 +25,149 @@
     <div class="row pt-1">
         <div class="col-sm-12">
             <div class="card">
+                <div class="card-body p-4 pb-1">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-0">Grafik Interaktif Kepegawaian</h5>
+                        </div>
+                        <div class="flex-shrink-0 ms-3">
+                            <div class="dropdown">
+                                <a class="avtar avtar-s btn-link-secondary border border-secondary dropdown-toggle arrow-none" href="#"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="ti ti-dots f-18"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showGrafikJenisPegawai()">Jenis Pegawai</a>
+                                    <a class="dropdown-item" href="javascript:void(0);"><s>Jenis Kelamin</s></a>
+                                    <a class="dropdown-item" href="javascript:void(0);"><s>Pendidikan</s></a>
+                                    <a class="dropdown-item" href="javascript:void(0);"><s>Profesi</s></a>
+                                    <a class="dropdown-item" href="javascript:void(0);"><s>Status Pegawai</s></a>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-s bg-light-secondary"><i
+                                                    class="ti ti-chart-bar f-20"></i></div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="row g-1">
+                                                <div class="col-6">
+                                                    <p class="text-muted mb-1">Total Pegawai</p>
+                                                    <h6 class="mb-0">xxx</h6>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <h6 class="mb-1">- xx</h6>
+                                                    <p class="text-danger mb-0"><i
+                                                            class="ti ti-arrow-down-left"></i> x%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-s bg-light-secondary"><i
+                                                    class="ti ti-chart-arrows-vertical f-20"></i></div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="row g-1">
+                                                <div class="col-6">
+                                                    <p class="text-muted mb-1">Total Pegawai</p>
+                                                    <h6 class="mb-0">xxx</h6>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <h6 class="mb-1">+ xx</h6>
+                                                    <p class="text-success mb-0"><i
+                                                            class="ti ti-arrow-up-right"></i> x%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-s bg-light-secondary">
+                                                <i class="ti ti-activity f-20"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="row g-1">
+                                                <div class="col-6">
+                                                    <p class="text-muted mb-1">Total Pegawai</p>
+                                                    <h6 class="mb-0">xxx</h6>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <h6 class="mb-1">- xx</h6>
+                                                    <p class="text-warning mb-0"><i
+                                                            class="ti ti-arrows-left-right"></i> x%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-s bg-light-secondary"><i
+                                                    class="ti ti-ad f-20"></i></div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="row g-1">
+                                                <div class="col-6">
+                                                    <p class="text-muted mb-1">Total Pegawai</p>
+                                                    <h6 class="mb-0">xxx</h6>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <h6 class="mb-1">xxx</h6>
+                                                    <p class="text-success mb-0"><i
+                                                            class="ti ti-arrow-up-right"></i> xx%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-s bg-light-secondary"><i
+                                                    class="ti ti-chart-arrows-vertical f-20"></i></div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="row g-1">
+                                                <div class="col-6">
+                                                    <p class="text-muted mb-1">Total Pegawai</p>
+                                                    <h6 class="mb-0">xxx</h6>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <h6 class="mb-1">+ xx</h6>
+                                                    <p class="text-success mb-0"><i
+                                                            class="ti ti-arrow-up-right"></i> x%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-center my-2" id="show-name-grafik"></h5>
+                            <div id="grafik-show"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <div class="btn-group shadow">
                         {{-- <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Akun Pengguna Baru" disabled>
@@ -37,7 +180,7 @@
                             <i class="fas fa-history me-1"></i></button> --}}
                     </div>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
+                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary border border-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showNonLengkap()">Profil Belum Lengkap</a>
@@ -89,7 +232,7 @@
                                     <th>TMPT/TGL LAHIR</th>
                                     <th>JENIS KELAMIN</th>
                                     <th>STATUS KAWIN</th>
-                                    <th>PROFESI</th>
+                                    <th>STATUS PEGAWAI</th>
                                     <th>JABATAN</th> {{-- 10 --}}
                                     <th>KLASIFIKASI</th>
                                     <th>MASUK KERJA</th>
@@ -148,7 +291,7 @@
                                     <th>TMPT/TGL LAHIR</th>
                                     <th>JENIS KELAMIN</th>
                                     <th>STATUS KAWIN</th>
-                                    <th>PROFESI</th>
+                                    <th>STATUS PEGAWAI</th>
                                     <th>JABATAN</th>
                                     <th>KLASIFIKASI</th>
                                     <th>MASUK KERJA</th>
@@ -329,8 +472,9 @@
     </div>
 
     <script>
+        let grafik = null; // INITIALIZE GRAPH
         $(document).ready(function() {
-
+            showGrafikJenisPegawai();
             // TABEL PROFIL KARYAWAN INIT
             refresh();
             // $.ajax({
@@ -447,7 +591,7 @@
                         content += `<td>${item.temp_lahir?item.temp_lahir:'-'}${item.tgl_lahir?', '+item.tgl_lahir:''}</td>`;
                         content += `<td>${item.jns_kelamin?item.jns_kelamin:'-'}</td>`;
                         content += `<td>${item.status_kawin?item.status_kawin:'-'}</td>`;
-                        content += `<td>${item.profesi?item.profesi:'-'}</td>`;
+                        content += `<td>${item.status_pegawai?item.status_pegawai:'-'}</td>`;
                         content += `<td>`;
                         res.role.forEach(val => {
                             if (item.id == val.id_user) {
@@ -498,7 +642,7 @@
                     var table = $('#dttable-all').DataTable({
                         dom: 'Bfrtip',
                         order: [
-                            [1, "asc"]
+                            [47, "desc"]
                         ],
                         // bAutoWidth: false,
                         // aoColumns : [
@@ -580,7 +724,7 @@
                                 <tr>
                                     <td><center>` + item.id + `</center></td>
                                     <td>` + item.name + `</td>
-                                    <td>` + item.nama + `</td>
+                                    <td>${item.nama?item.nama:'-'}</td>
                                     <td>` + new Date(item.deleted_at).toLocaleString("sv-SE") +
                             `</td>
                                     <td><center><a href='javascript:void(0);' class='btn btn-sm btn-link-primary' onclick="showAktifKaryawan(` +
@@ -775,6 +919,59 @@
                     }
                 })
             }
+        }
+
+        // -----------------------   GRAFIK  ------------------------
+        function showGrafikJenisPegawai() {
+            $.ajax({
+                url: "/api/profilkaryawan/nonlengkap",
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    var options = {
+                        chart: {
+                            height: 350,
+                            type: "pie"
+                        },
+                        labels: ["Components", "Widgets", "Pages", "Forms", "Other", "Apps"],
+                        series: [40, 20, 10, 15, 5, 10],
+                        colors: ["#4680FF", "#4680FF", "#212529", "#212529", "#212529", "#212529"],
+                        fill: {
+                            opacity: [1, .6, .4, .6, .8, 1]
+                        },
+                        legend: {
+                            show: !1
+                        },
+                        dataLabels: {
+                            enabled: !0,
+                            dropShadow: {
+                                enabled: !1
+                            }
+                        },
+                        responsive: [{
+                            breakpoint: 575,
+                            options: {
+                                chart: {
+                                    height: 250
+                                },
+                                dataLabels: {
+                                    enabled: !1
+                                }
+                            }
+                        }]
+                    };
+
+                    // Hapus grafik lama jika ada
+                    if (grafik) {
+                        grafik.destroy();
+                    }
+
+                    $('#show-name-grafik').text('Berdasarkan Jenis Kelamin (Semua Pegawai)')
+                    grafik = new ApexCharts($("#grafik-show")[0], options);
+                    grafik.render();
+                }
+            })
+
         }
     </script>
 @endsection
