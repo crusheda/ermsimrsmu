@@ -154,9 +154,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('kepegawaian/absensi/{id}', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'show'])->name('kepegawaian.absensi.show');
         // REKRUTMEN
             // PENGUMUMAN
-            Route::get('kepegawaian/rekrutmen/pengumuman/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'table'])->name('kepegawaian.rekrutmen.tablePengumuman');
-            Route::post('kepegawaian/rekrutmen/pengumuman/simpan', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'simpan'])->name('kepegawaian.rekrutmen.simpan');
-            Route::delete('kepegawaian/rekrutmen/pengumuman/{id}/hapus', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'hapus'])->name('kepegawaian.rekrutmen.hapus');
+            Route::get('kepegawaian/rekrutmen/pengumuman/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'table'])->name('kepegawaian.rekrutmen.pengumuman.table');
+            Route::get('kepegawaian/rekrutmen/pengumuman/{id}/show', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'show'])->name('kepegawaian.rekrutmen.pengumuman.show');
+            Route::post('kepegawaian/rekrutmen/pengumuman/simpan', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'simpan'])->name('kepegawaian.rekrutmen.pengumuman.simpan');
+            Route::post('kepegawaian/rekrutmen/pengumuman/ubah', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'ubah'])->name('kepegawaian.rekrutmen.pengumuman.ubah');
+            Route::delete('kepegawaian/rekrutmen/pengumuman/{id}/hapus', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'hapus'])->name('kepegawaian.rekrutmen.pengumuman.hapus');
             // REGISTRASI/LOKER
             Route::get('kepegawaian/rekrutmen/registrasi/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'table'])->name('kepegawaian.rekrutmen.tableRegistrasi');
 

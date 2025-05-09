@@ -28,7 +28,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Table</h5>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i class="fa-fw fas fa-plus nav-icon"></i>&nbsp;&nbsp;Tambah Loker</button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i class="fa-fw fas fa-plus-square nav-icon"></i>&nbsp;&nbsp;Tambah Loker</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -36,13 +36,16 @@
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
                                 <tr>
-                                    <th class="cell-fit">#ID</th>
-                                    <th class="cell-fit">NIP</th>
-                                    <th>NAMA</th>
-                                    <th>JABATAN</th>
-                                    <th><center>PROGRESS</center></th>
-                                    <th>ESTIMASI</th>
-                                    <th>UPDATE</th>
+                                    <th class="cell-fit">AKSI</th>
+                                    <th class="cell-fit">LOWONGAN KERJA</th>
+                                    <th class="cell-fit">DIBUKA</th>
+                                    <th class="cell-fit">DITUTUP</th>
+                                    <th class="cell-fit">KUALIFIKASI</th>
+                                    <th class="cell-fit">PERSYARATAN</th>
+                                    <th class="cell-fit">TUGAS</th>
+                                    <th class="cell-fit">KEAHLIAN</th>
+                                    <th class="cell-fit">KETERANGAN</th>
+                                    <th class="cell-fit">DIPERBARUI</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
@@ -54,13 +57,16 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th class="cell-fit">#ID</th>
-                                    <th class="cell-fit">NIP</th>
-                                    <th>NAMA</th>
-                                    <th>JABATAN</th>
-                                    <th><center>PROGRESS</center></th>
-                                    <th>ESTIMASI</th>
-                                    <th>UPDATE</th>
+                                    <th class="cell-fit">AKSI</th>
+                                    <th class="cell-fit">LOWONGAN KERJA</th>
+                                    <th class="cell-fit">DIBUKA</th>
+                                    <th class="cell-fit">DITUTUP</th>
+                                    <th class="cell-fit">KUALIFIKASI</th>
+                                    <th class="cell-fit">PERSYARATAN</th>
+                                    <th class="cell-fit">TUGAS</th>
+                                    <th class="cell-fit">KEAHLIAN</th>
+                                    <th class="cell-fit">KETERANGAN</th>
+                                    <th class="cell-fit">DIPERBARUI</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -179,9 +185,117 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="prosesSimpan()" id="btn-simpan" disabled><i class="fa-fw fas fa-save nav-icon"></i> Submit</button>
+                    <button type="button" class="btn btn-primary" onclick="prosesSimpan()" id="btn-simpan"><i class="fa-fw fas fa-save nav-icon"></i> Submit</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-lg" id="ubah" role="dialog" aria-labelledby="confirmFormLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Ubah Lowongan Pekerjaan <span class="badge badge-bg-secondary">ID#<b id="show_id_edit"></b></span>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" class="form-control" id="id_edit" hidden>
+                        <div class="col-md-12 mb-3">
+                            <div class="alert alert-secondary">
+                                <small>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Tgl Buka Lowongan</b> tidak lebih dari <b>Tgl Tutup Lowongan</b><br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Tanda <a class="text-danger">*</a> berarti isian <b>Wajib</b> diisi<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menggunakan <b>Huruf Besar/Capital/Uppercase</b> saat pengisian
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Buka Lowongan <a class="text-danger">*</a></label>
+                                <input type="date" id="mulai_edit" value="" class="form-control notnull">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Tutup Lowongan <a class="text-danger">*</a></label>
+                                <input type="date" id="selesai_edit" value="" class="form-control notnull">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Penempatan / Unit Kerja</label>
+                                <input type="text" id="unit_edit" value="" class="form-control" placeholder="e.g. IT">
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Nama Kebutuhan <a class="text-danger">*</a></label>
+                                <input type="text" id="nama_edit" value="" class="form-control notnull" placeholder="e.g. IT Support">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Umur Minimal <a class="text-danger">*</a></label>
+                                <input type="number" id="umur_min_edit" value="" class="form-control notnull" placeholder="e.g. 20">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Umur Maksimal <a class="text-danger">*</a></label>
+                                <input type="number" id="umur_max_edit" value="" class="form-control notnull" placeholder="e.g. 35">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jumlah Kebutuhan <a class="text-danger">*</a></label>
+                                <input type="number" id="jumlah_edit" value="" class="form-control notnull" placeholder="e.g. 5">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Maksimal Kuota Pendaftar</label>
+                                <input type="number" id="kuota_edit" value="" class="form-control" placeholder="e.g. 100">
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Jenjang Pendidikan <a class="text-danger">*</a></label>
+                                <select class="select-multiple form-select notnull" name="pendidikan_edit[]" id="pendidikan_edit" data-allow-clear="true" data-bs-auto-close="outside" style="width: 100%" required multiple></select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Uraian Tugas <a class="text-danger">*</a></label>
+                                <textarea id="tugas_edit" rows="4" class="form-control notnull" placeholder="e.g. Pengelolaan infrastruktur teknologi, keamanan data pasien, pemeliharaan sistem informasi rumah sakit, serta memberikan dukungan teknis dan integrasi antar sistem untuk mendukung pelayanan medis yang efisien."></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Keahlian <a class="text-danger">*</a></label>
+                                <textarea id="keahlian_edit" rows="4" class="form-control notnull" placeholder="e.g. keamanan siber untuk melindungi data pasien, manajemen jaringan untuk memastikan konektivitas yang stabil, serta pemrograman untuk pengembangan dan pemeliharaan perangkat lunak. Selain itu, kemampuan dalam memberikan support teknis, manajemen sistem informasi rumah sakit, dan analisis data juga penting untuk mendukung kelancaran operasional dan meningkatkan kualitas layanan medis."></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Persyaratan <a class="text-danger">*</a></label>
+                                <textarea id="persyaratan_edit" rows="4" class="form-control notnull" placeholder="e.g. Muslim (Laki-laki), usia max 30th, memiliki sertifikat ahli K3 umum/K3RS, manajemen resiko, mampu berkomunikasi dengan baik, sehat jasmani & rohani, mampu bekerjasama dalam tim, menguasai analisa/pengolahan/penyajian data dalam komputer"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Keterangan</label>
+                                <textarea id="keterangan_edit" rows="2" class="form-control notnull" placeholder="Optional"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" onclick="prosesUbah()" id="btn-ubah"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                 </div>
             </div>
         </div>
@@ -246,6 +360,7 @@
                         res.show.forEach(item => {
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
                                 if (item.deleted_at == null) {
                                     content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
                                 } else {
@@ -255,22 +370,20 @@
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                             <div class='d-flex justify-content-start align-items-center'>
                                                 <div class='d-flex flex-column'>
-                                                    <a class='mb-0'>` + item.nama + ` (` + item.kuota + `)</a>
-                                                    <small class='text-truncate text-muted'>` + item.nama_user + `</small>
+                                                    <a class='mb-0'>${item.nama} ${item.unit?'('+item.unit+')':''}</a>
+                                                    <small class='text-truncate text-muted'>Jumlah Kebutuhan : <b class='text-primary'>${item.jumlah}</b> Orang</small>
+                                                    <small class='text-truncate text-muted'>Kuota Pendaftar : ${item.kuota?'<b class="text-danger">'+item.kuota+'</b> Peserta':'<b class="text-danger">∞</b> (Tak Terhingga)'}</small>
+                                                    <small class='text-truncate text-muted'>Batasan Umur : <mark>${item.umur_min?item.umur_min:'x'} - ${item.umur_max?item.umur_max:'x'} Tahun</mark></small>
                                                 </div>
                                             </div>
                                         </td>`;
-                            content += `<td>${item.tgl}</td>`;
-                            content += `<td><small><ul class='list-unstyled mt-2'>`;
-                            res.users.forEach(us => {
-                                JSON.parse(item.pegawai_id).forEach(val => {
-                                    if (val == us.id) {
-                                        content += `<li><i class="ti ti-arrow-narrow-right me-1"></i>` + us.nama + `</li>`;
-                                    }
-                                })
-                            })
-                            content += `</small></ul></td>`;
-                            // content += `<td>${item.keterangan?item.keterangan:''}</td>`;
+                            content += `<td>≥ ${moment(item.mulai).locale('id').format('D MMMM YYYY')}</td>`;
+                            content += `<td>≤ ${moment(item.selesai).locale('id').format('D MMMM YYYY')}</td>`;
+                            content += `<td>${item.kualifikasi_nama}</td>`;
+                            content += `<td>${item.tugas}</td>`;
+                            content += `<td>${item.keahlian}</td>`;
+                            content += `<td>${item.persyaratan}</td>`;
+                            content += `<td>${item.keterangan?item.keterangan:'-'}</td>`;
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                             <div class='d-flex justify-content-start align-items-center'>
                                                 <div class='d-flex flex-column'>
@@ -284,24 +397,26 @@
                         });
                         var table = $('#dttable').DataTable({
                             order: [
-                                [6, "desc"]
+                                [9, "desc"]
                             ],
                             bAutoWidth: false,
                             aoColumns : [
                                 { sWidth: '5%' },
+                                { sWidth: '25%' },
+                                { sWidth: '5%' },
+                                { sWidth: '5%' },
                                 { sWidth: '10%' },
-                                { sWidth: '20%' },
-                                { sWidth: '20%' },
-                                { sWidth: '15%' },
-                                { sWidth: '15%' },
-                                { sWidth: '15%' },
+                                { sWidth: '10%' },
+                                { sWidth: '10%' },
+                                { sWidth: '10%' },
+                                { sWidth: '10%' },
+                                { sWidth: '10%' },
                             ],
                             displayLength: 10,
                             lengthChange: true,
                             lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
                             // buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
-
                     },
                     error: function(res) {
                         iziToast.error({
@@ -312,6 +427,21 @@
                     }
                 }
             );
+        }
+
+        function ubah(id) {
+            $.ajax(
+                {
+                    url: `/api/kepegawaian/rekrutmen/pengumuman/${id}/show`,
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        $('#show_id_edit').text(id);
+                        $('#id_edit').val(id);
+                        $('#ubah').modal('show');
+                    }
+                }
+            )
         }
 
         function prosesSimpan() {
@@ -383,6 +513,8 @@
                                 });
                                 refresh();
                                 $('#tambah').modal('hide');
+                                $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+                                $("#btn-simpan").prop('disabled', false);
                             }
                         },
                         error: function (res) {
@@ -391,13 +523,12 @@
                                 message: res.responseJSON.error,
                                 position: 'topRight'
                             });
+                            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+                            $("#btn-simpan").prop('disabled', false);
                         }
                     });
                 }
             }
-
-            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
-            $("#btn-simpan").prop('disabled', false);
         }
 
         function hapus(id) {

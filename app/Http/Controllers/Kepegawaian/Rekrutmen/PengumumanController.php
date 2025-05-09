@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Kepegawaian\Rekrutmen;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\users;
 use App\Models\datalogs;
@@ -34,12 +35,44 @@ class PengumumanController extends Controller
 
     function table()
     {
-        $show  = pengumuman::get();
+        // Ambil semua jenjang pendidikan dan simpan dalam bentuk [id => nama]
+        $jenjangMap = DB::table('referensi_jenjang_pendidikan')
+            ->pluck('nama', 'id');
+
+        // Ambil data pengumuman + nama user
+        $show = Pengumuman::join('users', 'users.id', '=', 'rekrutmen_pengumuman.user_id')
+            ->select('rekrutmen_pengumuman.*', 'users.nama as nama_user')
+            ->get();
+
+        // Transform hasil untuk tambahkan 'kualifikasi_nama'
+        $show->transform(function ($item) use ($jenjangMap) {
+            $kualifikasi_ids = json_decode($item->kualifikasi, true);
+
+            // Cek jika kualifikasi null/invalid
+            if (!is_array($kualifikasi_ids)) {
+                $kualifikasi_ids = [];
+            }
+
+            // Ambil nama jenjang dari ID
+            $item->kualifikasi_nama = collect($kualifikasi_ids)
+                ->map(function ($id) use ($jenjangMap) {
+                    return $jenjangMap[$id] ?? 'Tidak Diketahui';
+                })
+                ->implode(', ');
+
+            return $item;
+        });
 
         $data = [
             'show' => $show,
         ];
 
+        return response()->json($data, 200);
+    }
+
+    function show($id)
+    {
+        $data = Pengumuman::where('id',$id)->first();
         return response()->json($data, 200);
     }
 
@@ -69,7 +102,7 @@ class PengumumanController extends Controller
             $data->mulai = $request->mulai;
             $data->selesai = $request->selesai;
             $data->keterangan = $request->keterangan;
-            // $data->pegawai_id = $request->pegawai;
+            $data->user_id = $request->pegawai;
             $data->save();
 
             datalogs::record($request->pegawai, 'Baru saja melakukan penambahan Lowongan Kerja '.$request->nama, 'dari '.$request->mulai.' sampai '.$request->selesai, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
