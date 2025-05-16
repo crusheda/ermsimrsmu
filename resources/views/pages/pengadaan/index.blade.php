@@ -30,7 +30,7 @@
                     <div class="d-flex">
                         <div>
                             <h5 class="card-title mb-3">Elektronik Pengadaan</h5>
-                            <p class="text-muted">Semua data terintegrasi menjadi satu dengan tampilan yang baru dan lebih menarik..</p>
+                            <p class="text-muted">Semua data terintegrasi menjadi satu dengan tampilan lebih menarik..</p>
                         </div>
                         {{-- <div class="btn-group">
                             <a href="javascript:void(0);" class="btn btn-light-dark btn-sm disabled">
@@ -884,13 +884,13 @@
                                     <h5 class="my-0 mb-3"><b class="text-success">` + formatRupiah(res.harga, 'Rp ') + `</b> <span class="text-muted me-2">/ ` + res.satuan + `</span></h5>
                                 </div>`;
                     $('#showBarangKeranjang').append(content);
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                    $('#addKeranjang').modal('show');
                 }
             });
-            // Showing Tooltip
-            $('[data-bs-toggle="tooltip"]').tooltip({
-                trigger: 'hover'
-            })
-            $('#addKeranjang').modal('show');
         }
 
         // Memasukkan Barang Ke Keranjang

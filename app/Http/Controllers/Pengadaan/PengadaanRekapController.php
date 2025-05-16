@@ -22,12 +22,13 @@ class PengadaanRekapController extends Controller
             if ($request->kategori == 1) {
                 $nama_kategori = 'ATK';
             } else {
-                if ($request->kategori == 1) {
+                if ($request->kategori == 2) {
                     $nama_kategori = 'Cetak';
                 } else {
                     $nama_kategori = 'BHP';
                 }
             }
+            $ref = pengadaan_ref::get();
 
 
             $data = [
@@ -35,50 +36,8 @@ class PengadaanRekapController extends Controller
                 'thn' => $request->tahun,
                 'nama_kategori' => $nama_kategori,
                 'kategori' => $request->kategori,
+                'ref' => $ref
             ];
-
-            // $bulan = $request->bulan;
-            // $tahun = $request->tahun;
-            // $kategori = $request->kategori;
-
-            // $bln = Carbon::create()->month($bulan)->isoFormat('MMMM');
-
-            // $unit = pengadaan::join('users','pengadaan.id_user','=','users.id')
-            //                 ->select('users.id as id_user','users.nama','pengadaan.id_pengadaan','pengadaan.unit','pengadaan.tgl_pengadaan')
-            //                 ->whereYear('pengadaan.tgl_pengadaan', $tahun)
-            //                 ->whereMonth('pengadaan.tgl_pengadaan', $bulan)
-            //                 ->groupBy('users.id','users.nama','pengadaan.id_pengadaan','pengadaan.unit','pengadaan.tgl_pengadaan')
-            //                 ->orderBy('pengadaan.unit','ASC')
-            //                 ->get();
-
-            // $barang = pengadaan_detail::join('pengadaan_barang','pengadaan_detail.id_barang','=','pengadaan_barang.id')
-            //                 ->join('pengadaan','pengadaan_detail.id_pengadaan','=','pengadaan.id_pengadaan')
-            //                 ->select('pengadaan_detail.id_barang','pengadaan_barang.nama as nama_barang','pengadaan_detail.satuan as satuan_barang','pengadaan_detail.harga as harga_barang','pengadaan_detail.ket as ket_barang')
-            //                 ->whereYear('pengadaan.tgl_pengadaan', $tahun)
-            //                 ->whereMonth('pengadaan.tgl_pengadaan', $bulan)
-            //                 ->where('pengadaan_barang.ref_barang', $kategori)
-            //                 ->orderBy('pengadaan_barang.nama','ASC')
-            //                 ->groupBy('pengadaan_detail.id_barang','pengadaan_barang.nama','pengadaan_detail.satuan','pengadaan_detail.harga','pengadaan_detail.ket')
-            //                 ->get();
-
-            // $total = pengadaan::select('total')
-            //                 ->whereYear('tgl_pengadaan', $tahun)
-            //                 ->whereMonth('tgl_pengadaan', $bulan)
-            //                 ->groupBy('total')
-            //                 ->orderBy('unit','ASC')
-            //                 ->get();
-
-            // $ref = pengadaan_ref::where('id',$kategori)->first();
-
-            // $data = [
-            //     'bln' => $bln,
-            //     'bulan' => $bulan,
-            //     'tahun' => $tahun,
-            //     'total' => $total,
-            //     'unit' => $unit,
-            //     'barang' => $barang,
-            //     'ref' => $ref,
-            // ];
 
             return view('pages.pengadaan.rekap')->with('list', $data);
         } else {
@@ -86,44 +45,89 @@ class PengadaanRekapController extends Controller
         }
     }
 
+    // function table($bln, $thn, $kategori)
+    // {
+    //     $data = DB::table('pengadaan_detail as d')
+    //         ->join('pengadaan as p', 'd.id_pengadaan', '=', 'p.id')
+    //         ->join('pengadaan_barang as b', 'd.id_barang', '=', 'b.id')
+    //         ->select(
+    //             'b.id as barang_id',
+    //             'b.nama as barang_nama',
+    //             'p.tgl_pengadaan',
+    //             'p.unit',
+    //             'd.jumlah',
+    //             'd.total',
+    //             'd.ket'
+    //         )
+    //         ->whereMonth('p.tgl_pengadaan', $bln)
+    //         ->whereYear('p.tgl_pengadaan', $thn)
+    //         ->where('b.ref_barang', $kategori)
+    //         ->get();
+
+    //     return response()->json($data);
+    // }
+
     function table($bln, $thn, $kategori)
     {
         $data = DB::table('pengadaan_detail as d')
-            ->join('pengadaan as p', 'd.id_pengadaan', '=', 'p.id')
-            ->join('pengadaan_barang as b', 'd.id_barang', '=', 'b.id')
+            ->join('pengadaan as p', 'd.id_pengadaan', '=', 'p.id_pengadaan')
+            ->join('pengadaan_barang as b', function($join) {
+                $join->on('d.id_barang', '=', 'b.id');
+                    // ->whereNull('b.deleted_at');
+            })
+            ->where('b.ref_barang', '=', $kategori)
+            ->whereMonth('p.tgl_pengadaan', (int) $bln)
+            ->whereYear('p.tgl_pengadaan', $thn)
             ->select(
                 'b.id as barang_id',
                 'b.nama as barang_nama',
-                DB::raw('JSON_UNQUOTE(JSON_EXTRACT(p.unit, "$[0]")) as unit_nama'),
-                DB::raw('SUM(d.jumlah) as jumlah'),
-                DB::raw('SUM(d.total) as total'),
-                DB::raw('MIN(d.ket) as keterangan')
+                'p.id_pengadaan',
+                'p.unit as unit_json',
+                'p.tgl_pengadaan',
+                'd.jumlah',
+                'd.total',
+                'd.ket as keterangan'
             )
-            ->whereMonth('p.tgl_pengadaan', $bln)  // ⬅ gunakan tgl_pengadaan
-            ->whereYear('p.tgl_pengadaan', $thn)   // ⬅ gunakan tgl_pengadaan
-            ->where('b.ref_barang', $kategori)
-            // ->whereRaw('JSON_CONTAINS(p.unit, \'["ttk"]\')') // filter jika hanya ingin unit tertentu
-            ->groupBy('b.id', 'b.nama', DB::raw('JSON_UNQUOTE(JSON_EXTRACT(p.unit, "$[0]"))'))
+            ->orderBy('p.tgl_pengadaan')
             ->get();
 
-        // Susun data
+        // print_r($data);
+        // die();
         $grouped = [];
-        foreach ($data as $row) {
-            $grouped[$row->barang_id]['id'] = $row->barang_id;
-            $grouped[$row->barang_id]['nama'] = $row->barang_nama;
-            $grouped[$row->barang_id]['units'][$row->unit_nama] = [
-                'jumlah' => $row->jumlah,
-                'total' => $row->total,
-                'keterangan' => $row->keterangan
-            ];
-        }
+        $allUnits = [];
 
-        // Ambil semua unit untuk header dinamis
-        $allUnits = $data->pluck('unit_nama')->unique()->values();
+        foreach ($data as $row) {
+            $unitsArray = json_decode($row->unit_json, true) ?? [];
+            $unit_nama = implode(', ', $unitsArray);
+            // $tgl_pengadaan = Carbon::parse($row->tgl_pengadaan)->format('j M');
+            $tgl_pengadaan = $row->tgl_pengadaan;
+
+            $unitKey = $unit_nama . '|' . $tgl_pengadaan;
+
+            // Pastikan hanya jika ada barang_id (berarti ada detail)
+            if ($row->barang_id) {
+                $grouped[$row->barang_id]['id'] = $row->barang_id;
+                $grouped[$row->barang_id]['nama'] = $row->barang_nama;
+                $grouped[$row->barang_id]['units'][$unitKey] = [
+                    'jumlah' => $row->jumlah,
+                    'total' => $row->total,
+                    'keterangan' => $row->keterangan,
+                    'tgl_pengadaan' => $tgl_pengadaan
+                ];
+            }
+
+            // Tetap masukkan ke allUnits meskipun detailnya kosong
+            if (!isset($allUnits[$unitKey])) {
+                $allUnits[$unitKey] = [
+                    'unit' => $unit_nama,
+                    'tgl_pengadaan' => $tgl_pengadaan
+                ];
+            }
+        }
 
         return response()->json([
             'data' => array_values($grouped),
-            'units' => $allUnits
+            'units' => array_values($allUnits)
         ]);
     }
 }

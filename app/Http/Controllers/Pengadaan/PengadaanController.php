@@ -254,7 +254,7 @@ class PengadaanController extends Controller
 
     function dataBarang()
     {
-        $barang = pengadaan_barang::orderBy('nama','asc')->get();
+        $barang = pengadaan_barang::orderBy('nama','asc')->whereNull('deleted_at')->get();
 
         $data = [
             'barang' => $barang,
