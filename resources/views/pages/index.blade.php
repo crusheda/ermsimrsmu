@@ -33,6 +33,12 @@
     <div class="page-loader">
         <div class="bar"></div>
     </div>
+
+    <!-- Logout Form -->
+    <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+    </form>
+
     <header id="home" style="background-image: url('{{ asset('images/landing/img-headerbg.jpg') }}')">
         <nav class="navbar navbar-expand-md navbar-light default">
             <div class="container">
@@ -100,7 +106,7 @@
                                 <a class="btn btn-light-primary dropdown-toggle arrow-none d-inline-flex align-items-center" data-bs-toggle="dropdown" href="#">Menu <i class="ti ti-chevron-down ms-1"></i></a>
                                 <div class="dropdown-menu drp-technology drp-tech-scrollble">
                                     <a class="dropdown-item gap-2" href="{{ route('dashboard') }}"><i class="ti ti-home me-1"></i> Dashboard</a>
-                                    <a class="dropdown-item gap-2" href="javascript:void(0);"><i class="ti ti-logout me-1"></i> Logout</a>
+                                    <a class="dropdown-item gap-2" href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logoutform').submit();"><i class="ti ti-logout me-1"></i> Logout</a>
                                 </div>
                             </div>
                         @else
@@ -158,6 +164,7 @@
             </ul>
         </div>
     </header>
+
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script><!-- Required Js -->
     <script src="{{ asset('js/plugins/popper.min.js') }}"></script>
     <script src="{{ asset('js/plugins/simplebar.min.js') }}"></script>

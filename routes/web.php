@@ -267,3 +267,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
 //     Route::get('asetx/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail2')->name('asetx.detail');
 // });
 
+
+// FALLBACK ROUTE
+Route::fallback(function () {
+    return response()->view('pages.page404', [], 404);
+});

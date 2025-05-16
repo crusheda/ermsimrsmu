@@ -19,7 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Route::group(['middleware' => ['auth']], function () {
-
     // PROFIL
     // Route::post('profil/fotoprofil', '\App\Http\Controllers\Setting\Profil\ProfilController@storeBlobImg');
     Route::get('provinsi/{id}', '\App\Http\Controllers\Setting\Profil\ProfilController@apiProvinsi');
@@ -257,14 +256,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::delete('pengadaan/keranjang/{id}/hapus', '\App\Http\Controllers\Pengadaan\PengadaanController@hapusKeranjang')->name('pengadaan.hapus-keranjang');
     Route::get('pengadaan/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@loadMore')->name('pengadaan.loadmore');
     Route::get('pengadaan/caribarang', '\App\Http\Controllers\Pengadaan\PengadaanController@getacbarang')->name('pengadaan.getacbarang');
-    // Route::get('pengadaan/autocomplete/barang', '\App\Http\Controllers\Pengadaan\PengadaanController@acbarang')->name('pengadaan.acbarang');
         // MASTER BARANG
-            Route::get('pengadaan/acbarang', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@acBarang')->name('pengadaan.ac.barang');
-            Route::get('pengadaan/barang/table', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@table')->name('pengadaan.barang.table');
-            Route::post('pengadaan/barang/tambah', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@tambah')->name('pengadaan.barang.tambah');
-            Route::get('pengadaan/barang/ubah/{id}', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@ubah')->name('pengadaan.barang.ubah');
-            Route::post('pengadaan/barang/ubah/proses', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@prosesUbah')->name('pengadaan.barang.prosesUbah');
-            Route::delete('pengadaan/barang/{id}/hapus', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@hapus')->name('pengadaan.barang.hapus');
+        Route::get('pengadaan/acbarang', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@acBarang')->name('pengadaan.ac.barang');
+        Route::get('pengadaan/barang/table', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@table')->name('pengadaan.barang.table');
+        Route::post('pengadaan/barang/tambah', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@tambah')->name('pengadaan.barang.tambah');
+        Route::get('pengadaan/barang/ubah/{id}', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@ubah')->name('pengadaan.barang.ubah');
+        Route::post('pengadaan/barang/ubah/proses', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@prosesUbah')->name('pengadaan.barang.prosesUbah');
+        Route::delete('pengadaan/barang/{id}/hapus', '\App\Http\Controllers\Pengadaan\PengadaanBarangController@hapus')->name('pengadaan.barang.hapus');
+        // REKAP PENGADAAN
+        Route::get('rekap/{bln}/{thn}/{kategori}', '\App\Http\Controllers\Pengadaan\PengadaanRekapController@table')->name('pengadaan.rekap.table');
 
     // PENGADUAN
         // IPSRS
