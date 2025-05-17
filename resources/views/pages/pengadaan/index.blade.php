@@ -383,96 +383,49 @@
 
     <script>
         $(document).ready(function() {
+            if (moment().format('DD') > 20) {
+                Swal.fire({
+                    title: "Mohon Perhatian!",
+                    text: "Pengadaan telah ditutup untuk bulan ini! Silakan melakukan pengadaan pada bulan selanjutnya.",
+                    icon: "danger",
+                    timer: 5000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        // Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "Mohon Perhatian!",
+                    text: "Batas maksimal Pengajuan Pengadaan hanya sampai tanggal 20 setiap bulannya!",
+                    icon: "success",
+                    timer: 5000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        // Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                        timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 100);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                });
+            }
             // When the user scrolls down 20px from the top of the document, show the button
             window.onscroll = function() {
                 scrollFunction()
             };
 
-            $.ajax({
-                url: "/api/pengadaan/data/{{ Auth::user()->id }}",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    var date = new Date().toLocaleDateString("sv-SE"); // 2022-05-23
-                    var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->getPermission('admin_pengadaan') }}";
-                    var suID = "{{ Auth::user()->hasRole('it') }}";
-                    var tgl = date.substring(8, 10);
-                    var bln = date.substring(5, 7);
-                    var thn = date.substring(0, 4);
-                    // Tampil Result setelah Selesai Laporan
-                    $("#tampil-tbody").empty();
-                    if (res.pengadaan.length != 0) {
-                        res.pengadaan.forEach(item => {
-                            // var updet = item.updated_at.substring(0, 10);
-                            var tglUpload = item.updated_at.substring(8, 10);
-                            var blnUpload = item.updated_at.substring(5, 7);
-                            var thnUpload = item.updated_at.substring(0, 4);
-                            content = `<tr id="pengadaan` + item.id_pengadaan + `" style="font-size:13px">
-                                        <td style="width: 50px;">
-                                            <span class="badge bg-secondary">ID : ` + item.id_pengadaan + `</span>
-                                        </td>
-                                        <td>
-                                            <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);"
-                                                    class="text-dark">` + formatRupiah(item.total, 'Rp ') + ` ,-</a></h5>
-                                            <p class="text-muted mb-0">` + item.tgl_pengadaan + `</p>
-                                        </td>
-                                        <td style="width: 90px;">
-                                            <div>
-                                                <ul class="list-inline mb-0 font-size-16">
-                                                    <li class="list-inline-item">
-                                                        <a href="javascript: void(0);" onclick="showRiwayat(` + item.id_pengadaan + `)" class="btn btn-link-primary p-1"
-                                                        data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat">
-                                                        <i class="fas fa-shopping-bag"></i></a>
-                                                    </li>
-                                                    <li class="list-inline-item">`;
-                            if (adminID) {
-                                content += `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
-                                    item.id_pengadaan +
-                                    `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
-                            } else {
-                                if (thnUpload == thn) { // TAHUN SAMA
-                                    if (blnUpload == bln) { // BULAN SAMA
-                                        if (tgl >= 1 && tgl <=
-                                            20) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 20 (Tgl 1-25)
-                                            content +=
-                                                `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
-                                                item.id_pengadaan +
-                                                `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
-                                        } else {
-                                            content +=
-                                                `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
-                                        }
-                                    } else {
-                                        content +=
-                                            `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
-                                    }
-                                } else {
-                                    content +=
-                                        `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
-                                }
-                            }
-                            content += `</li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>`;
-                            $('#tampil-tbody').append(content);
-
-                            // Showing Tooltip
-                            $('[data-bs-toggle="tooltip"]').tooltip({
-                                trigger: 'hover'
-                            })
-                        })
-                    } else {
-                        content = `<tr style="font-size:13px"><td><center>Tidak ada record</center></td></tr>`;
-                        $('#tampil-tbody').append(content);
-                    }
-                    // if (res.pengadaan) {
-                    //     $('#riwayat_pengadaan').props('hidden',true);
-                    // }
-                }
-            });
+            refreshRiwayat();
 
             var page = 1;
             var pagecari = 1;
@@ -539,10 +492,10 @@
                             var tglUpload = item.updated_at.substring(8, 10);
                             var blnUpload = item.updated_at.substring(5, 7);
                             var thnUpload = item.updated_at.substring(0, 4);
+                            // <td style="width: 50px;">
+                            //     <span class="badge bg-primary">ID : ` + item.id_pengadaan + `</span>
+                            // </td>
                             content = `<tr id="pengadaan` + item.id_pengadaan + `" style="font-size:13px">
-                                        <td style="width: 50px;">
-                                            <span class="badge bg-primary">ID : ` + item.id_pengadaan + `</span>
-                                        </td>
                                         <td>
                                             <h5 class="text-truncate font-size-14 mb-1"><a href="javascript: void(0);"
                                                     class="text-dark">` + formatRupiah(item.total, 'Rp ') + ` ,-</a></h5>
@@ -552,35 +505,27 @@
                                             <div>
                                                 <ul class="list-inline mb-0 font-size-16">
                                                     <li class="list-inline-item">
-                                                        <a href="javascript: void(0);" onclick="showRiwayat(` + item
-                                .id_pengadaan + `)" class="text-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat"><i
-                                                                class="fas fa-shopping-bag"></i></a>
+                                                        <a href="javascript: void(0);" onclick="showRiwayat(` + item.id_pengadaan + `)" class="btn btn-link-primary p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Riwayat ID#${item.id_pengadaan}">
+                                                            <i class="fas fa-shopping-bag"></i>
+                                                        </a>
                                                     </li>
                                                     <li class="list-inline-item">`;
                             if (adminID) {
-                                content += `<a href="javascript: void(0);" onclick="hapusRiwayat(` + item
-                                    .id_pengadaan +
-                                    `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
+                                content += `<a href="javascript: void(0);" onclick="hapusRiwayat(` + item.id_pengadaan + `)" class="btn btn-link-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
                             } else {
                                 if (thnUpload == thn) { // TAHUN SAMA
                                     if (blnUpload == bln) { // BULAN SAMA
                                         if (tgl >= 1 && tgl <=
                                             20) { // TANGGAL TIDAK BOLEH LEBIH DARI TGL 25 (Tgl 1-25)
-                                            content +=
-                                                `<a href="javascript: void(0);" onclick="hapusRiwayat(` +
-                                                item.id_pengadaan +
-                                                `)" class="text-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
+                                            content += `<a href="javascript: void(0);" onclick="hapusRiwayat(` + item.id_pengadaan + `)" class="btn btn-link-danger p-1" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Pengadaan"><i class="fas fa-trash"></i></a>`;
                                         } else {
-                                            content +=
-                                                `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                            content += `<a href="javascript: void(0);" class="btn btn-link-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
                                         }
                                     } else {
-                                        content +=
-                                            `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                        content += `<a href="javascript: void(0);" class="btn btn-link-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
                                     }
                                 } else {
-                                    content +=
-                                        `<a href="javascript: void(0);" class="text-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
+                                    content += `<a href="javascript: void(0);" class="btn btn-link-secondary p-1" disabled data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Riwayat Pengadaan terkunci"><i class="fas fa-trash"></i></a>`;
                                 }
                             }
                             content += `</li>
@@ -973,18 +918,22 @@
                 success: function(res) {
                     iziToast.success({
                         title: 'Pesan Sukses!',
-                        message: 'Pengajuan Pengadaan telah berhasil pada ' + res,
-                        position: 'topRight'
+                        message: res.message,
+                        position: 'topRight',
                     });
                     refresh();
                     refreshRiwayat();
                 },
                 error: function(res) {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: res.responseJSON.error,
-                        position: 'topRight'
-                    });
+                    if (res.responseJSON && res.responseJSON.message) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.message,
+                            position: 'topRight'
+                        });
+                    } else {
+                        alert('Terjadi kesalahan.');
+                    }
                 }
             });
             $('#btn-ajukan').find('i').removeClass('bx-loader bx-spin').addClass('bx-check-double');

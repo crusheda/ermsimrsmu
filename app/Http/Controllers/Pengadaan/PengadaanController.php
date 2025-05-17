@@ -191,55 +191,64 @@ class PengadaanController extends Controller
 
     function checkoutKeranjang(Request $request)
     {
-        $getRoles = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                            ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                            ->select('roles.name')
-                            ->where('users.id',$request->id_user)
-                            ->get();
-
-        foreach ($getRoles as $key => $value) {
-            $unitArr[] = $value->name;
-        }
-
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
-
-        $queue = pengadaan::orderBy('id_pengadaan','DESC')->first();
-        // print_r($queue);
-        // die();
-        if (empty($queue)) {
-            $getQueue = 1;
+        if (Carbon::now()->isoFormat('DD') > 20) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengadaan telah ditutup per Tanggal 20 '.Carbon::now()->isoFormat('MMM YYYY'),
+            ], 400); // status code 400 Bad Request
         } else {
-            $getQueue = $queue->id_pengadaan + 1;
+
+            $getRoles = users::Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                                ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                                ->select('roles.name')
+                                ->where('users.id',$request->id_user)
+                                ->get();
+
+            foreach ($getRoles as $key => $value) {
+                $unitArr[] = $value->name;
+            }
+
+            $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+            $queue = pengadaan::orderBy('id_pengadaan','DESC')->first();
+
+            if (empty($queue)) {
+                $getQueue = 1;
+            } else {
+                $getQueue = $queue->id_pengadaan + 1;
+            }
+
+            pengadaan_keranjang::where('id_user',$request->id_user)->delete();
+
+            for ($i=0; $i < $request->urutan; $i++) {
+                $data = new pengadaan_detail;
+                $data->id_pengadaan = $getQueue;
+                $data->id_barang = $request->id_barang[$i];
+                $data->jumlah = $request->id_jumlah[$i];
+                // Get Data Barang
+                $getBarang = pengadaan_barang::where('id',$request->id_barang[$i])->first();
+                $data->harga = $getBarang->harga;
+                $data->satuan = $getBarang->satuan;
+                $data->total = $request->id_jumlah[$i] * $getBarang->harga;
+                $data->ket = $request->id_ket[$i];
+                $data->save();
+            }
+
+            $save = new pengadaan;
+            $save->id_pengadaan = $getQueue;
+            $save->id_user = $request->id_user;
+            $save->unit = json_encode($unitArr);
+            $save->total = $request->total;
+            $save->tgl_pengadaan = Carbon::now();
+            $save->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengajuan Pengadaan telah berhasil dilakukan pada '.$tgl,
+            ], 200); // status code 400 Bad Request
+
         }
 
-        // print_r($request->all());
-        // die();
-        pengadaan_keranjang::where('id_user',$request->id_user)->delete();
-        // print_r($getQueue);
-        // die();
-        for ($i=0; $i < $request->urutan; $i++) {
-            $data = new pengadaan_detail;
-            $data->id_pengadaan = $getQueue;
-            $data->id_barang = $request->id_barang[$i];
-            $data->jumlah = $request->id_jumlah[$i];
-            // Get Data Barang
-            $getBarang = pengadaan_barang::where('id',$request->id_barang[$i])->first();
-            $data->harga = $getBarang->harga;
-            $data->satuan = $getBarang->satuan;
-            $data->total = $request->id_jumlah[$i] * $getBarang->harga;
-            $data->ket = $request->id_ket[$i];
-            $data->save();
-        }
-
-        $save = new pengadaan;
-        $save->id_pengadaan = $getQueue;
-        $save->id_user = $request->id_user;
-        $save->unit = json_encode($unitArr);
-        $save->total = $request->total;
-        $save->tgl_pengadaan = Carbon::now();
-        $save->save();
-
-        return response()->json($data, 200);
     }
 
     function hapusKeranjang($id)
