@@ -35,6 +35,7 @@ class PengumumanController extends Controller
 
     function table()
     {
+        $dateNow = Carbon::now()->isoFormat('YYYY-MM-DD');
         // Ambil semua jenjang pendidikan dan simpan dalam bentuk [id => nama]
         $jenjangMap = DB::table('referensi_jenjang_pendidikan')
             ->pluck('nama', 'id');
@@ -65,6 +66,7 @@ class PengumumanController extends Controller
 
         $data = [
             'show' => $show,
+            'now' => $dateNow,
         ];
 
         return response()->json($data, 200);

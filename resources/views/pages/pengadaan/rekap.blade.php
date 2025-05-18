@@ -181,7 +181,7 @@
 
             $('#btn-refresh').prop('disabled',true);
             $('#btn-refresh').find('i').addClass('fa-spin');
-            $('#tabelRekap').empty().append(`<thead></thead><tbody><tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr></tbody>`);
+            $('#tabelRekap').empty().append(`<thead></thead><tbody><tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr></tbody><tfoot></tfoot>`);
             $.ajax({
                 url: `/api/rekap/${bulan}/${tahun}/${kategori}`,
                 type: 'GET',
@@ -269,24 +269,24 @@
                     $('#rekap').modal('hide');
 
                     // Inisialisasi DataTable
-                    var table = $('#tabelRekap').DataTable({
+                    $('#tabelRekap').DataTable({
                         dom: 'Bfrtip',
                         order: [[1, "asc"]],
-                        displayLength: 100,
+                        displayLength: 10000,
                         lengthChange: true,
                         scrollX: true,
-                        deferRender: true,
+                        deferRender: false,
                         scrollY: '700px', // bisa disesuaikan sesuai kebutuhan tinggi viewport kamu
                         scrollCollapse: true,
-                        autoWidth: false,
+                        autoWidth: true,
                         fixedHeader: true,
                         // fixedHeader: {
                         //     header: true,
                         //     headerOffset: 0
                         // },
-                        fixedColumns: {
-                            leftColumns: 2 // misalnya freeze kolom ID & Nama Barang
-                        },
+                        // fixedColumns: {
+                        //     leftColumns: 2 // misalnya freeze kolom ID & Nama Barang
+                        // },
                         columnDefs: [
                             { targets: 1, orderable: true },
                             { targets: '_all', orderable: false },
@@ -321,12 +321,11 @@
                             }
                             // , 'colvis'
                         ],
-                        drawCallback: function () {
-                            // Fix lebar kolom manual tiap redraw
-                            this.api().columns.adjust();
-                        }
-                    });
-                    table.columns.adjust().draw();
+                        // drawCallback: function () {
+                        //     // Fix lebar kolom manual tiap redraw
+                        //     this.api().columns.adjust();
+                        // }
+                    }).columns.adjust().draw();
                 },
                 error: function (xhr, status, error) {
                     console.log(error);

@@ -28,6 +28,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Table</h5>
                     <div class="btn-group">
+                        <button type="button" class="btn btn-warning" onclick="refresh()"><i class="fa-fw fas fa-sync nav-icon"></i></button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i class="fa-fw fas fa-plus-square nav-icon"></i>&nbsp;&nbsp;Tambah Loker</button>
                     </div>
                 </div>
@@ -45,12 +46,13 @@
                                     <th class="cell-fit">TUGAS</th>
                                     <th class="cell-fit">KEAHLIAN</th>
                                     <th class="cell-fit">KETERANGAN</th>
+                                    <th class="cell-fit">STATUS</th>
                                     <th class="cell-fit">DIPERBARUI</th>
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody">
                                 <tr>
-                                    <td colspan="9" style="font-size:13px">
+                                    <td colspan="10" style="font-size:13px">
                                         <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                                     </td>
                                 </tr>
@@ -66,6 +68,7 @@
                                     <th class="cell-fit">TUGAS</th>
                                     <th class="cell-fit">KEAHLIAN</th>
                                     <th class="cell-fit">KETERANGAN</th>
+                                    <th class="cell-fit">STATUS</th>
                                     <th class="cell-fit">DIPERBARUI</th>
                                 </tr>
                             </tfoot>
@@ -345,7 +348,7 @@
 
         function refresh() {
             $("#tampil-tbody").empty();
-            $("#tampil-tbody").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $("#tampil-tbody").empty().append(`<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
                 {
                     url: "/api/kepegawaian/rekrutmen/pengumuman/table",
@@ -384,6 +387,15 @@
                             content += `<td>${item.keahlian}</td>`;
                             content += `<td>${item.persyaratan}</td>`;
                             content += `<td>${item.keterangan?item.keterangan:'-'}</td>`;
+                            if (moment(res.now).format('YYYY-MM-DD') >= moment(item.mulai).format('YYYY-MM-DD')) {
+                                if (moment(res.now).format('YYYY-MM-DD') <= moment(item.selesai).format('YYYY-MM-DD')) {
+                                    content += `<td><span class="badge rounded-pill text-bg-primary">Aktif</span></td>`;
+                                } else {
+                                    content += `<td><span class="badge rounded-pill text-bg-danger">Tidak Aktif</span></td>`;
+                                }
+                            } else {
+                                content += `<td><span class="badge rounded-pill text-bg-danger">Tidak Aktif</span></td>`;
+                            }
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                             <div class='d-flex justify-content-start align-items-center'>
                                                 <div class='d-flex flex-column'>
@@ -396,13 +408,14 @@
                             $('#tampil-tbody').append(content);
                         });
                         var table = $('#dttable').DataTable({
+                            dom: 'Bfrtip',
                             order: [
-                                [9, "desc"]
+                                [10, "desc"]
                             ],
                             bAutoWidth: false,
                             aoColumns : [
                                 { sWidth: '5%' },
-                                { sWidth: '25%' },
+                                { sWidth: '20%' },
                                 { sWidth: '5%' },
                                 { sWidth: '5%' },
                                 { sWidth: '10%' },
@@ -410,13 +423,22 @@
                                 { sWidth: '10%' },
                                 { sWidth: '10%' },
                                 { sWidth: '10%' },
+                                { sWidth: '5%' },
                                 { sWidth: '10%' },
                             ],
-                            displayLength: 10,
-                            lengthChange: true,
-                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
-                            // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                            columnDefs: [
+                                { visible: false, targets: [5,6,7,8] },
+                            ],
+                            displayLength: 15,
+                            // lengthChange: true,
+                            // lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            buttons: [
+                                // 'copy',
+                                'excel',
+                                // 'pdf',
+                                'colvis']
                         });
+                        clearText();
                     },
                     error: function(res) {
                         iziToast.error({
@@ -445,8 +467,6 @@
         }
 
         function prosesSimpan() {
-            $("#btn-simpan").prop('disabled', true);
-            $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
 
             // Definisi
             var save = new FormData();
@@ -462,6 +482,7 @@
             save.append('tugas',$('#tugas').val());
             save.append('keahlian',$('#keahlian').val());
             save.append('persyaratan',$('#persyaratan').val());
+            save.append('keterangan',$('#keterangan').val());
             save.append('pegawai','{{ Auth::user()->id }}');
 
             if ($('.notnull').val() == "") {
@@ -478,6 +499,8 @@
                         position: 'topRight'
                     });
                 } else {
+                    $("#btn-simpan").prop('disabled', true);
+                    $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -513,9 +536,9 @@
                                 });
                                 refresh();
                                 $('#tambah').modal('hide');
-                                $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
-                                $("#btn-simpan").prop('disabled', false);
                             }
+                            $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-stamp");
+                            $("#btn-simpan").prop('disabled', false);
                         },
                         error: function (res) {
                             iziToast.error({
@@ -560,7 +583,7 @@
                             position: 'topRight'
                         });
                         $('#modalHapus').modal('hide');
-                        showRiwayat();
+                        refresh();
                     },
                     error: function(res) {
                         iziToast.error({
@@ -571,6 +594,21 @@
                     }
                 });
             }
+        }
+
+        function clearText() {
+            $('#mulai').val('');
+            $('#selesai').val('');
+            $('#unit').val('');
+            $('#nama').val('');
+            $('#umur_min').val('');
+            $('#umur_max').val('');
+            $('#jumlah').val('');
+            $('#kuota').val('');
+            $('#pendidikan').val('').change();
+            $('#tugas').val('');
+            $('#keahlian').val('');
+            $('#persyaratan').val('');
         }
 
     </script>

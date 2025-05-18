@@ -405,7 +405,7 @@
                 Swal.fire({
                     title: "Mohon Perhatian!",
                     text: "Batas maksimal Pengajuan Pengadaan hanya sampai tanggal 20 setiap bulannya!",
-                    icon: "success",
+                    icon: "warning",
                     timer: 5000,
                     timerProgressBar: true,
                     didOpen: () => {
