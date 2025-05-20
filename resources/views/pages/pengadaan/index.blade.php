@@ -255,7 +255,7 @@
                 <div class="modal-footer">
                     <button class="btn btn-danger" onclick="checkoutKeranjang()" id="btn-ajukan"
                         data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                        title="Ajukan Barang Pengadaan"><i class="ti ti-checks me-1"></i> Ajukan</button>
+                        title="Ajukan Barang Pengadaan"><i class="fas fa-check-double me-1"></i> Ajukan</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa fa-times"></i>&nbsp;&nbsp;Tutup</button>
                 </div>
@@ -386,16 +386,17 @@
             if (moment().format('DD') > 20) {
                 Swal.fire({
                     title: "Mohon Perhatian!",
-                    text: "Pengadaan telah ditutup untuk bulan ini! Silakan melakukan pengadaan pada bulan selanjutnya.",
+                    html: "Pengadaan telah ditutup untuk bulan ini! Silakan melakukan pengadaan pada bulan selanjutnya. Popup akan tertutup dalam <b></b> ms.",
                     icon: "danger",
                     timer: 5000,
                     timerProgressBar: true,
                     didOpen: () => {
-                        // Swal.showLoading();
                         const timer = Swal.getPopup().querySelector("b");
-                        timerInterval = setInterval(() => {
-                        timer.textContent = `${Swal.getTimerLeft()}`;
-                        }, 100);
+                        if (timer) {
+                            timerInterval = setInterval(() => {
+                                timer.textContent = `${Swal.getTimerLeft()}`;
+                            }, 100);
+                        }
                     },
                     willClose: () => {
                         clearInterval(timerInterval);
@@ -404,7 +405,7 @@
             } else {
                 Swal.fire({
                     title: "Mohon Perhatian!",
-                    text: "Batas maksimal Pengajuan Pengadaan hanya sampai tanggal 20 setiap bulannya!",
+                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai tanggal 20 setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
                     icon: "warning",
                     timer: 5000,
                     timerProgressBar: true,
@@ -596,7 +597,7 @@
                                                 <input type="number" id="totalKeranjang" value="` + item.total_barang + `" class="form-control">
                                                 <input type="number" id="urutan" value="` + res.keranjang.length + `" class="form-control">
                                                 <input type="number" id="idBarang` + urutan + `" value="` + item .id_barang + `" class="form-control">
-                                                <input type="number" id="ket` + urutan + `" value="` + ket + `" class="form-control">
+                                                <input type="text" id="ket` + urutan + `" value="` + ket + `" class="form-control">
 
                                                 <input type="number" id="hrg` + item.id + `" value="` + item .harga_barang + `" class="form-control">
                                                 <input type="number" id="tot` + item.id + `" value="` + item .total_barang + `" class="form-control total` + urutan + `">
@@ -887,7 +888,7 @@
         // Checkout Keranjang / Ajukan Barang Pengadaan
         function checkoutKeranjang() {
             $('#btn-ajukan').prop('disabled', true);
-            $('#btn-ajukan').find('i').removeClass('bx-check-double').addClass('bx-loader bx-spin');
+            $('#btn-ajukan').find('i').removeClass('fa-check-double').addClass('fa-sync fa-spin');
             var urutan = $("#urutan").val();
             var total = $("#totalKeranjangAll").val();
             var id_barang = [];
@@ -899,7 +900,6 @@
                 id_ket[i] = $("#ket" + (i + 1)).val();
             }
             var id_user = '{{ Auth::user()->id }}';
-
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -923,6 +923,8 @@
                     });
                     refresh();
                     refreshRiwayat();
+                    $('#btn-ajukan').find('i').removeClass('fa-sync bx-spin').addClass('fa-check-double');
+                    $('#btn-ajukan').prop('disabled', false);
                 },
                 error: function(res) {
                     if (res.responseJSON && res.responseJSON.message) {
@@ -934,10 +936,10 @@
                     } else {
                         alert('Terjadi kesalahan.');
                     }
+                    $('#btn-ajukan').find('i').removeClass('fa-sync bx-spin').addClass('fa-check-double');
+                    $('#btn-ajukan').prop('disabled', false);
                 }
             });
-            $('#btn-ajukan').find('i').removeClass('bx-loader bx-spin').addClass('bx-check-double');
-            $('#btn-ajukan').prop('disabled', false);
         }
 
         // Checkout/Ajukan Barang di Keranjang
