@@ -443,70 +443,72 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body">
-                    <table class="table-responsive table border-top table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-primary">JENIS REGULASI</th>
-                                <th class="text-primary">TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tampil-tbody">
-                            <tr>
-                                <th><h6>Kebijakan</h6></th>
-                                <td id="count_kebijakan"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Panduan</h6></th>
-                                <td id="count_panduan"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Pedoman</h6></th>
-                                <td id="count_pedoman"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Program</h6></th>
-                                <td id="count_program"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>SPO</h6></th>
-                                <td id="count_spo"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>PPK</h6></th>
-                                <td id="count_ppk"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Undang-Undang</h6></th>
-                                <td id="count_uu"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Peraturan Pemerintah Pengganti Undang-Undang (PERPU)</h6></th>
-                                <td id="count_perpu"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Peraturan Pemerintah</h6></th>
-                                <td id="count_pp"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Peraturan Presiden</h6></th>
-                                <td id="count_perpres"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Peraturan Menteri</h6></th>
-                                <td id="count_perment"></td>
-                            </tr>
-                            <tr>
-                                <th><h6>Peraturan Daerah</h6></th>
-                                <td id="count_perda"></td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th class="text-primary">TOTAL KESELURUHAN</th>
-                                <td id="count_total"></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table border-top table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-primary">JENIS REGULASI</th>
+                                    <th class="text-primary">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody">
+                                <tr>
+                                    <th><h6>Kebijakan</h6></th>
+                                    <td id="count_kebijakan"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Panduan</h6></th>
+                                    <td id="count_panduan"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Pedoman</h6></th>
+                                    <td id="count_pedoman"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Program</h6></th>
+                                    <td id="count_program"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>SPO</h6></th>
+                                    <td id="count_spo"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>PPK</h6></th>
+                                    <td id="count_ppk"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Undang-Undang</h6></th>
+                                    <td id="count_uu"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Peraturan Pemerintah Pengganti Undang-Undang (PERPU)</h6></th>
+                                    <td id="count_perpu"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Peraturan Pemerintah</h6></th>
+                                    <td id="count_pp"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Peraturan Presiden</h6></th>
+                                    <td id="count_perpres"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Peraturan Menteri</h6></th>
+                                    <td id="count_perment"></td>
+                                </tr>
+                                <tr>
+                                    <th><h6>Peraturan Daerah</h6></th>
+                                    <td id="count_perda"></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-primary">TOTAL KESELURUHAN</th>
+                                    <td id="count_total"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>

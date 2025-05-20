@@ -33,6 +33,11 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-secondary mb-3">
+                        <small>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Hapus Lowongan Kerja digunakan HANYA apabila lowongan
+                        </small>
+                    </div>
                     <div class="table-responsive">
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
@@ -52,7 +57,7 @@
                             </thead>
                             <tbody id="tampil-tbody">
                                 <tr>
-                                    <td colspan="10" style="font-size:13px">
+                                    <td colspan="15" style="font-size:13px">
                                         <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                                     </td>
                                 </tr>
@@ -94,8 +99,8 @@
                         <div class="col-md-12 mb-3">
                             <div class="alert alert-secondary">
                                 <small>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Tgl Buka Lowongan</b> tidak lebih dari <b>Tgl Tutup Lowongan</b><br>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Tanda <a class="text-danger">*</a> berarti isian <b>Wajib</b> diisi<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Tgl Buka Lowongan</b> tidak lebih dari <b>Tgl Tutup Lowongan</b><br>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menggunakan <b>Huruf Besar/Capital/Uppercase</b> saat pengisian
                                 </small>
                             </div>
@@ -207,25 +212,31 @@
                 <div class="modal-body">
                     <div class="row">
                         <input type="text" class="form-control" id="id_edit" hidden>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-12">
                             <div class="alert alert-secondary">
                                 <small>
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Tgl Buka Lowongan</b> tidak lebih dari <b>Tgl Tutup Lowongan</b><br>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Tanda <a class="text-danger">*</a> berarti isian <b>Wajib</b> diisi<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Pastikan <b>Tgl Buka Lowongan</b> tidak lebih dari <b>Tgl Tutup Lowongan</b><br>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Disarankan untuk menggunakan <b>Huruf Besar/Capital/Uppercase</b> saat pengisian
                                 </small>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Token</label>
+                                <textarea type="text" class="form-control" id="token_edit" rows="2" disabled></textarea>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Buka Lowongan <a class="text-danger">*</a></label>
-                                <input type="date" id="mulai_edit" value="" class="form-control notnull">
+                                <input type="date" id="mulai_edit" value="" class="form-control notnull_edit">
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Tutup Lowongan <a class="text-danger">*</a></label>
-                                <input type="date" id="selesai_edit" value="" class="form-control notnull">
+                                <input type="date" id="selesai_edit" value="" class="form-control notnull_edit">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -237,25 +248,25 @@
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Nama Kebutuhan <a class="text-danger">*</a></label>
-                                <input type="text" id="nama_edit" value="" class="form-control notnull" placeholder="e.g. IT Support">
+                                <input type="text" id="nama_edit" value="" class="form-control notnull_edit" placeholder="e.g. IT Support">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Umur Minimal <a class="text-danger">*</a></label>
-                                <input type="number" id="umur_min_edit" value="" class="form-control notnull" placeholder="e.g. 20">
+                                <input type="number" id="umur_min_edit" value="" class="form-control notnull_edit" placeholder="e.g. 20">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Umur Maksimal <a class="text-danger">*</a></label>
-                                <input type="number" id="umur_max_edit" value="" class="form-control notnull" placeholder="e.g. 35">
+                                <input type="number" id="umur_max_edit" value="" class="form-control notnull_edit" placeholder="e.g. 35">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jumlah Kebutuhan <a class="text-danger">*</a></label>
-                                <input type="number" id="jumlah_edit" value="" class="form-control notnull" placeholder="e.g. 5">
+                                <input type="number" id="jumlah_edit" value="" class="form-control notnull_edit" placeholder="e.g. 5">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -267,38 +278,38 @@
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Jenjang Pendidikan <a class="text-danger">*</a></label>
-                                <select class="select-multiple form-select notnull" name="pendidikan_edit[]" id="pendidikan_edit" data-allow-clear="true" data-bs-auto-close="outside" style="width: 100%" required multiple></select>
+                                <select class="select-multiple form-select notnull_edit" name="pendidikan_edit[]" id="pendidikan_edit" data-allow-clear="true" data-bs-auto-close="outside" style="width: 100%" required multiple></select>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Uraian Tugas <a class="text-danger">*</a></label>
-                                <textarea id="tugas_edit" rows="4" class="form-control notnull" placeholder="e.g. Pengelolaan infrastruktur teknologi, keamanan data pasien, pemeliharaan sistem informasi rumah sakit, serta memberikan dukungan teknis dan integrasi antar sistem untuk mendukung pelayanan medis yang efisien."></textarea>
+                                <textarea id="tugas_edit" rows="4" class="form-control notnull_edit" placeholder="e.g. Pengelolaan infrastruktur teknologi, keamanan data pasien, pemeliharaan sistem informasi rumah sakit, serta memberikan dukungan teknis dan integrasi antar sistem untuk mendukung pelayanan medis yang efisien."></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Keahlian <a class="text-danger">*</a></label>
-                                <textarea id="keahlian_edit" rows="4" class="form-control notnull" placeholder="e.g. keamanan siber untuk melindungi data pasien, manajemen jaringan untuk memastikan konektivitas yang stabil, serta pemrograman untuk pengembangan dan pemeliharaan perangkat lunak. Selain itu, kemampuan dalam memberikan support teknis, manajemen sistem informasi rumah sakit, dan analisis data juga penting untuk mendukung kelancaran operasional dan meningkatkan kualitas layanan medis."></textarea>
+                                <textarea id="keahlian_edit" rows="4" class="form-control notnull_edit" placeholder="e.g. keamanan siber untuk melindungi data pasien, manajemen jaringan untuk memastikan konektivitas yang stabil, serta pemrograman untuk pengembangan dan pemeliharaan perangkat lunak. Selain itu, kemampuan dalam memberikan support teknis, manajemen sistem informasi rumah sakit, dan analisis data juga penting untuk mendukung kelancaran operasional dan meningkatkan kualitas layanan medis."></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Persyaratan <a class="text-danger">*</a></label>
-                                <textarea id="persyaratan_edit" rows="4" class="form-control notnull" placeholder="e.g. Muslim (Laki-laki), usia max 30th, memiliki sertifikat ahli K3 umum/K3RS, manajemen resiko, mampu berkomunikasi dengan baik, sehat jasmani & rohani, mampu bekerjasama dalam tim, menguasai analisa/pengolahan/penyajian data dalam komputer"></textarea>
+                                <textarea id="persyaratan_edit" rows="4" class="form-control notnull_edit" placeholder="e.g. Muslim (Laki-laki), usia max 30th, memiliki sertifikat ahli K3 umum/K3RS, manajemen resiko, mampu berkomunikasi dengan baik, sehat jasmani & rohani, mampu bekerjasama dalam tim, menguasai analisa/pengolahan/penyajian data dalam komputer"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label">Keterangan</label>
-                                <textarea id="keterangan_edit" rows="2" class="form-control notnull" placeholder="Optional"></textarea>
+                                <textarea id="keterangan_edit" rows="2" class="form-control notnull_edit" placeholder="Optional"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" onclick="prosesUbah()" id="btn-ubah"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                    <button type="button" class="btn btn-warning" onclick="prosesUbah()" id="btn-ubah"><i class="fa-fw fas fa-edit nav-icon me-1"></i> Ubah</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-fw fas fa-times nav-icon me-1"></i> Tutup</button>
                 </div>
             </div>
         </div>
@@ -348,7 +359,7 @@
 
         function refresh() {
             $("#tampil-tbody").empty();
-            $("#tampil-tbody").empty().append(`<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $("#tampil-tbody").empty().append(`<tr><td colspan="15" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
                 {
                     url: "/api/kepegawaian/rekrutmen/pengumuman/table",
@@ -460,10 +471,129 @@
                     success: function(res) {
                         $('#show_id_edit').text(id);
                         $('#id_edit').val(id);
+                        $('#token_edit').val(res.show.token);
+                        $('#mulai_edit').val(res.show.mulai.split(' ')[0]);
+                        $('#selesai_edit').val(res.show.selesai.split(' ')[0]);
+                        $('#unit_edit').val(res.show.unit);
+                        $('#nama_edit').val(res.show.nama);
+                        $('#umur_min_edit').val(res.show.umur_min);
+                        $('#umur_max_edit').val(res.show.umur_max);
+                        $('#jumlah_edit').val(res.show.jumlah);
+                        $('#kuota_edit').val(res.show.kuota);
+
+                            const inp_edit = $('#pendidikan_edit');
+                            const options = res.pendidikan || [];
+                            const selected = JSON.parse(res.show.kualifikasi); // hasil: ["55", "77"]
+                            // Isi <option> dari API
+                            inp_edit.empty();
+                            options.forEach(opt => {
+                                inp_edit.append(`<option value="${opt.id}">[${opt.kategori}] ${opt.nama}</option>`);
+                            });
+                            inp_edit.val(selected).trigger('change');
+                            // selectedPendidikan.forEach(val => {
+                            //     if (!$('#pendidikan_edit option[value="' + val + '"]').length) {
+                            //         $('#pendidikan_edit').append(`<option value="${val}">${val}</option>`); // atau label yang sesuai
+                            //     }
+                            // });
+                            // $('#pendidikan_edit').val(selectedPendidikan).change();
+
+                        $('#tugas_edit').val(res.show.tugas);
+                        $('#keahlian_edit').val(res.show.keahlian);
+                        $('#persyaratan_edit').val(res.show.persyaratan);
+                        $('#keterangan_edit').val(res.show.keterangan);
                         $('#ubah').modal('show');
                     }
                 }
             )
+        }
+
+        function prosesUbah() {
+
+            // Definisi
+            var save = new FormData();
+            save.append('id',$('#id_edit').val());
+            save.append('mulai',$('#mulai_edit').val());
+            save.append('selesai',$('#selesai_edit').val());
+            save.append('unit',$('#unit_edit').val());
+            save.append('nama',$('#nama_edit').val());
+            save.append('umur_min',$('#umur_min_edit').val());
+            save.append('umur_max',$('#umur_max_edit').val());
+            save.append('jumlah',$('#jumlah_edit').val());
+            save.append('kuota',$('#kuota_edit').val());
+            save.append('kualifikasi',JSON.stringify($('#pendidikan_edit').val()));
+            save.append('tugas',$('#tugas_edit').val());
+            save.append('keahlian',$('#keahlian_edit').val());
+            save.append('persyaratan',$('#persyaratan_edit').val());
+            save.append('keterangan',$('#keterangan_edit').val());
+            save.append('pegawai','{{ Auth::user()->id }}');
+
+            if ($('.notnull_edit').val() == "") {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                if ($('#selesai_edit').val() < $('#mulai_edit').val()) {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Tgl Tutup Lowongan harus lebih dari Tgl Buka Lowongan',
+                        position: 'topRight'
+                    });
+                } else {
+                    $("#btn-ubah").prop('disabled', true);
+                    $("#btn-ubah").find("i").removeClass("fa-edit").addClass('fa-sync fa-spin');
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: '/api/kepegawaian/rekrutmen/pengumuman/ubah',
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        data: save,
+                        success: function(res) {
+                            if (res.code == 400) {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.message,
+                                    position: 'topRight',
+                                    buttons: [
+                                        [
+                                            '<button>Tutup</button>',
+                                            function (instance, toast) {
+                                                instance.hide({
+                                                    transitionOut: 'fadeOutUp'
+                                                }, toast);
+                                            }
+                                        ]
+                                    ]
+                                });
+                            } else {
+                                iziToast.success({
+                                    title: 'Pesan Sukses!',
+                                    message: 'Perubahan Lowongan Pekerjaan berhasil pada '+res,
+                                    position: 'topRight'
+                                });
+                                refresh();
+                                $('#ubah').modal('hide');
+                            }
+                            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+                            $("#btn-ubah").prop('disabled', false);
+                        },
+                        error: function (res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+                            $("#btn-ubah").prop('disabled', false);
+                        }
+                    });
+                }
+            }
         }
 
         function prosesSimpan() {
@@ -500,7 +630,7 @@
                     });
                 } else {
                     $("#btn-simpan").prop('disabled', true);
-                    $("#btn-simpan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
+                    $("#btn-simpan").find("i").removeClass("fa-stamp").addClass('fa-sync fa-spin');
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -28,7 +28,7 @@
                 <div class="card-body" style="overflow: visible;">
                     <div class="float-end" id="btn_link_pengajuan">
                         <div class="dropdown">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-information-outline me-1"></i> <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down me-1"></i> Informasi</span></button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-info-circle"></i> <span class="d-none d-sm-inline-block"><i class="fas fa-caret-down ms-1 me-1"></i> Informasi</span></button>
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-md">
                                 <div class="dropdown-item-text">
                                     <div>
@@ -39,13 +39,13 @@
                                 <div class="dropdown-divider"></div>
 
                                 <a class="dropdown-item" href="javascript:;">
-                                    Disetujui : <span class="float-end">♾️</span>
+                                    Disetujui : <span class="float-end ms-1">♾️</span>
                                 </a>
                                 <a class="dropdown-item" href="javascript:;">
-                                    Diverifikasi : <span class="float-end">♾️</span>
+                                    Diverifikasi : <span class="float-end ms-1">♾️</span>
                                 </a>
                                 <a class="dropdown-item" href="javascript:;">
-                                    Ditolak : <span class="float-end">♾️</span>
+                                    Ditolak : <span class="float-end ms-1">♾️</span>
                                 </a>
 
                                 <div class="dropdown-divider"></div>
@@ -64,10 +64,10 @@
 
                             <button class="btn btn-primary" type="button" id="button-addon2" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Cari data berdasarkan tanggal acara" disabled><i class="ti ti-search align-middle"></i> </button>
+                            title="Cari data berdasarkan tanggal acara" disabled><i class="fas fa-search align-middle"></i> </button>
                             <button type="button" class="btn btn-warning" onclick="riwayat()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Refresh Tabel Pemesanan Ruangan"><i class="fas fa-sync fa-fw nav-icon me-1"></i>Segarkan</button>
+                            title="Refresh Tabel Pemesanan Ruangan" id="btn-refresh-table"><i class="fas fa-sync fa-fw nav-icon me-1"></i>Segarkan</button>
                         </div>
                     </div>
                     <div class="float-end" id="btn_link_display" hidden>
@@ -643,6 +643,7 @@
         }
 
         function riwayat() {
+            $('#btn-refresh-table').find('i').addClass('fa-spin');
             $("#tampil-tbody").empty().append(
                 `<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -840,6 +841,7 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                    $('#btn-refresh-table').find('i').removeClass('fa-spin');
                 }
             })
         }

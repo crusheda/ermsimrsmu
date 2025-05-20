@@ -21,7 +21,7 @@ class PengumumanController extends Controller
     function index()
     {
         if (Auth::user()->getPermission('admin_kepegawaian') == true) {
-            $jenjang_pendidikan = ref_jenjang_pendidikan::get();
+            $jenjang_pendidikan = ref_jenjang_pendidikan::orderBy('kategori','ASC')->get();
 
             $data = [
                 'pendidikan' => $jenjang_pendidikan,
@@ -74,7 +74,14 @@ class PengumumanController extends Controller
 
     function show($id)
     {
-        $data = Pengumuman::where('id',$id)->first();
+        $show = pengumuman::where('id',$id)->first();
+        $pendidikan = ref_jenjang_pendidikan::orderBy('kategori','ASC')->get();
+
+        $data = [
+            'show' => $show,
+            'pendidikan' => $pendidikan,
+        ];
+
         return response()->json($data, 200);
     }
 
@@ -108,6 +115,43 @@ class PengumumanController extends Controller
             $data->save();
 
             datalogs::record($request->pegawai, 'Baru saja melakukan penambahan Lowongan Kerja '.$request->nama, 'dari '.$request->mulai.' sampai '.$request->selesai, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            return Response::json(array(
+                'message' => $push,
+                'code' => 200,
+            ));
+        }
+    }
+
+    function ubah(Request $request)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $validasi = pengumuman::where('nama',$request->nama)->count();
+        if ($validasi > 0) {
+            return Response::json(array(
+                'message' => 'Nama Kebutuhan sudah pernah digunakan, silakan menggunakan nama lain.',
+                'code' => 400,
+            ));
+        } else {
+            $data = pengumuman::find($request->id);
+            $data->token = Crypt::encryptString($request->nama); // decryptString to Decrypt
+            $data->unit = $request->unit;
+            $data->nama = $request->nama;
+            $data->jumlah = $request->jumlah;
+            $data->kualifikasi = $request->kualifikasi;
+            $data->tugas = $request->tugas;
+            $data->keahlian = $request->keahlian;
+            $data->persyaratan = $request->persyaratan;
+            $data->umur_min = $request->umur_min;
+            $data->umur_max = $request->umur_max;
+            $data->kuota = $request->kuota;
+            $data->mulai = $request->mulai;
+            $data->selesai = $request->selesai;
+            $data->keterangan = $request->keterangan;
+            $data->user_id = $request->pegawai;
+            $data->save();
+
+            datalogs::record($request->pegawai, 'Baru saja melakukan perubahan Lowongan Kerja '.$request->nama, 'dari '.$request->mulai.' sampai '.$request->selesai, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
             return Response::json(array(
                 'message' => $push,
                 'code' => 200,
