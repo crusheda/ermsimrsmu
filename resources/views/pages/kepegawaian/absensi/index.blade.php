@@ -155,7 +155,8 @@
                     <h5 class="mb-0 ms-3">Filter <b class="text-primary">Riwayat</b></h5>
                     {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
                         <div class="btn-group">
-                            <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
+                            <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
                             {{-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a>
@@ -176,15 +177,8 @@
                             <div class="form-group">
                                 <label class="form-label">Pilihan Filter <a class="text-danger">*</a></label>
                                 <select class="form-select select2" id="filter_pilihan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
-                                    {{-- <option value="">Pilih</option> --}}
                                     <option value="1" selected hidden>Monitoring Absensi</option>
                                     <option value="2">Absensi Karyawan Lengkap</option>
-                                    {{-- <option value="3">Absensi Terlambat</option>
-                                    <option value="4">Absensi Hangus</option>
-                                    <option value="5">Absensi Ijin/Tidak Masuk</option>
-                                    <option value="6">Absensi Lembur</option>
-                                    <option value="7">Kehadiran Karyawan</option>
-                                    <option value="8">Jam Kerja Tidak Lebih/Sama Dengan 7 Jam (Per Hari)</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -274,125 +268,32 @@
     </div>
 
     {{-- MODAL START --}}
-    <div class="modal fade animate__animated animate__rubberBand" id="modalRincian" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
+    <div class="modal fade animate__animated animate__rubberBand" id="modalDetail" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Rincian Perjalanan
+                        Detail Absensi <span class="badge p-1" id="show_jenis_detail"></span> <span class="badge text-bg-info ms-1 p-1" id="show_id_detail"></span>
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" class="form-control" name="id_rincian" id="id_rincian" hidden>
                     <div class="table-responsive">
-                        <table class="table table-hover dt-responsive align-middle table-borderless">
-                            <tbody style="font-size:13px" id="tbody-rincian">
+                        <table class="table table-bordered" style="width: 100%">
+                            <thead class="text-center align-middle">
                                 <tr>
-                                    <td colspan="9">
-                                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
-                                    </td>
+                                    <th>&nbsp;</th>
+                                    <th>Berangkat</th>
+                                    <th>Pulang</th>
                                 </tr>
-                            </tbody>
+                            </thead>
+                            <tbody id="tampil-tbody-detail" class="text-center align-middle"></tbody>
                         </table>
                     </div>
                 </div>
-                <div class="modal-footer" id="keu-only" hidden>
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup</button>
-                    @if (Auth::user()->getPermission('admin_keuangan') == true || Auth::user()->id == '391')
-                        <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden>Confirm Paid</button>
-                        <button type="button" class="btn btn-warning" onclick="cancelPaid()" id="btn-cancel" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden>Cancel Paid</button>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade animate__animated animate__rubberBand" id="modalUbah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        Form Ubah
-                    </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="id_edit" hidden>
-                    <div class="row">
-                        <div class="col-md-9 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="acara_edit" id="acara_edit" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
-                                <input type="datetime-local" class="form-control" name="tgl_edit" id="tgl_edit">
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
-                                <select class="form-control" name="jenis_edit" id="jenis_edit"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
-                                <select class="form-control" name="kendaraan_edit" id="kendaraan_edit"></select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3" id="showing_edit" hidden>
-                            <div class="form-group">
-                                <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="kendaraan_pegawai_edit[]" id="kendaraan_pegawai_edit" style="width: 100%" multiple>
-                                    @if (count($list['users']) > 0)
-                                        @foreach ($list['users'] as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
-                            <div class="input-group">
-                                <select class="form-control" name="lama1_edit" id="lama1_edit"></select>
-                                <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2_edit" id="lama2_edit">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
-                                <input type="text" class="form-control" name="lokasi_edit" id="lokasi_edit" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3" id="slide_edit">
-                            <div class="form-group">
-                                <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                <select class="form-select select2" name="pegawai_edit[]" id="pegawai_edit" style="width: 100%" multiple></select>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
-                                <textarea class="form-control" name="deskripsi_edit" id="deskripsi_edit" rows="1" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
-                            </div>
-                        </div>
-                        {{-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label">File Terupload</label>
-                                <div id="filex_edit"></div>
-                                <small>File yang telah terupload tidak dapat diubah kembali, lakukan penginputan ulang apabila diperlukan</small>
-                            </div>
-                        </div> --}}
-                    </div>
-                </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
-                    <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-save nav-icon"></i> Simpan Perubahan</button>
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup <i class="fas fa-arrow-right ms-1"></i></button>
+                    {{-- <button class="btn btn-primary" id="btn-ubah" onclick="prosesUbah()"><i class="fa-fw fas fa-save nav-icon"></i> Simpan Perubahan</button> --}}
                 </div>
             </div>
         </div>
@@ -526,17 +427,15 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (superID == true || adminID == true) {
-                                            // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
-                                            // content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            // content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                        if (adminID == true) {
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            if (superID == true) {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            }
                                         } else {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
                         role = '';
@@ -696,7 +595,7 @@
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID == true) {
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                             if (superID == true) {
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
@@ -853,6 +752,195 @@
                     });
                 }
             })
+        }
+
+        // FUNCTION FITURE
+        function detail(id) {
+            $("#tampil-tbody-detail").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax({
+                url: `/api/kepegawaian/absensi/${id}/detail`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.show) {
+                        $('#show_id_detail').text('ID#'+id);
+                        // INIT HEADER
+                        if (res.show.jenis == 1) {
+                            tx = 'Shift '+res.show.nm_shift;
+                            clr = 'primary';
+                            // $('#jenis_shift').empty().append('<span class="badge text-bg-primary p-1">Shift '+res.show.nm_shift+'</span>');
+                        } else {
+                            if (res.show.jenis == 3) {
+                                tx = 'Ijin';
+                                clr = 'warning';
+                                // $('#jenis_shift').empty().append('<span class="badge text-bg-warning p-1">Ijin</span>');
+                            } else {
+                                tx = 'OnCall';
+                                clr = 'danger';
+                                // $('#jenis_shift').empty().append('<span class="badge text-bg-danger p-1">OnCall</span>');
+                            }
+                        }
+                        $('#show_jenis_detail').addClass(`text-bg-${clr}`).text(tx);
+                        // INIT CONTENT
+                        if (res.show.terlambat == 0) {
+                            stt = '<span class="badge text-bg-success p-1">TEPAT WAKTU</span>';
+                        } else {
+                            stt = '<span class="badge text-bg-danger p-1">TERLAMBAT</span>';
+                        }
+                        var parts_in = res.show.tgl_in.split(' '); // pisah berdasarkan spasi
+                        date_in = parts_in[0]; // "2025-04-04"
+                        time_in = parts_in[1]; // "20:00:00"
+                        if (res.show.tgl_out) {
+                            var parts_out = res.show.tgl_out.split(' ');
+                            date_out = parts_out[0]; // "2025-04-04"
+                            time_out = parts_out[1]; // "20:00:00"
+                        } else {
+                            date_out = '-';
+                            time_out = '-';
+                        }
+                        $('#tampil-tbody-detail').empty().append(`
+                            <tr>
+                                <th class="text-start">Bukti Foto</th>
+                                <td>
+                                    <a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/1" data-lightbox="gallery" data-title="Bukti Foto Absensi (${res.show.foto_in?res.show.foto_in:'-'})" style="width:500px;height:500px">
+                                        <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/1" class="img-fluid m-b-10" alt="" style="width:500px;height:500px">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/0" data-lightbox="gallery" data-title="Bukti Foto Absensi (${res.show.foto_out?res.show.foto_out:'-'})" style="width:500px;height:500px">
+                                        <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/0" class="img-fluid m-b-10" alt="" style="width:500px;height:500px">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Lokasi</th>
+                                <td>${res.show.lokasi_in}</td>
+                                <td>${res.show.lokasi_out?res.show.lokasi_out:'-'}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Tanggal Absen</th>
+                                <td>${moment(date_in).format('dddd, D MMMM YYYY')}</td>
+                                <td>${res.show.tgl_out?moment(date_out).format('dddd, D MMMM YYYY'):'-'}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Waktu/Jam Absen</th>
+                                <td data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Referensi Berangkat Pukul ${moment(res.show.ref_jam_masuk).format('HH:mm:ss')}">${time_in}</td>
+                                <td data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Referensi Pulang Pukul ${moment(res.show.ref_jam_pulang).format('HH:mm:ss')}">${time_out}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Total Waktu Bekerja</th>
+                                <td colspan="2">${res.show.selisih_jam?res.show.selisih_jam:'-'}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Keterlambatan</th>
+                                <td colspan="2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Toleransi Keterlambatan 10 Menit">${res.show.keterlambatan} ${stt}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Lembur</th>
+                                <td colspan="2">${res.show.lembur?res.show.lembur:'-'}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Keterangan</th>
+                                <td colspan="2">${res.show.keterangan?res.show.keterangan:'Tidak Ada.'}</td>
+                            </tr>
+                        `);
+                        // INIT MAP
+                        // tampilMapIn(res.show.lokasi_in);
+                        // if (res.show.lokasi_out) {
+                        //     tampilMapOut(res.show.lokasi_out);
+                        // }
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                        $('#modalDetail').modal('show');
+                    } else {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Data Absensi Tidak Valid. Hubungi Administrator!',
+                            position: 'topRight'
+                        });
+                    }
+                },
+                error: function(res) {
+                    if (res.responseJSON && res.responseJSON.message) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON.message,
+                            position: 'topRight'
+                        });
+                    } else {
+                        alert('Terjadi kesalahan.');
+                    }
+                }
+            })
+        }
+
+        function tampilMapIn(lokasi) {
+            // Tampil MAP
+            if (map_in) {
+                map_in.remove();
+            }
+            var lat,long;// Creating a promise out of the function
+            var arr = lokasi.split(", ");
+            console.log(arr);
+            lat = arr[0];
+            long = arr[1];
+            map_in = L.map('map_in',{
+                keyboard: false,
+                zoomControl: false,
+                boxZoom: false,
+                doubleClickZoom: false,
+                tap: false,
+                touchZoom: false,
+                enableHighAccuracy: true,
+                scrollWheelZoom: false,
+                dragging: false,
+                doubleClickZoom: false,
+            }).setView([lat, long], 18);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxNativeZoom:16,
+                minZoom:16,
+                maxZoom:16
+                // attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map_in);
+
+            var marker = new L.Marker([lat, long]);
+            // marker.addTo(map_in).bindPopup("<center>Titik Lokasi Anda<br><b class='text-danger'>"+lokasi+"</b></center>").openPopup();
+            marker.addTo(map_in).openPopup();
+        }
+
+        function tampilMapOut(lokasi) {
+            if (map_out) {
+                map_out.remove(); // beda instance!
+            }
+            var arr = lokasi.split(", ");
+            var lat = arr[0];
+            var long = arr[1];
+
+            map_out = L.map('map_out', {
+                keyboard: false,
+                zoomControl: false,
+                boxZoom: false,
+                doubleClickZoom: false,
+                tap: false,
+                touchZoom: false,
+                enableHighAccuracy: true,
+                scrollWheelZoom: false,
+                dragging: false
+            }).setView([lat, long], 18);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxNativeZoom:16,
+                minZoom:16,
+                maxZoom:16
+            }).addTo(map_out);
+
+            var marker = L.marker([lat, long]);
+            marker.addTo(map_out).openPopup();
         }
 
         function clearInput() {
