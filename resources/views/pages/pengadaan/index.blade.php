@@ -48,8 +48,8 @@
                         <h5 class="mb-0 card-title flex-grow-1"><i class="ti ti-history me-1"></i> Riwayat Pengadaan</h5>
                         <div class="flex-shrink-0">
                             <div class="btn-group">
-                                <a onclick="refreshRiwayat()" class="text-warning" href="javascript:void(0);"
-                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                                <a onclick="refreshRiwayat()" class="text-warning" href="javascript:void(0);" id="btn-refresh-riwayat"
+                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="Refresh Data Riwayat Pengadaan"><i class='fa-fw fas fa-sync nav-icon'></i></a>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                                 <input type="text" class="form-control border-2 typeahead" id="caribarang"
                                     autocomplete="off" placeholder="Cari Barang..." data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Tekan ENTER untuk Submit">
+                                    title="Tekan ENTER untuk Submit" autofocus>
                                 <i class="fas fa-search-alt search-icon"></i>
                             </div>
                         </div>
@@ -97,8 +97,8 @@
                                     title="Tampilkan Keranjang"><i class="fas fa-shopping-cart align-middle me-1"></i></button>
                             </li>
                             <li class="nav-item">
-                                <button class="btn btn-icon btn-warning rounded" onclick="refresh()" data-bs-toggle="tooltip"
-                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                <button class="btn btn-icon btn-warning rounded" onclick="refresh()"  id="btn-refresh-barang-pgd"
+                                    data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="Refresh Data Pembelanjaan"><i class="fas fa-sync align-middle"></i></button>
                             </li>
                             {{-- IF SUPER USER --}}
@@ -246,6 +246,7 @@
                             <span>
                                 <ul>
                                     <li>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 20 setiap bulannya</li>
+                                    {{-- <li></li> --}}
                                 </ul>
                             </span>
                         </div>
@@ -269,8 +270,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orderdetailsModalLabel">Riwayat Pengadaan <span class="badge bg-primary"
-                            id="show_id"></span></h5>
+                    <h5 class="modal-title" id="orderdetailsModalLabel">Riwayat Pengadaan <span class="badge bg-primary" id="show_id"></span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-b-0">
@@ -386,7 +386,7 @@
             if (moment().format('DD') > 20) {
                 Swal.fire({
                     title: "Mohon Perhatian!",
-                    html: "Pengadaan telah ditutup untuk bulan ini! Silakan melakukan pengadaan pada bulan selanjutnya. Popup akan tertutup dalam <b></b> ms.",
+                    html: "Pengadaan <strong class='text-danger'>TELAH DITUTUP</strong> untuk bulan ini! Silakan melakukan pengadaan pada bulan selanjutnya. Popup akan tertutup dalam <b></b> ms.",
                     icon: "danger",
                     timer: 5000,
                     timerProgressBar: true,
@@ -405,7 +405,7 @@
             } else {
                 Swal.fire({
                     title: "Mohon Perhatian!",
-                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai tanggal 20 setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
+                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai <strong class='text-primary'>TANGGAL 20</strong> setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
                     icon: "warning",
                     timer: 5000,
                     timerProgressBar: true,
@@ -470,6 +470,8 @@
         }
 
         function refreshRiwayat() {
+            $('#btn-refresh-riwayat').prop('disabled', true);
+            $('#btn-refresh-riwayat').find('i').addClass('fa-spin');
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -545,6 +547,8 @@
                         content = `<tr style="font-size:13px"><td><center>Tidak ada record</center></td></tr>`;
                         $('#tampil-tbody').append(content);
                     }
+                    $('#btn-refresh-riwayat').prop('disabled', false);
+                    $('#btn-refresh-riwayat').find('i').removeClass('fa-spin');
                 }
             });
         }
@@ -923,7 +927,8 @@
                     });
                     refresh();
                     refreshRiwayat();
-                    $('#btn-ajukan').find('i').removeClass('fa-sync bx-spin').addClass('fa-check-double');
+                    $('#keranjang').modal('hide');
+                    $('#btn-ajukan').find('i').removeClass('fa-sync fa-spin').addClass('fa-check-double');
                     $('#btn-ajukan').prop('disabled', false);
                 },
                 error: function(res) {
@@ -936,7 +941,7 @@
                     } else {
                         alert('Terjadi kesalahan.');
                     }
-                    $('#btn-ajukan').find('i').removeClass('fa-sync bx-spin').addClass('fa-check-double');
+                    $('#btn-ajukan').find('i').removeClass('fa-sync fa-spin').addClass('fa-check-double');
                     $('#btn-ajukan').prop('disabled', false);
                 }
             });
@@ -1055,7 +1060,7 @@
                                         <td colspan="2"><b>` + formatRupiah(res.pengadaan.total, 'Rp ') + `</b></td>
                                     </tr>`;
                     $('#tampil-riwayat').append(content_total);
-                    $("#show_id").text("#" + res.pengadaan.id_pengadaan);
+                    $("#show_id").text("ID#" + res.pengadaan.id_pengadaan);
                     $("#nama_r").text(res.pengadaan.nama_user);
                     $("#unit_r").text(res.pengadaan.unit.replace('["', '').replace('"]', '').replace('","',
                         ','));
