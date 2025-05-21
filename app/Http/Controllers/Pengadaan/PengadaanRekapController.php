@@ -45,32 +45,13 @@ class PengadaanRekapController extends Controller
         }
     }
 
-    // function table($bln, $thn, $kategori)
-    // {
-    //     $data = DB::table('pengadaan_detail as d')
-    //         ->join('pengadaan as p', 'd.id_pengadaan', '=', 'p.id')
-    //         ->join('pengadaan_barang as b', 'd.id_barang', '=', 'b.id')
-    //         ->select(
-    //             'b.id as barang_id',
-    //             'b.nama as barang_nama',
-    //             'p.tgl_pengadaan',
-    //             'p.unit',
-    //             'd.jumlah',
-    //             'd.total',
-    //             'd.ket'
-    //         )
-    //         ->whereMonth('p.tgl_pengadaan', $bln)
-    //         ->whereYear('p.tgl_pengadaan', $thn)
-    //         ->where('b.ref_barang', $kategori)
-    //         ->get();
-
-    //     return response()->json($data);
-    // }
-
     function table($bln, $thn, $kategori)
     {
         $data = DB::table('pengadaan_detail as d')
-            ->join('pengadaan as p', 'd.id_pengadaan', '=', 'p.id_pengadaan')
+            ->join('pengadaan as p', function($join) {
+                $join->on('d.id_pengadaan', '=', 'p.id_pengadaan')
+                    ->whereNull('p.deleted_at');
+            })
             ->join('pengadaan_barang as b', function($join) {
                 $join->on('d.id_barang', '=', 'b.id');
                     // ->whereNull('b.deleted_at');
@@ -88,11 +69,10 @@ class PengadaanRekapController extends Controller
                 'd.total',
                 'd.ket as keterangan'
             )
+            ->whereNull('d.deleted_at')
             ->orderBy('p.tgl_pengadaan')
             ->get();
 
-        // print_r($data);
-        // die();
         $grouped = [];
         $allUnits = [];
 
