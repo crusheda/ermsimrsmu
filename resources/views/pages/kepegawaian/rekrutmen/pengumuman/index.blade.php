@@ -35,7 +35,8 @@
                 <div class="card-body">
                     <div class="alert alert-secondary mb-3">
                         <small>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Hapus Lowongan Kerja digunakan HANYA apabila lowongan
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Hapus Lowongan Kerja digunakan HANYA apabila lowongan salah/dibatalkan <br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Lowongan akan tampil pada Website RS setelah input pada rentang tanggal dibuka sampai ditutup <br>
                         </small>
                     </div>
                     <div class="table-responsive">
