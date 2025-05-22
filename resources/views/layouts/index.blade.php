@@ -41,6 +41,9 @@
     {{-- <link rel="stylesheet" href="{{ asset('libs/typeahead-js/typeahead.css') }}" /> --}}
     <!-- cropper css -->
     {{-- <link rel="stylesheet" href="{{ asset('css/plugins/croppr.min.css') }}"> --}}
+    {{-- LIGHTBOX --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('css/cropper.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/notifier.css') }}">
     <link href="{{ asset('libs/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
@@ -175,7 +178,8 @@
     <script src="{{ asset('libs/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
 
     <!-- lightbox init js-->
-    <script src="{{ asset('js/pages/lightbox.init.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    {{-- <script src="{{ asset('js/pages/lightbox.init.js') }}"></script> --}}
 
     <!-- Flat Pickr js -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

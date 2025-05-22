@@ -143,8 +143,14 @@ class AbsensiController extends Controller
         return response()->json($data);
     }
 
-    function show($id)
+    function detail($id)
     {
+        $show = absensi::where('id',$id)->first();
 
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data);
     }
 }
