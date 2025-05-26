@@ -15,7 +15,7 @@ class ChangeColumnTableRekrutmenRegistrasi extends Migration
     {
         Schema::table('rekrutmen_registrasi', function (Blueprint $table) {
             $table->string('tempat_lahir')->change();
-            $table->integer('hp',13)->change();
+            $table->string('hp',15)->change();
         });
     }
 
@@ -28,7 +28,7 @@ class ChangeColumnTableRekrutmenRegistrasi extends Migration
     {
         Schema::table('rekrutmen_registrasi', function (Blueprint $table) {
             $table->string('tempat_lahir')->change();
-            $table->integer('hp',13)->change();
+            $table->string('hp',13)->change();
         });
     }
 }
