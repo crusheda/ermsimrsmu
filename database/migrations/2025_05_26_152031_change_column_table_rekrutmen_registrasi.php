@@ -14,7 +14,8 @@ class ChangeColumnTableRekrutmenRegistrasi extends Migration
     public function up()
     {
         Schema::table('rekrutmen_registrasi', function (Blueprint $table) {
-            $table->string('tempat_lahir')->change(); // ubah tipe kolom 'nama'
+            $table->string('tempat_lahir')->change();
+            $table->integer('hp',13)->change();
         });
     }
 
@@ -26,7 +27,8 @@ class ChangeColumnTableRekrutmenRegistrasi extends Migration
     public function down()
     {
         Schema::table('rekrutmen_registrasi', function (Blueprint $table) {
-            $table->string('tempat_lahir')->change(); // kembalikan ke tipe semula jika rollback
+            $table->string('tempat_lahir')->change();
+            $table->integer('hp',13)->change();
         });
     }
 }
