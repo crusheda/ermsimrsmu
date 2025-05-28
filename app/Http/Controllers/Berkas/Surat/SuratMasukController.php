@@ -147,7 +147,7 @@ class SuratMasukController extends Controller
 
     public function apiGetAll()
     {
-        $show = surat_masuk::get();
+        $show = surat_masuk::orderBy('created_at','DESC')->get();
 
         $data = [
             'show' => $show,
