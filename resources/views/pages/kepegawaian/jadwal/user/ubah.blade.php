@@ -101,7 +101,7 @@
                                                         @else
                                                             <td class="p-2">
                                                         @endif
-                                                                <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit }}" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                                <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required>
                                                             </td>
                                                     @endfor
                                                 </tr>
@@ -157,7 +157,10 @@
                     <div class="card-footer p-2">
                         <div class="text-end btn-page mt-2">
                             <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
-                            <a class="btn btn-primary" id="btn-simpan" href="javascript:void(0);" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</a>
+                            <div class="btn-group">
+                                <a class="btn btn-primary" id="btn-simpan" href="javascript:void(0);" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</a>
+                                <a class="btn btn-danger" id="btn-ajukan" href="javascript:void(0);" onclick="ajukan()"><i class="fas fa-stamp me-1"></i> Ajukan</a>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -285,6 +288,8 @@
                     var adminID = "{{ Auth::user()->getPermission('admin-kepegawaian') }}";
                     var valid = 1;
                     t=1;
+                    $('.inputTgl').removeAttr('required');
+                    $('#formUbah').removeAttr('novalidate');
                     res.staf.forEach(item => { // LOOPING STAF
                         var cuti = 0;
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
@@ -327,6 +332,70 @@
                             "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
                             "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
                         );
+                        $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+                        $("#btn-simpan").prop('disabled', true);
+                        $("#formUbah").submit();
+                    }
+                },
+                error: function (res) { }
+            })
+        }
+
+        function ajukan() {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/{{ $list['jadwal']->id }}/shift/user/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    var adminID = "{{ Auth::user()->getPermission('admin-kepegawaian') }}";
+                    var valid = 1;
+                    t=1;
+                    $('.inputTgl').removeAttr('required');
+                    $('#formUbah').removeAttr('novalidate');
+                    res.staf.forEach(item => { // LOOPING STAF
+                        var cuti = 0;
+                        for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
+                            num = $("#"+t+"tgl"+i);
+                            up = num.val();
+                            console.log(up);
+                            upper = up.toString().toUpperCase();
+                            if (res.shiftArr.includes(upper) == 0) {
+                                if (upper == 'L' || upper == 'C' || upper == 'CM' || upper == 'CU' || upper == 'CH' || upper == 'CD') {
+                                    num.removeClass('is-invalid').addClass('is-valid');
+                                } else {
+                                    valid = 0;
+                                    num.removeClass('is-valid').addClass('is-invalid');
+                                }
+                            } else {
+                                num.removeClass('is-invalid').addClass('is-valid');
+                            }
+                            if (upper == 'C') {
+                                cuti++;
+                            }
+                        }
+                        // VALIDASI CUTI LEBIH DARI 4x DALAM 1 BULAN
+                        if (cuti > 4) {
+                            notifier.show(
+                                "Pesan Larangan!", "Terdapat Cuti pada karyawan "+item.nama_pegawai+" yang melebihi 4x dalam sebulan",
+                                "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                            );
+                            valid = 0;
+                        }
+                        t++;
+                    })
+                    if (valid == 1) {
+                        console.log('berhasil');
+                        $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+                        $("#btn-simpan").prop('disabled', true);
+                        $("#formUbah").submit();
+                    } else {
+                        console.log('gagal');
+                        notifier.show(
+                            "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
+                            "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                        );
+                        $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
+                        $("#btn-simpan").prop('disabled', true);
                     }
                 },
                 error: function (res) { }

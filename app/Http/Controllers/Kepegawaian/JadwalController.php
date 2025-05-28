@@ -152,6 +152,33 @@ class JadwalController extends Controller
         }
     }
 
+    function prosesSimpan(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
+        $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
+
+        for ($i=0; $i < count($request->id_staf) ; $i++) {
+            $data = new jadwal_detail;
+            $data->id_jadwal = $request->id_jadwal;
+            $data->pegawai_id = $request->id_staf[$i];
+            $data->pegawai_nama = $request->nama_staf[$i];
+            $data->jabatan = $request->jabatan_staf[$i];
+            $data->color = $request->color_staf[$i];
+            for ($t = 1; $t <= $totalDay; $t++) {
+                $hit = 'tgl'.$t;
+                if ($request->$hit[$i]) {
+                    $data->$hit = strtoupper($request->$hit[$i]);
+                } else {
+                    $data->$hit = null;
+                }
+            }
+            $data->save();
+        }
+
+        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil disimpan pada '.$tgl);
+    }
+
     function prosesTambah(Request $request)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
@@ -167,14 +194,18 @@ class JadwalController extends Controller
             $data->color = $request->color_staf[$i];
             for ($t = 1; $t <= $totalDay; $t++) {
                 $hit = 'tgl'.$t;
-                $data->$hit = strtoupper($request->$hit[$i]);
+                if ($request->$hit[$i]) {
+                    $data->$hit = strtoupper($request->$hit[$i]);
+                } else {
+                    $data->$hit = null;
+                }
             }
             $data->save();
         }
 
         datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan penambahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
-        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil disimpan pada '.$tgl);
+        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil diajukan pada '.$tgl);
     }
 
     function prosesUbah(Request $request)
@@ -190,7 +221,11 @@ class JadwalController extends Controller
         // for ($i=0; $i < count($request->id_staf) ; $i++) {
             for ($t = 1; $t <= $totalDay; $t++) {
                 $hit = 'tgl'.$t;
-                $data[$i]->$hit = strtoupper($request->$hit[$i]);
+                if ($request->$hit[$i]) {
+                    $data[$i]->$hit = strtoupper($request->$hit[$i]);
+                } else {
+                    $data[$i]->$hit = null;
+                }
             }
             $data[$i]->save();
         }

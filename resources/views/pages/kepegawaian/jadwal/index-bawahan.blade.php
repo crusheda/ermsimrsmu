@@ -403,42 +403,42 @@
                                                         </div>
                                                     </div>
                                                 </td>`;
-                                    content += `<td class="p-2 tgl1">${res.detail[t].tgl1}</td>`;
-                                    content += `<td class="p-2 tgl2">${res.detail[t].tgl2}</td>`;
-                                    content += `<td class="p-2 tgl3">${res.detail[t].tgl3}</td>`;
-                                    content += `<td class="p-2 tgl4">${res.detail[t].tgl4}</td>`;
-                                    content += `<td class="p-2 tgl5">${res.detail[t].tgl5}</td>`;
-                                    content += `<td class="p-2 tgl6">${res.detail[t].tgl6}</td>`;
-                                    content += `<td class="p-2 tgl7">${res.detail[t].tgl7}</td>`;
-                                    content += `<td class="p-2 tgl8">${res.detail[t].tgl8}</td>`;
-                                    content += `<td class="p-2 tgl9">${res.detail[t].tgl9}</td>`;
-                                    content += `<td class="p-2 tgl10">${res.detail[t].tgl10}</td>`;
-                                    content += `<td class="p-2 tgl11">${res.detail[t].tgl11}</td>`;
-                                    content += `<td class="p-2 tgl12">${res.detail[t].tgl12}</td>`;
-                                    content += `<td class="p-2 tgl13">${res.detail[t].tgl13}</td>`;
-                                    content += `<td class="p-2 tgl14">${res.detail[t].tgl14}</td>`;
-                                    content += `<td class="p-2 tgl15">${res.detail[t].tgl15}</td>`;
-                                    content += `<td class="p-2 tgl16">${res.detail[t].tgl16}</td>`;
-                                    content += `<td class="p-2 tgl17">${res.detail[t].tgl17}</td>`;
-                                    content += `<td class="p-2 tgl18">${res.detail[t].tgl18}</td>`;
-                                    content += `<td class="p-2 tgl19">${res.detail[t].tgl19}</td>`;
-                                    content += `<td class="p-2 tgl20">${res.detail[t].tgl20}</td>`;
-                                    content += `<td class="p-2 tgl21">${res.detail[t].tgl21}</td>`;
-                                    content += `<td class="p-2 tgl22">${res.detail[t].tgl22}</td>`;
-                                    content += `<td class="p-2 tgl23">${res.detail[t].tgl23}</td>`;
-                                    content += `<td class="p-2 tgl24">${res.detail[t].tgl24}</td>`;
-                                    content += `<td class="p-2 tgl25">${res.detail[t].tgl25}</td>`;
-                                    content += `<td class="p-2 tgl26">${res.detail[t].tgl26}</td>`;
+                                    content += `<td class="p-2 tgl1">${res.detail[t].tgl1?res.detail[t].tgl1:''}</td>`;
+                                    content += `<td class="p-2 tgl2">${res.detail[t].tgl2?res.detail[t].tgl2:''}</td>`;
+                                    content += `<td class="p-2 tgl3">${res.detail[t].tgl3?res.detail[t].tgl3:''}</td>`;
+                                    content += `<td class="p-2 tgl4">${res.detail[t].tgl4?res.detail[t].tgl4:''}</td>`;
+                                    content += `<td class="p-2 tgl5">${res.detail[t].tgl5?res.detail[t].tgl5:''}</td>`;
+                                    content += `<td class="p-2 tgl6">${res.detail[t].tgl6?res.detail[t].tgl6:''}</td>`;
+                                    content += `<td class="p-2 tgl7">${res.detail[t].tgl7?res.detail[t].tgl7:''}</td>`;
+                                    content += `<td class="p-2 tgl8">${res.detail[t].tgl8?res.detail[t].tgl8:''}</td>`;
+                                    content += `<td class="p-2 tgl9">${res.detail[t].tgl9?res.detail[t].tgl9:''}</td>`;
+                                    content += `<td class="p-2 tgl10">${res.detail[t].tgl10?res.detail[t].tgl10:''}</td>`;
+                                    content += `<td class="p-2 tgl11">${res.detail[t].tgl11?res.detail[t].tgl11:''}</td>`;
+                                    content += `<td class="p-2 tgl12">${res.detail[t].tgl12?res.detail[t].tgl12:''}</td>`;
+                                    content += `<td class="p-2 tgl13">${res.detail[t].tgl13?res.detail[t].tgl13:''}</td>`;
+                                    content += `<td class="p-2 tgl14">${res.detail[t].tgl14?res.detail[t].tgl14:''}</td>`;
+                                    content += `<td class="p-2 tgl15">${res.detail[t].tgl15?res.detail[t].tgl15:''}</td>`;
+                                    content += `<td class="p-2 tgl16">${res.detail[t].tgl16?res.detail[t].tgl16:''}</td>`;
+                                    content += `<td class="p-2 tgl17">${res.detail[t].tgl17?res.detail[t].tgl17:''}</td>`;
+                                    content += `<td class="p-2 tgl18">${res.detail[t].tgl18?res.detail[t].tgl18:''}</td>`;
+                                    content += `<td class="p-2 tgl19">${res.detail[t].tgl19?res.detail[t].tgl19:''}</td>`;
+                                    content += `<td class="p-2 tgl20">${res.detail[t].tgl20?res.detail[t].tgl20:''}</td>`;
+                                    content += `<td class="p-2 tgl21">${res.detail[t].tgl21?res.detail[t].tgl21:''}</td>`;
+                                    content += `<td class="p-2 tgl22">${res.detail[t].tgl22?res.detail[t].tgl22:''}</td>`;
+                                    content += `<td class="p-2 tgl23">${res.detail[t].tgl23?res.detail[t].tgl23:''}</td>`;
+                                    content += `<td class="p-2 tgl24">${res.detail[t].tgl24?res.detail[t].tgl24:''}</td>`;
+                                    content += `<td class="p-2 tgl25">${res.detail[t].tgl25?res.detail[t].tgl25:''}</td>`;
+                                    content += `<td class="p-2 tgl26">${res.detail[t].tgl26?res.detail[t].tgl26:''}</td>`;
                                     if (res.totalDay >= 27) {
-                                        content += `<td class="p-2 tgl27">${res.detail[t].tgl27}</td>`;
+                                        content += `<td class="p-2 tgl27">${res.detail[t].tgl27?res.detail[t].tgl27:''}</td>`;
                                         if (res.totalDay >= 28) {
-                                            content += `<td class="p-2 tgl28">${res.detail[t].tgl28}</td>`;
+                                            content += `<td class="p-2 tgl28">${res.detail[t].tgl28?res.detail[t].tgl28:''}</td>`;
                                             if (res.totalDay >= 29) {
-                                                content += `<td class="p-2 tgl29">${res.detail[t].tgl29}</td>`;
+                                                content += `<td class="p-2 tgl29">${res.detail[t].tgl29?res.detail[t].tgl29:''}</td>`;
                                                 if (res.totalDay >= 30) {
-                                                    content += `<td class="p-2 tgl30">${res.detail[t].tgl30}</td>`;
+                                                    content += `<td class="p-2 tgl30">${res.detail[t].tgl30?res.detail[t].tgl30:''}</td>`;
                                                     if (res.totalDay >= 31) {
-                                                        content += `<td class="p-2 tgl31">${res.detail[t].tgl31}</td>`;
+                                                        content += `<td class="p-2 tgl31">${res.detail[t].tgl31?res.detail[t].tgl31:''}</td>`;
                                                     }
                                                 }
                                             }
