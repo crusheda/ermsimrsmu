@@ -172,7 +172,11 @@ class SuratKeluarController extends Controller
     // API
     public function apiGet()
     {
-        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')->limit(100)->get();
+        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')
+                            ->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')
+                            ->orderBy('berkas_surat_keluar.created_at','DESC')
+                            ->limit(100)
+                            ->get();
         $getUser = user::select('id','nama')->get();
         $user = json_encode($getUser);
 
@@ -186,7 +190,10 @@ class SuratKeluarController extends Controller
 
     public function apiGetAll()
     {
-        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')->get();
+        $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')
+                            ->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')
+                            ->orderBy('berkas_surat_keluar.created_at','DESC')
+                            ->get();
         $getUser = user::select('id','nama')->get();
         $user = json_encode($getUser);
 
