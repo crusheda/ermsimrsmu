@@ -36,7 +36,11 @@
             <div class="card table-card mb-0">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0"><button class="btn btn-link-dark" onclick="window.location='{{ route('kepegawaian.jadwaldinas.index') }}'"><i class="fas fa-chevron-left me-2"></i>Kembali</button></h5>
-                    <div class="btn-group">
+                    <div class="text-end">
+                        <h6>Perubahan Jadwal ID : <a class="text-primary">{{ $list["jadwal"]->id }}</a></h6>
+                        <h6 class="mb-0">Diajukan Oleh : <a class="text-danger">{{ $list["jadwal"]->nama?$list["jadwal"]->nama:$list["jadwal"]->name }}</a></h6>
+                    </div>
+                    {{-- <div class="btn-group">
                         <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
@@ -46,9 +50,7 @@
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="">#</a>
                             </li>
                         </ul>
-                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
-                    </div>
+                    </div> --}}
                 </div>
                 <form action="{{ route('kepegawaian.jadwaldinas.prosesTambah') }}" id="formTambah" class="needs-validation mb-0" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
@@ -294,6 +296,8 @@
         // }
 
         function simpan() {
+            $("#btn-simpan").find("i").removeClass("fa-save").addClass('fa-sync fa-spin');
+            $("#btn-simpan").prop('disabled', true);
             $.ajax({
                 url: "/api/kepegawaian/jadwaldinas/{{ $list['jadwal']->id }}/shift/user/{{ Auth::user()->id }}",
                 type: 'GET',
@@ -335,29 +339,24 @@
                         }
                         t++;
                     })
-                    if (valid == 1) {
-                        console.log('berhasil menyimpan');
-                        $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
-                        $("#btn-simpan").prop('disabled', true);
-                        // $("#formTambah").attr("action", "{{ route('kepegawaian.jadwaldinas.prosesSimpan') }}");
-                        $("#formTambah").submit();
-                    } else {
-                        console.log('gagal menyimpan');
+                    $("#formTambah").submit();
+                    if (valid != 1) {
                         notifier.show(
                             "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
                             "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
                         );
-                        $("#btn-simpan").find("i").toggleClass("fa-save fa-sync fa-spin");
-                        $("#btn-simpan").prop('disabled', true);
-                        // $("#formTambah").attr("action", "{{ route('kepegawaian.jadwaldinas.prosesSimpan') }}");
-                        $("#formTambah").submit();
                     }
                 },
-                error: function (res) { }
+                error: function (res) {
+                    $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass('fa-save');
+                    $("#btn-simpan").prop('disabled', false);
+                }
             })
         }
 
         function ajukan() {
+            $("#btn-ajukan").find("i").removeClass("fa-stamp").addClass('fa-sync fa-spin');
+            $("#btn-ajukan").prop('disabled', true);
             $.ajax({
                 url: "/api/kepegawaian/jadwaldinas/{{ $list['jadwal']->id }}/shift/user/{{ Auth::user()->id }}",
                 type: 'GET',
@@ -401,9 +400,6 @@
                     })
                     if (valid == 1) {
                         console.log('berhasil mengajukan');
-                        $("#btn-ajukan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
-                        $("#btn-ajukan").prop('disabled', true);
-                        // $("#formTambah").attr("action", "{{ route('kepegawaian.jadwaldinas.prosesTambah') }}");
                         $("#formTambah").submit();
                     } else {
                         console.log('gagal mengajukan');
@@ -411,11 +407,14 @@
                             "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
                             "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
                         );
-                        $("#btn-ajukan").find("i").toggleClass("fa-stamp fa-sync fa-spin");
-                        $("#btn-ajukan").prop('disabled', true);
+                        $("#btn-ajukan").find("i").removeClass("fa-sync fa-spin").addClass('fa-stamp');
+                        $("#btn-ajukan").prop('disabled', false);
                     }
                 },
-                error: function (res) { }
+                error: function (res) {
+                    $("#btn-ajukan").find("i").removeClass("fa-sync fa-spin").addClass('fa-stamp');
+                    $("#btn-ajukan").prop('disabled', false);
+                }
             })
         }
 
