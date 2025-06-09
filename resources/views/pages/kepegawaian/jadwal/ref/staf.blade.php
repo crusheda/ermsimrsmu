@@ -46,6 +46,7 @@
                     <small>
                         Setelah berhasil menambahkan semua Staf pada Unit Anda, <mark>DIWAJIBKAN</mark> segera melengkapi Data (No.Urutan pada Jadwal) pada masing-masing staf (Klik Atur Karyawan). <br>Tombol Atur Karyawan ada pada masing-masing baris Staf Anda, Kolom <mark>AKSI</mark>. <br>
                         <i class="ti ti-arrow-narrow-right me-1"></i> Pastikan Staf ditambahkan oleh Admin Jadwal (<mark>Setiap Unit/Bagian hanya 1 orang</mark>), berkaitan dengan kelengkapan data saat pembuatan Jadwal Dinas <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Tambah</b> hanya bisa dilakukan apabila Data Shift Karyawan yang bersangkutan belum didaftarkan/tergabung pada <mark>UNIT</mark> manapun (Belum pernah ditambahkan oleh siapapun) <br>
                         <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Ubah</b> maupun <b>Hapus</b> Data Referensi Staf hanya dapat dilakukan oleh Admin Jadwal (User Admin Ref.Staf) <br>
                         <i class="ti ti-arrow-narrow-right me-1"></i> Penambahan Staf hanya dilakukan sekali saja dan dapat digunakan untuk seterusnya, terkecuali apabila terdapat pergantian Data Staf <br>
                         <i class="ti ti-arrow-narrow-right me-1"></i> Hapus Data Staf <mark>Dapat Menghapus</mark> riwayat jadwal yang berhubungan dengan karyawan terhapus, lakukan dengan hati-hati atau gunakan Ubah Data apabila diperlukan perubahan data karyawan

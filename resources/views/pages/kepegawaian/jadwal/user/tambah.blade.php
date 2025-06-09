@@ -174,6 +174,7 @@
                         <div class="text-end btn-page">
                             <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
                             <div class="btn-group">
+                                <a class="btn btn-dark" id="btn-simpan" href="javascript:void(0);" onclick="hapus({{ $list['jadwal']->id }})"><i class="fas fa-trash me-1"></i> Hapus</a>
                                 <a class="btn btn-primary" id="btn-simpan" href="javascript:void(0);" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</a>
                                 <a class="btn btn-danger" id="btn-ajukan" href="javascript:void(0);" onclick="ajukan()"><i class="fas fa-stamp me-1"></i> Ajukan</a>
                             </div>
@@ -210,6 +211,33 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Batalkan</button>
                     <button class="btn btn-primary" id="btn-tambah" onclick="prosesTambah()"><i class="fa-fw fas fa-chevron-right nav-icon"></i> Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Hapus
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_hapus" hidden>
+                    <p style="text-align: justify;">Anda akan menghapus Jadwal Dinas tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
         </div>
@@ -422,6 +450,51 @@
             var jml = parseInt("{{ $list['jml_tgl'] }}",10);
             for (let i = 0; i <= jml; i++) {
                 $(".clearTxt").val("");
+            }
+        }
+
+        function hapus(id) {
+            $("#id_hapus").val(id);
+            var inputs = document.getElementById('setujuhapus');
+            inputs.checked = false;
+            $('#modalHapus').modal('show');
+        }
+
+        function prosesHapus() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuhapus').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui untuk dilakukan penghapusan jadwal dinas tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_hapus").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/"+id+"/hapus",
+                    type: 'DELETE',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Jadwal Dinas Anda telah berhasil dihapus pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalHapus').modal('hide');
+                        // Redirect setelah delay (misal: 1 detik)
+                        setTimeout(function() {
+                            window.location.href = "/kepegawaian/jadwaldinas"; // ganti sesuai URL tujuan
+                        }, 1000);
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Jadwal Dinas Anda gagal dihapus',
+                            position: 'topRight'
+                        });
+                    }
+                });
             }
         }
     </script>

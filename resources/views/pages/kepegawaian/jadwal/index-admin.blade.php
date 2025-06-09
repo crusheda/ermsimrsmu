@@ -49,8 +49,8 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel Riwayat</h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="btn btn-light-secondary dropdown-toggle position-relative" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Menu
+                        <a href="javascript:void(0);" class="btn btn-light-primary dropdown-toggle position-relative" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Pilihan Menu
                             @if ($validasi != 0)
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-primary">
                                     {{ $validasi }}<span class="visually-hidden">unread messages</span>

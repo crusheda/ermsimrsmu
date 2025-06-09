@@ -45,6 +45,16 @@
                 </div>
             </div>
             <div class="card-body">
+                <div class="alert alert-light mb-3 mt-2">
+                    <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
+                    <small>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Pastikan Data Shift ditambahkan oleh Admin Jadwal (<mark>Setiap Unit/Bagian hanya 1 orang perwakilan</mark>), berkaitan dengan kelengkapan data saat pembuatan Jadwal Dinas <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Tambah</b> hanya bisa dilakukan apabila Data Shift Karyawan yang bersangkutan belum didaftarkan/tergabung pada <mark>UNIT</mark> manapun (Belum pernah ditambahkan oleh siapapun) <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Akses <b>Ubah</b> maupun <b>Hapus</b> Data Referensi Shift hanya dapat dilakukan oleh Admin Jadwal (User Admin Ref.Shift) <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Penambahan Data Shift hanya dilakukan sekali saja dan dapat digunakan untuk seterusnya, terkecuali apabila terdapat perubahan Data Shift <br>
+                        <i class="ti ti-arrow-narrow-right me-1"></i> Perlu diperhatikan bahwa penghapusan Data Shift tidak akan menghapus Data Jadwal Dinas yang sudah/pernah diajukan sebelumnya, mohon lakukan dengan hati-hati
+                    </small>
+                </div>
                 <div class="table-responsive text-nowrap" style="border: 0px">
                     <table id="dttable" class="table dt-responsive table-hover nowrap w-100">
                         <thead>
