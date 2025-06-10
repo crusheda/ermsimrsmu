@@ -134,6 +134,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                     Route::post('kepegawaian/jadwaldinas/staf/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'ubahStaf'])->name('kepegawaian.jadwaldinas.staf.update');
                     Route::post('kepegawaian/jadwaldinas/staf/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tambahStaf'])->name('kepegawaian.jadwaldinas.staf.tambah');
                     Route::delete('kepegawaian/jadwaldinas/staf/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusStaf'])->name('kepegawaian.jadwaldinas.staf.hapus');
+                    Route::get('kepegawaian/jadwaldinas/staf/{id}/ambilalih/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'ambilAlihStaf'])->name('kepegawaian.jadwaldinas.staf.ambilalih');
                     // ATUR STAF
                     Route::get('kepegawaian/jadwaldinas/staf/atur/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showAturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.show');
                     Route::post('kepegawaian/jadwaldinas/staf/atur/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'aturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.update');

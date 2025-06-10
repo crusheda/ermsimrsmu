@@ -51,7 +51,17 @@ class JadwalController extends Controller
 
     function indexShift()
     {
-        return view('pages.kepegawaian.jadwal.ref.shift');
+        $pegawai = Auth::user()->id; // misal: 232
+
+        $show = DB::table('referensi_jadwal_users')
+            ->whereJsonContains('staf', (string) $pegawai)
+            ->whereNull('deleted_at')
+            ->first();
+
+        $data = [
+            'show' => $show,
+        ];
+        return view('pages.kepegawaian.jadwal.ref.shift')->with('list', $data);
     }
 
     function indexStaf()
@@ -841,29 +851,31 @@ class JadwalController extends Controller
     // REFERENSI SHIFT -----------------------------------------------------------------------------------------------------------
     function tableShift($id)
     {
-        $getStaf = ref_jadwal_users::get();
-        $staf = array();
-        $atasan = null;
-        foreach ($getStaf as $key => $value) {
-            if (in_array($id,json_decode($value->staf))) {
-                // print_r($value->pegawai_id);
-                $staf[] = $value->pegawai_id;
-                $atasan = $value->pegawai_id;
-            }
+        // print_r($id);
+        // die();
+        $pegawai = $id; // misal: 232
+        $cekUser = DB::table('referensi_jadwal_users')
+            ->whereJsonContains('staf', (string) $pegawai)
+            ->whereNull('deleted_at')
+            ->first();
+
+        if ($cekUser) {
+            $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+            $show  = ref_jadwal_shift::join('users','users.id','=','referensi_jadwal_shift.pegawai_id')
+                    ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai')
+                    ->where('referensi_jadwal_shift.pegawai_id',$cekUser->pegawai_id)
+                    ->get();
+
+            $data = [
+                'users' => $users,
+                'atasan' => $cekUser->pegawai_id,
+                'show' => $show,
+            ];
+
+            return response()->json($data, 200);
+        } else {
+            return response()->json($pegawai, 400);
         }
-        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        $show  = ref_jadwal_shift::join('users','users.id','=','referensi_jadwal_shift.pegawai_id')
-                ->select('referensi_jadwal_shift.*','users.nama as nama_pegawai')
-                ->where('referensi_jadwal_shift.pegawai_id',$staf)
-                ->get();
-
-        $data = [
-            'users' => $users,
-            'atasan' => $atasan,
-            'show' => $show,
-        ];
-
-        return response()->json($data, 200);
     }
 
     function tambahShift(Request $request)
@@ -1095,6 +1107,41 @@ class JadwalController extends Controller
         $data->delete();
 
         return response()->json($tgl, 200);
+    }
+
+    function ambilAlihStaf($id,$user)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Validasi
+        $cek = ref_jadwal_users::where('pegawai_id',$user)->whereNull('deleted_at')->first();
+
+        if ($cek) {
+            return response()->json($tgl, 400);
+        } else {
+            // Inisialisasi
+            $data = ref_jadwal_users::where('pegawai_id',$id)->whereNull('deleted_at')->first();
+            $data->pegawai_id = $user;
+            $data->save();
+
+            $data2 = ref_jadwal_jabatan::where('pegawai_id',$id)->whereNull('deleted_at')->get();
+            if ($data2->count() > 0) {
+                foreach ($data2 as $item) {
+                    $item->pegawai_id = $user;
+                    $item->save();
+                }
+            }
+
+            $data3 = ref_jadwal_jabatan::where('pegawai_id',$id)->whereNull('deleted_at')->get();
+            if ($data3->count() > 0) {
+                foreach ($data3 as $item) {
+                    $item->pegawai_id = $user;
+                    $item->save();
+                }
+            }
+
+            return response()->json($tgl, 200);
+        }
     }
 
     function showAturStaf($id)

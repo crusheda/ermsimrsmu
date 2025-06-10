@@ -32,9 +32,13 @@
                             <a class="btn btn-outline-secondary" href="{{ route('kepegawaian.jadwaldinas.index') }}" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Kembali"><i class="fas fa-angle-left me-1"></i> Kembali</a>
-                            <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
-                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Form Tambah" id="btn-tambah" disabled><i class='ti ti-calendar-plus me-1'></i> Tambah</button>
+                            @if ($list['show'])
+                                @if ($list['show']->pegawai_id == Auth::user()->id)
+                                    <button class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Tambah" id="btn-tambah" disabled><i class='ti ti-calendar-plus me-1'></i> Tambah</button>
+                                @endif
+                            @endif
                         </div>
                     </h5>
                     <div class="flex-shrink-0">
@@ -318,7 +322,7 @@
                 success: function(res) {
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
-                    if (res.atasan == null) {
+                    if (res.atasan == "{{ Auth::user()->id }}") {
                         $('#btn-tambah').prop('disabled',false);
                     } else {
                         if (res.atasan == "{{ Auth::user()->id }}") {

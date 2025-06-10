@@ -207,6 +207,35 @@
             </div>
         </div>
     </div>
+    <div class="modal animate__animated animate__rubberBand fade" id="ambilalih" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Ambil Alih
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_ambil_alih" hidden>
+                    <p style="text-align: justify;">Anda akan mengambil alih kuasa Jadwal Dinas Unit, pastikan telah menghubungi pegawai sebelumnya untuk
+                        dilakukan perpindahan hak akses dan penetapan Admin Jadwal Dinas yang baru.
+                        lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <label class="switch">
+                        <input type="checkbox" class="switch-input" id="setujuambilalih">
+                        <span class="switch-toggle-slider">
+                        <span class="switch-on"></span>
+                        <span class="switch-off"></span>
+                        </span>
+                        <span class="switch-label">Anda siap menerima Risiko</span>
+                    </label>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-ambil-alih" class="btn btn-info me-sm-3 me-1" onclick="prosesAmbilAlih()"><i class="fas fa-thumbs-up me-1" style="font-size:13px"></i> Lanjutkan</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" tabindex="-1" id="modalAtur" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
@@ -389,6 +418,9 @@
                                     <button class="btn btn-secondary" data-bs-toggle="tooltip"
                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                     title="Form Hapus" disabled><i class='ti ti-x me-1'></i> Hapus</button>
+                                    <button class="btn btn-info" onclick="ambilAlih(${res.show.pegawai_id})" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Ambil Alih Admin Jadwal Dinas"><i class='ti ti-switch-3 me-1'></i> Ambil Alih</button>
                                 </div>
                             `);
                         }
@@ -690,6 +722,49 @@
 
             $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
             $("#btn-ubah").prop('disabled', false);
+        }
+
+        function ambilAlih(id) {
+            $("#id_ambil_alih").val(id);
+            var inputs = document.getElementById('setujuambilalih');
+            inputs.checked = false;
+            $('#ambilalih').modal('show');
+        }
+
+        function prosesAmbilAlih() {
+            // SWITCH BTN HAPUS
+            var checkboxHapus = $('#setujuambilalih').is(":checked");
+            if (checkboxHapus == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui/ceklis form ini untuk melanjutkan proses pengambilalihan akses Admin Jadwal Dinas Unit tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES HAPUS
+                var id = $("#id_ambil_alih").val();
+                $.ajax({
+                    url: "/api/kepegawaian/jadwaldinas/staf/"+id+"/ambilalih/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Admin Jadwal Dinas telah berhasil ditetapkan pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#ambilalih').modal('hide');
+                        refresh();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Admin Jadwal Dinas gagal ditetapkan/sudah ditetapkan di Unit Lain. Periksa sekali lagi.',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
         }
 
         function hapus(id) {
