@@ -66,9 +66,23 @@ class JadwalController extends Controller
 
     function indexStaf()
     {
+        $pegawai = Auth::user()->id; // misal: 232
         $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        $cekUser = DB::table('referensi_jadwal_users')
+                    ->whereJsonContains('staf', (string) $pegawai)
+                    ->whereNull('deleted_at')
+                    ->first();
+        if ($cekUser) {
+            $show = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
+                        ->select('referensi_jadwal_users.*','users.nama as nama_user')
+                        ->where('referensi_jadwal_users.pegawai_id',$cekUser->pegawai_id)
+                        ->first();
+        } else {
+            $show = null;
+        }
+
         $data = [
-            // 'show' => $show,
+            'show' => $show,
             'users' => $users,
         ];
         return view('pages.kepegawaian.jadwal.ref.staf')->with('list', $data);
@@ -213,7 +227,7 @@ class JadwalController extends Controller
         }
     }
 
-    function prosesSimpan(Request $request)
+    function prosesSimpan(Request $request) // TIDAK DIPAKAI (HANYA UNTUK BACKUP)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
         $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
@@ -266,7 +280,7 @@ class JadwalController extends Controller
 
         datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan penambahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
 
-        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil diajukan pada '.$tgl);
+        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil disimpan/diajukan pada '.$tgl);
     }
 
     function prosesUbah(Request $request)
@@ -566,29 +580,45 @@ class JadwalController extends Controller
     // TABEL RIWAYAT JADWAL
     function table($id)
     {
-        $getStaf = ref_jadwal_users::get();
-        $staf = array();
-        foreach ($getStaf as $key => $value) {
-            if (in_array($id,json_decode($value->staf))) {
-                // print_r($value->pegawai_id);
-                $staf[] = $value->pegawai_id;
-            }
-        }
-        // if ($staf) {
-        //     $staf = $staf;
-        // } else {
-        // }
-
-        // print_r($staf);
-        // die();
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                ->join('referensi_jadwal_users','referensi_jadwal_users.pegawai_id','=','kepegawaian_jadwal.pegawai_id')
-                ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
-                ->where('kepegawaian_jadwal.pegawai_id',$staf)
-                ->whereNotNull('referensi_jadwal_users.unit')
-                ->whereNull('kepegawaian_jadwal.deleted_at')
-                ->get();
+
+        // Ambil daftar staf yang menjadi tanggung jawab user
+        $stafList = DB::table('referensi_jadwal_users')
+            ->whereJsonContains('staf', (string) $id)
+            ->whereNull('deleted_at')
+            ->pluck('staf')
+            ->first();
+
+        // $stafList = DB::table('referensi_jadwal_users')
+        //     ->where('pegawai_id', $id)
+        //     ->pluck('staf')
+        //     ->first();
+
+        $pegawaiIds = [];
+
+        if ($stafList) {
+            // Decode JSON yang tersimpan di kolom `staf`
+            $pegawaiIds = json_decode($stafList, true);
+        }
+
+        // print_r($stafList);
+        // die();
+        $show = DB::table('kepegawaian_jadwal')
+            ->leftJoin('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->select(
+                'kepegawaian_jadwal.*',
+                'users.nama as nama_pegawai',
+                DB::raw("(
+                    SELECT unit
+                    FROM referensi_jadwal_users
+                    WHERE JSON_CONTAINS(staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR))) AND deleted_at IS NULL
+                    LIMIT 1
+                ) as unit")
+            )
+            ->whereIn('kepegawaian_jadwal.pegawai_id', $pegawaiIds)
+            ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
+            ->whereNull('kepegawaian_jadwal.deleted_at')
+            ->get();
 
         $data = [
             'users' => $users,
@@ -693,7 +723,11 @@ class JadwalController extends Controller
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
         $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                 ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->join('referensi_jadwal_users','referensi_jadwal_users.pegawai_id','=','kepegawaian_jadwal.pegawai_id')
+                ->join('referensi_jadwal_users', function ($join) use ($jabatan) {
+                    $join->on(DB::raw('1'), '=', DB::raw('1'))
+                        ->whereRaw('JSON_CONTAINS(referensi_jadwal_users.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))')
+                        ->where('referensi_jadwal_users.pegawai_id', '!=', $jabatan->id_user);
+                })
                 ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
                 ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
                 ->whereNotNull('referensi_jadwal_users.unit')
@@ -701,6 +735,8 @@ class JadwalController extends Controller
                 // ->whereIn('kepegawaian_jadwal.progress',[0,1,2,3])
                 ->get();
 
+        // print_r($jabatan);
+        // die();
         $data = [
             'jabatan' => $jabatan,
             'users' => $users,
@@ -851,8 +887,6 @@ class JadwalController extends Controller
     // REFERENSI SHIFT -----------------------------------------------------------------------------------------------------------
     function tableShift($id)
     {
-        // print_r($id);
-        // die();
         $pegawai = $id; // misal: 232
         $cekUser = DB::table('referensi_jadwal_users')
             ->whereJsonContains('staf', (string) $pegawai)
@@ -970,22 +1004,11 @@ class JadwalController extends Controller
                             ->select('referensi_jadwal_users.*','users.nama as nama_user')
                             ->where('referensi_jadwal_users.pegawai_id',$cekUser->pegawai_id)
                             ->first();
-
             $show = ref_jadwal_users::join('users','users.id','=','referensi_jadwal_users.pegawai_id')
                             ->select('referensi_jadwal_users.*','users.nama as nama_user')
                             ->where('referensi_jadwal_users.pegawai_id',$cekUser->pegawai_id)
                             ->first();
-            // if ($check) {
-            //     $show = $check;
-            // } else {
-            //     $getData = ref_jadwal_users::get();
-            //     foreach ($getData as $key => $value) {
-            //         foreach (json_decode($value->staf) as $ul => $item) {
-            //             if ($item == $id) {
-            //             }
-            //         }
-            //     }
-            // }
+
             $data = [
                 'users' => $users,
                 'foto_user' => $foto_user,
@@ -995,7 +1018,7 @@ class JadwalController extends Controller
 
             return response()->json($data, 200);
         } else {
-            return response()->json($pegawai, 400);
+            return response()->json($cekUser, 400);
         }
     }
 
@@ -1132,7 +1155,7 @@ class JadwalController extends Controller
                 }
             }
 
-            $data3 = ref_jadwal_jabatan::where('pegawai_id',$id)->whereNull('deleted_at')->get();
+            $data3 = ref_jadwal_shift::where('pegawai_id',$id)->whereNull('deleted_at')->get();
             if ($data3->count() > 0) {
                 foreach ($data3 as $item) {
                     $item->pegawai_id = $user;

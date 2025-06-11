@@ -9,7 +9,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
-                        <li class="breadcrumb-item">Jadwal Dinas</li>
+                        <li class="breadcrumb-item"><a href="{{ route('kepegawaian.jadwaldinas.index') }}">Jadwal Dinas</a></li>
                         <li class="breadcrumb-item" aria-current="page">Daftar Staf</li>
                     </ul>
                 </div>
@@ -37,7 +37,50 @@
                             title="Segarkan Tabel"><i class="fas fa-sync me-1"></i> Segarkan</button>
                         </div>
                     </h5>
-                    <div class="flex-shrink-0" id="btn-link"></div>
+                    <div class="flex-shrink-0" id="btn-link">
+                        @if ($list['show'])
+                            @if ($list['show']->pegawai_id == Auth::user()->id)
+                                <div class="btn-group">
+                                    <button id="btn-tambah" class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Tambah" disabled><i class='ti ti-square-plus me-1'></i> Tambah</button>
+                                    <button class="btn btn-warning" onclick="ubah({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Ubah"><i class='ti ti-edit me-1'></i> Ubah</button>
+                                    <button class="btn btn-danger" onclick="hapus({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Hapus"><i class='ti ti-x me-1'></i> Hapus</button>
+                                </div>
+                            @else
+                                <div class="btn-group">
+                                    <button id="btn-tambah" class="btn btn-secondary" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Tambah" disabled><i class='ti ti-square-plus me-1'></i> Tambah</button>
+                                    <button class="btn btn-secondary" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Ubah" disabled><i class='ti ti-edit me-1'></i> Ubah</button>
+                                    <button class="btn btn-secondary" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Hapus" disabled><i class='ti ti-x me-1'></i> Hapus</button>
+                                    <button class="btn btn-info" onclick="ambilAlih({{ $list['show']->id }})" data-bs-toggle="tooltip"
+                                    data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Form Ambil Alih Admin Jadwal Dinas"><i class='ti ti-switch-3 me-1'></i> Ambil Alih</button>
+                                </div>
+                            @endif
+                        @else
+                            <div class="btn-group">
+                                <button id="btn-tambah" class="btn btn-primary" onclick="tambah()" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Form Tambah"><i class='ti ti-square-plus me-1'></i> Tambah</button>
+                                <button class="btn btn-secondary" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Form Ubah" disabled><i class='ti ti-edit me-1'></i> Ubah</button>
+                                <button class="btn btn-secondary" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Form Hapus" disabled><i class='ti ti-x me-1'></i> Hapus</button>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -493,6 +536,19 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                },
+                error: function (res) {
+                    if (res.responseText.length == 0) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Tidak ada data Staf ditemukan',
+                            position: 'topRight'
+                        });
+                    }
+                    // console.log();
+                    $("#tampil-tbody").empty().append(
+                        `<tr style='font-size:13px'><td colspan="9"><center>Tidak ada Data Staf</center></td></tr>`
+                    );
                 }
             })
         }

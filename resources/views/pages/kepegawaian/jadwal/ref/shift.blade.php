@@ -9,7 +9,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
-                        <li class="breadcrumb-item">Jadwal Dinas</li>
+                        <li class="breadcrumb-item"><a href="{{ route('kepegawaian.jadwaldinas.index') }}">Jadwal Dinas</a></li>
                         <li class="breadcrumb-item" aria-current="page">Daftar Shift</li>
                     </ul>
                 </div>
@@ -436,6 +436,16 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                },
+                error: function (res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Tidak ada data shift ditemukan',
+                        position: 'topRight'
+                    });
+                    $("#tampil-tbody").empty().append(
+                        `<tr style='font-size:13px'><td colspan="9"><center>Tidak ada Data Shift</center></td></tr>`
+                    );
                 }
             })
         }
