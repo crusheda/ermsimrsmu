@@ -719,27 +719,113 @@ class JadwalController extends Controller
     // SHOW TABLE ATASAN LANGSUNG
     function tableAllBawahan($user)
     {
-        $jabatan = struktur_organisasi::where('id_user',$user)->orderBy('updated_at','desc')->first();
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-        $show  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->join('referensi_jadwal_users', function ($join) use ($jabatan) {
-                    $join->on(DB::raw('1'), '=', DB::raw('1'))
-                        ->whereRaw('JSON_CONTAINS(referensi_jadwal_users.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))')
-                        ->where('referensi_jadwal_users.pegawai_id', '!=', $jabatan->id_user);
-                })
-                ->select('kepegawaian_jadwal.*','referensi_jadwal_users.unit','users.nama as nama_pegawai')
-                ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
-                ->whereNotNull('referensi_jadwal_users.unit')
-                ->whereNull('kepegawaian_jadwal.deleted_at')
-                // ->whereIn('kepegawaian_jadwal.progress',[0,1,2,3])
-                ->get();
+        // Ambil data struktur organisasi user tersebut
+        $jabatan = struktur_organisasi::where('id_user', $user)
+                    ->orderBy('updated_at','desc')
+                    ->first();
 
-        // print_r($jabatan);
-        // die();
+        if (!$jabatan) {
+            return collect(); // Kosongkan hasil jika tidak ada jabatan
+        }
+
+        $bawahanRoles = json_decode($jabatan->bawahan); // Contoh: ["14","93","94","95","55","56"]
+        $referensi = DB::table('referensi_jadwal_users')->get();
+        $pegawaiUnitMap = [];
+
+        foreach ($referensi as $row) {
+            // unit milik pegawai_id
+            $pegawaiUnitMap[$row->pegawai_id] = $row->unit;
+
+            // unit diwariskan ke staf-nya juga
+            $stafList = json_decode($row->staf, true);
+            if (is_array($stafList)) {
+                foreach ($stafList as $stafId) {
+                    $pegawaiUnitMap[$stafId] = $row->unit;
+                }
+            }
+        }
+
+        // 1. Pegawai yang punya role bawahan (user seperti 164)
+        $pegawaiDenganRole = DB::table('model_has_roles')
+            ->whereIn('role_id', $bawahanRoles)
+            ->pluck('model_id')
+            ->unique();
+
+        // 2. Pegawai penginput (pegawai_id dari referensi_jadwal_users) yang staf-nya mengandung pegawai bawahan
+        $pegawaiPenginput = DB::table('referensi_jadwal_users')
+            ->where(function ($query) use ($pegawaiDenganRole) {
+                foreach ($pegawaiDenganRole as $pegawaiId) {
+                    $query->orWhereRaw("JSON_CONTAINS(staf, JSON_QUOTE(?))", [(string) $pegawaiId]);
+                }
+            })
+            ->pluck('pegawai_id')
+            ->unique();
+
+        // 3. Gabungkan keduanya — yang bisa input sendiri atau staf dari orang lain
+        $finalPegawaiIds = $pegawaiDenganRole->merge($pegawaiPenginput)->unique();
+
+        // 4. Ambil data jadwal dengan unit
+        $show = jadwal::join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->select('kepegawaian_jadwal.*', 'users.nama as nama_pegawai')
+            ->whereIn('kepegawaian_jadwal.pegawai_id', $finalPegawaiIds)
+            ->whereNull('kepegawaian_jadwal.deleted_at')
+            ->get();
+
+        // Tambahkan unit berdasarkan mapping
+        $show->transform(function ($item) use ($pegawaiUnitMap) {
+            $item->unit = $pegawaiUnitMap[$item->pegawai_id] ?? null;
+            return $item;
+        });
+
         $data = [
             'jabatan' => $jabatan,
             'users' => $users,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function countBawahan($user)
+    {
+        $jabatan = struktur_organisasi::where('id_user', $user)
+                    ->orderBy('updated_at','desc')
+                    ->first();
+
+        if (!$jabatan) {
+            return collect(); // Kosongkan hasil jika tidak ada jabatan
+        }
+
+        $bawahanRoles = json_decode($jabatan->bawahan); // Contoh: ["14","93","94","95","55","56"]
+
+        // 1. Pegawai yang punya role bawahan (user seperti 164)
+        $pegawaiDenganRole = DB::table('model_has_roles')
+            ->whereIn('role_id', $bawahanRoles)
+            ->pluck('model_id')
+            ->unique();
+
+        // 2. Pegawai penginput (pegawai_id dari referensi_jadwal_users) yang staf-nya mengandung pegawai bawahan
+        $pegawaiPenginput = DB::table('referensi_jadwal_users')
+            ->where(function ($query) use ($pegawaiDenganRole) {
+                foreach ($pegawaiDenganRole as $pegawaiId) {
+                    $query->orWhereRaw("JSON_CONTAINS(staf, JSON_QUOTE(?))", [(string) $pegawaiId]);
+                }
+            })
+            ->pluck('pegawai_id')
+            ->unique();
+
+        // 3. Gabungkan keduanya — yang bisa input sendiri atau staf dari orang lain
+        $finalPegawaiIds = $pegawaiDenganRole->merge($pegawaiPenginput)->unique();
+
+        // 4. Ambil data jadwal dengan unit
+        $show = jadwal::join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->select('kepegawaian_jadwal.*', 'users.nama as nama_pegawai')
+            ->whereIn('kepegawaian_jadwal.pegawai_id', $finalPegawaiIds)
+            ->whereNull('kepegawaian_jadwal.deleted_at')
+            ->count();
+
+        $data = [
             'show' => $show,
         ];
 

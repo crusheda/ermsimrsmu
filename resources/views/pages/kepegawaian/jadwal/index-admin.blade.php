@@ -28,20 +28,6 @@
             </div>
         </div>
     </div><!-- [ breadcrumb ] end -->
-    @php
-        $jabatan = \App\Models\struktur_organisasi::where('id_user',Auth::user()->id)->orderBy('updated_at','desc')->first();
-        if ($jabatan) {
-            $validasi  = \App\Models\kepegawaian\jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                    ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->select('kepegawaian_jadwal.id','users.nama as nama_pegawai')
-                    ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
-                    ->where('kepegawaian_jadwal.progress',1)
-                    // ->whereIn('kepegawaian_jadwal.progress',[0,1,2,3])
-                    ->count();
-        } else {
-            $validasi = 0;
-        }
-    @endphp
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
         <div class="col-xl-12">
@@ -49,15 +35,8 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel Riwayat</h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="btn btn-light-primary dropdown-toggle position-relative" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Pilihan Menu
-                            @if ($validasi != 0)
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-primary">
-                                    {{ $validasi }}<span class="visually-hidden">unread messages</span>
-                                </span>
-                            @endif
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <button class="btn btn-light-info dropdown-toggle position-relative" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-sync fa-spin me-2"></i></button>
+                        <ul class="dropdown-menu" aria-labelledby="tombolMenu">
                             <li>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
@@ -66,7 +45,7 @@
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
                                 <a class="dropdown-item" href="javascript:void(0);"><s>Referensi Hari Libur Nasional</s></a>
                                 <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan @if ($validasi != 0)<span class="badge bg-primary ms-2">{{ $validasi }}</span>@endif</a>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span></a>
                             </li>
                         </ul>
                         {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
@@ -407,9 +386,26 @@
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
-
+            count();
             showRiwayat();
         });
+
+        function count() {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/bawahan/count/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $('#tombolMenu').empty().html(`
+                        Pilihan Menu
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
+                            ${res.show} Data<span class="visually-hidden">unread messages</span>
+                        </span>
+                    `);
+                    $('#count-bawahan').text(res.show);
+                }
+            })
+        }
 
         function tambah() {
             $('#modalTambah').modal('show');

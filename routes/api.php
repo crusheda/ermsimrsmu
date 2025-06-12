@@ -109,6 +109,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/jadwaldinas/{id}/batalverif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalVerif'])->name('kepegawaian.jadwaldinas.batalVerif');
                 // Route::get('kepegawaian/jadwaldinas/{id}/bataltolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalTolak'])->name('kepegawaian.jadwaldinas.batalTolak');
             // VERIFIKASI BAWAHAN
+                Route::get('kepegawaian/jadwaldinas/bawahan/count/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'countBawahan'])->name('kepegawaian.jadwaldinas.countBawahan');
                 Route::get('kepegawaian/jadwaldinas/bawahan/table/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableAllBawahan'])->name('kepegawaian.jadwaldinas.tableAllBawahan');
                 Route::get('kepegawaian/jadwaldinas/bawahan/{id}/verif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'verifBawahan'])->name('kepegawaian.jadwaldinas.verifBawahan');
                 Route::get('kepegawaian/jadwaldinas/bawahan/{id}/tolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tolakBawahan'])->name('kepegawaian.jadwaldinas.tolakBawahan');
