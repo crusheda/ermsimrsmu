@@ -44,7 +44,7 @@
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
                                 <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span></a>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}" id="tombol-verif-bawahan">Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span></a>
                             </li>
                         </ul>
                         {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
@@ -202,13 +202,29 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    $('#tombolMenu').empty().html(`
-                        Pilihan Menu
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
-                            ${res.show} Data<span class="visually-hidden">unread messages</span>
-                        </span>
-                    `);
-                    $('#count-bawahan').text(res.show);
+                    if (res.jabatan) {
+                        if (res.length > 0) {
+                            $('#tombolMenu').empty().html(`
+                                Pilihan Menu
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
+                                    ${res.show} Data<span class="visually-hidden">unread messages</span>
+                                </span>
+                            `);
+                            $('#count-bawahan').text(res.show);
+                        } else {
+                            $('#tombolMenu').empty().html(`
+                                Pilihan Menu
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
+                                    0 Data<span class="visually-hidden">unread messages</span>
+                                </span>
+                            `);
+                            $('#count-bawahan').text('0');
+                        }
+                    } else {
+                        $('#tombolMenu').empty().html(`Pilihan Menu`);
+                        $('#count-bawahan').text('-').prop('hidden',true);
+                        $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('<s>Verifikasi Bawahan</s>'); // .removeAttr('href')
+                    }
                 }
             })
         }

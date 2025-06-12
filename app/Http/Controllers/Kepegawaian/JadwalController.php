@@ -826,6 +826,7 @@ class JadwalController extends Controller
             ->count();
 
         $data = [
+            'jabatan' => $jabatan,
             'show' => $show,
         ];
 
