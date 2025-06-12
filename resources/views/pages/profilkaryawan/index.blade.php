@@ -170,8 +170,8 @@
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <div class="btn-group shadow">
-                        {{-- <button class="btn btn-primary" onclick="window.location.href='{{ route('akunpengguna.create') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Akun Pengguna Baru" disabled>
-                            <i class="fas fa-plus me-1"></i> Tambah Pengguna</button> --}}
+                        <button class="btn btn-light-primary" onclick="window.location.href='{{ route('akunpengguna.index') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pengaturan Akun Pengguna (Tambah/Ubah/Hapus Akun Karyawan)">
+                            <i class="fas fa-users-cog me-1"></i> Pengaturan Akun</button>
                         <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Data Simpel Profil Karyawan">
                             <i class="fas fa-sync me-1"></i> Tabel Simpel</button>
                         <button type="button" class="btn btn-light-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()">
