@@ -176,11 +176,11 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label class="form-label">Pilihan Filter <a class="text-danger">*</a></label>
-                                <select class="form-select select2" id="filter_pilihan" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
+                                <select class="form-select select2" id="filter_pilihan" onchange="filterPilihan()" data-allow-clear="false" data-bs-auto-close="outside" style="width: 100%" required>
                                     <option value="1" selected hidden>Monitoring Absensi</option>
                                     <option value="2">Absensi Karyawan Lengkap</option>
-                                    <option value="3">Rekap Absensi</option>
-                                    <option value="4">Rekap Absensi Detail</option>
+                                    <option value="3">Rekap Absensi Final</option>
+                                    <option value="4">Rekap Absensi (Per Karyawan Per Tanggal)</option>
                                 </select>
                             </div>
                         </div>
@@ -253,7 +253,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="dttable" class="table table-hover dt-responsive align-middle">
+                        <table id="dttable" class="table table-hover dt-responsive align-middle" style="width: 100%">
                             <thead id="tampil-thead"></thead>
                             <tbody id="tampil-tbody">
                                 <tr>
@@ -394,15 +394,26 @@
             //         $('#slide').removeClass('col-md-12').addClass('col-md-6');
             //     }
             // });
+
             $('#show_filter').prop('hidden',false);
+            filterPilihan();
         });
+
+        function filterPilihan() {
+            pilihan = $('#filter_pilihan').val();
+            if (pilihan == 3 || pilihan == 4) {
+                $('#filter_jenis').val(0).prop('disabled',true);
+            } else {
+                $('#filter_jenis').prop('disabled',false);
+            }
+        }
 
         function filter() {
             pilihan = $('#filter_pilihan').val();
-            jenis = $('#filter_jenis').val();
-            unit = $('#filter_unit').val();
-            dari = $('#filter_dari').val();
-            sampai = $('#filter_sampai').val();
+            // jenis = $('#filter_jenis').val();
+            // unit = $('#filter_unit').val();
+            // dari = $('#filter_dari').val();
+            // sampai = $('#filter_sampai').val();
 
             if (pilihan == 1) {
                 showMonitoring();
@@ -698,6 +709,11 @@
                     });
                     var table = $('#dttable').DataTable({
                         dom: 'Bfrtip',
+                        scrollX: true, // Tambahkan ini untuk memungkinkan scroll horizontal
+                        scrollCollapse: true,
+                        fixedColumns: {
+                            leftColumns: 5 // Jumlah kolom kiri yang ingin dibekukan (NIP, PEGAWAI, UNIT)
+                        },
                         order: [
                             // [1, "desc"],
                             [4, "asc"],
@@ -792,20 +808,40 @@
         }
 
         function showRekapAbsensiLinda() {
+            Swal.fire({
+                title: `Mohon Perhatian!`,
+                text: 'Isikan NIP Seluruh Pegawai dengan Lengkap pada Halaman Profil Kepegawaian guna kelancaran rekap data Absensi',
+                icon: `warning`,
+                showConfirmButton: false,
+                showCancelButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: true,
+                timer: 5000,
+                timerProgressBar: true,
+                backdrop: `rgba(26,27,41,0.8)`,
+            });
             $("#tampil-thead").empty().append(`
                 <tr>
                     <th rowspan="2" class="text-center"><center>NIP</center></th>
                     <th rowspan="2" class="text-center">PEGAWAI</th>
                     <th rowspan="2" class="text-center">UNIT</th>
-                    <th colspan="5" class="text-center">TOTAL PERHITUNGAN</th>
+                    <th colspan="7" class="text-center">TOTAL (JADWAL DINAS)</th>
+                    <th colspan="5" class="text-center">TOTAL (ABSENSI)</th>
                     <th rowspan="2" class="text-center">KETERANGAN</th>
                 </tr>
                 <tr>
-                    <th class="text-end">SHIFT</th>
-                    <th class="text-end">ABSENSI</th>
-                    <th class="text-end">DISIPLIN</th>
-                    <th class="text-end">TERLAMBAT</th>
-                    <th class="text-end">ABSEN 1X</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Shift Sesuai Jadwal Dinas">S</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Libur Sesuai Jadwal Dinas">L</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Cuti Tahunan Sesuai Jadwal Dinas">C</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Cuti Menikah Sesuai Jadwal Dinas">CM</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Cuti Umroh Sesuai Jadwal Dinas">CU</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Cuti Haji Sesuai Jadwal Dinas">CH</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Cuti Diluar Tanggungan Sesuai Jadwal Dinas">CD</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Datang Tepat Waktu Dari Data Absensi">TEPAT WAKTU</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Terlambat Dari Data Absensi">TERLAMBAT</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Absen Hanya 1 Kali Dari Data Absensi">ABSEN 1X</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Ijin Dari Data Absensi">IJIN</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Seluruh Absen Dari Data Absensi">ABSENSI</th>
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
@@ -839,12 +875,19 @@
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
                         content += `<td>${item.unit}</td>`;
-                        content += `<td class="text-end">-</td>`;
-                        content += `<td class="text-end">${item.total_absensi}</td>`;
+                        content += `<td class="text-end">${item.total_masuk_shift}</td>`;
+                        content += `<td class="text-end">${item.total_L}</td>`;
+                        content += `<td class="text-end">${item.total_C}</td>`;
+                        content += `<td class="text-end">${item.total_CM}</td>`;
+                        content += `<td class="text-end">${item.total_CU}</td>`;
+                        content += `<td class="text-end">${item.total_CH}</td>`;
+                        content += `<td class="text-end">${item.total_CD}</td>`;
                         content += `<td class="text-end">${item.total_tidak_terlambat}</td>`;
                         content += `<td class="text-end">${item.total_terlambat}</td>`;
                         content += `<td class="text-end">${item.total_alpha}</td>`;
-                        content += `<td class="text-end">${item.status}</td>`;
+                        content += `<td class="text-end">${item.total_ijin}</td>`;
+                        content += `<td class="text-end">${item.total_absensi}</td>`;
+                        content += `<td class="text-end text-capitalize">${item.status}</td>`;
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
                         // Showing Tooltip
@@ -854,25 +897,14 @@
                     });
                     var table = $('#dttable').DataTable({
                         dom: 'Bfrtip',
+                        scrollX: true, // Tambahkan ini untuk memungkinkan scroll horizontal
+                        scrollCollapse: true,
+                        fixedColumns: {
+                            leftColumns: 3 // Jumlah kolom kiri yang ingin dibekukan (NIP, PEGAWAI, UNIT)
+                        },
                         order: [
                             [2, "asc"],
                             [1, "asc"]
-                        ],
-                        // bAutoWidth: false,
-                        // aoColumns : [
-                        //     { sWidth: '5%' },
-                        //     { sWidth: '10%' },
-                        //     { sWidth: '30%' },
-                        //     { sWidth: '10%' },
-                        //     { sWidth: '10%' },
-                        //     { sWidth: '10%' },
-                        //     { sWidth: '10%' },
-                        //     { sWidth: '5%' },
-                        //     { sWidth: '5%' },
-                        //     { sWidth: '5%' },
-                        // ],
-                        columnDefs: [
-                            // { visible: false, targets: [2] },
                         ],
                         displayLength: 100,
                         lengthChange: true,
@@ -948,6 +980,18 @@
         }
 
         function showRekapAbsensiLindaDetail() {
+            Swal.fire({
+                title: `Mohon Perhatian!`,
+                text: 'Isikan NIP Seluruh Pegawai dengan Lengkap pada Halaman Profil Kepegawaian guna kelancaran rekap data Absensi',
+                icon: `warning`,
+                showConfirmButton: false,
+                showCancelButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: true,
+                timer: 5000,
+                timerProgressBar: true,
+                backdrop: `rgba(26,27,41,0.8)`,
+            });
             $("#tampil-thead").empty().append(`
                 <tr>
                     <th class="text-center"><center>NIP</center></th>
@@ -957,8 +1001,9 @@
                     <th class="text-center">ABSENSI BERANGKAT</th>
                     <th class="text-center">ABSENSI PULANG</th>
                     <th class="text-center">TERLAMBAT</th>
-                    <th class="text-center">DISIPLIN</th>
+                    <th class="text-center">TEPAT WAKTU</th>
                     <th class="text-center">ABSEN 1X</th>
+                    <th class="text-center">IJIN</th>
                     <th class="text-center">KETERANGAN</th>
                 </tr>
             `);
@@ -994,11 +1039,12 @@
                         content += `<td>${item.nama}</td>`;
                         content += `<td>${item.unit}</td>`;
                         content += `<td>${item.tanggal}</td>`;
-                        content += `<td>${item.is_tidak_terlambat==1?'<b class="text-danger">'+item.jam_masuk+'</b>':item.jam_masuk}</td>`;
+                        content += `<td>${item.is_terlambat==1?'<b class="text-danger">'+item.jam_masuk+'</b>':item.jam_masuk}</td>`;
                         content += `<td>${item.jam_pulang?item.jam_pulang:'-'}</td>`;
                         content += `<td class="text-center">${item.is_terlambat==1?'<i class="ti ti-mood-sad text-danger" style="font-size: 20px;"></i>':' '}</td>`;
                         content += `<td class="text-center">${item.is_tidak_terlambat==1?'<i class="ti ti-mood-smile text-success" style="font-size: 20px;"></i>':' '}</td>`;
                         content += `<td class="text-center">${item.is_alpha==1?'<i class="ti ti-mood-neutral text-warning" style="font-size: 20px;"></i>':' '}</td>`;
+                        content += `<td class="text-center">${item.is_ijin==1?'<i class="ti ti-mood-crazy-happy text-info" style="font-size: 20px;"></i>':' '}</td>`;
                         content += `<td class="text-end">${item.status_keterangan}</td>`;
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
