@@ -68,7 +68,8 @@ class PengadaanBarangController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = pengadaan_barang::find($id);
+        return Storage::download($data->filename, $data->title);
     }
 
     /**
@@ -146,7 +147,7 @@ class PengadaanBarangController extends Controller
             'satuan' => ['required'],
             'harga' => ['required'],
             'harga' => ['required'],
-            'file.*' => ['mimes:jpg,png,jpeg','max:2000'], // required
+            'file.*' => ['mimes:jpg,png,jpeg','mimetypes:image/jpeg,image/png','max:2000'], // required
         ]);
 
         $getBarang = pengadaan_barang::where('nama',$request->barang)->first();
@@ -212,7 +213,7 @@ class PengadaanBarangController extends Controller
             'satuan' => ['required'],
             'harga' => ['required'],
             'harga' => ['required'],
-            'file.*' => ['mimes:jpg,png,jpeg','max:2000'], // required
+            'file.*' => ['mimes:jpg,png,jpeg','mimetypes:image/jpeg,image/png','max:2000'], // required
         ]);
 
         $getBarang = pengadaan_barang::where('nama',$request->barang)->count();

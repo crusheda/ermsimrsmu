@@ -155,30 +155,79 @@ class AbsensiController extends Controller
         $dari = $request->dari ? Carbon::parse($request->dari)->format('Y-m-d') : now()->format('Y-m-d');
         $sampai = $request->sampai ? Carbon::parse($request->sampai)->format('Y-m-d') : now()->format('Y-m-d');
 
-        // Query utama absensi
-        $query = DB::table('kepegawaian_absensi as a')
-            ->join('users as u', 'u.id', '=', 'a.pegawai_id')
+        // Query utama absensi ---> DATA ABSENSI KARYAWAN YANG TIDAK ADA DI TABEL KEPEGAWAIAN_ABSENSI TIDAK AKAN TERSELECT
+        // $query = DB::table('kepegawaian_absensi as a')
+        //     ->join('users as u', 'u.id', '=', 'a.pegawai_id')
+        //     ->select(
+        //         'a.pegawai_id',
+        //         'u.nama',
+        //         'u.nip',
+        //         DB::raw("COUNT(*) as total_absensi"),
+        //         DB::raw("SUM(CASE WHEN a.jenis = 3 THEN 1 ELSE 0 END) as total_ijin"),
+        //         DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NULL THEN 1 ELSE 0 END) as total_alpha"),
+        //         DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 1 THEN 1 ELSE 0 END) as total_terlambat"),
+        //         DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 0 THEN 1 ELSE 0 END) as total_tidak_terlambat")
+        //     )
+        //     ->when(!empty($unit_ids), function ($query) use ($unit_ids) {
+        //         $query->join('referensi_jadwal_users as rju', function ($join) {
+        //             $join->on(DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(a.pegawai_id AS CHAR)))'), '=', DB::raw('TRUE'))
+        //                 ->whereNull('rju.deleted_at');
+        //         })->whereIn('rju.id', $unit_ids);
+        //     })
+        //     ->when($jenis != 0, fn($query) => $query->where('a.jenis', $jenis))
+        //     ->whereBetween('a.tgl_in', ["$dari 00:00:00", "$sampai 23:59:59"])
+        //     ->whereNull('a.deleted_at')
+        //     ->groupBy('a.pegawai_id', 'u.nama', 'u.nip');
+
+        // $show = $query->get();
+
+        // Ambil semua pegawai yang termasuk staf dari referensi_jadwal_users
+        $show = DB::table('referensi_jadwal_users as rju')
             ->select(
-                'a.pegawai_id',
+                'u.id as pegawai_id',
                 'u.nama',
                 'u.nip',
-                DB::raw("COUNT(*) as total_absensi"),
-                DB::raw("SUM(CASE WHEN a.jenis = 3 THEN 1 ELSE 0 END) as total_ijin"),
-                DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NULL THEN 1 ELSE 0 END) as total_alpha"),
-                DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 1 THEN 1 ELSE 0 END) as total_terlambat"),
-                DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 0 THEN 1 ELSE 0 END) as total_tidak_terlambat")
+                'rju.unit',
+                DB::raw('IFNULL((
+                    SELECT COUNT(*) FROM kepegawaian_absensi as a
+                    WHERE a.pegawai_id = u.id
+                    AND a.deleted_at IS NULL
+                    AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+                    ' . ($jenis != 0 ? 'AND a.jenis = ' . (int) $jenis : '') . '
+                ), 0) as total_absensi'),
+                DB::raw('IFNULL((
+                    SELECT COUNT(*) FROM kepegawaian_absensi as a
+                    WHERE a.pegawai_id = u.id AND a.jenis = 3
+                    AND a.deleted_at IS NULL
+                    AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+                ), 0) as total_ijin'),
+                DB::raw('IFNULL((
+                    SELECT COUNT(*) FROM kepegawaian_absensi as a
+                    WHERE a.pegawai_id = u.id AND a.jenis = 1 AND a.tgl_out IS NULL
+                    AND a.deleted_at IS NULL
+                    AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+                ), 0) as total_alpha'),
+                DB::raw('IFNULL((
+                    SELECT COUNT(*) FROM kepegawaian_absensi as a
+                    WHERE a.pegawai_id = u.id AND a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 1
+                    AND a.deleted_at IS NULL
+                    AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+                ), 0) as total_terlambat'),
+                DB::raw('IFNULL((
+                    SELECT COUNT(*) FROM kepegawaian_absensi as a
+                    WHERE a.pegawai_id = u.id AND a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 0
+                    AND a.deleted_at IS NULL
+                    AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+                ), 0) as total_tidak_terlambat')
             )
-            ->when(!empty($unit_ids), function ($query) use ($unit_ids) {
-                $query->join('referensi_jadwal_users as rju', function ($join) {
-                    $join->on(DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(a.pegawai_id AS CHAR)))'), '=', DB::raw('TRUE'))
-                        ->whereNull('rju.deleted_at');
-                })->whereIn('rju.id', $unit_ids);
+            ->join('users as u', function ($join) {
+                $join->on(DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(u.id AS CHAR)))'), '=', DB::raw('TRUE'));
             })
-            ->when($jenis != 0, fn($query) => $query->where('a.jenis', $jenis))
-            ->whereBetween('a.tgl_in', ["$dari 00:00:00", "$sampai 23:59:59"])
-            ->groupBy('a.pegawai_id', 'u.nama', 'u.nip');
-
-        $show = $query->get();
+            ->whereNull('rju.deleted_at')
+            ->when(!empty($unit_ids), fn($q) => $q->whereIn('rju.id', $unit_ids))
+            // ->where('rju.pegawai_id',232)
+            ->groupBy('u.id', 'u.nama', 'u.nip', 'rju.unit')
+            ->get();
 
         // Iterasi tiap pegawai
         foreach ($show as $item) {
@@ -187,6 +236,7 @@ class AbsensiController extends Controller
                 ->where('a.pegawai_id', $item->pegawai_id)
                 ->when($jenis != 0, fn($q) => $q->where('a.jenis', $jenis))
                 ->whereBetween('a.tgl_in', ["$dari 00:00:00", "$sampai 23:59:59"])
+                ->whereNull('a.deleted_at')
                 ->orderBy('a.tgl_in')
                 ->get(['a.tgl_in', 'a.terlambat', 'a.tgl_out']);
 
@@ -222,6 +272,7 @@ class AbsensiController extends Controller
             // Ambil peta shift
             $shiftMap = DB::table('referensi_jadwal_shift')
                 ->where('pegawai_id', $pegawaiInduk)
+                ->whereNull('deleted_at')
                 ->pluck('shift', 'singkat')
                 ->toArray();
 
@@ -249,10 +300,15 @@ class AbsensiController extends Controller
 
             foreach ($bulanTahun as [$bulan, $tahun]) {
                 $jadwal = DB::table('kepegawaian_jadwal as kj')
-                    ->join('kepegawaian_jadwal_detail as kd', 'kd.id_jadwal', '=', 'kj.id')
+                    ->join('kepegawaian_jadwal_detail as kd', function($join) {
+                        $join->on('kd.id_jadwal', '=', 'kj.id')
+                            ->whereNull('kd.deleted_at');
+                    })
                     ->where('kd.pegawai_id', $item->pegawai_id)
                     ->where('kj.bulan', $bulan)
                     ->where('kj.tahun', $tahun)
+                    ->where('kj.progress', '!=', 0)
+                    ->whereNull('kj.deleted_at')
                     ->first();
 
                 if (!$jadwal) continue;
@@ -358,6 +414,7 @@ class AbsensiController extends Controller
                 $query->where('a.jenis', $jenis);
             })
             ->whereBetween('a.tgl_in', [$dari . ' 00:00:00', $sampai . ' 23:59:59'])
+            ->whereNull('a.deleted_at')
             ->orderBy('a.pegawai_id')
             ->orderBy('a.tgl_in');
 

@@ -181,6 +181,8 @@
                                     <option value="2">Absensi Karyawan Lengkap</option>
                                     <option value="3">Rekap Absensi Final</option>
                                     <option value="4">Rekap Absensi (Per Karyawan Per Tanggal)</option>
+                                    <option value="5"><s>Rekap Cuti</s></option>
+                                    <option value="6"><s>Monitoring Harian Pegawai</s></option>
                                 </select>
                             </div>
                         </div>
@@ -427,6 +429,19 @@
                         if (pilihan == 4) {
                             showRekapAbsensiLindaDetail();
                         } else {
+                            $('#table').prop('hidden',true);
+                            Swal.fire({
+                                title: `Ahh Maaf!`,
+                                text: 'Fitur ini sedang tahap development. Mohon Ditunggu yaa 😊. Tetap Semangat..',
+                                icon: `success`,
+                                showConfirmButton: false,
+                                showCancelButton: false,
+                                allowOutsideClick: true,
+                                allowEscapeKey: true,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                backdrop: `rgba(26,27,41,0.8)`,
+                            });
                             // PILIHAN LAIN LAGI APABILA ADA
                         }
                     }
@@ -814,7 +829,7 @@
                 icon: `warning`,
                 showConfirmButton: false,
                 showCancelButton: false,
-                allowOutsideClick: false,
+                allowOutsideClick: true,
                 allowEscapeKey: true,
                 timer: 5000,
                 timerProgressBar: true,
@@ -986,7 +1001,7 @@
                 icon: `warning`,
                 showConfirmButton: false,
                 showCancelButton: false,
-                allowOutsideClick: false,
+                allowOutsideClick: true,
                 allowEscapeKey: true,
                 timer: 5000,
                 timerProgressBar: true,

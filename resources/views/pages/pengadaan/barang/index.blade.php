@@ -96,7 +96,7 @@
                         <div class="col-md-9">
                             <div class="form-group">
                                 <label class="form-label">Upload Lampiran (<mark>Optional</mark>)</label>
-                                <input type="file" class="form-control" id="filex" name="filex" accept="image/*">
+                                <input type="file" class="form-control" id="filex" name="filex" accept=".jpg,.jpeg,.png">
                             </div>
                         </div>
                         <div class="text-end btn-page mt-2">
@@ -201,7 +201,13 @@
                                 <input type="text" class="form-control" name="harga_edit" id="harga_edit" onclick="$(this).val('')" placeholder="Rp. xxx.xxx" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Masukkan Hanya Angka Tanpa Titik (.) / Koma (,) /dsb">
                             </div>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-7 mb-3">
+                            <div class="form-group">
+                                <label class="form-label">Upload Lampiran Baru</label>
+                                <input type="file" class="form-control" id="filex_edit" name="filex_edit" accept=".jpg,.jpeg,.png">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="form-label">File</label>
                                 <div id="filex_edit_show"></div>
@@ -307,7 +313,7 @@
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary" onclick="lampiran(${item.id})"><i class="fa-fw fas fa-download me-2"></i> Lampiran</a></li>`;
+                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-${item.filename == null?'secondary':'primary'}" onclick="lampiran(${item.filename == null?'':item.id})"><i class="fa-fw fas fa-download me-2"></i> Lampiran</a></li>`;
                                         content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                         content += "</div></center></td>";
@@ -438,9 +444,9 @@
                 dataType: 'json',
                 success: function(res) {
                     if (res.show.filename == null) {
-                        $("#filex_edit_show").empty().append(`<input type="file" class="form-control" id="filex_edit" name="filex_edit" accept="image/*">`);
+                        $("#filex_edit_show").empty().append(`<h6 class="text-danger">Tidak Ada Lampiran</h6>`);
                     } else {
-                        $("#filex_edit_show").empty().append(`<h6 class="text-primary"><a href="javascript:void(0);" onclick="window.open('/pengadaan/barang/download/`+res.show.id+`')"><u>${res.show.title}</u></a></h6><small><a href="javascript:void(0);" class="btn btn-sm btn-link-dark" onclick="ubahLampiran(${res.show.id})">Ubah Lampiran</a></small>`);
+                        $("#filex_edit_show").empty().append(`<h6 class="text-primary"><a href="javascript:void(0);" onclick="window.open('/pengadaan/barang/download/`+res.show.id+`')"><u>${res.show.title}</u></a></h6>`);
                     }
                     $('#id_edit_show').text(res.show.id);
                     $('#id_edit').val(res.show.id);
@@ -458,9 +464,9 @@
             })
         }
 
-        function ubahLampiran(id) {
-            $("#filex_edit_show").empty().append('<input type="file" class="form-control" id="filex_edit" name="filex_edit" accept="image/*">')
-        }
+        // function ubahLampiran(id) {
+        //     $("#filex_edit_show").empty().append('<input type="file" class="form-control" id="filex_edit" name="filex_edit" accept="image/*">')
+        // }
 
         function prosesUbah() {
             $("#btn-ubah").prop('disabled', true);
@@ -469,6 +475,7 @@
             var save = new FormData();
             var id = $('#id_edit').val();
             var filesAdded = $('#filex_edit')[0].files;
+            console.log(filesAdded);
             save.append('id',id);
             save.append('barang',$('#barang_edit').val());
             save.append('satuan',$('#satuan_edit').val());
@@ -567,6 +574,31 @@
                         });
                     }
                 });
+            }
+        }
+
+        function lampiran(id) {
+            if (id) {
+                Swal.fire({
+                    // title: 'Lampiran ID : '+id,
+                    // text: '',
+                    imageUrl: '/pengadaan/barang/download/' + id,
+                    // imageWidth: 400,
+                    heightAuto: true,
+                    imageHeight: 275,
+                    imageAlt: 'Lampiran',
+                    reverseButtons: true,
+                    showDenyButton: false,
+                    showCloseButton: true,
+                    showCancelButton: true,
+                    cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Tutup`,
+                    confirmButtonText: `<i class="fa fa-download"></i> Download`,
+                    backdrop: `rgba(26,27,41,0.8)`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/pengadaan/barang/download/" + id;
+                    }
+                })
             }
         }
 
