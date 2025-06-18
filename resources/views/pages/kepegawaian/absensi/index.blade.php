@@ -168,7 +168,7 @@
                 <div class="card-body p-b-10">
                     <div class="alert alert-secondary alert-dismissible fade show" role="alert">
                         <small>
-                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Kosongi semua filter isian untuk mendapatkan seluruh data
+                            <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Kosongi filter isian untuk mendapatkan seluruh data (Kecuali isian Wajib <a class="text-danger">*</a>)
                             {{-- <i class="ti ti-arrow-narrow-right text-primary me-1"></i>  <br> --}}
                         </small>
                     </div>
@@ -180,15 +180,15 @@
                                     <option value="1" selected hidden>Monitoring Absensi</option>
                                     <option value="2">Absensi Karyawan Lengkap</option>
                                     <option value="3">Rekap Absensi Final</option>
-                                    <option value="4">Rekap Absensi (Per Karyawan Per Tanggal)</option>
-                                    <option value="5"><s>Rekap Cuti</s></option>
-                                    <option value="6"><s>Monitoring Harian Pegawai</s></option>
+                                    <option value="4">Rekap Absensi (Per Tanggal)</option>
+                                    <option value="5">Rekap Cuti</option>
+                                    <option value="6">Monitoring Harian Pegawai</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="form-group">
-                                <label class="form-label">Daftar Unit</label>
+                                <label class="form-label">Pilihan Unit</label>
                                 <select class="form-select select2" name="filter_unit[]" id="filter_unit" style="width: 100%" multiple>
                                     @if (!empty($list['jabatan']))
                                         @foreach ($list['jabatan'] as $item)
@@ -212,7 +212,7 @@
                         </div>
                         <div class="col-md-12 mb-3" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                            title="Pilih Rentang Tanggal">
+                            title="Pilih Rentang Tanggal" id="tgl_range">
                             <div class="form-group">
                                 <label class="form-label">Rentang Tanggal <span class="text-danger">*</span></label>
                                 <div class="input-daterange input-group" id="pc-datepicker-5">
@@ -221,6 +221,14 @@
                                     <span class="input-group-text">Sampai</span>
                                     <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-end" id="filter_sampai">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            title="Pilih Tanggal" id="tgl_harian" hidden>
+                            <div class="form-group">
+                                <label class="form-label">Masukkan Tanggal (Harian) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control text-center" placeholder="Masukkan Tanggal" id="filter_tanggal">
                             </div>
                         </div>
                         {{-- <div class="col-md-3" data-bs-toggle="tooltip"
@@ -340,6 +348,12 @@
                 clearBtn: true,
                 format: 'yyyy-mm-dd'
             });
+            const datepickerd = new Datepicker(document.querySelector('#filter_tanggal'), {
+                buttonClass: 'btn',
+                todayBtn: true,
+                clearBtn: true,
+                format: 'yyyy-mm-dd'
+            });
             // Set tanggal default
             const today = new Date();
             let tahun = today.getFullYear();
@@ -364,6 +378,7 @@
 
             // 🔥 Set nilai ke datepicker RANGE (bukan ke input langsung)
             datepicker_range.setDates(dariDate, sampaiDate);
+            datepickerd.setDate(new Date());
             // ------------------------------------------------------------------------------------- END DATERANGEPICKER
             // SELECT2
             var t = $(".select2");
@@ -402,11 +417,27 @@
         });
 
         function filterPilihan() {
+            $('#tgl_harian').prop('hidden',true);
+            $('#tgl_range').prop('hidden',false);
             pilihan = $('#filter_pilihan').val();
-            if (pilihan == 3 || pilihan == 4) {
+            if (pilihan == 3) {
                 $('#filter_jenis').val(0).prop('disabled',true);
             } else {
-                $('#filter_jenis').prop('disabled',false);
+                if (pilihan == 4) {
+                    $('#filter_jenis').val(0).prop('disabled',true);
+                } else {
+                    if (pilihan == 5) {
+                        $('#filter_jenis').val(0).prop('disabled',true);
+                    } else {
+                        if (pilihan == 6) {
+                            $('#filter_jenis').val(0).prop('disabled',true);
+                            $('#tgl_range').prop('hidden',true);
+                            $('#tgl_harian').prop('hidden',false);
+                        } else {
+                            $('#filter_jenis').prop('disabled',false);
+                        }
+                    }
+                }
             }
         }
 
@@ -429,20 +460,28 @@
                         if (pilihan == 4) {
                             showRekapAbsensiLindaDetail();
                         } else {
-                            $('#table').prop('hidden',true);
-                            Swal.fire({
-                                title: `Ahh Maaf!`,
-                                text: 'Fitur ini sedang tahap development. Mohon Ditunggu yaa 😊. Tetap Semangat..',
-                                icon: `success`,
-                                showConfirmButton: false,
-                                showCancelButton: false,
-                                allowOutsideClick: true,
-                                allowEscapeKey: true,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                backdrop: `rgba(26,27,41,0.8)`,
-                            });
-                            // PILIHAN LAIN LAGI APABILA ADA
+                            if (pilihan == 5) {
+                                showRekapCuti();
+                            } else {
+                                if (pilihan == 6) {
+                                    showMonitoringAbsensiHarian();
+                                } else {
+                                    $('#table').prop('hidden',true);
+                                    Swal.fire({
+                                        title: `Ahh Maaf!`,
+                                        text: 'Fitur ini sedang tahap development. Mohon Ditunggu yaa 😊. Tetap Semangat..',
+                                        icon: `success`,
+                                        showConfirmButton: false,
+                                        showCancelButton: false,
+                                        allowOutsideClick: true,
+                                        allowEscapeKey: true,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        backdrop: `rgba(26,27,41,0.8)`,
+                                    });
+                                    // PILIHAN LAIN LAGI APABILA ADA
+                                }
+                            }
                         }
                     }
                 }
@@ -1154,6 +1193,289 @@
                     iziToast.success({
                         title: 'System Message!',
                         message: 'Berhasil menampilkan data Rekapitulasi Absensi berdasarkan masing-masing Pegawai dan Per Tanggal',
+                        position: 'topRight'
+                    });
+                }
+            })
+        }
+
+        function showRekapCuti() {
+            // Swal.fire({
+            //     title: `Mohon Perhatian!`,
+            //     text: 'Isikan NIP Seluruh Pegawai dengan Lengkap pada Halaman Profil Kepegawaian guna kelancaran rekap data Absensi',
+            //     icon: `warning`,
+            //     showConfirmButton: false,
+            //     showCancelButton: false,
+            //     allowOutsideClick: true,
+            //     allowEscapeKey: true,
+            //     timer: 5000,
+            //     timerProgressBar: true,
+            //     backdrop: `rgba(26,27,41,0.8)`,
+            // });
+            $("#tampil-thead").empty().append(`
+                <tr>
+                    <th class="text-center"><center>NIP</center></th>
+                    <th class="text-center">PEGAWAI</th>
+                    <th class="text-center">UNIT</th>
+                    <th class="text-center">TGL CUTI</th>
+                    <th class="text-center">KETERANGAN</th>
+                </tr>
+            `);
+            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#table').prop('hidden',false);
+            // INITIALIZIE
+            var save = new FormData();
+            save.append('jenis',$('#filter_jenis').val());
+            save.append('unit',JSON.stringify($('#filter_unit').val()));
+            save.append('dari',$('#filter_dari').val());
+            save.append('sampai',$('#filter_sampai').val());
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/kepegawaian/absensi/table/getCutiPegawai`,
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.forEach(item => {
+                        var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var date = new Date().toLocaleDateString("sv-SE");
+                        var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
+                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
+                        content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
+                        content += `<td>${item.nama}</td>`;
+                        content += `<td class="text-center">${item.unit}</td>`;
+                        content += `<td class="text-center">${item.tanggal_cuti}</td>`;
+                        content += `<td class="text-center">${item.jenis_cuti}</td>`;
+                        content += "</tr>";
+                        $('#tampil-tbody').append(content);
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    });
+                    var table = $('#dttable').DataTable({
+                        dom: 'Bfrtip',
+                        order: [
+                            [2, "asc"] // Kolom PEGAWAI (kolom ke-3, index 2)
+                        ],
+                        displayLength: 100,
+                        lengthChange: true,
+                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Export Excel',
+                                orientation: 'landscape',
+                                pageSize: 'A4',
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                },
+                                className: 'btn btn-success'
+                            },
+                            {
+                                extend: 'pdf',
+                                text: 'Export PDF',
+                                orientation: 'landscape',
+                                pageSize: 'A4',  // F4 dalam milimeter
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                },
+                                className: 'btn btn-danger',
+                                customize: function (doc) {
+                                    // Menambahkan judul di atas tabel
+                                    doc.content.unshift({
+                                        text: 'Laporan Data Absensi Pegawai',  // Judul yang ingin ditambahkan
+                                        fontSize: 18,   // Ukuran font
+                                        bold: true,     // Menebalkan teks
+                                        alignment: 'center', // Menyelaraskan teks ke tengah
+                                        margin: [0, 0, 0, 10]  // Margin bawah (untuk memberi jarak antara judul dan tabel)
+                                    });
+
+                                    // Pastikan header tabel tetap disembunyikan jika diinginkan
+                                    if (doc.content && doc.content[1] && doc.content[1].table) {
+                                        doc.content[1].table.headerRows = 0;
+                                    }
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: 'Cetak',
+                                orientation: 'landscape',
+                                pageSize: 'A4',  // F4 dalam milimeter
+                                className: 'btn btn-warning',
+                                customize: function (win) {
+                                    // Sembunyikan semua selain tabel
+                                    $(win.document.body).find('*').not('table, table *').hide();
+
+                                    $(win.document.body).find('table')
+                                        .addClass('compact')
+                                        .css('font-size', 'inherit');
+                                },
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                },
+                            },
+                            {
+                                extend: 'colvis',
+                                text: 'Sembunyikan Kolom',
+                                className: 'btn btn-dark',
+                            }
+                        ],
+                    });
+                    iziToast.success({
+                        title: 'System Message!',
+                        message: 'Berhasil menampilkan data Rekapitulasi Cuti berdasarkan masing-masing Pegawai dan Per Tanggal',
+                        position: 'topRight'
+                    });
+                }
+            })
+        }
+
+        function showMonitoringAbsensiHarian() {
+            // Swal.fire({
+            //     title: `Mohon Perhatian!`,
+            //     text: 'Isikan NIP Seluruh Pegawai dengan Lengkap pada Halaman Profil Kepegawaian guna kelancaran rekap data Absensi',
+            //     icon: `warning`,
+            //     showConfirmButton: false,
+            //     showCancelButton: false,
+            //     allowOutsideClick: true,
+            //     allowEscapeKey: true,
+            //     timer: 5000,
+            //     timerProgressBar: true,
+            //     backdrop: `rgba(26,27,41,0.8)`,
+            // });
+            $("#tampil-thead").empty().append(`
+                <tr>
+                    <th class="text-center"><center>NIP</center></th>
+                    <th class="text-center">PEGAWAI</th>
+                    <th class="text-center">UNIT</th>
+                    <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Shift Di Hari Itu">STATUS SHIFT</th>
+                    <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jam Berangkat Menurut Referensi Shift">SHIFT BERANGKAT</th>
+                    <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jam Pulang Menurut Referensi Shift">SHIFT PULANG</th>
+                    <th class="text-center">KEDISIPLINAN</th>
+                </tr>
+            `);
+            $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#table').prop('hidden',false);
+            // INITIALIZIE
+            var save = new FormData();
+            save.append('unit',JSON.stringify($('#filter_unit').val()));
+            save.append('tanggal',$('#filter_tanggal').val());
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/kepegawaian/absensi/table/getMonitoringAbsensiHarian`,
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    $('#dttable').DataTable().clear().destroy();
+                    res.forEach(item => {
+                        var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
+                        var date = new Date().toLocaleDateString("sv-SE");
+                        var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
+                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
+                        content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
+                        content += `<td>${item.nama}</td>`;
+                        content += `<td class="text-center">${item.unit}</td>`;
+                        content += `<td class="text-center text-capitalize">${item.status_shift}</td>`;
+                        content += `<td class="text-center">${item.jam_berangkat}</td>`;
+                        content += `<td class="text-center">${item.jam_pulang}</td>`;
+                        content += `<td class="text-center">${item.status_disiplin}</td>`;
+                        content += "</tr>";
+                        $('#tampil-tbody').append(content);
+                        // Showing Tooltip
+                        $('[data-bs-toggle="tooltip"]').tooltip({
+                            trigger: 'hover'
+                        })
+                    });
+                    var table = $('#dttable').DataTable({
+                        dom: 'Bfrtip',
+                        order: [
+                            [2, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
+                            [1, "asc"] // Kolom PEGAWAI (kolom ke-3, index 2)
+                        ],
+                        displayLength: 100,
+                        lengthChange: true,
+                        lengthMenu: [100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Export Excel',
+                                orientation: 'landscape',
+                                pageSize: 'A4',
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                },
+                                className: 'btn btn-success'
+                            },
+                            {
+                                extend: 'pdf',
+                                text: 'Export PDF',
+                                orientation: 'landscape',
+                                pageSize: 'A4',  // F4 dalam milimeter
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                },
+                                className: 'btn btn-danger',
+                                customize: function (doc) {
+                                    // Menambahkan judul di atas tabel
+                                    doc.content.unshift({
+                                        text: 'Laporan Data Absensi Pegawai',  // Judul yang ingin ditambahkan
+                                        fontSize: 18,   // Ukuran font
+                                        bold: true,     // Menebalkan teks
+                                        alignment: 'center', // Menyelaraskan teks ke tengah
+                                        margin: [0, 0, 0, 10]  // Margin bawah (untuk memberi jarak antara judul dan tabel)
+                                    });
+
+                                    // Pastikan header tabel tetap disembunyikan jika diinginkan
+                                    if (doc.content && doc.content[1] && doc.content[1].table) {
+                                        doc.content[1].table.headerRows = 0;
+                                    }
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: 'Cetak',
+                                orientation: 'landscape',
+                                pageSize: 'A4',  // F4 dalam milimeter
+                                className: 'btn btn-warning',
+                                customize: function (win) {
+                                    // Sembunyikan semua selain tabel
+                                    $(win.document.body).find('*').not('table, table *').hide();
+
+                                    $(win.document.body).find('table')
+                                        .addClass('compact')
+                                        .css('font-size', 'inherit');
+                                },
+                                exportOptions: {
+                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                },
+                            },
+                            {
+                                extend: 'colvis',
+                                text: 'Sembunyikan Kolom',
+                                className: 'btn btn-dark',
+                            }
+                        ],
+                    });
+                    iziToast.success({
+                        title: 'System Message!',
+                        message: 'Berhasil menampilkan data Monitoring Harian Absensi berdasarkan Jadwal Shift Per Tanggal',
                         position: 'topRight'
                     });
                 }

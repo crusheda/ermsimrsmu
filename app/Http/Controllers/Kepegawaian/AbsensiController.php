@@ -30,7 +30,7 @@ class AbsensiController extends Controller
                 Auth::user()->getRole('karu-it') == true
             ) {
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
-            $jabatan = ref_jadwal_users::select('id','unit')->groupBy('id','unit')->get();
+            $jabatan = ref_jadwal_users::select('id','unit')->groupBy('id','unit')->orderBy('unit','asc')->get();
 
             $data = [
                 'users' => $users,
@@ -154,32 +154,6 @@ class AbsensiController extends Controller
 
         $dari = $request->dari ? Carbon::parse($request->dari)->format('Y-m-d') : now()->format('Y-m-d');
         $sampai = $request->sampai ? Carbon::parse($request->sampai)->format('Y-m-d') : now()->format('Y-m-d');
-
-        // Query utama absensi ---> DATA ABSENSI KARYAWAN YANG TIDAK ADA DI TABEL KEPEGAWAIAN_ABSENSI TIDAK AKAN TERSELECT
-        // $query = DB::table('kepegawaian_absensi as a')
-        //     ->join('users as u', 'u.id', '=', 'a.pegawai_id')
-        //     ->select(
-        //         'a.pegawai_id',
-        //         'u.nama',
-        //         'u.nip',
-        //         DB::raw("COUNT(*) as total_absensi"),
-        //         DB::raw("SUM(CASE WHEN a.jenis = 3 THEN 1 ELSE 0 END) as total_ijin"),
-        //         DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NULL THEN 1 ELSE 0 END) as total_alpha"),
-        //         DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 1 THEN 1 ELSE 0 END) as total_terlambat"),
-        //         DB::raw("SUM(CASE WHEN a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 0 THEN 1 ELSE 0 END) as total_tidak_terlambat")
-        //     )
-        //     ->when(!empty($unit_ids), function ($query) use ($unit_ids) {
-        //         $query->join('referensi_jadwal_users as rju', function ($join) {
-        //             $join->on(DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(a.pegawai_id AS CHAR)))'), '=', DB::raw('TRUE'))
-        //                 ->whereNull('rju.deleted_at');
-        //         })->whereIn('rju.id', $unit_ids);
-        //     })
-        //     ->when($jenis != 0, fn($query) => $query->where('a.jenis', $jenis))
-        //     ->whereBetween('a.tgl_in', ["$dari 00:00:00", "$sampai 23:59:59"])
-        //     ->whereNull('a.deleted_at')
-        //     ->groupBy('a.pegawai_id', 'u.nama', 'u.nip');
-
-        // $show = $query->get();
 
         // Ambil semua pegawai yang termasuk staf dari referensi_jadwal_users
         $show = DB::table('referensi_jadwal_users as rju')
@@ -423,6 +397,208 @@ class AbsensiController extends Controller
         $data = [
             'show' => $show,
         ];
+
+        return response()->json($data);
+    }
+
+    public function getCutiPegawai(Request $request)
+    {
+        $dari = Carbon::parse($request->dari ?? now());
+        $sampai = Carbon::parse($request->sampai ?? now());
+
+        $data = [];
+
+        // Ambil semua bulan-tahun dalam range filter
+        $bulanTahun = collect($dari->copy()->startOfMonth()->monthsUntil($sampai->copy()->startOfMonth()))
+            ->map(fn($d) => [$d->format('m'), $d->format('Y')])
+            ->unique()
+            ->values();
+
+        foreach ($bulanTahun as [$bulan, $tahun]) {
+            $jadwal = DB::table('kepegawaian_jadwal as kj')
+                ->join('kepegawaian_jadwal_detail as kd', function ($join) {
+                    $join->on('kd.id_jadwal', '=', 'kj.id')->whereNull('kd.deleted_at');
+                })
+                ->join('users as u', 'u.id', '=', 'kd.pegawai_id')
+                ->join('referensi_jadwal_users as rju', DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(kd.pegawai_id AS CHAR)))'), '=', DB::raw('TRUE'))
+                ->where('kj.bulan', $bulan)
+                ->where('kj.tahun', $tahun)
+                ->where('kj.progress', '!=', 0)
+                ->whereNull('kj.deleted_at')
+                ->select('kd.*', 'u.nip', 'u.nama', 'rju.unit')
+                ->get();
+
+            foreach ($jadwal as $row) {
+                // Tentukan rentang tanggal yang akan dicek untuk bulan ini
+                $startTgl = ((int)$bulan === (int)$dari->format('m') && (int)$tahun === (int)$dari->format('Y'))
+                            ? (int) $dari->format('d')
+                            : 1;
+                $endTgl = ((int)$bulan === (int)$sampai->format('m') && (int)$tahun === (int)$sampai->format('Y'))
+                            ? (int) $sampai->format('d')
+                            : cal_days_in_month(CAL_GREGORIAN, (int)$bulan, (int)$tahun);
+
+                for ($i = $startTgl; $i <= $endTgl; $i++) {
+                    if (!checkdate((int)$bulan, $i, (int)$tahun)) continue;
+
+                    $kode = $row->{'tgl'.$i} ?? null;
+                    if (!$kode) continue;
+
+                    $jenisCuti = match($kode) {
+                        'C'  => 'Cuti Tahunan',
+                        'CM' => 'Cuti Melahirkan',
+                        'CU' => 'Cuti Umroh',
+                        'CH' => 'Cuti Haji',
+                        'CD' => 'Cuti di Luar Tanggungan',
+                        default => null
+                    };
+
+                    if ($jenisCuti) {
+                        $tanggal = Carbon::createFromDate($tahun, $bulan, $i);
+                        $data[] = [
+                            'nip' => $row->nip,
+                            'nama' => $row->nama,
+                            'unit' => $row->unit,
+                            'tanggal_cuti' => $tanggal->translatedFormat('d F Y'),
+                            'jenis_cuti' => $jenisCuti
+                        ];
+                    }
+                }
+            }
+        }
+
+        return response()->json($data);
+    }
+
+    function getMonitoringAbsensiHarian(Request $request)
+    {
+        $tanggal = Carbon::parse($request->tanggal ?? now())->format('Y-m-d');
+        $tglHari = (int)Carbon::parse($tanggal)->format('d');
+        $bulan   = Carbon::parse($tanggal)->format('m');
+        $tahun   = Carbon::parse($tanggal)->format('Y');
+        $unitIds = json_decode($request->input('unit'), true) ?? [];
+
+        $data = [];
+
+        // Ambil semua referensi_jadwal_users (unit dan staf)
+        $rjuList = DB::table('referensi_jadwal_users')
+            ->whereNull('deleted_at')
+            ->when(!empty($unitIds), fn($q) => $q->whereIn('id', $unitIds))
+            ->get();
+
+        // Mapping: pegawai_id -> unit & pegawai_induk
+        $pegawaiUnitMap = collect();
+        $pegawaiIndukMap = collect();
+        foreach ($rjuList as $rju) {
+            $stafList = json_decode($rju->staf ?? '[]', true);
+            foreach ($stafList as $id) {
+                $pegawaiUnitMap[$id] = $rju->unit;
+                $pegawaiIndukMap[$id] = $rju->pegawai_id;
+            }
+        }
+
+        // Ambil semua pegawai yang dijadwalkan di tanggal tersebut
+        $jadwalList = DB::table('kepegawaian_jadwal as kj')
+            ->join('kepegawaian_jadwal_detail as kd', function ($join) {
+                $join->on('kd.id_jadwal', '=', 'kj.id')->whereNull('kd.deleted_at');
+            })
+            ->join('users as u', 'u.id', '=', 'kd.pegawai_id')
+            ->where('kj.bulan', $bulan)
+            ->where('kj.tahun', $tahun)
+            ->where('kj.progress', '!=', 0)
+            ->whereNull('kj.deleted_at')
+            ->select('kd.*', 'u.nip', 'u.nama')
+            ->get();
+
+        foreach ($jadwalList as $row) {
+            // Lewati jika tidak ada di daftar unit yang dipilih
+            if (!isset($pegawaiUnitMap[$row->pegawai_id])) continue;
+
+            $kodeShift = $row->{'tgl'.$tglHari} ?? null;
+            if (!$kodeShift) continue;
+
+            $unit = $pegawaiUnitMap[$row->pegawai_id] ?? null;
+            $pegawaiInduk = $pegawaiIndukMap[$row->pegawai_id] ?? null;
+
+            $statusDisiplin = 'Alpha';
+            $jamBerangkat = '00:00:00';
+            $jamPulang = '00:00:00';
+
+            // Cek absensi
+            $absen = DB::table('kepegawaian_absensi')
+                ->where('pegawai_id', $row->pegawai_id)
+                ->whereDate('tgl_in', $tanggal)
+                ->whereNull('deleted_at')
+                ->orderBy('tgl_in')
+                ->first();
+
+            // Ambil shift jika bukan hari libur/cuti
+            $shift = null;
+            if (!in_array($kodeShift, ['C', 'CM', 'CU', 'CH', 'CD', 'L']) && $pegawaiInduk) {
+                $shift = DB::table('referensi_jadwal_shift')
+                    ->where('pegawai_id', $pegawaiInduk)
+                    ->where('singkat', $kodeShift)
+                    ->whereNull('deleted_at')
+                    ->first();
+
+                $jamBerangkat = $shift->berangkat ?? '00:00:00';
+                $jamPulang = $shift->pulang ?? '00:00:00';
+            }
+
+            // Label cuti/libur
+            $labelCuti = match($kodeShift) {
+                'C'  => 'Cuti Tahunan',
+                'CM' => 'Cuti Melahirkan',
+                'CU' => 'Cuti Umroh',
+                'CH' => 'Cuti Haji',
+                'CD' => 'Cuti di Luar Tanggungan',
+                'L'  => 'Libur',
+                default => null
+            };
+
+            // --- STATUS SHIFT & DISIPLIN ---
+            if ($absen && $absen->jenis == 3) {
+                // Izin
+                $statusDisiplin = 'Toleransi';
+                if ($labelCuti) {
+                    $statusShift = $labelCuti . ' (Izin)';
+                } else {
+                    $statusShift = $shift
+                        ? 'Masuk Shift ' . $shift->shift . ' (Izin)'
+                        : 'Masuk Shift ' . $kodeShift . ' (Izin)';
+                }
+            } elseif ($labelCuti) {
+                // Libur/Cuti
+                $statusShift = $labelCuti;
+                $statusDisiplin = '-';
+            } else {
+                // Masuk shift biasa
+                $statusShift = $shift
+                    ? 'Masuk Shift ' . $shift->shift
+                    : 'Masuk Shift ' . $kodeShift;
+
+                if ($absen) {
+                    $jamMasuk = Carbon::parse($absen->tgl_in)->format('H:i:s');
+
+                    if ($absen->jenis == 1 && is_null($absen->tgl_out)) {
+                        $statusDisiplin = 'Absen 1x';
+                    } else {
+                        $statusDisiplin = ($jamBerangkat && $jamMasuk > $jamBerangkat)
+                            ? 'Terlambat'
+                            : 'Tepat Waktu';
+                    }
+                }
+            }
+
+            $data[] = [
+                'nip' => $row->nip,
+                'nama' => $row->nama,
+                'unit' => $unit,
+                'status_shift' => $statusShift,
+                'status_disiplin' => $statusDisiplin,
+                'jam_berangkat' => $jamBerangkat,
+                'jam_pulang' => $jamPulang,
+            ];
+        }
 
         return response()->json($data);
     }
