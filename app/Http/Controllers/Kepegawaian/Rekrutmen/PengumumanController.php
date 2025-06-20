@@ -40,25 +40,32 @@ class PengumumanController extends Controller
         $jenjangMap = DB::table('referensi_jenjang_pendidikan')
             ->pluck('nama', 'id');
 
-        // Ambil data pengumuman + nama user
-        $show = Pengumuman::join('users', 'users.id', '=', 'rekrutmen_pengumuman.user_id')
-            ->select('rekrutmen_pengumuman.*', 'users.nama as nama_user')
+        // Subquery: hitung jumlah pendaftar per pengumuman
+        $subQuery = DB::table('rekrutmen_registrasi')
+            ->select('id_pengumuman', DB::raw('COUNT(*) as total_pendaftar'))
+            ->whereNull('deleted_at')
+            ->groupBy('id_pengumuman');
+
+        // Query utama: join dengan user dan subquery pendaftar
+        $show = DB::table('rekrutmen_pengumuman')
+            ->join('users', 'users.id', '=', 'rekrutmen_pengumuman.user_id')
+            ->leftJoinSub($subQuery, 'pendaftar', function ($join) {
+                $join->on('rekrutmen_pengumuman.id', '=', 'pendaftar.id_pengumuman');
+            })
+            ->select(
+                'rekrutmen_pengumuman.*',
+                'users.nama as nama_user',
+                DB::raw('COALESCE(pendaftar.total_pendaftar, 0) as total_pendaftar')
+            )
             ->get();
 
-        // Transform hasil untuk tambahkan 'kualifikasi_nama'
+        // Tambahkan kualifikasi_nama
         $show->transform(function ($item) use ($jenjangMap) {
             $kualifikasi_ids = json_decode($item->kualifikasi, true);
+            if (!is_array($kualifikasi_ids)) $kualifikasi_ids = [];
 
-            // Cek jika kualifikasi null/invalid
-            if (!is_array($kualifikasi_ids)) {
-                $kualifikasi_ids = [];
-            }
-
-            // Ambil nama jenjang dari ID
             $item->kualifikasi_nama = collect($kualifikasi_ids)
-                ->map(function ($id) use ($jenjangMap) {
-                    return $jenjangMap[$id] ?? 'Tidak Diketahui';
-                })
+                ->map(fn($id) => $jenjangMap[$id] ?? 'Tidak Diketahui')
                 ->implode(', ');
 
             return $item;

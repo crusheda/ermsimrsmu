@@ -510,7 +510,6 @@ class AbsensiController extends Controller
             ->get();
 
         foreach ($jadwalList as $row) {
-            // Lewati jika tidak ada di daftar unit yang dipilih
             if (!isset($pegawaiUnitMap[$row->pegawai_id])) continue;
 
             $kodeShift = $row->{'tgl'.$tglHari} ?? null;
@@ -519,11 +518,14 @@ class AbsensiController extends Controller
             $unit = $pegawaiUnitMap[$row->pegawai_id] ?? null;
             $pegawaiInduk = $pegawaiIndukMap[$row->pegawai_id] ?? null;
 
-            $statusDisiplin = 'Alpha';
+            $statusDisiplin = '-';
+            $statusAbsensi = 'Belum Absen / Alpha';
             $jamBerangkat = '00:00:00';
             $jamPulang = '00:00:00';
+            $absenBerangkat = '-';
+            $absenPulang = '-';
 
-            // Cek absensi
+            // Ambil absensi
             $absen = DB::table('kepegawaian_absensi')
                 ->where('pegawai_id', $row->pegawai_id)
                 ->whereDate('tgl_in', $tanggal)
@@ -531,7 +533,7 @@ class AbsensiController extends Controller
                 ->orderBy('tgl_in')
                 ->first();
 
-            // Ambil shift jika bukan hari libur/cuti
+            // Ambil shift info
             $shift = null;
             if (!in_array($kodeShift, ['C', 'CM', 'CU', 'CH', 'CD', 'L']) && $pegawaiInduk) {
                 $shift = DB::table('referensi_jadwal_shift')
@@ -544,7 +546,6 @@ class AbsensiController extends Controller
                 $jamPulang = $shift->pulang ?? '00:00:00';
             }
 
-            // Label cuti/libur
             $labelCuti = match($kodeShift) {
                 'C'  => 'Cuti Tahunan',
                 'CM' => 'Cuti Melahirkan',
@@ -555,37 +556,36 @@ class AbsensiController extends Controller
                 default => null
             };
 
-            // --- STATUS SHIFT & DISIPLIN ---
+            // Status Shift dan Disiplin
             if ($absen && $absen->jenis == 3) {
-                // Izin
                 $statusDisiplin = 'Toleransi';
-                if ($labelCuti) {
-                    $statusShift = $labelCuti . ' (Izin)';
-                } else {
-                    $statusShift = $shift
-                        ? 'Masuk Shift ' . $shift->shift . ' (Izin)'
-                        : 'Masuk Shift ' . $kodeShift . ' (Izin)';
-                }
+                $statusShift = $labelCuti
+                    ? $labelCuti . ' (Izin)'
+                    : ($shift ? 'Masuk Shift ' . $shift->shift . ' (Izin)' : 'Masuk Shift ' . $kodeShift . ' (Izin)');
+                $statusAbsensi = '-'; // Izin dianggap pengecualian
             } elseif ($labelCuti) {
-                // Libur/Cuti
                 $statusShift = $labelCuti;
                 $statusDisiplin = '-';
+                $statusAbsensi = '-';
             } else {
-                // Masuk shift biasa
                 $statusShift = $shift
                     ? 'Masuk Shift ' . $shift->shift
                     : 'Masuk Shift ' . $kodeShift;
 
                 if ($absen) {
                     $jamMasuk = Carbon::parse($absen->tgl_in)->format('H:i:s');
+                    $absenBerangkat = $jamMasuk;
 
-                    if ($absen->jenis == 1 && is_null($absen->tgl_out)) {
-                        $statusDisiplin = 'Absen 1x';
-                    } else {
-                        $statusDisiplin = ($jamBerangkat && $jamMasuk > $jamBerangkat)
-                            ? 'Terlambat'
-                            : 'Tepat Waktu';
+                    if (!is_null($absen->tgl_out)) {
+                        $absenPulang = Carbon::parse($absen->tgl_out)->format('H:i:s');
+                        $statusAbsensi = 'Lengkap';
+                    } elseif ($absen->jenis == 1) {
+                        $statusAbsensi = 'Absen 1x / Tidak Lengkap';
                     }
+
+                    $statusDisiplin = ($jamBerangkat && $jamMasuk > $jamBerangkat)
+                        ? 'Terlambat'
+                        : 'Tepat Waktu';
                 }
             }
 
@@ -593,10 +593,13 @@ class AbsensiController extends Controller
                 'nip' => $row->nip,
                 'nama' => $row->nama,
                 'unit' => $unit,
-                'status_shift' => $statusShift,
+                'status_shift' => $statusShift ?? '-',
                 'status_disiplin' => $statusDisiplin,
+                'status_absensi' => $statusAbsensi,
                 'jam_berangkat' => $jamBerangkat,
                 'jam_pulang' => $jamPulang,
+                'absen_berangkat' => $absenBerangkat,
+                'absen_pulang' => $absenPulang,
             ];
         }
 

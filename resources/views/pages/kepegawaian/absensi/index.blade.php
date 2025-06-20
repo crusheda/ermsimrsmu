@@ -1360,7 +1360,10 @@
                     <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Shift Di Hari Itu">STATUS SHIFT</th>
                     <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jam Berangkat Menurut Referensi Shift">SHIFT BERANGKAT</th>
                     <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jam Pulang Menurut Referensi Shift">SHIFT PULANG</th>
+                    <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jam Absensi Berangkat Oleh Karyawan">ABSEN BERANGKAT</th>
+                    <th class="text-center" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jam Absensi Pulang Oleh Karyawan">ABSEN PULANG</th>
                     <th class="text-center">KEDISIPLINAN</th>
+                    <th class="text-center">ABSENSI</th>
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
@@ -1393,9 +1396,38 @@
                         content += `<td>${item.nama}</td>`;
                         content += `<td class="text-center">${item.unit}</td>`;
                         content += `<td class="text-center text-capitalize">${item.status_shift}</td>`;
-                        content += `<td class="text-center">${item.jam_berangkat}</td>`;
-                        content += `<td class="text-center">${item.jam_pulang}</td>`;
-                        content += `<td class="text-center">${item.status_disiplin}</td>`;
+                        content += `<td class="text-center">${item.jam_berangkat!='00:00:00'?item.jam_berangkat:'-'}</td>`;
+                        content += `<td class="text-center">${item.jam_pulang!='00:00:00'?item.jam_pulang:'-'}</td>`;
+                        content += `<td class="text-center">${item.absen_berangkat}</td>`;
+                        content += `<td class="text-center">${item.absen_pulang}</td>`;
+                        if (item.status_disiplin == 'Tepat Waktu') {
+                            status_disiplin = `<span class="badge bg-light-success">${item.status_disiplin}</span>`;
+                        } else {
+                            if (item.status_disiplin == 'Toleransi') {
+                                status_disiplin = `<span class="badge bg-light-warning">${item.status_disiplin}</span>`;
+                            } else {
+                                if (item.status_disiplin == 'Terlambat') {
+                                    status_disiplin = `<span class="badge bg-light-danger">${item.status_disiplin}</span>`;
+                                } else {
+                                    status_disiplin = `<span class="badge bg-light-secondary">-</span>`;
+                                }
+                            }
+                        }
+                        content += `<td class="text-center">${status_disiplin}</td>`;
+                        if (item.status_absensi == 'Lengkap') {
+                            status_absensi = `<span class="badge bg-light-success">${item.status_absensi}</span>`;
+                        } else {
+                            if (item.status_absensi == 'Absen 1x / Tidak Lengkap') {
+                                status_absensi = `<span class="badge bg-light-warning">${item.status_absensi}</span>`;
+                            } else {
+                                if (item.status_absensi == 'Belum Absen / Alpha') {
+                                    status_absensi = `<span class="badge bg-light-danger">${item.status_absensi}</span>`;
+                                } else {
+                                    status_absensi = `<span class="badge bg-light-secondary">-</span>`;
+                                }
+                            }
+                        }
+                        content += `<td class="text-center">${status_absensi}</td>`;
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
                         // Showing Tooltip

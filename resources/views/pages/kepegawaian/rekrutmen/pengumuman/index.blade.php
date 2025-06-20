@@ -48,6 +48,7 @@
                                     <th class="cell-fit">DIBUKA</th>
                                     <th class="cell-fit">DITUTUP</th>
                                     <th class="cell-fit">KUALIFIKASI</th>
+                                    <th class="cell-fit">JML PENDAFTAR</th>
                                     <th class="cell-fit">PERSYARATAN</th>
                                     <th class="cell-fit">TUGAS</th>
                                     <th class="cell-fit">KEAHLIAN</th>
@@ -70,6 +71,7 @@
                                     <th class="cell-fit">DIBUKA</th>
                                     <th class="cell-fit">DITUTUP</th>
                                     <th class="cell-fit">KUALIFIKASI</th>
+                                    <th class="cell-fit">JML PENDAFTAR</th>
                                     <th class="cell-fit">PERSYARATAN</th>
                                     <th class="cell-fit">TUGAS</th>
                                     <th class="cell-fit">KEAHLIAN</th>
@@ -395,6 +397,7 @@
                             content += `<td>≥ ${moment(item.mulai).locale('id').format('D MMMM YYYY')}</td>`;
                             content += `<td>≤ ${moment(item.selesai).locale('id').format('D MMMM YYYY')}</td>`;
                             content += `<td>${item.kualifikasi_nama}</td>`;
+                            content += `<td>${item.total_pendaftar} Peserta</td>`;
                             content += `<td>${item.tugas}</td>`;
                             content += `<td>${item.keahlian}</td>`;
                             content += `<td>${item.persyaratan}</td>`;
@@ -424,22 +427,22 @@
                             order: [
                                 [10, "desc"]
                             ],
-                            bAutoWidth: false,
-                            aoColumns : [
-                                { sWidth: '5%' },
-                                { sWidth: '20%' },
-                                { sWidth: '5%' },
-                                { sWidth: '5%' },
-                                { sWidth: '10%' },
-                                { sWidth: '10%' },
-                                { sWidth: '10%' },
-                                { sWidth: '10%' },
-                                { sWidth: '10%' },
-                                { sWidth: '5%' },
-                                { sWidth: '10%' },
-                            ],
+                            // bAutoWidth: false,
+                            // aoColumns : [
+                            //     { sWidth: '5%' },
+                            //     { sWidth: '20%' },
+                            //     { sWidth: '5%' },
+                            //     { sWidth: '5%' },
+                            //     { sWidth: '10%' },
+                            //     { sWidth: '10%' },
+                            //     { sWidth: '10%' },
+                            //     { sWidth: '10%' },
+                            //     { sWidth: '10%' },
+                            //     { sWidth: '5%' },
+                            //     { sWidth: '10%' },
+                            // ],
                             columnDefs: [
-                                { visible: false, targets: [5,6,7,8] },
+                                { visible: false, targets: [6,7,8,9] },
                             ],
                             displayLength: 15,
                             // lengthChange: true,
