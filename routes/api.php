@@ -118,7 +118,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             // USER
                 Route::post('kepegawaian/jadwaldinas/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'storePengajuan'])->name('kepegawaian.jadwaldinas.storePengajuan');
                 Route::post('kepegawaian/jadwaldinas/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'updatePengajuan'])->name('kepegawaian.jadwaldinas.updatePengajuan');
-                Route::get('kepegawaian/jadwaldinas/shift/{id}/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'cekShift'])->name('kepegawaian.jadwaldinas.cekShift');
+                // Route::get('kepegawaian/jadwaldinas/shift/{id}/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'cekShift'])->name('kepegawaian.jadwaldinas.cekShift');
                 Route::get('kepegawaian/jadwaldinas/{id}/shift/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'getShift'])->name('kepegawaian.jadwaldinas.getShift');
                 Route::get('kepegawaian/jadwaldinas/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'table'])->name('kepegawaian.jadwaldinas.table');
                 Route::get('kepegawaian/jadwaldinas/jadwal/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'jadwal'])->name('kepegawaian.jadwaldinas.jadwal');

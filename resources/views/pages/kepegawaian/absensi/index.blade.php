@@ -765,9 +765,9 @@
                         dom: 'Bfrtip',
                         scrollX: true, // Tambahkan ini untuk memungkinkan scroll horizontal
                         scrollCollapse: true,
-                        fixedColumns: {
-                            leftColumns: 5 // Jumlah kolom kiri yang ingin dibekukan (NIP, PEGAWAI, UNIT)
-                        },
+                        // fixedColumns: {
+                        //     leftColumns: 5 // Jumlah kolom kiri yang ingin dibekukan (NIP, PEGAWAI, UNIT)
+                        // },
                         order: [
                             // [1, "desc"],
                             [4, "asc"],

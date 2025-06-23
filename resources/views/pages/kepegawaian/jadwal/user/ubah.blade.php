@@ -41,130 +41,137 @@
                         <h6 class="mb-0">Diajukan Oleh : <a class="text-danger">{{ $list["jadwal"]->nama?$list["jadwal"]->nama:$list["jadwal"]->name }}</a></h6>
                     </div>
                 </div>
-                <form action="{{ route('kepegawaian.jadwaldinas.prosesUbah') }}" id="formUbah" class="needs-validation mb-0" method="POST" enctype="multipart/form-data" novalidate>
-                    @csrf
-                    <input type="text" class="form-control" name="id_jadwal" value="{{ $list["jadwal"]->id }}" hidden>
-                    <div class="card-body pb-0">
-                        @php
-                            $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                            $totalDay = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan)->format('t');
-                            $n = 1;
-                        @endphp
-                        <h4 class="text-center p-10 mb-0 mt-2">Bulan
-                            @foreach ($bulan as $key => $value)
-                                @if ($key == $list['jadwal']->bulan)
-                                    <b class="text-primary">{{ $value }}</b>
-                                @endif
-                            @endforeach Tahun <b class="text-primary">{{ $list['jadwal']->tahun }}</b>
-                        </h4>
-                        <div class="table-responsive p-10 pb-0">
-                            <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" rowspan="2">NO</th>
-                                        <th class="text-center" rowspan="2">NAMA</th>
-                                        <th class="text-center" colspan="{{ $totalDay }}">TANGGAL</th>
-                                    </tr>
-                                    <tr>
-                                        @for ($i = 1; $i <= $totalDay; $i++)
-                                            @php $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                            @if ($dayh == 'Minggu')
-                                                <th class="p-2 text-center" style="background-color: #fed8b9">
-                                            @else
-                                                <th class="p-2 text-center">
-                                            @endif
-                                                    {{ sprintf("%02d", $i) }}
-                                                </th>
-                                        @endfor
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- @foreach (json_decode($list['ref_users']->staf) as $item) --}}
-                                    @foreach ($list['detail'] as $item)
-                                        @foreach ($list['ref_jabatan'] as $jab)
-                                            @if ($jab->id_staf == $item->pegawai_id)
-                                                <tr style="background-color: @if($jab->color) {{ $jab->color }} @endif">
-                                                    <td>{{ $n++ }}</td>
-                                                    <td>
-                                                        <input type="text" class="form-control" name="id_staf[]" value="{{ $item->pegawai_id }}" hidden>
-                                                        <input type="text" class="form-control" name="nama_staf[]" value="{{ $item->pegawai_nama }}" hidden>
-                                                        <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
-                                                        <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
-                                                        <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $item->nick != null?$item->nick:$item->name }}</h6><small class='text-truncate text-muted'>{{ $jab->jabatan?$jab->jabatan:'' }}</small></div></div>
-                                                    </td>
-                                                    @for ($i = 1; $i <= $totalDay; $i++)
-                                                        @php
-                                                            $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
-                                                            $hit = 'tgl'.$i;
-                                                        @endphp
-                                                        @if ($dayb == 'Minggu')
-                                                            <td class="p-2" style="background-color: #fed8b9">
-                                                        @else
-                                                            <td class="p-2">
-                                                        @endif
-                                                                <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                            </td>
-                                                    @endfor
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row p-10">
-                            <div class="col-md-7">
-                                <div class="alert alert-light">
-                                    <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
-                                    <small>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat data gagal saat memproses Jadwal, silakan Refresh Browser <br>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Disarankan melakukan pengisian jadwal dinas menggunakan <b>Device Komputer</b> dan <b>Browser Google Chrome</b> <br>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) menyesuaikan kode shift pada referensi yang sudah ada <br>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Penulisan Huruf pada kolom isian Shift Jaga <i><b>Auto Capslock</b></i> meskipun sudah disimpan sekalipun <br>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit<br>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <h5>Shift Jaga :</h5>
-                                <div class="list-group">
-                                    <label class="list-group-item border-0 p-2" id="kode-shift">
-                                        <ul>
-                                            @foreach ($list['ref_shift'] as $item)
-                                                <li><b class="me-1">{{ $item->singkat }}</b>(<u>{{ $item->shift }}</u>) : {{ \Carbon\Carbon::parse($item->berangkat)->isoFormat('HH:mm') }} - {{ \Carbon\Carbon::parse($item->pulang)->isoFormat('HH:mm') }} WIB</li>
+                <div class="text-center mt-4 mb-3" id="show-loading">
+                    <h5><i class="fas fa-sync fa-spin fa-1x me-1"></i> Memproses <b class="text-primary">Jadwal Dinas</b></h5>
+                </div>
+                <div id="show-jadwal" hidden>
+                    <form action="{{ route('kepegawaian.jadwaldinas.prosesUbah') }}" id="formUbah" class="needs-validation mb-0" method="POST" enctype="multipart/form-data" novalidate>
+                        @csrf
+                        <input type="text" class="form-control" name="id_jadwal" value="{{ $list["jadwal"]->id }}" hidden>
+                        <div class="card-body pb-0">
+                            @php
+                                $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                $totalDay = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan)->format('t');
+                                $n = 1;
+                            @endphp
+                            <h4 class="text-center p-10 mb-0 mt-2">Bulan
+                                @foreach ($bulan as $key => $value)
+                                    @if ($key == $list['jadwal']->bulan)
+                                        <b class="text-primary">{{ $value }}</b>
+                                    @endif
+                                @endforeach Tahun <b class="text-primary">{{ $list['jadwal']->tahun }}</b>
+                            </h4>
+                            <div class="table-responsive p-10 pb-0">
+                                <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" rowspan="2">NO</th>
+                                            <th class="text-center" rowspan="2">NAMA</th>
+                                            <th class="text-center" colspan="{{ $totalDay }}">TANGGAL</th>
+                                        </tr>
+                                        <tr>
+                                            @for ($i = 1; $i <= $totalDay; $i++)
+                                                @php $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
+                                                @if ($dayh == 'Minggu')
+                                                    <th class="p-2 text-center" style="background-color: #fed8b9">
+                                                @else
+                                                    <th class="p-2 text-center">
+                                                @endif
+                                                        {{ sprintf("%02d", $i) }}
+                                                    </th>
+                                            @endfor
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{-- @foreach (json_decode($list['ref_users']->staf) as $item) --}}
+                                        @foreach ($list['detail'] as $item)
+                                            @foreach ($list['ref_jabatan'] as $jab)
+                                                @if ($jab->id_staf == $item->pegawai_id)
+                                                    <tr style="background-color: @if($jab->color) {{ $jab->color }} @endif">
+                                                        <td>{{ $n++ }}</td>
+                                                        <td>
+                                                            <input type="text" class="form-control" name="id_staf[]" value="{{ $item->pegawai_id }}" hidden>
+                                                            <input type="text" class="form-control" name="nama_staf[]" value="{{ $item->pegawai_nama }}" hidden>
+                                                            <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
+                                                            <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
+                                                            <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $item->nick != null?$item->nick:$item->name }}</h6><small class='text-truncate text-muted'>{{ $jab->jabatan?$jab->jabatan:'' }}</small></div></div>
+                                                        </td>
+                                                        @for ($i = 1; $i <= $totalDay; $i++)
+                                                            @php
+                                                                $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
+                                                                $hit = 'tgl'.$i;
+                                                            @endphp
+                                                            @if ($dayb == 'Minggu')
+                                                                <td class="p-2" style="background-color: #fed8b9">
+                                                            @else
+                                                                <td class="p-2">
+                                                            @endif
+                                                                    <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                                    {{-- <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required> --}}
+                                                                </td>
+                                                        @endfor
+                                                    </tr>
+                                                @endif
                                             @endforeach
-                                            <li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
-                                            <li><b class="me-1">C</b>(<u>CUTI TAHUNAN</u>)</li>
-                                            <li><b class="me-1">CM</b>(<u>CUTI MELAHIRKAN</u>)</li>
-                                            <li><b class="me-1">CU</b>(<u>CUTI UMROH</u>)</li>
-                                            <li><b class="me-1">CH</b>(<u>CUTI HAJI</u>)</li>
-                                            <li><b class="me-1">CD</b>(<u>CUTI DILUAR TANGGUNGAN</u>)</li>
-                                        </ul>
-                                    </label>
-                                </div>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-md-2">
-                                <h5>Keterangan :</h5>
-                                <div class="list-group">
-                                    <label class="list-group-item border-0 p-2">
-                                        <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>
-                                        Hari Minggu
-                                    </label>
+                            <div class="row p-10">
+                                <div class="col-md-7">
+                                    <div class="alert alert-light">
+                                        <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
+                                        <small>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat data gagal saat memproses Jadwal, silakan Refresh Browser <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Disarankan melakukan pengisian jadwal dinas menggunakan <b>Device Komputer</b> dan <b>Browser Google Chrome</b> <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) menyesuaikan kode shift pada referensi yang sudah ada <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Penulisan Huruf pada kolom isian Shift Jaga <i><b>Auto Capslock</b></i> meskipun sudah disimpan sekalipun <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit<br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengubahan shift pada jadwal dinas diluar per tanggal 1 sampai dengan sebelum hari ini (Kemarin) akan terkunci oleh Sistem (Tidak dapat diubah lagi)
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5>Shift Jaga :</h5>
+                                    <div class="list-group">
+                                        <label class="list-group-item border-0 p-2" id="kode-shift">
+                                            <ul>
+                                                @foreach ($list['ref_shift'] as $item)
+                                                    <li><b class="me-1">{{ $item->singkat }}</b>(<u>{{ $item->shift }}</u>) : {{ \Carbon\Carbon::parse($item->berangkat)->isoFormat('HH:mm') }} - {{ \Carbon\Carbon::parse($item->pulang)->isoFormat('HH:mm') }} WIB</li>
+                                                @endforeach
+                                                <li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
+                                                <li><b class="me-1">C</b>(<u>CUTI TAHUNAN</u>)</li>
+                                                <li><b class="me-1">CM</b>(<u>CUTI MELAHIRKAN</u>)</li>
+                                                <li><b class="me-1">CU</b>(<u>CUTI UMROH</u>)</li>
+                                                <li><b class="me-1">CH</b>(<u>CUTI HAJI</u>)</li>
+                                                <li><b class="me-1">CD</b>(<u>CUTI DILUAR TANGGUNGAN</u>)</li>
+                                            </ul>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>Keterangan :</h5>
+                                    <div class="list-group">
+                                        <label class="list-group-item border-0 p-2">
+                                            <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>
+                                            Hari Minggu
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-footer p-2">
-                        <div class="text-end btn-page mt-2">
-                            <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
-                            <div class="btn-group">
-                                <a class="btn btn-primary" id="btn-simpan" href="javascript:void(0);" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</a>
-                                <a class="btn btn-danger" id="btn-ajukan" href="javascript:void(0);" onclick="ajukan()"><i class="fas fa-stamp me-1"></i> Ajukan</a>
+                        <div class="card-footer p-2">
+                            <div class="text-end btn-page mt-2">
+                                {{-- <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a> --}}
+                                <div class="btn-group">
+                                    <a class="btn btn-primary" id="btn-simpan" href="javascript:void(0);" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</a>
+                                    <a class="btn btn-danger" id="btn-ajukan" href="javascript:void(0);" onclick="ajukan()"><i class="fas fa-stamp me-1"></i> Ajukan</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -203,6 +210,29 @@
 
     <script>
         $(document).ready(function() {
+            $(".pc-sidebar").addClass("pc-sidebar-hide"); // HIDE NAVBAR
+
+            const today = new Date();
+            const currentDate = today.getDate();
+            const totalDay = {{ $totalDay }};
+            const currentRowCount = {{ count($list['detail']) }};
+
+            for (let row = 1; row <= currentRowCount; row++) {
+                for (let day = 1; day <= totalDay; day++) {
+                    const id = `#${row}tgl${day}`;
+                    const input = $(id);
+                    if (input.length) {
+                        if (day < currentDate) {
+                            input.prop('readonly', true).addClass('bg-light text-muted');
+                            // input.prop('disabled', true).addClass('bg-light');
+                        }
+                    }
+                }
+            }
+
+            // SETELAH VALIDASI DI ATAS SELESAI, MEMUNCULKAN INPUT JADWAL
+            $('#show-loading').prop('hidden',true);
+            $('#show-jadwal').prop('hidden',false);
             // SELECT2
             // var t = $(".select2");
             // t.length && t.each(function() {
@@ -246,29 +276,29 @@
             return input.substring(0, tests.length);
         }
 
-        function checkShift(t) {
-            if (t.val().length <= 2 ) {
-                $.ajax({
-                    url: "/api/kepegawaian/jadwaldinas/shift/"+t.val().toUpperCase()+"/user/{{ Auth::user()->id }}",
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        if (res.code == 200) {
-                            t.val(t.val().toUpperCase());
-                        } else {
-                            t.val('');
-                            notifier.show(
-                                "Pesan Galat!", res.message,
-                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                            );
-                        }
-                    },
-                    error: function (res) { }
-                });
-            } else {
-                t.val('');
-            }
-        }
+        // function checkShift(t) {
+        //     if (t.val().length <= 2 ) {
+        //         $.ajax({
+        //             url: "/api/kepegawaian/jadwaldinas/shift/"+t.val().toUpperCase()+"/user/{{ Auth::user()->id }}",
+        //             type: 'GET',
+        //             dataType: 'json',
+        //             success: function(res) {
+        //                 if (res.code == 200) {
+        //                     t.val(t.val().toUpperCase());
+        //                 } else {
+        //                     t.val('');
+        //                     notifier.show(
+        //                         "Pesan Galat!", res.message,
+        //                         "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+        //                     );
+        //                 }
+        //             },
+        //             error: function (res) { }
+        //         });
+        //     } else {
+        //         t.val('');
+        //     }
+        // }
 
         // function onlyInput(event) {
         //     var value = String.fromCharCode(event.which);
@@ -298,15 +328,17 @@
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
                             up = num.val();
-                            console.log(up);
                             upper = up.toString().toUpperCase();
-                            if (res.shiftArr.includes(upper) == 0) {
-                                if (upper == 'L' || upper == 'C' || upper == 'CM' || upper == 'CU' || upper == 'CH' || upper == 'CD') {
-                                    num.removeClass('is-invalid').addClass('is-valid');
-                                } else {
-                                    valid = 0;
-                                    num.removeClass('is-valid').addClass('is-invalid');
-                                }
+                            const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
+                            const allValidShift = res.shiftArr.concat(shiftTambahan);
+                            console.log(up);
+                            if (!allValidShift.includes(upper)) {
+                                notifier.show(
+                                    "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
+                                    "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                                );
+                                valid = 0;
+                                num.removeClass('is-valid').addClass('is-invalid');
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
@@ -357,15 +389,17 @@
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
                             up = num.val();
-                            console.log(up);
                             upper = up.toString().toUpperCase();
-                            if (res.shiftArr.includes(upper) == 0) {
-                                if (upper == 'L' || upper == 'C' || upper == 'CM' || upper == 'CU' || upper == 'CH' || upper == 'CD') {
-                                    num.removeClass('is-invalid').addClass('is-valid');
-                                } else {
-                                    valid = 0;
-                                    num.removeClass('is-valid').addClass('is-invalid');
-                                }
+                            const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
+                            const allValidShift = res.shiftArr.concat(shiftTambahan);
+                            console.log(up);
+                            if (!allValidShift.includes(upper)) {
+                                notifier.show(
+                                    "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
+                                    "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                                );
+                                valid = 0;
+                                num.removeClass('is-valid').addClass('is-invalid');
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
@@ -388,10 +422,10 @@
                         $("#formUbah").submit();
                     } else {
                         console.log('gagal mengajukan');
-                        notifier.show(
-                            "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
-                            "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                        );
+                        // notifier.show(
+                        //     "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
+                        //     "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                        // );
                         $("#btn-ajukan").find("i").removeClass("fa-sync fa-spin").addClass('fa-stamp');
                         $("#btn-ajukan").prop('disabled', false);
                     }

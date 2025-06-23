@@ -227,32 +227,32 @@ class JadwalController extends Controller
         }
     }
 
-    function prosesSimpan(Request $request) // TIDAK DIPAKAI (HANYA UNTUK BACKUP)
-    {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
-        $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
-        $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
+    // function prosesSimpan(Request $request) // TIDAK DIPAKAI (HANYA UNTUK BACKUP)
+    // {
+    //     $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+    //     $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
+    //     $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
 
-        for ($i=0; $i < count($request->id_staf) ; $i++) {
-            $data = new jadwal_detail;
-            $data->id_jadwal = $request->id_jadwal;
-            $data->pegawai_id = $request->id_staf[$i];
-            $data->pegawai_nama = $request->nama_staf[$i];
-            $data->jabatan = $request->jabatan_staf[$i];
-            $data->color = $request->color_staf[$i];
-            for ($t = 1; $t <= $totalDay; $t++) {
-                $hit = 'tgl'.$t;
-                if ($request->$hit[$i]) {
-                    $data->$hit = strtoupper($request->$hit[$i]);
-                } else {
-                    $data->$hit = null;
-                }
-            }
-            $data->save();
-        }
+    //     for ($i=0; $i < count($request->id_staf) ; $i++) {
+    //         $data = new jadwal_detail;
+    //         $data->id_jadwal = $request->id_jadwal;
+    //         $data->pegawai_id = $request->id_staf[$i];
+    //         $data->pegawai_nama = $request->nama_staf[$i];
+    //         $data->jabatan = $request->jabatan_staf[$i];
+    //         $data->color = $request->color_staf[$i];
+    //         for ($t = 1; $t <= $totalDay; $t++) {
+    //             $hit = 'tgl'.$t;
+    //             if ($request->$hit[$i]) {
+    //                 $data->$hit = strtoupper($request->$hit[$i]);
+    //             } else {
+    //                 $data->$hit = null;
+    //             }
+    //         }
+    //         $data->save();
+    //     }
 
-        return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil disimpan pada '.$tgl);
-    }
+    //     return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil disimpan pada '.$tgl);
+    // }
 
     function prosesTambah(Request $request)
     {
@@ -406,36 +406,36 @@ class JadwalController extends Controller
         }
     }
 
-    function cekShift($id,$user)
-    {
-        if ($id == 'L' || $id == 'C' || $id == 'CM' || $id == 'CU' || $id == 'CH' || $id == 'CD') {
-            return Response::json(array(
-                'message' => $id,
-                'code' => 200,
-            ));
-        } else {
-            $ref_users = DB::table('referensi_jadwal_users')
-                                ->whereJsonContains('staf', (string) $user)
-                                ->whereNull('deleted_at')
-                                ->first();
-            $ref_shift = ref_jadwal_shift::where('singkat',$id)
-                                            ->whereIn('pegawai_id',[$user,$ref_users->pegawai_id])
-                                            // ->where('pegawai_id',$user)
-                                            ->first();
+    // function cekShift($id,$user)
+    // {
+    //     if ($id == 'L' || $id == 'C' || $id == 'CM' || $id == 'CU' || $id == 'CH' || $id == 'CD') {
+    //         return Response::json(array(
+    //             'message' => $id,
+    //             'code' => 200,
+    //         ));
+    //     } else {
+    //         $ref_users = DB::table('referensi_jadwal_users')
+    //                             ->whereJsonContains('staf', (string) $user)
+    //                             ->whereNull('deleted_at')
+    //                             ->first();
+    //         $ref_shift = ref_jadwal_shift::where('singkat',$id)
+    //                                         ->whereIn('pegawai_id',[$user,$ref_users->pegawai_id])
+    //                                         // ->where('pegawai_id',$user)
+    //                                         ->first();
 
-            if (empty($ref_shift)) {
-                return Response::json(array(
-                    'message' => 'Shift Tidak Ditemukan',
-                    'code' => 500,
-                ));
-            } else {
-                return Response::json(array(
-                    'message' => $ref_shift,
-                    'code' => 200,
-                ));
-            }
-        }
-    }
+    //         if (empty($ref_shift)) {
+    //             return Response::json(array(
+    //                 'message' => 'Shift Tidak Ditemukan',
+    //                 'code' => 500,
+    //             ));
+    //         } else {
+    //             return Response::json(array(
+    //                 'message' => $ref_shift,
+    //                 'code' => 200,
+    //             ));
+    //         }
+    //     }
+    // }
 
     function getShift($id,$user)
     {
@@ -461,6 +461,9 @@ class JadwalController extends Controller
         {
             $shiftArr[] = $shift[$i]->singkat;
         }
+
+        // print_r($shiftArr);
+        // die();
 
         $data = [
             'users' => $users,

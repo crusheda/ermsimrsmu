@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
+use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        DB::statement("SET time_zone = '+07:00'");
         // ResetPassword::toMailUsing(function (User $user, string $token) {
         //     $url = url(route('reset.password.get', [
         //         'token' => $token,

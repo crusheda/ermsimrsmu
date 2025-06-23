@@ -113,7 +113,8 @@
                                                         @else
                                                             <td class="p-2">
                                                         @endif
-                                                                <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                                <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                                {{-- <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required> --}}
                                                             </td>
                                                     @endfor
                                                 </tr>
@@ -174,7 +175,7 @@
                         <div class="text-end btn-page">
                             <a class="btn btn-link-secondary" id="clear_text" href="javascript:void(0);" onclick="clearInput()">Kosongkan</a>
                             <div class="btn-group">
-                                <a class="btn btn-dark" id="btn-simpan" href="javascript:void(0);" onclick="hapus({{ $list['jadwal']->id }})"><i class="fas fa-trash me-1"></i> Hapus</a>
+                                <a class="btn btn-dark" id="btn-hapus-jadwal" href="javascript:void(0);" onclick="hapus({{ $list['jadwal']->id }})"><i class="fas fa-trash me-1"></i> Hapus</a>
                                 <a class="btn btn-primary" id="btn-simpan" href="javascript:void(0);" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</a>
                                 <a class="btn btn-danger" id="btn-ajukan" href="javascript:void(0);" onclick="ajukan()"><i class="fas fa-stamp me-1"></i> Ajukan</a>
                             </div>
@@ -246,6 +247,8 @@
 
     <script>
         $(document).ready(function() {
+            $(".pc-sidebar").addClass("pc-sidebar-hide"); // HIDE NAVBAR
+
             // SELECT2
             // var t = $(".select2");
             // t.length && t.each(function() {
@@ -289,29 +292,29 @@
             return input.substring(0, tests.length);
         }
 
-        function checkShift(t) {
-            if (t.val().length <= 2 ) {
-                $.ajax({
-                    url: "/api/kepegawaian/jadwaldinas/shift/"+t.val().toUpperCase()+"/user/{{ Auth::user()->id }}",
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(res) {
-                        if (res.code == 200) {
-                            t.val(t.val().toUpperCase());
-                        } else {
-                            t.val('');
-                            notifier.show(
-                                "Pesan Galat!", res.message,
-                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                            );
-                        }
-                    },
-                    error: function (res) { }
-                });
-            } else {
-                t.val('');
-            }
-        }
+        // function checkShift(t) {
+        //     if (t.val().length <= 2 ) {
+        //         $.ajax({
+        //             url: "/api/kepegawaian/jadwaldinas/shift/"+t.val().toUpperCase()+"/user/{{ Auth::user()->id }}",
+        //             type: 'GET',
+        //             dataType: 'json',
+        //             success: function(res) {
+        //                 if (res.code == 200) {
+        //                     t.val(t.val().toUpperCase());
+        //                 } else {
+        //                     t.val('');
+        //                     notifier.show(
+        //                         "Pesan Galat!", res.message,
+        //                         "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+        //                     );
+        //                 }
+        //             },
+        //             error: function (res) { }
+        //         });
+        //     } else {
+        //         t.val('');
+        //     }
+        // }
 
         // function onlyInput(event) {
         //     var value = String.fromCharCode(event.which);
@@ -341,15 +344,17 @@
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
                             up = num.val();
-                            console.log(up);
                             upper = up.toString().toUpperCase();
-                            if (res.shiftArr.includes(upper) == 0) {
-                                if (upper == 'L' || upper == 'C' || upper == 'CM' || upper == 'CU' || upper == 'CH' || upper == 'CD') {
-                                    num.removeClass('is-invalid').addClass('is-valid');
-                                } else {
-                                    valid = 0;
-                                    num.removeClass('is-valid').addClass('is-invalid');
-                                }
+                            const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
+                            const allValidShift = res.shiftArr.concat(shiftTambahan);
+                            console.log(up);
+                            if (!allValidShift.includes(upper)) {
+                                notifier.show(
+                                    "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
+                                    "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                                );
+                                valid = 0;
+                                num.removeClass('is-valid').addClass('is-invalid');
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
@@ -400,15 +405,17 @@
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
                             up = num.val();
-                            console.log(up);
                             upper = up.toString().toUpperCase();
-                            if (res.shiftArr.includes(upper) == 0) {
-                                if (upper == 'L' || upper == 'C' || upper == 'CM' || upper == 'CU' || upper == 'CH' || upper == 'CD') {
-                                    num.removeClass('is-invalid').addClass('is-valid');
-                                } else {
-                                    valid = 0;
-                                    num.removeClass('is-valid').addClass('is-invalid');
-                                }
+                            const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
+                            const allValidShift = res.shiftArr.concat(shiftTambahan);
+                            console.log(up);
+                            if (!allValidShift.includes(upper)) {
+                                notifier.show(
+                                    "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
+                                    "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                                );
+                                valid = 0;
+                                num.removeClass('is-valid').addClass('is-invalid');
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
@@ -431,10 +438,10 @@
                         $("#formTambah").submit();
                     } else {
                         console.log('gagal mengajukan');
-                        notifier.show(
-                            "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
-                            "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                        );
+                        // notifier.show(
+                        //     "Pesan Galat!", "Terdapat beberapa isian yang tidak valid. Mohon cek kembali penulisan Shift Jaga pada setiap isian",
+                        //     "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                        // );
                         $("#btn-ajukan").find("i").removeClass("fa-sync fa-spin").addClass('fa-stamp');
                         $("#btn-ajukan").prop('disabled', false);
                     }
