@@ -214,6 +214,8 @@
 
             const today = new Date();
             const currentDate = today.getDate();
+            const currentMonth = today.getMonth() + 1; // getMonth() hasilnya 0-11
+            const activeMonth = parseInt("{{ $list['jadwal']->bulan }}", 10); // ini variabel dari backend, contoh: 6 untuk Juni
             const totalDay = {{ $totalDay }};
             const currentRowCount = {{ count($list['detail']) }};
 
@@ -222,9 +224,11 @@
                     const id = `#${row}tgl${day}`;
                     const input = $(id);
                     if (input.length) {
-                        if (day < currentDate) {
+                        // readonly hanya jika bulan aktif adalah bulan sekarang atau sebelumnya
+                        if (activeMonth <= currentMonth && day < currentDate && activeMonth === currentMonth) {
                             input.prop('readonly', true).addClass('bg-light text-muted');
-                            // input.prop('disabled', true).addClass('bg-light');
+                        } else if (activeMonth < currentMonth) {
+                            input.prop('readonly', true).addClass('bg-light text-muted');
                         }
                     }
                 }
