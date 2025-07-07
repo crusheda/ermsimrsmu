@@ -411,7 +411,7 @@ class ERuangController extends Controller
     ///////////////////////////////////////////////////////// DAFTAR RUANGAN
     function indexRuangan()
     {
-        if (Auth::user()->getRole('kasubag-tata-usaha') == true || Auth::user()->getRole('it') == true) {
+        if (Auth::user()->getPermission('admin_eruang')) {
             $role = roles::where('name', '<>','administrator')->orderBy('updated_at','desc')->get();
             // $show = eruang::get();
             $ruangan = eruang_ref::orderBy('nama','ASC')->get();
