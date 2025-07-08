@@ -151,7 +151,7 @@
                     type: 'GET',
                     dataType: 'json', // added data type
                     success: function(res) {
-                        var adminID = "{{ Auth::user()->getManyRole(['it','kabag-kepegawaian']) }}";
+                        var adminID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         // var userID = "{{ Auth::user()->id }}";
                         $("#tampil-tbody").empty();
                         $('#dttable').DataTable().clear().destroy();

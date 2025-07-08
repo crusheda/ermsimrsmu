@@ -27,7 +27,7 @@ class AbsensiController extends Controller
     {
         if (
                 Auth::user()->getPermission('admin_kepegawaian') == true ||
-                Auth::user()->getRole('karu-it') == true
+                Auth::user()->getPermission('admin_kepegawaian_kepala') == true
             ) {
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
             $jabatan = ref_jadwal_users::select('id','unit')->groupBy('id','unit')->orderBy('unit','asc')->get();

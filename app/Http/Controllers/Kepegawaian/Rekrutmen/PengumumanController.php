@@ -121,7 +121,7 @@ class PengumumanController extends Controller
             $data->user_id = $request->pegawai;
             $data->save();
 
-            datalogs::record($request->pegawai, 'Baru saja melakukan penambahan Lowongan Kerja '.$request->nama, 'dari '.$request->mulai.' sampai '.$request->selesai, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            datalogs::record($request->pegawai, 'Baru saja melakukan penambahan Lowongan Kerja '.$request->nama, 'dari '.$request->mulai.' sampai '.$request->selesai, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
             return Response::json(array(
                 'message' => $push,
                 'code' => 200,
@@ -158,7 +158,7 @@ class PengumumanController extends Controller
             $data->user_id = $request->pegawai;
             $data->save();
 
-            datalogs::record($request->pegawai, 'Baru saja melakukan perubahan Lowongan Kerja '.$request->nama, 'dari '.$request->mulai.' sampai '.$request->selesai, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            datalogs::record($request->pegawai, 'Baru saja melakukan perubahan Lowongan Kerja '.$request->nama, 'dari '.$request->mulai.' sampai '.$request->selesai, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
             return Response::json(array(
                 'message' => $push,
                 'code' => 200,

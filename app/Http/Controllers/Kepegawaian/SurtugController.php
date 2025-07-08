@@ -95,7 +95,7 @@ class SurtugController extends Controller
             $data->filename = $path;
             $data->save();
 
-            datalogs::record($request->user, 'Baru saja melakukan penambahan Surat Tugas', $request->pegawai_id, null, $title, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            datalogs::record($request->user, 'Baru saja melakukan penambahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
             return Response::json(array(
                 'message' => $push,
                 'code' => 200,

@@ -897,11 +897,11 @@
             }
 
             // PENENTUAN MENU AKSES
-            var aksesAdmin = "{{ Auth::user()->getManyRole(['karu-it','kasubag-aset-gudang']) }}";
-            var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";
-            var aksesPIC = "{{ Auth::user()->getRole('pic-sarpras') }}";
-            var aksesIPSRS = "{{ Auth::user()->getManyRole(['ipsrs','kasubag-ipsrs']) }}";
-            var aksesIT = "{{ Auth::user()->getManyRole(['it']) }}";
+            var aksesAdmin = "{{ Auth::user()->getPermission('admin_aset') }}";
+            var aksesElektromedis = "{{ Auth::user()->getPermission('admin_aset_elektromedis') }}";
+            var aksesPIC = "{{ Auth::user()->getPermission('admin_aset_pic') }}";
+            var aksesIPSRS = "{{ Auth::user()->getPermission('admin_aset_ipsrs') }}";
+            var aksesIT = "{{ Auth::user()->getPermission('admin_aset_it') }}";
             // console.log(aksesAdmin+' - '+aksesElektromedis+' - '+aksesIPSRS+' - '+aksesPIC);
             // VALIDASI AKSES
             if (aksesAdmin == true) { // ALL ACCESS
@@ -1090,7 +1090,7 @@
                         });
 
                         // TAMPIL TABEL PEMELIHARAAN
-                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                        var adminID = "{{ Auth::user()->getPermission('admin_aset') }}";
                         $("#tampil-tbody-pemeliharaan").empty();
                         $('#dttable-pemeliharaan').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
@@ -1304,7 +1304,7 @@
                         }
 
                         // TABEL
-                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                        var adminID = "{{ Auth::user()->getPermission('admin_aset') }}";
                         $("#tampil-tbody-mutasi").empty();
                         $('#dttable-mutasi').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
@@ -2109,7 +2109,7 @@
                         });
 
                         // TABEL
-                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                        var adminID = "{{ Auth::user()->getPermission('admin_aset') }}";
                         $("#tampil-tbody-pemeliharaan").empty();
                         $('#dttable-pemeliharaan').DataTable().clear().destroy();
                         var date = new Date().toLocaleDateString();
@@ -2194,7 +2194,7 @@
                         });
 
                         // TABEL
-                        var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                        var adminID = "{{ Auth::user()->getPermission('admin_aset') }}";
                         console.log(adminID);
                         $("#tampil-tbody-mutasi").empty();
                         $('#dttable-mutasi').DataTable().clear().destroy();

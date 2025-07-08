@@ -248,7 +248,7 @@ class ProfilKaryawanController extends Controller
         $data->save();
 
         // CEK DATA & SAVE LOG
-        datalogs::record($user, 'Baru saja mengaktifkan status Login Pegawai ID : '.$id, null, null, null, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($user, 'Baru saja mengaktifkan status Login Pegawai ID : '.$id, null, null, null, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }
@@ -279,7 +279,7 @@ class ProfilKaryawanController extends Controller
         $data->delete();
 
         // CEK DATA & SAVE LOG
-        datalogs::record($user, 'Baru saja menghapus/menonaktifkan Pegawai ID : '.$id, null, null, $switch, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($user, 'Baru saja menghapus/menonaktifkan Pegawai ID : '.$id, null, null, $switch, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }

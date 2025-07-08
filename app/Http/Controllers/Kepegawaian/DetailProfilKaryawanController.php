@@ -175,7 +175,7 @@ class DetailProfilKaryawanController extends Controller
         $data->status = true;
         $data->save();
 
-        datalogs::record($request->user_id, 'Baru saja melakukan penambahan Status Pegawai '.$cekPegawai->nama.' menjadi '.$cekData->deskripsi, 'Berlaku mulai tanggal '.$tgl_berlaku, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan penambahan Status Pegawai '.$cekPegawai->nama.' menjadi '.$cekData->deskripsi, 'Berlaku mulai tanggal '.$tgl_berlaku, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }
@@ -226,7 +226,7 @@ class DetailProfilKaryawanController extends Controller
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_id);
         $cekPegawai = users::find($request->pegawai_id);
-        datalogs::record($request->user_id, 'Baru saja melakukan '.$cekData->deskripsi.' pada Rotasi Jabatan Pegawai '.$cekPegawai->nama, 'Berlaku mulai tanggal '.$tgl_berlaku, json_encode($roleBefore), $request->jabatan, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan '.$cekData->deskripsi.' pada Rotasi Jabatan Pegawai '.$cekPegawai->nama, 'Berlaku mulai tanggal '.$tgl_berlaku, json_encode($roleBefore), $request->jabatan, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }
@@ -280,7 +280,7 @@ class DetailProfilKaryawanController extends Controller
             $berakhir = 'Berakhir pada tanggal '.$request->tgl_berakhir;
         }
 
-        datalogs::record($request->user_id, 'Baru saja melakukan penambahan '.$jns.' pada Data Pegawai '.$cekPegawai->nama, $berakhir, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan penambahan '.$jns.' pada Data Pegawai '.$cekPegawai->nama, $berakhir, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }
@@ -326,7 +326,7 @@ class DetailProfilKaryawanController extends Controller
             $data->save();
 
             // CEK DATA & SAVE LOG
-            datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+            datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
         } else {
             $data = users::find($request->pegawai_id);
             $data->nip          = null;
@@ -348,7 +348,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_profesi); // 11 is Jenis Klasifikasi Pegawai
-        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Klasifikasi Pegawai menjadi '.$cekData->deskripsi, $request->ref_profesi, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Klasifikasi Pegawai menjadi '.$cekData->deskripsi, $request->ref_profesi, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($now, 200);
     }
@@ -363,7 +363,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_subprofesi); // 11 is Jenis Klasifikasi Pegawai
-        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Profesi / Sub Klasifikasi Pegawai menjadi '.$cekData->deskripsi, $request->ref_profesi, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Profesi / Sub Klasifikasi Pegawai menjadi '.$cekData->deskripsi, $request->ref_profesi, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($now, 200);
     }
@@ -383,7 +383,7 @@ class DetailProfilKaryawanController extends Controller
         $data->save();
 
         // CEK DATA & SAVE LOG
-        datalogs::record($request->user_id, 'Baru saja melakukan perubahan TMT ('.$request->tmt.') & TAT ('.$tat.') Pegawai', null, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan TMT ('.$request->tmt.') & TAT ('.$tat.') Pegawai', null, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($now, 200);
     }
@@ -442,7 +442,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_id);
-        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Status Pegawai '.$pushPegawai->nama.' menjadi '.$cekData->deskripsi.' pada record ID : '.$request->id, $request->keterangan, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Status Pegawai '.$pushPegawai->nama.' menjadi '.$cekData->deskripsi.' pada record ID : '.$request->id, $request->keterangan, $pushData, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($now, 200);
     }
@@ -465,7 +465,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($request->ref_id);
-        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Dokumen SPK RKK Pegawai : '.$pushPegawai->nama.' pada record ID : '.$request->id, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($request->user_id, 'Baru saja melakukan perubahan Dokumen SPK RKK Pegawai : '.$pushPegawai->nama.' pada record ID : '.$request->id, null, $pushData, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($now, 200);
     }
@@ -497,7 +497,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($data->ref_id);
-        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Status Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Status Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }
@@ -539,7 +539,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($data->ref_id);
-        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Rotasi Jabatan Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan Rotasi Jabatan Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }
@@ -567,7 +567,7 @@ class DetailProfilKaryawanController extends Controller
 
         // CEK DATA & SAVE LOG
         $cekData = referensi::find($data->ref_id);
-        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan '.$jns.' Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($data->user_id, 'Baru saja melakukan penghapusan '.$jns.' Pegawai : '.$pushPegawai->nama, null, $pushData, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
     }

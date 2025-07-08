@@ -278,7 +278,7 @@ class JadwalController extends Controller
             $data->save();
         }
 
-        datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan penambahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan penambahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Jadwal Dinas Karyawan berhasil disimpan/diajukan pada '.$tgl);
     }
@@ -305,7 +305,7 @@ class JadwalController extends Controller
             $data[$i]->save();
         }
 
-        datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan perubahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+        datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan perubahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Perubahan Jadwal Dinas Karyawan berhasil dilakukan pada '.$tgl);
         // return Redirect::route()->with('message','Perubahan Jadwal Dinas Karyawan berhasil dilakukan pada '.$tgl);
@@ -392,7 +392,7 @@ class JadwalController extends Controller
                 $data->save();
 
                 $getData = jadwal::where('progress',1)->whereIn('pegawai_id',[$request->pegawai,$users->pegawai_id])->orderBy('updated_at','desc')->whereNull('deleted_at')->first();
-                datalogs::record($request->pegawai, 'Baru saja mengajukan penambahan Jadwal Dinas Pegawai Bulan '.$bulan.' Tahun '.$tahun, $getData->staf, null, $data, '["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]');
+                datalogs::record($request->pegawai, 'Baru saja mengajukan penambahan Jadwal Dinas Pegawai Bulan '.$bulan.' Tahun '.$tahun, $getData->staf, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
                 return Response::json(array(
                     'message' => $getData,
                     'code' => 200,

@@ -18,7 +18,7 @@
                 <div class="flex-shrink-0">
                     <div class="hstack gap-3 ms-auto">
                         <div class="btn-group">
-                            @if (Auth::user()->getManyRole(['it','kasubag-aset-gudang']) == true)
+                            @if (Auth::user()->getPermission('admin_aset') == true)
                                 <button class="btn btn-primary tombol-tambah" onclick="tambah()" data-bs-toggle="tooltip"
                                 data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Menambahkan Sarana"><i class='bx bx-plus scaleX-n1-rtl'></i> Tambah Sarana</button>
@@ -30,7 +30,7 @@
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Scan QR-Code Aset" hidden><i class="fas fa-qrcode fa-fw nav-icon"></i></button>
                         </div>
-                        @if (Auth::user()->getManyRole(['it','kasubag-aset-gudang']) == true)
+                        @if (Auth::user()->getPermission('admin_aset') == true)
                             <div class="vr"></div>
                             <div class="dropdown d-inline-block">
                                 <button type="menu" class="btn btn-success" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-vertical"></i> Menu</button>
@@ -638,10 +638,10 @@
             // });
 
             // PENENTUAN MENU AKSES
-            // var aksesAdmin = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
-            // var aksesElektromedis = "{{ Auth::user()->getRole('elektromedis') }}";
-            // var aksesPIC = "{{ Auth::user()->getRole('pic-sarpras') }}";
-            // var aksesIPSRS = "{{ Auth::user()->getManyRole(['ipsrs','kasubag-ipsrs']) }}";
+            // var aksesAdmin = "{{ Auth::user()->getPermission('admin_aset') }}";
+            // var aksesElektromedis = "{{ Auth::user()->getPermission('admin_aset_elektromedis') }}";
+            // var aksesPIC = "{{ Auth::user()->getPermission('admin_aset_pic') }}";
+            // var aksesIPSRS = "{{ Auth::user()->getPermission('admin_aset_ipsrs') }}";
             // if (aksesAdmin == true) { // ALL ACCESS
             //     $(".tombol-tambah").prop('hidden', false);
             // } else {
@@ -808,7 +808,7 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_aset') }}";
                     var kalibrasiID = "{{ Auth::user()->getManyRole(['elektromedis']) }}";
                     var date = new Date().toLocaleDateString();
 
@@ -1318,7 +1318,7 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     var userID = "{{ Auth::user()->id }}";
-                    var adminID = "{{ Auth::user()->getManyRole(['it','kasubag-aset-gudang']) }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_aset') }}";
                     var kalibrasiID = "{{ Auth::user()->getManyRole(['elektromedis']) }}";
                     var date = new Date().toLocaleDateString();
 

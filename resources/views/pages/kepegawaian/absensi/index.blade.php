@@ -31,7 +31,7 @@
 
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
-        @if (Auth::user()->getRole('kabag-kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
+        @if (Auth::user()->getPermission('admin_kepegawaian_kepala'))
             <div class="col-xl-12" hidden>
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
@@ -524,7 +524,7 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
@@ -691,7 +691,7 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
@@ -924,7 +924,7 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
@@ -1087,7 +1087,7 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
@@ -1247,7 +1247,7 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
@@ -1390,7 +1390,7 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;

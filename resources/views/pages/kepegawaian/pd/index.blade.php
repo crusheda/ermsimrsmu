@@ -31,7 +31,7 @@
 
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
-        @if (Auth::user()->getRole('kabag-kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
+        @if (Auth::user()->getPermission('admin_kepegawaian_kepala'))
             <div class="col-xl-12">
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
@@ -408,7 +408,7 @@
                         var date = new Date().toLocaleDateString("sv-SE");
                         var userID = "{{ Auth::user()->id }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
-                        var superID = "{{ Auth::user()->getRole('kabag-kepegawaian') }}";
+                        var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         var keuID = "{{ Auth::user()->getPermission(['admin_keuangan']) }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>

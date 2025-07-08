@@ -18,10 +18,9 @@ class PDController extends Controller
     function index()
     {
         if (
+                Auth::user()->getPermission('admin_kepegawaian_kepala') == true ||
                 Auth::user()->getPermission('admin_kepegawaian') == true ||
-                Auth::user()->getPermission('admin_keuangan') == true ||
-                Auth::user()->getRole('karu-it') == true ||
-                Auth::user()->id == '391' // CHYNTIA KEUANGAN
+                Auth::user()->getPermission('admin_keuangan') == true
             ) {
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
 
