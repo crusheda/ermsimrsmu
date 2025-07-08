@@ -128,7 +128,7 @@
                     </ul>
                 </li>
 
-                @if (Auth::user()->getPermission('pengadaan') == true)
+                @if (Auth::user()->getPermission('admin_pengadaan') == true)
                 <li>
                     <a href="{{ route('pengadaan.index') }}" class="waves-effect">
                         <i class="bx bxs-cart"></i>
@@ -137,18 +137,18 @@
                 </li>
                 @endif
 
-                @if (Auth::user()->getPermission('perbaikan_ipsrs') == true || Auth::user()->getPermission('perbaikan_it') == true)
+                @if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true || Auth::user()->getPermission('perbaikan_it') == true)
                     <li class="menu-title" key="t-menu">Pengaduan</li>
                 @endif
 
-                @if (Auth::user()->getPermission('perbaikan_ipsrs') == true || Auth::user()->getPermission('perbaikan_it') == true)
+                @if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true || Auth::user()->getPermission('perbaikan_it') == true)
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="bx bxs-wrench"></i>
                         <span key="t-dashboards">Perbaikan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        @if (Auth::user()->getPermission('perbaikan_ipsrs') == true)
+                        @if (Auth::user()->getPermission('admin_perbaikan_ipsrs') == true)
                             <li><a href="{{ route('ipsrs.index') }}" key="t-saas">IPSRS</a></li>
                         @endif
                         @if (Auth::user()->getPermission('perbaikan_it') == true)
@@ -180,9 +180,9 @@
                 </li>
                 @endif
 
-                @if (Auth::user()->getPermission('kecelakaan_kerja') == true || Auth::user()->getPermission('manajemen_risiko') == true)
-                    <li class="menu-title" key="t-menu">Akreditasi</li>
-                @endif
+                {{-- @if (Auth::user()->getPermission('kecelakaan_kerja') == true || Auth::user()->getPermission('manajemen_risiko') == true)
+                @endif --}}
+                <li class="menu-title" key="t-menu">Akreditasi</li>
 
                 {{-- @if (Auth::user()->getPermission('kecelakaan_kerja') == true)
                 <li hidden>
@@ -199,7 +199,7 @@
                 @endif --}}
                 <li>
                     <a href="{{ route('accidentreport.index') }}" class="waves-effect">
-                        <span class="badge rounded-pill bg-primary float-end">new</span>
+                        {{-- <span class="badge rounded-pill bg-primary float-end">new</span> --}}
                         <i class="fas fa-running"></i>
                         <span key="t-chat">Kecelakaan Kerja</span>
                     </a>

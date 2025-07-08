@@ -30,7 +30,7 @@
         </a>
     </li>
     <li class="pc-item pc-caption"><label>Kepegawaian</label></li>
-    @if (Auth::user()->getPermission(['admin_kepegawaian']) == true)
+    @if (Auth::user()->getPermission(['admin_kepegawaian']) == true || Auth::user()->getRole('admin_kepegawaian_kepala') == true)
         <li class="pc-item">
             <a href="{{ route('profilkaryawan.index') }}" class="pc-link">
                 <span class="pc-micon">
@@ -77,10 +77,10 @@
         </ul>
     </li>
     @if (
+        Auth::user()->getPermission('admin_kepegawaian_kepala') == true ||
         Auth::user()->getPermission('admin_kepegawaian') == true ||
         Auth::user()->getPermission('admin_keuangan') == true ||
-        Auth::user()->getRole('karu-it') == true ||
-        Auth::user()->id == '391' // CHYNTIA KEUANGAN
+        Auth::user()->getRole('karu-it') == true
     )
     <li class="pc-item">
         <a href="{{ route('kepegawaian.pd.index') }}" class="pc-link">
@@ -99,7 +99,7 @@
             <span class="pc-mtext">Surat Tugas</span>
         </a>
     </li>
-    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
+    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('admin_kepegawaian_kepala') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
                 <span class="pc-micon">
@@ -115,7 +115,7 @@
             </ul>
         </li>
     @endif
-    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('karu-it') == true)
+    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('admin_kepegawaian_kepala') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
                 <span class="pc-micon">
