@@ -243,6 +243,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('suratmasuk/cariasal', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@acAsal')->name('ac.asal.cari');
         Route::get('suratmasuk/caritempat', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@acTempat')->name('ac.tempat.cari');
 
+        // BRIDGE - SEMENTARA
+        Route::get('suratmasuk/pushdata', '\App\Http\Controllers\Berkas\Surat\SuratMasukController@changeModelTypeUser')->name('suratmasuk.pushdata');
+
         // SURAT KELUAR
         Route::get('suratkeluar/getkode/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@apiKode');
         // Route::get('suratkeluar/filter/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@getFilterSurat');

@@ -182,10 +182,11 @@
                     <div class="card-title-elements">
                         <select class="form-select form-select-sm" name="user" autofocus required>
                             <option value="" hidden>Pilih Petugas</option>
-                            <option value="84" selected>Sri Suryani, Amd</option>
-                            <option value="293">Zia Nuswantara pahlawan, S.H</option>
-                            <option value="88">Siti Dewi Sholikhah</option>
-                            <option value="82">Salis Annisa Hafiz, Amd.Kom</option>
+                            @if (!empty($list['user']))
+                                @foreach ($list['user'] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <div class="card-title-elements" style="margin-left: 10px">
@@ -444,111 +445,7 @@
                 })
             });
 
-            $.ajax(
-                {
-                    url: "/api/suratkeluar/data",
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        var adminID = "{{ Auth::user()->hasRole('administrator') }}";
-                        $("#tampil-tbody").empty();
-                        res.show.forEach(item => {
-                            var us = JSON.parse(res.user);
-                            // var updet = item.updated_at.substring(0, 10);
-                            // WARNA BUTTON
-                            if (item.sesuai == '0') {
-                                btnColor = 'btn-link-danger';
-                            } else {
-                                if (item.sesuai == '1') {
-                                    btnColor = 'btn-link-primary';
-                                } else {
-                                    btnColor = 'btn-link-dark';
-                                }
-                            }
-                            content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
-                                    + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
-                                    if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
-                                    }
-                                    // if (adminID) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a></li>`;
-                                    // }
-                            content += `</ul></center></td><td>`;
-                                        if (item.pembuat) {
-                                            pembuat = item.pembuat;
-                                        } else {
-                                            pembuat = '-';
-                                        }
-                            content += item.urutan + "</td><td>"
-                                        + item.tgl + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
-                                        if (item.isi) {
-                                            content += item.isi;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><ul class='list-unstyled mt-2'>";
-                                        if (item.tujuan2 != null) {
-                                            content += "<li>" + item.tujuan2 + "</li>";
-                                        } else {
-                                            var un = JSON.parse(item.tujuan);
-                                            for(i = 0; i < un.length; i++){
-                                                for(u = 0; u < us.length; u++){
-                                                    if (un[i] == us[u].id) {
-                                                        content += "<li>- " + us[u].nama + "</li>";
-                                                    }
-                                                }
-                                            }
-                                        }
-                            content += "</ul></td><td>";
-                                if (item.pembuat) {
-                                    content += item.pembuat;
-                                } else {
-                                    content += "-";
-                                }
-                            content += "</td><td>";
-                                if (item.sesuai == 1) {
-                                    content += "Sesuai";
-                                } else {
-                                    if (item.sesuai == 0) {
-                                        content += "Tidak Sesuai";
-                                    } else {
-                                        content += "-";
-                                    }
-                                }
-                            content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
-                            content += "</td></tr>";
-                            $('#tampil-tbody').append(content);
-                        });
-                        var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
-                            order: [
-                                [8, "desc"]
-                            ],
-                            columnDefs: [
-                                { width: "8%", targets: 2 },
-                                { width: "40%", targets: 4 },
-                                { width: "20%", targets: 5 },
-                                { visible: false, targets: [6,7,9] },
-                            ],
-                            displayLength: 7,
-                            lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
-                        });
-
-                        // Showing Tooltip
-                        $('[data-bs-toggle="tooltip"]').tooltip({
-                            trigger : 'hover'
-                        })
-                    }
-                }
-            );
+            refresh();
         });
 
         // FUNCTION-FUNCTION
@@ -593,7 +490,7 @@
             $("#tgl_edit").val("");
             $("#id_edit").val("");
             $("#user").val("");
-            $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $("#tampil-tbody").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax(
                 {
                     url: "/api/suratkeluar/data",
@@ -604,7 +501,7 @@
                         $("#tampil-tbody").empty();
                         $('#dttable').DataTable().clear().destroy();
                         res.show.forEach(item => {
-                            var us = JSON.parse(res.user);
+                            var us = JSON.parse(res.users);
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
@@ -633,7 +530,7 @@
                                         }
                             content += item.urutan + "</td><td>"
                                         + item.tgl + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -669,12 +566,17 @@
                                     }
                                 }
                             content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                            res.user.forEach(val => {
+                                if (item.user == val.id) {
+                                    content += val.nama;
+                                }
+                            })
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
+                            // Showing Tooltip
+                            $('[data-bs-toggle="tooltip"]').tooltip({
+                                trigger : 'hover'
+                            })
                         });
                         var table = $('#dttable').DataTable({
                             dom: 'Bfrtip',
@@ -692,11 +594,6 @@
                             lengthMenu: [7, 10, 25, 50, 75, 100],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
-
-                        // Showing Tooltip
-                        $('[data-bs-toggle="tooltip"]').tooltip({
-                            trigger : 'hover'
-                        })
                     }
                 }
             );
@@ -723,7 +620,7 @@
                         $("#tampil-tbody").empty();
                         $('#dttable').DataTable().clear().destroy();
                         res.show.forEach(item => {
-                            var us = JSON.parse(res.user);
+                            var us = JSON.parse(res.users);
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
@@ -752,7 +649,7 @@
                                         }
                             content += item.urutan + "</td><td>"
                                         + item.tgl + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
+                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate text-primary'><a href='/berkas/suratkeluar/" + item.id + "/download' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Unduh Surat'><u>" + item.nomor + "</u></a></h6><small class='text-truncate text-muted'><strong>" + item.kode_jenis + "</strong>&nbsp;-&nbsp;" + item.jenis + "</small><small class='text-truncate text-muted'>Pembuat&nbsp;:&nbsp;" + pembuat + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
                                         if (item.isi) {
                                             content += item.isi;
                                         } else {
@@ -788,10 +685,11 @@
                                     }
                                 }
                             content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                            res.user.forEach(val => {
+                                if (item.user == val.id) {
+                                    content += val.nama;
+                                }
+                            })
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
@@ -839,7 +737,7 @@
                         $('#dttable').DataTable().clear().destroy();
                         res.show.forEach(item => {
                             // VALIDASI TUJUAN FROM JSON
-                            var us = JSON.parse(res.user);
+                            var us = JSON.parse(res.users);
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
@@ -889,10 +787,11 @@
                                     }
                                 }
                             content += "</td><td>" + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                            res.user.forEach(val => {
+                                if (item.user == val.id) {
+                                    content += val.nama;
+                                }
+                            })
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
@@ -976,7 +875,7 @@
                     if (res.show.filename != null) {
                         document.getElementById('linksurat').innerHTML = `
                         <label class='form-label'>Berkas Surat Anda <a class='text-danger'>*</a></label>&nbsp;&nbsp;
-                        <button class='btn btn-sm btn-outline-dark' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
+                        <button class='btn btn-sm btn-link-info' type='button' onclick='ubahFile(`+id+`)'>Ubah File</button>
                         <h6 class='mb-2'><a href='/berkas/suratkeluar/`+res.show.id+`/download'>`+res.show.title+`</a></h6>
                         <input type="text" class="form-control" id="verifberkas`+res.show.id+`" hidden>`;
                         $("#verifberkas"+res.show.id).val(0);
@@ -1040,12 +939,11 @@
                         })
                     });
                     $("#user").find('option').remove();
-                    $("#user").append(`
-                        <option value="84" ${res.show.user == '84' ? "selected":""}>Sri Suryani, Amd</option>
-                        <option value="293" ${res.show.user == '293' ? "selected":""}>Zia Nuswantara pahlawan, S.H</option>
-                        <option value="88" ${res.show.user == '88' ? "selected":""}>Siti Dewi Sholikhah</option>
-                        <option value="82" ${res.show.user == '82' ? "selected":""}>Salis Annisa Hafiz, Amd.Kom</option>
-                    `);
+                    user = ``;
+                    res.user.forEach(item => {
+                        user += `<option value="${item.id}" ${res.show.user == item.id ? "selected":""}>${item.nama}</option>`;
+                    })
+                    $("#user").append(user);
                     $("#sesuai").find('option').remove();
                     $("#sesuai").append(`
                         <option value="" ${res.show.sesuai == null ? "selected":""} hidden>Pilih Kesesuaian</option>

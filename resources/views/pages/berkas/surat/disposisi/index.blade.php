@@ -308,101 +308,7 @@
                 })
             });
 
-            $.ajax(
-                {
-                    url: "/api/disposisi/data",
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        $("#tampil-tbody").empty();
-                        res.show.forEach(item => {
-                            // var updet = item.updated_at.substring(0, 10);
-                            content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
-                                    if (item.verif_disposisi == null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="tambahDisposisi(`+item.id+`)"><i class='fas fa-plus-square me-1'></i> Tambah Disposisi</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
-                                    } else {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.id+`)"><i class='fas fa-envelope-open-text me-1'></i> Lihat Disposisi</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)"><i class='fas fa-trash me-1'></i> Hapus Disposisi</a></li>`;
-                                    }
-                                    // if (item.filename != null) {
-                                    //     content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='bx bx-download scaleX-n1-rtl'></i> Unduh</a></li>`
-                                    // }
-                                    // if (adminID) {
-                                    // }
-                            content += "</ul></center></td><td>" + item.urutan + "&nbsp;&nbsp;";
-                            res.disposisi.forEach(val => {
-                                if (item.id == val.id_surat) {
-                                    content += '<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ditindak Lanjuti"></i>';
-                                }
-                            });
-                            content += "</td><td>";
-                                        if (item.tgl_surat != null) {
-                                            content += item.tgl_surat;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.asal + "</h6><small class='text-truncate text-muted'>" + item.nomor + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
-                                        if (item.deskripsi) {
-                                            content += item.deskripsi;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
-                                        if (item.tempat != null) {
-                                            content += item.tempat;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</h6><small class='text-truncate text-muted'>";
-                                        if (item.tglTo == null) {
-                                            if (item.tglFrom == null) {
-                                                content += '-';
-                                            } else {
-                                                content += item.tglFrom.substring(0, 10);
-                                            }
-                                        } else {
-                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-right-circle text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
-                                        }
-                            content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>"
-                                        + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</h6><small class='text-truncate text-muted'>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
-                            content += "</small></div></div></td></td></tr>";
-                            $('#tampil-tbody').append(content);
-                        });
-                        var table = $('#dttable').DataTable({
-                            order: [
-                                [6, "desc"]
-                            ],
-                            bAutoWidth: false,
-                            aoColumns : [
-                                { sWidth: '5%' },
-                                { sWidth: '8%' },
-                                { sWidth: '10%' },
-                                { sWidth: '20%' },
-                                { sWidth: '32%' },
-                                { sWidth: '15%' },
-                                { sWidth: '10%' },
-                            ],
-                            displayLength: 10,
-                            lengthChange: true,
-                            lengthMenu: [10, 25, 50, 75, 100],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
-                        });
-
-                        // Showing Tooltip
-                        // $('[data-bs-toggle="tooltip"]').tooltip({
-                        //     trigger: 'hover'
-                        // })
-                    }
-                }
-            );
+            refresh();
 
             $('[data-bs-toggle="tooltip"]').tooltip({
                 trigger: 'hover'
@@ -472,10 +378,11 @@
                                         }
                             content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>"
                                         + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</h6><small class='text-truncate text-muted'>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                                        res.user.forEach(val => {
+                                            if (item.user == val.id) {
+                                                content += val.nama;
+                                            }
+                                        })
                             content += "</small></div></div></td></td></tr>";
                             $('#tampil-tbody').append(content);
                         });
@@ -572,10 +479,11 @@
                                         }
                             content += "</small></div></div></td><td><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>"
                                         + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</h6><small class='text-truncate text-muted'>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                                        res.user.forEach(val => {
+                                            if (item.user == val.id) {
+                                                content += val.nama;
+                                            }
+                                        })
                             content += "</small></div></div></td></td></tr>";
                             $('#tampil-tbody').append(content);
                         });

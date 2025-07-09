@@ -20,6 +20,7 @@ class SuratKeluarController extends Controller
     public function index()
     {
         if (Auth::user()->getPermission('surat_keluar') == true) {
+            $user = User::role('staf-sekretariatan')->select('id','nama')->get();
             $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
             $kode = kode_surat_keluar::orderBy('nama','ASC')->get();
             $year = Carbon::now()->isoFormat('YYYY');
@@ -56,6 +57,7 @@ class SuratKeluarController extends Controller
             // die();
 
             $data = [
+                'user' => $user,
                 'users' => $users,
                 'kode' => $kode,
                 'urutan' => $urutan,
@@ -172,17 +174,19 @@ class SuratKeluarController extends Controller
     // API
     public function apiGet()
     {
+        $user = User::get();
         $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')
                             ->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')
                             ->orderBy('berkas_surat_keluar.created_at','DESC')
                             ->limit(100)
                             ->get();
         $getUser = user::select('id','nama')->get();
-        $user = json_encode($getUser);
+        $users = json_encode($getUser);
 
         $data = [
             'show' => $show,
             'user' => $user,
+            'users' => $users,
         ];
 
         return response()->json($data, 200);
@@ -190,16 +194,18 @@ class SuratKeluarController extends Controller
 
     public function apiGetAll()
     {
+        $user = User::get();
         $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')
                             ->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*')
                             ->orderBy('berkas_surat_keluar.created_at','DESC')
                             ->get();
         $getUser = user::select('id','nama')->get();
-        $user = json_encode($getUser);
+        $users = json_encode($getUser);
 
         $data = [
             'show' => $show,
             'user' => $user,
+            'users' => $users,
         ];
 
         return response()->json($data, 200);
@@ -207,6 +213,7 @@ class SuratKeluarController extends Controller
 
     function getFilterSurat($surat,$bulan,$tahun)
     {
+        $user = User::get();
         $show = surat_keluar::join('berkas_surat_keluar_kode','berkas_surat_keluar_kode.id','=','berkas_surat_keluar.kode')
                 ->select('berkas_surat_keluar_kode.kode as kode_jenis','berkas_surat_keluar.*');
                 If($surat != "0"){
@@ -221,11 +228,12 @@ class SuratKeluarController extends Controller
         $show = $show->get();
 
         $getUser = user::select('id','nama')->get();
-        $user = json_encode($getUser);
+        $users = json_encode($getUser);
 
         $data = [
             'show' => $show,
             'user' => $user,
+            'users' => $users,
         ];
 
         return response()->json($data, 200);
@@ -239,6 +247,7 @@ class SuratKeluarController extends Controller
 
     public function showChange($id)
     {
+        $user = User::role('staf-sekretariatan')->select('id','nama')->get();
         $users = user::whereNotNull('nik')->where('status',null)->orderBy('nama','ASC')->get();
         $show = surat_keluar::find($id);
         $getKode = kode_surat_keluar::where('id',$show->kode)->first();
@@ -249,6 +258,7 @@ class SuratKeluarController extends Controller
         $urutan = sprintf("%03d", $show->urutan);
 
         $data = [
+            'user' => $user,
             'users' => $users,
             'show' => $show,
             'refkode' => $refKode,

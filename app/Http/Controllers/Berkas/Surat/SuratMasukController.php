@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\roles;
 use App\Models\surat_masuk;
 use App\Models\disposisi;
+use App\Models\User;
 use Carbon\Carbon;
 use Validator,Redirect,Response,File;
 use Exception;
@@ -20,14 +21,26 @@ class SuratMasukController extends Controller
     public function index()
     {
         if (Auth::user()->getPermission('surat_masuk') == true) {
+            $user = User::role('staf-sekretariatan')->select('id','nama')->get();
             $year = Carbon::now()->isoFormat('YYYY');
+
             $data = [
+                'user' => $user,
                 'year' => $year,
             ];
             return view('pages.berkas.surat.suratmasuk.index')->with('list', $data); //
         } else {
             return redirect()->back();
         }
+    }
+
+    function changeModelTypeUser()
+    {
+        DB::table('model_has_roles')
+            ->where('model_type', 'App\User')
+            ->update(['model_type' => 'App\Models\User']);
+        print_r('berhasil.');
+        die();
     }
 
     public function store(Request $request)
@@ -101,8 +114,10 @@ class SuratMasukController extends Controller
     public function apiGet()
     {
         $show = surat_masuk::orderBy('created_at','DESC')->limit(100)->get();
+        $user = User::get();
 
         $data = [
+            'user' => $user,
             'show' => $show,
         ];
 
@@ -148,8 +163,10 @@ class SuratMasukController extends Controller
     public function apiGetAll()
     {
         $show = surat_masuk::orderBy('created_at','DESC')->get();
+        $user = User::get();
 
         $data = [
+            'user' => $user,
             'show' => $show,
         ];
 
@@ -159,10 +176,12 @@ class SuratMasukController extends Controller
     public function apiGetDisposisi($id)
     {
         $show = disposisi::where('id_surat',$id)->get();
+        $user = User::get();
         $roles = roles::orderBy('name','ASC')->get();
 
         $data = [
             'show' => $show,
+            'user' => $user,
             'roles' => $roles,
         ];
 
@@ -178,6 +197,7 @@ class SuratMasukController extends Controller
     public function showChange($id)
     {
         $show = surat_masuk::find($id);
+        $user = User::role('staf-sekretariatan')->select('id','nama')->get();
 
         if ($show->tglTo == null) {
             $tglFrom = Carbon::parse($show->tglFrom)->isoFormat('YYYY-MM-DD');
@@ -189,6 +209,7 @@ class SuratMasukController extends Controller
         }
 
         $data = [
+            'user' => $user,
             'show' => $show,
             'waktu' => $waktu,
         ];

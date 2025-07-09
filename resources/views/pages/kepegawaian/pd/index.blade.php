@@ -226,7 +226,7 @@
                 </div>
                 <div class="modal-footer" id="keu-only" hidden>
                     <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup</button>
-                    @if (Auth::user()->getPermission('admin_keuangan') == true || Auth::user()->id == '391')
+                    @if (Auth::user()->getPermission('admin_pd_keuangan') == true)
                         <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden>Confirm Paid</button>
                         <button type="button" class="btn btn-warning" onclick="cancelPaid()" id="btn-cancel" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden>Cancel Paid</button>
@@ -409,12 +409,12 @@
                         var userID = "{{ Auth::user()->id }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
                         var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
-                        var keuID = "{{ Auth::user()->getPermission(['admin_keuangan']) }}";
+                        var keuID = "{{ Auth::user()->getPermission(['admin_pd_keuangan']) }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
                                         <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (adminID == true || keuID == true || userID == '391') {
+                                        if (superID == true || adminID == true || keuID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
                                         }
                                         if (superID == true) {
@@ -651,9 +651,9 @@
                         <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
                         ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh `+res.show.nama_user_paid+` pada `+res.show.tgl_paid+`</td></tr>`:``}
                     `);
-                    var keuID = "{{ Auth::user()->getManyPermission(['admin_keuangan']) }}";
+                    var keuID = "{{ Auth::user()->getManyPermission(['admin_pd_keuangan']) }}";
                     var userID = "{{ Auth::user()->id }}";
-                    if (keuID == true || userID == '391') {
+                    if (keuID == true) {
                         $('#keu-only').prop('hidden',false);
                     } else {
                         $('#keu-only').prop('hidden',true);

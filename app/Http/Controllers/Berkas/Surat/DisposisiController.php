@@ -145,10 +145,12 @@ class DisposisiController extends Controller
     // API
     public function apiGet()
     {
+        $user = User::get();
         $show = surat_masuk::orderBy('created_at','DESC')->limit(100)->get();
         $disposisi = disposisi::get();
 
         $data = [
+            'user' => $user,
             'show' => $show,
             'disposisi' => $disposisi,
         ];
@@ -158,10 +160,12 @@ class DisposisiController extends Controller
 
     public function apiGetAll()
     {
+        $user = User::get();
         $show = surat_masuk::get();
         $disposisi = disposisi::get();
 
         $data = [
+            'user' => $user,
             'show' => $show,
             'disposisi' => $disposisi,
         ];
@@ -171,10 +175,12 @@ class DisposisiController extends Controller
 
     public function apiGetDisposisi($id)
     {
+        $user = User::get();
         $show = disposisi::where('id_surat',$id)->get();
         $roles = roles::orderBy('name','ASC')->get();
 
         $data = [
+            'user' => $user,
             'show' => $show,
             'roles' => $roles,
         ];

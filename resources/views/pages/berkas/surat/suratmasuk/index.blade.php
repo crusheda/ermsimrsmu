@@ -139,10 +139,11 @@
                     <div class="card-title-elements">
                         <select class="form-select form-select-sm" name="user" required>
                             <option value="" hidden>Pilih Petugas</option>
-                            <option value="84" selected>Sri Suryani, Amd</option>
-                            <option value="293">Zia Nuswantara pahlawan, S.H</option>
-                            <option value="88">Siti Dewi Sholikhah</option>
-                            <option value="82">Salis Annisa Hafiz, Amd.Kom</option>
+                            @if (!empty($list['user']))
+                                @foreach ($list['user'] as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -462,90 +463,7 @@
                     dateFormat: "Y-m-d H:i"
                 });
 
-            $.ajax(
-                {
-                    url: "/api/suratmasuk/data",
-                    type: 'GET',
-                    dataType: 'json', // added data type
-                    success: function(res) {
-                        var adminID = "{{ Auth::user()->hasRole('administrator') }}";
-                        $("#tampil-tbody").empty();
-                        res.show.forEach(item => {
-                            // var updet = item.updated_at.substring(0, 10);
-                            content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button><ul class='dropdown-menu dropdown-menu-right dropend'>`
-                                    + `<div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Surat Masuk</h5></div><li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-edit nav-icon'></i> Ubah</a></li>`;
-                                    if (item.filename != null) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
-                                    }
-                                    // if (adminID) {
-                                        content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fa-fw fas fa-trash nav-icon'></i> Hapus</a></li>`;
-                                    // }
-                            if (item.verif_disposisi == true) {
-                                content += `<div class="dropdown-divider"></div><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
-                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="showDisposisi(`+item.urutan+`)"><i class='fa-fw fas fa-book-open nav-icon'></i> Lihat</a></li>`
-                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/disposisi/`+item.id+`')"><i class='fa-fw fas fa-download nav-icon'></i> Unduh</a></li>`
-                            }
-                            content += `</ul></center></td><td>` + item.urutan + `&nbsp;&nbsp;`;
-                            if (item.verif_disposisi != null) {
-                                content += `<i class="ti ti-checkbox text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sudah Ada Disposisi"></i>`;
-                            }
-                            content += "</td><td>";
-                                        if (item.tgl_surat != null) {
-                                            content += item.tgl_surat;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</td><td>" + item.tgl_diterima + "</td><td style='white-space: normal !important;word-wrap: break-word;'>"
-                                        + "<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>" + item.asal + "</h6><small class='text-truncate text-muted'>" + item.nomor + "</small></div></div></td><td style='white-space: normal !important;word-wrap: break-word;'>";
-                                        if (item.deskripsi) {
-                                            content += item.deskripsi;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</td><td style='white-space: normal !important;word-wrap: break-word;'><div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>";
-                                        if (item.tempat != null) {
-                                            content += item.tempat;
-                                        } else {
-                                            content += '-';
-                                        }
-                            content += "</h6><small class='text-truncate text-muted'>";
-                                        if (item.tglTo == null) {
-                                            if (item.tglFrom == null) {
-                                                content += '-';
-                                            } else {
-                                                content += item.tglFrom.substring(0, 10);
-                                            }
-                                        } else {
-                                            content += item.tglFrom.substring(0, 10) + `&nbsp;<i class="ti ti-arrow-narrow-right text-primary"></i>&nbsp;` + item.tglTo.substring(0, 10);
-                                        }
-                            content += "</small></div></div></td><td>"
-                                        + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
-                            content += "</td></tr>";
-                            $('#tampil-tbody').append(content);
-                        });
-                        var table = $('#dttable').DataTable({
-                            dom: 'Bfrtip',
-                            order: [
-                                [7, "desc"]
-                            ],
-                            displayLength: 7,
-                            lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
-                            buttons: ['copy', 'excel', 'pdf', 'colvis']
-                        });
-
-                        // Showing Tooltip
-                        $('[data-bs-toggle="tooltip"]').tooltip({
-                            trigger: 'hover'
-                        })
-                    }
-                }
-            );
+            refresh();
         });
 
         // FUNCTION-FUNCTION
@@ -611,10 +529,11 @@
                                         }
                             content += "</small></div></div></td><td>"
                                         + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                                        res.user.forEach(val => {
+                                            if (item.user == val.id) {
+                                                content += val.nama;
+                                            }
+                                        })
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
@@ -702,10 +621,11 @@
                                         }
                             content += "</small></div></div></td><td>"
                                         + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                                        res.user.forEach(val => {
+                                            if (item.user == val.id) {
+                                                content += val.nama;
+                                            }
+                                        })
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
@@ -791,10 +711,11 @@
                                         }
                             content += "</small></div></div></td><td>"
                                         + new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 19) + "</td><td>";
-                                        if (item.user == '84') { content += 'Sri Suryani, Amd'; }
-                                        if (item.user == '293') { content += 'Zia Nuswantara pahlawan, S.H'; }
-                                        if (item.user == '88') { content += 'Siti Dewi Sholikhah'; }
-                                        if (item.user == '82') { content += 'Salis Annisa Hafiz, Amd.Kom'; }
+                                        res.user.forEach(val => {
+                                            if (item.user == val.id) {
+                                                content += val.nama;
+                                            }
+                                        })
                             content += "</td></tr>";
                             $('#tampil-tbody').append(content);
                         });
@@ -934,12 +855,11 @@
                     $("#tempat").val(res.show.tempat);
                     $("#waktu").val(res.waktu);
                     $("#user").find('option').remove();
-                    $("#user").append(`
-                        <option value="84" ${res.show.user == '84' ? "selected":""}>Sri Suryani, Amd</option>
-                        <option value="293" ${res.show.user == '293' ? "selected":""}>Zia Nuswantara pahlawan, S.H</option>
-                        <option value="88" ${res.show.user == '88' ? "selected":""}>Siti Dewi Sholikhah</option>
-                        <option value="82" ${res.show.user == '82' ? "selected":""}>Salis Annisa Hafiz, Amd.Kom</option>
-                    `);
+                    user = ``;
+                    res.user.forEach(item => {
+                        user += `<option value="${item.id}" ${res.show.user == item.id ? "selected":""}>${item.nama}</option>`;
+                    })
+                    $("#user").append(user);
                 }
             }
             );
