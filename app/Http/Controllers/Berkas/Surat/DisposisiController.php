@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\disposisi;
 use App\Models\surat_masuk;
-use App\Models\user;
+use App\Models\User;
 use App\Models\roles;
 use Carbon\Carbon;
 use Validator,Redirect,Response,File;
