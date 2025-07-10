@@ -109,6 +109,58 @@ class SurtugController extends Controller
         return Storage::download($data->filename, $data->title);
     }
 
+    function ubah($id)
+    {
+        $show = surtug::find($id);
+        $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
+
+        $data = [
+            'show' => $show,
+            'users' => $users,
+        ];
+
+        return response()->json($data);
+    }
+
+    function prosesUbah(Request $request)
+    {
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            // Lanjut proses upload
+        } else {
+            // File tidak ada
+        }
+        $request->validate([
+            'file' => ['max:3000'],
+        ]);
+        $uploadedFile = $request->file('file');
+        $title = $uploadedFile->getClientOriginalName();
+        $validasi = surtug::where('title',$title)->count();
+        if ($validasi > 0) {
+            return Response::json(array(
+                'message' => 'File sudah pernah diupload, periksa dokumen Anda sekali lagi.',
+                'code' => 400,
+            ));
+        } else {
+            $path = $uploadedFile->store('public/files/kepegawaian/surtug');
+
+            $data = new surtug;
+            $data->tgl = Carbon::now();
+            $data->user = $request->user;
+            $data->pegawai_id = $request->pegawai;
+            $data->title = $title;
+            $data->filename = $path;
+            $data->save();
+
+            datalogs::record($request->user, 'Baru saja melakukan perubahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+            return Response::json(array(
+                'message' => $push,
+                'code' => 200,
+            ));
+        }
+    }
+
     function hapus($id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');

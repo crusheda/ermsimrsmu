@@ -51,6 +51,7 @@
                         <div class="alert alert-secondary alert-dismissible fade show" role="alert">
                             <small>
                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Batas maksimal upload dokumen <b><u>3 mb</u></b> dan hanya berformat <b>PDF</b> <br>
+                                <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pegawai yang ada dalam pilihan di bawah adalah pegawai yang telah selesai melengkapi Profil / Biodata Pegawai <br>
                                 <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Pegawai-pegawai yang sudah ditambahkan akan mendapatkan akses download dokumen Surat Tugas tersebut pada masing-masing halaman surat tugas pegawai beserta notifikasi
                                 {{-- <i class="ti ti-arrow-narrow-right text-primary me-1"></i>  --}}
                             </small>
@@ -126,6 +127,38 @@
     </div>
 
     {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="modalUbah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Ubah
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_edit" hidden>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Daftar Pegawai <span class="text-danger">*</span></label>
+                                <select class="form-select select2" name="pegawai_edit[]" id="pegawai_edit" style="width: 100%" multiple></select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" id="filex_edit" accept="application/pdf">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="prosesUbah()" id="btn-ubah"><i class="fas fa-upload me-1"></i> Ubah</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
@@ -196,6 +229,7 @@
                         content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
                             if (item.deleted_at == null) {
                                 content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/kepegawaian/surtug/`+item.id+`/download')"><i class='fas fa-download me-1'></i> Download</a>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' onclick="showUbahSurtug(`+item.id+`)" value="animate__rubberBand" disabled><i class='fas fa-trash me-1'></i> Ubah</a>`;
                                 content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusSurtug(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
                             } else {
                                 content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-download me-1'></i> Download</a>`;
@@ -360,7 +394,93 @@
             $("#btn-simpan").prop('disabled', false);
         }
 
-        function hapus(id) {
+        function showUbahSurtug(id) {
+            $.ajax(
+            {
+                url: "/api/kepegawaian/surtug/"+id+"/ubah",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $('#id_edit').val(res.show.id);
+                    $("#pegawai_edit").find('option').remove();
+                    var un = JSON.parse(res.show.pegawai_id);
+                    $("#pegawai_edit").find('option').remove();
+                    res.users.forEach(pouch => {
+                        selected = '';
+                        un.forEach(val => {
+                            if (val == pouch.id) {
+                                selected = 'selected';
+                            }
+                        });
+                        $("#pegawai_edit").append(`
+                            <option value="${pouch.id}" ${selected}>${pouch.nama}</option>
+                        `);
+                    });
+                    $('#modalUbah').modal('show');
+                }
+            })
+        }
+
+        function prosesUbah() {
+            $("#btn-ubah").prop('disabled', true);
+            $("#btn-ubah").find("i").toggleClass("fa-edit fa-sync fa-spin");
+
+            var save = new FormData();
+            var id = $('#id_edit').val();
+            var filesAdded = $('#filex')[0].files;
+            save.append('id',id);
+            save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
+            save.append('user','{{ Auth::user()->id }}');
+            if (filesAdded) {
+                save.append('file',filesAdded[0]);
+            }
+
+            if (
+                $('#pegawai_edit').val() == ""
+            ) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/kepegawaian/surtug/"+id+"/prosesubah",
+                    method: 'post',
+                    data: save,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        notifier.show(
+                            "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
+                            "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
+                        );
+                        if (res) {
+                            $('#modalUbah').modal('hide');
+                            showRiwayatAdmin();
+                            clearInput();
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        notifier.show(
+                            res.statusText + " (Code " + res.status + ")", res.responseText,
+                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                        );
+                    }
+                });
+            }
+
+            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+            $("#btn-ubah").prop('disabled', false);
+        }
+
+        function showHapusSurtug(id) {
             $("#id_hapus").val(id);
             var inputs = document.getElementById('setujuhapus');
             inputs.checked = false;

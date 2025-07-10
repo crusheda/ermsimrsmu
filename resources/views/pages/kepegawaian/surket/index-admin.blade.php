@@ -184,7 +184,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Daftar Pengajuan</b></h5>
                     <div class="btn-group">
-                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20"></i></a>
+                        <a href="javascript:void(0);" class="btn btn-link-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20 me-1"></i> Refresh Tabel</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -472,7 +472,7 @@
                                     clrbtn = 'text-info';
                                 } else {
                                     if (item.progress == 1) { // Diverifikasi
-                                        clrbtn = 'text-primary';
+                                        clrbtn = 'text-warning';
                                     } else {
                                         if (item.progress == 0) { // Pengajuan
                                             clrbtn = 'text-primary';
@@ -931,9 +931,21 @@
                         }
                     },
                     error: function (res) {
+                        let errors = res.responseJSON.errors;
+                        let message = res.responseJSON.message;
+
+                        // Ambil error pertama dari list
+                        if (errors) {
+                            let allErrors = [];
+                            $.each(errors, function (key, val) {
+                                allErrors.push(val[0]); // ambil pesan pertama per field
+                            });
+                            message = allErrors.join('<br>');
+                        }
+
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: res.responseJSON.error,
+                            message: message,
                             position: 'topRight'
                         });
                     }
