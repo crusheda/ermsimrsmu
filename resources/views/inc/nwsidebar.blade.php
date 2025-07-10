@@ -79,7 +79,7 @@
     @if (
         Auth::user()->getPermission('admin_kepegawaian_kepala') == true ||
         Auth::user()->getPermission('admin_kepegawaian') == true ||
-        Auth::user()->getPermission('admin_keuangan') == true ||
+        Auth::user()->getPermission('admin_pd_keuangan') == true ||
         Auth::user()->getRole('karu-it') == true
     )
     <li class="pc-item">
