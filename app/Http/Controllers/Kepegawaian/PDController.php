@@ -20,7 +20,7 @@ class PDController extends Controller
         if (
                 Auth::user()->getPermission('admin_kepegawaian_kepala') == true ||
                 Auth::user()->getPermission('admin_kepegawaian') == true ||
-                Auth::user()->getPermission('admin_keuangan') == true
+                Auth::user()->getPermission('admin_pd_keuangan') == true
             ) {
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
 
