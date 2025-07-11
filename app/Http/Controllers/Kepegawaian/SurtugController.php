@@ -125,40 +125,45 @@ class SurtugController extends Controller
     function prosesUbah(Request $request)
     {
         $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            // Lanjut proses upload
-        } else {
-            // File tidak ada
-        }
-        $request->validate([
-            'file' => ['max:3000'],
-        ]);
-        $uploadedFile = $request->file('file');
-        $title = $uploadedFile->getClientOriginalName();
-        $validasi = surtug::where('title',$title)->count();
-        if ($validasi > 0) {
-            return Response::json(array(
-                'message' => 'File sudah pernah diupload, periksa dokumen Anda sekali lagi.',
-                'code' => 400,
-            ));
-        } else {
-            $path = $uploadedFile->store('public/files/kepegawaian/surtug');
+        $file = null;
+        $title = null;
 
-            $data = new surtug;
-            $data->tgl = Carbon::now();
-            $data->user = $request->user;
-            $data->pegawai_id = $request->pegawai;
+        if ($request->hasFile('file')) {
+            $request->validate([
+                'file' => ['max:3000'],
+            ]);
+            $file = $request->file('file');
+        }
+
+        if ($file) {
+            $title = $file->getClientOriginalName();
+            $validasi = surtug::where('title',$title)->count();
+            if ($validasi > 0) {
+                return Response::json(array(
+                    'message' => 'File sudah pernah diupload, periksa dokumen Anda sekali lagi.',
+                    'code' => 400,
+                ));
+            }
+            $hapusFileOld = surtug::find($request->id);
+            Storage::delete($hapusFileOld->filename);
+        }
+
+        $data = surtug::find($request->id);
+        // $data->tgl = Carbon::now();
+        $data->user = $request->user;
+        $data->pegawai_id = $request->pegawai;
+        if ($file) {
+            $path = $file->store('public/files/kepegawaian/surtug');
             $data->title = $title;
             $data->filename = $path;
-            $data->save();
-
-            datalogs::record($request->user, 'Baru saja melakukan perubahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
-            return Response::json(array(
-                'message' => $push,
-                'code' => 200,
-            ));
         }
+        $data->save();
+
+        datalogs::record($request->user, 'Baru saja melakukan perubahan Surat Tugas', $request->pegawai_id, null, $title, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+        return Response::json(array(
+            'message' => $push,
+            'code' => 200,
+        ));
     }
 
     function hapus($id)

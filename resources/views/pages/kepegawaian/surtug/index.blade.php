@@ -38,7 +38,7 @@
                         <h5 class="mb-0">Form Tambah</h5>
                         {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
                             <div class="btn-group">
-                                <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
+                                {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a> --}}
                                 {{-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li>
                                         <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a>
@@ -146,8 +146,16 @@
                             </div>
                         </div>
                         <div class="col-md-12">
+                            <div class="alert alert-secondary">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Nama Dokumen Sebelumnya</label>
+                                    <p class="text-primary"><u><a id="show_title"></a></u></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div class="form-group mb-3">
-                                <label class="form-label">Upload Dokumen <span class="text-danger">*</span></label>
+                                <label class="form-label">Upload Dokumen Baru (Apabila Ada / Optional) <span class="text-danger">*</span></label>
                                 <input type="file" class="form-control" id="filex_edit" accept="application/pdf">
                             </div>
                         </div>
@@ -229,7 +237,7 @@
                         content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
                             if (item.deleted_at == null) {
                                 content += `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/kepegawaian/surtug/`+item.id+`/download')"><i class='fas fa-download me-1'></i> Download</a>`;
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-secondary' onclick="showUbahSurtug(`+item.id+`)" value="animate__rubberBand" disabled><i class='fas fa-trash me-1'></i> Ubah</a>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbahSurtug(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Ubah</a>`;
                                 content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="showHapusSurtug(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
                             } else {
                                 content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-download me-1'></i> Download</a>`;
@@ -266,8 +274,8 @@
                         bAutoWidth: false,
                         aoColumns : [
                             { sWidth: '5%' },
-                            { sWidth: '15%' },
-                            { sWidth: '60%' },
+                            { sWidth: '7%' },
+                            { sWidth: '68%' },
                             { sWidth: '20%' },
                         ],
                         displayLength: 7,
@@ -402,6 +410,7 @@
                 dataType: 'json',
                 success: function(res) {
                     $('#id_edit').val(res.show.id);
+                    $('#show_title').text(res.show.title);
                     $("#pegawai_edit").find('option').remove();
                     var un = JSON.parse(res.show.pegawai_id);
                     $("#pegawai_edit").find('option').remove();
@@ -427,12 +436,12 @@
 
             var save = new FormData();
             var id = $('#id_edit').val();
-            var filesAdded = $('#filex')[0].files;
+            var filesAdded = $('#filex_edit')[0].files;
             save.append('id',id);
             save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
             save.append('user','{{ Auth::user()->id }}');
-            if (filesAdded) {
-                save.append('file',filesAdded[0]);
+            if (filesAdded.length > 0) {
+                save.append('file', filesAdded[0]);
             }
 
             if (
@@ -456,14 +465,21 @@
                     processData: false,
                     dataType: 'json',
                     success: function(res){
-                        notifier.show(
-                            "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
-                            "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
-                        );
                         if (res) {
-                            $('#modalUbah').modal('hide');
-                            showRiwayatAdmin();
-                            clearInput();
+                            if (res.code == 200) {
+                                notifier.show(
+                                    "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
+                                    "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
+                                );
+                                $('#modalUbah').modal('hide');
+                                showRiwayatAdmin();
+                                clearInput();
+                            } else {
+                                notifier.show(
+                                    "Pesan Gagal! (Code " + res.code + ")", res.message,
+                                    "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                                );
+                            }
                         }
                     },
                     error: function(res){
