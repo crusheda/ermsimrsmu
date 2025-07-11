@@ -399,7 +399,7 @@
                     } else {
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Akses Laporan Bawahan tidak ditemukan, silakan hubungi IT',
+                            message: 'Anda tidak memiliki Akses untuk Verifikasi Laporan Bulanan Bawahan atau Akses Laporan Bawahan tidak ditemukan. Silakan hubungi IT.',
                             position: 'topRight'
                         });
                     }

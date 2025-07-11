@@ -386,6 +386,14 @@
                         position: 'topRight'
                     });
                     refresh();
+                },
+                error: function(res){
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: JSON.stringify(res.responseJSON.message),
+                        position: 'topRight'
+                    });
+                    console.log("error : " + JSON.stringify(res) );
                 }
             })
             $("#verifUser"+id).prop('disabled', false);

@@ -64,7 +64,7 @@ class DataKaryawanController extends Controller
         foreach ($request->role as $key => $value) {
             $model = new model_has_roles;
             $model->role_id = $value;
-            $model->model_type = 'App\User';
+            $model->model_type = 'App\Models\User';
             $model->model_id = $data->id;
             // print_r($model);
             // die();
@@ -131,7 +131,7 @@ class DataKaryawanController extends Controller
         foreach ($request->role as $key => $value) {
             $model = new model_has_roles;
             $model->role_id = $value;
-            $model->model_type = 'App\User';
+            $model->model_type = 'App\Models\User';
             $model->model_id = $id;
             // print_r($model);
             // die();

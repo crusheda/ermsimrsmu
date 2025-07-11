@@ -242,20 +242,37 @@ class LaporanBulananController extends Controller
     public function formVerif($id)
     {
         $cek = struktur_organisasi::where('id_user',$id)->first();
+        $user = User::find($id);
 
-        if (!empty($cek->nama_user)) {
+        if ($user->hasPermissionTo('admin_laporan_bulanan_verifall')) {
             $res = 1;
             return response()->json($res, 200);
         } else {
-            $res = 0;
-            return response()->json($res, 200);
+            if (!empty($cek->nama_user)) {
+                $res = 1;
+                return response()->json($res, 200);
+            } else {
+                $res = 0;
+                return response()->json($res, 200);
+            }
         }
     }
 
     // Berpindah ke halaman Verifikasi
     function showVerif()
     {
-        return view('pages.berkas.laporanbulanan.verif');
+        $cek = struktur_organisasi::where('id_user',Auth::user()->id)->first();
+        $user = User::find(Auth::user()->id);
+
+        if ($user->hasPermissionTo('admin_laporan_bulanan_verifall')) {
+            return view('pages.berkas.laporanbulanan.verif');
+        } else {
+            if (!empty($cek->nama_user)) {
+                return view('pages.berkas.laporanbulanan.verif');
+            } else {
+                return redirect()->back()->withErrors('Anda tidak memiliki Akses untuk Verifikasi Laporan Bulanan Bawahan atau Akses Laporan Bawahan tidak ditemukan. Silakan hubungi IT.');
+            }
+        }
     }
 
     // Menampilkan tabel laporan Bawahan
@@ -265,15 +282,27 @@ class LaporanBulananController extends Controller
 
         $getVerif = berkas_laporan_bulanan_verif::where('user_id',$id)->get();
 
-        $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
-                ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                // ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
-                ->where('berkas_laporan_bulanan.id_user','!=',$id)
-                ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
-                ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
-                ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
-                ->get();
+        $user = User::find($id);
+
+        if ($user->hasPermissionTo('admin_laporan_bulanan_verifall')) {
+            $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
+                    ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->where('berkas_laporan_bulanan.id_user','!=',$id)
+                    ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
+                    ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                    ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                    ->get();
+        } else {
+            $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
+                    ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    // ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
+                    ->where('berkas_laporan_bulanan.id_user','!=',$id)
+                    ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
+                    ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                    ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                    ->get();
+        }
 
         $data = [
             'verif' => $getVerif,
@@ -299,27 +328,33 @@ class LaporanBulananController extends Controller
         $getJabatan = struktur_organisasi::where('id_user',$user)->first();
         $getRoles = roles::select('id','name')->get();
 
-        foreach (json_decode($getJabatan->role) as $a => $valjab) {
-            foreach ($getRoles as $b => $valrol) {
-                if ($valjab == $valrol->id) {
-                    $unit[] = $valrol->name;
+        if ($getJabatan) {
+            foreach (json_decode($getJabatan->role) as $a => $valjab) {
+                foreach ($getRoles as $b => $valrol) {
+                    if ($valjab == $valrol->id) {
+                        $unit[] = $valrol->name;
+                    }
                 }
             }
-        }
 
-        $data = new berkas_laporan_bulanan_verif;
-        if (empty($getLast)) {
-            $data->queue = 1;
+            $data = new berkas_laporan_bulanan_verif;
+            if (empty($getLast)) {
+                $data->queue = 1;
+            } else {
+                $data->queue = $getLast->queue + 1;
+            }
+            $data->lap_id = $id;
+            $data->user_id = $getUser->id;
+            $data->user_name = $getUser->nama;
+            $data->role_name = json_encode($unit);
+            $data->save();
+
+            return response()->json($data, 200);
         } else {
-            $data->queue = $getLast->queue + 1;
+            return response()->json([
+                'message' => 'Verifikasi tidak diizinkan, Akun Anda tidak termasuk dalam Struktur Organisasi di RS.',
+            ], 400);
         }
-        $data->lap_id = $id;
-        $data->user_id = $getUser->id;
-        $data->user_name = $getUser->nama;
-        $data->role_name = json_encode($unit);
-        $data->save();
-
-        return response()->json($data, 200);
     }
 
     // Proses Verifikasi laporan bulanan
