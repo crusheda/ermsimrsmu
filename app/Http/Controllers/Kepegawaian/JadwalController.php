@@ -653,23 +653,26 @@ class JadwalController extends Controller
         //     ->whereNull('deleted_at')
         //     ->get();
 
-        $subRjuStaf = DB::table('referensi_jadwal_users as rju')
-            ->select('rju.unit', DB::raw('kepegawaian_jadwal.pegawai_id as pegawai_id'))
-            ->whereRaw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))')
-            ->limit(1);
+        // $subRjuStaf = DB::table('referensi_jadwal_users as rju')
+        //     ->select('rju.unit', DB::raw('kepegawaian_jadwal.pegawai_id as pegawai_id'))
+        //     ->whereRaw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))')
+        //     ->limit(1);
 
-        $subRjuDirect = DB::table('referensi_jadwal_users as rju')
-            ->select('rju.unit', 'rju.pegawai_id')
-            ->whereColumn('rju.pegawai_id', 'kepegawaian_jadwal.pegawai_id')
-            ->limit(1);
+        // $subRjuDirect = DB::table('referensi_jadwal_users as rju')
+        //     ->select('rju.unit', 'rju.pegawai_id')
+        //     ->whereColumn('rju.pegawai_id', 'kepegawaian_jadwal.pegawai_id')
+        //     ->limit(1);
+
         $show = DB::table('kepegawaian_jadwal')
             ->distinct()
             ->join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
             ->leftJoin('referensi_jadwal_users as rju_staf', function ($join) {
-                $join->whereRaw('JSON_CONTAINS(rju_staf.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))');
+                $join->whereRaw('JSON_CONTAINS(rju_staf.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))')
+                    ->whereNull('rju_staf.deleted_at');
             })
             ->leftJoin('referensi_jadwal_users as rju_direct', function ($join) {
-                $join->on('kepegawaian_jadwal.pegawai_id', '=', 'rju_direct.pegawai_id');
+                $join->on('kepegawaian_jadwal.pegawai_id', '=', 'rju_direct.pegawai_id')
+                    ->whereNull('rju_direct.deleted_at');
             })
             ->select(
                 'kepegawaian_jadwal.*',
@@ -677,10 +680,10 @@ class JadwalController extends Controller
                 'users.nama as nama_pegawai'
             )
             ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
-            ->where(function ($query) {
-                $query->whereNotNull('rju_staf.unit')
-                    ->orWhereNotNull('rju_direct.unit');
-            })
+            // ->where(function ($query) {
+            //     $query->whereNotNull('rju_staf.unit')
+            //         ->orWhereNotNull('rju_direct.unit');
+            // })
             ->whereNull('kepegawaian_jadwal.deleted_at')
             ->get();
 
@@ -1233,23 +1236,41 @@ class JadwalController extends Controller
             return response()->json($tgl, 400);
         } else {
             // Inisialisasi
-            $data = ref_jadwal_users::where('pegawai_id',$id)->whereNull('deleted_at')->first();
-            $data->pegawai_id = $user;
-            $data->save();
+            $oldData = ref_jadwal_users::where('pegawai_id',$id)->whereNull('deleted_at')->first();
+            $newData = new ref_jadwal_users;
+            $newData->pegawai_id = $user;
+            $newData->staf = $oldData->staf;
+            $newData->unit = $oldData->unit;
+            $newData->save();
+            $oldData->delete();
 
             $data2 = ref_jadwal_jabatan::where('pegawai_id',$id)->whereNull('deleted_at')->get();
             if ($data2->count() > 0) {
                 foreach ($data2 as $item) {
-                    $item->pegawai_id = $user;
-                    $item->save();
+                    $newData2 = new ref_jadwal_jabatan;
+                    $newData2->urutan = $item->urutan;
+                    $newData2->pegawai_id = $user;
+                    $newData2->id_staf = $item->id_staf;
+                    $newData2->jabatan = $item->jabatan;
+                    $newData2->color = $item->color;
+                    $newData2->save();
+                    $item->delete();
                 }
             }
 
             $data3 = ref_jadwal_shift::where('pegawai_id',$id)->whereNull('deleted_at')->get();
             if ($data3->count() > 0) {
                 foreach ($data3 as $item) {
-                    $item->pegawai_id = $user;
-                    $item->save();
+                    $newData3 = new ref_jadwal_shift;
+                    $newData3->pegawai_id = $user;
+                    $newData3->unit = null;
+                    $newData3->shift = $item->shift;
+                    $newData3->singkat = $item->singkat;
+                    $newData3->berangkat = $item->berangkat;
+                    $newData3->pulang = $item->pulang;
+                    $newData3->ket = $item->ket;
+                    $newData3->save();
+                    $item->delete();
                 }
             }
 

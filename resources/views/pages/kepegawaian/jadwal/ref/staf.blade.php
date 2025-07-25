@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="page-header">
-        <div class="page-block">
+        <div class="page-block">ambilalih
             <div class="row align-items-center">
                 <div class="col-md-12">
                     <ul class="breadcrumb">
