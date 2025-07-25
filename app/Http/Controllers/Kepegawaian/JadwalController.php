@@ -667,12 +667,12 @@ class JadwalController extends Controller
             ->distinct()
             ->join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
             ->leftJoin('referensi_jadwal_users as rju_staf', function ($join) {
-                $join->whereRaw('JSON_CONTAINS(rju_staf.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))')
-                    ->whereNull('rju_staf.deleted_at');
+                $join->whereRaw('JSON_CONTAINS(rju_staf.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))');
+                    // ->whereNull('rju_staf.deleted_at');
             })
             ->leftJoin('referensi_jadwal_users as rju_direct', function ($join) {
-                $join->on('kepegawaian_jadwal.pegawai_id', '=', 'rju_direct.pegawai_id')
-                    ->whereNull('rju_direct.deleted_at');
+                $join->on('kepegawaian_jadwal.pegawai_id', '=', 'rju_direct.pegawai_id');
+                    // ->whereNull('rju_direct.deleted_at');
             })
             ->select(
                 'kepegawaian_jadwal.*',
@@ -680,10 +680,10 @@ class JadwalController extends Controller
                 'users.nama as nama_pegawai'
             )
             ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
-            // ->where(function ($query) {
-            //     $query->whereNotNull('rju_staf.unit')
-            //         ->orWhereNotNull('rju_direct.unit');
-            // })
+            ->where(function ($query) {
+                $query->whereNotNull('rju_staf.unit')
+                    ->orWhereNotNull('rju_direct.unit');
+            })
             ->whereNull('kepegawaian_jadwal.deleted_at')
             ->get();
 
