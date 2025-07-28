@@ -852,7 +852,8 @@
                             position: 'topRight'
                         });
                         $('#hapus').modal('hide');
-                        refresh();
+                        window.location.reload();
+                        // refresh();
                     },
                     error: function(res) {
                         iziToast.error({

@@ -1220,6 +1220,16 @@ class JadwalController extends Controller
 
         // Inisialisasi
         $data = ref_jadwal_users::find($id);
+
+        // Pastikan decode JSON ke array
+        $stafIds = json_decode($data->staf, true);
+
+        if (is_array($stafIds)) {
+            // Hapus di ref_jadwal_jabatan yang id_staf ada di array
+            ref_jadwal_jabatan::whereIn('id_staf', $stafIds)->delete();
+        }
+
+        // Hapus ref_jadwal_users
         $data->delete();
 
         return response()->json($tgl, 200);
