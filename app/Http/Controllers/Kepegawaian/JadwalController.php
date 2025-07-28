@@ -385,6 +385,7 @@ class JadwalController extends Controller
                 $data = new jadwal;
                 $data->pegawai_id = $request->pegawai;
                 $data->staf = $users->staf;
+                $data->unit = $users->unit;
                 $data->bulan = $bulan;
                 $data->tahun = $tahun;
                 $data->keterangan = $request->keterangan;
@@ -480,11 +481,8 @@ class JadwalController extends Controller
     // TAMPIL JADWAL
     function jadwal($id)
     {
-        $detail = jadwal_detail::leftJoin('referensi_jadwal_users_jabatan','referensi_jadwal_users_jabatan.id_staf','=','kepegawaian_jadwal_detail.pegawai_id')
-                ->select('kepegawaian_jadwal_detail.*','referensi_jadwal_users_jabatan.urutan','referensi_jadwal_users_jabatan.jabatan','referensi_jadwal_users_jabatan.color')
-                ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
-                ->where('referensi_jadwal_users_jabatan.deleted_at',null)
-                ->orderBy('referensi_jadwal_users_jabatan.urutan','ASC')
+        $detail = jadwal_detail::where('id_jadwal',$id)
+                ->orderBy('id','ASC')
                 ->get();
 
         $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
@@ -592,11 +590,6 @@ class JadwalController extends Controller
             ->pluck('staf')
             ->first();
 
-        // $stafList = DB::table('referensi_jadwal_users')
-        //     ->where('pegawai_id', $id)
-        //     ->pluck('staf')
-        //     ->first();
-
         $pegawaiIds = [];
 
         if ($stafList) {
@@ -604,21 +597,14 @@ class JadwalController extends Controller
             $pegawaiIds = json_decode($stafList, true);
         }
 
-        // print_r($stafList);
-        // die();
         $show = DB::table('kepegawaian_jadwal')
             ->leftJoin('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
             ->select(
                 'kepegawaian_jadwal.*',
-                'users.nama as nama_pegawai',
-                DB::raw("(
-                    SELECT unit
-                    FROM referensi_jadwal_users
-                    WHERE JSON_CONTAINS(staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR))) AND deleted_at IS NULL
-                    LIMIT 1
-                ) as unit")
+                'users.nama as nama_pegawai'
             )
-            ->whereIn('kepegawaian_jadwal.pegawai_id', $pegawaiIds)
+            ->whereJsonContains('staf', (string) $id)
+            // ->whereIn('kepegawaian_jadwal.pegawai_id', $pegawaiIds)
             ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
             ->whereNull('kepegawaian_jadwal.deleted_at')
             ->get();
@@ -676,14 +662,9 @@ class JadwalController extends Controller
             })
             ->select(
                 'kepegawaian_jadwal.*',
-                DB::raw('COALESCE(rju_staf.unit, rju_direct.unit) as unit'),
                 'users.nama as nama_pegawai'
             )
             ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
-            ->where(function ($query) {
-                $query->whereNotNull('rju_staf.unit')
-                    ->orWhereNotNull('rju_direct.unit');
-            })
             ->whereNull('kepegawaian_jadwal.deleted_at')
             ->get();
 
@@ -736,7 +717,7 @@ class JadwalController extends Controller
         }
 
         $bawahanRoles = json_decode($jabatan->bawahan); // Contoh: ["14","93","94","95","55","56"]
-        $referensi = DB::table('referensi_jadwal_users')->get();
+        $referensi = DB::table('referensi_jadwal_users')->whereNull('deleted_at')->get();
         $pegawaiUnitMap = [];
 
         foreach ($referensi as $row) {
@@ -765,6 +746,7 @@ class JadwalController extends Controller
                     $query->orWhereRaw("JSON_CONTAINS(staf, JSON_QUOTE(?))", [(string) $pegawaiId]);
                 }
             })
+            ->whereNull('deleted_at')
             ->pluck('pegawai_id')
             ->unique();
 
@@ -779,10 +761,10 @@ class JadwalController extends Controller
             ->get();
 
         // Tambahkan unit berdasarkan mapping
-        $show->transform(function ($item) use ($pegawaiUnitMap) {
-            $item->unit = $pegawaiUnitMap[$item->pegawai_id] ?? null;
-            return $item;
-        });
+        // $show->transform(function ($item) use ($pegawaiUnitMap) {
+        //     $item->unit = $pegawaiUnitMap[$item->pegawai_id] ?? null;
+        //     return $item;
+        // });
 
         $data = [
             'jabatan' => $jabatan,

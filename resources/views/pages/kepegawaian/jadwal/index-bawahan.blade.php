@@ -376,16 +376,7 @@
                         var n = 1;
                         // PROCESS
                         content = ``;
-                        if (res.staf) {
-                            if (res.staf.unit) {
-                                uni = res.staf.unit;
-                            } else {
-                                uni = '<s>Tidak Valid</s>';
-                            }
-                        } else {
-                            uni = '<s>Tidak Valid</s>';
-                        }
-                        content += `<h4 class="text-center mb-2">Jadwal Dinas Unit <b class="text-primary">${uni}</b></h4><h5 class="text-center mb-2">Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h5>`;
+                        content += `<h4 class="text-center mb-2">Jadwal Dinas Unit <b class="text-primary">${res.jadwal.unit}</b></h4><h5 class="text-center mb-2">Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h5>`;
                         content += `<div class="row"><div class="col-md-12"><div class="table-responsive p-10 pb-0">
                                     <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
                                         <thead>
