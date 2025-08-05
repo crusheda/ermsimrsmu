@@ -306,7 +306,7 @@ class ProfilController extends Controller
             $data->d3 = $request->d3;
             $data->d4 = $request->d4;
             $data->s1 = $request->s1;
-            $data->s1 = $request->s1_profesi;
+            $data->s1_profesi = $request->s1_profesi;
             $data->s2 = $request->s2;
             $data->s3 = $request->s3;
 
