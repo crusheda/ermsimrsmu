@@ -583,7 +583,8 @@ class AbsensiController extends Controller
                         $statusAbsensi = 'Absen 1x / Tidak Lengkap';
                     }
 
-                    $statusDisiplin = ($jamBerangkat && $jamMasuk > $jamBerangkat)
+                    $toleransiJamBerangkat = Carbon::parse($shift->berangkat)->addMinutes(10)->format('H:i:s');
+                    $statusDisiplin = ($jamBerangkat && $jamMasuk > $toleransiJamBerangkat)
                         ? 'Terlambat'
                         : 'Tepat Waktu';
                 }
