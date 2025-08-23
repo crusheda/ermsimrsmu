@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnTableFcmToken extends Migration
+class AddColumnTableFcmToken2 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class AddColumnTableFcmToken extends Migration
     public function up()
     {
         Schema::table('fcm_tokens', function (Blueprint $table) {
-            $table->string('device_id')->after('os_version')->nullable()->comment('ID Device per User');
-            $table->boolean('is_active')->after('model')->nullable()->comment('Device ID = Aktif/Tidak Aktif');
-            $table->datetime('last_login_at')->after('is_rooted')->nullable()->comment('Waktu Login Terakhir');
+            $table->string('ip_address')->after('device_id')->nullable();
+            $table->boolean('accepted')->after('is_rooted')->nullable()->default(false)->comment('Login pada Device Disetujui/Tidak');
+            $table->datetime('accepted_date')->after('is_rooted')->nullable()->comment('Tanggal Device Disetujui');
         });
     }
 
@@ -28,9 +28,9 @@ class AddColumnTableFcmToken extends Migration
     public function down()
     {
         Schema::table('fcm_tokens', function (Blueprint $table) {
-            $table->dropColumn('device_id');
-            $table->dropColumn('is_active');
-            $table->dropColumn('last_login_at');
+            $table->dropColumn('ip_address');
+            $table->dropColumn('accepted');
+            $table->dropColumn('accepted_date');
         });
     }
 }
