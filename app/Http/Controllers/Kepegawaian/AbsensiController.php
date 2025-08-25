@@ -37,7 +37,7 @@ class AbsensiController extends Controller
                 'jabatan' => $jabatan,
             ];
 
-            return view('pages.kepegawaian.absensi.index')->with('list', $data);
+            return view('pages.kepegawaian.absensi.rekapitulasi')->with('list', $data);
         } else {
             return redirect()->back()->withErrors("Maaf, Anda tidak memiliki akses untuk membuka halaman Absensi Karyawan!");
         }

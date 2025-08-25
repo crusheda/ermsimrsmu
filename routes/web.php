@@ -108,6 +108,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // ABSENSI
     Route::get('absensi', [App\Http\Controllers\Kepegawaian\AbsensiController::class, 'index'])->name('kepegawaian.absensi.index');
+    Route::get('absensi/device', [App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'index'])->name('kepegawaian.absensi.device.index');
 
     // REKRUTMEN
         // PENGUMUMAN

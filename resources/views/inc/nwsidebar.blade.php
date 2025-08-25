@@ -111,6 +111,7 @@
                 </span>
             </a>
             <ul class="pc-submenu">
+                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.absensi.device.index') }}">Perizinan Perangkat</a></li>
                 <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.absensi.index') }}">Rekapitulasi</a></li>
             </ul>
         </li>
