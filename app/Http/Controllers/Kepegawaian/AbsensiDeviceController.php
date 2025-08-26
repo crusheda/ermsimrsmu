@@ -50,8 +50,9 @@ class AbsensiDeviceController extends Controller
                     // Ambil semua kolom fcm_tokens
                     $data = $token->toArray();
 
-                    // Tambahkan kolom nama_user dari relasi user
+                    // Tambahkan kolom nama_user dari relasi
                     $data['nama_user'] = $token->user->nama ?? null;
+                    $data['nama_admin'] = $token->admin->nama ?? null;
 
                     // Tambahkan kolom android_model
                     $data['nama_brand']   = $token->androidModel->brand ?? null;
@@ -66,5 +67,62 @@ class AbsensiDeviceController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    function approve($id,$user)
+    {
+        $now = Carbon::now();
+        $push = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = fcm_tokens::find($id);
+        $data->accepted = 1;
+        $data->accepted_user = $user;
+        $data->accepted_date = $now;
+        $data->save();
+
+        return response()->json($push, 200);
+    }
+
+    function reject($id,$user)
+    {
+        $now = Carbon::now();
+        $push = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = fcm_tokens::find($id);
+        $data->accepted = 0;
+        $data->accepted_user = $user;
+        $data->accepted_date = $now;
+        $data->save();
+
+        return response()->json($push, 200);
+    }
+
+    function aktif($id,$user)
+    {
+        $now = Carbon::now();
+        $push = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = fcm_tokens::find($id);
+        $data->status = 1;
+        $data->accepted_user = $user;
+        $data->accepted_date = null;
+        $data->save();
+
+        return response()->json($push, 200);
+    }
+
+    function blokir($id,$user)
+    {
+        $now = Carbon::now();
+        $push = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $data = fcm_tokens::find($id);
+        $data->status = 0;
+        $data->accepted = 0;
+        $data->accepted_user = $user;
+        $data->accepted_date = $now;
+        $data->save();
+
+        return response()->json($push, 200);
     }
 }

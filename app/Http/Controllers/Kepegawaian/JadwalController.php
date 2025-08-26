@@ -312,6 +312,21 @@ class JadwalController extends Controller
     }
 
     // AJAX JSON ---------------------------------------------------------------------------------------------
+    function dokumentasiAbsensi()
+    {
+        $path = public_path().'/doc/dokumentasi_e-absensi.pdf';
+        return response()->file($path,[
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
+    function downloadDokumentasiAbsensi()
+    {
+        $path = public_path('doc/dokumentasi_e-absensi.pdf');
+
+        return response()->download($path, 'Dokumentasi E-Absensi Versi 3.1.0.pdf');
+    }
+
     function storePengajuan(Request $request)
     {
         $pegawai = $request->pegawai; // misal: 232

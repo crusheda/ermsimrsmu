@@ -32,12 +32,14 @@
     <div class="row pt-1">
         <div class="col-xl-12">
             <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                <div class="card-header d-flex align-items-center justify-content-between px-3">
                     <h5 class="mb-0">Tabel Riwayat</h5>
                     <div class="btn-group">
                         <button class="btn btn-light-info dropdown-toggle position-relative" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-sync fa-spin me-2"></i></button>
                         <ul class="dropdown-menu" aria-labelledby="tombolMenu">
                             <li>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="dokumentasi()">Lihat Dokumentasi</a>
+                                <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                                 <div class="divider pb-1"></div>
@@ -309,6 +311,27 @@
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dokumentasi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dokumentasiLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dokumentasiLabel">Dokumentasi E-Absensi <span class="badge text-bg-info">Versi 3.1.0</span> | Diperbarui pada 26 Agustus 2025</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div id="file-dokumentasi"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-success"
+                        onclick="window.location.href='{{ url('/api/kepegawaian/dokumentasi/eabsensi/download') }}'">
+                        Download
+                    </button>
+
                 </div>
             </div>
         </div>
@@ -838,6 +861,33 @@
         //         });
         //     }
         // }
+
+        // SHOW DOKUMENTASI E-ABSENSI
+        function dokumentasi() {
+            fetch("/api/kepegawaian/dokumentasi/eabsensi")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('File dokumentasi tidak ditemukan atau gagal diambil.');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Buat object URL dari blob
+                const fileURL = URL.createObjectURL(blob);
+
+                // Tampilkan ke iframe dalam modal
+                $('#file-dokumentasi').empty().html(`<iframe src="${fileURL}" width="100%" height="500px" frameborder="0"></iframe>`);
+                $('#dokumentasi').modal('show');
+            })
+            .catch(error => {
+                iziToast.error({
+                    title: 'Maaf!',
+                    message: 'File Dokumentasi tidak ditemukan atau belum dipublikasi.',
+                    position: 'topRight'
+                });
+                console.error(error);
+            });
+        }
 
         // VERIFIKASI
         function validasi(id) {

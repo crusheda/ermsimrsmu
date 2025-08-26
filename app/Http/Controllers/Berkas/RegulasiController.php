@@ -55,6 +55,15 @@ class RegulasiController extends Controller
         return response()->json($show, 200);
     }
 
+    public function cetak($id)
+    {
+        $show = berkas_regulasi::find($id);
+        $path = storage_path()."/app/".$show->filename;
+        return response()->file($path,[
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
     public function showTambah()
     {
         $unit = unit::orderBy('nama','asc')->get();

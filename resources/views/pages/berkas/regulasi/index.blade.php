@@ -532,6 +532,23 @@
             </div>
         </div>
     </div>
+    {{-- Cetak Regulasi --}}
+    <div id="modalCetak" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dokumentasiLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dokumentasiLabel">Cetak Regulasi <kbd><a href="txIDCetak"></a></kbd></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div id="file-cetak"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -635,6 +652,7 @@
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
                                     + `<a href='javascript:void(0);' class='dropdown-item text-success' onclick="bacaRegulasi(`+item.id+`)"><i class='fas fa-book-open scaleX-n1-rtl'></i> Baca</a>`
+                                    + `<a href='javascript:void(0);' class='dropdown-item text-info' onclick="cetak(`+item.id+`)"><i class='fas fa-print scaleX-n1-rtl'></i> Cetak</a>`
                                     + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/regulasi/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a>`;
                                     if (adminID == true) {
                                         content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a>`
@@ -697,6 +715,34 @@
                     flipbook = jQuery("#fbook").flipBook();
                     $('#bacaregulasi').modal('show');
                 }
+            });
+        }
+
+        // SHOW DOKUMENTASI E-ABSENSI
+        function cetak(id) {
+            fetch("/api/regulasi/cetak/"+id)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('File dokumentasi tidak ditemukan atau gagal diambil.');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Buat object URL dari blob
+                const fileURL = URL.createObjectURL(blob);
+
+                $('#txIDCetak').text(id);
+                // Tampilkan ke iframe dalam modal
+                $('#file-cetak').empty().html(`<iframe src="${fileURL}" width="100%" height="500px" frameborder="0"></iframe>`);
+                $('#modalCetak').modal('show');
+            })
+            .catch(error => {
+                iziToast.error({
+                    title: 'Maaf!',
+                    message: 'File Dokumentasi tidak ditemukan atau belum dipublikasi.',
+                    position: 'topRight'
+                });
+                console.error(error);
             });
         }
 

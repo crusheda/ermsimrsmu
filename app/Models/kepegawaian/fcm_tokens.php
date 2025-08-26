@@ -21,6 +21,12 @@ class fcm_tokens extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    // Relasi ke admin
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'accepted_user', 'id');
+    }
+
     // Relasi 1 row ke android_model, ambil id terkecil per model
     public function androidModel()
     {

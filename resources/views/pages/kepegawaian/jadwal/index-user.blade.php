@@ -174,6 +174,27 @@
             </div>
         </div>
     </div>
+    <div id="dokumentasi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dokumentasiLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dokumentasiLabel">Dokumentasi E-Absensi <span class="badge text-bg-info">Versi 3.1.0</span> | Diperbarui pada 26 Agustus 2025</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div id="file-dokumentasi"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-success"
+                        onclick="window.location.href='{{ url('/api/kepegawaian/dokumentasi/eabsensi/download') }}'">
+                        Download
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- MODAL END --}}
 
     <script>
@@ -597,6 +618,33 @@
             // myWindow.onafterprint = function() {
             //     myWindow.close();
             // }
+        }
+
+        // SHOW DOKUMENTASI E-ABSENSI
+        function dokumentasi() {
+            fetch("/api/kepegawaian/dokumentasi/eabsensi")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('File dokumentasi tidak ditemukan atau gagal diambil.');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Buat object URL dari blob
+                const fileURL = URL.createObjectURL(blob);
+
+                // Tampilkan ke iframe dalam modal
+                $('#file-dokumentasi').empty().html(`<iframe src="${fileURL}" width="100%" height="500px" frameborder="0"></iframe>`);
+                $('#dokumentasi').modal('show');
+            })
+            .catch(error => {
+                iziToast.error({
+                    title: 'Maaf!',
+                    message: 'File Dokumentasi tidak ditemukan atau belum dipublikasi.',
+                    position: 'topRight'
+                });
+                console.error(error);
+            });
         }
 
         function hapus(id) {

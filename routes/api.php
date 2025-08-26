@@ -123,6 +123,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/jadwaldinas/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'table'])->name('kepegawaian.jadwaldinas.table');
                 Route::get('kepegawaian/jadwaldinas/jadwal/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'jadwal'])->name('kepegawaian.jadwaldinas.jadwal');
                 Route::delete('kepegawaian/jadwaldinas/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapus'])->name('kepegawaian.jadwaldinas.hapus');
+                Route::get('kepegawaian/dokumentasi/eabsensi', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'dokumentasiAbsensi'])->name('kepegawaian.dokumentasi.absensi');
+                Route::get('kepegawaian/dokumentasi/eabsensi/download', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'downloadDokumentasiAbsensi'])->name('kepegawaian.dokumentasi.absensi.download');
                 // REFERENSI SHIFT
                     Route::get('kepegawaian/jadwaldinas/shift/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableShift'])->name('kepegawaian.jadwaldinas.shift.table');
                     Route::get('kepegawaian/jadwaldinas/shift/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showUbahShift'])->name('kepegawaian.jadwaldinas.shift.show');
@@ -142,6 +144,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // ABSENSI
             // PERANGKAT
                 Route::get('kepegawaian/absensi/perangkat/table', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'table'])->name('kepegawaian.absensi.device.table');
+                Route::get('kepegawaian/absensi/perangkat/approve/{id}/{user}', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'approve'])->name('kepegawaian.absensi.device.approve');
+                Route::get('kepegawaian/absensi/perangkat/reject/{id}/{user}', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'reject'])->name('kepegawaian.absensi.device.reject');
+                Route::get('kepegawaian/absensi/perangkat/aktif/{id}/{user}', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'aktif'])->name('kepegawaian.absensi.device.aktif');
+                Route::get('kepegawaian/absensi/perangkat/blokir/{id}/{user}', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'blokir'])->name('kepegawaian.absensi.device.blokir');
             // ADMIN
                 Route::post('kepegawaian/absensi/table/monitoring', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableMonitoring'])->name('kepegawaian.absensi.tableMonitoring');
                 Route::post('kepegawaian/absensi/table/all', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableAll'])->name('kepegawaian.absensi.tableAll');
@@ -207,6 +213,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
         // REGULASI
         Route::get('regulasi/baca/{id}', '\App\Http\Controllers\Berkas\RegulasiController@baca');
+        Route::get('regulasi/cetak/{id}', '\App\Http\Controllers\Berkas\RegulasiController@cetak');
         Route::get('regulasi/showtambah', '\App\Http\Controllers\Berkas\RegulasiController@showTambah');
         Route::post('regulasi/tambah', '\App\Http\Controllers\Berkas\RegulasiController@tambah')->name('regulasi.tambah');
         Route::get('regulasi/showubah/{id}', '\App\Http\Controllers\Berkas\RegulasiController@showUbah');
