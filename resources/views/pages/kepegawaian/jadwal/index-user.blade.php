@@ -38,6 +38,8 @@
                         <button class="btn btn-light-info dropdown-toggle position-relative" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-sync fa-spin me-2"></i></button>
                         <ul class="dropdown-menu" aria-labelledby="tombolMenu">
                             <li>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="dokumentasi()">Lihat Dokumentasi</a>
+                                <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                                 <div class="divider pb-1"></div>

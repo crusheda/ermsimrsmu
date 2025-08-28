@@ -197,12 +197,17 @@
                         content += `<td><center>`;
                                 if (item.status == 1) {
                                     if (superID == true || adminID == true || devID == true) {
-                                        if (item.accepted) {
-                                            content += `<buttoon class="btn btn-light-danger btn-icon me-2" onclick="reject(${item.id})" data-bs-toggle="tooltip"
-                                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Perizinan Device"><i class="fas fa-frown"></i></buttoon>`;
+                                        if (item.nama_user) {
+                                            if (item.accepted) {
+                                                content += `<buttoon class="btn btn-light-danger btn-icon me-2" onclick="reject(${item.id})" data-bs-toggle="tooltip"
+                                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Hapus Perizinan Device"><i class="fas fa-frown"></i></buttoon>`;
+                                            } else {
+                                                content += `<buttoon class="btn btn-success btn-icon me-2" onclick="approve(${item.id})" data-bs-toggle="tooltip"
+                                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tetapkan Perizinan Device"><i class="fas fa-smile-beam"></i></buttoon>`;
+                                            }
                                         } else {
-                                            content += `<buttoon class="btn btn-success btn-icon me-2" onclick="approve(${item.id})" data-bs-toggle="tooltip"
-                                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tetapkan Perizinan Device"><i class="fas fa-smile-beam"></i></buttoon>`;
+                                            content += `<buttoon class="btn btn-light-secondary btn-icon me-2" data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                            data-bs-placement="bottom" data-bs-html="true" title="Perizinan Belum dibuka sampai Pengguna melengkapi Profil" disabled><i class="fas fa-smile-beam"></i></buttoon>`;
                                         }
                                     }
                                 } else {
@@ -219,7 +224,7 @@
                                     }
                                 }
                         content += "</center></td>";
-                        content += `<td>${item.nama_user} [<b>#${item.user_id}</b>]</td>`;
+                        content += `<td>${item.nama_user?item.nama_user:'<b class="text-danger">Profil Pengguna Tidak Lengkap</b>'} [<b>#${item.user_id}</b>]</td>`;
                         content += `<td>${item.nama_brand?item.nama_brand+' - ':''}${item.nama_android?item.nama_android:'Perangkat Tidak Diketahui'} ${item.nama_device?'(ID#'+item.nama_device+')':''}</td>`;
                         content += `<td>${item.platform} (Ver. ${item.os_version})</td>`;
                                     aktif = '';
@@ -271,7 +276,7 @@
                         ],
                         columnDefs: [
                             { sortable: false, targets: [0] },
-                            { sortable: false, targets: [6] },
+                            { sortable: false, targets: [8] },
                             { visible: false, targets: [7] },
                         ],
                         displayLength: 20,

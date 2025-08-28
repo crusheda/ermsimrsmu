@@ -149,6 +149,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/absensi/perangkat/aktif/{id}/{user}', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'aktif'])->name('kepegawaian.absensi.device.aktif');
                 Route::get('kepegawaian/absensi/perangkat/blokir/{id}/{user}', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'blokir'])->name('kepegawaian.absensi.device.blokir');
             // ADMIN
+                Route::get('kepegawaian/absensi/ijin/checkBulan/{bln}', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'checkBulan'])->name('kepegawaian.absensi.ijin.checkBulan');
+                Route::get('kepegawaian/absensi/ijin/checkJadwal/{id}', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'checkJadwal'])->name('kepegawaian.absensi.ijin.checkJadwal');
+                Route::get('kepegawaian/absensi/ijin/checkPegawai/{id}', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'checkPegawai'])->name('kepegawaian.absensi.ijin.checkPegawai');
+                Route::post('kepegawaian/absensi/ijin/push', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'storeIjin'])->name('kepegawaian.absensi.ijin.storeIjin');
                 Route::post('kepegawaian/absensi/table/monitoring', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableMonitoring'])->name('kepegawaian.absensi.tableMonitoring');
                 Route::post('kepegawaian/absensi/table/all', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableAll'])->name('kepegawaian.absensi.tableAll');
                 Route::post('kepegawaian/absensi/table/rekapLinda', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableRekapAbsensi'])->name('kepegawaian.absensi.tableRekapAbsensi');

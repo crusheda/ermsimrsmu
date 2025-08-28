@@ -18,6 +18,7 @@ use App\Models\struktur_organisasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Auth, DB;
 use Validator,Redirect,Response,File,Storage;
 
@@ -29,18 +30,212 @@ class AbsensiController extends Controller
                 Auth::user()->getPermission('admin_kepegawaian') == true ||
                 Auth::user()->getPermission('admin_kepegawaian_kepala') == true
             ) {
+            $bulan = Carbon::now()->isoFormat('MM');
+            $tahun = Carbon::now()->isoFormat('YYYY');
+
             $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
             $jabatan = ref_jadwal_users::select('id','unit')->groupBy('id','unit')->orderBy('unit','asc')->get();
+            $totalDay = Carbon::create($tahun, $bulan)->format('t');
 
             $data = [
                 'users' => $users,
                 'jabatan' => $jabatan,
+                'totalDay' => $totalDay
             ];
 
             return view('pages.kepegawaian.absensi.rekapitulasi')->with('list', $data);
         } else {
             return redirect()->back()->withErrors("Maaf, Anda tidak memiliki akses untuk membuka halaman Absensi Karyawan!");
         }
+    }
+
+    function checkBulan($bln)
+    {
+        $bulan = Carbon::parse($bln)->isoFormat('MM');
+        $tahun = Carbon::parse($bln)->isoFormat('YYYY');
+
+        $show = jadwal::leftJoin('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
+                        ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
+                        ->where('kepegawaian_jadwal.bulan',$bulan)
+                        ->where('kepegawaian_jadwal.tahun',$tahun)
+                        ->whereIn('kepegawaian_jadwal.progress',[1,2,3])
+                        ->whereNull('kepegawaian_jadwal.deleted_at')
+                        ->orderBy('kepegawaian_jadwal.unit','asc')
+                        ->get();
+
+        return response()->json($show);
+    }
+
+    function checkJadwal($id)
+    {
+        $show = jadwal_detail::leftJoin('users', 'users.id', '=', 'kepegawaian_jadwal_detail.pegawai_id')
+                        ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai')
+                        ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
+                        ->whereNull('kepegawaian_jadwal_detail.deleted_at')
+                        ->orderBy('kepegawaian_jadwal_detail.id','asc')
+                        ->get();
+
+        return response()->json($show);
+    }
+
+    function checkPegawai($id)
+    {
+        $show = jadwal_detail::where('id',$id)->first();
+        $jadwal = jadwal::where('id',$show->id_jadwal)->first();
+        $totalDay = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
+
+        $data = [
+            'show' => $show,
+            'jadwal' => $jadwal,
+            'bulan' => $jadwal->bulan,
+            'tahun' => $jadwal->tahun,
+            'totalDay' => $totalDay,
+        ];
+
+        return response()->json($data);
+    }
+
+    function storeIjin(Request $request)
+    {
+        $request->validate([
+            'file' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+        ]);
+
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        $show = jadwal_detail::where('id',$request->jadwal)->first();
+        $jadwal = jadwal::where('id',$show->id_jadwal)->first();
+
+        // range tanggal
+        $periode = CarbonPeriod::create($request->dari, $request->sampai);
+
+        $hasil = [];
+        foreach ($periode as $tanggal) {
+            $hasil[] = [
+                'tanggal' => $tanggal->format('Y-m-d'),
+                'besok'   => $tanggal->copy()->addDay()->format('Y-m-d'),
+                'bulan'   => $tanggal->format('m'),
+                'hari'    => $tanggal->format('d'),
+                'kolom'   => 'tgl' . (int) $tanggal->format('d'), // contoh: tgl30, tgl31, tgl1
+            ];
+        }
+
+        // insert ke tabel absensi
+        foreach ($hasil as $row) {
+            $hit = 'tgl' . (int) $row['hari'];
+            $callShift = $show->$hit;
+            // print_r($hit);
+            // die();
+            if (
+                $callShift == 'L' ||
+                $callShift == 'C' ||
+                $callShift == 'CM' ||
+                $callShift == 'CU' ||
+                $callShift == 'CH' ||
+                $callShift == 'CD'
+                ) {
+                $kd_shift = $callShift;
+                $nm_shift = 'Ijin/Tidak Masuk';
+                $berangkat = '00:00:00';
+                $pulang = '00:00:00';
+            } else {
+                $shift = ref_jadwal_shift::leftJoin('referensi_jadwal_users', function($join) {
+                        $join->on('referensi_jadwal_users.pegawai_id', '=', 'referensi_jadwal_shift.pegawai_id')
+                            ->whereNull('referensi_jadwal_users.deleted_at');
+                    })
+                    ->select('referensi_jadwal_shift.*')
+                    ->whereRaw("
+                        FIND_IN_SET(?,
+                            REPLACE(REPLACE(REPLACE(referensi_jadwal_users.staf, '\"', ''), '[', ''), ']', '')
+                        )
+                    ", [$jadwal->pegawai_id])
+                    ->where('referensi_jadwal_shift.singkat',$callShift)
+                    ->whereNull('referensi_jadwal_shift.deleted_at')
+                    ->first();
+                if ($shift) {
+                    $kd_shift = $shift->singkat;
+                    $nm_shift = $shift->shift;
+                    $berangkat = $shift->berangkat;
+                    $pulang = $shift->pulang;
+                } else {
+                    return response()->json([
+                        'status'  => 'error',
+                        'message' => 'Jadwal Shift untuk pegawai '.$show->pegawai_nama.' pada tanggal '.$row['tanggal'].' tidak ditemukan. Pastikan pada Jadwal/tanggal tersebut memang terdapat shift masuk/bekerja.'
+                    ], 500);
+                }
+            }
+
+
+            $data = new Absensi;
+            $data->jenis         = 3; // ijin
+            $data->pegawai_id    = $show->pegawai_id;   // pakai dari request atau $show->pegawai
+            $data->kd_shift      = $kd_shift;
+            $data->nm_shift      = $nm_shift;
+            $data->ref_jam_masuk = Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$berangkat);    // atau $jamMasuk dari logic shift
+            if ($berangkat >= $pulang) {
+                $data->ref_jam_pulang= Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$pulang);
+            } else {
+                $data->ref_jam_pulang= Carbon::createFromFormat('Y-m-d H:i:s', $row['besok'].' '.$pulang); // Pulang Lewat Hari
+            }
+            $data->keterlambatan = null;
+            $data->lembur        = null;
+            $data->tgl_in        = Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$berangkat);        // simpan sesuai tanggal loop
+            $data->tgl_out       = null;
+            $data->selisih_jam   = null;
+
+            $uploadedFile = $request->file('file');
+            $title = uniqid() . '.png';
+            if ($request->hasFile('file')) {
+                $path = $uploadedFile->storeAs(
+                    'public/files/kepegawaian/absensi/ijin',
+                    $title
+                );
+            } else {
+                // path asal di public/images
+                $path_original = public_path("images/no-image.jpeg");
+                $path_moved = "public/files/kepegawaian/absensi/ijin/";
+                // simpan ke storage
+                Storage::put(
+                    $path_moved . $title,
+                    file_get_contents($path_original)
+                );
+                $path = 'public/files/kepegawaian/absensi/ijin/' . $title;
+            }
+
+            $data->foto_in       = $title;
+            $data->path_in       = $path;
+            $data->foto_out      = null;
+            $data->path_out      = null;
+            $data->lokasi_in     = "-7.677851238136329, 110.83968584828327";
+            $data->lokasi_out    = null;
+            $data->terlambat     = null;
+
+            if ($request->ket == 1) {
+                $ket = 'Izin menikah';
+            } elseif ($request->ket == 2) {
+                $ket = 'Izin menikahkan anak kandung';
+            } elseif ($request->ket == 3) {
+                $ket = 'Izin istri melahirkan';
+            } elseif ($request->ket == 4) {
+                $ket = 'Izin mengkhitankan anak kandung';
+            } elseif ($request->ket == 5) {
+                $ket = 'Izin menunggu anak kandung/istri/suami rawat inap';
+            } elseif ($request->ket == 6) {
+                $ket = 'Izin karena suami/istri, orang tua/mertua, anak kandung, menantu meninggal dunia';
+            } else {
+                $ket = 'Izin khusus atas persetujuan Direktur Utama';
+            }
+
+            $data->keterangan    = $ket;
+            $data->lewat_hari    = false;
+            $data->is_fake_gps   = false;
+            $data->manual_user   = $request->user;
+            $data->manual_tgl   = Carbon::now();
+            $data->save();
+        }
+        // print_r(public_path().'/images/no-image.png');
+        // die();
+        return response()->json($push);
     }
 
     function tableMonitoring(Request $request)

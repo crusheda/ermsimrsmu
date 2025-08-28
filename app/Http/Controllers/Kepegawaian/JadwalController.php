@@ -206,6 +206,7 @@ class JadwalController extends Controller
                 $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
                             ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
                             ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai','users.nick','users.name')
+                            ->orderBy('kepegawaian_jadwal_detail.id','asc')
                             ->get();
                 $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
 

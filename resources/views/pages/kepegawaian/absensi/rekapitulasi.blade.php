@@ -30,118 +30,82 @@
     </div><!-- [ breadcrumb ] end -->
 
     <!-- [ Main Content ] start -->
-    <div class="row pt-1">
-        @if (Auth::user()->getPermission('admin_kepegawaian_kepala'))
-            <div class="col-xl-12" hidden>
+    <div class="row pt-1" id="formAbsensiManual">
+        @if (Auth::user()->getPermission('admin_kepegawaian_kepala') || Auth::user()->getPermission('admin_kepegawaian'))
+            <div class="col-xl-12">
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
                         <div class="card">
-                            <div class="card-header accordion-header d-flex align-items-center justify-content-between py-3 ">
+                            <div class="card-header accordion-header d-flex align-items-center justify-content-between px-3 py-2">
                                 <h5 class="mb-0"><button
-                                    class="accordion-button collapsed" type="button"
+                                    class="accordion-button text-dark collapsed" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-                                    aria-expanded="false" aria-controls="flush-collapseOne"><b style="font-size: 1rem">Form Manual <a class="text-primary">Ijin Sakit</a></b>&nbsp;&nbsp;</button>
+                                    aria-expanded="false" aria-controls="flush-collapseOne"><b style="font-size: 1rem">Form Absensi <a class="text-primary">Ijin Manual</a></b>&nbsp;&nbsp;</button>
                                 </h5>
                             </div>
                             <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                <div class="accordion-body">
+                                <div class="accordion-body" id="filterTampil">
 
-                                    {{-- <div class="row">
-                                        <div class="col-xl-12 col-xxl-12">
-                                            <div class="alert alert-secondary">
-                                                <small>
-                                                    <i class="ti ti-arrow-narrow-right me-1"></i> Isian bertanda (<a class="text-danger">*</a>) berarti wajib diisi
-                                                </small>
+                                    <div class="row" id="formAbsensiManual">
+                                        <div class="col-md-3 mb-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Pilih Bulan dan Tahun Jadwal <a class="text-danger">*</a></label>
+                                                <input type="month" class="form-control" value="" onchange="checkBulanIjin(this.value)" id="bulan_ijin" />
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-9 mb-3">
                                             <div class="form-group">
-                                                <label class="form-label">Nama Acara <a class="text-danger">*</a></label>
-                                                <input type="text" class="form-control" name="acara" id="acara" placeholder="e.g. Upacara Pengibaran Bendera Merah Putih HUT RI Ke-XX">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Waktu Acara <a class="text-danger">*</a></label>
-                                                <input type="datetime-local" class="form-control" name="tgl" id="tgl">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Jenis Perjalanan Dinas <a class="text-danger">*</a></label>
-                                                <select class="form-control" name="jenis" id="jenis">
-                                                    <option value="">Pilih</option>
-                                                    <option value="1">Offline</option>
-                                                    <option value="2">Online</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Jenis Kendaraan <a class="text-danger">*</a></label>
-                                                <select class="form-control" name="kendaraan" id="kendaraan">
-                                                    <option value="">Pilih</option>
-                                                    <option value="1">[Pribadi] Motor</option>
-                                                    <option value="2">[Pribadi] Mobil</option>
-                                                    <option value="3">[Rumah Sakit] Mobil</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-3" id="showing" hidden>
-                                            <div class="form-group">
-                                                <label class="form-label">Pemilik Kendaraan Yang Digunakan <a class="text-danger">*</a></label>
-                                                <select class="form-select select2" name="kendaraan_pegawai[]" id="kendaraan_pegawai" style="width: 100%" multiple>
-                                                    @if (count($list['users']) > 0)
-                                                        @foreach ($list['users'] as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="multiple-inputs">Lama Dinas <a class="text-danger">*</a></label>
-                                            <div class="input-group">
-                                                <select class="form-control" name="lama1" id="lama1">
-                                                    <option value="">Pilih</option>
-                                                    <option value="1">< 4 Jam (Kurang dari 4 jam)</option>
-                                                    <option value="2">> 4 Jam (Lebih dari 4 jam)</option>
-                                                </select>
-                                                <input type="text" placeholder="Perkiraan Waktu (Jam)" class="form-control" name="lama2" id="lama2">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Lokasi Acara <a class="text-danger">*</a></label>
-                                                <input type="text" class="form-control" name="lokasi" id="lokasi" placeholder="e.g. Alun-alun Satya Negara Kabupaten Sukoharjo">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-3" id="slide">
-                                            <div class="form-group">
-                                                <label class="form-label">Pegawai Pelaksana <a class="text-danger">*</a></label>
-                                                <select class="form-select select2" name="pegawai[]" id="pegawai" style="width: 100%" multiple>
-                                                    @if (count($list['users']) > 0)
-                                                        @foreach ($list['users'] as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
+                                                <label class="form-label">Pilih Jadwal Dinas <a class="text-danger">*</a></label>
+                                                <select class="form-control selectFilter" onchange="checkJadwalIjin(this.value)" id="jadwal_ijin" style="width: 100%" data-allow-clear="false" data-bs-auto-close="outside" disabled></select>
                                             </div>
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <div class="form-group">
-                                                <label class="form-label">Deskripsi Perjalanan (<b>Optional</b>)</label>
-                                                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2" placeholder="Deskripsikan perjalanan dinas Anda"></textarea>
+                                                <label class="form-label">Pilih Nama Pegawai <a class="text-danger">*</a></label>
+                                                <select class="form-control selectFilter" onchange="checkPegawaiIjin(this.value)" id="pegawai_ijin" style="width: 100%" data-allow-clear="false" data-bs-auto-close="outside" disabled></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3" id="showInfoIjin" hidden></div>
+                                        <div class="col-md-12 mb-3" data-bs-toggle="tooltip"
+                                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                            title="Pilih Rentang Tanggal Ijin" id="pilih_tgl_ijin" hidden>
+                                            <div class="form-group">
+                                                <label class="form-label">Rentang Ijin <span class="text-danger">*</span></label>
+                                                <div class="input-daterange input-group" id="tgl_ijin">
+                                                    <span class="input-group-text">Tanggal Mulai</span>
+                                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-start" id="ijin_dari">
+                                                    <span class="input-group-text">Tanggal Selesai</span>
+                                                    <input type="text" class="form-control text-end" placeholder="Masukkan Tanggal" name="range-end" id="ijin_sampai">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3" id="pilih_ket_ijin" hidden>
+                                            <div class="form-group">
+                                                <label class="form-label">Keterangan Ijin <a class="text-danger">*</a></label>
+                                                <select class="form-control" id="ket_ijin">
+                                                    <option value="">Pilih</option>
+                                                    <option value="1">Izin menikah (Aturan 3 hari)</option>
+                                                    <option value="2">Izin menikahkan anak kandung (Aturan 3 hari)</option>
+                                                    <option value="3">Izin istri melahirkan (Aturan 2 hari)</option>
+                                                    <option value="4">Izin mengkhitankan anak kandung (Aturan 2 hari)</option>
+                                                    <option value="5">Izin menunggu anak kandung/istri/suami rawat inap (Aturan 3 hari)</option>
+                                                    <option value="6">Izin karena suami/istri, orang tua/mertua, anak kandung, menantu meninggal dunia (Aturan 3 hari)</option>
+                                                    <option value="7">Izin khusus atas persetujuan Direktur Utama</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3" id="upload_ijin" hidden>
+                                            <div class="form-group">
+                                                <label class="form-label">Upload Berkas Ijin</label>
+                                                <input type="file" name="filex" id="filex" class="form-control" accept="image/png, image/jpeg">
                                             </div>
                                         </div>
                                         <div class="text-end btn-page mt-2">
-                                            <button class="btn btn-link-secondary" id="clear_text" onclick="clearInput()">Kosongkan</button>
-                                            <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i class="fas fa-save me-1"></i> Simpan</button>
+                                            <button class="btn btn-link-secondary" id="clear_input_ijin" onclick="clearInputIjin()">Kosongkan</button>
+                                            <button class="btn btn-primary" id="btn-simpan-ijin" onclick="simpanIjin()" disabled><i class="fas fa-save me-1"></i> Buat Ijin</button>
                                         </div>
-                                    </div> --}}
-                                    <a>masih tahap development :)</a>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -348,6 +312,12 @@
                 clearBtn: true,
                 format: 'yyyy-mm-dd'
             });
+            const datepicker_range_ijin = new DateRangePicker(document.querySelector('#tgl_ijin'), {
+                buttonClass: 'btn',
+                todayBtn: true,
+                clearBtn: false,
+                format: 'yyyy-mm-dd'
+            });
             const datepickerd = new Datepicker(document.querySelector('#filter_tanggal'), {
                 buttonClass: 'btn',
                 todayBtn: true,
@@ -368,6 +338,8 @@
 
             const dariDate = new Date(tahunLalu, bulanLalu, 21);
             const sampaiDate = new Date(tahun, bulan, 20);
+            const dariDateIjin = new Date(today);
+            const sampaiDateIjin = new Date(today);
 
             // Format ke yyyy-mm-dd string
             const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -377,6 +349,7 @@
             $('#filter_sampai').val(formatDate(sampaiDate));
 
             // 🔥 Set nilai ke datepicker RANGE (bukan ke input langsung)
+            datepicker_range_ijin.setDates(dariDateIjin, sampaiDateIjin);
             datepicker_range.setDates(dariDate, sampaiDate);
             datepickerd.setDate(new Date());
             // ------------------------------------------------------------------------------------- END DATERANGEPICKER
@@ -389,6 +362,10 @@
                     allowClear: true,
                     dropdownParent: e.parent()
                 })
+            });
+            $('.selectFilter').select2({
+                placeholder: "Pilih",
+                dropdownParent: $('#filterTampil')
             });
 
             // $('#kendaraan').change(function () {
@@ -486,6 +463,183 @@
                     }
                 }
             }
+        }
+
+        function checkBulanIjin(bulan) {
+            $.ajax({
+                url: "/api/kepegawaian/absensi/ijin/checkBulan/"+bulan,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $("#jadwal_ijin").empty();
+                    res.forEach(item => {
+                        $("#jadwal_ijin").append(`
+                            <option value="${item.id}">Jadwal Unit ${item.unit} Oleh ${item.nama_pegawai}</option>
+                        `);
+                    });
+                    $("#jadwal_ijin").val(null).trigger('change').prop('disabled',false);
+                    $('#pegawai_ijin').val(null).trigger('change').prop('disabled',true);
+                    $('#showInfoIjin').prop('hidden',true);
+                    $('#pilih_tgl_ijin').prop('hidden',true);
+                    $('#pilih_ket_ijin').prop('hidden',true);
+                    $('#upload_ijin').val("").prop('hidden',true);
+                    $('#btn-simpan-ijin').prop('disabled',true);
+                }
+            })
+        }
+
+        function checkJadwalIjin(id_jadwal) {
+            $.ajax({
+                url: "/api/kepegawaian/absensi/ijin/checkJadwal/"+id_jadwal,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $("#pegawai_ijin").empty();
+                    res.forEach(item => {
+                        $("#pegawai_ijin").append(`
+                            <option value="${item.id}">${item.nama_pegawai} (${item.jabatan})</option>
+                        `);
+                    });
+                    $("#pegawai_ijin").val(null).trigger('change').prop('disabled',false);
+                    $('#showInfoIjin').prop('hidden',true);
+                    $('#pilih_tgl_ijin').prop('hidden',true);
+                    $('#pilih_ket_ijin').prop('hidden',true);
+                    $('#upload_ijin').val("").prop('hidden',true);
+                    $('#btn-simpan-ijin').prop('disabled',true);
+                }
+            })
+        }
+
+        function checkPegawaiIjin(id_jadwal) {
+            $.ajax({
+                url: "/api/kepegawaian/absensi/ijin/checkPegawai/" + id_jadwal,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    $('#showInfoIjin').empty();
+
+                    let td1 = '';
+                    let td2 = '';
+                    let totalDay = parseInt(res.totalDay);
+
+                    for (let count = 1; count <= totalDay; count++) {
+                        let kol = 'tgl' + count;
+
+                        // bikin objek tanggal (misalnya bulan & tahun diambil dari res)
+                        let currentDate = new Date(res.tahun, res.bulan - 1, count);
+                        let isSunday = currentDate.getDay() === 0; // 0 = Minggu
+
+                        console.log(isSunday);
+                        if (isSunday) {
+                            td1 += `<th class="p-2 text-center" style="background-color: #fed8b9">${count}</th>`;
+                            td2 += `<th class="p-2 text-center" style="background-color: #fed8b9">${res.show[kol] ?? ''}</th>`;
+                        } else {
+                            td1 += `<td class="text-center">${count}</td>`;
+                            td2 += `<td class="text-center">${res.show[kol] ?? ''}</td>`;
+                        }
+                    }
+
+                    $('#showInfoIjin').append(`
+                        <div class="table-responsive p-10 pb-0">
+                            <table id="table_ijin_manual" class="table table-bordered" style="width: 100%;table-layout: auto">
+                                <tbody>
+                                    <tr>
+                                        <th class="text-center">TANGGAL</th>
+                                        ${td1}
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center">JADWAL</th>
+                                        ${td2}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `).prop('hidden',false);
+                    $('#pilih_tgl_ijin').prop('hidden',false);
+                    $('#pilih_ket_ijin').val("").prop('hidden',false);
+                    $('#upload_ijin').val("").prop('hidden',false);
+                    $('#btn-simpan-ijin').prop('disabled',false);
+                }
+            })
+        }
+
+        function simpanIjin() {
+            var save = new FormData();
+            save.append('bulan',$('#bulan_ijin').val());
+            save.append('jadwal',$('#pegawai_ijin').val());
+            save.append('dari',$('#ijin_dari').val());
+            save.append('sampai',$('#ijin_sampai').val());
+            save.append('ket',$('#ket_ijin').val());
+            save.append('user',"{{ Auth::user()->id }}");
+
+            var filesAdded = $('#filex')[0].files;
+            save.append('file',filesAdded[0]);
+
+            if ($('#ket_ijin').val() == '') {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Keterangan Ijin Wajib Diisi.',
+                    position: 'topRight'
+                });
+            } else {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: `/api/kepegawaian/absensi/ijin/push`,
+                    method: 'post',
+                    data: save,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Penambahan Manual Absensi Ijin telah berhasil dilakukan pada '+res+'. Silakan cek pada riwayat Data Absensi.',
+                            position: 'topRight'
+                        });
+                        clearInputIjin();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: res.responseJSON?.message || 'Penambahan Manual Absensi Ijin gagal dilakukan',
+                            position: 'topRight'
+                        });
+                    }
+                })
+            }
+        }
+
+        function clearInputIjin() {
+            // Reset input bulan jadwal
+            $('#bulan_ijin').val('');
+
+            // Reset select jadwal dinas
+            $('#jadwal_ijin').val('').trigger('change').prop('disabled', true);
+
+            // Reset select pegawai
+            $('#pegawai_ijin').val('').trigger('change').prop('disabled', true);
+
+            // Kosongkan tabel info ijin dan sembunyikan
+            $('#showInfoIjin').empty().prop('hidden', true);
+
+            // Kosongkan date range
+            $('#ijin_dari').val('');
+            $('#ijin_sampai').val('');
+            $('#pilih_tgl_ijin').prop('hidden', true);
+
+            // Reset select keterangan ijin
+            $('#ket_ijin').val('');
+            $('#pilih_ket_ijin').prop('hidden', true);
+
+            // Reset upload ijin
+            $('#upload_ijin').val('');
+            $('#upload_ijin').prop('hidden', true);
+
+            // Disable tombol simpan
+            $('#btn-simpan-ijin').prop('disabled', true);
         }
 
         function showMonitoring() {
@@ -1596,7 +1750,7 @@
                             <tr>
                                 <th class="text-start">Keterlambatan</th>
                                 <td colspan="2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                    title="Toleransi Keterlambatan 10 Menit">${res.show.keterlambatan} ${stt}</td>
+                                    title="Toleransi Keterlambatan 10 Menit">${res.show.keterlambatan?res.show.keterlambatan:''} ${stt}</td>
                             </tr>
                             <tr>
                                 <th class="text-start">Lembur</th>
