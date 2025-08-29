@@ -167,7 +167,7 @@ class JadwalController extends Controller
             ->whereNull('deleted_at')
             ->get();
 
-        $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
+        $jadwal  = jadwal::leftJoin('users','users.id','=','kepegawaian_jadwal.pegawai_id')
                             ->select('users.nama','users.name','kepegawaian_jadwal.*')
                             ->where('kepegawaian_jadwal.id',$id)
                             ->whereNull('kepegawaian_jadwal.deleted_at')
@@ -184,9 +184,11 @@ class JadwalController extends Controller
 
                 return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status]);
             } else {
-                $ref_jabatan = ref_jadwal_jabatan::whereIn('pegawai_id',[$pegawai,$ref_users->pegawai_id])
-                                                ->whereNull('deleted_at')
-                                                ->orderBy('urutan','ASC')
+                $ref_jabatan = ref_jadwal_jabatan::leftJoin('users','users.id','=','referensi_jadwal_users_jabatan.id_staf')
+                                                ->select('referensi_jadwal_users_jabatan.*','users.name as name_staf','users.nick as panggilan_staf','users.nama as nama_staf')
+                                                ->whereIn('referensi_jadwal_users_jabatan.pegawai_id',[$pegawai,$ref_users->pegawai_id])
+                                                ->whereNull('referensi_jadwal_users_jabatan.deleted_at')
+                                                ->orderBy('referensi_jadwal_users_jabatan.urutan','ASC')
                                                 ->get();
 
                 if ($jadwal->staf != $ref_users->staf) {
@@ -221,6 +223,8 @@ class JadwalController extends Controller
                     'jml_tgl' => $jml_tgl,
                 ];
 
+                // print_r($ref_jabatan->);
+                // die();
                 return view('pages.kepegawaian.jadwal.user.ubah')->with('list', $data);
             }
         } else {
@@ -465,6 +469,11 @@ class JadwalController extends Controller
                 ->select('kepegawaian_jadwal.*','users.nama as nama_pegawai')
                 ->where('kepegawaian_jadwal.id',$id)
                 ->first();
+        $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
+                ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai')
+                ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
+                ->orderBy('kepegawaian_jadwal_detail.id','ASC')
+                ->get();
         $staf = ref_jadwal_jabatan::join('users','users.id','=','referensi_jadwal_users_jabatan.id_staf')
                 ->select('referensi_jadwal_users_jabatan.*','users.nama as nama_pegawai')
                 ->whereIn('referensi_jadwal_users_jabatan.pegawai_id',[$user,$ref_users->pegawai_id])
@@ -488,6 +497,7 @@ class JadwalController extends Controller
             'shiftArr' => $shiftArr,
             'staf' => $staf,
             'jadwal' => $jadwal,
+            'detail' => $detail,
             'totalDay' => $totalDay,
         ];
 

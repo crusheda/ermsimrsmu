@@ -331,23 +331,26 @@
                         var cuti = 0;
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
-                            up = num.val();
-                            upper = up.toString().toUpperCase();
-                            const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
-                            const allValidShift = res.shiftArr.concat(shiftTambahan);
-                            console.log(up);
-                            if (!allValidShift.includes(upper)) {
-                                notifier.show(
-                                    "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
-                                    "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                                );
-                                valid = 0;
-                                num.removeClass('is-valid').addClass('is-invalid');
-                            } else {
-                                num.removeClass('is-invalid').addClass('is-valid');
-                            }
-                            if (upper == 'C') {
-                                cuti++;
+                            if (num.length != 0) {
+                                up = num.val();
+                                console.log(num);
+                                upper = up.toString().toUpperCase();
+                                const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
+                                const allValidShift = res.shiftArr.concat(shiftTambahan);
+                                console.log(up);
+                                if (!allValidShift.includes(upper)) {
+                                    notifier.show(
+                                        "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
+                                        "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                                    );
+                                    valid = 0;
+                                    num.removeClass('is-valid').addClass('is-invalid');
+                                } else {
+                                    num.removeClass('is-invalid').addClass('is-valid');
+                                }
+                                if (upper == 'C') {
+                                    cuti++;
+                                }
                             }
                         }
                         // VALIDASI CUTI LEBIH DARI 4x DALAM 1 BULAN
@@ -388,27 +391,30 @@
                     t=1;
                     $('.inputTgl').removeAttr('required');
                     $('#formUbah').removeAttr('novalidate');
-                    res.staf.forEach(item => { // LOOPING STAF
+                    // res.staf.forEach(item => { // LOOPING STAF DARI REF STAF
+                    res.detail.forEach(item => { // LOOPING STAF DARI TABLE KEPEGAWAIAN_JADWAL_DETAIL
                         var cuti = 0;
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
-                            up = num.val();
-                            upper = up.toString().toUpperCase();
-                            const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
-                            const allValidShift = res.shiftArr.concat(shiftTambahan);
-                            console.log(up);
-                            if (!allValidShift.includes(upper)) {
-                                notifier.show(
-                                    "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
-                                    "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
-                                );
-                                valid = 0;
-                                num.removeClass('is-valid').addClass('is-invalid');
-                            } else {
-                                num.removeClass('is-invalid').addClass('is-valid');
-                            }
-                            if (upper == 'C') {
-                                cuti++;
+                            if (num.length != 0) {
+                                up = num.val();
+                                upper = up.toString().toUpperCase();
+                                const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
+                                const allValidShift = res.shiftArr.concat(shiftTambahan);
+                                console.log(up);
+                                if (!allValidShift.includes(upper)) {
+                                    notifier.show(
+                                        "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
+                                        "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                                    );
+                                    valid = 0;
+                                    num.removeClass('is-valid').addClass('is-invalid');
+                                } else {
+                                    num.removeClass('is-invalid').addClass('is-valid');
+                                }
+                                if (upper == 'C') {
+                                    cuti++;
+                                }
                             }
                         }
                         // VALIDASI CUTI LEBIH DARI 4x DALAM 1 BULAN
