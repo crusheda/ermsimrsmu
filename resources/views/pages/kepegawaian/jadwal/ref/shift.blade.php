@@ -368,6 +368,15 @@
                                                     <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
                                                 </div>
                                             </div>
+                                        </div></td><td><kbd class="bg-success text-white me-1">DL</kbd> <u><b class='text-dark'>DINAS LUAR</b></u></td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
+                    $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
+                                            <div class="dropdown">
+                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown"></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-edit me-1'></i> Ubah</a>
+                                                    <a href="javascript:;" class="dropdown-item text-secondary"><i class='fas fa-trash-alt me-1'></i> Hapus</a>
+                                                </div>
+                                            </div>
                                         </div></td><td><kbd class="bg-danger text-white me-1">L</kbd> <u><b class='text-dark'>LIBUR</b></u></td><td>-</td><td>-</td><td>-</td><td>Ditambahkan otomatis oleh sistem</td>`);
                     $('#tampil-tbody').append(`<tr><td><div class="d-flex align-items-center">
                                             <div class="dropdown">
@@ -473,6 +482,22 @@
                     position: 'topRight'
                 });
             } else {
+                if (singkat == "DL") {
+                    iziToast.error({
+                        title: 'Maaf!',
+                        message: '[DL] Dinas Luar hanya dapat digunakan saat pengajuan saja, tidak dapat ditambahkan ke Referensi Jadwal Dinas secara Manual.',
+                        position: 'topRight'
+                    });
+                    return;
+                }
+                if (singkat == "L" || singkat == "C" || singkat == "CT" || singkat == "CM" || singkat == "CD" || singkat == "CU" || singkat == "CH") {
+                    iziToast.error({
+                        title: 'Maaf!',
+                        message: 'Referensi Shift ['+singkat+'] sudah ditambahkan oleh Sistem. Tidak diizinkan menambahkan manual.',
+                        position: 'topRight'
+                    });
+                    return;
+                }
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

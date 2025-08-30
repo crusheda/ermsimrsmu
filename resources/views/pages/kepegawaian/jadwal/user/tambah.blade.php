@@ -355,6 +355,13 @@
                                 );
                                 valid = 0;
                                 num.removeClass('is-valid').addClass('is-invalid');
+                            } elseif (upper == "DL") {
+                                notifier.show(
+                                    "Pesan Larangan!", "Terdapat shift [DL] Dinas Luar pada karyawan "+item.nama_pegawai+" di tanggal "+i+", Dinas Luar tidak diizinkan untuk penambahan pada Jadwal Dinas.",
+                                    "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                                );
+                                valid = 0;
+                                num.removeClass('is-valid').addClass('is-invalid');
                             } else {
                                 num.removeClass('is-invalid').addClass('is-valid');
                             }
@@ -413,6 +420,13 @@
                                 notifier.show(
                                     "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
                                     "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                                );
+                                valid = 0;
+                                num.removeClass('is-valid').addClass('is-invalid');
+                            } elseif (upper == "DL") {
+                                notifier.show(
+                                    "Pesan Larangan!", "Terdapat shift [DL] Dinas Luar pada karyawan "+item.nama_pegawai+" di tanggal "+i+", Dinas Luar tidak diizinkan untuk penambahan pada Jadwal Dinas.",
+                                    "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
                                 );
                                 valid = 0;
                                 num.removeClass('is-valid').addClass('is-invalid');

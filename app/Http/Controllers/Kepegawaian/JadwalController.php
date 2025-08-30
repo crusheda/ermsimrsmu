@@ -265,6 +265,10 @@ class JadwalController extends Controller
         $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
         $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
 
+        if (empty($request->id_staf)) {
+            return redirect()->back()->with('error', 'Tidak ada staf yang dipilih, silakan isi jadwal terlebih dahulu.');
+        }
+
         for ($i=0; $i < count($request->id_staf) ; $i++) {
             $data = new jadwal_detail;
             $data->id_jadwal = $request->id_jadwal;
