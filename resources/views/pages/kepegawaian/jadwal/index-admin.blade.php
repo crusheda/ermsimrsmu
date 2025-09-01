@@ -41,6 +41,7 @@
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="dokumentasi()">Lihat Dokumentasi</a>
                                 <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
+                                {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="dinasLuar()">Pengajuan <b class="text-success">Dinas Luar</b></a> --}}
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                                 <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
@@ -150,25 +151,17 @@
             </div>
         </div>
     </div>
-    {{-- <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+    {{-- <div class="modal fade animate__animated animate__rubberBand" id="modalDinasLuar" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Hapus
+                        Form Pengajuan Dinas Luar
                     </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus Jadwal Dinas tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
-                    <label class="switch">
-                        <input type="checkbox" class="switch-input" id="setujuhapus">
-                        <span class="switch-toggle-slider">
-                        <span class="switch-on"></span>
-                        <span class="switch-off"></span>
-                        </span>
-                        <span class="switch-label">Anda siap menerima Risiko</span>
-                    </label>
+
                 </div>
                 <div class="col-12 text-center mb-4">
                     <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
@@ -420,14 +413,14 @@
                 dataType: 'json',
                 success: function(res) {
                     if (res.jabatan) {
-                        if (res.length > 0) {
+                        if (res.show) {
                             $('#tombolMenu').empty().html(`
                                 Pilihan Menu
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
                                     ${res.show} Data<span class="visually-hidden">unread messages</span>
                                 </span>
                             `);
-                            $('#count-bawahan').text(res.show);
+                            $('#count-bawahan').text(res.show+" Data");
                         } else {
                             $('#tombolMenu').empty().html(`
                                 Pilihan Menu
@@ -435,11 +428,11 @@
                                     0 Data<span class="visually-hidden">unread messages</span>
                                 </span>
                             `);
-                            $('#count-bawahan').text('0');
+                            $('#count-bawahan').text('0 Data');
                         }
                     } else {
                         $('#tombolMenu').empty().html(`Pilihan Menu`);
-                        $('#count-bawahan').text('-').prop('hidden',true);
+                        $('#count-bawahan').text('0 Data').prop('hidden',true);
                         $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('<s>Verifikasi Bawahan</s>'); // .removeAttr('href')
                     }
                 }
@@ -531,9 +524,31 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                        if (item.progress == 0) {
+                            var colButton = 'btn-light-dark';
+                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
+                        } else {
+                            if (item.progress == 1) {
+                                var colButton = 'btn-light-warning';
+                                var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
+                            } else {
+                                if (item.progress == 2) {
+                                    var colButton = 'btn-light-primary';
+                                    var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
+                                } else {
+                                    if (item.progress == 3) {
+                                        var colButton = 'btn-light-success';
+                                        var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
+                                    } else {
+                                        var colButton = 'btn-light-dark';
+                                        var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
+                                    }
+                                }
+                            }
+                        }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm ${colButton} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
                                             if (item.progress == 1) { // BELUM DIVERIFIKASI ATASAN
@@ -575,36 +590,20 @@
                                     content += `${us.nama?us.nama:'<b class="text-danger">'+us.name+'</b>'}; `;
                                 }
                             })
-                            if (us.id == item.verif) {
-                                nama_verif = us.nama;
-                            }
+                            // if (us.id == item.verif) {
+                            //     nama_verif = us.nama;
+                            // }
                         })
                         content += `</small></div></div></td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.keterangan?item.keterangan:''}</td>`;
-                        if (item.progress == 0) {
-                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
-                        } else {
-                            if (item.progress == 1) {
-                                var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
-                            } else {
-                                if (item.progress == 2) {
-                                    var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
-                                } else {
-                                    if (item.progress == 3) {
-                                        var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
-                                    } else {
-                                        var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
-                                    }
-                                }
-                            }
-                        }
                         content += `<td>${status}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
                                                 <small class='text-truncate text-muted'>Ditambahkan Oleh ` + item.nama_pegawai + `</small>
-                                                ${nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+nama_verif+'</small>':''}
+                                                ${item.nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+item.nama_verif+'</small>':''}
+                                                ${item.nama_valid!=null?'<small class="text-truncate text-muted">Divalidasi Oleh '+item.nama_valid+'</small>':''}
                                             </div>
                                         </div>
                                     </td>`;

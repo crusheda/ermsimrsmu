@@ -81,7 +81,17 @@
                                         </div>
                                         <div class="col-md-12 mb-3" id="pilih_ket_ijin" hidden>
                                             <div class="form-group">
-                                                <label class="form-label">Keterangan Ijin <a class="text-danger">*</a></label>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="form-label mb-0">Keterangan Ijin <span class="text-danger">*</span></label>
+                                                    <label class="switch mb-0">
+                                                        <input type="checkbox" class="switch-input" id="switch_ketmanual_ijin">
+                                                        <span class="switch-toggle-slider">
+                                                            <span class="switch-on"></span>
+                                                            <span class="switch-off"></span>
+                                                        </span>
+                                                        <span class="switch-label">Tulis Keterangan Manual</span>
+                                                    </label>
+                                                </div>
                                                 <select class="form-control" id="ket_ijin">
                                                     <option value="">Pilih</option>
                                                     <option value="1">Izin menikah (Aturan 3 hari)</option>
@@ -92,6 +102,7 @@
                                                     <option value="6">Izin karena suami/istri, orang tua/mertua, anak kandung, menantu meninggal dunia (Aturan 3 hari)</option>
                                                     <option value="7">Izin khusus atas persetujuan Direktur Utama</option>
                                                 </select>
+                                                <textarea class="form-control" id="ketmanual_ijin" rows="3" hidden></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-12 mb-3" id="upload_ijin" hidden>
@@ -274,19 +285,39 @@
             </div>
         </div>
     </div>
+    {{-- MODAL HAPUS --}}
+    <div class="modal animate__animated animate__rubberBand fade" id="modalUbah" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Form Ubah&nbsp;<kbd id="tx_ubah_absensi"></kbd>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="id_ubah_absensi" hidden>
+
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <button type="submit" id="btn-ubah-absensi" class="btn btn-warning me-sm-3 me-1" onclick="prosesUbah()"><i class="fa fa-edit me-1" style="font-size:13px"></i> Ubah</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Hapus
+                        Form Hapus&nbsp;<kbd id="tx_hapus_absensi"></kbd>
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan melakukan penghapusan Berkas Perjalanan Dinas, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <input type="text" id="id_hapus_absensi" hidden>
+                    <p style="text-align: justify;">Anda akan melakukan penghapusan Record Absensi tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
                     <label class="switch">
-                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <input type="checkbox" class="switch-input" id="setujuhapusabsensi">
                         <span class="switch-toggle-slider">
                         <span class="switch-on"></span>
                         <span class="switch-off"></span>
@@ -295,7 +326,7 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="submit" id="btn-hapus-absensi" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
                     <button type="reset" class="btn btn-link-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
@@ -388,6 +419,17 @@
             //         $('#slide').removeClass('col-md-12').addClass('col-md-6');
             //     }
             // });
+
+            // SWITCH KET MANUAL IJIN
+            $("#switch_ketmanual_ijin").on("change", function() {
+                if ($(this).is(":checked")) {
+                    $("#ket_ijin").prop('hidden',true);
+                    $("#ketmanual_ijin").prop('hidden',false);
+                } else {
+                    $("#ket_ijin").prop('hidden',false);
+                    $("#ketmanual_ijin").prop('hidden',true);
+                }
+            });
 
             $('#show_filter').prop('hidden',false);
             filterPilihan();
@@ -569,47 +611,65 @@
             save.append('jadwal',$('#pegawai_ijin').val());
             save.append('dari',$('#ijin_dari').val());
             save.append('sampai',$('#ijin_sampai').val());
-            save.append('ket',$('#ket_ijin').val());
+            save.append('switch',$('#switch_ketmanual_ijin').is(":checked"));
             save.append('user',"{{ Auth::user()->id }}");
 
             var filesAdded = $('#filex')[0].files;
-            save.append('file',filesAdded[0]);
-
-            if ($('#ket_ijin').val() == '') {
-                iziToast.error({
-                    title: 'Pesan Galat!',
-                    message: 'Keterangan Ijin Wajib Diisi.',
-                    position: 'topRight'
-                });
-            } else {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: `/api/kepegawaian/absensi/ijin/push`,
-                    method: 'post',
-                    data: save,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function(res) {
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Penambahan Manual Absensi Ijin telah berhasil dilakukan pada '+res+'. Silakan cek pada riwayat Data Absensi.',
-                            position: 'topRight'
-                        });
-                        clearInputIjin();
-                    },
-                    error: function(res) {
-                        iziToast.error({
-                            title: 'Pesan Galat!',
-                            message: res.responseJSON?.message || 'Penambahan Manual Absensi Ijin gagal dilakukan',
-                            position: 'topRight'
-                        });
-                    }
-                })
+            if (filesAdded.length > 0) {
+                save.append('file', filesAdded[0]);
             }
+            var checkbox = $('#switch_ketmanual_ijin').is(":checked");
+            if (checkbox == false) {
+                if ($('#ket_ijin').val() == '') {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Keterangan Ijin Wajib Diisi.',
+                        position: 'topRight'
+                    });
+                    return;
+                } else {
+                    save.append('ket',$('#ket_ijin').val());
+                }
+            } else {
+                if ($('#ketmanual_ijin').val() == '') {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Keterangan Ijin Wajib Diisi.',
+                        position: 'topRight'
+                    });
+                    return;
+                } else {
+                    save.append('ket',$('#ketmanual_ijin').val());
+                }
+            }
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/kepegawaian/absensi/ijin/push`,
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: 'Penambahan Manual Absensi Ijin telah berhasil dilakukan pada '+res+'. Silakan cek pada riwayat Data Absensi.',
+                        position: 'topRight'
+                    });
+                    clearInputIjin();
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: res.responseJSON?.message || 'Penambahan Manual Absensi Ijin gagal dilakukan',
+                        position: 'topRight'
+                    });
+                }
+            })
         }
 
         function clearInputIjin() {
@@ -685,13 +745,12 @@
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            if (superID == true) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            }
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            // if (superID == true) {
+                                            // }
                                         } else {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                         }
                         content += "</div></center></td>";
                         role = '';
@@ -852,13 +911,12 @@
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            if (superID == true) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            }
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            // if (superID == true) {
+                                            // }
                                         } else {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
                                         }
                         content += "</div></center></td>";
                         content += `<td>${moment(item.ref_jam_masuk).format('YYYY-MM-DD')}</td>`;
@@ -1590,8 +1648,9 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        dom: 'Bfrtip',
+                        // dom: 'Bfrtip',
                         order: [
+                            [4, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
                             [2, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
                             [1, "asc"] // Kolom PEGAWAI (kolom ke-3, index 2)
                         ],
@@ -1790,6 +1849,55 @@
                     }
                 }
             })
+        }
+
+        function ubah(id) {
+            $("#tx_ubah_absensi").text(id);
+            $("#id_ubah_absensi").val(id);
+            $('#modalUbah').modal('show');
+        }
+
+        function hapus(id) {
+            $("#id_hapus_absensi").val(id);
+            var inputs = document.getElementById('setujuhapusabsensi');
+            inputs.checked = false;
+            $('#modalHapus').modal('show');
+        }
+
+        function prosesHapus() {
+            var id = $("#id_hapus_absensi").val();
+            // SWITCH BTN
+            var checkbox = $('#setujuhapusabsensi').is(":checked");
+            if (checkbox == false) {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Mohon menyetujui (Check) untuk dilakukan proses penghapusan Data Record Absensi ID#'+id+' tersebut',
+                    position: 'topRight'
+                });
+            } else {
+                // PROSES
+                $.ajax({
+                    url: "/api/kepegawaian/absensi/"+id+"/hapus/{{ Auth::user()->id }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Penghapusan Data Absensi ID#'+id+' telah berhasil pada '+res,
+                            position: 'topRight'
+                        });
+                        $('#modalHapus').modal('hide');
+                        filter();
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Penghapusan Data Absensi gagal dilakukan. Coba lagi.',
+                            position: 'topRight'
+                        });
+                    }
+                });
+            }
         }
 
         function tampilMapIn(lokasi) {

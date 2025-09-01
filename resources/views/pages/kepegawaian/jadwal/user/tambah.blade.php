@@ -136,6 +136,7 @@
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat data gagal saat memproses Jadwal, silakan Refresh Browser <br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Disarankan melakukan pengisian jadwal dinas menggunakan <b>Device Komputer</b> dan <b>Browser Google Chrome</b> <br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Pengisian jadwal wajib menggunakan Kode Shift (e.g. P / S / P6 / etc) menyesuaikan kode shift pada referensi yang sudah ada <br>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Khusus untuk pengisian <b class="text-success">DL (Dinas Luar)</b> hanya dapat dilakukan saat Absen Dinas Luar pada aplikasi absensi / melalui pengajuan ke bagian SDI<br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Penulisan Huruf pada kolom isian Shift Jaga <i><b>Auto Capslock</b></i> meskipun sudah disimpan sekalipun <br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit<br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut pada halaman Referensi Staf <a href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}"><u><b>(Klik Disini)</b></u></a>
@@ -150,12 +151,13 @@
                                             @foreach ($list['ref_shift'] as $item)
                                                 <li><b class="me-1">{{ $item->singkat }}</b>(<u>{{ $item->shift }}</u>) : {{ \Carbon\Carbon::parse($item->berangkat)->isoFormat('HH:mm') }} - {{ \Carbon\Carbon::parse($item->pulang)->isoFormat('HH:mm') }} WIB</li>
                                             @endforeach
-                                            <li><b class="me-1">L</b>(<u>LIBUR</u>)</li>
-                                            <li><b class="me-1">C</b>(<u>CUTI TAHUNAN</u>)</li>
-                                            <li><b class="me-1">CM</b>(<u>CUTI MELAHIRKAN</u>)</li>
-                                            <li><b class="me-1">CU</b>(<u>CUTI UMROH</u>)</li>
-                                            <li><b class="me-1">CH</b>(<u>CUTI HAJI</u>)</li>
-                                            <li><b class="me-1">CD</b>(<u>CUTI DILUAR TANGGUNGAN</u>)</li>
+                                            <li><b class="me-1 text-success">DL</b>(<u class="text-success">DINAS LUAR</u>)</li>
+                                            <li><b class="me-1 text-danger">L</b>(<u class="text-danger">LIBUR</u>)</li>
+                                            <li><b class="me-1 text-danger">C</b>(<u class="text-danger">CUTI TAHUNAN</u>)</li>
+                                            <li><b class="me-1 text-danger">CM</b>(<u class="text-danger">CUTI MELAHIRKAN</u>)</li>
+                                            <li><b class="me-1 text-danger">CU</b>(<u class="text-danger">CUTI UMROH</u>)</li>
+                                            <li><b class="me-1 text-danger">CH</b>(<u class="text-danger">CUTI HAJI</u>)</li>
+                                            <li><b class="me-1 text-danger">CD</b>(<u class="text-danger">CUTI DILUAR TANGGUNGAN</u>)</li>
                                         </ul>
                                     </label>
                                 </div>
@@ -355,7 +357,7 @@
                                 );
                                 valid = 0;
                                 num.removeClass('is-valid').addClass('is-invalid');
-                            } elseif (upper == "DL") {
+                            } else if (upper == "DL") {
                                 notifier.show(
                                     "Pesan Larangan!", "Terdapat shift [DL] Dinas Luar pada karyawan "+item.nama_pegawai+" di tanggal "+i+", Dinas Luar tidak diizinkan untuk penambahan pada Jadwal Dinas.",
                                     "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
@@ -423,7 +425,7 @@
                                 );
                                 valid = 0;
                                 num.removeClass('is-valid').addClass('is-invalid');
-                            } elseif (upper == "DL") {
+                            } else if (upper == "DL") {
                                 notifier.show(
                                     "Pesan Larangan!", "Terdapat shift [DL] Dinas Luar pada karyawan "+item.nama_pegawai+" di tanggal "+i+", Dinas Luar tidak diizinkan untuk penambahan pada Jadwal Dinas.",
                                     "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3

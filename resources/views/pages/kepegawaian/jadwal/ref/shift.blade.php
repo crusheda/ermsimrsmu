@@ -115,6 +115,7 @@
                                         <i class="fas fa-caret-right text-primary me-1"></i> Penulisan Nama Singkat Shift hanya diperbolehkan <kbd>2 HURUF</kbd><br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Shift yang akan ditambahkan tidak boleh sama dengan yang sudah ada<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Format Waktu/Jam Shift = <u><b>JAM (24 Jam) : MENIT</b></u><br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Terkait <kbd>Toleransi Kehadiran (10 Menit)</kbd> sudah otomatis dari sistem<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Waktu/Jam Shift Berangkat dan Pulang tidak boleh sama<br>
                                         <i class="fas fa-caret-right text-primary me-1 mb-3"></i> Contoh memasukkan Jam Berangkat & Pulang (Khusus Lewat HARI)<br>
                                         <h6><span class="border border-dark border-top-2">&nbsp;Berangkat <i class="fas fa-long-arrow-alt-right text-danger"></i> Pulang&nbsp;</span>
@@ -189,6 +190,7 @@
                                         <i class="fas fa-caret-right text-primary me-1"></i> Penulisan Nama Singkat Shift hanya diperbolehkan <kbd>2 HURUF</kbd><br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Shift yang akan diubah tidak boleh sama dengan yang sudah ada<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Format Waktu/Jam Shift = <u><b>JAM (24 Jam) : MENIT</b></u><br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Terkait <kbd>Toleransi Kehadiran (10 Menit)</kbd> sudah otomatis dari sistem<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Waktu/Jam Shift Berangkat dan Pulang tidak boleh sama<br>
                                         <i class="fas fa-caret-right text-primary me-1 mb-3"></i> Contoh memasukkan Jam Berangkat & Pulang (Khusus Lewat HARI)<br>
                                         <h6><span class="border border-dark border-top-2">&nbsp;Berangkat <i class="fas fa-long-arrow-alt-right text-danger"></i> Pulang&nbsp;</span>
@@ -579,6 +581,22 @@
                     position: 'topRight'
                 });
             } else {
+                if (fd.get('singkat') == "DL") {
+                    iziToast.error({
+                        title: 'Maaf!',
+                        message: '[DL] Dinas Luar hanya dapat digunakan saat pengajuan saja, tidak dapat ditambahkan ke Referensi Jadwal Dinas secara Manual.',
+                        position: 'topRight'
+                    });
+                    return;
+                }
+                if (fd.get('singkat') == "L" || fd.get('singkat') == "C" || fd.get('singkat') == "CT" || fd.get('singkat') == "CM" || fd.get('singkat') == "CD" || fd.get('singkat') == "CU" || fd.get('singkat') == "CH") {
+                    iziToast.error({
+                        title: 'Maaf!',
+                        message: 'Referensi Shift ['+fd.get('singkat')+'] sudah ditambahkan oleh Sistem. Tidak diizinkan menambahkan manual.',
+                        position: 'topRight'
+                    });
+                    return;
+                }
                 // AJAX request
                 $.ajax({
                     headers: {

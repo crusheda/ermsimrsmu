@@ -414,7 +414,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>${jabatan}</td>`;
+                                            <td>${jabatan?jabatan:'-'}</td>`;
                             if (color != "-") {
                                 content += `<td><span class="badge border text-dark" style="background-color: ${color}">TEXT HERE</span></td>`;
                             } else {

@@ -226,14 +226,14 @@
                 dataType: 'json',
                 success: function(res) {
                     if (res.jabatan) {
-                        if (res.length > 0) {
+                        if (res.show) {
                             $('#tombolMenu').empty().html(`
                                 Pilihan Menu
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger">
                                     ${res.show} Data<span class="visually-hidden">unread messages</span>
                                 </span>
                             `);
-                            $('#count-bawahan').text(res.show);
+                            $('#count-bawahan').text(res.show+" Data");
                         } else {
                             $('#tombolMenu').empty().html(`
                                 Pilihan Menu
@@ -241,11 +241,11 @@
                                     0 Data<span class="visually-hidden">unread messages</span>
                                 </span>
                             `);
-                            $('#count-bawahan').text('0');
+                            $('#count-bawahan').text('0 Data');
                         }
                     } else {
                         $('#tombolMenu').empty().html(`Pilihan Menu`);
-                        $('#count-bawahan').text('-').prop('hidden',true);
+                        $('#count-bawahan').text('0 Data').prop('hidden',true);
                         $('#tombol-verif-bawahan').attr('href', 'javascript:void(0);').html('<s>Verifikasi Bawahan</s>'); // .removeAttr('href')
                     }
                 }
@@ -336,9 +336,31 @@
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
                         var bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                        if (item.progress == 0) {
+                            var colButton = 'btn-light-dark';
+                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
+                        } else {
+                            if (item.progress == 1) {
+                                var colButton = 'btn-light-warning';
+                                var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
+                            } else {
+                                if (item.progress == 2) {
+                                    var colButton = 'btn-light-primary';
+                                    var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
+                                } else {
+                                    if (item.progress == 3) {
+                                        var colButton = 'btn-light-success';
+                                        var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
+                                    } else {
+                                        var colButton = 'btn-light-dark';
+                                        var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
+                                    }
+                                }
+                            }
+                        }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm ${colButton} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
                                         if (item.pegawai_id == userID) {
@@ -380,36 +402,20 @@
                                     content += `${us.nama?us.nama:'<b class="text-danger">'+us.name+'</b>'}; `;
                                 }
                             })
-                            if (us.id == item.verif) {
-                                nama_verif = us.nama;
-                            }
+                            // if (us.id == item.verif) {
+                            //     nama_verif = us.nama;
+                            // }
                         })
                         content += `</small></div></div></td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.keterangan?item.keterangan:''}</td>`;
-                        if (item.progress == 0) {
-                            var status = `<span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
-                        } else {
-                            if (item.progress == 1) {
-                                var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
-                            } else {
-                                if (item.progress == 2) {
-                                    var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
-                                } else {
-                                    if (item.progress == 3) {
-                                        var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
-                                    } else {
-                                        var status = `<span class="badge rounded-pill text-bg-info">Tidak Valid</span>`;
-                                    }
-                                }
-                            }
-                        }
                         content += `<td>${status}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
                                                 <small class='text-truncate text-muted'>Ditambahkan Oleh ` + item.nama_pegawai + `</small>
-                                                ${nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+nama_verif+'</small>':''}
+                                                ${item.nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+item.nama_verif+'</small>':''}
+                                                ${item.nama_valid!=null?'<small class="text-truncate text-muted">Divalidasi Oleh '+item.nama_valid+'</small>':''}
                                             </div>
                                         </div>
                                     </td>`;

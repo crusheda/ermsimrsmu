@@ -124,8 +124,6 @@ class AbsensiController extends Controller
         foreach ($hasil as $row) {
             $hit = 'tgl' . (int) $row['hari'];
             $callShift = $show->$hit;
-            // print_r($hit);
-            // die();
             if (
                 $callShift == 'L' ||
                 $callShift == 'C' ||
@@ -165,18 +163,30 @@ class AbsensiController extends Controller
                 }
             }
 
+            $ref_jam_masuk = Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$berangkat);
+            if ($berangkat >= $pulang) {
+                $ref_jam_pulang = Carbon::createFromFormat('Y-m-d H:i:s', $row['besok'].' '.$pulang); // Pulang Lewat Hari
+            } else {
+                $ref_jam_pulang = Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$pulang);
+            }
 
-            $data = new Absensi;
+            $validasi = absensi::where('ref_jam_masuk', $ref_jam_masuk)
+                                ->where('ref_jam_pulang', $ref_jam_pulang)
+                                ->whereNull('deleted_at')
+                                ->first();
+
+            if ($validasi) {
+                $data = $validasi; // UPDATE OLD DATA
+            } else {
+                $data = new Absensi; // CREATE NEW DATA
+            }
+
             $data->jenis         = 3; // ijin
-            $data->pegawai_id    = $show->pegawai_id;   // pakai dari request atau $show->pegawai
+            $data->pegawai_id    = $show->pegawai_id; // pakai dari request atau $show->pegawai
             $data->kd_shift      = $kd_shift;
             $data->nm_shift      = $nm_shift;
-            $data->ref_jam_masuk = Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$berangkat);    // atau $jamMasuk dari logic shift
-            if ($berangkat >= $pulang) {
-                $data->ref_jam_pulang= Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$pulang);
-            } else {
-                $data->ref_jam_pulang= Carbon::createFromFormat('Y-m-d H:i:s', $row['besok'].' '.$pulang); // Pulang Lewat Hari
-            }
+            $data->ref_jam_masuk = $ref_jam_masuk; // atau $jamMasuk dari logic shift
+            $data->ref_jam_pulang= $ref_jam_pulang;
             $data->keterlambatan = null;
             $data->lembur        = null;
             $data->tgl_in        = Carbon::createFromFormat('Y-m-d H:i:s', $row['tanggal'].' '.$berangkat);        // simpan sesuai tanggal loop
@@ -210,20 +220,27 @@ class AbsensiController extends Controller
             $data->lokasi_out    = null;
             $data->terlambat     = null;
 
-            if ($request->ket == 1) {
-                $ket = 'Izin menikah';
-            } elseif ($request->ket == 2) {
-                $ket = 'Izin menikahkan anak kandung';
-            } elseif ($request->ket == 3) {
-                $ket = 'Izin istri melahirkan';
-            } elseif ($request->ket == 4) {
-                $ket = 'Izin mengkhitankan anak kandung';
-            } elseif ($request->ket == 5) {
-                $ket = 'Izin menunggu anak kandung/istri/suami rawat inap';
-            } elseif ($request->ket == 6) {
-                $ket = 'Izin karena suami/istri, orang tua/mertua, anak kandung, menantu meninggal dunia';
+            // ambil value switch (string "true"/"false")
+            $isManual = filter_var($request->input('switch'), FILTER_VALIDATE_BOOLEAN);
+
+            if ($isManual) {
+                $ket = $request->ket;
             } else {
-                $ket = 'Izin khusus atas persetujuan Direktur Utama';
+                if ($request->ket == 1) {
+                    $ket = 'Izin menikah';
+                } elseif ($request->ket == 2) {
+                    $ket = 'Izin menikahkan anak kandung';
+                } elseif ($request->ket == 3) {
+                    $ket = 'Izin istri melahirkan';
+                } elseif ($request->ket == 4) {
+                    $ket = 'Izin mengkhitankan anak kandung';
+                } elseif ($request->ket == 5) {
+                    $ket = 'Izin menunggu anak kandung/istri/suami rawat inap';
+                } elseif ($request->ket == 6) {
+                    $ket = 'Izin karena suami/istri, orang tua/mertua, anak kandung, menantu meninggal dunia';
+                } else {
+                    $ket = 'Izin khusus atas persetujuan Direktur Utama';
+                }
             }
 
             $data->keterangan    = $ket;
@@ -811,5 +828,26 @@ class AbsensiController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    function hapus($id, $user)
+    {
+        $now = Carbon::now();
+        $push = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = absensi::find($id);
+        $data->user_deleted_at = $user;
+
+        // Proses Hapus Lampiran
+        Storage::delete(str_replace('public/', '', $data->path_in));
+        if ($data->path_out) {
+            Storage::delete(str_replace('public/', '', $data->path_out));
+        }
+
+        // Hapus Record DB
+        $data->delete();
+
+        return response()->json($push, 200);
     }
 }

@@ -628,10 +628,14 @@ class JadwalController extends Controller
         }
 
         $show = DB::table('kepegawaian_jadwal')
-            ->leftJoin('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->leftJoin('users as us', 'us.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->leftJoin('users as vr', 'vr.id', '=', 'kepegawaian_jadwal.verif')
+            ->leftJoin('users as vl', 'vl.id', '=', 'kepegawaian_jadwal.valid')
             ->select(
                 'kepegawaian_jadwal.*',
-                'users.nama as nama_pegawai'
+                'us.nama as nama_pegawai',
+                'vr.nama as nama_verif',
+                'vl.nama as nama_valid'
             )
             ->whereJsonContains('staf', (string) $id)
             // ->whereIn('kepegawaian_jadwal.pegawai_id', $pegawaiIds)
@@ -681,7 +685,9 @@ class JadwalController extends Controller
 
         $show = DB::table('kepegawaian_jadwal')
             ->distinct()
-            ->join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->leftJoin('users as us', 'us.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->leftJoin('users as vr', 'vr.id', '=', 'kepegawaian_jadwal.verif')
+            ->leftJoin('users as vl', 'vl.id', '=', 'kepegawaian_jadwal.valid')
             ->leftJoin('referensi_jadwal_users as rju_staf', function ($join) {
                 $join->whereRaw('JSON_CONTAINS(rju_staf.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))');
                     // ->whereNull('rju_staf.deleted_at');
@@ -692,7 +698,9 @@ class JadwalController extends Controller
             })
             ->select(
                 'kepegawaian_jadwal.*',
-                'users.nama as nama_pegawai'
+                'us.nama as nama_pegawai',
+                'vr.nama as nama_verif',
+                'vl.nama as nama_valid'
             )
             ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
             ->whereNull('kepegawaian_jadwal.deleted_at')
@@ -784,11 +792,13 @@ class JadwalController extends Controller
         $finalPegawaiIds = $pegawaiDenganRole->merge($pegawaiPenginput)->unique();
 
         // 4. Ambil data jadwal dengan unit
-        $show = jadwal::join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
-            ->select('kepegawaian_jadwal.*', 'users.nama as nama_pegawai')
-            ->whereIn('kepegawaian_jadwal.pegawai_id', $finalPegawaiIds)
-            ->whereNull('kepegawaian_jadwal.deleted_at')
-            ->get();
+        $show = jadwal::leftJoin('users as us', 'us.id', '=', 'kepegawaian_jadwal.pegawai_id')
+                        ->leftJoin('users as vr', 'vr.id', '=', 'kepegawaian_jadwal.verif')
+                        ->leftJoin('users as vl', 'vl.id', '=', 'kepegawaian_jadwal.valid')
+                        ->select('kepegawaian_jadwal.*', 'us.nama as nama_pegawai', 'vr.nama as nama_verif', 'vl.nama as nama_valid')
+                        ->whereIn('kepegawaian_jadwal.pegawai_id', $finalPegawaiIds)
+                        ->whereNull('kepegawaian_jadwal.deleted_at')
+                        ->get();
 
         // Tambahkan unit berdasarkan mapping
         // $show->transform(function ($item) use ($pegawaiUnitMap) {
@@ -840,9 +850,12 @@ class JadwalController extends Controller
         $show = jadwal::join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
             ->select('kepegawaian_jadwal.*', 'users.nama as nama_pegawai')
             ->whereIn('kepegawaian_jadwal.pegawai_id', $finalPegawaiIds)
+            ->where('kepegawaian_jadwal.progress',1)
             ->whereNull('kepegawaian_jadwal.deleted_at')
             ->count();
 
+        // print_r($show);
+        // die();
         $data = [
             'jabatan' => $jabatan,
             'show' => $show,
@@ -934,6 +947,23 @@ class JadwalController extends Controller
 
         // Inisialisasi
         $jadwal = jadwal::find($id);
+        $detail = jadwal_detail::where('id_jadwal',$id)->whereNull('deleted_at')->get();
+
+        $hitungTgl = Carbon::createFromDate($jadwal->tahun, $jadwal->bulan, 1);
+        $jmlHari = $hitungTgl->daysInMonth;
+
+        if (count($detail) > 0) {
+            foreach ($detail as $key => $value) {
+                for ($i=1; $i <= $jmlHari; $i++) {
+                    $hit = "tgl".$i;
+                    if (!$value->$hit) {
+                        return response()->json($tgl, 401);
+                    }
+                }
+            }
+        } else {
+            return response()->json($tgl, 401);
+        }
 
         // Change
         $jadwal->progress = 2;
