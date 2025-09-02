@@ -40,6 +40,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('profilkaryawan/nonlengkap', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'tableNonLengkap'])->name('profilkaryawan.nonlengkap');
     Route::get('profilkaryawan/{user}/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'hapusPegawai'])->name('profilkaryawan.hapusPegawai');
 
+        // GRAFIK INTERAKTIF
+        Route::get('profilkaryawan/grafik/1', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik1'])->name('profilkaryawan.grafik1'); // Jenis Pegawai
+        Route::get('profilkaryawan/grafik/2', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik2'])->name('profilkaryawan.grafik2'); // Jenis Kelamin
+        Route::get('profilkaryawan/grafik/3', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik3'])->name('profilkaryawan.grafik3'); // Pendidikan
+        Route::get('profilkaryawan/grafik/4', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik4'])->name('profilkaryawan.grafik4'); // Profesi
+        Route::get('profilkaryawan/grafik/5', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik5'])->name('profilkaryawan.grafik5'); // Status Pegawai
+
         // PENETAPAN
         Route::get('profilkaryawan/penetapan/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tablePenetapan'])->name('profilkaryawan.tablePenetapan');
         Route::post('profilkaryawan/penetapan/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahPenetapan'])->name('profilkaryawan.tambahPenetapan');

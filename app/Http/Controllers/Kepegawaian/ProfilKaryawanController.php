@@ -243,6 +243,7 @@ class ProfilKaryawanController extends Controller
 
         // $data = DB::table('users')->where('id',$id)->first();
         $data = users::onlyTrashed()->where('id',$id)->first();
+        $data->status = null;
         $data->user_hapus = null;
         $data->deleted_at = null;
         $data->save();
@@ -275,6 +276,7 @@ class ProfilKaryawanController extends Controller
 
         // Proses Hapus Data dari DB
         $data->user_hapus = $user;
+        $data->status = 1;
         $data->save();
         $data->delete();
 
@@ -282,5 +284,71 @@ class ProfilKaryawanController extends Controller
         datalogs::record($user, 'Baru saja menghapus/menonaktifkan Pegawai ID : '.$id, null, null, $switch, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return response()->json($tgl, 200);
+    }
+
+    function grafik1()
+    {
+
+    }
+
+    function grafik2()
+    {
+
+    }
+
+    function grafik3()
+    {
+
+    }
+
+    function grafik4()
+    {
+
+    }
+
+    function grafik5()
+    {
+        $data = DB::table('referensi')
+            ->select(
+                'referensi.id',
+                'referensi.deskripsi',
+                DB::raw('COUNT(users.id) as total')
+            )
+            ->leftJoin('users_status', function($join) {
+                $join->on('referensi.id', '=', 'users_status.ref_id')
+                        ->where('users_status.status', 1)
+                        ->where('users_status.deleted_at',null);
+            })
+            ->leftJoin('users','users_status.pegawai_id', '=', 'users.id')
+            // ->leftJoin('users', function($join) {
+            //     $join->on('users_status.pegawai_id', '=', 'users.id')
+            //             ->where('users.status', null)
+            //             ->where('users.deleted_at',null);
+            // })
+            ->where('referensi.ref_jenis', 10)
+            ->groupBy('referensi.id', 'referensi.deskripsi')
+            ->get();
+
+        $belumMasuk = DB::table('users')
+            ->leftJoin('users_status', function($join) {
+                $join->on('users.id', '=', 'users_status.pegawai_id')
+                    ->where('users_status.status', 1)
+                    ->whereNull('users_status.deleted_at');
+            })
+            ->whereNull('users_status.id') // belum ada di users_status
+            ->whereNull('users.deleted_at') // user aktif
+            ->count('users.id');
+
+        // Format agar mudah dipakai ApexCharts
+        $refid = $data->pluck('id');
+        $labels = $data->pluck('deskripsi');
+        $series = $data->pluck('total');
+
+        return response()->json([
+            'refid' => $refid,
+            'labels' => $labels,
+            'series' => $series,
+            'belumMasuk' => $belumMasuk,
+        ]);
     }
 }
