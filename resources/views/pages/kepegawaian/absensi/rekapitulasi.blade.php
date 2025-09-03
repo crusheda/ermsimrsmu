@@ -1785,16 +1785,20 @@
                     console.log(res);
                     ct = `<div class="row g-3">`;
                     res.show.forEach(item => {
-                        let imgPath = '/storage/' + item.foto_berangkat.replace('public/', '');
+                        let imgPath = 'https://absensi.simrsmu.com/storage/' + item.foto_berangkat.replace('public/', '');
                         ct += `<div class="col-md-1">
-                                    <img src="${imgPath}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                        title="asdsad" data-full="${imgPath}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Berangkat" style="width: 100%">
+                                    <div class="foto-wrapper" style="width: 100%;aspect-ratio: 1 / 1;overflow: hidden;border-radius: 0.5rem;">
+                                        <img src="${imgPath}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                            title="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-full="${imgPath}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Berangkat" style="width: 100%;height: 100%;object-fit: cover;">
+                                    </div>
                                 </div>`;
                         if (item.foto_pulang) {
-                            let imgPathP = '/storage/' + item.foto_pulang.replace('public/', '');
+                            let imgPathP = 'https://absensi.simrsmu.com/storage/' + item.foto_pulang.replace('public/', '');
                             ct += `<div class="col-md-1">
-                                        <img src="${imgPathP}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                            title="asdsad" data-full="${imgPathP}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Pulang" style="width: 100%">
+                                        <div class="foto-wrapper" style="width: 100%;aspect-ratio: 1 / 1;overflow: hidden;border-radius: 0.5rem;">
+                                            <img src="${imgPathP}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                                title="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-full="${imgPathP}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Pulang" style="width: 100%;height: 100%;object-fit: cover;">
+                                        </div>
                                     </div>`;
                         }
                     });
@@ -1805,6 +1809,10 @@
                         message: 'Berhasil menampilkan Rekapitulasi Bukti Foto Absensi Filter Tanggal',
                         position: 'topRight'
                     });
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
                     $(".img-thumb").on("click", function(){
                         let fullUrl = $(this).data("full");
                         let absen = $(this).data("absen");
