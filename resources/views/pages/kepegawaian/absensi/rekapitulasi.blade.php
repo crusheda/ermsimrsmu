@@ -158,6 +158,7 @@
                                     <option value="4">Rekap Absensi (Per Tanggal)</option>
                                     <option value="5">Rekap Cuti</option>
                                     <option value="6">Monitoring Harian Pegawai</option>
+                                    <option value="10">Bukti Foto Absensi</option>
                                 </select>
                             </div>
                         </div>
@@ -181,7 +182,7 @@
                                     <option value="1">Shift/Masuk</option>
                                     {{-- <option value="2"><s>Cuti</s></option> --}}
                                     <option value="3">Ijin/TIdak Masuk</option>
-                                    {{-- <option value="4"><s>OnCall</s></option> --}}
+                                    <option value="4">Dinas Luar</option>
                                 </select>
                             </div>
                         </div>
@@ -252,9 +253,37 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-12" id="foto">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between px-3">
+                    <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Bukti <a class="text-primary">Foto Absensi</a></b></h5>
+                    {{-- <div class="btn-group">
+                        <a href="javascript:void(0);" class="avtar avtar-s btn-link-warning" onclick="showRiwayat()" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Segarkan Tabel"><i class="ti ti-refresh f-20"></i></a>
+                    </div> --}}
+                </div>
+                <div class="card-body" id="tampil-bukti-foto"></div>
+            </div>
+        </div>
     </div>
 
     {{-- MODAL START --}}
+    <div class="modal fade" id="fotoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFotoTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 text-center">
+                    <img id="modalImage" src="" alt="Preview Foto" class="img-fluid rounded-3 shadow-sm">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup <i class="fas fa-arrow-right ms-1"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalDetail" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
@@ -485,20 +514,24 @@
                                 if (pilihan == 6) {
                                     showMonitoringAbsensiHarian();
                                 } else {
-                                    $('#table').prop('hidden',true);
-                                    Swal.fire({
-                                        title: `Ahh Maaf!`,
-                                        text: 'Fitur ini sedang tahap development. Mohon Ditunggu yaa 😊. Tetap Semangat..',
-                                        icon: `success`,
-                                        showConfirmButton: false,
-                                        showCancelButton: false,
-                                        allowOutsideClick: true,
-                                        allowEscapeKey: true,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        backdrop: `rgba(26,27,41,0.8)`,
-                                    });
-                                    // PILIHAN LAIN LAGI APABILA ADA
+                                    if (pilihan == 10) {
+                                        showBuktiFotoAbsensi();
+                                    } else {
+                                        $('#table').prop('hidden',true);
+                                        Swal.fire({
+                                            title: `Ahh Maaf!`,
+                                            text: 'Fitur ini sedang tahap development. Mohon Ditunggu yaa 😊. Tetap Semangat..',
+                                            icon: `success`,
+                                            showConfirmButton: false,
+                                            showCancelButton: false,
+                                            allowOutsideClick: true,
+                                            allowEscapeKey: true,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            backdrop: `rgba(26,27,41,0.8)`,
+                                        });
+                                        // PILIHAN LAIN LAGI APABILA ADA
+                                    }
                                 }
                             }
                         }
@@ -1722,6 +1755,69 @@
                         title: 'System Message!',
                         message: 'Berhasil menampilkan data Monitoring Harian Absensi berdasarkan Jadwal Shift Per Tanggal',
                         position: 'topRight'
+                    });
+                }
+            })
+        }
+
+        function showBuktiFotoAbsensi() {
+            $("#tampil-bukti-foto").empty().append(`<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`);
+            $('#foto').prop('hidden',false);
+            // INITIALIZIE
+            var save = new FormData();
+            save.append('jenis',$('#filter_jenis').val());
+            save.append('unit',JSON.stringify($('#filter_unit').val()));
+            save.append('dari',$('#filter_dari').val());
+            save.append('sampai',$('#filter_sampai').val());
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: `/api/kepegawaian/absensi/table/getBuktifFotoPegawai`,
+                method: 'post',
+                data: save,
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(res) {
+                    $("#tampil-bukti-foto").empty();
+                    console.log(res);
+                    ct = `<div class="row g-3">`;
+                    res.show.forEach(item => {
+                        let imgPath = '/storage/' + item.foto_berangkat.replace('public/', '');
+                        ct += `<div class="col-md-1">
+                                    <img src="${imgPath}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                        title="asdsad" data-full="${imgPath}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Berangkat" style="width: 100%">
+                                </div>`;
+                        if (item.foto_pulang) {
+                            let imgPathP = '/storage/' + item.foto_pulang.replace('public/', '');
+                            ct += `<div class="col-md-1">
+                                        <img src="${imgPathP}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                            title="asdsad" data-full="${imgPathP}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Pulang" style="width: 100%">
+                                    </div>`;
+                        }
+                    });
+                    ct += `</div>`;
+                    $("#tampil-bukti-foto").append(ct);
+                    iziToast.success({
+                        title: 'System Message!',
+                        message: 'Berhasil menampilkan Rekapitulasi Bukti Foto Absensi Filter Tanggal',
+                        position: 'topRight'
+                    });
+                    $(".img-thumb").on("click", function(){
+                        let fullUrl = $(this).data("full");
+                        let absen = $(this).data("absen");
+                        let modalImg = $("#modalImage");
+
+                        modalImg.attr("src", fullUrl);
+                        $('#modalFotoTitle').text('Absensi '+absen);
+                        modalImg.css({
+                            "height": "800px",
+                            "width": "auto"
+                        });
+
+                        $("#fotoModal").modal("show");
                     });
                 }
             })

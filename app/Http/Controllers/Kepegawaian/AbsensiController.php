@@ -819,6 +819,55 @@ class AbsensiController extends Controller
         return response()->json($data);
     }
 
+    function getBuktifFotoPegawai(Request $request)
+    {
+        $unit_ids = json_decode($request->input('unit'), true);
+        $jenis = $request->jenis;
+
+        $dari = $request->dari ? Carbon::parse($request->dari)->format('Y-m-d') : now()->format('Y-m-d');
+        $sampai = $request->sampai ? Carbon::parse($request->sampai)->format('Y-m-d') : now()->format('Y-m-d');
+
+        $show = DB::table('kepegawaian_absensi as a')
+            ->join('users as u', 'u.id', '=', 'a.pegawai_id')
+            ->leftJoin('referensi_jadwal_users as rju', function ($join) {
+                $join->on(DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(a.pegawai_id AS CHAR)))'), '=', DB::raw('TRUE'))
+                    ->whereNull('rju.deleted_at');
+            })
+            ->select(
+                'a.pegawai_id',
+                'a.path_in as foto_berangkat',
+                'a.path_out as foto_pulang',
+                'u.nama',
+                'u.nip',
+                'rju.unit',
+                DB::raw("DATE(a.tgl_in) as tanggal"),
+                DB::raw("TIME(a.tgl_in) as jam_masuk"),
+                DB::raw("IF(a.tgl_out IS NOT NULL, TIME(a.tgl_out), NULL) as jam_pulang"),
+                DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NULL, 'Absen 1x', IF(a.terlambat = 1, 'Terlambat', 'Tepat Waktu')), 'Toleransi') as status_keterangan"),
+                DB::raw("IF(a.jenis = 3, 1, 0) as is_ijin"),
+                DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NULL, 1, 0), 0) as is_alpha"),
+                DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NOT NULL AND a.terlambat = 1, 1, 0), 0) as is_terlambat"),
+                DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NOT NULL AND a.terlambat = 0, 1, 0), 0) as is_tidak_terlambat")
+            )
+            ->when(!empty($unit_ids), function ($query) use ($unit_ids) {
+                $query->whereIn('rju.id', $unit_ids);
+            })
+            ->when($jenis != 0, function ($query) use ($jenis) {
+                $query->where('a.jenis', $jenis);
+            })
+            ->whereBetween('a.tgl_in', [$dari . ' 00:00:00', $sampai . ' 23:59:59'])
+            ->whereNull('a.deleted_at')
+            ->orderBy('a.pegawai_id')
+            ->orderBy('a.tgl_in')
+            ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data);
+    }
+
     function detail($id)
     {
         $show = absensi::where('id',$id)->first();

@@ -174,6 +174,7 @@
     {{-- FIXED DATATABLE --}}
     <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
     <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
+
     <!-- Magnific Popup-->
     <script src="{{ asset('libs/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
 
