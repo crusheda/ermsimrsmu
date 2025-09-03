@@ -1789,7 +1789,7 @@
                         ct += `<div class="col-md-1">
                                     <div class="foto-wrapper" style="width: 100%;aspect-ratio: 1 / 1;overflow: hidden;border-radius: 0.5rem;">
                                         <img src="${imgPath}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                            title="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-full="${imgPath}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Berangkat" style="width: 100%;height: 100%;object-fit: cover;">
+                                            title="${item.nama+' ('+item.unit+') - Berangkat Pukul '+item.jam_masuk+' ('+item.status_keterangan+')'}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-full="${imgPath}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Berangkat" style="width: 100%;height: 100%;object-fit: cover;">
                                     </div>
                                 </div>`;
                         if (item.foto_pulang) {
@@ -1797,7 +1797,7 @@
                             ct += `<div class="col-md-1">
                                         <div class="foto-wrapper" style="width: 100%;aspect-ratio: 1 / 1;overflow: hidden;border-radius: 0.5rem;">
                                             <img src="${imgPathP}" class="img-fluid rounded-3 shadow-sm img-thumb" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
-                                                title="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-full="${imgPathP}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Pulang" style="width: 100%;height: 100%;object-fit: cover;">
+                                                title="${item.nama+' ('+item.unit+') - Pulang Pukul '+item.jam_pulang+' (Status : '+item.status_keterangan+')'}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" data-full="${imgPathP}" data-absen="${item.nama+' ('+item.unit+') - '+item.status_keterangan}" alt="Foto Absensi Pulang" style="width: 100%;height: 100%;object-fit: cover;">
                                         </div>
                                     </div>`;
                         }
