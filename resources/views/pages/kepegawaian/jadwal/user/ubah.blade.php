@@ -141,7 +141,6 @@
                                                 @foreach ($list['ref_shift'] as $item)
                                                     <li><b class="me-1">{{ $item->singkat }}</b>(<u>{{ $item->shift }}</u>) : {{ \Carbon\Carbon::parse($item->berangkat)->isoFormat('HH:mm') }} - {{ \Carbon\Carbon::parse($item->pulang)->isoFormat('HH:mm') }} WIB</li>
                                                 @endforeach
-                                                <li><b class="me-1 text-success">DL</b>(<u class="text-success">DINAS LUAR</u>)</li>
                                                 <li><b class="me-1 text-danger">L</b>(<u class="text-danger">LIBUR</u>)</li>
                                                 <li><b class="me-1 text-danger">C</b>(<u class="text-danger">CUTI TAHUNAN</u>)</li>
                                                 <li><b class="me-1 text-danger">CM</b>(<u class="text-danger">CUTI MELAHIRKAN</u>)</li>

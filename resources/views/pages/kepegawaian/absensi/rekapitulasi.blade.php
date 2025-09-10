@@ -253,7 +253,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-12" id="foto">
+        <div class="col-xl-12" id="foto" hidden>
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between px-3">
                     <h5 class="mb-0 ms-3"><b style="font-size: 1rem">Bukti <a class="text-primary">Foto Absensi</a></b></h5>
@@ -316,19 +316,54 @@
     </div>
     {{-- MODAL HAPUS --}}
     <div class="modal animate__animated animate__rubberBand fade" id="modalUbah" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-        <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
+        <div class="modal-dialog modal-simple modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Ubah&nbsp;<kbd id="tx_ubah_absensi"></kbd>
+                        Form <b class="text-warning">Ubah Absensi</b>&nbsp;<kbd id="tx_ubah_absensi"></kbd>
                     </h4>
                 </div>
                 <div class="modal-body">
                     <input type="text" id="id_ubah_absensi" hidden>
-
+                    <div class="row">
+                        <div class="alert alert-secondary">
+                            <small>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Silakan memperbaiki data absensi dan shift <mark><b>HANYA YANG PERLU DIUBAH SAJA</b></mark><br>
+                                <i class="ti ti-arrow-narrow-right me-1"></i> Form Ubah Absensi ini diperlukan jika pegawai menginginkan perubahan/perbaikan shift dengan kondisi pegawai tersebut telah melakukan/menyelesaikan absensi
+                            </small>
+                        </div>
+                        <h5>DATA <b class="text-primary">SHIFT</b></h5>
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Pilih Perbaikan Shift</label>
+                                <select class="form-control" id="shift_ubah">
+                                    <option value="" hidden>Pilih</option>
+                                </select>
+                            </div>
+                        </div>
+                        <h5>DATA <b class="text-primary">ABSENSI</b></h5>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Absensi Masuk</label>
+                                <input type="datetime-local" class="form-control" id="masuk_ubah">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Absensi Pulang</label>
+                                <input type="datetime-local" class="form-control" id="pulang_ubah" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Keterangan</label>
+                                <textarea class="form-control" id="ket_ubah" rows="3" placeholder="Terisi apabila pegawai telah melakukan Absensi Ijin / Dinas Luar saja"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-ubah-absensi" class="btn btn-warning me-sm-3 me-1" onclick="prosesUbah()"><i class="fa fa-edit me-1" style="font-size:13px"></i> Ubah</button>
+                <div class="modal-footer">
+                    <button type="submit" id="btn-ubah-absensi" class="btn btn-warning me-sm-3 me-1" onclick="prosesUbah()" disabled><i class="fa fa-edit me-1" style="font-size:13px"></i> Ubah</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
@@ -364,21 +399,29 @@
     {{-- MODAL END --}}
 
     <script>
+        let datepicker_range;
+        let datepicker_range_ijin;
+        let datepickerd;
+        let dariDate;
+        let sampaiDate;
+        let dariDateIjin;
+        let sampaiDateIjin;
         $(document).ready(function() {
+            // ubah('1034');
             // ------------------------------------------------------------------------------------- START DATERANGEPICKER
-            const datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
+            datepicker_range = new DateRangePicker(document.querySelector('#pc-datepicker-5'), {
                 buttonClass: 'btn',
                 todayBtn: true,
                 clearBtn: true,
                 format: 'yyyy-mm-dd'
             });
-            const datepicker_range_ijin = new DateRangePicker(document.querySelector('#tgl_ijin'), {
+            datepicker_range_ijin = new DateRangePicker(document.querySelector('#tgl_ijin'), {
                 buttonClass: 'btn',
                 todayBtn: true,
                 clearBtn: false,
                 format: 'yyyy-mm-dd'
             });
-            const datepickerd = new Datepicker(document.querySelector('#filter_tanggal'), {
+            datepickerd = new Datepicker(document.querySelector('#filter_tanggal'), {
                 buttonClass: 'btn',
                 todayBtn: true,
                 clearBtn: true,
@@ -396,10 +439,10 @@
                 tahunLalu -= 1;
             }
 
-            const dariDate = new Date(tahunLalu, bulanLalu, 21);
-            const sampaiDate = new Date(tahun, bulan, 20);
-            const dariDateIjin = new Date(today);
-            const sampaiDateIjin = new Date(today);
+            dariDate = new Date(tahunLalu, bulanLalu, 21);
+            sampaiDate = new Date(tahun, bulan, 20);
+            dariDateIjin = new Date(today);
+            sampaiDateIjin = new Date(today);
 
             // Format ke yyyy-mm-dd string
             const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -468,21 +511,36 @@
             $('#tgl_harian').prop('hidden',true);
             $('#tgl_range').prop('hidden',false);
             pilihan = $('#filter_pilihan').val();
-            if (pilihan == 3) {
-                $('#filter_jenis').val(0).prop('disabled',true);
+            datepicker_range.setDates(dariDate, sampaiDate);
+            if (pilihan == 1) {
+                datepicker_range.setDates(dariDateIjin, sampaiDateIjin);
+                $('#filter_jenis').prop('disabled',false);
             } else {
-                if (pilihan == 4) {
-                    $('#filter_jenis').val(0).prop('disabled',true);
+                if (pilihan == 2) {
+                    $('#filter_jenis').prop('disabled',false);
                 } else {
-                    if (pilihan == 5) {
+                    if (pilihan == 3) {
                         $('#filter_jenis').val(0).prop('disabled',true);
                     } else {
-                        if (pilihan == 6) {
+                        if (pilihan == 4) {
                             $('#filter_jenis').val(0).prop('disabled',true);
-                            $('#tgl_range').prop('hidden',true);
-                            $('#tgl_harian').prop('hidden',false);
                         } else {
-                            $('#filter_jenis').prop('disabled',false);
+                            if (pilihan == 5) {
+                                $('#filter_jenis').val(0).prop('disabled',true);
+                            } else {
+                                if (pilihan == 6) {
+                                    $('#filter_jenis').val(0).prop('disabled',true);
+                                    $('#tgl_range').prop('hidden',true);
+                                    $('#tgl_harian').prop('hidden',false);
+                                } else {
+                                    if (pilihan == 10) {
+                                        datepicker_range.setDates(dariDateIjin, sampaiDateIjin);
+                                        $('#filter_jenis').prop('disabled',false);
+                                    } else {
+                                        $('#filter_jenis').prop('disabled',false);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -746,6 +804,7 @@
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#foto').prop('hidden',true);
             $('#table').prop('hidden',false);
             // INITIALIZIE
             var save = new FormData();
@@ -770,6 +829,7 @@
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
+                        var devID = "{{ Auth::user()->getPermission(['administrator']) }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
                         var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
@@ -778,10 +838,10 @@
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            // if (superID == true) {
-                                            // }
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            if (superID == true || devID == true) {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            }
                                         } else {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                         }
@@ -810,7 +870,11 @@
                             if (item.jenis == 3) {
                                 jenis = `<h6>Tidak Masuk/<b class="text-warning">Ijin</b></h6>`;
                             } else {
-                                jenis = `<h6>Tidak <b class="text-danger">Terdefinisi</b></h6>`;
+                                if (item.jenis == 4) {
+                                    jenis = `<h6>Masuk <b class="text-info">Dinas Luar</b></h6>`;
+                                } else {
+                                    jenis = `<h6>Tidak <b class="text-danger">Terdefinisi</b></h6>`;
+                                }
                             }
                         }
                         content += `<td>${jenis}</td>`;
@@ -822,8 +886,18 @@
                                 colorTglIn = 'text-bg-primary';
                                 terlambat = '<span class="badge text-bg-success" style="padding:3px">Disiplin</span>';
                             } else {
-                                colorTglIn = 'text-bg-warning';
-                                terlambat = '';
+                                if (item.jenis == 3) {
+                                    colorTglIn = 'text-bg-warning';
+                                    terlambat = '';
+                                } else {
+                                    if (item.jenis == 4) {
+                                        colorTglIn = 'text-bg-info';
+                                        terlambat = '';
+                                    } else {
+                                        colorTglIn = 'text-bg-secondary';
+                                        terlambat = '<span class="badge text-bg-danger" style="padding:3px">Tidak Terdefinisi</span>';
+                                    }
+                                }
                             }
                         }
                         if (item.tgl_out) {
@@ -912,6 +986,7 @@
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#foto').prop('hidden',true);
             $('#table').prop('hidden',false);
             // INITIALIZIE
             var save = new FormData();
@@ -936,18 +1011,19 @@
                     res.show.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
+                        var devID = "{{ Auth::user()->getPermission(['administrator']) }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
                         var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm btn-light-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
-                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
-                                            // if (superID == true) {
-                                            // }
+                                            content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                            if (superID == true || devID == true) {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                            }
                                         } else {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
                                         }
@@ -970,27 +1046,39 @@
                             if (item.jenis == 3) {
                                 jenis = `<h6>Tidak Masuk/<b class="text-warning">Ijin</b></h6>`;
                             } else {
-                                jenis = `<h6>Tidak <b class="text-danger">Terdefinisi</b></h6>`;
+                                if (item.jenis == 4) {
+                                    jenis = `<h6>Masuk <b class="text-info">Dinas Luar</b></h6>`;
+                                } else {
+                                    jenis = `<h6>Tidak <b class="text-danger">Terdefinisi</b></h6>`;
+                                }
                             }
                         }
                         content += `<td>${jenis}</td>`;
                         content += `<td>${item.nm_shift} (${item.kd_shift})</td>`;
                         content += `<td>${moment(item.ref_jam_masuk).format('HH:mm') +" - "+ moment(item.ref_jam_pulang).format('HH:mm')}</td>`;
                         if (item.terlambat == 1) {
-                            colorTglIn = 'text-bg-primary';
+                            colorTglIn = 'text-bg-danger';
                         } else {
                             if (item.terlambat == 0) {
                                 colorTglIn = 'text-bg-primary';
                             } else {
-                                colorTglIn = 'text-bg-warning';
+                                if (item.jenis == 3) {
+                                    colorTglIn = 'text-bg-warning';
+                                } else {
+                                    if (item.jenis == 4) {
+                                        colorTglIn = 'text-bg-info';
+                                    } else {
+                                        colorTglIn = 'text-bg-secondary';
+                                    }
+                                }
                             }
                         }
                         content += `<td><span class="badge ${colorTglIn}">${new Date(item.tgl_in).toLocaleString("sv-SE")}</span></td>`;
                         if (item.tgl_out) {
                             tgl_out = '<span class="badge text-bg-secondary">'+new Date(item.tgl_out).toLocaleString("sv-SE")+'</span>';
                         } else {
-                            if (item.jenis != 3) {
-                                tgl_out = '<span class="badge text-bg-info">Belum/Tidak Absen Pulang</span>';
+                            if (item.jenis != 3 && item.jenis != 4) {
+                                tgl_out = '<span class="badge text-bg-danger">Belum/Tidak Absen Pulang</span>';
                             } else {
                                 tgl_out = '-';
                             }
@@ -1125,7 +1213,7 @@
                     <th rowspan="2" class="text-center">PEGAWAI</th>
                     <th rowspan="2" class="text-center">UNIT</th>
                     <th colspan="7" class="text-center">TOTAL (JADWAL DINAS)</th>
-                    <th colspan="5" class="text-center">TOTAL (ABSENSI)</th>
+                    <th colspan="6" class="text-center">TOTAL (ABSENSI)</th>
                     <th rowspan="2" class="text-center">KETERANGAN</th>
                 </tr>
                 <tr>
@@ -1140,10 +1228,12 @@
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Terlambat Dari Data Absensi">TERLAMBAT</th>
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Absen Hanya 1 Kali Dari Data Absensi">ABSEN 1X</th>
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Ijin Dari Data Absensi">IJIN</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Dinas Luar Dari Data Absensi">DINAS LUAR</th>
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Seluruh Absen Dari Data Absensi">ABSENSI</th>
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#foto').prop('hidden',true);
             $('#table').prop('hidden',false);
             // INITIALIZIE
             var save = new FormData();
@@ -1185,6 +1275,7 @@
                         content += `<td class="text-end">${item.total_terlambat}</td>`;
                         content += `<td class="text-end">${item.total_alpha}</td>`;
                         content += `<td class="text-end">${item.total_ijin}</td>`;
+                        content += `<td class="text-end">${item.total_dinas_luar}</td>`;
                         content += `<td class="text-end">${item.total_absensi}</td>`;
                         content += `<td class="text-end text-capitalize">${item.status}</td>`;
                         content += "</tr>";
@@ -1215,7 +1306,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-success'
                             },
@@ -1225,7 +1316,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',  // F4 dalam milimeter
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-danger',
                                 customize: function (doc) {
@@ -1259,7 +1350,7 @@
                                         .css('font-size', 'inherit');
                                 },
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] // hanya kolom tertentu
                                 },
                             },
                             {
@@ -1303,10 +1394,12 @@
                     <th class="text-center">TEPAT WAKTU</th>
                     <th class="text-center">ABSEN 1X</th>
                     <th class="text-center">IJIN</th>
+                    <th class="text-center">DINAS LUAR</th>
                     <th class="text-center">KETERANGAN</th>
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#foto').prop('hidden',true);
             $('#table').prop('hidden',false);
             // INITIALIZIE
             var save = new FormData();
@@ -1337,13 +1430,14 @@
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
                         content += `<td>${item.unit}</td>`;
-                        content += `<td>${item.tanggal}</td>`;
-                        content += `<td>${item.is_terlambat==1?'<b class="text-danger">'+item.jam_masuk+'</b>':item.jam_masuk}</td>`;
-                        content += `<td>${item.jam_pulang?item.jam_pulang:'-'}</td>`;
+                        content += `<td class="text-center">${item.tanggal}</td>`;
+                        content += `<td class="text-center">${item.is_terlambat==1?'<b class="text-danger">'+item.jam_masuk+'</b>':item.jam_masuk}</td>`;
+                        content += `<td class="text-center">${item.jam_pulang?item.jam_pulang:'-'}</td>`;
                         content += `<td class="text-center">${item.is_terlambat==1?'<i class="ti ti-mood-sad text-danger" style="font-size: 20px;"></i>':' '}</td>`;
                         content += `<td class="text-center">${item.is_tidak_terlambat==1?'<i class="ti ti-mood-smile text-success" style="font-size: 20px;"></i>':' '}</td>`;
                         content += `<td class="text-center">${item.is_alpha==1?'<i class="ti ti-mood-neutral text-warning" style="font-size: 20px;"></i>':' '}</td>`;
                         content += `<td class="text-center">${item.is_ijin==1?'<i class="ti ti-mood-crazy-happy text-info" style="font-size: 20px;"></i>':' '}</td>`;
+                        content += `<td class="text-center">${item.is_dinas_luar==1?'<i class="ti ti-mood-happy text-dark" style="font-size: 20px;"></i>':' '}</td>`;
                         content += `<td class="text-end">${item.status_keterangan}</td>`;
                         content += "</tr>";
                         $('#tampil-tbody').append(content);
@@ -1381,7 +1475,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-success'
                             },
@@ -1391,7 +1485,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',  // F4 dalam milimeter
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-danger',
                                 customize: function (doc) {
@@ -1425,7 +1519,7 @@
                                         .css('font-size', 'inherit');
                                 },
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11] // hanya kolom tertentu
                                 },
                             },
                             {
@@ -1467,6 +1561,7 @@
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#foto').prop('hidden',true);
             $('#table').prop('hidden',false);
             // INITIALIZIE
             var save = new FormData();
@@ -1521,7 +1616,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-success'
                             },
@@ -1531,7 +1626,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',  // F4 dalam milimeter
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-danger',
                                 customize: function (doc) {
@@ -1565,7 +1660,7 @@
                                         .css('font-size', 'inherit');
                                 },
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4] // hanya kolom tertentu
                                 },
                             },
                             {
@@ -1599,6 +1694,7 @@
             // });
             $("#tampil-thead").empty().append(`
                 <tr>
+                    <th class="text-center"><center>#ID</center></th>
                     <th class="text-center"><center>NIP</center></th>
                     <th class="text-center">PEGAWAI</th>
                     <th class="text-center">UNIT</th>
@@ -1612,6 +1708,7 @@
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $('#foto').prop('hidden',true);
             $('#table').prop('hidden',false);
             // INITIALIZIE
             var save = new FormData();
@@ -1634,15 +1731,38 @@
                     res.forEach(item => {
                         var updet = new Date(item.updated_at).toLocaleDateString("sv-SE");
                         var date = new Date().toLocaleDateString("sv-SE");
+                        var devID = "{{ Auth::user()->getPermission(['administrator']) }}";
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
                         var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
+                        if (item.id) {
+                            content += `<td><center><div class='btn-group'>
+                                            <button type='button' class='btn btn-sm btn-light-primary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                            <ul class='dropdown-menu dropdown-menu-right'>`;
+                                            if (adminID == true) {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-edit me-2"></i> Ubah</a></li>`;
+                                                if (superID == true || devID == true) {
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                                }
+                                            } else {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
+                                            }
+                            content += "</div></center></td>";
+                        } else {
+                            content += `<td><center><span class="badge bg-light-secondary">-</span></center></td>`;
+                        }
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
                         content += `<td class="text-center">${item.unit}</td>`;
                         content += `<td class="text-center text-capitalize">${item.status_shift}</td>`;
-                        content += `<td class="text-center">${item.jam_berangkat!='00:00:00'?item.jam_berangkat:'-'}</td>`;
-                        content += `<td class="text-center">${item.jam_pulang!='00:00:00'?item.jam_pulang:'-'}</td>`;
+                        if (!['C', 'CM', 'CU', 'CH', 'CD', 'L'].includes(item.kd_shift ?? '')) {
+                            content += `<td class="text-center">${item.jam_berangkat ?? '-'}</td>`;
+                            content += `<td class="text-center">${item.jam_pulang ?? '-'}</td>`;
+                        } else {
+                            content += `<td class="text-center">-</td>`;
+                            content += `<td class="text-center">-</td>`;
+                        }
                         content += `<td class="text-center">${item.absen_berangkat}</td>`;
                         content += `<td class="text-center">${item.absen_pulang}</td>`;
                         if (item.status_disiplin == 'Tepat Waktu') {
@@ -1668,7 +1788,11 @@
                                 if (item.status_absensi == 'Belum Absen / Alpha') {
                                     status_absensi = `<span class="badge bg-light-danger">${item.status_absensi}</span>`;
                                 } else {
-                                    status_absensi = `<span class="badge bg-light-secondary">-</span>`;
+                                    if (item.status_absensi == 'Tidak Valid') {
+                                        status_absensi = `<span class="badge bg-danger">Jam Shift Tidak Valid</span>`;
+                                    } else {
+                                        status_absensi = `<span class="badge bg-light-secondary">-</span>`;
+                                    }
                                 }
                             }
                         }
@@ -1683,9 +1807,9 @@
                     var table = $('#dttable').DataTable({
                         // dom: 'Bfrtip',
                         order: [
-                            [4, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
-                            [2, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
-                            [1, "asc"] // Kolom PEGAWAI (kolom ke-3, index 2)
+                            [5, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
+                            [3, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
+                            [2, "asc"] // Kolom PEGAWAI (kolom ke-3, index 2)
                         ],
                         displayLength: 100,
                         lengthChange: true,
@@ -1697,7 +1821,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [2,3,4,5,6,7,8,9,10,11,12,13,14] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-success'
                             },
@@ -1707,7 +1831,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',  // F4 dalam milimeter
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [2,3,4,5,6,7,8,9,10,11,12,13,14] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-danger',
                                 customize: function (doc) {
@@ -1741,7 +1865,7 @@
                                         .css('font-size', 'inherit');
                                 },
                                 exportOptions: {
-                                    columns: [1,2,3,4,5,6,7,8,9,10,11,12,13] // hanya kolom tertentu
+                                    columns: [2,3,4,5,6,7,8,9,10,11,12,13,14] // hanya kolom tertentu
                                 },
                             },
                             {
@@ -1763,6 +1887,7 @@
         function showBuktiFotoAbsensi() {
             $("#tampil-bukti-foto").empty().append(`<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`);
             $('#foto').prop('hidden',false);
+            $('#table').prop('hidden',true);
             // INITIALIZIE
             var save = new FormData();
             save.append('jenis',$('#filter_jenis').val());
@@ -1845,25 +1970,28 @@
                         if (res.show.jenis == 1) {
                             tx = 'Shift '+res.show.nm_shift;
                             clr = 'primary';
-                            // $('#jenis_shift').empty().append('<span class="badge text-bg-primary p-1">Shift '+res.show.nm_shift+'</span>');
+                            if (res.show.terlambat == 0) {
+                                stt = '<span class="badge text-bg-success p-1">TEPAT WAKTU</span>';
+                            } else {
+                                stt = '<span class="badge text-bg-danger p-1">TERLAMBAT</span>';
+                            }
                         } else {
+                            stt = '<span class="badge text-bg-warning p-1">TOLERANSI</span>';
                             if (res.show.jenis == 3) {
                                 tx = 'Ijin';
                                 clr = 'warning';
-                                // $('#jenis_shift').empty().append('<span class="badge text-bg-warning p-1">Ijin</span>');
                             } else {
-                                tx = 'OnCall';
-                                clr = 'danger';
-                                // $('#jenis_shift').empty().append('<span class="badge text-bg-danger p-1">OnCall</span>');
+                                if (res.show.jenis == 4) {
+                                    tx = 'Dinas Luar';
+                                    clr = 'info';
+                                } else {
+                                    tx = 'OnCall';
+                                    clr = 'danger';
+                                }
                             }
                         }
                         $('#show_jenis_detail').addClass(`text-bg-${clr}`).text(tx);
                         // INIT CONTENT
-                        if (res.show.terlambat == 0) {
-                            stt = '<span class="badge text-bg-success p-1">TEPAT WAKTU</span>';
-                        } else {
-                            stt = '<span class="badge text-bg-danger p-1">TERLAMBAT</span>';
-                        }
                         var parts_in = res.show.tgl_in.split(' '); // pisah berdasarkan spasi
                         date_in = parts_in[0]; // "2025-04-04"
                         time_in = parts_in[1]; // "20:00:00"
@@ -1891,8 +2019,10 @@
                             </tr>
                             <tr>
                                 <th class="text-start">Lokasi</th>
-                                <td>${res.show.lokasi_in}</td>
-                                <td>${res.show.lokasi_out?res.show.lokasi_out:'-'}</td>
+                                <td><a href="https://www.google.com/maps?q=${res.show.lokasi_in}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Klik disini untuk melihat Lokasi Berangkat">${res.show.lokasi_in}</a></td>
+                                <td>${res.show.lokasi_out?`<a href="https://www.google.com/maps?q=${res.show.lokasi_out}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                    title="Klik disini untuk melihat Lokasi Pulang">`+res.show.lokasi_out+'</a>':'-'}</td>
                             </tr>
                             <tr>
                                 <th class="text-start">Tanggal Absen</th>
@@ -1956,13 +2086,133 @@
         }
 
         function ubah(id) {
-            $("#tx_ubah_absensi").text(id);
+            $("#tx_ubah_absensi").text('ID # '+id);
             $("#id_ubah_absensi").val(id);
-            $('#modalUbah').modal('show');
+            $.ajax(
+            {
+                url: "/api/kepegawaian/absensi/"+id+"/ubah",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.show.jenis == 1) {
+                        $("#shift_ubah").find('option').remove();
+                        $("#shift_ubah").append('<option value="" hidden>Pilih</option>');
+                        res.shift.forEach(item => {
+                            $("#shift_ubah").append(`
+                                <option value="${item.id}" ${res.show.kd_shift==item.singkat?"selected":""}>${item.shift} (${item.singkat}) = ${item.berangkat} - ${item.pulang}</option>
+                            `);
+                        })
+                        $("#shift_ubah").append(`
+                            <option value="L">LIBUR (L)</option>
+                            <option value="C">CUTI TAHUNAN (C)</option>
+                            <option value="CM">CUTI MELAHIRKAN (CM)</option>
+                            <option value="CU">CUTI UMROH (CU)</option>
+                            <option value="CH">CUTI HAJI (CH)</option>
+                            <option value="CD">CUTI DILUAR TANGGUNGAN (CD)</option>
+                        `);
+                        $('#masuk_ubah').val(res.show.tgl_in);
+                        if (res.show.tgl_out) {
+                            $('#pulang_ubah').val(res.show.tgl_out).prop('disabled',false);
+                        } else {
+                            $('#pulang_ubah').val('').prop('disabled',true);
+                        }
+                        if (res.show.keterangan) {
+                            $('#ket_ubah').val(res.show.keterangan).prop('disabled',false);
+                        } else {
+                            $('#ket_ubah').val('').prop('disabled',true);
+                        }
+                        $('#modalUbah').modal('show');
+                    } else {
+                        iziToast.warning({
+                            title: 'Pesan Ambigu!',
+                            message: 'Perubahan data absensi berlaku hanya jika Pegawai tsb Absensi Jaga Shift saja. Khusus Ijin / Dinas Luar hanya bisa dilakukan Penghapusan oleh Kepala SDI.',
+                            position: 'topRight'
+                        });
+                    }
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Pengambilan Data Absensi (ID#'+id+') gagal dilakukan. Coba lagi.',
+                        position: 'topRight'
+                    });
+                }
+            })
         }
+
+        // function prosesUbah() {
+        //     $("#btn-ubah").prop('disabled', true);
+        //     $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+
+        //     var save = new FormData();
+        //     var id = $('#id_edit').val();
+        //     save.append('id',id);
+        //     save.append('acara',$('#acara_edit').val());
+        //     save.append('tgl',$('#tgl_edit').val());
+        //     save.append('jenis',$('#jenis_edit').val());
+        //     save.append('kendaraan',$('#kendaraan_edit').val());
+        //     save.append('kendaraan_pegawai',JSON.stringify($('#kendaraan_pegawai_edit').val()));
+        //     save.append('lama1',$('#lama1_edit').val());
+        //     save.append('lama2',$('#lama2_edit').val());
+        //     save.append('lokasi',$('#lokasi_edit').val());
+        //     save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
+        //     save.append('deskripsi',$('#deskripsi_edit').val());
+
+        //     if (
+        //         save.get('acara') == ""   ||
+        //         save.get('tgl') == ""     ||
+        //         save.get('jenis') == ""   ||
+        //         save.get('kendaraan') == ""   ||
+        //         save.get('lama1') == ""   ||
+        //         // save.get('lama2') == ""   ||
+        //         save.get('lokasi') == ""  ||
+        //         $('#pegawai_edit').val() == ""
+        //     ) {
+        //         iziToast.warning({
+        //             title: 'Pesan Ambigu!',
+        //             message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+        //             position: 'topRight'
+        //         });
+        //     } else {
+        //         // AJAX request
+        //         $.ajax({
+        //             headers: {
+        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //             },
+        //             url: "/api/kepegawaian/absensi/"+id+"/ubah/proses",
+        //             method: 'post',
+        //             data: save,
+        //             contentType: false,
+        //             processData: false,
+        //             dataType: 'json',
+        //             success: function(res){
+        //                 notifier.show(
+        //                     "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
+        //                     "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
+        //                 );
+        //                 if (res) {
+        //                     $('#modalUbah').modal('hide');
+        //                     showRiwayat();
+        //                     clearInput();
+        //                 }
+        //             },
+        //             error: function(res){
+        //                 console.log("error : " + JSON.stringify(res) );
+        //                 notifier.show(
+        //                     res.statusText + " (Code " + res.status + ")", res.responseText,
+        //                     "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+        //                 );
+        //             }
+        //         });
+        //     }
+
+        //     $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+        //     $("#btn-ubah").prop('disabled', false);
+        // }
 
         function hapus(id) {
             $("#id_hapus_absensi").val(id);
+            $("#tx_hapus_absensi").text(id);
             var inputs = document.getElementById('setujuhapusabsensi');
             inputs.checked = false;
             $('#modalHapus').modal('show');

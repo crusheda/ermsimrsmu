@@ -168,7 +168,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::post('kepegawaian/absensi/table/getMonitoringAbsensiHarian', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'getMonitoringAbsensiHarian'])->name('kepegawaian.absensi.getMonitoringAbsensiHarian');
                 Route::post('kepegawaian/absensi/table/getBuktifFotoPegawai', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'getBuktifFotoPegawai'])->name('kepegawaian.absensi.getBuktifFotoPegawai');
                 Route::get('kepegawaian/absensi/{id}/detail', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'detail'])->name('kepegawaian.absensi.detail');
-                Route::post('kepegawaian/absensi/ubah', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'ubah'])->name('kepegawaian.absensi.ubah');
+                Route::get('kepegawaian/absensi/{id}/ubah', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'getUbah'])->name('kepegawaian.absensi.getUbah');
+                Route::post('kepegawaian/absensi/{id}/ubah/proses', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'ubah'])->name('kepegawaian.absensi.prosesUbah');
                 Route::get('kepegawaian/absensi/{id}/hapus/{user}', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'hapus'])->name('kepegawaian.absensi.hapus');
         // SURAT TUGAS
             Route::post('kepegawaian/surtug/simpan', [\App\Http\Controllers\Kepegawaian\SurtugController::class, 'simpan'])->name('kepegawaian.surtug.simpan');

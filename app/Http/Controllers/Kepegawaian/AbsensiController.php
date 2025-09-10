@@ -389,6 +389,12 @@ class AbsensiController extends Controller
                 ), 0) as total_ijin'),
                 DB::raw('IFNULL((
                     SELECT COUNT(*) FROM kepegawaian_absensi as a
+                    WHERE a.pegawai_id = u.id AND a.jenis = 4
+                    AND a.deleted_at IS NULL
+                    AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+                ), 0) as total_dinas_luar'),
+                DB::raw('IFNULL((
+                    SELECT COUNT(*) FROM kepegawaian_absensi as a
                     WHERE a.pegawai_id = u.id AND a.jenis = 1 AND a.tgl_out IS NULL
                     AND a.deleted_at IS NULL
                     AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
@@ -428,7 +434,7 @@ class AbsensiController extends Controller
 
             $absenArray = $absensiDetail->map(fn($d) => [
                 'tgl_in' => $d->tgl_in,
-                'terlambat' => $d->terlambat,
+                'terlambat' => $d->terlambat ?? 1,
                 'alpha' => $d->tgl_out === null ? 1 : 0,
             ])->values();
 
@@ -462,9 +468,9 @@ class AbsensiController extends Controller
                 ->pluck('shift', 'singkat')
                 ->toArray();
 
-            if ($item->pegawai_id == 267) {
-                logger()->info("SHIFT MAP PEGAWAI INDUK 6", $shiftMap);
-            }
+            // if ($item->pegawai_id == 267) {
+            //     logger()->info("SHIFT MAP PEGAWAI INDUK 6", $shiftMap);
+            // }
 
             // Ambil rentang bulan
             $bulanTahun = collect(Carbon::parse($dari)->startOfMonth()->monthsUntil(Carbon::parse($sampai)->startOfMonth()->addMonth()))
@@ -589,6 +595,7 @@ class AbsensiController extends Controller
                 DB::raw("IF(a.tgl_out IS NOT NULL, TIME(a.tgl_out), NULL) as jam_pulang"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NULL, 'Absen 1x', IF(a.terlambat = 1, 'Terlambat', 'Tepat Waktu')), 'Toleransi') as status_keterangan"),
                 DB::raw("IF(a.jenis = 3, 1, 0) as is_ijin"),
+                DB::raw("IF(a.jenis = 4, 1, 0) as is_dinas_luar"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NULL, 1, 0), 0) as is_alpha"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NOT NULL AND a.terlambat = 1, 1, 0), 0) as is_terlambat"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NOT NULL AND a.terlambat = 0, 1, 0), 0) as is_tidak_terlambat")
@@ -713,7 +720,7 @@ class AbsensiController extends Controller
             ->join('kepegawaian_jadwal_detail as kd', function ($join) {
                 $join->on('kd.id_jadwal', '=', 'kj.id')->whereNull('kd.deleted_at');
             })
-            ->join('users as u', 'u.id', '=', 'kd.pegawai_id')
+            ->leftJoin('users as u', 'u.id', '=', 'kd.pegawai_id')
             ->where('kj.bulan', $bulan)
             ->where('kj.tahun', $tahun)
             ->where('kj.progress', '!=', 0)
@@ -775,6 +782,12 @@ class AbsensiController extends Controller
                     ? $labelCuti . ' (Izin)'
                     : ($shift ? 'Masuk Shift ' . $shift->shift . ' (Izin)' : 'Masuk Shift ' . $kodeShift . ' (Izin)');
                 $statusAbsensi = '-'; // Izin dianggap pengecualian
+            } elseif ($absen && $absen->jenis == 4) {
+                $statusDisiplin = 'Toleransi';
+                $statusShift = $labelCuti
+                    ? $labelCuti . ' (Dinas Luar)'
+                    : ($shift ? 'Masuk Shift ' . $shift->shift . ' (Dinas Luar)' : 'Masuk Shift ' . $kodeShift . ' (Dinas Luar)');
+                $statusAbsensi = '-'; // Dinas Luar dianggap pengecualian
             } elseif ($labelCuti) {
                 $statusShift = $labelCuti;
                 $statusDisiplin = '-';
@@ -800,12 +813,21 @@ class AbsensiController extends Controller
                         ? 'Terlambat'
                         : 'Tepat Waktu';
                 }
+
+                // JIKA REF SHIFT BERISI 00:00 - 00:00
+                if ($shift && $shift->berangkat == '00:00:00' && $shift->pulang == '00:00:00') {
+                    $statusShift = '<b class="text-danger">Shift Tidak Valid</b> ( KODE = '.($kodeShift ? $kodeShift : 'NULL').' )';
+                    $statusDisiplin = '-';
+                    $statusAbsensi = 'Tidak Valid';
+                }
             }
 
             $data[] = [
+                'id' => $absen->id ?? null,
                 'nip' => $row->nip,
                 'nama' => $row->nama,
                 'unit' => $unit,
+                'kd_shift' => $kodeShift,
                 'status_shift' => $statusShift ?? '-',
                 'status_disiplin' => $statusDisiplin,
                 'status_absensi' => $statusAbsensi,
@@ -845,6 +867,7 @@ class AbsensiController extends Controller
                 DB::raw("IF(a.tgl_out IS NOT NULL, TIME(a.tgl_out), NULL) as jam_pulang"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NULL, 'Absen 1x', IF(a.terlambat = 1, 'Terlambat', 'Tepat Waktu')), 'Toleransi') as status_keterangan"),
                 DB::raw("IF(a.jenis = 3, 1, 0) as is_ijin"),
+                DB::raw("IF(a.jenis = 4, 1, 0) as is_dinas_luar"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NULL, 1, 0), 0) as is_alpha"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NOT NULL AND a.terlambat = 1, 1, 0), 0) as is_terlambat"),
                 DB::raw("IF(a.jenis = 1, IF(a.tgl_out IS NOT NULL AND a.terlambat = 0, 1, 0), 0) as is_tidak_terlambat")
@@ -879,6 +902,38 @@ class AbsensiController extends Controller
         return response()->json($data);
     }
 
+    function getUbah($id)
+    {
+        $show = DB::table('kepegawaian_absensi as a')
+            ->join('users as u', 'u.id', '=', 'a.pegawai_id')
+            ->leftJoin('referensi_jadwal_users as rju', function ($join) {
+                $join->on(DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(a.pegawai_id AS CHAR)))'), '=', DB::raw('TRUE'))
+                    ->whereNull('rju.deleted_at');
+            })
+            ->select('a.*','rju.pegawai_id as id_admin_jadwal','rju.staf','rju.unit')
+            ->where('a.id',$id)
+            ->whereNull('a.deleted_at')
+            ->first();
+
+        $shift = DB::table('referensi_jadwal_shift')
+            ->whereIn('pegawai_id', json_decode($show->staf, true))
+            ->whereNull('deleted_at')
+            ->orderBy('berangkat','asc')
+            ->get();
+
+        $data = [
+            'show' => $show,
+            'shift' => $shift,
+        ];
+
+        return response()->json($data);
+    }
+
+    function ubah(Request $request)
+    {
+
+    }
+
     function hapus($id, $user)
     {
         $now = Carbon::now();
@@ -893,6 +948,9 @@ class AbsensiController extends Controller
         if ($data->path_out) {
             Storage::delete(str_replace('public/', '', $data->path_out));
         }
+
+        // Save DB
+        $data->save();
 
         // Hapus Record DB
         $data->delete();

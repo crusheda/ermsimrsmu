@@ -552,8 +552,7 @@
                                     res.shift.forEach(item => {
                                         content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
                                     });
-                                        content += `<li><b class="me-1 text-success">DL</b>(<u class="text-success">DINAS LUAR</u>)</li>
-                                                    <li><b class="me-1 text-danger">L</b>(<u class="text-danger">LIBUR</u>)</li>
+                                        content += `<li><b class="me-1 text-danger">L</b>(<u class="text-danger">LIBUR</u>)</li>
                                                     <li><b class="me-1 text-danger">C</b>(<u class="text-danger">CUTI TAHUNAN</u>)</li>
                                                     <li><b class="me-1 text-danger">CM</b>(<u class="text-danger">CUTI MELAHIRKAN</u>)</li>
                                                     <li><b class="me-1 text-danger">CU</b>(<u class="text-danger">CUTI UMROH</u>)</li>
