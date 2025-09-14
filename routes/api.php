@@ -62,11 +62,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // DOKUMEN
         Route::get('profilkaryawan/dokumen/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableDokumen'])->name('profilkaryawan.tableDokumen');
         // SPK RKK
-        Route::get('profilkaryawan/spkrkk/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableSpkRkk'])->name('profilkaryawan.tableSpkRkk');
-        Route::post('profilkaryawan/spkrkk/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahSpkRkk'])->name('profilkaryawan.tambahSpkRkk');
-        Route::get('profilkaryawan/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahSpkRkk'])->name('profilkaryawan.show.ubahSpkRkk');
-        Route::post('profilkaryawan/spkrkk/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahSpkRkk'])->name('profilkaryawan.ubahSpkRkk');
-        Route::delete('profilkaryawan/spkrkk/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusSpkRkk'])->name('profilkaryawan.hapusSpkRkk');
+        // Route::get('profilkaryawan/spkrkk/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tableSpkRkk'])->name('profilkaryawan.tableSpkRkk');
+        // Route::post('profilkaryawan/spkrkk/tambah', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahSpkRkk'])->name('profilkaryawan.tambahSpkRkk');
+        // Route::get('profilkaryawan/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showUbahSpkRkk'])->name('profilkaryawan.show.ubahSpkRkk');
+        // Route::post('profilkaryawan/spkrkk/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'ubahSpkRkk'])->name('profilkaryawan.ubahSpkRkk');
+        // Route::delete('profilkaryawan/spkrkk/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'hapusSpkRkk'])->name('profilkaryawan.hapusSpkRkk');
         // KEPEGAWAIAN (NIP, KLASIFIKASI, dan TAT/TMT)
         Route::get('profilkaryawan/kepegawaian/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'showKepegawaian'])->name('profilkaryawan.show.kepegawaian');
         Route::post('profilkaryawan/kepegawaian/nip/simpan', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tambahNIP'])->name('profilkaryawan.tambahNIP');
@@ -192,6 +192,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::delete('kepegawaian/rekrutmen/pengumuman/{id}/hapus', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'hapus'])->name('kepegawaian.rekrutmen.pengumuman.hapus');
             // REGISTRASI/LOKER
             Route::get('kepegawaian/rekrutmen/registrasi/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'table'])->name('kepegawaian.rekrutmen.tableRegistrasi');
+
+    // SPK & RKK
+    Route::get('kepegawaian/spkrkk/table', [\App\Http\Controllers\Kepegawaian\SpkRkkController::class, 'tableSpkRkk'])->name('kepegawaian.spkrkk.table');
+    Route::post('kepegawaian/spkrkk/tambah', [\App\Http\Controllers\Kepegawaian\SpkRkkController::class, 'tambahSpkRkk'])->name('kepegawaian.spkrkk.tambah');
+    Route::get('kepegawaian/spkrkk/ubah/{id}', [\App\Http\Controllers\Kepegawaian\SpkRkkController::class, 'showUbahSpkRkk'])->name('kepegawaian.spkrkk.show.ubah');
+    Route::post('kepegawaian/spkrkk/ubah/{id}/proses', [\App\Http\Controllers\Kepegawaian\SpkRkkController::class, 'ubahSpkRkk'])->name('kepegawaian.spkrkk.ubah');
+    Route::delete('kepegawaian/spkrkk/hapus/{id}/proses', [\App\Http\Controllers\Kepegawaian\SpkRkkController::class, 'hapusSpkRkk'])->name('kepegawaian.spkrkk.hapus');
 
     // HAK AKSES
         // AKSES JABATAN

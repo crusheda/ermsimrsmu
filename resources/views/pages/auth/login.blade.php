@@ -51,7 +51,16 @@
                         <div class="saprator my-2"><span>Selesaikan Captcha</span></div>
                         <div id="reloadedCaptcha" class="mb-3 text-center"><span>{!! captcha_img('math') !!}</span></div>
                         <div class="input-group">
-                            <input type="number" class="form-control" name="captcha" min="0" max="99" onKeyUp="if(this.value>99){this.value='';alert('Masukkan 2 digit hasil penjumlahan Captcha!')}else if(this.value<0){this.value='0';}" placeholder="Tulis hasil penjumlahan dari angka di atas" required>
+                            <input type="text"
+                                class="form-control"
+                                name="captcha"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                maxlength="2"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 2);"
+                                placeholder="Tulis hasil penjumlahan dari angka di atas"
+                                required>
+                            {{-- <input type="number" class="form-control" name="captcha" min="0" max="99" onKeyUp="if(this.value>99){this.value='';alert('Masukkan 2 digit hasil penjumlahan Captcha!')}else if(this.value<0){this.value='0';}" placeholder="Tulis hasil penjumlahan dari angka di atas" required> --}}
                             <button type="button" class="btn btn-outline-primary" id="btn-reload-captcha" style="border-color: #ced4da;border-top-right-radius:8px;border-bottom-right-radius:8px" onclick="reloadCaptcha()" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                             title="1x Refresh Captcha"><i class="fas fa-sync fa-fw nav-icon"></i></button>
                         </div>

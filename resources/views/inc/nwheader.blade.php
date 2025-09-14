@@ -58,11 +58,6 @@
                         data-bs-target="#announcement" aria-controls="announcement" disabled><svg class="pc-icon">
                             <use xlink:href="#custom-flash"></use>
                         </svg></a></li> --}}
-                @php
-                    $notif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('users.nama','datalogs.*')->orderBy('created_at','desc')->limit(15)->get();
-                    $jmlnotif = \App\Models\datalogs::join('users','users.id','=','datalogs.user_id')->select('datalogs.id')->orderBy('created_at','desc')->count();
-                    $jmlnotif = '*';
-                @endphp
                 <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle arrow-none me-0 waves-effect" data-bs-toggle="fullscreen" href="javascript:void(0);" onclick="toggle_fullscreen()" id="fullscreen-btn">
                         <i class="fas fa-expand" style="font-size:22px"></i>
@@ -70,33 +65,33 @@
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="false" aria-expanded="false">
                         <svg class="pc-icon">
                             <use xlink:href="#custom-notification"></use>
-                        </svg> <span class="badge bg-success pc-h-badge">{{ $jmlnotif }}</span>
+                        </svg> <span class="badge bg-info pc-h-badge">*</span>
                     </a>
                     <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
-                            <h5 class="m-0">Ditampilkan ({{ count($notif) }} Pemberitahuan)</h5><a href="javascript:void(0);" class="text-muted text-sm">Diperbarui {{ \Carbon\Carbon::now()->isoFormat('DD/MM/YYYY') }}</a>
+                            <h5 class="m-0">Pemberitahuan Terbaru</h5><a href="javascript:void(0);" class="text-muted text-sm">Diperbarui {{ \Carbon\Carbon::now()->isoFormat('DD/MM/YYYY') }}</a>
                         </div>
                         <div class="dropdown-body text-wrap header-notification-scroll position-relative"
                             style="max-height: calc(100vh - 215px)">
-                            @foreach ($notif as $item)
-                                @if (Auth::user()->getManyRole(["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]) == true)
+                            @if (Auth::user()->getManyPermission(["admin_kepegawaian","admin_kepegawaian_kepala"]) == true)
+                                @foreach ($logs as $item)
                                     <div class="card mb-2">
                                         <div class="card-body">
                                             <div class="d-flex">
-                                                <div class="flex-shrink-0">
+                                                <div class="flex-shrink-0 me-2">
                                                     <h4><i class="ti ti-refresh-alert text-primary"></i></h4>
                                                 </div>
-                                                <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
-                                                    <h5 class="text-body mb-1">Log Kepegawaian</h5>
-                                                    <p class="mb-1">{{ $item->event }} {{ $item->extra?"(".$item->extra.")":"" }}</p>
+                                                <div class="flex-grow-1 text-wrap">
+                                                    <span class="float-end text-sm text-muted">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
+                                                    <h5 class="text-body mb-1">Log Sistem (#<b class="text-muted">{{ $item->id }}</b>)</h5>
+                                                    <p class="mb-1">{{ $item->event }}</p>
                                                     <small class="text-sm text-muted">Oleh {{ $item->nama }}</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endif
-                            @endforeach
-                            @if (Auth::user()->getManyRole(["kabag-kepegawaian","kasubag-kepegawaian","kepegawaian"]) != true)
+                                @endforeach
+                            @else
                                 <div class="card mb-2">
                                     <div class="card-body">
                                         <div class="d-flex">
@@ -105,8 +100,7 @@
                                             </svg></div>
                                             <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">∞</span>
                                                 <h5 class="text-body mb-2">Update System v3.1</h5>
-                                                {{-- <p class="mb-0">Simrsmu sedang dalam pengembangan menjadi lebih baik lagi..</p> --}}
-                                                <p class="mb-0">Akan ada dalam beberapa saat lagi..</p>
+                                                <p class="mb-0">Selamat Beraktivitas..</p>
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +172,7 @@
                                 </div>
                             </div> --}}
                         </div>
-                        <div class="text-center py-2"><a href="javascript:void(0);" class="link-primary">Lihat Semua Notifikasi ({{ $jmlnotif }})</a></div>
+                        <div class="text-center py-2"><a href="javascript:void(0);" class="link-primary">Lihat Semua Notifikasi ({{ $countLogs }})</a></div>
                     </div>
                 </li>
                 <li class="dropdown pc-h-item header-user-profile">

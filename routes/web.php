@@ -30,6 +30,7 @@ Route::get('resetpassword/{token}', [ForgotPasswordController::class, 'showReset
 Route::post('resetpassword', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
 Route::get('dashboard', [App\Http\Controllers\Dashboard\DefaultController::class, 'index'])->name('dashboard');
+Route::get('logs', [App\Http\Controllers\logsController::class, 'index'])->name('logs');
 Route::get('clear-cache', [App\Http\Controllers\Dashboard\DefaultController::class, 'clearCache'])->name('clearcache');
 
 Route::group(['middleware' => ['auth']], function () {
@@ -109,6 +110,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     // ABSENSI
     Route::get('absensi', [App\Http\Controllers\Kepegawaian\AbsensiController::class, 'index'])->name('kepegawaian.absensi.index');
     Route::get('absensi/device', [App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'index'])->name('kepegawaian.absensi.device.index');
+
+    // SPK RKK
+    Route::get('spkrkk', [App\Http\Controllers\Kepegawaian\SpkRkkController::class, 'index'])->name('kepegawaian.spkrkk.index');
 
     // REKRUTMEN
         // PENGUMUMAN

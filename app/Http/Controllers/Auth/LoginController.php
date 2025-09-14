@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -59,5 +61,47 @@ class LoginController extends Controller
     public function username()
     {
         return 'name';
+    }
+
+    protected function attemptLogin(Request $request)
+    {
+        $credentials = $this->credentials($request);
+
+        // ambil user dari database berdasarkan field username()
+        $user = User::where($this->username(), $credentials[$this->username()])->first();
+
+        if ($user && $user->status == 1) {
+            // kalau status = 1 → blokir login
+            return false;
+        }
+
+        // kalau status NULL atau bukan 1 → lanjut login normal
+        return $this->guard()->attempt(
+            $credentials,
+            $request->filled('remember')
+        );
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $user = User::where($this->username(), $request->{$this->username()})->first();
+
+        if (!$user) {
+            // username salah
+            throw ValidationException::withMessages([
+                $this->username() => ['Username tidak ditemukan. Pastikan Username telah didaftarkan sebelumnya.'],
+            ]);
+        }
+
+        if ($user && $user->status == 1) {
+            throw ValidationException::withMessages([
+                $this->username() => ['Akun anda telah dinonaktifkan oleh Sistem, silakan hubungi Administrator.'],
+            ]);
+        }
+
+        // username benar tapi password salah
+        throw ValidationException::withMessages([
+            'password' => ['Password yang anda masukkan salah. Silakan coba lagi.'],
+        ]);
     }
 }

@@ -72,7 +72,7 @@
         <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.surket.index') }}">Surat Keterangan</a></li>
             {{-- <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Surat Ijin</s></a></li> --}}
-            <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Cuti</s></a></li>
+            {{-- <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Cuti</s></a></li> --}}
             <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.idcard.index') }}">ID Card</a></li>
         </ul>
     </li>
@@ -99,6 +99,16 @@
             <span class="pc-mtext">Surat Tugas</span>
         </a>
     </li>
+    @if (Auth::user()->getPermission('admin_spkrkk') == true)
+    <li class="pc-item">
+        <a href="{{ route('kepegawaian.spkrkk.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="ti ti-brand-docker"></i>
+            </span>
+            <span class="pc-mtext">SPK & RKK</span>
+        </a>
+    </li>
+    @endif
     @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getPermission('admin_kepegawaian_kepala') == true || Auth::user()->getRole('karu-it') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
