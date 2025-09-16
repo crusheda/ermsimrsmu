@@ -87,7 +87,11 @@ class SurketController extends Controller
     // USER
     function tableUser($id)
     {
-        $show  = surket::join('referensi','referensi.id','=','kepegawaian_surket.ref_id')->where('kepegawaian_surket.pegawai_id',$id)->select('referensi.deskripsi as kategori','kepegawaian_surket.*')->get();
+        $show  = surket::join('referensi','referensi.id','=','kepegawaian_surket.ref_id')
+                        ->join('users','users.id','=','kepegawaian_surket.valid')
+                        ->where('kepegawaian_surket.pegawai_id',$id)
+                        ->select('referensi.deskripsi as kategori','kepegawaian_surket.*','users.nama as nama_validator')
+                        ->get();
 
         $data = [
             'show' => $show,

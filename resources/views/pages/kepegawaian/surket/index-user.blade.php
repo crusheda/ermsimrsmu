@@ -402,6 +402,7 @@
                     $("#tampil-tbody").empty();
                     $('#dttable').DataTable().clear().destroy();
                     res.show.forEach(item => {
+                        // console.log(item.progress);
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         var date = new Date().toLocaleString("sv-SE").substring(0, 10);
                         // PROGRESS
@@ -427,20 +428,46 @@
                             }
                         }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        if (item.progress == 0) {
+                            btnColor = 'btn-light-secondary';
+                        } else {
+                            if (item.progress == 1) {
+                                btnColor = 'btn-light-primary';
+                            } else {
+                                if (item.progress == 2) {
+                                    btnColor = 'btn-light-info';
+                                } else {
+                                    btnColor = 'btn-light-success';
+                                }
+                            }
+                        }
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm ${btnColor} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>ID#`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
-                                        if (updet == date) {
-                                            if (item.progress == 0) {
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>`;
-                                            } else {
-                                                if (item.progress == 3 || item.title != null) {
-                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick='downloadFile(${item.id})'><i class="fa-fw fas fa-download nav-icon me-1"></i> Download Dokumen Final</a></li>`;
+                                        if (item.progress == 1) {
+                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-download nav-icon me-1"></i> Download Dokumen Final</a></li>`;
+                                            if (updet == date) {
+                                                if (item.progress == 0) {
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus Pengajuan</a></li>`;
+                                                } else {
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus Pengajuan</a></li>`;
                                                 }
-                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>`;
+                                            } else {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus Pengajuan</a></li>`;
                                             }
                                         } else {
-                                            content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus</a></li>`;
+                                            if (item.progress == 2) {
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-download nav-icon me-1"></i> Download Dokumen Final</a></li>`;
+                                                content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus Pengajuan</a></li>`;
+                                            } else {
+                                                if (item.progress == 3) {
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-success' onclick='downloadFile(${item.id})'><i class="fa-fw fas fa-download nav-icon me-1"></i> Download Dokumen Final</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus Pengajuan</a></li>`;
+                                                } else {
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger'><i class="fa-fw fas fa-download nav-icon me-1"></i> Download Dokumen Final</a></li>`;
+                                                    content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon me-1"></i> Hapus Pengajuan</a></li>`;
+                                                }
+                                            }
                                         }
                         content += "</div></center></td>";
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
@@ -492,6 +519,7 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <h6 class='mb-0'>${item.valid?'Telah '+valid+' oleh <b class="text-primary">Kepegawaian</b>':'Belum Terverifikasi'}</h6>
+                                                <small class='text-truncate text-muted'>${item.tgl_valid?'Diverifikasi Oleh '+item.nama_validator:''}</small>
                                                 <small class='text-truncate text-muted'>${item.tgl_valid?'Pada '+item.tgl_valid:''}</small>
                                             </div>
                                         </div>
