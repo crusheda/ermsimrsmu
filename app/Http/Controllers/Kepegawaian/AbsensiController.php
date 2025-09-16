@@ -931,7 +931,122 @@ class AbsensiController extends Controller
 
     function ubah(Request $request)
     {
+        $request->validate([
+            'id' => ['required'],
+            'shift' => ['required'],
+            'masuk' => ['required'],
+        ]);
 
+        $push = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $now = Carbon::now('Asia/Jakarta');
+        $dateMasuk = Carbon::parse($request->masuk)->isoFormat('YYYY/MM/DD');
+        $dateMasukTommorow = Carbon::parse($request->masuk)->addDay()->isoFormat('YYYY/MM/DD');
+        // $today = $now->toDateString();
+        // $tommorow = $now->copy()->addDay()->toDateString();
+
+        // GET SHIFT
+        $shift = ref_jadwal_shift::find($request->shift);
+        $jam_masuk = Carbon::parse($shift->berangkat);
+        $jam_pulang = Carbon::parse($shift->pulang);
+
+        // VALIDASI LEWAT HARI
+        if ($jam_pulang->greaterThan($jam_masuk)) {
+            $ref_berangkat = Carbon::parse($dateMasuk.' '.$shift->berangkat);
+            $ref_pulang = Carbon::parse($dateMasuk.' '.$shift->pulang);
+            $lewathari = 1;
+        } else {
+            $ref_berangkat = Carbon::parse($dateMasuk.' '.$shift->berangkat);
+            $ref_pulang = Carbon::parse($dateMasukTommorow.' '.$shift->pulang);
+            $lewathari = 0;
+        }
+
+        // print_r($ref_berangkat);
+        // print_r($ref_pulang);
+        // die();
+        if ($shift) {
+            $data = absensi::find($request->id);
+            $data->kd_shift = $shift->singkat;
+            $data->nm_shift = $shift->shift;
+            $data->ref_jam_masuk = $ref_berangkat;
+            $data->ref_jam_pulang = $ref_pulang;
+
+            // BERANGKAT
+            if ($request->masuk) {
+                $data->tgl_in = Carbon::parse($request->masuk);
+
+                $awalBerangkat = new Carbon($request->masuk);
+                $initHarusnyaBerangkat = Carbon::parse($ref_berangkat)->addMinutes(10);
+                $harusnyaBerangkat = new Carbon($initHarusnyaBerangkat);
+
+                // SAVE DATA
+                if ($awalBerangkat->gt($harusnyaBerangkat)) {
+                    $data->keterlambatan = $awalBerangkat->diff($harusnyaBerangkat)->format('%H:%I:%S');
+                    $data->terlambat = 1; // TERLAMBAT
+                } else {
+                    $data->keterlambatan = Carbon::parse('00:00:00')->isoFormat('HH:mm:ss');
+                    $data->terlambat = 0; // DISIPLIN
+                }
+            }
+
+            // PULANG
+            if ($request->pulang) {
+                // PERHITUNGAN LEMBUR JAM PULANG
+                $jam_pulang_seharusnya = new Carbon($ref_pulang);
+                $jam_pulang_awal = new Carbon($request->pulang);
+                $diffLembur = $jam_pulang_seharusnya->diff($jam_pulang_awal)->format('%H:%I:%S');
+
+                if ($jam_pulang_seharusnya->gt($jam_pulang_awal)) {
+                    return Response::json(array(
+                        'message' => "Jam Absensi Pulang kurang dari referensi jam shift pulang yang sudah ditetapkan. Silakan periksa Absensi Pulang sekali lagi.",
+                        'code' => 404,
+                    ));
+                }
+
+                // PERHITUNGAN SELISIH JAM SAAT MASUK SAMPAI PULANG
+                $jam_berangkat_tercatat = new Carbon($request->masuk ?? $data->tgl_in);
+                $diffKerja = $jam_berangkat_tercatat->diff($jam_pulang_awal)->format('%H:%I:%S');
+
+                // SAVE DATA
+                $data->lembur = $diffLembur;
+                $data->selisih_jam = $diffKerja;
+                $data->tgl_out = Carbon::parse($request->pulang);
+
+                if ($data->jenis == 1 && !$data->tgl_out) {
+                    $title = uniqid() . '.png';
+                    // path asal di public/images
+                    $path_original = public_path("images/no-image.jpeg");
+                    $path_moved = "public/files/kepegawaian/absensi/ijin/";
+                    // simpan ke storage
+                    Storage::put(
+                        $path_moved . $title,
+                        file_get_contents($path_original)
+                    );
+
+                    // SAVE DATA
+                    $data->lokasi_out     = "-7.677851238136329, 110.83968584828327";
+                    $data->foto_out       = $title;
+                    $data->path_out       = 'public/files/kepegawaian/absensi/ijin/' . $title;
+                }
+            }
+
+            $data->lewat_hari = $lewathari;
+            $data->edit_user = $request->user;
+            $data->edit_tgl = $now;
+            // if ($data->jenis == 3 || $data->jenis == 4) {
+            //     $data->keterangan = $request->ket;
+            // } // SEMENTARA INI UBAH HANYA PADA ABSENSI SHIFT (JENIS = 1)
+            $data->save();
+
+            return Response::json(array(
+                'message' => $push,
+                'code' => 200,
+            ));
+        } else {
+            return Response::json(array(
+                'message' => "Shift tidak valid atau tidak ditemukan",
+                'code' => 404,
+            ));
+        }
     }
 
     function hapus($id, $user)

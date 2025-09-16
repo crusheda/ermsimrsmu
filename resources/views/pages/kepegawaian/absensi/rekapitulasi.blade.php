@@ -335,7 +335,7 @@
                         <h5>DATA <b class="text-primary">SHIFT</b></h5>
                         <div class="col-md-12">
                             <div class="form-group mb-3">
-                                <label class="form-label">Pilih Perbaikan Shift</label>
+                                <label class="form-label">Pilih Perbaikan Shift <a class="text-danger">*</a></label>
                                 <select class="form-control" id="shift_ubah">
                                     <option value="" hidden>Pilih</option>
                                 </select>
@@ -344,17 +344,23 @@
                         <h5>DATA <b class="text-primary">ABSENSI</b></h5>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Absensi Masuk</label>
+                                <label class="form-label">Absensi Masuk <a class="text-danger">*</a></label>
                                 <input type="datetime-local" class="form-control" id="masuk_ubah">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Absensi Pulang</label>
+                                <div class=" d-flex align-items-center justify-content-between">
+                                    <label class="form-label">Absensi Pulang</label>
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="cek_pulang">Isi Absen Pulang?</label>
+                                        <input class="form-check-input" type="checkbox" id="cek_pulang">
+                                    </div>
+                                </div>
                                 <input type="datetime-local" class="form-control" id="pulang_ubah" disabled>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12" hidden>
                             <div class="form-group">
                                 <label class="form-label">Keterangan</label>
                                 <textarea class="form-control" id="ket_ubah" rows="3" placeholder="Terisi apabila pegawai telah melakukan Absensi Ijin / Dinas Luar saja"></textarea>
@@ -363,7 +369,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" id="btn-ubah-absensi" class="btn btn-warning me-sm-3 me-1" onclick="prosesUbah()" disabled><i class="fa fa-edit me-1" style="font-size:13px"></i> Ubah</button>
+                    <button type="submit" id="btn-ubah-absensi" class="btn btn-warning me-sm-3 me-1" onclick="prosesUbah()"><i class="fa fa-edit me-1" style="font-size:13px"></i> Ubah</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
@@ -834,7 +840,7 @@
                         var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm ${item.jenis == 1?'btn-light-info':'btn-light-warning'} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (adminID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="detail(${item.id})"><i class="fas fa-calendar-alt me-2"></i> Detail</a></li>`;
@@ -2095,6 +2101,7 @@
                 dataType: 'json',
                 success: function(res) {
                     if (res.show.jenis == 1) {
+                        $("#id_ubah_absensi").val(id);
                         $("#shift_ubah").find('option').remove();
                         $("#shift_ubah").append('<option value="" hidden>Pilih</option>');
                         res.shift.forEach(item => {
@@ -2113,8 +2120,10 @@
                         $('#masuk_ubah').val(res.show.tgl_in);
                         if (res.show.tgl_out) {
                             $('#pulang_ubah').val(res.show.tgl_out).prop('disabled',false);
+                            $('#cek_pulang').prop('disabled',true);
                         } else {
                             $('#pulang_ubah').val('').prop('disabled',true);
+                            $('#cek_pulang').prop('disabled',false);
                         }
                         if (res.show.keterangan) {
                             $('#ket_ubah').val(res.show.keterangan).prop('disabled',false);
@@ -2122,6 +2131,17 @@
                             $('#ket_ubah').val('').prop('disabled',true);
                         }
                         $('#modalUbah').modal('show');
+
+                        // JIKA INGIN ISI JAM ABSEN PULANG
+                        $('#cek_pulang').on('change', function() {
+                            if ($(this).is(':checked')) {
+                                // Checkbox dicentang
+                                $('#pulang_ubah').val('').prop('disabled',false);
+                            } else {
+                                // Checkbox tidak dicentang
+                                $('#pulang_ubah').val('').prop('disabled',true);
+                            }
+                        });
                     } else {
                         iziToast.warning({
                             title: 'Pesan Ambigu!',
@@ -2140,75 +2160,68 @@
             })
         }
 
-        // function prosesUbah() {
-        //     $("#btn-ubah").prop('disabled', true);
-        //     $("#btn-ubah").find("i").toggleClass("fa-save fa-sync fa-spin");
+        function prosesUbah() {
+            $("#btn-ubah-absensi").prop('disabled', true);
+            $("#btn-ubah-absensi").find("i").removeClass("fa-edit").addClass("fa-sync fa-spin");
 
-        //     var save = new FormData();
-        //     var id = $('#id_edit').val();
-        //     save.append('id',id);
-        //     save.append('acara',$('#acara_edit').val());
-        //     save.append('tgl',$('#tgl_edit').val());
-        //     save.append('jenis',$('#jenis_edit').val());
-        //     save.append('kendaraan',$('#kendaraan_edit').val());
-        //     save.append('kendaraan_pegawai',JSON.stringify($('#kendaraan_pegawai_edit').val()));
-        //     save.append('lama1',$('#lama1_edit').val());
-        //     save.append('lama2',$('#lama2_edit').val());
-        //     save.append('lokasi',$('#lokasi_edit').val());
-        //     save.append('pegawai',JSON.stringify($('#pegawai_edit').val()));
-        //     save.append('deskripsi',$('#deskripsi_edit').val());
+            var save = new FormData();
+            var id = $('#id_ubah_absensi').val();
+            save.append('id',id);
+            save.append('shift',$('#shift_ubah').val());
+            save.append('masuk',$('#masuk_ubah').val());
+            save.append('pulang',$('#pulang_ubah').val());
+            save.append('ket',$('#ket_ubah').val());
+            save.append('user',"{{ Auth::user()->id }}");
 
-        //     if (
-        //         save.get('acara') == ""   ||
-        //         save.get('tgl') == ""     ||
-        //         save.get('jenis') == ""   ||
-        //         save.get('kendaraan') == ""   ||
-        //         save.get('lama1') == ""   ||
-        //         // save.get('lama2') == ""   ||
-        //         save.get('lokasi') == ""  ||
-        //         $('#pegawai_edit').val() == ""
-        //     ) {
-        //         iziToast.warning({
-        //             title: 'Pesan Ambigu!',
-        //             message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
-        //             position: 'topRight'
-        //         });
-        //     } else {
-        //         // AJAX request
-        //         $.ajax({
-        //             headers: {
-        //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //             },
-        //             url: "/api/kepegawaian/absensi/"+id+"/ubah/proses",
-        //             method: 'post',
-        //             data: save,
-        //             contentType: false,
-        //             processData: false,
-        //             dataType: 'json',
-        //             success: function(res){
-        //                 notifier.show(
-        //                     "Pesan Sukses!", "Perubahan berhasil dilakukan pada "+res.message,
-        //                     "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
-        //                 );
-        //                 if (res) {
-        //                     $('#modalUbah').modal('hide');
-        //                     showRiwayat();
-        //                     clearInput();
-        //                 }
-        //             },
-        //             error: function(res){
-        //                 console.log("error : " + JSON.stringify(res) );
-        //                 notifier.show(
-        //                     res.statusText + " (Code " + res.status + ")", res.responseText,
-        //                     "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
-        //                 );
-        //             }
-        //         });
-        //     }
+            if (
+                save.get('shift') == ""   ||
+                save.get('masuk') == ""
+            ) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    position: 'topRight'
+                });
+            } else {
+                // AJAX request
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/kepegawaian/absensi/"+id+"/ubah/proses",
+                    method: 'post',
+                    data: save,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function(res){
+                        if (res.code == 200) {
+                            notifier.show(
+                                "Pesan Sukses!", "Perubahan Data Absensi berhasil dilakukan pada "+res.message,
+                                "success", "{{ asset('images/notification/ok-48.png') }}", 4e3
+                            );
+                            $('#modalUbah').modal('hide');
+                            filter();
+                        } else {
+                            notifier.show(
+                                "Warning Code " + res.code, res.message,
+                                "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                            );
+                        }
+                    },
+                    error: function(res){
+                        console.log("error : " + JSON.stringify(res) );
+                        notifier.show(
+                            res.statusText + " (Code " + res.status + ")", res.responseText,
+                            "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
+                        );
+                    }
+                });
+            }
 
-        //     $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-        //     $("#btn-ubah").prop('disabled', false);
-        // }
+            $("#btn-ubah-absensi").find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
+            $("#btn-ubah-absensi").prop('disabled', false);
+        }
 
         function hapus(id) {
             $("#id_hapus_absensi").val(id);
