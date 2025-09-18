@@ -112,8 +112,10 @@
                                     <small>
                                         <h6><center>Mohon Diperhatikan <b class="text-danger">Panduan Di Bawah</b> Sebelum Melakukan Pengisian!</center></h6>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Perhatikan penulisan Nama Singkat Shift karena kata tersebut akan menjadi pilihan dalam penentuan Jadwal Dinas<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Penambahan Jam Berangkat dan Jam Pulang harus sesuai dengan kebijakan yang ada, tidak diperbolehkan membuat jam shift sendiri / <i>OnRequest</i> (Diluar Jam Shift Berangkat & Pulang yang sudah ada) tanpa persetujuan bagian SDI<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Penulisan Nama Singkat Shift hanya diperbolehkan <kbd>2 HURUF</kbd><br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Shift yang akan ditambahkan tidak boleh sama dengan yang sudah ada<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Tidak diperbolehkan menambahkan Shift dengan selisih kurang dari 4 Jam, e.g (00:00 - 00:00)<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Format Waktu/Jam Shift = <u><b>JAM (24 Jam) : MENIT</b></u><br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Terkait <kbd>Toleransi Kehadiran (10 Menit)</kbd> sudah otomatis dari sistem<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Waktu/Jam Shift Berangkat dan Pulang tidak boleh sama<br>
@@ -187,8 +189,10 @@
                                     <small>
                                         <h6><center>Mohon Diperhatikan <b class="text-danger">Panduan Di Bawah</b> Sebelum Melakukan Pengisian!</center></h6>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Perhatikan penulisan Nama Singkat Shift karena kata tersebut akan menjadi pilihan dalam penentuan Jadwal Dinas<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Penambahan Jam Berangkat dan Jam Pulang harus sesuai dengan kebijakan yang ada, tidak diperbolehkan membuat jam shift sendiri / <i>OnRequest</i> (Diluar Jam Shift Berangkat & Pulang yang sudah ada) tanpa persetujuan bagian SDI<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Penulisan Nama Singkat Shift hanya diperbolehkan <kbd>2 HURUF</kbd><br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Shift yang akan diubah tidak boleh sama dengan yang sudah ada<br>
+                                        <i class="fas fa-caret-right text-primary me-1"></i> Tidak diperbolehkan menambahkan Shift dengan selisih kurang dari 4 Jam, e.g (00:00 - 00:00)<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Format Waktu/Jam Shift = <u><b>JAM (24 Jam) : MENIT</b></u><br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Terkait <kbd>Toleransi Kehadiran (10 Menit)</kbd> sudah otomatis dari sistem<br>
                                         <i class="fas fa-caret-right text-primary me-1"></i> Waktu/Jam Shift Berangkat dan Pulang tidak boleh sama<br>
@@ -507,14 +511,22 @@
                         pegawai: pegawai,
                     },
                     success: function(res) {
-                        iziToast.success({
-                            title: 'Sukses!',
-                            message: 'Tambah Shift berhasil pada '+ res,
-                            position: 'topRight'
-                        });
                         if (res) {
-                            $('.modal').modal('hide');
-                            refresh();
+                            if (res.code == 200) {
+                                $('.modal').modal('hide');
+                                iziToast.success({
+                                    title: 'Sukses!',
+                                    message: 'Tambah Shift berhasil pada '+ res.message,
+                                    position: 'topRight'
+                                });
+                                refresh();
+                            } else {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.message,
+                                    position: 'topRight'
+                                });
+                            }
                         }
                     },
                     error: function (res) {
@@ -600,24 +612,33 @@
                     processData: false,
                     dataType: 'json',
                     success: function(res){
-                        iziToast.success({
-                            title: 'Pesan Sukses! ID : '+fd.get('id'),
-                            message: 'Shift berhasil diperbarui pada '+res,
-                            position: 'topRight'
-                        });
                         if (res) {
-                            $('#ubah').modal('hide');
-                            refresh();
+                            if (res.code == 200) {
+                                iziToast.success({
+                                    title: 'Pesan Sukses! ID : '+fd.get('id'),
+                                    message: 'Shift berhasil diperbarui pada '+res.message,
+                                    position: 'topRight'
+                                });
+                                $('#ubah').modal('hide');
+                                refresh();
+                            } else {
+                                iziToast.error({
+                                    title: 'Pesan Galat! ID : '+fd.get('id'),
+                                    message: 'Shift gagal diperbarui. '+res.message,
+                                    position: 'topRight'
+                                });
+                            }
                         }
+                        $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        $("#btn-ubah").prop('disabled', false);
                     },
                     error: function(res){
                         console.log("error : " + JSON.stringify(res) );
+                        $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                        $("#btn-ubah").prop('disabled', false);
                     }
                 });
             }
-
-            $("#btn-ubah").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#btn-ubah").prop('disabled', false);
         }
 
         function hapus(id) {
