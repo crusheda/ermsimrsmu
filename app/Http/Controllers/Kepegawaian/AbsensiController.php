@@ -443,7 +443,7 @@ class AbsensiController extends Controller
             for ($i = 0; $i <= count($absenArray) - 5; $i++) {
                 $chunk = array_slice($absenArray->toArray(), $i, 5);
                 $jumlahTerlambat = collect($chunk)->where('terlambat', 1)->count();
-                if ($jumlahTerlambat >= 4) {
+                if ($jumlahTerlambat > 4) {
                     $hangus_beruntun = true;
                     break;
                 }
