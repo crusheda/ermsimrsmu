@@ -166,13 +166,15 @@ class PengumumanController extends Controller
         }
     }
 
-    function hapus($id)
+    function nonaktif($id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
         $data = pengumuman::find($id);
-        $data->delete();
+        $data->status = 0;
+        $data->save();
+        // $data->delete();
 
         return response()->json($tgl, 200);
     }

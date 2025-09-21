@@ -30,6 +30,7 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-warning" onclick="refresh()"><i class="fa-fw fas fa-sync nav-icon"></i></button>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambah"><i class="fa-fw fas fa-plus-square nav-icon"></i>&nbsp;&nbsp;Tambah Loker</button>
+                        <button type="button" class="btn btn-info" onclick="window.location='{{ route('kepegawaian.rekrutmen.indexRegistrasi') }}'"><i class="fa-fw fas fa-users nav-icon"></i>&nbsp;&nbsp;Lihat Peserta</button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -317,19 +318,19 @@
             </div>
         </div>
     </div>
-    <div class="modal animate__animated animate__rubberBand fade" id="modalHapus" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal animate__animated animate__rubberBand fade" id="modalNonAKtif" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-add-new-address modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        Form Hapus Lowongan Kerja
+                        Form Non Aktif Lowongan Kerja
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="id_hapus" hidden>
-                    <p style="text-align: justify;">Anda akan menghapus Lowongan Pekerjaan tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penghapusan.</p>
+                    <input type="text" id="id_nonaktif" hidden>
+                    <p style="text-align: justify;">Anda akan menonaktifkan Lowongan Pekerjaan tersebut, lakukanlah dengan hati-hati. Ceklis dibawah untuk melanjutkan penonaktifan.</p>
                     <label class="switch">
-                        <input type="checkbox" class="switch-input" id="setujuhapus">
+                        <input type="checkbox" class="switch-input" id="setujunonaktif">
                         <span class="switch-toggle-slider">
                         <span class="switch-on"></span>
                         <span class="switch-off"></span>
@@ -338,7 +339,7 @@
                     </label>
                 </div>
                 <div class="col-12 text-center mb-4">
-                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesHapus()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus</button>
+                    <button type="submit" id="btn-hapus" class="btn btn-danger me-sm-3 me-1" onclick="prosesNonAktif()"><i class="fa fa-trash me-1" style="font-size:13px"></i> Nonaktifkan</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times me-1" style="font-size:13px"></i> Batal</button>
                 </div>
             </div>
@@ -370,6 +371,7 @@
                     dataType: 'json', // added data type
                     success: function(res) {
                         var adminID = "{{ Auth::user()->getPermission('admin_kepegawaian') }}";
+                        var kepalaID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         // var userID = "{{ Auth::user()->id }}";
                         $("#tampil-tbody").empty();
                         $('#dttable').DataTable().clear().destroy();
@@ -377,11 +379,23 @@
                         res.show.forEach(item => {
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-light btn-sm text-muted font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
-                                if (item.deleted_at == null) {
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-info' onclick="lihat(`+item.id+`)"><i class='fas fa-file-invoice me-2'></i> Lihat</a>`;
+                                if (item.status == 1) {
+                                    if (moment(res.now).format('YYYY-MM-DD') >= moment(item.mulai).format('YYYY-MM-DD')) {
+                                        if (moment(res.now).format('YYYY-MM-DD') <= moment(item.selesai).format('YYYY-MM-DD')) {
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="ubah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="nonaktif(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash me-1'></i> Non Aktif</a>`;
+                                        } else {
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                            content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Non Aktif</a>`;
+                                        }
+                                    } else {
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                        content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Non Aktif</a>`;
+                                    }
                                 } else {
-                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Hapus</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-edit me-1'></i> Ubah</a>`;
+                                    content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-trash me-1'></i> Non Aktif</a>`;
                                 }
                             content += `</div></center></td>`;
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>
@@ -402,14 +416,18 @@
                             content += `<td>${item.keahlian}</td>`;
                             content += `<td>${item.persyaratan}</td>`;
                             content += `<td>${item.keterangan?item.keterangan:'-'}</td>`;
-                            if (moment(res.now).format('YYYY-MM-DD') >= moment(item.mulai).format('YYYY-MM-DD')) {
-                                if (moment(res.now).format('YYYY-MM-DD') <= moment(item.selesai).format('YYYY-MM-DD')) {
-                                    content += `<td><span class="badge rounded-pill text-bg-primary">Aktif</span></td>`;
+                            if (item.status == 1) {
+                                if (moment(res.now).format('YYYY-MM-DD') >= moment(item.mulai).format('YYYY-MM-DD')) {
+                                    if (moment(res.now).format('YYYY-MM-DD') <= moment(item.selesai).format('YYYY-MM-DD')) {
+                                        content += `<td><span class="badge rounded-pill text-bg-primary">Aktif</span></td>`;
+                                    } else {
+                                        content += `<td><span class="badge rounded-pill text-bg-success">Selesai</span></td>`;
+                                    }
                                 } else {
-                                    content += `<td><span class="badge rounded-pill text-bg-danger">Tidak Aktif</span></td>`;
+                                    content += `<td><span class="badge rounded-pill text-bg-warning">Segera Dimulai</span></td>`;
                                 }
                             } else {
-                                content += `<td><span class="badge rounded-pill text-bg-danger">Tidak Aktif</span></td>`;
+                                content += `<td><span class="badge rounded-pill text-bg-danger">Nonaktif</span></td>`;
                             }
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                             <div class='d-flex justify-content-start align-items-center'>
@@ -688,16 +706,16 @@
             }
         }
 
-        function hapus(id) {
-            $("#id_hapus").val(id);
-            var inputs = document.getElementById('setujuhapus');
+        function nonaktif(id) {
+            $("#id_nonaktif").val(id);
+            var inputs = document.getElementById('setujunonaktif');
             inputs.checked = false;
-            $('#modalHapus').modal('show');
+            $('#modalNonAKtif').modal('show');
         }
 
-        function prosesHapus() {
+        function prosesNonAktif() {
             // SWITCH BTN HAPUS
-            var checkboxHapus = $('#setujuhapus').is(":checked");
+            var checkboxHapus = $('#setujunonaktif').is(":checked");
             if (checkboxHapus == false) {
                 iziToast.error({
                     title: 'Pesan Galat!',
@@ -706,7 +724,7 @@
                 });
             } else {
                 // PROSES HAPUS
-                var id = $("#id_hapus").val();
+                var id = $("#id_nonaktif").val();
                 $.ajax({
                     url: "/api/kepegawaian/rekrutmen/pengumuman/"+id+"/hapus",
                     type: 'DELETE',
@@ -716,7 +734,7 @@
                             message: 'Lowongan Pekerjaan telah berhasil dihapus pada '+res,
                             position: 'topRight'
                         });
-                        $('#modalHapus').modal('hide');
+                        $('#modalNonAKtif').modal('hide');
                         refresh();
                     },
                     error: function(res) {

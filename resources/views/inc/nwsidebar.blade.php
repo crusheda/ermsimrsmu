@@ -139,7 +139,7 @@
             </a>
             <ul class="pc-submenu">
                 <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.rekrutmen.indexPengumuman') }}">Lowongan Kerja</a></li>
-                <li class="pc-item"><a class="pc-link" href="javascript: void(0);"><s>Peserta</s></a></li>
+                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.rekrutmen.indexRegistrasi') }}">Daftar Peserta</a></li>
                 {{-- {{ route('kepegawaian.rekrutmen.indexRegistrasi') }} --}}
             </ul>
         </li>

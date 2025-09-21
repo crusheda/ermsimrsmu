@@ -189,9 +189,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('kepegawaian/rekrutmen/pengumuman/{id}/show', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'show'])->name('kepegawaian.rekrutmen.pengumuman.show');
             Route::post('kepegawaian/rekrutmen/pengumuman/simpan', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'simpan'])->name('kepegawaian.rekrutmen.pengumuman.simpan');
             Route::post('kepegawaian/rekrutmen/pengumuman/ubah', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'ubah'])->name('kepegawaian.rekrutmen.pengumuman.ubah');
-            Route::delete('kepegawaian/rekrutmen/pengumuman/{id}/hapus', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'hapus'])->name('kepegawaian.rekrutmen.pengumuman.hapus');
+            Route::delete('kepegawaian/rekrutmen/pengumuman/{id}/nonaktif', [\App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'nonaktif'])->name('kepegawaian.rekrutmen.pengumuman.nonaktif');
             // REGISTRASI/LOKER
-            Route::get('kepegawaian/rekrutmen/registrasi/table', [\App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'table'])->name('kepegawaian.rekrutmen.tableRegistrasi');
+            Route::get('kepegawaian/rekrutmen/registrasi/table/{id}', [\App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'table'])->name('kepegawaian.rekrutmen.tableRegistrasi');
+            // Route::get('kepegawaian/rekrutmen/registrasi/download/{dokumen}/{peserta}', [\App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'previewPdf'])->name('kepegawaian.rekrutmen.previewPdf');
 
     // SPK & RKK
     Route::get('kepegawaian/spkrkk/table', [\App\Http\Controllers\Kepegawaian\SpkRkkController::class, 'tableSpkRkk'])->name('kepegawaian.spkrkk.table');

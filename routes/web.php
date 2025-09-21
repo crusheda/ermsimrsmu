@@ -117,7 +117,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
     // REKRUTMEN
         // PENGUMUMAN
         Route::get('rekrutmen/pengumuman', [App\Http\Controllers\Kepegawaian\Rekrutmen\PengumumanController::class, 'index'])->name('kepegawaian.rekrutmen.indexPengumuman');
-        // REGISTRASI
+        // REGISTRASI PESERTA
         Route::get('rekrutmen/registrasi', [App\Http\Controllers\Kepegawaian\Rekrutmen\RegistrasiController::class, 'index'])->name('kepegawaian.rekrutmen.indexRegistrasi');
 });
 
