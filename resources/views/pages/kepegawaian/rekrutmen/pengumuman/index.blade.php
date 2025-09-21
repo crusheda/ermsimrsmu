@@ -726,7 +726,7 @@
                 // PROSES HAPUS
                 var id = $("#id_nonaktif").val();
                 $.ajax({
-                    url: "/api/kepegawaian/rekrutmen/pengumuman/"+id+"/hapus",
+                    url: "/api/kepegawaian/rekrutmen/pengumuman/{{ Auth::user()->id }}/nonaktif/"+id+"",
                     type: 'DELETE',
                     success: function(res) {
                         iziToast.success({

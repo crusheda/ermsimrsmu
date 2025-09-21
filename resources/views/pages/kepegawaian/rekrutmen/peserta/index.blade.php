@@ -64,12 +64,12 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-secondary mb-3">
+                    {{-- <div class="alert alert-secondary mb-3">
                         <small>
-                            {{-- <i class="fa-fw fas fa-caret-right nav-icon"></i> Hapus Lowongan Kerja digunakan HANYA apabila lowongan salah/dibatalkan <br>
-                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Lowongan akan tampil pada Website RS setelah input pada rentang tanggal dibuka sampai ditutup <br> --}}
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Hapus Lowongan Kerja digunakan HANYA apabila lowongan salah/dibatalkan <br>
+                            <i class="fa-fw fas fa-caret-right nav-icon"></i> Lowongan akan tampil pada Website RS setelah input pada rentang tanggal dibuka sampai ditutup <br>
                         </small>
-                    </div>
+                    </div> --}}
                     <div class="table-responsive">
                         <table id="dttable" class="table table-hover dt-responsive align-middle">
                             <thead>
@@ -134,14 +134,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
+                    <input type="text" class="form-control" id="inp_hasil_old" hidden>
                     <input type="text" class="form-control" id="inp_peserta_id" hidden>
-                    <div class="form-group">
-                        <label class="form-label">Pilihan Hasil Seleksi</label>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Pilihan Hasil Seleksi <b class="text-danger">*</b></label>
                         <select class="form-control" id="inp_hasil"></select>
+                    </div>
+                    <div class="form-group mb-3 seleksi" hidden>
+                        <label class="form-label">Tanggal Seleksi <b class="text-danger">*</b></label>
+                        <input type="date" class="form-control" id="tgl_seleksi">
+                    </div>
+                    <div class="form-group mb-3 seleksi" hidden>
+                        <label class="form-label">Ruang Seleksi <b class="text-danger">*</b></label>
+                        <input type="text" class="form-control" id="inp_ruang"></input>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keterangan Hasil Seleksi <b class="text-danger">*</b></label>
+                        <textarea class="form-control" id="inp_ket" rows="3" placeholder="Keterangan yang dimasukkan akan dapat dilihat oleh Calon Pegawai melalui halaman Hasil Seleksi di Website RS"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" id="btn-ubah-hasil" class="btn btn-primary me-sm-1 me-1" onclick="prosesHasil()" disabled><i class="fa fa-save me-1" style="font-size:13px"></i> Tetapkan Hasil</button>
+                    <button type="submit" id="btn-ubah-hasil" class="btn btn-primary me-sm-1 me-1" onclick="prosesHasil()"><i class="fa fa-save me-1" style="font-size:13px"></i> Tetapkan Hasil</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
@@ -191,7 +204,11 @@
                             }
                             content = "<tr id='data"+ item.id +"'>";
                             content += `<td><center><div class='dropend'><a href='javascript:void(0);' class='btn btn-${clHasil} btn-sm font-size-16 rounded' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`;
-                                content += `<a href='javascript:void(0);' class='dropdown-item text-${clHasil}' onclick="hasil(${item.id},${item.hasil})"><i class='fas fa-file-invoice me-2'></i> Hasil</a>`;
+                            if (item.hasil == 0) {
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-secondary'><i class='fas fa-file-invoice me-2'></i> Hasil</a>`;
+                            } else {
+                                content += `<a href='javascript:void(0);' class='dropdown-item text-${clHasil}' onclick="ubahHasil(${item.id},${item.hasil})"><i class='fas fa-file-invoice me-2'></i> Hasil</a>`;
+                            }
                                 // if (item.status == 1) {
                                 //     if (moment(res.now).format('YYYY-MM-DD') >= moment(item.mulai).format('YYYY-MM-DD')) {
                                 //         if (moment(res.now).format('YYYY-MM-DD') <= moment(item.selesai).format('YYYY-MM-DD')) {
@@ -242,13 +259,13 @@
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.alamat_lengkap}</td>`;
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.pendidikan}</td>`;
                             content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.sosmed}</td>`;
-                            content += `<td><center><button class="btn btn-light-success rounded" id="download1" onclick="showPreviewPdf(1,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
-                            content += `<td><center><button class="btn btn-light-success rounded" id="download2" onclick="showPreviewPdf(2,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
-                            content += `<td><center><button class="btn btn-light-success rounded" id="download3" onclick="showPreviewPdf(3,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
-                            content += `<td><center><button class="btn btn-light-success rounded" id="download4" onclick="showPreviewPdf(4,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
-                            content += `<td><center><button class="btn btn-light-success rounded" id="download5" onclick="showPreviewPdf(5,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
+                            content += `<td><center><button class="btn btn-light-${clHasil} rounded" id="download1" onclick="showPreviewPdf(1,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
+                            content += `<td><center><button class="btn btn-light-${clHasil} rounded" id="download2" onclick="showPreviewPdf(2,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
+                            content += `<td><center><button class="btn btn-light-${clHasil} rounded" id="download3" onclick="showPreviewPdf(3,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
+                            content += `<td><center><button class="btn btn-light-${clHasil} rounded" id="download4" onclick="showPreviewPdf(4,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
+                            content += `<td><center><button class="btn btn-light-${clHasil} rounded" id="download5" onclick="showPreviewPdf(5,'${item.encrypted_id}')"><i class="fas fa-download"></i></button></center></td>`;
                             if (item.p_sertifikat) {
-                                content += `<td><center><button class="btn btn-light-success rounded" id="download6" onclick="showPreviewPdf(6,${item.id})"><i class="fas fa-download"></i></button></center></td>`;
+                                content += `<td><center><button class="btn btn-light-${clHasil} rounded" id="download6" onclick="showPreviewPdf(6,${item.id})"><i class="fas fa-download"></i></button></center></td>`;
                             } else {
                                 content += `<td><center><button class="btn btn-secondary rounded" disabled><i class="fas fa-download"></i></button></center></td>`;
                             }
@@ -306,8 +323,9 @@
             );
         }
 
-        function hasil(id,hasil) {
+        function ubahHasil(id,hasil) {
             $('#inp_peserta_id').val(id);
+            $('#inp_hasil_old').val(hasil);
             $('#id_hasil').text('ID#'+id);
 
             $('#inp_hasil').empty();
@@ -319,11 +337,140 @@
             `);
             $('#inp_hasil').val(hasil).trigger('change');
 
+            if (hasil == 1) {
+                $('.seleksi').prop('hidden',false);
+            } else {
+                $('.seleksi').prop('hidden',true);
+            }
+
             $('#formHasil').modal('show');
         }
 
         function prosesHasil() {
-            filter();
+            $("#btn-ubah-hasil").prop('disabled', true);
+            $("#btn-ubah-hasil").find("i").removeClass("fa-save").addClass('fa-sync fa-spin');
+            // Definisi
+            id = $('#inp_peserta_id').val();
+            ket = $('#inp_ket').val();
+            tgl_seleksi = $('#tgl_seleksi').val();
+            ruang_seleksi = $('#inp_ruang').val();
+            hasil = $('#inp_hasil').val();
+            hasil_old = $('#inp_hasil_old').val();
+
+            if (hasil < hasil_old) {
+                if (hasil != 0) {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Hasil Seleksi harus berprogress maju, tidak bisa memundurkan tahap seleksi!',
+                        position: 'topRight'
+                    });
+                    $("#btn-ubah-hasil").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                    $("#btn-ubah-hasil").prop('disabled', false);
+                    return;
+                }
+            }
+
+            if (hasil_old == 1 && hasil == 3) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Hasil Seleksi harus berprogress maju, tidak bisa memundurkan tahap seleksi!',
+                    position: 'topRight'
+                });
+                $("#btn-ubah-hasil").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                $("#btn-ubah-hasil").prop('disabled', false);
+                return;
+            }
+
+            var save = new FormData();
+            save.append('id',id);
+            save.append('tgl_seleksi',tgl_seleksi);
+            save.append('ruang_seleksi',ruang_seleksi);
+            save.append('ket',ket);
+            save.append('hasil',hasil);
+            save.append('pegawai','{{ Auth::user()->id }}');
+
+            if (hasil_old == 1) {
+                if (tgl_seleksi == '' || ruang_seleksi == '') {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Apabila Hasil diubah ke Lanjut Seleksi, maka wajib memasukkan Tanggal dan Ruang Seleksi. Periksa Perubahan Hasil Seleksi Anda!',
+                        position: 'topRight'
+                    });
+                    $("#btn-ubah-hasil").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                    $("#btn-ubah-hasil").prop('disabled', false);
+                    return;
+                }
+            }
+
+            if (hasil == hasil_old) {
+                iziToast.warning({
+                    title: 'Pesan Ambigu!',
+                    message: 'Pilihan Hasil Seleksi tidak diboleh sama dengan sebelumnya. Periksa Hasil Seleksi baru Anda!',
+                    position: 'topRight'
+                });
+                $("#btn-ubah-hasil").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                $("#btn-ubah-hasil").prop('disabled', false);
+            } else {
+                if (ket == '') {
+                    iziToast.warning({
+                        title: 'Pesan Ambigu!',
+                        message: 'Keterangan Hasil Seleksi wajib terisi. Periksa keterangan Hasil Seleksi sekali lagi!',
+                        position: 'topRight'
+                    });
+                    $("#btn-ubah-hasil").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                    $("#btn-ubah-hasil").prop('disabled', false);
+                } else {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        method: 'POST',
+                        url: `/api/kepegawaian/rekrutmen/registrasi/hasil`,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        data: save,
+                        success: function(res) {
+                            if (res.code == 400) {
+                                iziToast.error({
+                                    title: 'Pesan Galat!',
+                                    message: res.message,
+                                    position: 'topRight',
+                                    buttons: [
+                                        [
+                                            '<button>Tutup</button>',
+                                            function (instance, toast) {
+                                                instance.hide({
+                                                    transitionOut: 'fadeOutUp'
+                                                }, toast);
+                                            }
+                                        ]
+                                    ]
+                                });
+                            } else {
+                                iziToast.success({
+                                    title: 'Pesan Sukses!',
+                                    message: res.message,
+                                    position: 'topRight'
+                                });
+                                filter();
+                                $('#formHasil').modal('hide');
+                            }
+                            $("#btn-ubah-hasil").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                            $("#btn-ubah-hasil").prop('disabled', false);
+                        },
+                        error: function (res) {
+                            iziToast.error({
+                                title: 'Pesan Galat!',
+                                message: res.responseJSON.error,
+                                position: 'topRight'
+                            });
+                            $("#btn-ubah-hasil").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                            $("#btn-ubah-hasil").prop('disabled', false);
+                        }
+                    });
+                }
+            }
         }
 
         function showPreviewPdf(dokumen_id, peserta_id) {

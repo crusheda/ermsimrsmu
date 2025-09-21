@@ -166,16 +166,18 @@ class PengumumanController extends Controller
         }
     }
 
-    function nonaktif($id)
+    function nonaktif($user,$id)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
         $data = pengumuman::find($id);
+        $old = $data;
         $data->status = 0;
         $data->save();
         // $data->delete();
 
+        datalogs::record($user, 'Baru saja melakukan penonaktifan pengumuman ID#'.$id, $data->status, $old, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
         return response()->json($tgl, 200);
     }
 
