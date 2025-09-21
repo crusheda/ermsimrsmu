@@ -340,7 +340,7 @@
             $('#nama_dokumen').text(nama_dokumen);
             $('#download'+dokumen_id).find('i').removeClass('fa-download').addClass('fa-sync fa-spin');
 
-            fetch(`http://localhost:8001/api/rekrutmen/registrasi/download/${dokumen_id}/${peserta_id}`)
+            fetch(`https://rspkusukoharjo.com/api/rekrutmen/registrasi/download/${dokumen_id}/${peserta_id}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Dokumen tidak ditemukan atau gagal diambil.');
