@@ -275,18 +275,24 @@
         function prosesTambah() {
             $("#btn-tambah").prop('disabled', true);
             $("#btn-tambah").find("i").toggleClass("fa-chevron-right fa-sync fa-spin");
+            var regexBulan = /^\d{4}-(0[1-9]|1[0-2])$/;
+            var tgl = $('#tgl').val();
 
             // Definisi
             var save = new FormData();
             save.append('tgl',$('#tgl').val());
             save.append('keterangan',$('#ket').val());
             save.append('pegawai','{{ Auth::user()->id }}');
-            if (save.get('tgl') == "") {
+
+            if (!tgl || !regexBulan.test(tgl)) {
                 iziToast.warning({
                     title: 'Pesan Ambigu!',
-                    message: 'Pastikan Anda tidak mengosongi semua isian Wajib',
+                    message: 'Pastikan Anda memilih bulan dan tahun dengan benar (format = YYYY-MM)',
                     position: 'topRight'
                 });
+                $("#btn-tambah").find("i").removeClass("fa-sync fa-spin").addClass("fa-chevron-right");
+                $("#btn-tambah").prop('disabled', false);
+                return;
             } else {
                 $.ajax({
                     headers: {
@@ -308,18 +314,19 @@
                                 "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
                             );
                         }
+                        $("#btn-tambah").find("i").removeClass("fa-sync fa-spin").addClass("fa-chevron-right");
+                        $("#btn-tambah").prop('disabled', false);
                     },
                     error: function (res) {
                         notifier.show(
                             res.statusText + " (Code " + res.status + ")", res.responseText,
                             "danger", "{{ asset('images/notification/high_priority-48.png') }}", 4e3
                         );
+                        $("#btn-tambah").find("i").removeClass("fa-sync fa-spin").addClass("fa-chevron-right");
+                        $("#btn-tambah").prop('disabled', false);
                     }
                 });
             }
-
-            $("#btn-tambah").find("i").removeClass("fa-sync fa-spin").addClass("fa-chevron-right");
-            $("#btn-tambah").prop('disabled', false);
         }
 
         function showRiwayat() {
@@ -345,11 +352,11 @@
                                 var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
                             } else {
                                 if (item.progress == 2) {
-                                    var colButton = 'btn-light-primary';
+                                    var colButton = 'btn-light-success';
                                     var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
                                 } else {
                                     if (item.progress == 3) {
-                                        var colButton = 'btn-light-success';
+                                        var colButton = 'btn-light-primary';
                                         var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
                                     } else {
                                         var colButton = 'btn-light-dark';

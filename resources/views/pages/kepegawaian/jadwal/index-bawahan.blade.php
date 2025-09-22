@@ -261,11 +261,11 @@
                                 var status = `<span class="badge rounded-pill text-bg-warning">Pending</span>`;
                             } else {
                                 if (item.progress == 2) {
-                                    var colButton = 'btn-light-primary';
+                                    var colButton = 'btn-light-success';
                                     var status = `<span class="badge rounded-pill text-bg-success">Diverifikasi</span>`;
                                 } else {
                                     if (item.progress == 3) {
-                                        var colButton = 'btn-light-success';
+                                        var colButton = 'btn-light-primary';
                                         var status = `<span class="badge rounded-pill text-bg-primary">Divalidasi</span>`;
                                     } else {
                                         var colButton = 'btn-light-dark';
@@ -355,9 +355,9 @@
                         columnDefs: [
                             // { visible: false, targets: [7] },
                         ],
-                        displayLength: 7,
+                        displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [15, 25, 50, 75, 100, 300, 500],
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 }

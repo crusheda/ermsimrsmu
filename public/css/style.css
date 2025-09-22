@@ -6233,6 +6233,14 @@ fieldset:disabled .introjs-tooltip .introjs-button {
     .modal-xxl {
         --bs-modal-width: 1800px
     }
+
+    .modal-3xl {
+        --bs-modal-width: 2500px
+    }
+
+    .modal-4xl {
+        --bs-modal-width: 3300px
+    }
 }
 
 .list-group-flush {
