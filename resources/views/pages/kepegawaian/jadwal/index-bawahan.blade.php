@@ -325,9 +325,9 @@
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
                                                 <a class='mb-0'>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</a>
-                                                <small class='text-truncate text-muted'>Ditambahkan Oleh ` + item.nama_pegawai + `</small>
-                                                ${item.nama_verif!=null?'<small class="text-truncate text-muted">Diverifikasi Oleh '+item.nama_verif+'</small>':''}
-                                                ${item.nama_valid!=null?'<small class="text-truncate text-muted">Divalidasi Oleh '+item.nama_valid+'</small>':''}
+                                                <small class='text-truncate text-muted'><b class="text-warning">Ditambahkan</b> Oleh ` + item.nama_pegawai + `</small>
+                                                ${item.nama_verif!=null?'<small class="text-truncate text-muted"><b class="text-success">Diverifikasi</b> Oleh '+item.nama_verif+'</small>':''}
+                                                ${item.nama_valid!=null?'<small class="text-truncate text-muted"><b class="text-primary">Divalidasi</b> Oleh '+item.nama_valid+'</small>':''}
                                             </div>
                                         </div>
                                     </td>`;
@@ -357,7 +357,7 @@
                         ],
                         displayLength: 15,
                         lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 500],
+                        lengthMenu: [15, 25, 50, 75, 100, 300, 500, 1000],
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 }
