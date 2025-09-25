@@ -1811,7 +1811,7 @@
                         })
                     });
                     var table = $('#dttable').DataTable({
-                        // dom: 'Bfrtip',
+                        dom: 'Bfrtip',
                         order: [
                             [5, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
                             [3, "asc"], // Kolom PEGAWAI (kolom ke-3, index 2)
