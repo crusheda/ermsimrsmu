@@ -1827,7 +1827,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [2,3,4,5,6,7,8,9,10,11,12,13,14] // hanya kolom tertentu
+                                    // columns: [2,3,4,5,6,7,8,9,10] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-success'
                             },
@@ -1837,7 +1837,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',  // F4 dalam milimeter
                                 exportOptions: {
-                                    columns: [2,3,4,5,6,7,8,9,10,11,12,13,14] // hanya kolom tertentu
+                                    // columns: [2,3,4,5,6,7,8,9,10] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-danger',
                                 customize: function (doc) {
@@ -1871,7 +1871,7 @@
                                         .css('font-size', 'inherit');
                                 },
                                 exportOptions: {
-                                    columns: [2,3,4,5,6,7,8,9,10,11,12,13,14] // hanya kolom tertentu
+                                    // columns: [2,3,4,5,6,7,8,9,10] // hanya kolom tertentu
                                 },
                             },
                             {
