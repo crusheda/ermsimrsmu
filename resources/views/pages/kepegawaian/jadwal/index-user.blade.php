@@ -201,6 +201,7 @@
 
     <script>
         $(document).ready(function() {
+            showDeadlineReminder();
             // SELECT2
             var t = $(".select2");
             t.length && t.each(function() {
@@ -218,6 +219,41 @@
             count();
             showRiwayat();
         });
+
+        function showDeadlineReminder(targetTanggal = 27) {
+            let now = new Date();
+            let tanggal = now.getDate();
+            let bulan = now.getMonth();   // 0-11
+            let tahun = now.getFullYear();
+
+            // Nama bulan Indonesia
+            const namaBulan = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
+
+            // Hitung bulan depan
+            let bulanDepan = (bulan + 1) % 12;
+            let tahunDepan = tahun + (bulan === 11 ? 1 : 0);
+
+            // Tampilkan hanya jika sekarang tanggal 20–27
+            if (tanggal >= 20 && tanggal <= targetTanggal) {
+                let sisaHari = targetTanggal - tanggal;
+
+                Swal.fire({
+                    title: `Mohon Perhatian!`,
+                    html: `Batas waktu penambahan Jadwal Dinas <b class="text-primary">${namaBulan[bulanDepan]} ${tahunDepan}</b> maksimal sebelum Tanggal ${targetTanggal} ${namaBulan[bulan]} ${tahun} (<b class="text-danger">${sisaHari} hari lagi</b>)`,
+                    icon: `warning`,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    allowOutsideClick: true,
+                    allowEscapeKey: true,
+                    timer: 5000,
+                    timerProgressBar: true,
+                    backdrop: `rgba(26,27,41,0.8)`,
+                });
+            }
+        }
 
         function count() {
             $.ajax({
