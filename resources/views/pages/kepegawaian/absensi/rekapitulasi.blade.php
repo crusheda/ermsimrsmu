@@ -1219,7 +1219,7 @@
                     <th rowspan="2" class="text-center">PEGAWAI</th>
                     <th rowspan="2" class="text-center">UNIT</th>
                     <th colspan="7" class="text-center">TOTAL (JADWAL DINAS)</th>
-                    <th colspan="6" class="text-center">TOTAL (ABSENSI)</th>
+                    <th colspan="7" class="text-center">TOTAL (ABSENSI)</th>
                     <th rowspan="2" class="text-center">KETERANGAN</th>
                 </tr>
                 <tr>
@@ -1235,7 +1235,8 @@
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Absen Hanya 1 Kali Dari Data Absensi">ABSEN 1X</th>
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Ijin Dari Data Absensi">IJIN</th>
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Dinas Luar Dari Data Absensi">DINAS LUAR</th>
-                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Seluruh Absen Dari Data Absensi">ABSENSI</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Mangkir Dari Data Absensi">MANGKIR</th>
+                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Seluruh Absen Dari Data Absensi">ABSENSI TOTAL</th>
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
@@ -1269,7 +1270,7 @@
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
-                        content += `<td>${item.unit}</td>`;
+                        content += `<td>${item.unit?item.unit:'-'}</td>`;
                         content += `<td class="text-end">${item.total_masuk_shift}</td>`;
                         content += `<td class="text-end">${item.total_L}</td>`;
                         content += `<td class="text-end">${item.total_C}</td>`;
@@ -1282,6 +1283,7 @@
                         content += `<td class="text-end">${item.total_alpha}</td>`;
                         content += `<td class="text-end">${item.total_ijin}</td>`;
                         content += `<td class="text-end">${item.total_dinas_luar}</td>`;
+                        content += `<td class="text-end">${item.total_mangkir}</td>`;
                         content += `<td class="text-end">${item.total_absensi}</td>`;
                         content += `<td class="text-end text-capitalize">${item.status}</td>`;
                         content += "</tr>";
@@ -1312,7 +1314,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-success'
                             },
@@ -1322,7 +1324,7 @@
                                 orientation: 'landscape',
                                 pageSize: 'A4',  // F4 dalam milimeter
                                 exportOptions: {
-                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17] // hanya kolom tertentu
                                 },
                                 className: 'btn btn-danger',
                                 customize: function (doc) {
@@ -1356,7 +1358,7 @@
                                         .css('font-size', 'inherit');
                                 },
                                 exportOptions: {
-                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] // hanya kolom tertentu
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17] // hanya kolom tertentu
                                 },
                             },
                             {
@@ -1435,7 +1437,7 @@
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
-                        content += `<td>${item.unit}</td>`;
+                        content += `<td>${item.unit?item.unit:'-'}</td>`;
                         content += `<td class="text-center">${item.tanggal}</td>`;
                         content += `<td class="text-center">${item.is_terlambat==1?'<b class="text-danger">'+item.jam_masuk+'</b>':item.jam_masuk}</td>`;
                         content += `<td class="text-center">${item.jam_pulang?item.jam_pulang:'-'}</td>`;
@@ -1597,7 +1599,7 @@
                         content = "<tr id='data" + item.pegawai_id + "' style='font-size:13px'>";
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
-                        content += `<td class="text-center">${item.unit}</td>`;
+                        content += `<td class="text-center">${item.unit?item.unit:'-'}</td>`;
                         content += `<td class="text-center">${item.tanggal_cuti}</td>`;
                         content += `<td class="text-center">${item.jenis_cuti}</td>`;
                         content += "</tr>";
@@ -1760,7 +1762,7 @@
                         }
                         content += `<td class="text-center">${item.nip?item.nip:'-'}</td>`;
                         content += `<td>${item.nama}</td>`;
-                        content += `<td class="text-center">${item.unit}</td>`;
+                        content += `<td class="text-center">${item.unit?item.unit:'-'}</td>`;
                         content += `<td class="text-center text-capitalize">${item.status_shift}</td>`;
                         if (!['C', 'CM', 'CU', 'CH', 'CD', 'L'].includes(item.kd_shift ?? '')) {
                             content += `<td class="text-center">${item.jam_berangkat ?? '-'}</td>`;

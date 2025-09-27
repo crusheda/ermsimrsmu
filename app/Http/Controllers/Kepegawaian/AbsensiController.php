@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Kepegawaian;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use App\Models\referensi;
 use App\Models\datalogs;
 use App\Models\users;
@@ -367,13 +368,31 @@ class AbsensiController extends Controller
         $dari = $request->dari ? Carbon::parse($request->dari)->format('Y-m-d') : now()->format('Y-m-d');
         $sampai = $request->sampai ? Carbon::parse($request->sampai)->format('Y-m-d') : now()->format('Y-m-d');
 
+        // ambil semua kombinasi bulan-tahun dalam rentang
+        $start = Carbon::parse($dari);
+        $end = Carbon::parse($sampai);
+
+        $periode = [];
+        $current = $start->copy();
+        while ($current <= $end) {
+            $periode[] = [
+                'bulan' => $current->format('m'),
+                'tahun' => $current->format('Y')
+            ];
+            $current->addMonthNoOverflow();
+        }
+
+        // ubah jadi 2 array agar gampang dipakai di query
+        $bulanList = array_column($periode, 'bulan');
+        $tahunList = array_column($periode, 'tahun');
+
         // Ambil semua pegawai yang termasuk staf dari referensi_jadwal_users
-        $show = DB::table('referensi_jadwal_users as rju')
+        $show = DB::table('kepegawaian_jadwal as kj')
             ->select(
                 'u.id as pegawai_id',
                 'u.nama',
                 'u.nip',
-                'rju.unit',
+                'kj.unit',
                 DB::raw('IFNULL((
                     SELECT COUNT(*) FROM kepegawaian_absensi as a
                     WHERE a.pegawai_id = u.id
@@ -413,12 +432,14 @@ class AbsensiController extends Controller
                 ), 0) as total_tidak_terlambat')
             )
             ->join('users as u', function ($join) {
-                $join->on(DB::raw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(u.id AS CHAR)))'), '=', DB::raw('TRUE'));
+                $join->on(DB::raw('JSON_CONTAINS(kj.staf, JSON_QUOTE(CAST(u.id AS CHAR)))'), '=', DB::raw('TRUE'));
             })
-            ->whereNull('rju.deleted_at')
-            ->when(!empty($unit_ids), fn($q) => $q->whereIn('rju.id', $unit_ids))
-            // ->where('rju.pegawai_id',232)
-            ->groupBy('u.id', 'u.nama', 'u.nip', 'rju.unit')
+            ->whereNull('kj.deleted_at')
+            ->whereIn('kj.bulan', $bulanList)
+            ->whereIn('kj.tahun', $tahunList)
+            ->when(!empty($unit_ids), fn($q) => $q->whereIn('kj.id', $unit_ids))
+            // ->where('kj.pegawai_id',232)
+            ->groupBy('u.id', 'u.nama', 'u.nip', 'kj.unit')
             ->get();
 
         // Iterasi tiap pegawai
@@ -455,23 +476,6 @@ class AbsensiController extends Controller
                 ->whereRaw('JSON_CONTAINS(staf, JSON_QUOTE(?))', [(string) $item->pegawai_id])
                 ->value('unit') ?? '-';
 
-            // Pegawai induk
-            $pegawaiInduk = DB::table('referensi_jadwal_users')
-                ->whereNull('deleted_at')
-                ->whereRaw('JSON_CONTAINS(staf, JSON_QUOTE(?))', [(string) $item->pegawai_id])
-                ->value('pegawai_id');
-
-            // Ambil peta shift
-            $shiftMap = DB::table('referensi_jadwal_shift')
-                ->where('pegawai_id', $pegawaiInduk)
-                ->whereNull('deleted_at')
-                ->pluck('shift', 'singkat')
-                ->toArray();
-
-            // if ($item->pegawai_id == 267) {
-            //     logger()->info("SHIFT MAP PEGAWAI INDUK 6", $shiftMap);
-            // }
-
             // Ambil rentang bulan
             $bulanTahun = collect(Carbon::parse($dari)->startOfMonth()->monthsUntil(Carbon::parse($sampai)->startOfMonth()->addMonth()))
                 ->map(fn($d) => [$d->format('m'), $d->format('Y')])
@@ -501,9 +505,36 @@ class AbsensiController extends Controller
                     ->where('kj.tahun', $tahun)
                     ->where('kj.progress', '!=', 0)
                     ->whereNull('kj.deleted_at')
+                    ->select('kd.*', 'kj.id as jadwal_id', 'kj.unit as jadwal_unit')
                     ->first();
 
-                if (!$jadwal) continue;
+                if (!$jadwal) {
+                    // Tidak ada jadwal bulan ini → skip tapi jangan hilangkan jadwal sebelumnya
+                    continue;
+                }
+
+                // Perbarui unit jika ada di jadwal
+                if ($jadwal && $jadwal->jadwal_unit) {
+                    $item->unit = $jadwal->jadwal_unit;
+                }
+
+                // Pegawai induk
+                $pegawaiInduk = $this->getPegawaiInduk($item->pegawai_id, $jadwal->jadwal_id ?? null);
+                // $pegawaiInduk = DB::table('referensi_jadwal_users')
+                //     ->whereNull('deleted_at')
+                //     ->whereRaw('JSON_CONTAINS(staf, JSON_QUOTE(?))', [(string) $item->pegawai_id])
+                //     ->value('pegawai_id');
+
+                // Ambil peta shift
+                $shiftMap = DB::table('referensi_jadwal_shift')
+                    ->where('pegawai_id', $pegawaiInduk)
+                    ->whereNull('deleted_at')
+                    ->pluck('shift', 'singkat')
+                    ->toArray();
+
+                // if ($item->pegawai_id == 267) {
+                //     logger()->info("SHIFT MAP PEGAWAI INDUK 6", $shiftMap);
+                // }
 
                 // Tentukan batas tanggal
                 $startTgl = (int) (($bulan == Carbon::parse($dari)->format('m') && $tahun == Carbon::parse($dari)->format('Y')) ? Carbon::parse($dari)->format('d') : 1);
@@ -556,6 +587,16 @@ class AbsensiController extends Controller
             $totalHilang      = $totalMasukShift - $totalAbsensi;
             $totalPelanggaran = $totalHilang + $totalTerlambat;
 
+            // === Hitung mangkir ===
+            $absenTanggal = collect($absenArray)->map(fn($a) => Carbon::parse($a['tgl_in'])->format('Y-m-d'))->toArray();
+
+            $mangkirCount = collect($jadwalPerTanggal)
+                ->keys()
+                ->filter(fn($tgl) => !in_array($tgl, $absenTanggal))
+                ->count();
+
+            $item->total_mangkir = $mangkirCount;
+
             $item->status = match (true) {
                 $hangus_beruntun => 'hangus beruntun',
                 ($totalAbsensi === $totalMasukShift && $totalTerlambat === 0 && $totalAlpha === 0) => 'disiplin',
@@ -569,6 +610,109 @@ class AbsensiController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    private function getPegawaiInduk($pegawaiId, $idJadwal = null)
+    {
+        // 1️⃣ Cari dari kepegawaian_jadwal (jika id_jadwal tersedia)
+        if ($idJadwal) {
+            $indukFromJadwal = DB::table('kepegawaian_jadwal')
+                ->where('id', $idJadwal)
+                ->whereNull('deleted_at')
+                ->value('pegawai_id');
+
+            if ($indukFromJadwal) {
+                return $indukFromJadwal;
+            }
+        }
+
+        // 2️⃣ Cari dari referensi_jadwal_users JSON staf
+        $indukFromRef = DB::table('referensi_jadwal_users')
+            ->whereNull('deleted_at')
+            ->whereRaw('JSON_CONTAINS(staf, JSON_QUOTE(?))', [(string) $pegawaiId])
+            ->value('pegawai_id');
+
+        if ($indukFromRef) {
+            return $indukFromRef;
+        }
+
+        // fallback → pakai pegawai itu sendiri
+        return $pegawaiId;
+    }
+
+    public function cobaJadwal()
+    {
+        $pegawaiId = 381; // Tasya
+        $dari = '2025-09-01';
+        $sampai = '2025-09-20';
+
+        $pegawaiInduk = $this->getPegawaiInduk($pegawaiId, 153 ?? null);
+        $shiftMap = DB::table('referensi_jadwal_shift')
+            ->where('pegawai_id', $pegawaiInduk)
+            ->whereNull('deleted_at')
+            ->pluck('shift', 'singkat')
+            ->toArray();
+
+        logger()->info("SHIFT MAP TASYA", $shiftMap);
+
+        $bulanTahun = collect(Carbon::parse($dari)->startOfMonth()->monthsUntil(Carbon::parse($sampai)->startOfMonth()->addMonth()))
+            ->map(fn($d) => [$d->format('m'), $d->format('Y')])
+            ->unique()
+            ->values();
+
+        $jadwalPerTanggal = [];
+        foreach ($bulanTahun as [$bulan, $tahun]) {
+            $jadwal = DB::table('kepegawaian_jadwal as kj')
+                ->join('kepegawaian_jadwal_detail as kd', function($join) {
+                    $join->on('kd.id_jadwal', '=', 'kj.id')
+                        ->whereNull('kd.deleted_at');
+                })
+                ->where('kd.pegawai_id', $pegawaiId)
+                ->where('kj.bulan', $bulan)
+                ->where('kj.tahun', $tahun)
+                ->where('kj.progress', '!=', 0)
+                ->whereNull('kj.deleted_at')
+                ->select('kd.*')
+                ->first();
+
+            if (!$jadwal) {
+                logger()->warning("Tidak ada jadwal untuk $bulan-$tahun");
+                continue;
+            }
+
+            // Tentukan batas tanggal
+            $startTgl = ($bulan == Carbon::parse($dari)->format('m') && $tahun == Carbon::parse($dari)->format('Y'))
+                ? (int) Carbon::parse($dari)->format('d') : 1;
+            $endTgl = ($bulan == Carbon::parse($sampai)->format('m') && $tahun == Carbon::parse($sampai)->format('Y'))
+                ? (int) Carbon::parse($sampai)->format('d') : 31;
+
+            for ($i = $startTgl; $i <= $endTgl; $i++) {
+                if (!checkdate($bulan, $i, $tahun)) continue;
+
+                $tgl = sprintf('%04d-%02d-%02d', $tahun, $bulan, $i);
+                if ($tgl < $dari || $tgl > $sampai) continue;
+
+                $key = 'tgl' . $i;
+                $kodeShift = $jadwal->$key ?? null;
+
+                if ($kodeShift) {
+                    $dihitung = !in_array($kodeShift, ['L','C','CM','CU','CH','CD'])
+                        && array_key_exists($kodeShift, $shiftMap);
+
+                    logger()->info("TGL $tgl → $kodeShift (dihitung=$dihitung)");
+
+                    if ($dihitung) {
+                        $jadwalPerTanggal[$tgl] = $kodeShift;
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            'pegawai' => $pegawaiId,
+            'total_masuk_shift' => count($jadwalPerTanggal),
+            'jadwal' => $jadwalPerTanggal,
+        ]);
     }
 
     function tableRekapAbsensiDetail(Request $request)

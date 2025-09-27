@@ -162,6 +162,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::post('kepegawaian/absensi/ijin/push', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'storeIjin'])->name('kepegawaian.absensi.ijin.storeIjin');
                 Route::post('kepegawaian/absensi/table/monitoring', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableMonitoring'])->name('kepegawaian.absensi.tableMonitoring');
                 Route::post('kepegawaian/absensi/table/all', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableAll'])->name('kepegawaian.absensi.tableAll');
+                Route::get('kepegawaian/absensi/table/coba', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'cobaJadwal'])->name('kepegawaian.absensi.cobaJadwal');
                 Route::post('kepegawaian/absensi/table/rekapLinda', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableRekapAbsensi'])->name('kepegawaian.absensi.tableRekapAbsensi');
                 Route::post('kepegawaian/absensi/table/rekapLindaDetail', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'tableRekapAbsensiDetail'])->name('kepegawaian.absensi.tableRekapAbsensiDetail');
                 Route::post('kepegawaian/absensi/table/getCutiPegawai', [\App\Http\Controllers\Kepegawaian\AbsensiController::class, 'getCutiPegawai'])->name('kepegawaian.absensi.getCutiPegawai');
