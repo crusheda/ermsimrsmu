@@ -191,18 +191,18 @@ class JadwalController extends Controller
                                                 ->orderBy('referensi_jadwal_users_jabatan.urutan','ASC')
                                                 ->get();
 
-                if ($jadwal->staf != $ref_users->staf) {
-                    $jadwal->staf = $ref_users->staf;
-                    $jadwal->save();
+                // if ($jadwal->staf != $ref_users->staf) {
+                //     $jadwal->staf = $ref_users->staf;
+                //     $jadwal->save();
 
-                    // REINITIATE
-                    $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                                        ->select('users.nama','users.name','kepegawaian_jadwal.*')
-                                        ->where('kepegawaian_jadwal.id',$id)
-                                        ->whereNull('kepegawaian_jadwal.deleted_at')
-                                        ->orderBy('kepegawaian_jadwal.created_at','DESC')
-                                        ->first();
-                }
+                //     // REINITIATE
+                //     $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
+                //                         ->select('users.nama','users.name','kepegawaian_jadwal.*')
+                //                         ->where('kepegawaian_jadwal.id',$id)
+                //                         ->whereNull('kepegawaian_jadwal.deleted_at')
+                //                         ->orderBy('kepegawaian_jadwal.created_at','DESC')
+                //                         ->first();
+                // }
 
                 $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
                 $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
@@ -297,22 +297,42 @@ class JadwalController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
         $getJadwal = jadwal::where('id',$request->id_jadwal)->first();
         $totalDay = Carbon::create($getJadwal->tahun, $getJadwal->bulan)->format('t');
-        $getData = jadwal_detail::where('id_jadwal',$request->id_jadwal)->get();
-        // print_r($request->id_staf);
-        // die();
-        $data = jadwal_detail::where('id_jadwal',$request->id_jadwal)->get();
-        for ($i=0; $i < count($getData) ; $i++) {
+        $getData = jadwal_detail::where('id_jadwal',$request->id_jadwal)
+                                ->whereIn('pegawai_id', $request->id_staf)
+                                ->get()
+                                ->keyBy('pegawai_id');
+        // $data = jadwal_detail::where('id_jadwal',$request->id_jadwal)->get();
+        // $data = $getData;
+        // print_r($getData.'<br><br><br>');
+        // print_r($data.'<br><br><br>');
+        // for ($i=0; $i < count($getData) ; $i++) {
+        // if (count($getData) !== count($request->id_staf)) {
+        //     dd("Mismatch: DB punya ".count($getData)." record, request punya ".count($request->id_staf)." record");
+        // }
         // for ($i=0; $i < count($request->id_staf) ; $i++) {
+        foreach ($request->id_staf as $idx => $pegawaiId) {
+        // print_r($request->nama_staf[$idx].' - '.$pegawaiId.'<br>');
+            $row = $getData[$pegawaiId] ?? null;
+            if (!$row) continue;
             for ($t = 1; $t <= $totalDay; $t++) {
-                $hit = 'tgl'.$t;
-                if ($request->$hit[$i]) {
-                    $data[$i]->$hit = strtoupper($request->$hit[$i]);
-                } else {
-                    $data[$i]->$hit = null;
-                }
+                $hit = "tgl{$t}";
+                $value = $request->$hit[$idx] ?? null;
+                $row->$hit = $value ? strtoupper($value) : null;
+                // if ($request->$hit[$i]) {
+                //     $data[$i]->$hit = strtoupper($request->$hit[$i]);
+                // } else {
+                //     $data[$i]->$hit = null;
+                // }
+                // if (isset($request->$hit[$i])) {
+                //     echo "$i - {$request->$hit[$i]} - $hit <br>";
+                // } else {
+                //     echo "$i - (kosong) - $hit <br>";
+                // }
+                // print_r($idx.' - '.$row->$hit.' - '.$hit.'<br>');
             }
-            $data[$i]->save();
+            $row->save();
         }
+        // die();
 
         datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan perubahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 

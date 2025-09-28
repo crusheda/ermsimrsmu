@@ -85,7 +85,30 @@
                                     <tbody>
                                         {{-- @foreach (json_decode($list['ref_users']->staf) as $item) --}}
                                         @foreach ($list['detail'] as $item)
-                                            @foreach ($list['ref_jabatan'] as $jab)
+                                            <tr style="background-color: @if($item->color) {{ $item->color }} @endif">
+                                                <td>{{ $n++ }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="id_staf[]" value="{{ $item->pegawai_id }}" hidden>
+                                                    <input type="text" class="form-control" name="nama_staf[]" value="{{ $item->pegawai_nama }}" hidden>
+                                                    <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
+                                                    <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
+                                                    <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $item->nick != null?$item->nick:$item->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div>
+                                                </td>
+                                                @for ($i = 1; $i <= $totalDay; $i++)
+                                                    @php
+                                                        $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
+                                                        $hit = 'tgl'.$i;
+                                                    @endphp
+                                                    @if ($dayb == 'Minggu')
+                                                        <td class="p-2" style="background-color: #fed8b9">
+                                                    @else
+                                                        <td class="p-2">
+                                                    @endif
+                                                            <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                        </td>
+                                                @endfor
+                                            </tr>
+                                            {{-- @foreach ($list['ref_jabatan'] as $jab)
                                                 @if ($jab->id_staf == $item->pegawai_id)
                                                     <tr style="background-color: @if($jab->color) {{ $jab->color }} @endif">
                                                         <td>{{ $n++ }}</td>
@@ -107,12 +130,11 @@
                                                                 <td class="p-2">
                                                             @endif
                                                                     <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                                    {{-- <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required> --}}
                                                                 </td>
                                                         @endfor
                                                     </tr>
                                                 @endif
-                                            @endforeach
+                                            @endforeach --}}
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -219,7 +241,7 @@
             const activeMonth = parseInt("{{ $list['jadwal']->bulan }}", 10); // ini variabel dari backend, contoh: 6 untuk Juni
             const totalDay = {{ $totalDay }};
             const currentRowCount = {{ count($list['detail']) }};
-
+            console.log({{ $totalDay }});
             for (let row = 1; row <= currentRowCount; row++) {
                 for (let day = 1; day <= totalDay; day++) {
                     const id = `#${row}tgl${day}`;
@@ -328,7 +350,7 @@
                     t=1;
                     $('.inputTgl').removeAttr('required');
                     $('#formUbah').removeAttr('novalidate');
-                    res.staf.forEach(item => { // LOOPING STAF
+                    res.detail.forEach(item => { // LOOPING STAF
                         var cuti = 0;
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
@@ -404,12 +426,13 @@
                         var cuti = 0;
                         for (let i = 1; i <= res.totalDay; i++) { // LOOPING TANGGAL
                             num = $("#"+t+"tgl"+i);
+                            // console.log(item.nama_pegawai+' - '+num.val()+' - '+i);
                             if (num.length != 0) {
                                 up = num.val();
                                 upper = up.toString().toUpperCase();
                                 const shiftTambahan = ['L', 'C', 'CM', 'CU', 'CH', 'CD'];
                                 const allValidShift = res.shiftArr.concat(shiftTambahan);
-                                console.log(up);
+                                // console.log(up);
                                 if (!allValidShift.includes(upper)) {
                                     notifier.show(
                                         "Pesan Galat!", "Isian pada karyawan "+item.nama_pegawai+" tanggal "+i+" tidak valid. Mohon cek kembali penulisan Shift Jaga pada isian tersebut",
@@ -443,6 +466,7 @@
                         t++;
                     })
                     if (valid == 1) {
+                        // console.log(res.detail);
                         console.log('berhasil mengajukan');
                         $("#formUbah").submit();
                     } else {
