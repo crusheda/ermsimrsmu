@@ -555,7 +555,7 @@
                         }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm ${colButton} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm ${colButton} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' id='btnoptshow${item.id}'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
                                             if (item.progress == 1) { // BELUM DIVERIFIKASI ATASAN
@@ -585,23 +585,33 @@
                                 content += `<td>${bulan[i]} ${item.tahun}</td>`;
                             }
                         }
-                        var nama_verif = null;
-                        content += `<td style='white-space: normal !important;word-wrap: break-word;'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <div class='d-flex flex-column'>
-                                                <h6 class='mb-0 clef'>Unit ${item.unit?'<b class="text-primary">'+item.unit+'</b>':'<s class="text-danger">Tidak Valid</s>'}</h6>
-                                                <small class='text-muted clef'>`;
-                        res.users.forEach(us => {
-                            JSON.parse(item.staf).forEach(val => {
-                                if (val == us.id) {
-                                    content += `${us.nama?us.nama:'<b class="text-danger">'+us.name+'</b>'}; `;
-                                }
-                            })
-                            // if (us.id == item.verif) {
-                            //     nama_verif = us.nama;
-                            // }
-                        })
-                        content += `</small></div></div></td>`;
+                        // parse sekali aja
+                        let staf = JSON.parse(item.staf);
+                        let totalStaf = staf.length;
+
+                        // ambil nama verifikator
+                        let nama_verif = res.users.find(us => us.id == item.verif)?.nama ?? null;
+
+                        // ambil daftar nama staf sesuai ID
+                        let stafNames = res.users
+                            .filter(us => staf.includes(us.id.toString())) // pastikan id ke string
+                            .map(us => us.nama ?? `<b class="text-danger">${us.name}</b>`)
+                            .join('; ');
+
+                        // buat konten
+                        content += `
+                            <td style='white-space: normal !important; word-wrap: break-word;'>
+                                <div class='d-flex justify-content-center align-items-center'>
+                                    <div class='d-flex flex-column'>
+                                        <h6 class='mb-0'>
+                                            Unit ${item.unit ? `<b class="text-primary">${item.unit}</b>` : `<s class="text-danger">Tidak Valid</s>`}
+                                            (<b class="text-danger">${totalStaf}</b> Pegawai)
+                                        </h6>
+                                        <small class='text-muted'>${stafNames}</small>
+                                    </div>
+                                </div>
+                            </td>
+                        `;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>${item.keterangan?item.keterangan:''}</td>`;
                         content += `<td>${status}</td>`;
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
@@ -639,9 +649,9 @@
                         columnDefs: [
                             // { visible: false, targets: [7] },
                         ],
-                        displayLength: 15,
+                        displayLength: 20,
                         lengthChange: true,
-                        lengthMenu: [15, 25, 50, 75, 100, 300, 500, 1000],
+                        lengthMenu: [20, 35, 50, 75, 100, 300, 500, 1000],
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                 }
@@ -649,6 +659,7 @@
         }
 
         function lihat(id) {
+            $('#btnoptshow'+id).empty().append(`<i class="fa fa-spinner fa-spin fa-fw"></i>`);
             $("#tampil-jadwal").empty().append(`<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`);
             $.ajax({
                 url: "/api/kepegawaian/jadwaldinas/jadwal/"+id,
@@ -776,6 +787,14 @@
                         $('#btn-refresh-lihat').attr('onClick', 'lihat('+id+');');
                         $('#modalLihat').modal('show');
                     }
+                    $('#btnoptshow'+id).empty().text(id);
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Jadwal Dinas gagal dimuat, silakan coba beberapa saat lagi',
+                        position: 'topRight'
+                    });
                 }
             })
         }

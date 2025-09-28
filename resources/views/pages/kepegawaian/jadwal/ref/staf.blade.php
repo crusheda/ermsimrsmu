@@ -391,7 +391,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="dropdown">
-                                                        <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow arrow-none text-body p-0 btn-icon" data-bs-toggle="dropdown"><i class="ti ti-dots"></i></a>
+                                                        <a href="javascript:;" class="btn btn-sm ${urutan!='-'?'btn-light-primary':'btn-light-danger'} dropdown-toggle hide-arrow arrow-none rounded" data-bs-toggle="dropdown"><i class="ti ti-dots"></i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">`;
                                                             if (res.show.pegawai_id == "{{ Auth::user()->id }}") {
                                                                 content += `<a href="javascript:void(0);" onclick="atur(${val})" class="dropdown-item text-primary"><i class='fas fa-sort-amount-down me-1'></i> Atur Karyawan</a>`;

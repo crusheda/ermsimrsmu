@@ -340,7 +340,7 @@
                     res.show.forEach(item => {
                         content = `<tr><td><div class="d-flex align-items-center">
                                             <div class="dropdown">
-                                                <a href="javascript:;" class="btn btn-link-secondary dropdown-toggle hide-arrow text-body p-0 btn-icon" data-bs-toggle="dropdown">` + item.id + `</a>
+                                                <a href="javascript:;" class="btn btn-light-info btn-sm dropdown-toggle hide-arrow rounded" data-bs-toggle="dropdown">` + item.id + `</a>
                                                 <div class="dropdown-menu dropdown-menu-right">`;
                                                     if (item.pegawai_id == "{{ Auth::user()->id }}") {
                                                         content += `<a href="javascript:;" onclick="ubah(` + item.id + `)" class="dropdown-item text-warning"><i class='fas fa-edit me-1'></i> Ubah</a>`;
