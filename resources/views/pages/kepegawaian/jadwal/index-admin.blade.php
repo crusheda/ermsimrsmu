@@ -601,7 +601,7 @@
                         // buat konten
                         content += `
                             <td style='white-space: normal !important; word-wrap: break-word;'>
-                                <div class='d-flex justify-content-center align-items-center'>
+                                <div class='d-flex justify-content-start align-items-center'>
                                     <div class='d-flex flex-column'>
                                         <h6 class='mb-0'>
                                             Unit ${item.unit ? `<b class="text-primary">${item.unit}</b>` : `<s class="text-danger">Tidak Valid</s>`}
