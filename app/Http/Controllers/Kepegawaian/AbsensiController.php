@@ -630,6 +630,7 @@ class AbsensiController extends Controller
             $item->total_mangkir = $mangkirCount;
 
             $item->status = match (true) {
+                $totalMasukShift === 0 => 'toleransi',
                 $hangus_beruntun => 'hangus beruntun',
                 ($totalAbsensi === $totalMasukShift && $totalTerlambat === 0 && $totalAlpha === 0) => 'disiplin',
                 ($totalPelanggaran > 10) => 'hangus tidak beruntun',
