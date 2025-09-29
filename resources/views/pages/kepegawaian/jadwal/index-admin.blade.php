@@ -46,7 +46,7 @@
                                 <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><s>Referensi Hari Libur Nasional</s></a>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexLN') }}">Referensi Libur Nasional</a>
                                 <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span></a>
                             </li>

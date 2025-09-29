@@ -102,6 +102,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
         Route::get('jadwaldinas/shift', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'indexShift'])->name('kepegawaian.jadwaldinas.indexShift');
         // REF STAFF
         Route::get('jadwaldinas/staf', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'indexStaf'])->name('kepegawaian.jadwaldinas.indexStaf');
+        // REF HARI LIBUR NASIONAL
+        Route::get('jadwaldinas/ln', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'indexLN'])->name('kepegawaian.jadwaldinas.indexLN');
 
     // SURAT TUGAS
     Route::get('surtug', [App\Http\Controllers\Kepegawaian\SurtugController::class, 'index'])->name('kepegawaian.surtug.index');

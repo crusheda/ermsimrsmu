@@ -12,6 +12,7 @@ use App\Models\kepegawaian\jadwal_detail;
 use App\Models\kepegawaian\ref_jadwal_shift;
 use App\Models\kepegawaian\ref_jadwal_users;
 use App\Models\kepegawaian\ref_jadwal_jabatan;
+use App\Models\kepegawaian\ref_jadwal_ln;
 use App\Models\struktur_organisasi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -52,6 +53,7 @@ class JadwalController extends Controller
     function indexShift()
     {
         $pegawai = Auth::user()->id; // misal: 232
+        $pegawai = Auth::user()->id; // misal: 232
 
         $show = DB::table('referensi_jadwal_users')
             ->whereJsonContains('staf', (string) $pegawai)
@@ -86,6 +88,24 @@ class JadwalController extends Controller
             'users' => $users,
         ];
         return view('pages.kepegawaian.jadwal.ref.staf')->with('list', $data);
+    }
+
+    function indexLN()
+    {
+        if (Auth::user()->getPermission('admin_kepegawaian') == true) {
+            return view('pages.kepegawaian.jadwal.ref.ln');
+        } else {
+            return redirect()->back()->withErrors("Pengguna tidak memiliki akses menuju halaman Referensi Libur Nasional");
+        }
+        // $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        // $show = ref_jadwal_ln::get();
+
+        // $data = [
+        //     'show' => $show,
+        //     'users' => $users,
+        // ];
+
+        // return view('pages.kepegawaian.jadwal.ref.staf')->with('list', $data);
     }
 
     function formTambah($id)
@@ -1442,4 +1462,56 @@ class JadwalController extends Controller
 
         return response()->json($results);
     }
+
+    // REFERENSI LIBUR NASIONAL -------------------------------------------------------------------------------------------------------
+    function tableLN()
+    {
+        $show = ref_jadwal_ln::get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    function tambahLN(Request $request)
+    {
+        $tgl = explode('-',$request->tgl);
+        $getData = ref_jadwal_ln::where('tgl',(int) $tgl[2])->where('bulan',(int) $tgl[1])->where('tahun',(int) $tgl[0])->whereNull('deleted_at')->first();
+        $message = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        if ($getData) {
+            $status = 400;
+            $message = "Tanggal ".$request->tgl." sudah ada di dalam data Libur Nasional, silakan masukkan tanggal lainnya.";
+        } else {
+            $status = 200;
+            $data = new ref_jadwal_ln;
+            $data->tahun = (int) $tgl[0];
+            $data->bulan = (int) $tgl[1];
+            $data->tgl = (int) $tgl[2];
+            $data->deskripsi = $request->deskripsi;
+            $data->keterangan = $request->keterangan;
+            $data->save();
+        }
+
+        $results = array(
+            'status' => $status,
+            'message' => $message,
+        );
+
+        return response()->json($results);
+    }
+
+    function hapusLN($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+
+        // Inisialisasi
+        $data = ref_jadwal_ln::find($id);
+        $data->delete();
+
+        return response()->json($tgl, 200);
+    }
+
 }

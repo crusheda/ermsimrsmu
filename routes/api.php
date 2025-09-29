@@ -146,8 +146,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                     Route::delete('kepegawaian/jadwaldinas/staf/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusStaf'])->name('kepegawaian.jadwaldinas.staf.hapus');
                     Route::get('kepegawaian/jadwaldinas/staf/{id}/ambilalih/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'ambilAlihStaf'])->name('kepegawaian.jadwaldinas.staf.ambilalih');
                     // ATUR STAF
-                    Route::get('kepegawaian/jadwaldinas/staf/atur/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showAturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.show');
-                    Route::post('kepegawaian/jadwaldinas/staf/atur/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'aturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.update');
+                        Route::get('kepegawaian/jadwaldinas/staf/atur/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'showAturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.show');
+                        Route::post('kepegawaian/jadwaldinas/staf/atur/{id}/ubah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'aturStaf'])->name('kepegawaian.jadwaldinas.staf.atur.update');
+                // REFERENSI LIBUR NASIONAL
+                    Route::get('kepegawaian/jadwaldinas/ln/table', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableLN'])->name('kepegawaian.jadwaldinas.ln.table');
+                    Route::post('kepegawaian/jadwaldinas/ln/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tambahLN'])->name('kepegawaian.jadwaldinas.ln.tambah');
+                    Route::delete('kepegawaian/jadwaldinas/ln/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapusLN'])->name('kepegawaian.jadwaldinas.ln.hapus');
+
         // ABSENSI
             // PERANGKAT
                 Route::get('kepegawaian/absensi/perangkat/table', [\App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'table'])->name('kepegawaian.absensi.device.table');
