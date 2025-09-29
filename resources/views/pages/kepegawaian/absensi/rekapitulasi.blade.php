@@ -1235,8 +1235,8 @@
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Absen Hanya 1 Kali Dari Data Absensi">ABSEN 1X</th>
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Ijin Dari Data Absensi">IJIN</th>
                     <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Dinas Luar Dari Data Absensi">DINAS LUAR</th>
-                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Mangkir Dari Data Absensi">MANGKIR</th>
-                    <th class="text-end" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Seluruh Absen Dari Data Absensi">ABSENSI TOTAL</th>
+                    <th class="text-end bg-danger text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Mangkir Dari Data Absensi">MANGKIR</th>
+                    <th class="text-end bg-success text-white" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Total Seluruh Absen Dari Data Absensi">ABSENSI TOTAL</th>
                 </tr>
             `);
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);

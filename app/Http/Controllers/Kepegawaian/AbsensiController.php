@@ -431,13 +431,45 @@ class AbsensiController extends Controller
                     AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
                 ), 0) as total_tidak_terlambat')
             )
-            ->join('users as u', function ($join) {
+            ->leftJoin('users as u', function ($join) {
                 $join->on(DB::raw('JSON_CONTAINS(kj.staf, JSON_QUOTE(CAST(u.id AS CHAR)))'), '=', DB::raw('TRUE'));
+            })
+            ->when(!empty($unit_ids), function ($q) use ($unit_ids, $bulanList, $tahunList) {
+                $q->where(function ($subQuery) use ($unit_ids, $bulanList, $tahunList) {
+                    $subQuery
+                        // kondisi: masih ada di referensi_jadwal_users unit_ids
+                        ->whereExists(function ($sub) use ($unit_ids) {
+                            $sub->select(DB::raw(1))
+                                ->from('referensi_jadwal_users as rju2')
+                                ->whereNull('rju2.deleted_at')
+                                ->whereIn('rju2.id', $unit_ids)
+                                ->whereRaw('JSON_CONTAINS(rju2.staf, JSON_QUOTE(CAST(u.id AS CHAR)))');
+                        })
+                        // ATAU kondisi: punya absensi di periode filter untuk unit_ids
+                        ->orWhereExists(function ($sub) use ($unit_ids, $bulanList, $tahunList) {
+                            $sub->select(DB::raw(1))
+                                ->from('kepegawaian_absensi as ka2')
+                                ->join('kepegawaian_jadwal_detail as kj2', function ($join) {
+                                    $join->on('kj2.pegawai_id', '=', 'ka2.pegawai_id')
+                                        ->whereNull('kj2.deleted_at');
+                                })
+                                ->join('kepegawaian_jadwal as kj3', function ($join) {
+                                    $join->on('kj2.id_jadwal', '=', 'kj3.id')
+                                        ->whereNull('kj3.deleted_at');
+                                })
+                                ->join('referensi_jadwal_users as rju3', 'rju3.id', '=', 'kj3.unit') // ✅ betulnya ke sini
+                                ->whereNull('rju3.deleted_at')
+                                ->whereRaw('ka2.pegawai_id = u.id')
+                                ->whereIn('rju3.id', $unit_ids)   // filter unit
+                                ->whereIn('kj3.bulan', $bulanList)
+                                ->whereIn('kj3.tahun', $tahunList);
+                        });
+                });
             })
             ->whereNull('kj.deleted_at')
             ->whereIn('kj.bulan', $bulanList)
             ->whereIn('kj.tahun', $tahunList)
-            ->when(!empty($unit_ids), fn($q) => $q->whereIn('kj.id', $unit_ids))
+            // ->when(!empty($unit_ids), fn($q) => $q->whereIn('rju.id', $unit_ids))
             // ->where('kj.pegawai_id',232)
             ->groupBy('u.id', 'u.nama', 'u.nip', 'kj.unit')
             ->get();
@@ -585,7 +617,7 @@ class AbsensiController extends Controller
             $totalTerlambat   = (int) $item->total_terlambat;
             $totalAlpha       = (int) $item->total_alpha;
             $totalHilang      = $totalMasukShift - $totalAbsensi;
-            $totalPelanggaran = $totalHilang + $totalTerlambat;
+            $totalPelanggaran = $totalHilang + $totalTerlambat + $totalAlpha;
 
             // === Hitung mangkir ===
             $absenTanggal = collect($absenArray)->map(fn($a) => Carbon::parse($a['tgl_in'])->format('Y-m-d'))->toArray();
