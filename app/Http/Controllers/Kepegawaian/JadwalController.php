@@ -937,6 +937,8 @@ class JadwalController extends Controller
     // ADMIN == PROSES VERIFIKASI DAN PENOLAKAN
     function verif($id,$user)
     {
+        print_r($id);
+        die();
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
@@ -1027,9 +1029,9 @@ class JadwalController extends Controller
         $jadwal->progress = 2;
         $jadwal->verif = $user;
         $jadwal->tgl_verif = Carbon::now();
-        // $jadwal->save();
+        $jadwal->save();
 
-        // return response()->json($tgl, 200);
+        return response()->json($tgl, 200);
     }
     function batalVerifBawahan($id,$user)
     {
