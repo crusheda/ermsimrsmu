@@ -153,7 +153,7 @@
                     <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btn-cetak" class="btn btn-link-primary me-sm-3 me-1" onclick="printJadwal()"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
+                    <button type="button" id="btn-cetak" class="btn btn-link-primary me-sm-3 me-1"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
                     <button type="submit" id="btn-refresh-lihat" class="btn btn-link-warning me-sm-2"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
                     <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
                 </div>
@@ -570,16 +570,18 @@
                                             if (item.progress == 1) { // BELUM DIVERIFIKASI ATASAN
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-success" onclick="verif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
                                             } else {
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Verif</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Verif</a></li>`;
                                             }
                                             if (item.progress == 2) { // SEBELUM VALIDASI / SUDAH DIVERIFIKASI ATASAN
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="validasi(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
                                                 // content += `<li><a href="javascript:void(0);" class="dropdown-item text-danger" onclick="tolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
                                             } else { // SETELAH DIVALIDASI
                                                 if (item.progress == 3) {
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalValidasi(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Validasi</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item" style="color: #cd26d9" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalValidasi(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Validasi</a></li>`;
                                                     // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
                                                 } else { // BELUM DIVERIFIKASI OLEH ATASAN LANGSUNG
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</a></li>`;
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
                                                     // content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalTolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Tolak</a></li>`;
                                                 }
@@ -677,10 +679,10 @@
                 success: function(res) {
                     if (res.detail.length === 0) {
                         notifier.show(
-                            "Pesan Galat!", 
+                            "Pesan Galat!",
                             "Data isian Jadwal Dinas tidak ditemukan, silakan melengkapi jadwal terlebih dahulu (Klik Ubah)",
-                            "warning", 
-                            "{{ asset('images/notification/medium_priority-48.png') }}", 
+                            "warning",
+                            "{{ asset('images/notification/medium_priority-48.png') }}",
                             4000
                         );
                         return;
@@ -726,7 +728,7 @@
                     let shiftDurasi = {};
                     let shiftCounts = {};
                     res.shift.concat(['L','C','CM','CU','CH','CD']).forEach(s => {
-                        shiftDurasi[s.singkat || s] = ['L','C','CM','CU','CH','CD'].includes(s.singkat || s) ? 0 : 
+                        shiftDurasi[s.singkat || s] = ['L','C','CM','CU','CH','CD'].includes(s.singkat || s) ? 0 :
                             (function() {
                                 let start = new Date(`1970-01-01T${s.berangkat}`);
                                 let end = new Date(`1970-01-01T${s.pulang}`);
@@ -842,6 +844,7 @@
                     }
 
                     $('#btn-refresh-lihat').attr('onClick', `lihat(${id});`);
+                    $('#btn-cetak').attr('onClick', `printJadwal(${id});`);
                     $('#modalLihat').modal('show');
                     $('#btnoptshow'+id).empty().text(id);
                 },
@@ -855,93 +858,22 @@
             })
         }
 
-        function printJadwal() {
-            // Ambil elemen dengan ID 'tampil-jadwal'
-            var content = document.getElementById('tampil-jadwal').innerHTML;
+        function printJadwal(id) {
+            // Generate URL route Laravel
+            const url = `/kepegawaian/jadwaldinas/${id}/cetak`;
 
-            // Buka jendela print baru
-            var myWindow = window.open('', '', 'height=800,width=600');
+            // Buka popup dengan ukuran 800x600, tanpa toolbar, scrollable
+            const width = 800;
+            const height = 600;
+            const left = (screen.width/2) - (width/2); // posisi tengah layar
+            const top = (screen.height/2) - (height/2);
 
-            // Isi konten jendela print dengan konten yang akan dicetak
-            myWindow.document.write('<html><head><title>Print Preview</title>');
-            myWindow.document.write(`
-                <style>
-                    table, th, td {
-                        border: 1px solid black;
-                        border-collapse: collapse;
-                    }
-                    tbody td {
-                        text-align: center;
-                        vertical-align: middle;
-                    }
-                    h4 {
-                        text-align: center;
-                    }
-                    h5 {
-                        text-align: center;
-                    }
-                    h6 {
-                        font-size: 15px;
-                        margin-bottom:0px;
-                    }
-                    .clef {
-                        text-align: left !important;
-                    }
-                </style>
-            `);
-            myWindow.document.write('</head><body>');
-            myWindow.document.write(content); // Sisipkan konten yang diambil
-            myWindow.document.write('</body></html>');
-
-            // Tunggu hingga halaman baru siap dan cetak
-            myWindow.document.close(); // Tutup dokumen untuk memastikan semuanya dimuat
-            myWindow.print(); // Panggil fungsi print pada jendela baru
-            // myWindow.onafterprint = function() {
-            //     myWindow.close();
-            // }
+            window.open(
+                url,
+                '_blank',
+                `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
+            );
         }
-
-        // function hapus(id) {
-        //     $("#id_hapus").val(id);
-        //     var inputs = document.getElementById('setujuhapus');
-        //     inputs.checked = false;
-        //     $('#modalHapus').modal('show');
-        // }
-
-        // function prosesHapus() {
-        //     // SWITCH BTN HAPUS
-        //     var checkboxHapus = $('#setujuhapus').is(":checked");
-        //     if (checkboxHapus == false) {
-        //         iziToast.error({
-        //             title: 'Pesan Galat!',
-        //             message: 'Mohon menyetujui untuk dilakukan penghapusan jadwal dinas tersebut',
-        //             position: 'topRight'
-        //         });
-        //     } else {
-        //         // PROSES HAPUS
-        //         var id = $("#id_hapus").val();
-        //         $.ajax({
-        //             url: "/api/kepegawaian/jadwaldinas/"+id+"/hapus",
-        //             type: 'DELETE',
-        //             success: function(res) {
-        //                 iziToast.success({
-        //                     title: 'Pesan Sukses!',
-        //                     message: 'Jadwal Dinas Anda telah berhasil dihapus pada '+res,
-        //                     position: 'topRight'
-        //                 });
-        //                 $('#modalHapus').modal('hide');
-        //                 showRiwayat();
-        //             },
-        //             error: function(res) {
-        //                 iziToast.error({
-        //                     title: 'Pesan Galat!',
-        //                     message: 'Jadwal Dinas Anda gagal dihapus',
-        //                     position: 'topRight'
-        //                 });
-        //             }
-        //         });
-        //     }
-        // }
 
         // SHOW DOKUMENTASI E-ABSENSI
         function dokumentasi() {

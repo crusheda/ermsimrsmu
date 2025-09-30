@@ -101,6 +101,7 @@
                     <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" id="btn-cetak" class="btn btn-link-primary me-sm-3 me-1"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</button>
                     <button type="submit" id="btn-refresh-lihat" class="btn btn-link-warning me-sm-3 me-1"><i class="fa fa-sync me-1" style="font-size:13px"></i> Segarkan</button>
                     <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup &nbsp;<i class="fa-fw fas fa-chevron-right nav-icon" style="font-size:13px"></i></button>
                 </div>
@@ -280,17 +281,21 @@
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
                                             if (item.progress == 1) { // SEBELUM VERIFIKASI/PENDING
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</a></li>`;
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-success" onclick="verif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-danger" onclick="tolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
                                             } else { // SETELAH DIVERIFIKASI
                                                 if (item.progress == 2) {
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalVerif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Verif</a></li>`;
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
                                                 } else { // DIVALIDASI
                                                     if (item.progress == 3) {
+                                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-primary" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
                                                         content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-check me-2"></i> Batal Verif</a></li>`;
                                                         content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
                                                     } else { // DITOLAK
+                                                        content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</a></li>`;
                                                         content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
                                                         content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalTolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Tolak</a></li>`;
                                                     }
@@ -384,10 +389,10 @@
                 success: function(res) {
                     if (res.detail.length === 0) {
                         notifier.show(
-                            "Pesan Galat!", 
+                            "Pesan Galat!",
                             "Data isian Jadwal Dinas tidak ditemukan, silakan melengkapi jadwal terlebih dahulu (Klik Ubah)",
-                            "warning", 
-                            "{{ asset('images/notification/medium_priority-48.png') }}", 
+                            "warning",
+                            "{{ asset('images/notification/medium_priority-48.png') }}",
                             4000
                         );
                         return;
@@ -433,7 +438,7 @@
                     let shiftDurasi = {};
                     let shiftCounts = {};
                     res.shift.concat(['L','C','CM','CU','CH','CD']).forEach(s => {
-                        shiftDurasi[s.singkat || s] = ['L','C','CM','CU','CH','CD'].includes(s.singkat || s) ? 0 : 
+                        shiftDurasi[s.singkat || s] = ['L','C','CM','CU','CH','CD'].includes(s.singkat || s) ? 0 :
                             (function() {
                                 let start = new Date(`1970-01-01T${s.berangkat}`);
                                 let end = new Date(`1970-01-01T${s.pulang}`);
@@ -549,6 +554,7 @@
                     }
 
                     $('#btn-refresh-lihat').attr('onClick', `lihat(${id});`);
+                    $('#btn-cetak').attr('onClick', `printJadwal(${id});`);
                     $('#modalLihat').modal('show');
                     $('#btnoptshow'+id).empty().text(id);
                 },
@@ -560,6 +566,23 @@
                     });
                 }
             })
+        }
+
+        function printJadwal(id) {
+            // Generate URL route Laravel
+            const url = `/kepegawaian/jadwaldinas/${id}/cetak`;
+
+            // Buka popup dengan ukuran 800x600, tanpa toolbar, scrollable
+            const width = 800;
+            const height = 600;
+            const left = (screen.width/2) - (width/2); // posisi tengah layar
+            const top = (screen.height/2) - (height/2);
+
+            window.open(
+                url,
+                '_blank',
+                `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
+            );
         }
 
         // VERIFIKASI

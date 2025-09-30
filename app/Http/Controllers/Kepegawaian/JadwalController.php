@@ -35,6 +35,15 @@ class JadwalController extends Controller
         }
     }
 
+    function cetak($id)
+    {
+        $data = [
+            // 'show' => $show,
+            'id' => $id,
+        ];
+        return view('pages.kepegawaian.jadwal.cetak')->with('list', $data);
+    }
+
     function indexBawahan()
     {
         $jabatan = struktur_organisasi::where('id_user',Auth::user()->id)->orderBy('updated_at','desc')->first();

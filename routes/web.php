@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // JADWAL DINAS
     Route::get('jadwaldinas', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'index'])->name('kepegawaian.jadwaldinas.index');
+    Route::get('jadwaldinas/{id}/cetak',[App\Http\Controllers\Kepegawaian\JadwalController::class, 'cetak'])->name('kepegawaian.jadwaldinas.cetak');
     Route::get('jadwaldinas/tambah/{id}', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'formTambah'])->name('kepegawaian.jadwaldinas.formTambah');
     Route::get('jadwaldinas/ubah/{id}', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'formUbah'])->name('kepegawaian.jadwaldinas.formUbah');
     // Route::post('jadwaldinas/simpan/proses', [App\Http\Controllers\Kepegawaian\JadwalController::class, 'prosesSimpan'])->name('kepegawaian.jadwaldinas.prosesSimpan');
