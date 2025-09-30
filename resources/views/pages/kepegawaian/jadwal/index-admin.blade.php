@@ -8,6 +8,15 @@
             transform-style: preserve-3d;
             transform: translate3d(0,0,10px) !important;
         }
+        .table-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.table-wrapper table {
+    width: max-content; /* agar scroll aktif jika table lebar */
+}
     </style>
 
     <div class="page-header">
@@ -131,8 +140,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade animate__animated animate__rubberBand" id="modalLihat" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
-        <div class="modal-dialog modal-xxl modal-dialog-centered">
+    <div class="modal fade" id="modalLihat" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
@@ -666,127 +675,174 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    if (res.detail.length == 0) {
+                    if (res.detail.length === 0) {
                         notifier.show(
-                            "Pesan Galat!", "Data isian Jadwal Dinas tidak ditemukan, silakan melengkapi jadwal terlebih dahulu (Klik Ubah)",
-                            "warning", "{{ asset('images/notification/medium_priority-48.png') }}", 4e3
+                            "Pesan Galat!", 
+                            "Data isian Jadwal Dinas tidak ditemukan, silakan melengkapi jadwal terlebih dahulu (Klik Ubah)",
+                            "warning", 
+                            "{{ asset('images/notification/medium_priority-48.png') }}", 
+                            4000
                         );
-                    } else {
-                        $("#showUser").text(res.jadwal.nama_pegawai)
-                        // INIT
-                        var n = 1;
-                        // PROCESS
-                        content = ``;
-                        content += `<h4 class="text-center mb-2">Jadwal Dinas Unit <b class="text-primary">${res.jadwal.unit}</b></h4><h5 class="text-center mb-2">Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h5>`;
-                        content += `<div class="row"><div class="col-md-12"><div class="table-responsive p-10 pb-0">
+                        return;
+                    }
+
+                    $("#showUser").text(res.jadwal.nama_pegawai);
+                    let n = 1;
+                    let content = `
+                        <h4 class="text-center mb-2">Jadwal Dinas Unit <b class="text-primary">${res.jadwal.unit}</b></h4>
+                        <h5 class="text-center mb-2">Bulan <b class="text-primary">${res.bulan}</b> Tahun <b class="text-primary">${res.jadwal.tahun}</b></h5>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive p-10 pb-0">
                                     <table id="dttable" class="table table-bordered" style="width: 100%;table-layout: auto">
                                         <thead>
-                                        <tr>
-                                            <th class="text-center" rowspan="2">NO</th>
-                                            <th class="text-center" rowspan="2">NAMA</th>
-                                            <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
-                                        </tr>
-                                        <tr>`;
-                                        for (let i = 1; i <= res.totalDay; i++) {
-                                            content += `<th class="p-2 text-center tgl${i}">${i < 10?'0'+i:i}</th>`;
-                                        }
-                        content += `    </tr>
-                                    </thead>
-                                    <tbody>`;
-                            for (let t = 0; t < res.detail.length; t++) {
-                                content += `<tr class="text-center" style="background-color: ${res.detail[t].color}">`;
-                                    content += `<td>${n++}</td>`;
-                                    content += `<td class="text-start">
-                                                    <div class='d-flex justify-content-start align-items-center'>
-                                                        <div class='d-flex flex-column'>
-                                                            <h6 class='mb-0 clef'>${res.detail[t].pegawai_nama}</h6>
-                                                            <small class='text-truncate text-muted clef'>${res.detail[t].jabatan?res.detail[t].jabatan:''}</small>
-                                                        </div>
-                                                    </div>
-                                                </td>`;
-                                    content += `<td class="p-2 tgl1">${res.detail[t].tgl1?res.detail[t].tgl1:''}</td>`;
-                                    content += `<td class="p-2 tgl2">${res.detail[t].tgl2?res.detail[t].tgl2:''}</td>`;
-                                    content += `<td class="p-2 tgl3">${res.detail[t].tgl3?res.detail[t].tgl3:''}</td>`;
-                                    content += `<td class="p-2 tgl4">${res.detail[t].tgl4?res.detail[t].tgl4:''}</td>`;
-                                    content += `<td class="p-2 tgl5">${res.detail[t].tgl5?res.detail[t].tgl5:''}</td>`;
-                                    content += `<td class="p-2 tgl6">${res.detail[t].tgl6?res.detail[t].tgl6:''}</td>`;
-                                    content += `<td class="p-2 tgl7">${res.detail[t].tgl7?res.detail[t].tgl7:''}</td>`;
-                                    content += `<td class="p-2 tgl8">${res.detail[t].tgl8?res.detail[t].tgl8:''}</td>`;
-                                    content += `<td class="p-2 tgl9">${res.detail[t].tgl9?res.detail[t].tgl9:''}</td>`;
-                                    content += `<td class="p-2 tgl10">${res.detail[t].tgl10?res.detail[t].tgl10:''}</td>`;
-                                    content += `<td class="p-2 tgl11">${res.detail[t].tgl11?res.detail[t].tgl11:''}</td>`;
-                                    content += `<td class="p-2 tgl12">${res.detail[t].tgl12?res.detail[t].tgl12:''}</td>`;
-                                    content += `<td class="p-2 tgl13">${res.detail[t].tgl13?res.detail[t].tgl13:''}</td>`;
-                                    content += `<td class="p-2 tgl14">${res.detail[t].tgl14?res.detail[t].tgl14:''}</td>`;
-                                    content += `<td class="p-2 tgl15">${res.detail[t].tgl15?res.detail[t].tgl15:''}</td>`;
-                                    content += `<td class="p-2 tgl16">${res.detail[t].tgl16?res.detail[t].tgl16:''}</td>`;
-                                    content += `<td class="p-2 tgl17">${res.detail[t].tgl17?res.detail[t].tgl17:''}</td>`;
-                                    content += `<td class="p-2 tgl18">${res.detail[t].tgl18?res.detail[t].tgl18:''}</td>`;
-                                    content += `<td class="p-2 tgl19">${res.detail[t].tgl19?res.detail[t].tgl19:''}</td>`;
-                                    content += `<td class="p-2 tgl20">${res.detail[t].tgl20?res.detail[t].tgl20:''}</td>`;
-                                    content += `<td class="p-2 tgl21">${res.detail[t].tgl21?res.detail[t].tgl21:''}</td>`;
-                                    content += `<td class="p-2 tgl22">${res.detail[t].tgl22?res.detail[t].tgl22:''}</td>`;
-                                    content += `<td class="p-2 tgl23">${res.detail[t].tgl23?res.detail[t].tgl23:''}</td>`;
-                                    content += `<td class="p-2 tgl24">${res.detail[t].tgl24?res.detail[t].tgl24:''}</td>`;
-                                    content += `<td class="p-2 tgl25">${res.detail[t].tgl25?res.detail[t].tgl25:''}</td>`;
-                                    content += `<td class="p-2 tgl26">${res.detail[t].tgl26?res.detail[t].tgl26:''}</td>`;
-                                    if (res.totalDay >= 27) {
-                                        content += `<td class="p-2 tgl27">${res.detail[t].tgl27?res.detail[t].tgl27:''}</td>`;
-                                        if (res.totalDay >= 28) {
-                                            content += `<td class="p-2 tgl28">${res.detail[t].tgl28?res.detail[t].tgl28:''}</td>`;
-                                            if (res.totalDay >= 29) {
-                                                content += `<td class="p-2 tgl29">${res.detail[t].tgl29?res.detail[t].tgl29:''}</td>`;
-                                                if (res.totalDay >= 30) {
-                                                    content += `<td class="p-2 tgl30">${res.detail[t].tgl30?res.detail[t].tgl30:''}</td>`;
-                                                    if (res.totalDay >= 31) {
-                                                        content += `<td class="p-2 tgl31">${res.detail[t].tgl31?res.detail[t].tgl31:''}</td>`;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                content += `</tr>`;
-                            }
-                        content += `</tbody></table></div></div>`;
+                                            <tr>
+                                                <th class="text-center" rowspan="2">NO</th>
+                                                <th class="text-center" rowspan="2">NAMA</th>
+                                                <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
+                                                <th class="text-center" rowspan="2">JAM KERJA</th>
+                                                <th class="text-center" colspan="${res.shift.length + 6}" style="background-color:#eaeeaf;border-top: 3px solid #eaeeaf;border-left: 3px solid #eaeeaf;border-right: 3px solid #eaeeaf;">JML SHIFT</th>
+                                            </tr>
+                                            <tr>`;
 
-                        // KETERANGAN
-                        content += `<div class="col-md-6"><div class="p-10">
-                                        <h5>Shift Jaga :</h5>
-                                        <div class="list-group">
-                                            <label class="list-group-item border-0 p-2">
-                                                <ul>`;
-                                    res.shift.forEach(item => {
-                                        content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
-                                    });
-                                        content += `<li><b class="me-1 text-danger">L</b>(<u class="text-danger">LIBUR</u>)</li>
-                                                    <li><b class="me-1 text-danger">C</b>(<u class="text-danger">CUTI TAHUNAN</u>)</li>
-                                                    <li><b class="me-1 text-danger">CM</b>(<u class="text-danger">CUTI MELAHIRKAN</u>)</li>
-                                                    <li><b class="me-1 text-danger">CU</b>(<u class="text-danger">CUTI UMROH</u>)</li>
-                                                    <li><b class="me-1 text-danger">CH</b>(<u class="text-danger">CUTI HAJI</u>)</li>
-                                                    <li><b class="me-1 text-danger">CD</b>(<u class="text-danger">CUTI DILUAR TANGGUNGAN</u>)</li>
-                                                </ul>
-                                            </label>
-                                        </div>
-                                    </div></div>`;
-                        content += `<div class="col-md-6"><div class="p-10">
-                                        <h5>Keterangan :</h5>
-                                        <div class="list-group">
-                                            <label class="list-group-item border-0 p-2">
-                                                <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>
-                                                Hari Minggu
-                                            </label>
-                                        </div>
-                                    </div></div></div>`;
-                        $('#tampil-jadwal').empty().append(content);
-                        for (let i = 0; i < res.totalDay; i++) {
-                            if (res.dataArray[i] == 'Minggu') {
-                                $('.tgl'+(i+1)).css('background-color','#fed8b9');
-                                // console.log(i+1);
-                            }
-                        }
-                        $('#btn-refresh-lihat').attr('onClick', 'lihat('+id+');');
-                        $('#modalLihat').modal('show');
+                    // Header tanggal
+                    for (let i = 1; i <= res.totalDay; i++) {
+                        let lnItem = res.ln.find(ln => ln.tgl === i);
+                        let style = lnItem ? ` style="background-color: ${lnItem.color};"` : '';
+                        content += `<th class="p-2 text-center tgl${i}"${style}>${i < 10 ? '0'+i : i}</th>`;
                     }
+
+                    // Header shift
+                    res.shift.forEach((s, index) => {
+                        content += `<th class="p-2 text-center" ${index===0?"style='border-left: 3px solid #eaeeaf;'":""}>${s.singkat}</th>`;
+                    });
+                    ['L','C','CM','CU','CH','CD'].forEach((s, index, arr) => {
+                        let border = (s==='CD') ? "style='border-right: 3px solid #eaeeaf;'" : '';
+                        content += `<th class="p-2 text-center" ${border}>${s}</th>`;
+                    });
+                    content += `</tr></thead><tbody>`;
+
+                    // Mapping shift -> jam kerja & inisialisasi shiftCounts
+                    let shiftDurasi = {};
+                    let shiftCounts = {};
+                    res.shift.concat(['L','C','CM','CU','CH','CD']).forEach(s => {
+                        shiftDurasi[s.singkat || s] = ['L','C','CM','CU','CH','CD'].includes(s.singkat || s) ? 0 : 
+                            (function() {
+                                let start = new Date(`1970-01-01T${s.berangkat}`);
+                                let end = new Date(`1970-01-01T${s.pulang}`);
+                                if (end < start) end.setDate(end.getDate()+1);
+                                return (end - start)/(1000*60*60);
+                            })();
+                        shiftCounts[s.singkat || s] = 0;
+                    });
+
+                    // Mapping jumlah per tanggal
+                    let shifts = res.shift.map(s=>s.singkat).concat(['L','C','CM','CU','CH','CD']);
+                    let tfootCounts = {};
+                    for (let i=1;i<=res.totalDay;i++){
+                        tfootCounts[i] = {};
+                        shifts.forEach(s => tfootCounts[i][s]=0);
+                    }
+                    res.detail.forEach(pegawai => {
+                        for (let i=1;i<=res.totalDay;i++){
+                            let kodeShift = pegawai[`tgl${i}`];
+                            if(kodeShift && tfootCounts[i][kodeShift]!==undefined) tfootCounts[i][kodeShift]++;
+                        }
+                    });
+
+                    // LOOPING JADWAL DINAS
+                    res.detail.forEach(pegawai => {
+                        let pegawaiShiftCounts = {...shiftCounts};
+                        for (let i=1;i<=res.totalDay;i++){
+                            let kodeShift = pegawai[`tgl${i}`];
+                            if(kodeShift && pegawaiShiftCounts[kodeShift]!==undefined) pegawaiShiftCounts[kodeShift]++;
+                        }
+
+                        content += `<tr class="text-center">
+                                        <td style="background-color: ${pegawai.color}">${n++}</td>
+                                        <td class="text-start" style="background-color: ${pegawai.color}">
+                                            <div class='d-flex justify-content-start align-items-center'>
+                                                <div class='d-flex flex-column'>
+                                                    <h6 class='mb-0 clef'>${pegawai.pegawai_nama}</h6>
+                                                    <small class='text-truncate text-muted clef'>${pegawai.jabatan || ''}</small>
+                                                </div>
+                                            </div>
+                                        </td>`;
+
+                        // tanggal
+                        for (let i=1;i<=res.totalDay;i++){
+                            let kodeShift = pegawai[`tgl${i}`]||'';
+                            let lnItem = res.ln.find(ln => ln.tgl==i);
+                            let style = lnItem ? ` style="background-color: ${lnItem.color};"` : '';
+                            content += `<td class="p-2 tgl${i}"${style}>${kodeShift}</td>`;
+                        }
+
+                        // total jam kerja
+                        let totalJamKerja = 0;
+                        for (let i=1;i<=res.totalDay;i++){
+                            let kodeShift = pegawai[`tgl${i}`];
+                            if(kodeShift && shiftDurasi[kodeShift]) totalJamKerja += shiftDurasi[kodeShift];
+                        }
+                        content += `<td class="p-2">${totalJamKerja}</td>`;
+
+                        // shift counts
+                        res.shift.forEach((s,index)=>{
+                            content += `<td class="p-2 text-center" ${index==0?"style='border-left: 3px solid #eaeeaf;'":""}>${pegawaiShiftCounts[s.singkat]}</td>`;
+                        });
+                        ['L','C','CM','CU','CH','CD'].forEach(s=>{
+                            let border = (s==='CD') ? "style='border-right: 3px solid #eaeeaf;'" : '';
+                            content += `<td class="p-2 text-center" ${border}>${pegawaiShiftCounts[s]}</td>`;
+                        });
+
+                        content += `</tr>`;
+                    });
+
+                    // tfoot
+                    content += `<tfoot style="border:3px solid #eaeeaf;">`;
+                    shifts.forEach((shift,index)=>{
+                        content += `<tr>${index===0 ? `<th rowspan="${shifts.length}" style="writing-mode: vertical-rl; transform: rotate(180deg); text-align:center;background-color:#eaeeaf;">JUMLAH SHIFT</th>` : '' }
+                                        <th>${shift}</th>`;
+                        for (let i=1;i<=res.totalDay;i++){
+                            content += `<td class="text-center">${tfootCounts[i][shift]}</td>`;
+                        }
+                        content += `</tr>`;
+                    });
+                    content += `</tfoot></table></div></div>`;
+
+                    // Keterangan shift
+                    content += `<div class="col-md-6"><div class="p-10"><h5>Shift Jaga :</h5><div class="list-group"><label class="list-group-item border-0 p-2"><ul>`;
+                    res.shift.forEach(item=>{
+                        content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
+                    });
+                    ['L','C','CM','CU','CH','CD'].forEach(s=>{
+                        content += `<li><b class="me-1 text-danger">${s}</b>(<u class="text-danger">${s==='L'?'LIBUR':'CUTI'}</u>)</li>`;
+                    });
+                    content += `</ul></label></div></div></div>`;
+
+                    // Keterangan warna
+                    content += `<div class="col-md-6"><div class="p-10"><h5>Keterangan :</h5><div class="list-group">`;
+                    content += `<label class="list-group-item border-0 p-1">
+                                    <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>Hari Minggu
+                                </label>`;
+                    res.ln.forEach(item=>{
+                        content += `<label class="list-group-item border-0 p-1">
+                                        <a class="btn btn-light me-2" style="background-color: ${item.color}" href="javascript:void(0);"></a>
+                                        ${item.deskripsi}${item.keterangan ? ' ('+item.keterangan+')' : ''} ${item.tgl ? ' - Tanggal '+item.tgl : ''}
+                                    </label>`;
+                    });
+                    content += `</div></div></div>`;
+
+                    $('#tampil-jadwal').empty().append(content);
+
+                    // warna hari minggu
+                    for (let i=0;i<res.totalDay;i++){
+                        if(res.dataArray[i]==='Minggu'){
+                            $('.tgl'+(i+1)).css('background-color','#fed8b9');
+                        }
+                    }
+
+                    $('#btn-refresh-lihat').attr('onClick', `lihat(${id});`);
+                    $('#modalLihat').modal('show');
                     $('#btnoptshow'+id).empty().text(id);
                 },
                 error: function(res) {
@@ -1035,10 +1091,11 @@
                         $('#modalVerif').modal('hide');
                         showRiwayat();
                     },
-                    error: function(res) {
+                    error: function(xhr) {
+                        // xhr.responseJSON berisi data JSON dari Laravel
                         iziToast.error({
                             title: 'Pesan Galat!',
-                            message: 'Jadwal Dinas gagal diverifikasi',
+                            message: xhr.responseJSON.message,
                             position: 'topRight'
                         });
                     }

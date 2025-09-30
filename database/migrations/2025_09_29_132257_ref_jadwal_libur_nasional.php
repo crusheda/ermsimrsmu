@@ -20,6 +20,7 @@ class RefJadwalLiburNasional extends Migration
             $table->integer('tgl');
             $table->longText('deskripsi')->comment('Nama Peringatan Hari Libur Nasional');
             $table->longText('keterangan')->comment('optional')->nullable();
+            $table->string('color')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

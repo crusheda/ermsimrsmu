@@ -575,6 +575,12 @@ class JadwalController extends Controller
             // Gunakan pegawai_id dari staf jika ketemu, kalau tidak fallback ke pegawai_id asli
             $pegawaiId = $pegawaiUtama->pegawai_id ?? DB::table('kepegawaian_jadwal')->where('id', $id)->value('pegawai_id');
 
+            // Ambil libur nasional
+            $ln = ref_jadwal_ln::where('tahun', (int) $jadwal->tahun)
+                ->where('bulan', (int) $jadwal->bulan)
+                ->whereNull('deleted_at')
+                ->orderBy('tgl','ASC')
+                ->get();
             // Ambil shift
             $shift = DB::table('referensi_jadwal_shift')
                 ->where('pegawai_id', $pegawaiId)
@@ -637,6 +643,7 @@ class JadwalController extends Controller
         $data = [
             'bulan' => $bulan,
             'detail' => $detail,
+            'ln' => $ln,
             'shift' => $shift,
             'staf' => $staf,
             'jabatan' => $jabatan,
@@ -997,7 +1004,9 @@ class JadwalController extends Controller
                 for ($i=1; $i <= $jmlHari; $i++) {
                     $hit = "tgl".$i;
                     if (!$value->$hit) {
-                        return response()->json($tgl, 401);
+                        return response()->json([
+                            'message' => $hit . " masih kosong / belum terisi. Periksa Jadwal Dinas sekali lagi."
+                        ], 404);
                     }
                 }
             }
@@ -1009,9 +1018,9 @@ class JadwalController extends Controller
         $jadwal->progress = 2;
         $jadwal->verif = $user;
         $jadwal->tgl_verif = Carbon::now();
-        $jadwal->save();
+        // $jadwal->save();
 
-        return response()->json($tgl, 200);
+        // return response()->json($tgl, 200);
     }
     function batalVerifBawahan($id,$user)
     {
