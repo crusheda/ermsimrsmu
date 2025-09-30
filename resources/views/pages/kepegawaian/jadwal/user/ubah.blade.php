@@ -71,14 +71,26 @@
                                         </tr>
                                         <tr>
                                             @for ($i = 1; $i <= $totalDay; $i++)
-                                                @php $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                                @if ($dayh == 'Minggu')
-                                                    <th class="p-2 text-center" style="background-color: #fed8b9">
+                                                @php
+                                                    $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
+                                                    $lnItem = null;
+                                                    if ($list['ref_ln'] && count($list['ref_ln']) > 0) {
+                                                        foreach ($list['ref_ln'] as $itemlnh) {
+                                                            if ($itemlnh->tgl == $i) {
+                                                                $lnItem = $itemlnh;
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
+
+                                                @if ($lnItem)
+                                                    <th class="p-2 text-center" style="background-color: {{ $lnItem->color }}">{{ sprintf("%02d", $i) }}</th>
+                                                @elseif ($dayh == 'Minggu')
+                                                    <th class="p-2 text-center" style="background-color: #fed8b9">{{ sprintf("%02d", $i) }}</th>
                                                 @else
-                                                    <th class="p-2 text-center">
+                                                    <th class="p-2 text-center">{{ sprintf("%02d", $i) }}</th>
                                                 @endif
-                                                        {{ sprintf("%02d", $i) }}
-                                                    </th>
                                             @endfor
                                         </tr>
                                     </thead>
@@ -97,9 +109,21 @@
                                                 @for ($i = 1; $i <= $totalDay; $i++)
                                                     @php
                                                         $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
+                                                        $lnItemb = null;
+                                                        if ($list['ref_ln'] && count($list['ref_ln']) > 0) {
+                                                            foreach ($list['ref_ln'] as $itemlnb) {
+                                                                if ($itemlnb->tgl == $i) {
+                                                                    $lnItemb = $itemlnb;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
                                                         $hit = 'tgl'.$i;
                                                     @endphp
-                                                    @if ($dayb == 'Minggu')
+
+                                                    @if ($lnItemb)
+                                                        <td class="p-2" style="background-color: {{ $lnItemb->color }}">
+                                                    @elseif ($dayb == 'Minggu')
                                                         <td class="p-2" style="background-color: #fed8b9">
                                                     @else
                                                         <td class="p-2">

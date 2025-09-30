@@ -409,13 +409,13 @@
                                         if (item.pegawai_id == userID) {
                                             if (item.progress == 1) {
                                                 // content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</a></li>`;
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
                                                 content += `<li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(${item.id})"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                             } else {
                                                 if (item.progress == 2) {
                                                     // content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</a></li>`;
+                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="ubah(${item.id})"><i class="fa-fw fas fa-calendar-alt me-2"></i> Ubah</a></li>`;
                                                     content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                                 } else {

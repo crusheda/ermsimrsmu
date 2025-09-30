@@ -37,7 +37,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0"><button class="btn btn-link-dark" onclick="window.location='{{ route('kepegawaian.jadwaldinas.index') }}'"><i class="fas fa-chevron-left me-2"></i>Kembali</button></h5>
                     <div class="text-end">
-                        <h6>Perubahan Jadwal ID : <a class="text-primary">{{ $list["jadwal"]->id }}</a></h6>
+                        <h6>Penambahan Jadwal ID : <a class="text-primary">{{ $list["jadwal"]->id }}</a></h6>
                         <h6 class="mb-0">Diajukan Oleh : <a class="text-danger">{{ $list["jadwal"]->nama?$list["jadwal"]->nama:$list["jadwal"]->name }}</a></h6>
                     </div>
                     {{-- <div class="btn-group">
@@ -78,14 +78,26 @@
                                     </tr>
                                     <tr>
                                         @for ($i = 1; $i <= $totalDay; $i++)
-                                            @php $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                            @if ($dayh == 'Minggu')
-                                                <th class="p-2 text-center" style="background-color: #fed8b9">
+                                            @php
+                                                $dayh = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
+                                                $lnItem = null;
+                                                if ($list['ref_ln'] && count($list['ref_ln']) > 0) {
+                                                    foreach ($list['ref_ln'] as $itemlnh) {
+                                                        if ($itemlnh->tgl == $i) {
+                                                            $lnItem = $itemlnh;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            @endphp
+
+                                            @if ($lnItem)
+                                                <th class="p-2 text-center" style="background-color: {{ $lnItem->color }}">{{ sprintf("%02d", $i) }}</th>
+                                            @elseif ($dayh == 'Minggu')
+                                                <th class="p-2 text-center" style="background-color: #fed8b9">{{ sprintf("%02d", $i) }}</th>
                                             @else
-                                                <th class="p-2 text-center">
+                                                <th class="p-2 text-center">{{ sprintf("%02d", $i) }}</th>
                                             @endif
-                                                    {{ sprintf("%02d", $i) }}
-                                                </th>
                                         @endfor
                                     </tr>
                                 </thead>
@@ -107,14 +119,27 @@
                                                         @endforeach
                                                     </td>
                                                     @for ($i = 1; $i <= $totalDay; $i++)
-                                                        @php $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName @endphp
-                                                        @if ($dayb == 'Minggu')
-                                                            <td class="p-2" style="background-color: #fed8b9">
+                                                        @php
+                                                            $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
+                                                            $lnItemb = null;
+                                                            if ($list['ref_ln'] && count($list['ref_ln']) > 0) {
+                                                                foreach ($list['ref_ln'] as $itemlnb) {
+                                                                    if ($itemlnb->tgl == $i) {
+                                                                        $lnItemb = $itemlnb;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                        @endphp
+
+                                                        @if ($lnItemb)
+                                                            <td class="p-2 text-center" style="background-color: {{ $lnItemb->color }}">
+                                                        @elseif ($dayb == 'Minggu')
+                                                            <td class="p-2 text-center" style="background-color: #fed8b9">
                                                         @else
-                                                            <td class="p-2">
+                                                            <td class="p-2 text-center">
                                                         @endif
                                                                 <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                                {{-- <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" onkeyup="checkShift($(this))" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="" placeholder="......." style="padding: 0;border-radius: 0" required> --}}
                                                             </td>
                                                     @endfor
                                                 </tr>
@@ -129,7 +154,7 @@
                             </table>
                         </div>
                         <div class="row p-10">
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 <div class="alert alert-light">
                                     <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
                                     <small>
@@ -161,13 +186,21 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <h5>Keterangan :</h5>
                                 <div class="list-group">
                                     <label class="list-group-item border-0 p-2">
-                                        <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>
+                                        <a class="btn btn-light me-1" style="background-color: #fed8b9" href="javascript:void(0);"></a>
                                         Hari Minggu
                                     </label>
+                                    @if ($list['ref_ln'] && count($list['ref_ln']) > 0)
+                                        @foreach ($list['ref_ln'] as $item)
+                                            <label class="list-group-item border-0 p-2">
+                                                <a class="btn btn-light me-1" style="background-color: {{ $item->color }}" href="javascript:void(0);"></a>
+                                                {{ $item->deskripsi }} {{ $item->keterangan?'('.$item->keterangan.')':'' }} - Tanggal {{ $item->tgl }}
+                                            </label>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                         </div>

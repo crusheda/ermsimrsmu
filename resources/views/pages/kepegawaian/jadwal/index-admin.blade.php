@@ -41,27 +41,40 @@
     <div class="row pt-1">
         <div class="col-xl-12">
             <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between px-3">
+                <div class="card-header d-flex align-items-center justify-content-between px-3 gap-2">
                     <h5 class="mb-0">Tabel Riwayat</h5>
-                    <div class="btn-group">
-                        <button class="btn btn-light-info dropdown-toggle position-relative" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-sync fa-spin me-2"></i></button>
-                        <ul class="dropdown-menu" aria-labelledby="tombolMenu">
-                            <li>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="dokumentasi()">Lihat Dokumentasi</a>
-                                <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
-                                {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="dinasLuar()">Pengajuan <b class="text-success">Dinas Luar</b></a> --}}
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
-                                <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexLN') }}">Referensi Libur Nasional</a>
-                                <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span></a>
-                            </li>
-                        </ul>
-                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                        <div class="input-group">
+                            <input type="month" class="form-control" value="" placeholder="Pilih Bulan & Tahun" id="filterBulan" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Pilih Bulan & Tahun"/>
+                            <button class="btn btn-outline-primary" onclick="showRiwayat($('#filterBulan').val())" id="btn-cari" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Filter Jadwal Dinas Berdasarkan Bulan & Tahun" disabled><i class="fas fa-search"></i></button>
+                            <button class="btn btn-outline-warning" onclick="showRiwayat()" id="btn-refresh" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Tampilkan Seluruh Jadwal Dinas"><i class="fas fa-sync"></i></button>
+                            <button class="btn btn-outline-info dropdown-toggle" id="tombolMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-sync fa-spin me-2"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="tombolMenu">
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="dokumentasi()">Lihat Dokumentasi</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
+                                    <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
+                                    <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexLN') }}">Referensi Libur Nasional</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}">
+                                        Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Dropdown -->
                     </div>
                 </div>
                 <div class="card-body">
@@ -408,11 +421,19 @@
                 })
             });
 
+            $('#filterBulan').on('change', function() {
+                if ($(this).val()) {
+                    $('#btn-cari').prop('disabled', false); // aktifkan
+                } else {
+                    $('#btn-cari').prop('disabled', true); // nonaktifkan
+                }
+            });
+
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
             count();
-            showRiwayat();
+            showRiwayat($('#filterBulan').val());
         });
 
         function count() {
@@ -526,10 +547,17 @@
             }
         }
 
-        function showRiwayat() {
+        function showRiwayat(month) {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            var regexBulan = /^\d{4}-(0[1-9]|1[0-2])$/;
+            if (!regexBulan.test(month)) {
+                url = "/api/kepegawaian/jadwaldinas/table";
+                $('#filterBulan').val('');
+            } else {
+                url = "/api/kepegawaian/jadwaldinas/table/"+month;
+            }
             $.ajax({
-                url: "/api/kepegawaian/jadwaldinas/table/",
+                url: url,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -567,6 +595,11 @@
                                         <button type='button' class='btn btn-sm ${colButton} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false' id='btnoptshow${item.id}'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="lihat(${item.id})"><i class="fa-fw fas fa-list-ol me-2"></i> Lihat</a></li>`;
+                                            if (item.progress == 3) { // BELUM DIVERIFIKASI ATASAN
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item" style="color: #cd26d9" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
+                                            } else {
+                                                content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
+                                            }
                                             if (item.progress == 1) { // BELUM DIVERIFIKASI ATASAN
                                                 content += `<li><a href="javascript:void(0);" class="dropdown-item text-success" onclick="verif(${item.id})"><i class="fa-fw fas fa-calendar-check me-2"></i> Verif</a></li>`;
                                             } else {
@@ -577,11 +610,9 @@
                                                 // content += `<li><a href="javascript:void(0);" class="dropdown-item text-danger" onclick="tolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
                                             } else { // SETELAH DIVALIDASI
                                                 if (item.progress == 3) {
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item" style="color: #cd26d9" onclick="printJadwal(${item.id})"><i class="fa fa-print me-2" style="font-size:13px"></i> Cetak</a></li>`;
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalValidasi(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Validasi</a></li>`;
                                                     // content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-times me-2"></i> Tolak</a></li>`;
                                                 } else { // BELUM DIVERIFIKASI OLEH ATASAN LANGSUNG
-                                                    content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa fa-print me-1" style="font-size:13px"></i> Cetak</a></li>`;
                                                     content += `<li><a href="javascript:void(0);" class="dropdown-item text-secondary"><i class="fa-fw fas fa-calendar-check me-2"></i> Validasi</a></li>`;
                                                     // content += `<li><a href="javascript:void(0);" class="dropdown-item text-warning" onclick="batalTolak(${item.id})"><i class="fa-fw fas fa-calendar-times me-2"></i> Batal Tolak</a></li>`;
                                                 }
@@ -951,7 +982,7 @@
                             position: 'topRight'
                         });
                         $('#modalValidasi').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(res) {
                         iziToast.error({
@@ -986,7 +1017,7 @@
                             position: 'topRight'
                         });
                         $('#modalBatalValidasi').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(res) {
                         iziToast.error({
@@ -1021,7 +1052,7 @@
                             position: 'topRight'
                         });
                         $('#modalVerif').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(xhr) {
                         // xhr.responseJSON berisi data JSON dari Laravel
@@ -1057,7 +1088,7 @@
                             position: 'topRight'
                         });
                         $('#modalBatalVerif').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(res) {
                         iziToast.error({
@@ -1184,7 +1215,7 @@
                             position: 'topRight'
                         });
                         $('#modalHapus').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(res) {
                         iziToast.error({

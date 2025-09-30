@@ -146,6 +146,11 @@ class JadwalController extends Controller
             if ($jadwal_detail) {
                 return redirect()->route('kepegawaian.jadwaldinas.index')->withErrors('Jadwal Dinas sudah terisi, silakan mengubah/melengkapi Jadwal!');
             } else {
+                $ref_ln = ref_jadwal_ln::where('tahun', (int) $jadwal->tahun)
+                    ->where('bulan', (int) $jadwal->bulan)
+                    ->whereNull('deleted_at')
+                    ->orderBy('tgl','ASC')
+                    ->get();
                 $ref_jabatan = ref_jadwal_jabatan::whereIn('pegawai_id',[$pegawai,$ref_users->pegawai_id])
                                                     ->whereNull('deleted_at')
                                                     ->orderBy('urutan','ASC')
@@ -170,6 +175,7 @@ class JadwalController extends Controller
                     'ref_shift' => $ref_shift,
                     'ref_users' => $ref_users,
                     'ref_jabatan' => $ref_jabatan,
+                    'ref_ln' => $ref_ln,
                     'users' => $users,
                     'jml_tgl' => $jml_tgl,
                 ];
@@ -213,6 +219,11 @@ class JadwalController extends Controller
 
                 return Redirect::back()->withErrors(['msg' => 'Mohon maaf, status Jadwal Dinas Anda telah '.$status]);
             } else {
+                $ref_ln = ref_jadwal_ln::where('tahun', (int) $jadwal->tahun)
+                    ->where('bulan', (int) $jadwal->bulan)
+                    ->whereNull('deleted_at')
+                    ->orderBy('tgl','ASC')
+                    ->get();
                 $ref_jabatan = ref_jadwal_jabatan::leftJoin('users','users.id','=','referensi_jadwal_users_jabatan.id_staf')
                                                 ->select('referensi_jadwal_users_jabatan.*','users.name as name_staf','users.nick as panggilan_staf','users.nama as nama_staf')
                                                 ->whereIn('referensi_jadwal_users_jabatan.pegawai_id',[$pegawai,$ref_users->pegawai_id])
@@ -248,6 +259,7 @@ class JadwalController extends Controller
                     'ref_shift' => $ref_shift,
                     'ref_users' => $ref_users,
                     'ref_jabatan' => $ref_jabatan,
+                    'ref_ln' => $ref_ln,
                     'users' => $users,
                     'jml_tgl' => $jml_tgl,
                 ];
@@ -712,33 +724,6 @@ class JadwalController extends Controller
     {
         $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
 
-        // Buat subquery yang ambil semua referensi_jadwal_users yang relevan
-        // $referensiSub = DB::table('referensi_jadwal_users')
-        //     ->select('pegawai_id', 'unit', 'staf')
-        //     ->whereNull('deleted_at');
-
-        // Ambil semua jadwal, lalu filter berdasarkan match ke pegawai_id atau staf JSON
-        // $show = DB::table('kepegawaian_jadwal')
-        //     ->join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
-        //     ->leftJoinSub($referensiSub, 'referensi', function ($join) {
-        //         $join->on('kepegawaian_jadwal.pegawai_id', '=', 'referensi.pegawai_id')
-        //             ->orWhereRaw('JSON_CONTAINS(referensi.staf, JSON_QUOTE(kepegawaian_jadwal.pegawai_id))');
-        //     })
-        //     ->select('kepegawaian_jadwal.*', 'referensi.unit', 'users.nama as nama_pegawai')
-        //     ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
-        //     ->whereNull('deleted_at')
-        //     ->get();
-
-        // $subRjuStaf = DB::table('referensi_jadwal_users as rju')
-        //     ->select('rju.unit', DB::raw('kepegawaian_jadwal.pegawai_id as pegawai_id'))
-        //     ->whereRaw('JSON_CONTAINS(rju.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))')
-        //     ->limit(1);
-
-        // $subRjuDirect = DB::table('referensi_jadwal_users as rju')
-        //     ->select('rju.unit', 'rju.pegawai_id')
-        //     ->whereColumn('rju.pegawai_id', 'kepegawaian_jadwal.pegawai_id')
-        //     ->limit(1);
-
         $show = DB::table('kepegawaian_jadwal')
             ->distinct()
             ->leftJoin('users as us', 'us.id', '=', 'kepegawaian_jadwal.pegawai_id')
@@ -762,32 +747,47 @@ class JadwalController extends Controller
             ->whereNull('kepegawaian_jadwal.deleted_at')
             ->get();
 
-        // $show = DB::table('kepegawaian_jadwal')
-        //             ->join('users', 'users.id', '=', 'kepegawaian_jadwal.pegawai_id')
-        //             ->leftJoin('referensi_jadwal_users as rju_staf', function ($join) {
-        //                 $join->whereRaw('JSON_CONTAINS(rju_staf.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))');
-        //             })
-        //             ->leftJoin('referensi_jadwal_users as rju_direct', function ($join) {
-        //                 $join->on('kepegawaian_jadwal.pegawai_id', '=', 'rju_direct.pegawai_id');
-        //             })
-        //             ->select(
-        //                 'kepegawaian_jadwal.*',
-        //                 DB::raw('COALESCE(rju_staf.unit, rju_direct.unit) as unit'),
-        //                 'users.nama as nama_pegawai'
-        //             )
-        //             ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
-        //             ->where(function ($query) {
-        //                 $query->whereNotNull('rju_staf.unit')
-        //                     ->orWhereNotNull('rju_direct.unit');
-        //             })
-        //             ->whereNull('kepegawaian_jadwal.deleted_at')
-        //             ->get();
+        $data = [
+            'users' => $users,
+            'show' => $show,
+        ];
 
-        // print_r($show);
-        // die();
-        // print_r($show);
-        // die();
-        // dd($show);
+        return response()->json($data, 200);
+    }
+    function tableAllMonth($month)
+    {
+        list($year, $month) = explode('-', $month); // misal $input = "2025-08"
+        $month = sprintf("%02d", $month); // "08"
+        $year = sprintf("%04d", $year);   // "2025" (opsional)
+
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+
+        $show = DB::table('kepegawaian_jadwal')
+            ->distinct()
+            ->leftJoin('users as us', 'us.id', '=', 'kepegawaian_jadwal.pegawai_id')
+            ->leftJoin('users as vr', 'vr.id', '=', 'kepegawaian_jadwal.verif')
+            ->leftJoin('users as vl', 'vl.id', '=', 'kepegawaian_jadwal.valid')
+            ->leftJoin('referensi_jadwal_users as rju_staf', function ($join) {
+                $join->whereRaw('JSON_CONTAINS(rju_staf.staf, JSON_QUOTE(CAST(kepegawaian_jadwal.pegawai_id AS CHAR)))');
+                    // ->whereNull('rju_staf.deleted_at');
+            })
+            ->leftJoin('referensi_jadwal_users as rju_direct', function ($join) {
+                $join->on('kepegawaian_jadwal.pegawai_id', '=', 'rju_direct.pegawai_id');
+                    // ->whereNull('rju_direct.deleted_at');
+            })
+            ->select(
+                'kepegawaian_jadwal.*',
+                'us.nama as nama_pegawai',
+                'vr.nama as nama_verif',
+                'vl.nama as nama_valid'
+            )
+            ->where(function ($query) use ($year,$month) {
+                $query->where('kepegawaian_jadwal.tahun', $year)
+                        ->where('kepegawaian_jadwal.bulan', $month);
+            })
+            ->whereIn('kepegawaian_jadwal.progress', [1, 2, 3])
+            ->whereNull('kepegawaian_jadwal.deleted_at')
+            ->get();
 
         $data = [
             'users' => $users,

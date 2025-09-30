@@ -111,6 +111,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // JADWAL DINAS
             // ADMIN
                 Route::get('kepegawaian/jadwaldinas/table', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableAll'])->name('kepegawaian.jadwaldinas.tableAll');
+                Route::get('kepegawaian/jadwaldinas/table/{month}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tableAllMonth'])->name('kepegawaian.jadwaldinas.tableAllMonth');
                 Route::get('kepegawaian/jadwaldinas/{id}/verif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'verif'])->name('kepegawaian.jadwaldinas.verif');
                 // Route::get('kepegawaian/jadwaldinas/{id}/tolak/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'tolak'])->name('kepegawaian.jadwaldinas.tolak');
                 Route::get('kepegawaian/jadwaldinas/{id}/batalverif/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'batalVerif'])->name('kepegawaian.jadwaldinas.batalVerif');
