@@ -554,7 +554,7 @@
                 url = "/api/kepegawaian/jadwaldinas/table";
                 $('#filterBulan').val('');
             } else {
-                url = "/api/kepegawaian/jadwaldinas/table/"+month;
+                url = "/api/kepegawaian/jadwaldinas/table/admin/"+month;
             }
             $.ajax({
                 url: url,
