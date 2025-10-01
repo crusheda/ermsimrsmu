@@ -163,8 +163,8 @@
                             });
                         }
                         content += `<td><center><div class="btn-group">
-                                    <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
-                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>`;
+                                    <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
+                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>`;
 
                         // if(item.tgl_verif != null) {
                         // } else {
@@ -248,8 +248,8 @@
                             });
                         }
                         content += `<td><center><div class="btn-group">
-                                    <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
-                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>`;
+                                    <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
+                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>`;
 
                         // if(item.tgl_verif != null) {
                         // } else {
@@ -311,7 +311,7 @@
                     res.forEach(item => {
                         content =   `<tr id="data` + item.id + `">`;
                         if (item.user_id == '{{ Auth::user()->id }}') {
-                            content += `<td><button class="btn btn-danger btn-sm" id="batalVerif`+item.id+`" onclick="batalVerif(` + item.id +`)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="Batal Verifikasi"><i class="fa-fw fas fa-times nav-icon"></i></button></td>`;
+                            content += `<td><button class="btn btn-danger btn-sm" id="batalVerif`+item.id+`" onclick="batalVerif(` + item.id +`)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Batal Verifikasi"><i class="fa-fw fas fa-times nav-icon"></i></button></td>`;
                         } else {
                             content += `<td><button class="btn btn-secondary btn-sm" disabled><i class="fa-fw fas fa-times nav-icon"></i></button></td>`;
                         }

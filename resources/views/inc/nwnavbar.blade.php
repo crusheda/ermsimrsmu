@@ -2,11 +2,17 @@
     <div class="navbar-wrapper">
         <div class="m-header">
             <a href="javascript:void(0);" class="b-brand text-primary">
-                {{-- <img src="{{ asset('images/logo-dark.svg') }}" class="img-fluid logo-lg" alt="logo"> --}}
-                <img src="{{ asset('images/logo/logo_new_simrsmu_black.png') }}" alt="logo" class="img-fluid" width="150px">
+                <img id="app-logo" src="{{ asset('images/logo/logo_new_simrsmu_black.png') }}" alt="logo" class="img-fluid" width="150px">
                 <span class="badge bg-light-primary rounded-pill ms-2 theme-version">v3.1</span>
             </a>
         </div>
+        {{-- <script>
+            // Pasang logo sesuai theme saat pertama kali load
+            document.addEventListener("DOMContentLoaded", function () {
+                const savedTheme = localStorage.getItem("theme") || "dark";
+                setLogoByTheme(savedTheme);
+            });
+        </script> --}}
         <div class="navbar-content">
             <div class="card pc-user-card step1">
                 <div class="card-body">

@@ -1,6 +1,43 @@
 <html lang="en">
 
 <head>
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem("theme") || "light"; // default dark
+
+            // pasang theme ke body juga
+            // gunakan MutationObserver untuk tunggu body muncul
+            var observer = new MutationObserver(function(mutations, me) {
+                if (document.body) {
+                    document.body.setAttribute("data-pc-theme", savedTheme);
+                    setLogoByTheme(savedTheme); // update logo juga
+                    me.disconnect(); // stop observer
+                }
+            });
+            observer.observe(document.documentElement, {childList: true});
+        })();
+
+        function setLogoByTheme(theme) {
+            const logo = document.getElementById("app-logo");
+            if (!logo) return;
+
+            if (theme === "dark") {
+                logo.src = "{{ asset('images/logo/logo_new_simrsmu_light.png') }}";
+            } else {
+                logo.src = "{{ asset('images/logo/logo_new_simrsmu_black.png') }}";
+            }
+        }
+
+        function layout_change(theme) {
+            // ubah attribute body
+            document.body.setAttribute("data-pc-theme", theme);
+
+            // simpan pilihan ke localStorage agar persist
+            localStorage.setItem("theme", theme);
+            setLogoByTheme(theme); // update logo juga
+        }
+    </script>
+
     <title>Simrsmu v3.1 - {{ Auth::user()->name }}</title><!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
@@ -10,7 +47,8 @@
     <meta name="author" content="Yussuf Faisal" />
     <link rel="shortcut icon" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_new_light.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="icon" type="image/png" sizes="96
+    x96" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="stylesheet" href="{{ asset('fonts/inter/inter.css') }}" id="main-font-link">
     <!-- [phosphor Icons] https://phosphoricons.com/ -->
     <link rel="stylesheet" href="{{ asset('fonts/phosphor/duotone/style.css') }}">
@@ -93,8 +131,7 @@
     </style>
 </head>
 
-<body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
-    data-pc-theme_contrast="" data-pc-theme="light"><!-- [ Pre-loader ] start -->
+<body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr" data-pc-theme=""><!-- data-pc-theme_contrast="" data-pc-theme="light" -->
 
 
     <!-- Logout Form -->

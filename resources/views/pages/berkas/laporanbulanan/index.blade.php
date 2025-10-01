@@ -316,7 +316,7 @@
                         content += `<td>` + item.judul + ` `;
                         res.verif.forEach(valver => {
                             if (valver.lap_id == item.id) {
-                                content += `<i class="ti ti-checkbox text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"data-bs-html="true" title="Laporan Terverifikasi"></i>`;
+                                content += `<i class="ti ti-checkbox text-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Laporan Terverifikasi"></i>`;
                             }
                         });
                         content += `</td><td>` + item.bln + ` / ` + item.thn + `</td><td>`;
