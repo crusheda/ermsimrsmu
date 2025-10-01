@@ -937,8 +937,8 @@ class JadwalController extends Controller
     // ADMIN == PROSES VERIFIKASI DAN PENOLAKAN
     function verif($id,$user)
     {
-        print_r($id);
-        die();
+        // print_r($id);
+        // die();
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         // Inisialisasi
