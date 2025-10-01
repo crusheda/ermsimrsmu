@@ -289,6 +289,7 @@ class DetailProfilKaryawanController extends Controller
     function showKepegawaian($id)
     {
         $maxNip = sprintf('%03d',users::max('urutan_masuk'));
+        $maxNipThl = sprintf('%03d',users::where('nip','LIKE','THL%')->max('urutan_masuk'));
         $show = users::where('id', $id)->first();
         $ref_klasifikasi = referensi::where('ref_jenis',11)->get(); // 11 is Jenis Klasifikasi Pegawai
         $ref_subprofesi = referensi::where('ref_jenis',14)->get(); // 14 is Jenis Profesi / Sub Klasifikasi Pegawai
@@ -296,6 +297,7 @@ class DetailProfilKaryawanController extends Controller
         $data = [
             'show' => $show,
             'maxNip' => $maxNip,
+            'maxNipThl' => $maxNipThl,
             'ref_klasifikasi' => $ref_klasifikasi,
             'ref_subprofesi' => $ref_subprofesi,
         ];
@@ -308,31 +310,45 @@ class DetailProfilKaryawanController extends Controller
         $now = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
 
         if ($request->nip) {
-            $getBulan = substr($request->nip,3,2);
-            $getTahun = substr($request->nip,0,2);
-            $urutan_masuk = substr($request->nip,6,5);
-            // $getBulan = substr("19.12.314",3,2);
-            // $getTahun = substr("19.12.314",0,2);
-            // $urutan_masuk = substr("19.12.314",6,5);
-            $masuk_kerja = Carbon::parse($getTahun.'-'.$getBulan.'-01')->isoFormat('YYYY-MM-DD');
+            if (substr($request->nip,0,3) == 'THL') {
+                $data = users::find($request->pegawai_id);
+                $data->nip          = $request->nip;
+                $data->masuk_kerja  = null;
+                $data->urutan_masuk = substr($request->nip,6,5);
+                $data->save();
 
-            // print_r($masuk_kerja);
-            // die();
+                // CEK DATA & SAVE LOG
+                datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai THL (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+            } else {
+                if (ctype_digit(substr($request->nip, 0, 2))) {
+                    $getBulan = substr($request->nip,3,2);
+                    $getTahun = substr($request->nip,0,2);
+                    $urutan_masuk = substr($request->nip,6,5);
+                    // $getBulan = substr("19.12.314",3,2);
+                    // $getTahun = substr("19.12.314",0,2);
+                    // $urutan_masuk = substr("19.12.314",6,5);
+                    $masuk_kerja = Carbon::parse($getTahun.'-'.$getBulan.'-01')->isoFormat('YYYY-MM-DD');
 
-            $data = users::find($request->pegawai_id);
-            $data->nip          = $getTahun.'.'.$getBulan.'.'.sprintf('%03d',$urutan_masuk);;
-            $data->masuk_kerja  = $masuk_kerja;
-            $data->urutan_masuk = $urutan_masuk;
-            $data->save();
+                    $data = users::find($request->pegawai_id);
+                    $data->nip          = $getTahun.'.'.$getBulan.'.'.sprintf('%03d',$urutan_masuk);;
+                    $data->masuk_kerja  = $masuk_kerja;
+                    $data->urutan_masuk = $urutan_masuk;
+                    $data->save();
 
-            // CEK DATA & SAVE LOG
-            datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+                    // CEK DATA & SAVE LOG
+                    datalogs::record($request->user_id, 'Baru saja melakukan perubahan NIP Pegawai (ID:'.$request->pegawai_id.') menjadi '.$request->nip, $request->nip, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
+                } else {
+                    return response()->json(['error' => 'Format NIP tidak sesuai. Silahkan gunakan format yang benar sesuai dengan aturan yang sudah tertera!'], 422);
+                }
+            }
         } else {
             $data = users::find($request->pegawai_id);
+            $old = $data;
             $data->nip          = null;
             $data->masuk_kerja  = null;
             $data->urutan_masuk = null;
             $data->save();
+            datalogs::record($request->user_id, 'Baru saja melakukan penghapusan NIP Pegawai (ID:'.$old->nama?$old->nama:$old->name.')',$old, null, $data, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
         }
 
         return response()->json($now, 200);

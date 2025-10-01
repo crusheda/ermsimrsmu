@@ -132,7 +132,7 @@
                                         <hr class="my-3 border border-secondary-subtle">
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-id-card-alt me-3"></i>
-                                            <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Induk Pegawai">{{ $list['show']->nip?$list['show']->nip:'-' }}</p>
+                                            <p class="mb-0" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nomor Induk Pegawai" id="show_nip_after">{{ $list['show']->nip?$list['show']->nip:'-' }}</p>
                                         </div>
                                         <div class="d-inline-flex align-items-center justify-content-start w-100 mb-3">
                                             <i class="fas fa-address-card me-3"></i>
@@ -230,7 +230,7 @@
                         <div class="col-lg-8 col-xxl-9">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>Tentang Saya</h5>
+                                    <h5>Pengalaman Bekerja</h5>
                                 </div>
                                 <div class="card-body">
                                     <p class="mb-0">{!! $list['show']->pengalaman_kerja?str_replace(array("\r\n", "\r", "\n"),"<br>", $list['show']->pengalaman_kerja):'-' !!}</p>
@@ -289,82 +289,93 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card task-card">
-                                <div class="card-header">
-                                    <h5>Data Pendidikan</h5>
+                            @if (!empty($list['show']->s3) || !empty($list['show']->s2) || !empty($list['show']->s1_profesi) || !empty($list['show']->s1) || !empty($list['show']->d4) || !empty($list['show']->d3) || !empty($list['show']->d2) || !empty($list['show']->sma) || !empty($list['show']->smp) || !empty($list['show']->sd))
+                                {{-- CEK APAKAH ADA DATA PENDIDIKAN, JIKA ADA TAMPILKAN --}}
+                                <div class="card task-card">
+                                    <div class="card-header">
+                                        <h5>Data Pendidikan</h5>
+                                    </div>
+                                    <div class="card-body pb-3">
+                                        @if (!empty($list['show']->nik))
+                                            <ul class="list-unstyled task-list">
+                                                @if (!empty($list['show']->s3))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">S3 - {{ $list['show']->s3 }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s3 }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->s2))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">S2 - {{ $list['show']->s2 }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s2 }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->s1_profesi))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">S1 <b class="text-primary">Profesi</b> - {{ $list['show']->s1_profesi }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s1_profesi }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->s1))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">S1 - {{ $list['show']->s1 }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s1 }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->d4))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">D4 - {{ $list['show']->d4 }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d4 }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->d3))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">D3 - {{ $list['show']->d3 }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d3 }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->d2))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">D2 - {{ $list['show']->d2 }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d2 }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->sma))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">{{ $list['show']->sma }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sma }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->smp))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">{{ $list['show']->smp }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_smp }}</p>
+                                                </li>
+                                                @endif
+                                                @if (!empty($list['show']->sd))
+                                                <li>
+                                                    <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
+                                                    <h5 class="text-muted">{{ $list['show']->sd }}</h5>
+                                                    <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sd }}</p>
+                                                </li>
+                                                @endif
+                                            </ul>
+                                        @else
+                                        -
+                                        @endif
+                                    </div>
                                 </div>
-                                <div class="card-body pb-3">
-                                    @if (!empty($list['show']->nik))
-                                        <ul class="list-unstyled task-list">
-                                            @if (!empty($list['show']->s3))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">S3 - {{ $list['show']->s3 }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s3 }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->s2))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">S2 - {{ $list['show']->s2 }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s2 }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->s1))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">S1 - {{ $list['show']->s1 }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_s1 }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->d4))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">D4 - {{ $list['show']->d4 }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d4 }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->d3))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">D3 - {{ $list['show']->d3 }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d3 }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->d2))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">D2 - {{ $list['show']->d2 }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_d2 }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->sma))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">{{ $list['show']->sma }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sma }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->smp))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">{{ $list['show']->smp }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_smp }}</p>
-                                            </li>
-                                            @endif
-                                            @if (!empty($list['show']->sd))
-                                            <li>
-                                                <i class="feather icon-arrow-right f-w-600 task-icon bg-secondary"></i>
-                                                <h5 class="text-muted">{{ $list['show']->sd }}</h5>
-                                                <p class="m-b-5">Lulus pada tahun {{ $list['show']->th_sd }}</p>
-                                            </li>
-                                            @endif
-                                        </ul>
-                                    @else
-                                    -
-                                    @endif
-                                </div>
-                            </div>
+                                {{-- END CEK DATA PENDIDIKAN --}}
+                            @endif
                             <div class="card">
                                 <div class="card-header">
                                     <h5>Data Kesehatan</h5>
@@ -415,14 +426,21 @@
                                                     <h6 class="mb-0">NIP (Nomor Induk Pegawai)</h6>
                                                 </div>
                                                 <div class="flex-shrink-0">
-                                                    <h6 class="mb-0"><span class="badge bg-secondary">NIP Terakhir : <u id="show_nip_terakhir">000</u></span></h6>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-warning" disabled>NIP THL Terakhir : <u id="show_nip_thl_terakhir">000</u></button>
+                                                        <button class="btn btn-sm btn-info" disabled>NIP Terakhir : <u id="show_nip_terakhir">000</u></button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="mb-3 mt-3">
                                                 <div class="alert alert-secondary">
-                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Apabila karyawan baru, NIP bersifat otomatis<br>
-                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Format <b>WAJIB</b> NIP adalah <u><b class="text-danger">Tahun Masuk</b></u> . <u><b class="text-warning">Bulan Masuk</b></u> . <u><b class="text-primary">Nomor Urutan</b></u><br>
-                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Lakukan dengan teliti dan hati-hati
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Apabila karyawan baru (Non THL), NIP bersifat otomatis<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Format <b>WAJIB</b> NIP <mark><b><u>KHUSUS THL</u></b></mark> adalah <u><b class="text-danger">THL</b></u> . <u><b class="text-warning">Tahun Masuk</b></u> . <u><b class="text-primary">Nomor Urutan</b></u>
+                                                                                                                <i class="fas fa-long-arrow-alt-right ms-1 me-2"></i><b><i> (Contoh : THL.25.001)</i></b><br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Format <b>WAJIB</b> NIP Pegawai adalah <u><b class="text-danger">Tahun Masuk</b></u> . <u><b class="text-warning">Bulan Masuk</b></u> . <u><b class="text-primary">Nomor Urutan</b></u>
+                                                                                                                <i class="fas fa-long-arrow-alt-right ms-1 me-2"></i><b><i> (Contoh : 19.12.314)</i></b><br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Gunakan Titik (.) sebagai pemisah. Tidak Diperbolehkan ada SPASI ' '<br>
+                                                    <i class="ti ti-arrow-narrow-right text-primary me-1"></i> Lakukan dengan teliti dan hati-hati dalam pengisian NIP, karena NIP bersifat <b class="text-info">UNIK</b>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col"><input type="text" class="form-control" id="nip_pgw" maxlength="10" placeholder="Tuliskan NIP Pegawai (Wajib sesuai dengan Format)"></div>
@@ -1675,7 +1693,9 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#show_nip_terakhir").text(res.maxNip);
+                    $("#show_nip_thl_terakhir").text(res.maxNipThl);
                     $("#nip_pgw").val(res.show.nip);
+                    $("#show_nip_after").text(res.show.nip? res.show.nip : '-');
                     $("#tmt").val(res.show.tmt);
                     if (res.show.tat) {
                         $("#tat").val(res.show.tat);
@@ -1758,7 +1778,7 @@
                             console.log("error : " + JSON.stringify(res) );
                             iziToast.error({
                                 title: 'Pesan Galat!',
-                                message: res.responseJSON,
+                                message: res.responseJSON.error,
                                 position: 'topRight'
                             });
                         }
