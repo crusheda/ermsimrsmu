@@ -1,5 +1,42 @@
 <html lang="en">
 <head>
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem("theme") || "light"; // default dark
+
+            // pasang theme ke body juga
+            // gunakan MutationObserver untuk tunggu body muncul
+            var observer = new MutationObserver(function(mutations, me) {
+                if (document.body) {
+                    document.body.setAttribute("data-pc-theme", savedTheme);
+                    setLogoByTheme(savedTheme); // update logo juga
+                    me.disconnect(); // stop observer
+                }
+            });
+            observer.observe(document.documentElement, {childList: true});
+        })();
+
+        function setLogoByTheme(theme) {
+            const logo = document.getElementById("app-logo");
+            if (!logo) return;
+
+            if (theme === "dark") {
+                logo.src = "{{ asset('images/logo/logo_new_simrsmu_light.png') }}";
+            } else {
+                logo.src = "{{ asset('images/logo/logo_simrsmu_new_kop_31.png') }}";
+            }
+        }
+
+        function layout_change(theme) {
+            // ubah attribute body
+            document.body.setAttribute("data-pc-theme", theme);
+
+            // simpan pilihan ke localStorage agar persist
+            localStorage.setItem("theme", theme);
+            setLogoByTheme(theme); // update logo juga
+        }
+    </script>
+
     <title>Login - Simrsmu v3.1</title><!-- [Meta] -->
     <meta charset="utf-8">
     <!-- CSRF Token -->
@@ -31,8 +68,7 @@
 </head><!-- [Head] end -->
 
 <!-- [Body] Start -->
-<body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr"
-    data-pc-theme_contrast="" data-pc-theme="light">
+<body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-layout="vertical" data-pc-direction="ltr" data-pc-theme=""> <!-- data-pc-theme_contrast="" data-pc-theme="light" -->
     <!-- [ Pre-loader ] start -->
     <div class="page-loader">
         <div class="bar"></div>

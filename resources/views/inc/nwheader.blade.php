@@ -2,9 +2,9 @@
     <div class="header-wrapper"><!-- [Mobile Media Block] start -->
         <div class="me-auto pc-mob-drp">
             <ul class="list-unstyled"><!-- ======= Menu collapse Icon ===== -->
-                <li class="pc-h-item pc-sidebar-collapse"><a href="#" class="pc-head-link ms-0" id="sidebar-hide"><i
+                <li class="pc-h-item pc-sidebar-collapse"><a href="javascript:void(0);" class="pc-head-link ms-0" id="sidebar-hide"><i
                             class="ti ti-menu-2"></i></a></li>
-                <li class="pc-h-item pc-sidebar-popup"><a href="#" class="pc-head-link ms-0"
+                <li class="pc-h-item pc-sidebar-popup"><a href="javascript:void(0);" class="pc-head-link ms-0"
                         id="mobile-collapse"><i class="ti ti-menu-2"></i></a></li>
                 <li class="pc-h-item d-none d-md-inline-flex" style="margin-left:10px">
                     <form class="form-search">
@@ -20,24 +20,29 @@
         </div><!-- [Mobile Media Block end] -->
         <div class="ms-auto">
             <ul class="list-unstyled">
-                {{-- <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
+                <li class="dropdown pc-h-item">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
-                        aria-expanded="false"><svg class="pc-icon">
+                        aria-expanded="false" data-bs-toggle="tooltip"
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                        title="Pilih Tema Sistem">
+                        <svg class="pc-icon">
                             <use xlink:href="#custom-sun-1"></use>
-                        </svg></a>
+                        </svg>
+                    </a>
                     <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
-                        <a href="#!" class="dropdown-item" onclick="layout_change('dark')">
+                        <a href="javascript:void(0);" class="dropdown-item" onclick="layout_change('dark')">
                             <svg class="pc-icon">
                                 <use xlink:href="#custom-moon"></use>
-                            </svg> <span>Dark</span>
+                            </svg> <span>Gelap</span>
                         </a>
-                        <a href="#!" class="dropdown-item" onclick="layout_change('light')">
+                        <a href="javascript:void(0);" class="dropdown-item" onclick="layout_change('light')">
                             <svg class="pc-icon">
                                 <use xlink:href="#custom-sun-1"></use>
-                            </svg> <span>Light</span>
+                            </svg> <span>Terang</span>
                         </a>
                     </div>
-                </li> --}}
+                </li>
                 {{-- <li class="dropdown pc-h-item"><a class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                         aria-expanded="false" disabled><svg class="pc-icon">

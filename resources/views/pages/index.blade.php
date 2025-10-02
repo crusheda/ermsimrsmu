@@ -29,7 +29,7 @@
 </head>
 
 <body data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme_contrast=""
-    data-pc-theme="light" class="landing-page">
+    data-pc-theme="dark" class="landing-page">
     <div class="page-loader">
         <div class="bar"></div>
     </div>
@@ -44,11 +44,11 @@
             <div class="container">
                 <div class="d-inline-flex align-items-center">
                     <a class="navbar-brand" href="{{ route('portal') }}">
-                        <img src="{{ asset('images/logo/logo_new_simrsmu_black.png') }}" alt="logo" width="150px">
+                        <img src="{{ asset('images/logo/logo_new_simrsmu_light.png') }}" alt="logo" width="150px">
                     </a>
-                    <a href="javascript:void(0);">
+                    {{-- <a href="javascript:void(0);">
                         <div class="badge text-bg-light border-1 border rounded-pill">v3.1</div>
-                    </a>
+                    </a> --}}
                 </div>
                 <button class="navbar-toggler rounded" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false"
@@ -133,7 +133,7 @@
             <ul class="list-inline mb-0">
                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Support by RS PKU Muhammadiyah Sukoharjo">
                     <a href="https://rspkusukoharjo.com/" target="_blank">
-                        <img src="{{ asset('images/pku/logo_admin.png') }}" alt="img" class="img-fluid" width="100px">
+                        <img src="{{ asset('images/pku/logo_admin_white.png') }}" alt="img" class="img-fluid" width="100px">
                     </a>
                 </li>
                 {{-- <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="top"
