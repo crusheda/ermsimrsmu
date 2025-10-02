@@ -1,13 +1,13 @@
 @extends('layouts.index')
 
 @section('content')
-    {{-- <style>
+    <style>
         #grafik-show {
             width: 100%;
-            height: 100%;
-            min-height: 600px;
+            aspect-ratio: 1/1;
+            max-height: 500px;
         }
-    </style> --}}
+    </style>
 
     <div class="page-header">
         <div class="page-block">
@@ -16,12 +16,12 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
-                        <li class="breadcrumb-item" aria-current="page">Profil Karyawan</li>
+                        <li class="breadcrumb-item" aria-current="page">Profil Kepegawaian</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Profil Karyawan</h2>
+                        <h2 class="mb-0">Profil Kepegawaian</h2>
                     </div>
                 </div>
             </div>
@@ -49,126 +49,19 @@
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="showGrafikPendidikan()">Pendidikan</a>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="showGrafikProfesi()">Profesi</a>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="showGrafikStatusPegawai()">Status Pegawai</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showGrafikStatusKawin()">Status Perkawinan</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-7 border-end">
                         <ul class="list-group list-group-flush" id="list-grafik"></ul>
-                        {{-- <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="avtar avtar-s bg-light-secondary"><i
-                                                class="ti ti-chart-bar f-20"></i></div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="row g-1">
-                                            <div class="col-6">
-                                                <p class="text-muted mb-1">Total Pegawai</p>
-                                                <h6 class="mb-0">xxx</h6>
-                                            </div>
-                                            <div class="col-6 text-end">
-                                                <h6 class="mb-1">- xx</h6>
-                                                <p class="text-danger mb-0"><i
-                                                        class="ti ti-arrow-down-left"></i> x%</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="avtar avtar-s bg-light-secondary"><i
-                                                class="ti ti-chart-arrows-vertical f-20"></i></div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="row g-1">
-                                            <div class="col-6">
-                                                <p class="text-muted mb-1">Total Pegawai</p>
-                                                <h6 class="mb-0">xxx</h6>
-                                            </div>
-                                            <div class="col-6 text-end">
-                                                <h6 class="mb-1">+ xx</h6>
-                                                <p class="text-success mb-0"><i
-                                                        class="ti ti-arrow-up-right"></i> x%</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="avtar avtar-s bg-light-secondary">
-                                            <i class="ti ti-activity f-20"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="row g-1">
-                                            <div class="col-6">
-                                                <p class="text-muted mb-1">Total Pegawai</p>
-                                                <h6 class="mb-0">xxx</h6>
-                                            </div>
-                                            <div class="col-6 text-end">
-                                                <h6 class="mb-1">- xx</h6>
-                                                <p class="text-warning mb-0"><i
-                                                        class="ti ti-arrows-left-right"></i> x%</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="avtar avtar-s bg-light-secondary"><i
-                                                class="ti ti-ad f-20"></i></div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="row g-1">
-                                            <div class="col-6">
-                                                <p class="text-muted mb-1">Total Pegawai</p>
-                                                <h6 class="mb-0">xxx</h6>
-                                            </div>
-                                            <div class="col-6 text-end">
-                                                <h6 class="mb-1">xxx</h6>
-                                                <p class="text-success mb-0"><i
-                                                        class="ti ti-arrow-up-right"></i> xx%</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="avtar avtar-s bg-light-secondary"><i
-                                                class="ti ti-chart-arrows-vertical f-20"></i></div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="row g-1">
-                                            <div class="col-6">
-                                                <p class="text-muted mb-1">Total Pegawai</p>
-                                                <h6 class="mb-0">xxx</h6>
-                                            </div>
-                                            <div class="col-6 text-end">
-                                                <h6 class="mb-1">+ xx</h6>
-                                                <p class="text-success mb-0"><i
-                                                        class="ti ti-arrow-up-right"></i> x%</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul> --}}
                     </div>
-                    <div class="col-md-8 align-items-center">
+                    <div class="col-md-5 align-items-center">
                         <h5 class="text-center my-2" id="show-name-grafik"></h5>
-                        <div id="grafik-show" class="w-100" style="height: 100%; min-height: 400px;"></div>
+                        <div id="grafik-show" style="width:100%; min-height:400px; height:100%;"></div>
                     </div>
                 </div>
             </div>
@@ -179,9 +72,9 @@
                     <div class="btn-group shadow">
                         <button class="btn btn-light-primary" onclick="window.location.href='{{ route('akunpengguna.index') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Pengaturan Akun Pengguna (Tambah/Ubah/Hapus Akun Karyawan)">
                             <i class="fas fa-users-cog me-1"></i> Pengaturan Akun</button>
-                        <button class="btn btn-light-warning" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Data Simpel Profil Karyawan">
+                        <button class="btn btn-light-warning" id="btn-tabel-simpel" onclick="refresh()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Data Simpel Profil Karyawan">
                             <i class="fas fa-sync me-1"></i> Tabel Simpel</button>
-                        <button type="button" class="btn btn-light-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()">
+                        <button type="button" class="btn btn-light-danger" id="btn-tabel-lengkap" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan" onclick="showAll()">
                             <i class="fa-fw fas fa-infinity nav-icon me-1"></i> Tabel Lengkap</button>
                         {{-- <button class="btn btn-light-info" onclick="" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Data Profil Karyawan">
                             <i class="fas fa-history me-1"></i></button> --}}
@@ -525,6 +418,7 @@
 
         // FUNCTION-FUNCTION
         function refresh() {
+            $('#btn-tabel-simpel').find('i').addClass('fa-spin');
             $("#tampil-tbody").empty().append(
                 `<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -568,10 +462,21 @@
                     // Set True / False Table
                     $("#table1").prop('hidden',false);
                     $("#table2").prop('hidden',true);
+                    $('#btn-tabel-simpel').find('i').removeClass('fa-spin');
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Proses memuat Data Gagal!',
+                        position: 'topRight'
+                    });
+                    $('#btn-tabel-simpel').find('i').removeClass('fa-spin');
                 }
             });
         }
+
         function showAll() {
+            $('#btn-tabel-lengkap').find('i').removeClass('fa-infinity').addClass('fa-sync fa-spin');
             $("#tampil-tbody-all").empty().append(
                 `<tr><td colspan="20" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
             );
@@ -722,6 +627,15 @@
                     // Set True / False Table
                     $("#table1").prop('hidden',true);
                     $("#table2").prop('hidden',false);
+                    $('#btn-tabel-lengkap').find('i').removeClass('fa-sync fa-spin').addClass('fa-infinity');
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Proses memuat Data Gagal!',
+                        position: 'topRight'
+                    });
+                    $('#btn-tabel-lengkap').find('i').removeClass('fa-sync fa-spin').addClass('fa-infinity');
                 }
             });
         }
@@ -736,19 +650,29 @@
                     $("#tampil-tbody-nonaktif").empty();
                     $('#dttable-nonaktif').DataTable().clear().destroy();
                     res.show.forEach(item => {
-                        content = `
-                                <tr>
-                                    <td><center>` + item.id + `</center></td>
-                                    <td>` + item.name + `</td>
-                                    <td>${item.nama?item.nama:'-'}</td>
-                                    <td>` + new Date(item.deleted_at).toLocaleString("sv-SE") +
-                            `</td>
-                                    <td><center><a href='javascript:void(0);' class='btn btn-sm btn-link-primary' onclick="showAktifKaryawan(` +
-                            item.id + `)"><i class='fa-fw fas fa-user-check nav-icon'></i> Aktifkan</a></center></td>
-                                </tr>
-                            `;
+                        let urlShow = `/kepegawaian/profilkaryawan/${item.id}`;
+                        let content = `
+                            <tr>
+                                <td><center>${item.id}</center></td>
+                                <td>${item.name}</td>
+                                <td>${item.nama ? item.nama : '-'}</td>
+                                <td>${new Date(item.deleted_at).toLocaleString("sv-SE")}</td>
+                                <td>
+                                    <center>
+                                        <div class='btn-group'>
+                                            <a href="${urlShow}" class='btn btn-sm btn-light-info'>
+                                                <i class='fa-fw fas fa-file-archive nav-icon'></i> Lihat Profil
+                                            </a>
+                                            <a href='javascript:void(0);' class='btn btn-sm btn-light-success' onclick="showAktifKaryawan(${item.id})">
+                                                <i class='fa-fw fas fa-user-check nav-icon'></i> Aktifkan
+                                            </a>
+                                        </div>
+                                    </center>
+                                </td>
+                            </tr>
+                        `;
                         $('#tampil-tbody-nonaktif').append(content);
-                    })
+                    });
                     var table = $('#dttable-nonaktif').DataTable({
                         order: [
                             [3, "desc"]
@@ -763,6 +687,13 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Proses memuat Data Gagal!',
+                        position: 'topRight'
+                    });
                 }
             })
         }
@@ -803,6 +734,13 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Proses memuat Data Gagal!',
+                        position: 'topRight'
+                    });
                 }
             })
         }
@@ -846,6 +784,13 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Proses memuat Data Gagal!',
+                        position: 'topRight'
+                    });
                 }
             })
         }
@@ -888,6 +833,13 @@
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger: 'hover'
                     })
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Proses memuat Data Gagal!',
+                        position: 'topRight'
+                    });
                 }
             })
         }
@@ -932,120 +884,269 @@
                         refreshNonAktif();
                         refresh();
                         $('#nonaktif').modal('show');
+                    },
+                    error: function(res) {
+                        iziToast.error({
+                            title: 'Pesan Galat!',
+                            message: 'Gagal mengaktifkan Pegawai!',
+                            position: 'topRight'
+                        });
                     }
                 })
             }
         }
 
         // -----------------------   GRAFIK  ------------------------
-        function showGrafikJenisPegawai() {
-
-        }
-
-        function showGrafikJenisKelamin() {
-
-        }
-
-        function showGrafikPendidikan() {
-
-        }
-
-        function showGrafikProfesi() {
-
-        }
-
-        function showGrafikStatusPegawai() {
+        function loadGrafik(id, title) {
             $.ajax({
-                url: "/api/profilkaryawan/grafik/5",
-                type: 'GET',
-                dataType: 'json', // added data type
+                url: "/api/profilkaryawan/grafik/" + id,
+                type: "GET",
+                dataType: "json",
                 success: function(res) {
-                    $('#show-card-grafik').prop('hidden',false);
+                    $('#show-card-grafik').prop('hidden', false);
+
                     var options = {
                         chart: {
                             type: "pie",
                             width: "100%",
-                            height: "100%"
+                            // height: 700 // kasih tinggi fix, tapi tetap responsive
                         },
-                        labels: res.labels, // dari API
-                        series: res.series, // dari API
+                        labels: res.labels,
+                        series: res.series,
                         colors: ["#4680FF", "#FFB946", "#4BC0C0", "#FF6384", "#9966FF", "#212529", "#FF8BF2", "#3EFF73"],
-                        fill: {
-                            opacity: [1, .8, .6, .8, 1, .5]
-                        },
-                        legend: {
-                            show: true,
-                            position: 'bottom'
-                        },
+                        legend: { show: true, position: 'bottom' },
                         dataLabels: {
-                            enabled: true
+                            enabled: true,
+                            formatter: function (val, opts) {
+                                return val.toFixed(1) + "%" // tampilkan persentase
+                            },
+                            dropShadow: {
+                                enabled: false
+                            }
                         },
-                        responsive: [{
-                            breakpoint: 575,
-                            options: {
-                                chart: {
-                                    height: 250
-                                },
-                                dataLabels: {
-                                    enabled: false
+                        responsive: [
+                            {
+                                breakpoint: 992, // tablet
+                                options: {
+                                    chart: { height: 400 },
+                                    legend: { position: 'bottom' }
+                                }
+                            },
+                            {
+                                breakpoint: 575, // HP
+                                options: {
+                                    chart: { height: 250 },
+                                    dataLabels: { enabled: false },
+                                    legend: { show: true, position: 'bottom' }
                                 }
                             }
-                        }]
+                        ],
+                        animations: {
+                            enabled: true,
+                            easing: 'easeinout',
+                            speed: 800
+                        },
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: "65%",   // bikin donat, lebih enak dibaca
+                                    labels: {
+                                        show: true,
+                                        total: {
+                                            show: true,
+                                            label: 'Total',
+                                            fontSize: '16px',
+                                            color: '#373d3f',
+                                            formatter: function (w) {
+                                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        stroke: {
+                            show: true,
+                            width: 1,
+                            colors: ['#fff'] // kasih border biar potongan jelas
+                        },
                     };
 
-                    // Hapus grafik lama jika ada
-                    if (grafik) {
-                        grafik.destroy();
-                    }
+                    if (grafik) grafik.destroy();
 
-                    $('#show-name-grafik').empty().html(`Berdasarkan Status Pegawai ${res.belumMasuk!=0?'<b class="text-danger">('+res.belumMasuk+' pegawai belum diinput)</b>':'<b class="text-success">(Data Seluruh Pegawai)</b>'}`)
+                    $('#show-name-grafik').html(
+                        `${title} ${res.belumMasuk != 0
+                            ? '<b class="text-danger">(' + res.belumMasuk + ' pegawai belum diinput)</b>'
+                            : '<b class="text-success">(Data Seluruh Pegawai)</b>'}`
+                    );
+
                     grafik = new ApexCharts($("#grafik-show")[0], options);
                     grafik.render().then(() => {
-                        grafik.updateOptions({
-                            chart: {
-                                width: "100%",
-                                height: "100%"
-                            }
-                        });
-                    });
+                        // ambil warna setelah render
+                        let chartColors = grafik.w.config.colors;
 
-                    // Ambil warna dari grafik
-                    let chartColors = grafik.w.config.colors;
+                        var total = res.series.reduce((a, b) => a + b, 0);
+                        var listHTML = "";
+                        res.labels.forEach(function(label, i) {
+                            var jumlah = res.series[i];
+                            var persen = total > 0 ? ((jumlah / total) * 100).toFixed(1) : 0;
 
-                    // === Generate list kiri ===
-                    var total = res.series.reduce((a, b) => a + b, 0);
-                    var listHTML = "";
-                    res.labels.forEach(function(label, i) {
-                        var jumlah = res.series[i];
-                        var persen = total > 0 ? ((jumlah / total) * 100).toFixed(1) : 0;
-
-                        listHTML += `
-                            <li class="list-group-item">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="avtar avtar-s"><i class="ti ti-player-record f-40" style="color: ${chartColors[i]}"></i></div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="row g-1">
-                                            <div class="col-6">
-                                                <h6 class="text-dark mb-1">${label}</h6>
-                                                <a class="text-muted"><i>REFID # ${res.refid[i]}</i></a>
+                            listHTML += `
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="avtar avtar-s">
+                                                <i class="ti ti-player-record f-40" style="color: ${chartColors[i]}"></i>
                                             </div>
-                                            <div class="col-6 text-end">
-                                                <h6 class="mb-1"><b class="text-${jumlah==0?'dark':'danger'}">${jumlah}</b> Pegawai</h6>
-                                                <a class="text-success mb-0">${persen}%</a>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="row g-1">
+                                                <div class="col-6">
+                                                    <h6 class="text-dark mb-1">${label}</h6>
+                                                    <a class="text-muted"><i>REFID # ${res.refid[i]}</i></a>
+                                                </div>
+                                                <div class="col-6 text-end">
+                                                    <h6 class="mb-1"><b class="text-${jumlah==0?'dark':'danger'}">${jumlah}</b> Pegawai</h6>
+                                                    <a class="text-success mb-0">${persen}%</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        `;
-                    });
+                                </li>
+                            `;
+                        });
 
-                    // render ke UL
-                    $("#list-grafik").html(listHTML);
+                        $("#list-grafik").html(listHTML);
+                        // grafik.updateOptions({
+                        //     chart: {
+                        //         width: "100%",
+                        //         height: "100%"
+                        //     }
+                        // });
+                    });
                 }
-            })
+            });
         }
+
+        function showGrafikJenisPegawai() { loadGrafik(1, "Berdasarkan Jenis Pegawai"); }
+        function showGrafikJenisKelamin() { loadGrafik(2, "Berdasarkan Jenis Kelamin"); }
+        function showGrafikPendidikan()   { loadGrafik(3, "Berdasarkan Pendidikan"); }
+        function showGrafikProfesi()      { loadGrafik(4, "Berdasarkan Profesi"); }
+        function showGrafikStatusPegawai(){ loadGrafik(5, "Berdasarkan Status Pegawai"); }
+        function showGrafikStatusKawin()  { loadGrafik(6, "Berdasarkan Status Perkawinan"); }
+
+        // function showGrafikJenisPegawai() {
+
+        // }
+
+        // function showGrafikJenisKelamin() {
+
+        // }
+
+        // function showGrafikPendidikan() {
+
+        // }
+
+        // function showGrafikProfesi() {
+
+        // }
+
+        // function showGrafikStatusPegawai() {
+        //     $.ajax({
+        //         url: "/api/profilkaryawan/grafik/5",
+        //         type: 'GET',
+        //         dataType: 'json', // added data type
+        //         success: function(res) {
+        //             $('#show-card-grafik').prop('hidden',false);
+        //             var options = {
+        //                 chart: {
+        //                     type: "pie",
+        //                     width: "100%",
+        //                     height: "100%"
+        //                 },
+        //                 labels: res.labels, // dari API
+        //                 series: res.series, // dari API
+        //                 colors: ["#4680FF", "#FFB946", "#4BC0C0", "#FF6384", "#9966FF", "#212529", "#FF8BF2", "#3EFF73"],
+        //                 fill: {
+        //                     opacity: [1, .8, .6, .8, 1, .5]
+        //                 },
+        //                 legend: {
+        //                     show: true,
+        //                     position: 'bottom'
+        //                 },
+        //                 dataLabels: {
+        //                     enabled: true
+        //                 },
+        //                 responsive: [{
+        //                     breakpoint: 575,
+        //                     options: {
+        //                         chart: {
+        //                             height: 250
+        //                         },
+        //                         dataLabels: {
+        //                             enabled: false
+        //                         }
+        //                     }
+        //                 }]
+        //             };
+
+        //             // Hapus grafik lama jika ada
+        //             if (grafik) {
+        //                 grafik.destroy();
+        //             }
+
+        //             $('#show-name-grafik').empty().html(`Berdasarkan Status Pegawai ${res.belumMasuk!=0?'<b class="text-danger">('+res.belumMasuk+' pegawai belum diinput)</b>':'<b class="text-success">(Data Seluruh Pegawai)</b>'}`)
+        //             grafik = new ApexCharts($("#grafik-show")[0], options);
+        //             grafik.render().then(() => {
+        //                 grafik.updateOptions({
+        //                     chart: {
+        //                         width: "100%",
+        //                         height: "100%"
+        //                     }
+        //                 });
+        //             });
+
+        //             // Ambil warna dari grafik
+        //             let chartColors = grafik.w.config.colors;
+
+        //             // === Generate list kiri ===
+        //             var total = res.series.reduce((a, b) => a + b, 0);
+        //             var listHTML = "";
+        //             res.labels.forEach(function(label, i) {
+        //                 var jumlah = res.series[i];
+        //                 var persen = total > 0 ? ((jumlah / total) * 100).toFixed(1) : 0;
+
+        //                 listHTML += `
+        //                     <li class="list-group-item">
+        //                         <div class="d-flex align-items-center">
+        //                             <div class="flex-shrink-0">
+        //                                 <div class="avtar avtar-s"><i class="ti ti-player-record f-40" style="color: ${chartColors[i]}"></i></div>
+        //                             </div>
+        //                             <div class="flex-grow-1 ms-3">
+        //                                 <div class="row g-1">
+        //                                     <div class="col-6">
+        //                                         <h6 class="text-dark mb-1">${label}</h6>
+        //                                         <a class="text-muted"><i>REFID # ${res.refid[i]}</i></a>
+        //                                     </div>
+        //                                     <div class="col-6 text-end">
+        //                                         <h6 class="mb-1"><b class="text-${jumlah==0?'dark':'danger'}">${jumlah}</b> Pegawai</h6>
+        //                                         <a class="text-success mb-0">${persen}%</a>
+        //                                     </div>
+        //                                 </div>
+        //                             </div>
+        //                         </div>
+        //                     </li>
+        //                 `;
+        //             });
+
+        //             // render ke UL
+        //             $("#list-grafik").html(listHTML);
+        //         }
+        //     })
+        // }
+
+        // function showGrafikStatusKawin() {
+
+        // }
     </script>
 @endsection

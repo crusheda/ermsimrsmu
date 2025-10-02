@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::get('profilkaryawan/grafik/3', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik3'])->name('profilkaryawan.grafik3'); // Pendidikan
         Route::get('profilkaryawan/grafik/4', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik4'])->name('profilkaryawan.grafik4'); // Profesi
         Route::get('profilkaryawan/grafik/5', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik5'])->name('profilkaryawan.grafik5'); // Status Pegawai
+        Route::get('profilkaryawan/grafik/6', [\App\Http\Controllers\Kepegawaian\ProfilKaryawanController::class, 'grafik6'])->name('profilkaryawan.grafik6'); // Status Perkawinan
 
         // PENETAPAN
         Route::get('profilkaryawan/penetapan/table/{id}', [\App\Http\Controllers\Kepegawaian\DetailProfilKaryawanController::class, 'tablePenetapan'])->name('profilkaryawan.tablePenetapan');

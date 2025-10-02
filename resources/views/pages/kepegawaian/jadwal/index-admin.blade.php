@@ -4,19 +4,19 @@
 
     {{-- FOR DROPDOWN BEHIND CARD --}}
     <style>
-        .dropdown {
+        /* .dropdown {
             transform-style: preserve-3d;
             transform: translate3d(0,0,10px) !important;
-        }
+        } */
         .table-wrapper {
-    overflow-x: auto;
-    overflow-y: hidden;
-    position: relative;
-}
+            overflow-x: auto;
+            overflow-y: hidden;
+            position: relative;
+        }
 
-.table-wrapper table {
-    width: max-content; /* agar scroll aktif jika table lebar */
-}
+        .table-wrapper table {
+            width: max-content; /* agar scroll aktif jika table lebar */
+        }
     </style>
 
     <div class="page-header">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Daftar Jadwal Dinas</h2>
+                        <h2 class="mb-0">Daftar <b class="text-primary">Jadwal Dinas</b></h2>
                     </div>
                 </div>
             </div>

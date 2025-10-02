@@ -4,10 +4,10 @@
 
     {{-- FOR DROPDOWN BEHIND CARD --}}
     <style>
-        .dropdown {
+        /* .dropdown {
             transform-style: preserve-3d;
             transform: translate3d(0,0,10px) !important;
-        }
+        } */
     </style>
 
     <div class="page-header">

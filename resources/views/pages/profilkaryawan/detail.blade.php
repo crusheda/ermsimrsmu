@@ -38,42 +38,44 @@
                                 <i class="ti ti-sailboat me-2"></i>Kepegawaian
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab"
-                                href="#penetapan" role="tab" aria-selected="true" onclick="refreshPenetapan()">
-                                <i class="ti ti-license me-2"></i>Penetapan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-3" data-bs-toggle="tab"
-                                href="#rotasi" role="tab" aria-selected="true" onclick="refreshRotasi()">
-                                <i class="ti ti-route me-2"></i>Rotasi
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab"
-                                href="#dokumen" role="tab" aria-selected="true" onclick="refreshDokumen()">
-                                <i class="ti ti-cloud-download me-2"></i>Dokumen
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
-                                href="#spkrkk" role="tab" aria-selected="true" onclick="refreshSpkRkk()">
-                                <i class="ti ti-brand-docker me-2"></i>SPK & RKK
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
-                                href="#surtug" role="tab" aria-selected="true" onclick="refreshSurtug()">
-                                <i class="ti ti-plane me-2"></i>Surat Tugas
-                            </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
-                            <a class="nav-link" id="profile-tab-6" data-bs-toggle="tab"
-                                href="#profile-6" role="tab" aria-selected="true">
-                                <i class="ti ti-settings me-2"></i><s>Settings</s>
-                            </a>
-                        </li> --}}
+                        @if ($list['show']->deleted_at == null || $list['show']->status == null)
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab"
+                                    href="#penetapan" role="tab" aria-selected="true" onclick="refreshPenetapan()">
+                                    <i class="ti ti-license me-2"></i>Penetapan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab-3" data-bs-toggle="tab"
+                                    href="#rotasi" role="tab" aria-selected="true" onclick="refreshRotasi()">
+                                    <i class="ti ti-route me-2"></i>Rotasi
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab"
+                                    href="#dokumen" role="tab" aria-selected="true" onclick="refreshDokumen()">
+                                    <i class="ti ti-cloud-download me-2"></i>Dokumen
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab-4" data-bs-toggle="tab"
+                                    href="#spkrkk" role="tab" aria-selected="true" onclick="refreshSpkRkk()">
+                                    <i class="ti ti-brand-docker me-2"></i>SPK & RKK
+                                </a>
+                            </li>
+                            {{-- <li class="nav-item">
+                                <a class="nav-link" id="profile-tab-5" data-bs-toggle="tab"
+                                    href="#surtug" role="tab" aria-selected="true" onclick="refreshSurtug()">
+                                    <i class="ti ti-plane me-2"></i>Surat Tugas
+                                </a>
+                            </li> --}}
+                            {{-- <li class="nav-item">
+                                <a class="nav-link" id="profile-tab-6" data-bs-toggle="tab"
+                                    href="#profile-6" role="tab" aria-selected="true">
+                                    <i class="ti ti-settings me-2"></i><s>Settings</s>
+                                </a>
+                            </li> --}}
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -533,11 +535,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($list['show']->deleted_at != null)
+                                @if ($list['show']->deleted_at != null || $list['show']->status != null)
                                     <div class="col-md-12">
                                         <div class="card shadow-none border mb-0">
                                             <div class="card-body">
-                                                <h5 class="mb-0 text-center">Pegawai telah resmi <b class="text-danger">dihapus/dinonaktifkan</b> pada {{ \Carbon\Carbon::parse($list['show']->deleted_at)->isoFormat('dddd, D MMMM Y, HH:mm a') }} Oleh {{ $list['show']->deleted_at }}</h5>
+                                                <h5 class="mb-0 text-center">Pegawai telah resmi <b class="text-danger">dihapus/dinonaktifkan</b> pada {{ \Carbon\Carbon::parse($list['show']->deleted_at)->isoFormat('dddd, D MMMM Y, HH:mm a') }} Oleh {{ $list['show']->nama_admin }}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -1694,26 +1696,28 @@
                 success: function(res) {
                     $("#show_nip_terakhir").text(res.maxNip);
                     $("#show_nip_thl_terakhir").text(res.maxNipThl);
-                    $("#nip_pgw").val(res.show.nip);
-                    $("#show_nip_after").text(res.show.nip? res.show.nip : '-');
-                    $("#tmt").val(res.show.tmt);
-                    if (res.show.tat) {
-                        $("#tat").val(res.show.tat);
+                    if (res.show) {
+                        $("#nip_pgw").val(res.show.nip?res.show.nip:'');
+                        $("#show_nip_after").text(res.show.nip? res.show.nip : '-');
+                        $("#tmt").val(res.show.tmt);
+                        if (res.show.tat) {
+                            $("#tat").val(res.show.tat);
+                        }
+                        $("#klasifikasi_pgw").find('option').remove();
+                        res.ref_klasifikasi.forEach(item => {
+                            $("#klasifikasi_pgw").append(`<option value="" hidden>Pilih Salah Satu</option>`);
+                            $("#klasifikasi_pgw").append(`
+                                <option value="${item.id}" ${item.id == res.show.ref_profesi? "selected":""}>${item.deskripsi}</option>
+                            `);
+                        });
+                        $("#profesi_pgw").find('option').remove();
+                        res.ref_subprofesi.forEach(item => {
+                            $("#profesi_pgw").append(`<option value="" hidden>Pilih Salah Satu</option>`);
+                            $("#profesi_pgw").append(`
+                                <option value="${item.id}" ${item.id == res.show.ref_subprofesi? "selected":""}>${item.deskripsi}</option>
+                            `);
+                        });
                     }
-                    $("#klasifikasi_pgw").find('option').remove();
-                    res.ref_klasifikasi.forEach(item => {
-                        $("#klasifikasi_pgw").append(`<option value="" hidden>Pilih Salah Satu</option>`);
-                        $("#klasifikasi_pgw").append(`
-                            <option value="${item.id}" ${item.id == res.show.ref_profesi? "selected":""}>${item.deskripsi}</option>
-                        `);
-                    });
-                    $("#profesi_pgw").find('option').remove();
-                    res.ref_subprofesi.forEach(item => {
-                        $("#profesi_pgw").append(`<option value="" hidden>Pilih Salah Satu</option>`);
-                        $("#profesi_pgw").append(`
-                            <option value="${item.id}" ${item.id == res.show.ref_subprofesi? "selected":""}>${item.deskripsi}</option>
-                        `);
-                    });
                 },
                 error: function(res) {
                     console.log("error : " + JSON.stringify(res) );
@@ -2654,7 +2658,9 @@
                             position: 'topRight'
                         });
                         $('#hapusPegawai').modal('hide');
-                        location.reload();
+                        // location.reload();
+                        // redirect ke route
+                        window.location.href = "{{ route('profilkaryawan.index') }}";
                     },
                     error: function(res) {
                         iziToast.error({

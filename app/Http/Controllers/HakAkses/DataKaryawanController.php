@@ -21,7 +21,14 @@ class DataKaryawanController extends Controller
     public function index()
     {
         if (Auth::user()->getPermission('akun_pengguna') == true || Auth::user()->getRole('karu-it') == true) {
-            $user = users::select('id','name','nama','updated_at')->orderBy('nama', 'asc')->where('users.name', '<>','admin')->where('users.name', '<>','it')->where('users.name', '<>','demo')->get();
+            $user = users::select('id','name','nama','updated_at')
+            ->where('name', '<>','admin')
+            ->where('name', '<>','it')
+            ->where('name', '<>','demo')
+            ->whereNull('deleted_at')
+            ->whereNull('status')
+            ->orderBy('nama', 'asc')
+            ->get();
             $role = model_has_roles::join('roles', 'model_has_roles.role_id', '=', 'roles.id')->select('model_has_roles.model_id as id_user','roles.name as nama_role')->get();
 
             $data = [
@@ -55,6 +62,12 @@ class DataKaryawanController extends Controller
      */
     public function store(Request $request)
     {
+        $cekUser = users::where('name', $request->name)->whereNull('status')->whereNull('deleted_at')->first();
+
+        if ($cekUser) {
+            return Redirect::back()->withErrors(['msg' => 'Username '.$request->name.' sudah terdaftar! Silakan ganti Username Lainnya.'])->withInput();
+        }
+
         $data = new users;
         $data->name = $request->name;
         $data->email = $request->email;
@@ -170,6 +183,10 @@ class DataKaryawanController extends Controller
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
         $data = users::find($id);
+        $data->status = 1;
+        $data->user_hapus = Auth::user()->id;
+        $data->save();
+
         $data->delete();
         model_has_roles::where('model_id', $id)->delete();
 
