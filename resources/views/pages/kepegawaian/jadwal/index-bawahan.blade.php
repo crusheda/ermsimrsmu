@@ -412,8 +412,8 @@
                                                 <th class="text-center" rowspan="2">NO</th>
                                                 <th class="text-center" rowspan="2">NAMA</th>
                                                 <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
-                                                <th class="text-center" rowspan="2">JAM KERJA</th>
-                                                <th class="text-center" colspan="${res.shift.length + 6}" style="background-color:#eaeeaf;border-top: 3px solid #eaeeaf;border-left: 3px solid #eaeeaf;border-right: 3px solid #eaeeaf;">JML SHIFT</th>
+                                                <th class="text-center" rowspan="2">JAM KERJA (JAM)</th>
+                                                <th class="text-center" colspan="${res.shift.length + 6}" style="background-color:#eaeeaf;border-top: 3px solid #eaeeaf;border-left: 3px solid #eaeeaf;border-right: 3px solid #eaeeaf;">JUMLAH SHIFT</th>
                                             </tr>
                                             <tr>`;
 
