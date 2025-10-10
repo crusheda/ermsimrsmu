@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Services\WhatsappService;
 
 /*
 |--------------------------------------------------------------------------
@@ -276,6 +277,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'pelayanan', 'as' => ''], fu
 //     Route::get('asetx/{token}','\App\Http\Controllers\Inventaris\Aset\AsetController@detail2')->name('asetx.detail');
 // });
 
+Route::get('/wa-test', function (WhatsappService $wa) {
+    $response = $wa->sendMessage('6281232545545', 'Halo, ini pesan tes dari Laravel Simrsmu!');
+    return $response;
+});
 
 // FALLBACK ROUTE
 Route::fallback(function () {
