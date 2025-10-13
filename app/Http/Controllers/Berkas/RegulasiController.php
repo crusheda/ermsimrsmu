@@ -97,7 +97,7 @@ class RegulasiController extends Controller
             $request->jns_regulasi == 12
             ) {
             $request->validate([
-                'file' => ['max:10000','mimes:pdf'],
+                'file' => ['max:5000','mimes:pdf'],
             ]);
         } else {
             $request->validate([
@@ -173,6 +173,7 @@ class RegulasiController extends Controller
     public function ubah(Request $request)
     {
         $tgl = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
+        $uploadedFile = $request->file('file');
 
         if (
             $request->jns_regulasi == 7 ||
@@ -182,16 +183,18 @@ class RegulasiController extends Controller
             $request->jns_regulasi == 11 ||
             $request->jns_regulasi == 12
             ) {
-            $request->validate([
-                'file' => ['max:10000','mimes:pdf'],
-            ]);
+            if ($uploadedFile != null) {
+                $request->validate([
+                    'file' => ['max:10000','mimes:pdf'],
+                ]);
+            }
         } else {
-            $request->validate([
-                'file' => ['max:2000','mimes:pdf'],
-            ]);
+            if ($uploadedFile != null) {
+                $request->validate([
+                    'file' => ['max:2000','mimes:pdf'],
+                ]);
+            }
         }
-
-        $uploadedFile = $request->file('file');
 
         if ($uploadedFile == null) {
             $data = berkas_regulasi::find($request->id_edit);

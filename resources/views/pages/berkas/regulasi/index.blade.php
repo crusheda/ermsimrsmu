@@ -71,11 +71,11 @@
                     <div class="col-xxl-3 col-lg-4">
                         <label class="form-label">Klik <a class="text-primary">Filter</a> untuk menampilkan data</label>
                         <div class="position-relative btn-group w-100 h-80 m-t-5">
-                            <button type="button" class="btn btn-primary" id="btn-cari-show" onclick="cari()"><i class="fa-fw fas fa-search nav-icon"></i> Filter</button>
-                            <button type="button" class="btn btn-warning" onclick="bersih()"><i class="fa-fw fas fa-eraser nav-icon"></i> Reset</button>
+                            <button type="button" class="btn btn-primary" id="btn-cari-show" onclick="cari()" disabled><i class="fa-fw fas fa-sync fa-spin me-1 nav-icon"></i> Filter</button>
+                            <button type="button" class="btn btn-warning" onclick="bersih()"><i class="fa-fw fas fa-eraser me-1 nav-icon"></i> Reset</button>
                             <div class="dropdown">
                                 <button type="button" class="btn btn-dark text-light" role="button" data-bs-toggle="dropdown" aria-haspopup="true" style="border-top-left-radius:0px;border-bottom-left-radius:0px">
-                                    <i class="ti ti-brand-asana"></i> Menu
+                                    <i class="ti ti-brand-asana me-1"></i> Menu
                                 </button>
 
                                 <div class="dropdown-menu dropdown-menu-left">
@@ -102,8 +102,8 @@
                 <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
                     <thead>
                         <tr>
-                            <th style="width: 50px"></th>
-                            <th style="width: 50px">ID</th>
+                            <th style="width: 50px" class="text-center">#</th>
+                            <th style="width: 50px" class="text-center">ID</th>
                             <th style="width: 90px">DISAHKAN</th>
                             <th>JUDUL - UNIT TERKAIT</th>
                             <th class="cell-fit">UNIT PEMBUAT</th>
@@ -112,15 +112,15 @@
                     </thead>
                     <tbody id="tampil-tbody">
                         <tr>
-                            <td colspan="9">
+                            <td colspan="9" style="font-size:13px">
                                 <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th style="width: 50px"></th>
-                            <th style="width: 50px">ID</th>
+                            <th style="width: 50px" class="text-center">#</th>
+                            <th style="width: 50px" class="text-center">ID</th>
                             <th style="width: 90px">DISAHKAN</th>
                             <th>JUDUL - UNIT TERKAIT</th>
                             <th class="cell-fit">UNIT PEMBUAT</th>
@@ -222,7 +222,7 @@
                         <div class="alert alert-secondary">
                             <small>
                                 @if (Auth::user()->getPermission('admin_regulasi_humas'))
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>10 mb</strong><br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
                                 @else
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
                                 @endif
@@ -574,6 +574,8 @@
             })
 
             $('.selectFilter').select2({
+                // dropdownAutoWidth: true,
+                // width: '100%',
                 dropdownParent: $('#filterTampil')
             });
 
@@ -611,6 +613,9 @@
                     $('#unit').prop('disabled',false);
                 }
             });
+
+            // OPEN FOR SEARCHING
+            $('#btn-cari-show').prop('disabled',false).find('i').removeClass('fa-sync fa-spin').addClass('fa-search');
         });
 
         function cari() {
@@ -618,7 +623,7 @@
             $("#tampil-tbody").empty();
             $("#show_iklan").prop('hidden', true);
             $("#show_table").prop('hidden', false);
-            $("#tampil-tbody").empty().append(`<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $("#tampil-tbody").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             var regulasi    = $("#search_regulasi").val();
             var waktu       = $("#search_waktu").val();
             var pembuat     = $("#search_pembuat").val();
@@ -650,7 +655,7 @@
                             // var us = JSON.parse(res.user);
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-muted font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
+                            content += `<td><center><div class='btn-group dropend'><a href='javascript:void(0);' class='text-dark font-size-16' data-bs-toggle='dropdown' aria-haspopup="true"><i class="ti ti-dots"></i></a><div class='dropdown-menu'>`
                                     + `<a href='javascript:void(0);' class='dropdown-item text-success' onclick="bacaRegulasi(`+item.id+`)"><i class='fas fa-book-open scaleX-n1-rtl'></i> Baca</a>`
                                     + `<a href='javascript:void(0);' class='dropdown-item text-info' onclick="cetak(`+item.id+`)"><i class='fas fa-print scaleX-n1-rtl'></i> Cetak</a>`
                                     + `<a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/regulasi/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a>`;
@@ -658,9 +663,9 @@
                                         content += `<a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a>`
                                                 + `<a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-trash scaleX-n1-rtl'></i> Hapus</a>`;
                                     }
-                            content += `</div></center></td><td>`;
+                            content += `</div></center></td><td class="text-center">`;
                             content += item.id + `</td><td>${item.sah?item.sah:'-'}</td><td style='white-space: normal !important;word-wrap: break-word;'>`
-                                        + `<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-primary'><u><a href='/berkas/regulasi/` + item.id + `/download' target='_blank'>` + item.judul + `</a></u></h6><small class='text-truncate text-muted' style='white-space: normal !important;word-wrap: break-word;'>`
+                                        + `<div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-primary'><u><a href='javascript:void(0);' onclick='cetak(` + item.id + `)'>` + item.judul + `</a></u></h6><small class='text-truncate text-muted' style='white-space: normal !important;word-wrap: break-word;'>`
                                         if (item.unit) {
                                             content += item.unit;
                                         } else {
@@ -683,9 +688,21 @@
                             order: [
                                 [5, "desc"]
                             ],
-                            displayLength: 10,
+                            bAutoWidth: false,
+                            aoColumns : [
+                                { sWidth: '5%' },
+                                { sWidth: '5%' },
+                                { sWidth: '5%' },
+                                { sWidth: '57%' },
+                                { sWidth: '20%' },
+                                { sWidth: '8%' },
+                            ],
+                            columnDefs: [
+                                // { visible: false, targets: [7] },
+                            ],
+                            displayLength: 20,
                             lengthChange: true,
-                            lengthMenu: [ 10, 25, 50, 75, 100, 500, 1000, 5000, 10000],
+                            lengthMenu: [ 20, 35, 50, 75, 100, 500, 1000, 5000, 10000],
                             // buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
                     },
@@ -695,7 +712,7 @@
                             message: 'Data pencarian tidak ditemukan, ulangi sekali lagi.',
                             position: 'topRight'
                         });
-                        $("#tampil-tbody").append(`<tr><td colspan="7"><center>No data available in table</center></td></tr>`);
+                        $("#tampil-tbody").append(`<tr><td colspan="7" style="font-size:13px"><center>No data available in table</center></td></tr>`);
                     }
                 }
             );
@@ -916,6 +933,7 @@
 
                     $("#judul_edit").val(res.show.judul);
                     $("#unit_edit").val(res.show.unit);
+                    $("#tgl_edit").val(res.show.sah);
                     $("#jns_regulasi_edit").find('option').remove();
                     $("#jns_regulasi_edit").append(`
                         <option value="1" ${res.show.jns_regulasi == 1 ? "selected":""}>Kebijakan</option>

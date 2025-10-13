@@ -895,7 +895,7 @@
                                             </div>
                                         </div>
                                     </td>`;
-                        content += `<td>`+item.merk+`</td><td>`;
+                        content += `<td>${item.merk?item.merk:'-'}</td><td>`;
                                 if (item.tipe) {
                                     content += item.tipe;
                                 } else {
