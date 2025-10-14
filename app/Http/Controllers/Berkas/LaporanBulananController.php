@@ -11,6 +11,7 @@ use App\Models\struktur_organisasi;
 use App\Models\roles;
 use App\Models\berkas_laporan_bulanan;
 use App\Models\berkas_laporan_bulanan_verif;
+use App\Models\berkas_laporan_bulanan_catatan;
 use App\Models\unit;
 use App\Models\User;
 use App\Models\users;
@@ -285,23 +286,86 @@ class LaporanBulananController extends Controller
         $user = User::find($id);
 
         if ($user->hasPermissionTo('admin_laporan_bulanan_verifall')) {
-            $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
-                    ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->where('berkas_laporan_bulanan.id_user','!=',$id)
+            $show = berkas_laporan_bulanan::join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
+                    ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('berkas_laporan_bulanan_catatan as cat', function($join) {
+                        $join->on('cat.id_laporan', '=', 'berkas_laporan_bulanan.id')
+                            ->whereNull('cat.deleted_at');
+                    })
+                    ->where('berkas_laporan_bulanan.id_user', '!=', $id)
                     ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
-                    ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
-                    ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                    ->select(
+                        'users.nama',
+                        'berkas_laporan_bulanan.id',
+                        'berkas_laporan_bulanan.unit',
+                        'berkas_laporan_bulanan.judul',
+                        'berkas_laporan_bulanan.bln',
+                        'berkas_laporan_bulanan.thn',
+                        'berkas_laporan_bulanan.ket',
+                        'berkas_laporan_bulanan.updated_at',
+                        DB::raw('CASE WHEN COUNT(cat.id) > 0 THEN 1 ELSE 0 END AS has_catatan'),
+                        DB::raw('COUNT(cat.id) AS total_catatan')
+                    )
+                    ->groupBy(
+                        'users.nama',
+                        'berkas_laporan_bulanan.id',
+                        'berkas_laporan_bulanan.unit',
+                        'berkas_laporan_bulanan.judul',
+                        'berkas_laporan_bulanan.bln',
+                        'berkas_laporan_bulanan.thn',
+                        'berkas_laporan_bulanan.ket',
+                        'berkas_laporan_bulanan.updated_at'
+                    )
                     ->get();
+            // $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
+            //         ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            //         ->where('berkas_laporan_bulanan.id_user','!=',$id)
+            //         ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
+            //         ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+            //         ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+            //         ->get();
         } else {
-            $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
-                    ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    // ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
-                    ->where('berkas_laporan_bulanan.id_user','!=',$id)
+            $show = berkas_laporan_bulanan::join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
+                    ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('berkas_laporan_bulanan_catatan as cat', function($join) {
+                        $join->on('cat.id_laporan', '=', 'berkas_laporan_bulanan.id')
+                            ->whereNull('cat.deleted_at');
+                    })
+                    ->whereIn('model_has_roles.role_id', json_decode($jabatan->bawahan))
+                    ->where('berkas_laporan_bulanan.id_user', '!=', $id)
                     ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
-                    ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
-                    ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+                    ->select(
+                        'users.nama',
+                        'berkas_laporan_bulanan.id',
+                        'berkas_laporan_bulanan.unit',
+                        'berkas_laporan_bulanan.judul',
+                        'berkas_laporan_bulanan.bln',
+                        'berkas_laporan_bulanan.thn',
+                        'berkas_laporan_bulanan.ket',
+                        'berkas_laporan_bulanan.updated_at',
+                        DB::raw('CASE WHEN COUNT(cat.id) > 0 THEN 1 ELSE 0 END AS has_catatan'),
+                        DB::raw('COUNT(cat.id) AS total_catatan')
+                    )
+                    ->groupBy(
+                        'users.nama',
+                        'berkas_laporan_bulanan.id',
+                        'berkas_laporan_bulanan.unit',
+                        'berkas_laporan_bulanan.judul',
+                        'berkas_laporan_bulanan.bln',
+                        'berkas_laporan_bulanan.thn',
+                        'berkas_laporan_bulanan.ket',
+                        'berkas_laporan_bulanan.updated_at'
+                    )
                     ->get();
+            // $show = berkas_laporan_bulanan::Join('users', 'berkas_laporan_bulanan.id_user', '=', 'users.id')
+            //         ->Join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            //         // ->Join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            //         ->whereIn('model_has_roles.role_id',json_decode($jabatan->bawahan))
+            //         ->where('berkas_laporan_bulanan.id_user','!=',$id)
+            //         ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
+            //         ->select('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+            //         ->groupBy('users.nama','berkas_laporan_bulanan.id','berkas_laporan_bulanan.unit','berkas_laporan_bulanan.judul','berkas_laporan_bulanan.bln','berkas_laporan_bulanan.thn','berkas_laporan_bulanan.ket','berkas_laporan_bulanan.updated_at')
+            //         ->get();
         }
 
         $data = [
@@ -415,379 +479,39 @@ class LaporanBulananController extends Controller
         return response()->json($tgl, 200);
     }
 
-    // public function cariJabatan()
-    // {
-    //     $user = Auth::user();
+    // CATATAN LAPORAN BULANAN ---------------------------------------------------------------------------
+    function showCatatan($id)
+    {
+        $data = berkas_laporan_bulanan_catatan::leftJoin('users','berkas_laporan_bulanan_catatan.user','=','users.id')
+                                                ->select('berkas_laporan_bulanan_catatan.*','users.nama as nama_user')
+                                                ->where('berkas_laporan_bulanan_catatan.id_laporan',$id)
+                                                ->whereNull('berkas_laporan_bulanan_catatan.deleted_at')
+                                                ->get();
 
-    //     // VERIF DIRUT
-    //     $dirut = [
-    //         'spv',
-    //         'mpp',
-    //         'pmkp',
-    //         'pkrs',
-    //         'ppi',
-    //         'spi',
-    //         'asuransi',
-    //         'komite-keperawatan',
-    //         'komite-medik',
-    //         'direktur-keuangan-perencanaan',
-    //         'direktur-umum-kepegawaian',
-    //         'direktur-pelayanan-keperawatan-penunjang',
-    //         'kabag-perencanaan',
-    //         'kabag-keuangan',
-    //         'kasubag-perencanaan-it',
-    //         'kasubag-diklat',
-    //         'kasubag-marketing',
-    //         'staf-marketing',
-    //         'karu-it',
-    //         'kasubag-perbendaharaan',
-    //         'kasubag-verifikasi-akuntansi-pajak',
-    //         'karu-kasir',
-    //         'kabag-rumah-tangga',
-    //         'kabag-kepegawaian',
-    //         'kabag-umum',
-    //         'kasubag-tata-usaha',
-    //         'kasubag-humas',
-    //         'kasubag-penunjang-operasional',
-    //         'karu-driver',
-    //         'karu-cs',
-    //         'karu-security',
-    //         'kasubag-kepegawaian',
-    //         'kasubag-aik',
-    //         'kasubag-aset-gudang',
-    //         'kasubag-ipsrs',
-    //         'kasubag-kesling-k3',
-    //         'kabag-penunjang',
-    //         'kabag-keperawatan',
-    //         'kabag-pelayanan-medik',
-    //         'kasubag-keperawatan-rajal-gadar',
-    //         'kasubag-keperawatan-ranap',
-    //         'kasubag-rajal-gadar',
-    //         'kasubag-ranap',
-    //         'karu-igd',
-    //         'karu-poli',
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'karu-lab',
-    //         'karu-rm-informasi',
-    //         'karu-radiologi',
-    //         'karu-rehab',
-    //         'karu-farmasi',
-    //         'karu-gizi',
-    //         'karu-laundry',
-    //         'karu-cssd',
-    //         'karu-binroh',
-    //     ];
+        return response()->json($data, 200);
+    }
 
-    //     // VERIF DIREKTUR
-    //     $verif_direktur_keuangan_perencanaan = [
-    //         'kabag-perencanaan',
-    //         'kabag-keuangan',
-    //         'kasubag-perencanaan-it',
-    //         'kasubag-diklat',
-    //         'kasubag-marketing',
-    //         'staf-marketing',
-    //         'karu-it',
-    //         'kasubag-perbendaharaan',
-    //         'kasubag-verifikasi-akuntansi-pajak',
-    //         'karu-kasir',
-    //     ];
-    //     $verif_direktur_umum_kepegawaian = [
-    //         'kabag-rumah-tangga',
-    //         'kabag-kepegawaian',
-    //         'kabag-umum',
-    //         'kasubag-tata-usaha',
-    //         'kasubag-humas',
-    //         'kasubag-penunjang-operasional',
-    //         'karu-driver',
-    //         'karu-cs',
-    //         'karu-security',
-    //         'kasubag-kepegawaian',
-    //         'kepegawaian',
-    //         'kasubag-aik',
-    //         'kasubag-aset-gudang',
-    //         'kasubag-ipsrs',
-    //         'kasubag-kesling-k3',
-    //     ];
-    //     $verif_direktur_pelayanan_keperawatan_penunjang = [
-    //         'kabag-penunjang',
-    //         'kabag-keperawatan',
-    //         'kabag-pelayanan-medik',
-    //         'kasubag-keperawatan-rajal-gadar',
-    //         'kasubag-keperawatan-ranap',
-    //         'kasubag-rajal-gadar',
-    //         'kasubag-ranap',
-    //         'karu-igd',
-    //         'karu-poli',
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'karu-lab',
-    //         'karu-rm-informasi',
-    //         'karu-radiologi',
-    //         'karu-rehab',
-    //         'karu-farmasi',
-    //         'karu-gizi',
-    //         'karu-laundry',
-    //         'karu-cssd',
-    //         'karu-binroh',
-    //     ];
+    function storeCatatan(Request $request)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-    //     // VERIF KABAG
-    //     $verif_kabag_perencanaan = [
-    //         'kasubag-perencanaan-it',
-    //         'kasubag-diklat',
-    //         'kasubag-marketing',
-    //         'staf-marketing',
-    //         'karu-it',
-    //     ];
-    //     $verif_kabag_keuangan = [
-    //         'kasubag-perbendaharaan',
-    //         'kasubag-verifikasi-akuntansi-pajak',
-    //         'karu-kasir',
-    //     ];
-    //     $verif_kabag_rumah_tangga = [
-    //         'kasubag-aset-gudang',
-    //         'kasubag-ipsrs',
-    //         'kasubag-kesling-k3',
-    //     ];
-    //     $verif_kabag_kepegawaian = [
-    //         'kasubag-kepegawaian',
-    //         'kepegawaian',
-    //         'kasubag-aik',
-    //     ];
-    //     $verif_kabag_umum = [
-    //         'kasubag-tata-usaha',
-    //         'kasubag-humas',
-    //         'kasubag-penunjang-operasional',
-    //         'karu-driver',
-    //         'karu-cs',
-    //         'karu-security',
-    //     ];
-    //     $verif_kabag_penunjang = [
-    //         'kasubag-penunjang-medik',
-    //         'kasubag-penunjang-nonmedik',
-    //         'karu-lab',
-    //         'karu-rm-informasi',
-    //         'karu-radiologi',
-    //         'karu-rehab',
-    //         'karu-farmasi',
-    //         'karu-gizi',
-    //         'karu-laundry',
-    //         'karu-cssd',
-    //         'karu-binroh',
-    //     ];
-    //     $verif_kabag_keperawatan = [
-    //         'kasubag-keperawatan-rajal-gadar',
-    //         'kasubag-keperawatan-ranap',
-    //         'karu-igd',
-    //         'karu-poli',
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'perinatologi',
-    //     ];
-    //     $verif_kabag_pelayanan_medik = [
-    //         'kasubag-rajal-gadar',
-    //         'kasubag-ranap',
-    //         'karu-igd',
-    //         'karu-poli',
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'perinatologi',
-    //     ];
+        $data = new berkas_laporan_bulanan_catatan;
+        $data->id_laporan = $request->id_laporan;
+        $data->user = $request->user;
+        $data->tgl = Carbon::now();
+        $data->deskripsi = $request->deskripsi;
+        $data->save();
 
-    //     // VERIF KASUBAG
-    //     $verif_kasubag_perencanaan_it = ['karu-it'];
-    //     $verif_kasubag_diklat = [''];
-    //     $verif_kasubag_marketing = ['staf-marketing'];
-    //     $verif_kasubag_perbendaharaan = [''];
-    //     $verif_kasubag_verifikasi_akuntansi_pajak = ['karu-kasir'];
-    //     $verif_kasubag_aset_gudang = [''];
-    //     $verif_kasubag_ipsrs = [''];
-    //     $verif_kasubag_kesling_k3 = [''];
-    //     $verif_kasubag_kepegawaian = [''];
-    //     $verif_kasubag_aik = [''];
-    //     $verif_kasubag_tata_usaha = [''];
-    //     $verif_kasubag_humas = [''];
-    //     $verif_kasubag_penunjang_operasional = [
-    //         'karu-driver',
-    //         'karu-cs',
-    //         'karu-security',
-    //     ];
-    //     $verif_kasubag_penunjang_medik = [
-    //         'karu-lab',
-    //         'karu-rm-informasi',
-    //         'karu-radiologi',
-    //         'karu-rehab',
-    //         'karu-farmasi',
-    //     ];
-    //     $verif_kasubag_penunjang_nonmedik = [
-    //         'karu-gizi',
-    //         'karu-laundry',
-    //         'karu-cssd',
-    //         'karu-binroh',
-    //     ];
-    //     $verif_kasubag_keperawatan_rajal_gadar = [
-    //         'karu-igd',
-    //         'karu-poli',
-    //     ];
-    //     $verif_kasubag_keperawatan_ranap = [
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'perinatologi',
-    //     ];
-    //     $verif_kasubag_rajal_gadar = [
-    //         'karu-igd',
-    //         'karu-poli',
-    //     ];
-    //     $verif_kasubag_ranap = [
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'perinatologi',
-    //     ];
+        return response()->json($tgl, 200);
+    }
 
-    //     // ------------------------------------------------------------------------------------------------------------------------
-    //     $r = null;
-    //     // Direktur
-    //     if ($user->hasAnyRole('direktur-utama')) { $r = $dirut; }
-    //     elseif ($user->hasAnyRole('direktur-keuangan-perencanaan')) { $r = $verif_direktur_keuangan_perencanaan; }
-    //     elseif ($user->hasAnyRole('direktur-umum-kepegawaian')) { $r = $verif_direktur_umum_kepegawaian; }
-    //     elseif ($user->hasAnyRole('direktur-pelayanan-keperawatan-penunjang')) { $r = $verif_direktur_pelayanan_keperawatan_penunjang; }
+    function deleteCatatan($id)
+    {
+        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-    //     // SekDir
-    //     elseif ($user->hasAnyRole('sekretaris-direktur')) { $r = $dirut; }
+        $data = berkas_laporan_bulanan_catatan::find($id);
+        $data->delete();
 
-    //     // Kabag
-    //     elseif ($user->hasAnyRole('kabag-perencanaan')) { $r = $verif_kabag_perencanaan; }
-    //     elseif ($user->hasAnyRole('kabag-keuangan')) { $r = $verif_kabag_keuangan; }
-    //     elseif ($user->hasAnyRole('kabag-rumah-tangga')) { $r = $verif_kabag_rumah_tangga; }
-    //     elseif ($user->hasAnyRole('kabag-kepegawaian')) { $r = $verif_kabag_kepegawaian; }
-    //     elseif ($user->hasAnyRole('kabag-umum')) { $r = $verif_kabag_umum; }
-    //     elseif ($user->hasAnyRole('kabag-penunjang')) { $r = $verif_kabag_penunjang; }
-    //     elseif ($user->hasAnyRole('kabag-keperawatan')) { $r = $verif_kabag_keperawatan; }
-    //     elseif ($user->hasAnyRole('kabag-pelayanan-medik')) { $r = $verif_kabag_pelayanan_medik; }
-
-    //     // Kasubag
-    //     elseif ($user->hasAnyRole('kasubag-perencanaan-it')) { $r = $verif_kasubag_perencanaan_it; }
-    //     elseif ($user->hasAnyRole('kasubag-diklat')) { $r = $verif_kasubag_diklat; }
-    //     elseif ($user->hasAnyRole('kasubag-marketing')) { $r = $verif_kasubag_marketing; }
-    //     elseif ($user->hasAnyRole('kasubag-perbendaharaan')) { $r = $verif_kasubag_perbendaharaan; }
-    //     elseif ($user->hasAnyRole('kasubag-verifikasi-akuntansi-pajak')) { $r = $verif_kasubag_verifikasi_akuntansi_pajak; }
-    //     elseif ($user->hasAnyRole('kasubag-aset-gudang')) { $r = $verif_kasubag_aset_gudang; }
-    //     elseif ($user->hasAnyRole('kasubag-ipsrs')) { $r = $verif_kasubag_ipsrs; }
-    //     elseif ($user->hasAnyRole('kasubag-kesling-k3')) { $r = $verif_kasubag_kesling_k3; }
-    //     elseif ($user->hasAnyRole('kasubag-kepegawaian')) { $r = $verif_kasubag_kepegawaian; }
-    //     elseif ($user->hasAnyRole('kasubag-aik')) { $r = $verif_kasubag_aik; }
-    //     elseif ($user->hasAnyRole('kasubag-tata-usaha')) { $r = $verif_kasubag_tata_usaha; }
-    //     elseif ($user->hasAnyRole('kasubag-humas')) { $r = $verif_kasubag_humas; }
-    //     elseif ($user->hasAnyRole('kasubag-penunjang-operasional')) { $r = $verif_kasubag_penunjang_operasional; }
-    //     elseif ($user->hasAnyRole('kasubag-penunjang-medik')) { $r = $verif_kasubag_penunjang_medik; }
-    //     elseif ($user->hasAnyRole('kasubag-penunjang-nonmedik')) { $r = $verif_kasubag_penunjang_nonmedik; }
-    //     elseif ($user->hasAnyRole('kasubag-keperawatan-rajal-gadar')) { $r = $verif_kasubag_keperawatan_rajal_gadar; }
-    //     elseif ($user->hasAnyRole('kasubag-keperawatan-ranap')) { $r = $verif_kasubag_keperawatan_ranap; }
-    //     elseif ($user->hasAnyRole('kasubag-rajal-gadar')) { $r = $verif_kasubag_rajal_gadar; }
-    //     elseif ($user->hasAnyRole('kasubag-ranap')) { $r = $verif_kasubag_ranap; }
-
-    //     return $r;
-
-    // }
-
-
-
-
-    // public function userUpload($id)
-    // {
-    //     $roles = [
-    //         'kabag-perencanaan',
-    //         'kabag-keuangan',
-    //         'kabag-rumah-tangga',
-    //         'kabag-kepegawaian',
-    //         'kabag-umum',
-    //         'kabag-penunjang',
-    //         'kabag-keperawatan',
-    //         'kabag-pelayanan-medik',
-    //         'kasubag-perencanaan-it',
-    //         'kasubag-diklat',
-    //         'kasubag-marketing',
-    //         'kasubag-perbendaharaan',
-    //         'kasubag-verifikasi-akuntansi-pajak',
-    //         'kasubag-aset-gudang',
-    //         'kasubag-ipsrs',
-    //         'kasubag-kesling-k3',
-    //         'kasubag-kepegawaian',
-    //         'kepegawaian',
-    //         'kasubag-aik',
-    //         'kasubag-tata-usaha',
-    //         'kasubag-humas',
-    //         'kasubag-penunjang-operasional',
-    //         'kasubag-penunjang-medik',
-    //         'kasubag-penunjang-nonmedik',
-    //         'kasubag-keperawatan-rajal-gadar',
-    //         'kasubag-keperawatan-ranap',
-    //         'kasubag-rajal-gadar',
-    //         'kasubag-ranap',
-    //         'karu-icu',
-    //         'karu-ibs',
-    //         'karu-bangsal3',
-    //         'karu-bangsal4',
-    //         'karu-kebidanan',
-    //         'karu-perinatologi',
-    //         'karu-igd',
-    //         'karu-poli',
-    //         'karu-gizi',
-    //         'karu-laundry',
-    //         'karu-cssd',
-    //         'karu-binroh',
-    //         'karu-lab',
-    //         'karu-rm-informasi',
-    //         'karu-radiologi',
-    //         'karu-rehab',
-    //         'karu-farmasi',
-    //         'karu-driver',
-    //         'karu-cs',
-    //         'karu-security',
-    //         'karu-kasir',
-    //         'karu-it',
-    //         'staf-marketing',
-    //         'spv',
-    //         'mpp',
-    //         'pmkp',
-    //         'pkrs',
-    //         'ppi',
-    //         'spi',
-    //         'asuransi',
-    //         'komite-keperawatan',
-    //         'komite-medik',
-    //     ];
-
-    //     $user = users::join('model_has_roles','model_has_roles.model_id','=','users.id')
-    //             ->join('roles','roles.id','=','model_has_roles.role_id')
-    //             ->whereIn('roles.name', $roles)
-    //             ->where('model_has_roles.model_id', $id)
-    //             ->select('users.name')
-    //             ->first();
-
-    //     if (!empty($user->name)) {
-    //         return 1;
-    //     } else {
-    //         return 0;
-    //     }
-    // }
+        return response()->json($tgl, 200);
+    }
 }

@@ -106,9 +106,9 @@
                                 </tr>
                             </thead>
                             <tbody id="tampil-tbody-verif">
-                                <tr>
-                                    <td colspan="5"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
-                                </tr>
+                                {{-- <tr>
+                                    <td colspan="5" style="font-size:13px"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                                </tr> --}}
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -117,6 +117,59 @@
                                     <th>NAMA USER</th>
                                     <th>JABATAN</th>
                                     <th>UPDATE</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="catatan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">
+                    Catatan Dokumen&nbsp;<span class="badge rounded-pill text-bg-primary" id="id_laporan_tx"></span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="id_laporan" hidden>
+                    <textarea class="form-control mb-3" id="catatan_add" rows="3" placeholder="Tuliskan Catatan Dokumen Laporan Bulanan"></textarea>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <button class="btn btn-link-secondary" onclick="clearCatatan()">Kosongkan</button>
+                        <div class="btn-group">
+                            <button class="btn btn-warning btn-shadow" id="btnRefreshCatatan"><i class="fa-fw fas fa-sync nav-icon"></i></button>
+                            <button class="btn btn-primary btn-shadow" id="btnSaveCatatan" onclick="storeCatatan()"><i class="fa-fw fas fa-save nav-icon"></i>&nbsp;&nbsp;Tambah Catatan</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="table-responsive text-nowrap">
+                        <table id="dttable-catatan" class="table dt-responsive table-hover table-bordered nowrap w-100 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ID</th>
+                                    <th>TANGGAL</th>
+                                    <th>NAMA USER</th>
+                                    <th>DESKRIPSI</th>
+                                    <th>SOLVED</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-catatan">
+                                {{-- <tr>
+                                    <td colspan="6" style="font-size:13px"><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</td>
+                                </tr> --}}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>ID</th>
+                                    <th>TANGGAL</th>
+                                    <th>NAMA USER</th>
+                                    <th>DESKRIPSI</th>
+                                    <th>SOLVED</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -136,67 +189,7 @@
                     dropdownParent: e.parent()
                 })
             })
-
-            $.ajax({
-                url: "/api/laporan/bulanan/table/{{ Auth::user()->id }}/verif",
-                type: 'GET',
-                dataType: 'json', // added data type
-                success: function(res) {
-                    $("#tampil-tbody").empty();
-                    var date = getDateTime();
-                    res.show.forEach(item => {
-                        if (item.unit) {
-                            try {
-                                var un = JSON.parse(item.unit);
-                            } catch (e) {
-                                var un = item.unit;
-                            }
-                        }
-                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
-                        content = `<tr id="data` + item.id + `">`;
-                        var colorBtn = 'info';
-                        if (res.verif.length != 0) {
-                            res.verif.forEach(valver => {
-                                if (valver.lap_id == item.id) {
-                                    colorBtn = 'warning'
-                                }
-                            });
-                        }
-                        content += `<td><center><div class="btn-group">
-                                    <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
-                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>`;
-
-                        // if(item.tgl_verif != null) {
-                        // } else {
-                        //   content += `<button class='btn btn-secondary btn-sm' disabled><i class="fa-fw fas fa-check nav-icon"></i></a></li>`;
-                        // };
-                        content += `</div></center></td>
-                        <td>` + item.nama + `</td>
-                        <td>` + un + `</td>
-                        <td>` + item.judul + `</td>
-                        <td>` + item.bln + ` / ` + item.thn + `</td><td>`;
-                        if (item.ket != null) {
-                            content += item.ket;
-                        }
-                        content += `</td><td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
-                        $('#tampil-tbody').append(content);
-                    });
-                    var table = $('#dttable').DataTable({
-                        order: [
-                            [6, "desc"]
-                        ],
-                        displayLength: 10,
-                        lengthChange: true,
-                        lengthMenu: [10, 10, 25, 50, 75, 100],
-                        buttons: ['copy', 'excel', 'pdf', 'colvis']
-                    });
-
-                    // Showing Tooltip
-                    $('[data-bs-toggle="tooltip"]').tooltip({
-                        trigger : 'hover'
-                    })
-                }
-            });
+            refresh();
         });
 
         // FUNCTION-FUNCTION
@@ -227,7 +220,9 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody").empty();
-                    $('#dttable').DataTable().clear().destroy();
+                    if ($.fn.DataTable.isDataTable('#dttable')) {
+                        $('#dttable').DataTable().clear().destroy();
+                    }
                     var date = getDateTime();
                     res.show.forEach(item => {
                         if (item.unit) {
@@ -247,9 +242,14 @@
                                 }
                             });
                         }
+                        var colorBtnCat = 'secondary';
+                        if (item.has_catatan) {
+                            colorBtnCat = 'primary';
+                        }
                         content += `<td><center><div class="btn-group">
                                     <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
-                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>`;
+                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>
+                                    <button class='btn btn-`+colorBtnCat+` btn-sm' id="btnCatatan`+item.id+`" onclick="showCatatan(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Daftar Catatan Laporan Bulanan"><i class="fa-fw fas fa-sticky-note nav-icon"></i></button>`;
 
                         // if(item.tgl_verif != null) {
                         // } else {
@@ -272,18 +272,17 @@
                         ],
                         displayLength: 10,
                         lengthChange: true,
-                        lengthMenu: [10, 25, 50, 75, 100],
+                        lengthMenu: [10, 10, 25, 50, 75, 100],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
-
+                    $("#refreshBtn").prop('disabled', false);
+                    $("#refreshBtn").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");
                     // Showing Tooltip
                     $('[data-bs-toggle="tooltip"]').tooltip({
                         trigger : 'hover'
                     })
                 }
             });
-            $("#refreshBtn").prop('disabled', false);
-            $("#refreshBtn").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");
         }
 
         function saveData() {
@@ -295,16 +294,19 @@
         }
 
         function showVerif(id) {
-            $("#tampil-tbody-verif").empty();
             $("#btnVerif"+id).prop('disabled', true);
             $("#btnVerif"+id).find("i").toggleClass("fa-info-circle fa-spinner fa-spin");
+            $("#tampil-tbody-verif").empty().append(`<tr><td colspan="5" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
             $.ajax({
                 url: "/api/laporan/bulanan/table/verif/" + id,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
                     $('#show-action').empty();
-                    $('#dttable-verif').DataTable().clear().destroy();
+                    if ($.fn.DataTable.isDataTable('#dttable-verif')) {
+                        $('#dttable-verif').DataTable().clear().destroy();
+                    }
+                    $('#tampil-tbody-verif').empty();
                     var verifBtn = false;
                     // TAMPIL TABEL VERIFIKASI
                     var date = getDateTime();
@@ -350,7 +352,7 @@
                     } else {
                         actionBtn = `<button type="button" class="btn btn-primary waves-effect btn-label waves-light" style="margin-right: 8px" id="verifUser(`+id+`)" onclick="verifUser(`+id+`)"><i class="fas fa-check label-icon me-1"></i> Verifikasi</button>`;
                     }
-                    actionBtn += `<button type="button" class="btn btn-outline-secondary waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#tampil-catatan" disabled><i class="fas fa-sticky-note me-1"></i> Tambahkan Catatan</button>
+                    actionBtn += `<button type="button" class="btn btn-light-warning waves-effect waves-light" onclick="showCatatan(`+id+`)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Daftar Catatan Laporan Bulanan"><i class="fas fa-sticky-note me-1"></i> Tambahkan Catatan</button>
                                 <div class="collapse" id="tampil-catatan">
                                     <div class="form-group mb-2 mt-2">
                                         <textarea class="form-control" id="catatan(`+id+`)" placeholder="Tuliskan Catatan Laporan"></textarea>
@@ -368,6 +370,116 @@
                     })
                 }
             })
+        }
+
+        function showCatatan(id) {
+            $('#verif').modal('hide');
+            $("#btnCatatan"+id).prop('disabled', true);
+            $("#btnCatatan"+id).find("i").toggleClass("fa-sticky-note fa-spinner fa-spin");
+            if ($.fn.DataTable.isDataTable('#dttable-catatan')) {
+                $('#dttable-catatan').DataTable().clear().destroy();
+            }
+            $("#tampil-tbody-catatan").empty().append(`<tr><td colspan="6" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            $.ajax({
+                url: "/api/laporan/bulanan/catatan/" + id,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    $('#show-action').empty();
+                    $('#btnRefreshCatatan').attr('onclick', 'showCatatan('+id+')');
+                    $('#id_laporan_tx').text('ID#'+id);
+                    $('#id_laporan').val(id);
+                    $('#tampil-tbody-catatan').empty();
+                    res.forEach(item => {
+                        content =   `<tr id="data` + item.id + `">`;
+                        if (item.user == '{{ Auth::user()->id }}') {
+                            content += `<td><button class="btn btn-danger btn-sm" id="btnHapusCatatan`+item.id+`" onclick="hapusCatatan(` + item.id +`)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Hapus Catatan"><i class="fa-fw fas fa-times nav-icon"></i></button></td>`;
+                        } else {
+                            content += `<td><button class="btn btn-secondary btn-sm" disabled><i class="fa-fw fas fa-times nav-icon"></i></button></td>`;
+                        }
+                        if (item.solved == 1) {
+                            solved = '<span class="badge rounded-pill text-bg-primary">Terselesaikan</span>';
+                        } else {
+                            solved = '<span class="badge rounded-pill text-bg-secondary">Belum Terselesaikan</span>';
+                        }
+                        content += `<td>` + item.id + `</td>
+                                        <td>` + item.tgl + `</td>
+                                        <td>` + item.nama_user + `</td>
+                                        <td style="white-space: normal;">` + item.deskripsi + `</td>
+                                        <td>` + solved + `</td>
+                                    </tr>`;
+                        $('#tampil-tbody-catatan').append(content);
+                    });
+                    var tables = $('#dttable-catatan').DataTable({
+                        order: [
+                            [2, "desc"]
+                        ],
+                        // bAutoWidth: false,
+                        // aoColumns : [
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '10%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '20%' },
+                        //     { sWidth: '20%' },
+                        // ],
+                        displayLength: 10,
+                        lengthChange: true,
+                        lengthMenu: [10, 25, 50, 75, 100],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                    $('#catatan').modal('show');
+                    $("#btnCatatan"+id).prop('disabled', false);
+                    $("#btnCatatan"+id).find("i").removeClass("fa-spinner fa-spin").addClass("fa-sticky-note");
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger : 'hover'
+                    })
+                }
+            })
+        }
+
+        function hapusCatatan() {
+
+        }
+
+        function storeCatatan() {
+            $("#btnSaveCatatan").prop('disabled', true);
+            $("#btnSaveCatatan").find("i").removeClass("fa-save").addClass('fa-spinner fa-spin');
+            id_laporan = $('#id_laporan').val();
+            deskripsi = $('#catatan_add').val();
+            user = "{{ Auth::user()->id }}";
+            $.ajax(
+                {
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/api/laporan/bulanan/catatan/store",
+                    type: 'POST',
+                    dataType: 'json', // added data type
+                    data: {
+                        id_laporan: id_laporan,
+                        deskripsi: deskripsi,
+                        user: user,
+                    },
+                    success: function(res) {
+                        iziToast.success({
+                            title: 'Pesan Sukses!',
+                            message: 'Catatan berhasil ditambahkan pada '+res,
+                            position: 'topRight'
+                        });
+                        showCatatan(id_laporan);
+                        refresh();
+                        clearCatatan();
+                        $("#btnSaveCatatan").prop('disabled', false);
+                        $("#btnSaveCatatan").find("i").removeClass("fa-spinner fa-spin").addClass('fa-save');
+                    }
+                }
+            )
+        }
+
+        function clearCatatan() {
+            $('#catatan_add').val('');
         }
 
         // Proses Verifikasi Laporan oleh User
