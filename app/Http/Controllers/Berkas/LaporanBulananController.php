@@ -211,14 +211,97 @@ class LaporanBulananController extends Controller
     // Menampilkan tabel laporan bulanan
     public function table($id)
     {
-        $show = berkas_laporan_bulanan::where('id_user',$id)->orderBy('updated_at','desc')->get();
-        $getId = [];
-        if (!empty($show)) {
-            foreach ($show as $key => $value) {
-                $getId[] = $value->id;
+        $show = berkas_laporan_bulanan::leftJoin('berkas_laporan_bulanan_catatan as cat', function($join) {
+                                            $join->on('cat.id_laporan', '=', 'berkas_laporan_bulanan.id')
+                                                ->whereNull('cat.deleted_at');
+                                        })
+                                        ->select(
+                                            'berkas_laporan_bulanan.*',
+
+                                            // has_catatan
+                                            DB::raw('CASE WHEN EXISTS (
+                                                SELECT 1 FROM berkas_laporan_bulanan_catatan c
+                                                WHERE c.id_laporan = berkas_laporan_bulanan.id
+                                                AND c.deleted_at IS NULL
+                                            ) THEN 1 ELSE 0 END AS has_catatan'),
+
+                                            // has_verified
+                                            DB::raw('CASE WHEN EXISTS (
+                                                SELECT 1 FROM berkas_laporan_bulanan_verif v2
+                                                WHERE v2.lap_id = berkas_laporan_bulanan.id
+                                                AND v2.deleted_at IS NULL
+                                            ) THEN 1 ELSE 0 END AS has_verified'),
+
+                                            // verif_list
+                                            DB::raw('(
+                                                SELECT CONCAT(
+                                                    "[",
+                                                    GROUP_CONCAT(
+                                                        CONCAT(
+                                                            "{",
+                                                            "\"id\":", v.id, ",",
+                                                            "\"lap_id\":", v.lap_id, ",",
+                                                            "\"queue\":", v.queue, ",",
+                                                            "\"nama_user\":\"", IFNULL(v.user_name, ""), "\",",
+                                                            "\"nama_role\":\"", REPLACE(IFNULL(v.role_name, ""), \'"\', \'\\\"\'), "\"",
+                                                            "}"
+                                                        )
+                                                        ORDER BY v.queue ASC SEPARATOR ","
+                                                    ),
+                                                    "]"
+                                                )
+                                                FROM berkas_laporan_bulanan_verif v
+                                                WHERE v.lap_id = berkas_laporan_bulanan.id
+                                                AND v.deleted_at IS NULL
+                                            ) AS verif_list'),
+
+                                            // catatan_list (baru dengan join users)
+                                            DB::raw('(
+                                                SELECT CONCAT(
+                                                    "[",
+                                                    GROUP_CONCAT(
+                                                        CONCAT(
+                                                            "{",
+                                                            "\"id\":", c.id, ",",
+                                                            "\"id_laporan\":", c.id_laporan, ",",
+                                                            "\"user_id\":", c.user, ",",
+                                                            "\"nama_user\":\"", IFNULL(u.nama, ""), "\",",
+                                                            "\"tgl\":\"", IFNULL(c.tgl, ""), "\",",
+                                                            "\"deskripsi\":\"", REPLACE(IFNULL(c.deskripsi, ""), \'"\', \'\\\"\'), "\",",
+                                                            "\"extra\":\"", IFNULL(c.extra, ""), "\",",
+                                                            "\"solved\":", IFNULL(c.solved, 0), ",",
+                                                            "\"tgl_solved\":\"", IFNULL(c.tgl_solved, ""), "\"",
+                                                            "}"
+                                                        )
+                                                        ORDER BY c.tgl DESC SEPARATOR ","
+                                                    ),
+                                                    "]"
+                                                )
+                                                FROM berkas_laporan_bulanan_catatan c
+                                                LEFT JOIN users u ON u.id = c.user
+                                                WHERE c.id_laporan = berkas_laporan_bulanan.id
+                                                AND c.deleted_at IS NULL
+                                            ) AS catatan_list')
+                                        )
+                                        ->where('berkas_laporan_bulanan.id_user', $id)
+                                        ->distinct()
+                                        ->orderBy('berkas_laporan_bulanan.updated_at', 'desc')
+                                        ->get();
+
+        // Decode JSON agar langsung siap dipakai di view
+        foreach ($show as $item) {
+            foreach (['verif_list', 'catatan_list'] as $field) {
+                if (!empty($item->$field)) {
+                    $decoded = json_decode($item->$field, true);
+                    $item->$field = json_last_error() === JSON_ERROR_NONE ? $decoded : [];
+                } else {
+                    $item->$field = [];
+                }
             }
         }
-        $getVerif = berkas_laporan_bulanan_verif::whereIn('lap_id',$getId)->get();
+
+        // print_r($show);
+        // die();
 
         $tgl = Carbon::now()->isoFormat('YYYY/MM/DD');
         $tglAfter3Day = Carbon::now()->addDays(3)->isoFormat('YYYY/MM/DD');
@@ -226,7 +309,7 @@ class LaporanBulananController extends Controller
         $tglAfter1Day = Carbon::now()->addDays(1)->isoFormat('YYYY/MM/DD');
 
         $data = [
-            'verif' => $getVerif,
+            // 'verif' => $getVerif,
             'show' => $show,
             'tgl' => $tgl,
             'tglAfter1Day' => $tglAfter1Day,

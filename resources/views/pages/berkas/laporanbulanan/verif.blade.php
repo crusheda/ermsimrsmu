@@ -83,7 +83,7 @@
 
     {{-- MODAL --}}
     <div class="modal fade animate__animated animate__jackInTheBox" id="verif" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                 <h4 class="modal-title">
@@ -340,9 +340,9 @@
                             { sWidth: '34%' },
                             { sWidth: '20%' },
                         ],
-                        displayLength: 10,
+                        displayLength: 20,
                         lengthChange: true,
-                        lengthMenu: [10, 25, 50, 75, 100],
+                        lengthMenu: [20, 35, 50, 75, 100, 300, 500, 1000],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
 
