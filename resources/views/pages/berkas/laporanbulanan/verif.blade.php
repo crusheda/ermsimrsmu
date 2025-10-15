@@ -332,7 +332,7 @@
                     else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext)) {
                         // Dokumen Office: gunakan Google Docs Viewer
                         const encodedUrl = encodeURIComponent(fileUrl);
-                        iframe = `<iframe src="https://docs.google.com/gview?url=${encodedUrl}&embedded=true" style="width:100%; height:600px; border:none;"></iframe>`;
+                        iframe = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}&embedded=true" style="width:100%; height:600px;" frameborder="0"></iframe>`;
                     } 
                     else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
                         // Gambar: langsung tampil
