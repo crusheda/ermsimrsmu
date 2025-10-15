@@ -463,13 +463,12 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     // Encode URL agar aman di query Google Docs
-                    // let encodedUrl = encodeURIComponent(res);
-                    console.log(res);
+                    let encodedUrl = encodeURIComponent(res);
 
                     // Buat iframe Google Docs Viewer
                     let iframe = `
                         <iframe
-                            src="https://docs.google.com/gview?url=${res}&embedded=true"
+                            src="https://docs.google.com/gview?url=${encodedUrl}&embedded=true"
                             style="width:100%; height:600px; border:none;"
                             onload="this.previousElementSibling?.remove()"
                         ></iframe>

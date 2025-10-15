@@ -330,15 +330,18 @@ class LaporanBulananController extends Controller
             ], 404);
         }
         
-        $output = storage_path().'/app/'.$show->filename;
+        // Ambil URL publik (storage sudah di-link ke public/storage)
+        $publicUrl = asset(str_replace('public/', 'storage/', $show->filename));
 
-        if (file_exists($output.'.pdf')) {
+        // Pastikan file ada di storage
+        if (!Storage::exists(str_replace('public/', '', $show->filename))) {
             return response()->json([
                 'message' => 'Dokumen Laporan Bulanan Tidak Ditemukan.',
-            ], 500);
+            ], 404);
         }
 
-        return response()->json($output, 200);
+        // Return URL publik (bisa langsung dipakai di iframe Google Docs)
+        return response()->json($publicUrl, 200);
     }
 
     // VERIF LAPORAN BULANAN ----------------------------------------------------------------------------------------------------------------------------------
