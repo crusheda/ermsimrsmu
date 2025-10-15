@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Disposisi</h2>
+                        <h2 class="mb-0">Berkas <b class="text-primary">Disposisi</b></h2>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                             <button type="button" class="btn btn-outline-warning" id="btn-refresh" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Tabel Disposisi Surat Masuk akan disegarkan" onclick="refresh()">
                                 <i class="fa-fw fas fa-sync nav-icon me-1"></i>Segarkan</button>
-                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                            <button type="button" class="btn btn-outline-danger" id="btn-refresh-all" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                                 title="Tampilkan Semua Data" onclick="showAll()">
                                 <i class="fa-fw fas fa-infinity nav-icon"></i></button>
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
@@ -318,7 +318,7 @@
         // FUNCTION-FUNCTION
         function refresh() {
             $("#btn-refresh").prop('disabled', true);
-            $("#btn-refresh").find("i").toggleClass("fa-spin");
+            $("#btn-refresh").find("i").addClass("fa-spin");
             $("#tampil-tbody").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
 
             $.ajax(
@@ -332,7 +332,7 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-light-primary rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
                                     if (item.verif_disposisi == null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="tambahDisposisi(`+item.id+`)"><i class='fas fa-plus-square me-1'></i> Tambah Disposisi</a></li>`;
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
@@ -400,11 +400,13 @@
                                 { sWidth: '15%' },
                                 { sWidth: '10%' },
                             ],
-                            displayLength: 10,
+                            displayLength: 20,
                             lengthChange: true,
-                            lengthMenu: [10, 25, 50, 75, 100],
+                            lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
+                        $("#btn-refresh").prop('disabled', false);
+                        $("#btn-refresh").find("i").removeClass("fa-spin");
 
                         // Showing Tooltip
                         // $('[data-bs-toggle="tooltip"]').tooltip({
@@ -413,13 +415,11 @@
                     }
                 }
             );
-            $("#btn-refresh").prop('disabled', false);
-            $("#btn-refresh").find("i").removeClass("fa-spin");
         }
 
         function showAll() {
-            $("#btn-refresh").prop('disabled', true);
-            $("#btn-refresh").find("i").toggleClass("fa-spin");
+            $("#btn-refresh-all").prop('disabled', true);
+            $("#btn-refresh-all").find("i").addClass("fa-spin");
             $("#tampil-tbody").empty().append(`<tr><td colspan="9" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
 
             $.ajax(
@@ -433,7 +433,7 @@
                         res.show.forEach(item => {
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-light-primary rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'><div class="dropdown-header noti-title"><h5 class="font-size-13 text-muted text-truncate mn-0">Menu Disposisi</h5></div>`;
                                     if (item.verif_disposisi == null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="tambahDisposisi(`+item.id+`)"><i class='fas fa-plus-square me-1'></i> Tambah Disposisi</a></li>`;
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="window.open('/berkas/suratmasuk/`+item.id+`/download')"><i class='fa-fw fas fa-download nav-icon me-1'></i> Unduh Surat Masuk</a></li>`;
@@ -491,11 +491,13 @@
                             order: [
                                 [6, "desc"]
                             ],
-                            displayLength: 10,
+                            displayLength: 20,
                             lengthChange: true,
-                            lengthMenu: [10, 25, 50, 75, 100],
+                            lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
+                        $("#btn-refresh-all").prop('disabled', false);
+                        $("#btn-refresh-all").find("i").removeClass("fa-spin");
 
                         // Showing Tooltip
                         // $('[data-bs-toggle="tooltip"]').tooltip({
@@ -504,8 +506,6 @@
                     }
                 }
             );
-            $("#btn-refresh").prop('disabled', false);
-            $("#btn-refresh").find("i").removeClass("fa-spin");
         }
 
         function tambahDisposisi(id) {

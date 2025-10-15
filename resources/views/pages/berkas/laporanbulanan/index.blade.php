@@ -40,7 +40,7 @@
                                 class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas</button>
                         <button class="btn btn-warning btn-shadow" onclick="refresh()" id="btn-refresh" disabled><i
                                 class="fa-fw fas fa-spinner fa-spin nav-icon"></i></button>
-                        <button class="btn btn-outline-info btn-shadow" id="btn-verif" onclick="verif()" data-bs-toggle="tooltip"
+                        <button class="btn btn-info btn-shadow" id="btn-verif" onclick="verif()" data-bs-toggle="tooltip"
                             data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
                             title="Menampilkan Semua Data Laporan Bulanan Bawahan">
                             <i class="fas fa-history"></i>&nbsp;
@@ -60,7 +60,7 @@
                                     <th>BLN / THN</th>
                                     <th>KETERANGAN</th>
                                     <th>CATATAN</th>
-                                    <th>VERIFIKASI</th>
+                                    <th>VERIFIKATOR</th>
                                     <th>DIUPDATE</th>
                                 </tr>
                             </thead>
@@ -78,7 +78,7 @@
                                     <th>BLN / THN</th>
                                     <th>KETERANGAN</th>
                                     <th>CATATAN</th>
-                                    <th>VERIFIKASI</th>
+                                    <th>VERIFIKATOR</th>
                                     <th>DIUPDATE</th>
                                 </tr>
                             </tfoot>
@@ -111,7 +111,7 @@
                                     Pengubahan atau Penghapusan dokumen laporan hanya berlaku pada <strong class="text-danger">Hari saat Anda mengupload saja</strong>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Pilih Bulan <a class="text-danger">*</a></label>
                                     <select class="form-control" name="bln" id="bln-tambah" style="width: 100%" required>
@@ -126,24 +126,22 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group mb-3">
                                     <label class="form-label">Pilih Tahun <a class="text-danger">*</a></label>
                                     <select class="form-control" name="thn" id="thn-tambah" style="width: 100%" required>
                                         <option value="">Tahun</option>
-                                        @php
-                                            for ($i = 2018; $i <= $list['thn']; $i++) {
-                                                echo "<option value=$i> $i </option>";
-                                            }
-                                        @endphp
+                                        @for ($i = $list['thn']-4; $i <= $list['thn']; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Judul <a class="text-danger">*</a></label>
+                                    <label class="form-label">Judul Laporan Rutin <a class="text-danger">*</a></label>
                                     <input type="text" name="judul" class="form-control"
-                                        placeholder="Laporan Bulanan Unit X" required>
+                                        placeholder="Laporan Bulanan / Tahunan Unit X" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -161,7 +159,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="alert alert-secondary mb-0">
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen<br>
+                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> File Upload yang disarankan berupa Dokumen <b><mark>PDF</mark></b> (<i>.pdf</i>) dan <b><mark>Word</mark></b> (<i>.doc/.docx</i>)<br>
                                     <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong class="text-danger">5 mb</strong>
                                 </div>
                             </div>
@@ -207,7 +205,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label class="form-label">Judul <a class="text-danger">*</a></label>
+                                <label class="form-label">Judul Laporan Rutin <a class="text-danger">*</a></label>
                                 <input type="text" id="judul_edit" class="form-control"
                                     placeholder="Laporan Bulanan Unit X" required>
                             </div>
@@ -366,13 +364,19 @@
                                   <li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="showWordPreview(${item.id})"><i class="fa-fw fas fa-file-archive nav-icon"></i> Preview</a></li>
                                   <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
                         if (updet == date) {
-                            content +=
-                                `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
-                                item.id +
-                                `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
-                                                <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
-                                item.id +
-                                `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                            if (item.has_verified) {
+                                content +=
+                                    `<li><a href="javascript:void(0);" class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                                    <li><a href='javascript:void(0);' class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                            } else {
+                                content +=
+                                    `<li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` +
+                                    item.id +
+                                    `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                                    <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` +
+                                    item.id +
+                                    `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                            }
                         } else {
                             content +=
                                 `<li><a href="javascript:void(0);" class='dropdown-item text-secondary' disabled><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
@@ -394,7 +398,7 @@
                         if (item.catatan_list && item.catatan_list.length > 0) {
                             content += `<ul>`;
                             item.catatan_list.forEach(cat => {
-                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${cat.deskripsi} (Oleh ${cat.nama_user})</li>`;
+                                content += `<li style="white-space: normal; word-wrap: break-word; word-break: break-word;">${cat.deskripsi}<br><small><mark>Ditambahkan Oleh</mark> <span class="badge bg-light-warning">${cat.nama_user}</span></small></li>`;
                             })
                             content += `</ul>`;
                         } else {
@@ -494,7 +498,7 @@
 
                     // Masukkan iframe ke container
                     $('#tampil-preview-word').empty().html(iframe);
-                    $('#show_id_dokumen').empty().text(id);
+                    $('#show_id_dokumen').empty().text('ID#'+id);
                     $('#btn-download-preview').prop('disabled',false);
                     $('#btn-download-preview').off('click').on('click', function() {
                         window.location.href = `{{ url('berkas/laporan/bulanan/${id}') }}`;

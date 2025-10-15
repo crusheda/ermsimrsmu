@@ -10,12 +10,12 @@
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Administrasi</li>
                         <li class="breadcrumb-item">Berkas</li>
-                        <li class="breadcrumb-item" aria-current="page">Regulasi</li>
+                        <li class="breadcrumb-item" aria-current="page">Regulasi Digital</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">E-Regulasi</h2>
+                        <h2 class="mb-0">Digital <b class="text-primary">Regulasi</b></h2>
                     </div>
                 </div>
             </div>

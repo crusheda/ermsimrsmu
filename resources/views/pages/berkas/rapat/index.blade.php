@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Berkas Rapat</h2>
+                        <h2 class="mb-0">Berkas <b class="text-primary">Rapat</b></h2>
                     </div>
                 </div>
             </div>
@@ -29,6 +29,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Tabel</h5>
                     <div class="btn-group">
+                        <button class="btn btn-warning btn-shadow" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
                         <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah"><i
                                 class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas</button>
                     </div>
@@ -310,7 +311,33 @@
                 enableTime: !0,
                 dateFormat: "Y-m-d H:i"
             });
+            refresh();
+        });
 
+        function getDateTime() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+            if (month.toString().length == 1) {
+                month = '0' + month;
+            }
+            if (day.toString().length == 1) {
+                day = '0' + day;
+            }
+            var dateTime = year + '-' + month + '-' + day;
+            return dateTime;
+        }
+
+        function refresh() {
+            $("#refreshBtn").prop('disabled', true);
+            $("#refreshBtn").find("i").toggleClass("fa-sync fa-spinner fa-spin");
+            if ($.fn.DataTable.isDataTable('#dttable')) {
+                $('#dttable').DataTable().clear().destroy();
+            }
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
             $.ajax({
                 url: "/api/berkas/rapat/data",
                 type: 'GET',
@@ -322,10 +349,23 @@
                     var adminID = "{{ Auth::user()->getPermission('admin_rapat') }}";
                     var date = getDateTime();
                     res.show.forEach(item => {
+                        if (item.user_id == userID) {
+                            if (updet == date) {
+                                colorBtn = 'primary';
+                            } else {
+                                colorBtn = 'info';
+                            }
+                        } else {
+                            if (adminID == true) {
+                                colorBtn = 'primary';
+                            } else {
+                                colorBtn = 'secondary';
+                            }
+                        }
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link-secondary btn-icon dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm btn-light-${colorBtn} rounded dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                         if (adminID == true) {
                             content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
@@ -369,28 +409,18 @@
                         order: [
                             [6, "desc"]
                         ],
-                        displayLength: 7,
+                        displayLength: 20,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
+                    $("#refreshBtn").prop('disabled', false);
+                    $("#refreshBtn").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger : 'hover'
+                    })
                 }
             });
-        });
-
-        function getDateTime() {
-            var now = new Date();
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1;
-            var day = now.getDate();
-            if (month.toString().length == 1) {
-                month = '0' + month;
-            }
-            if (day.toString().length == 1) {
-                day = '0' + day;
-            }
-            var dateTime = year + '-' + month + '-' + day;
-            return dateTime;
         }
 
         function showUbah(id) {

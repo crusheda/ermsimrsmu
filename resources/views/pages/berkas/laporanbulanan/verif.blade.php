@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Verifikasi Laporan Rutin</h2>
+                        <h2 class="mb-0"><b class="text-danger">Verifikasi</b> Laporan Rutin</h2>
                     </div>
                 </div>
             </div>
@@ -28,14 +28,13 @@
         <div class="col-sm-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <button class="btn btn-link-secondary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
+                    <button class="btn btn-light-secondary rounded" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                         data-bs-html="true" title="Kembali ke halaman sebelumnya" onclick="window.location='{{ route('bulanan.index') }}'">
-                        <i class="fas fa-chevron-left mt-2"></i>&nbsp;
-                        <span class="align-middle">Kembali</span>
+                        <i class="fas fa-chevron-left me-2"></i> Kembali
                     </button>
-                    <h5 class="mb-0">Tabel Verifikasi Laporan</h5>
+                    <h5 class="mb-0">Tabel <b class="text-danger">Verifikasi</b> Laporan</h5>
                     <div class="btn-group">
-                        <button class="btn btn-warning" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                        <button class="btn btn-warning rounded" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
                         {{-- <button class="btn btn-outline-secondary" onclick="tutorial()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom"
                         data-bs-html="true" title="Lihat tutorial verifikasi dokumen" disabled><i class="far fa-question-circle"></i> Tutorial</button> --}}
                     </div>
@@ -46,11 +45,11 @@
                             <thead>
                                 <tr>
                                     <th class="cell-fit">
-                                        <center>#</center>
+                                        <center>AKSI</center>
                                     </th>
-                                    <th>NAMA</th>
+                                    <th>NAMA PEGAWAI</th>
                                     <th>UNIT</th>
-                                    <th>JUDUL</th>
+                                    <th>JUDUL LAPORAN</th>
                                     <th>BLN / THN</th>
                                     <th>KETERANGAN</th>
                                     <th>DIUPDATE</th>
@@ -64,11 +63,11 @@
                             <tfoot>
                                 <tr>
                                     <th class="cell-fit">
-                                        <center>#</center>
+                                        <center>AKSI</center>
                                     </th>
-                                    <th>NAMA</th>
+                                    <th>NAMA PEGAWAI</th>
                                     <th>UNIT</th>
-                                    <th>JUDUL</th>
+                                    <th>JUDUL LAPORAN</th>
                                     <th>BLN / THN</th>
                                     <th>KETERANGAN</th>
                                     <th>DIUPDATE</th>
@@ -140,8 +139,9 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <button class="btn btn-link-secondary" onclick="clearCatatan()">Kosongkan</button>
                         <div class="btn-group">
-                            <button class="btn btn-warning btn-shadow" id="btnRefreshCatatan"><i class="fa-fw fas fa-sync nav-icon"></i></button>
-                            <button class="btn btn-primary btn-shadow" id="btnSaveCatatan" onclick="storeCatatan()"><i class="fa-fw fas fa-save nav-icon"></i>&nbsp;&nbsp;Tambah Catatan</button>
+                            <button class="btn btn-info btn-shadow" id="btnVerifikasi1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Lihat Informasi Verifikator"><i class="fa-fw fas fa-info-circle me-1 nav-icon"></i> Verifikator</button>
+                            <button class="btn btn-warning btn-shadow" id="btnRefreshCatatan" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Refresh Catatan"><i class="fa-fw fas fa-sync nav-icon"></i></button>
+                            <button class="btn btn-primary btn-shadow" id="btnSaveCatatan" onclick="storeCatatan()" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Simpan Catatan Baru"><i class="fa-fw fas fa-save me-1 nav-icon"></i> Tambah Catatan</button>
                         </div>
                     </div>
                     <hr>
@@ -212,6 +212,15 @@
         });
 
         // FUNCTION-FUNCTION
+        function formatBulanTahun(bln, thn) {
+            const namaBulan = [
+                "", // index 0 dikosongkan biar bulan ke-1 = Januari
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
+            return `${namaBulan[parseInt(bln)]} ${thn}`;
+        }
+        
         function getDateTime() {
             var now = new Date();
             var year = now.getFullYear();
@@ -276,23 +285,23 @@
                         //   content += `<button class='btn btn-secondary btn-sm' disabled><i class="fa-fw fas fa-check nav-icon"></i></a></li>`;
                         // };
                         content += `</div></center></td>
-                        <td>` + item.nama + `</td>
-                        <td>` + un + `</td>
-                        <td>` + item.judul + `</td>
-                        <td>` + item.bln + ` / ` + item.thn + `</td><td>`;
+                        <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + item.nama + `</td>
+                        <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + un + `</td>
+                        <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + item.judul + `</td>
+                        <td>${formatBulanTahun(item.bln, item.thn)}</td><td style="white-space: normal; word-wrap: break-word; word-break: break-word;">`;
                         if (item.ket != null) {
                             content += item.ket;
                         }
-                        content += `</td><td>` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
+                        content += `</td><td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + new Date(item.updated_at).toLocaleString("sv-SE") + `</td></tr>`;
                         $('#tampil-tbody').append(content);
                     });
                     var table = $('#dttable').DataTable({
                         order: [
                             [6, "desc"]
                         ],
-                        displayLength: 10,
+                        displayLength: 20,
                         lengthChange: true,
-                        lengthMenu: [10, 10, 25, 50, 75, 100],
+                        lengthMenu: [20, 35, 50, 75, 100, 300, 500, 1000],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
                     $("#refreshBtn").prop('disabled', false);
@@ -352,7 +361,7 @@
 
                     // Masukkan iframe ke container
                     $('#tampil-preview-word').empty().html(iframe);
-                    $('#show_id_dokumen').empty().text(id);
+                    $('#show_id_dokumen').empty().text('ID#'+id);
                     $('#btn-download-preview').prop('disabled',false);
                     $('#btn-download-preview').off('click').on('click', function() {
                         window.location.href = `{{ url('berkas/laporan/bulanan/${id}') }}`;
@@ -445,6 +454,7 @@
                                             class="fa-fw fas fa-save nav-icon"></i> Simpan Catatan</button>
                                 </div>`;
                     $('#show-action').append(actionBtn);
+                    $('#catatan').modal('hide');
                     $('#verif').modal('show');
                     $("#btnVerif"+id).prop('disabled', false);
                     $("#btnVerif"+id).find("i").removeClass("fa-spinner fa-spin").addClass("fa-info-circle");
@@ -470,6 +480,7 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $('#show-action').empty();
+                    $('#btnVerifikasi1').attr('onclick', 'showVerif('+id+')');
                     $('#btnRefreshCatatan').attr('onclick', 'showCatatan('+id+')');
                     $('#id_laporan_tx').text('ID#'+id);
                     $('#id_laporan').val(id);

@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Surat Keluar</h2>
+                        <h2 class="mb-0">Surat <b class="text-danger">Keluar</b></h2>
                     </div>
                 </div>
             </div>
@@ -505,16 +505,16 @@
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
-                                btnColor = 'btn-link-danger';
+                                btnColor = 'btn-light-danger';
                             } else {
                                 if (item.sesuai == '1') {
-                                    btnColor = 'btn-link-primary';
+                                    btnColor = 'btn-light-primary';
                                 } else {
-                                    btnColor = 'btn-link-dark';
+                                    btnColor = 'btn-light-dark';
                                 }
                             }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
@@ -589,9 +589,9 @@
                                 { width: "20%", targets: 5 },
                                 { visible: false, targets: [6,7,9] },
                             ],
-                            displayLength: 7,
+                            displayLength: 20,
                             lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
                     }
@@ -624,16 +624,16 @@
                             // var updet = item.updated_at.substring(0, 10);
                             // WARNA BUTTON
                             if (item.sesuai == '0') {
-                                btnColor = 'btn-link-danger';
+                                btnColor = 'btn-light-danger';
                             } else {
                                 if (item.sesuai == '1') {
-                                    btnColor = 'btn-link-primary';
+                                    btnColor = 'btn-light-primary';
                                 } else {
-                                    btnColor = 'btn-link-dark';
+                                    btnColor = 'btn-light-dark';
                                 }
                             }
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn `+btnColor+` btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm `+btnColor+` rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
@@ -704,9 +704,9 @@
                                 { width: "20%", targets: 5 },
                                 { visible: false, targets: [6,7,9] },
                             ],
-                            displayLength: 7,
+                            displayLength: 20,
                             lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
 
@@ -738,9 +738,18 @@
                         res.show.forEach(item => {
                             // VALIDASI TUJUAN FROM JSON
                             var us = JSON.parse(res.users);
+                            if (item.sesuai == '0') {
+                                btnColor = 'btn-light-danger';
+                            } else {
+                                if (item.sesuai == '1') {
+                                    btnColor = 'btn-light-primary';
+                                } else {
+                                    btnColor = 'btn-light-dark';
+                                }
+                            }
                             // var updet = item.updated_at.substring(0, 10);
                             content = "<tr id='data"+ item.id +"'>";
-                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm btn-link-dark btn-icon dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
+                            content += `<td><center><div class='btn-group'><button type='button' class='btn btn-sm ${btnColor} rounded btn-shadow dropdown-toggle waves-effect waves-light hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button><ul class='dropdown-menu dropdown-menu-right'>`
                                     + `<li><a href='javascript:void(0);' class='dropdown-item text-warning' onclick="showUbah(`+item.id+`)" value="animate__rubberBand"><i class='fas fa-edit scaleX-n1-rtl'></i> Ubah</a></li>`;
                                     if (item.filename != null) {
                                         content += `<li><a href='javascript:void(0);' class='dropdown-item text-primary' onclick="window.open('/berkas/suratkeluar/`+item.id+`/download')"><i class='fas fa-download scaleX-n1-rtl'></i> Download</a></li>`
@@ -806,9 +815,9 @@
                                 { width: "20%", targets: 5 },
                                 { visible: false, targets: [6,7,9] },
                             ],
-                            displayLength: 7,
+                            displayLength: 20,
                             lengthChange: true,
-                            lengthMenu: [7, 10, 25, 50, 75, 100],
+                            lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                             buttons: ['copy', 'excel', 'pdf', 'colvis']
                         });
 

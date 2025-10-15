@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Rencana Kerja dan Anggaran</h2>
+                        <h2 class="mb-0">Rencana <b class="text-primary">Kerja</b> dan <b class="text-danger">Anggaran</b></h2>
                     </div>
                 </div>
             </div>
@@ -33,9 +33,10 @@
                         <i class="fa-fw fas fa-download nav-icon"></i>&nbsp;&nbsp;Download RKA 2025 FINAL
                     </button>
                     <div class="btn-group">
+                        <button class="btn btn-warning btn-shadow" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
                         {{-- @if (\Carbon\Carbon::now()->isoFormat('MM') <= '09') --}}
                             <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah">
-                                <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas RKA 2026 Unit
+                                <i class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas RKA Unit
                             </button>
                         {{-- @else
                             <button class="btn btn-secondary btn-shadow" disabled>
@@ -133,7 +134,18 @@
                 return false;
             });
 
+            refresh();
+        });
 
+        function refresh() {
+            $("#refreshBtn").prop('disabled', true);
+            $("#refreshBtn").find("i").toggleClass("fa-sync fa-spinner fa-spin");
+            if ($.fn.DataTable.isDataTable('#dttable')) {
+                $('#dttable').DataTable().clear().destroy();
+            }
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
             $.ajax({
                 url: "/api/rka/table",
                 type: 'GET',
@@ -178,7 +190,7 @@
                         var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
                         content = `<tr id="data` + item.id + `">`;
                         content += `<td><div class="d-flex align-items-center"><div class="dropdown">
-                            <a href="javascript:void(0);" class="btn btn-icon btn-link dropdown-toggle hide-arrow text-primary p-0" data-bs-toggle="dropdown">` + item.id + `</a>
+                            <a href="javascript:void(0);" class="btn btn-light-primary rounded btn-shadow dropdown-toggle hide-arrow btn-sm" data-bs-toggle="dropdown">` + item.id + `</a>
                             <div class="dropdown-menu dropdown-menu-right">`;
                         if (downloader == true) {
                             content += `<a href="./rka/` + item.id +
@@ -235,14 +247,27 @@
                         order: [
                             [3, "desc"]
                         ],
-                        displayLength: 10,
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '35%' },
+                            { sWidth: '50%' },
+                            { sWidth: '10%' },
+                        ],
+                        displayLength: 20,
                         lengthChange: true,
-                        lengthMenu: [7, 10, 25, 50, 75, 100],
+                        lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
                         buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
+                    $("#refreshBtn").prop('disabled', false);
+                    $("#refreshBtn").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger : 'hover'
+                    })
                 }
             });
-        });
+        }
 
         function saveData() {
             $("#tambah").one('submit', function() {
