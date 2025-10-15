@@ -27,7 +27,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between p-3">
-                    <h5 class="mb-0 ms-3"><b style="font-size: 1rem"><b class="text-dark">Periode</b> : <a id="periode-grafik1" data-bs-toggle="tooltip"
+                    <h5 class="mb-0 ms-3"><b style="font-size: 1rem"><b class="text-dark">Periode Tanggal </b> : <a id="periode-grafik1" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Perubahan Rentang Tanggal bisa menghubungi Developer :)"><i class="fas fa-spinner fa-spin"></i></a></h5>
                     <div class="btn-group">
                         <button class="btn btn-warning rounded btn-sm" onclick="refresh()" id="btn-refresh-grafik1" data-bs-toggle="tooltip"

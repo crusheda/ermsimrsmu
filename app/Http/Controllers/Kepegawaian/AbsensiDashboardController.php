@@ -83,7 +83,7 @@ class AbsensiDashboardController extends Controller
                 ['name' => 'Mangkir', 'data' => []],
             ],
             'debug' => [],
-            'periode' => ['dari' => Carbon::parse($dari)->isoFormat('D MMM YYYY'), 'sampai' => Carbon::parse($sampai)->isoFormat('D MMM YYYY')]
+            'periode' => ['dari' => Carbon::parse($dari)->isoFormat('D'), 'sampai' => Carbon::parse($sampai)->isoFormat('D')]
         ];
 
         foreach ($periode as $bulan) {
