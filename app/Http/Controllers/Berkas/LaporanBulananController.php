@@ -320,21 +320,31 @@ class LaporanBulananController extends Controller
         return response()->json($data, 200);
     }
     
-    function previewLaporan($id)
+    public function previewLaporan($id)
     {
         $show = berkas_laporan_bulanan::find($id);
-        
+
         if (!$show) {
             return response()->json(['message' => 'Data tidak ditemukan.'], 404);
         }
 
-        $filename = $show->filename; // contoh: public/files/laporan-bulanan/2025/8/file.xlsx
-        $publicUrl = asset(str_replace('public/', 'storage/', $filename));
-        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        // Ambil path file dari database, contoh:
+        // public/files/laporan-bulanan/2025/8/YzekBgDmSIOgO3nZM7dZXubS6xuxKZFS2wre5JR7.docx
+        $filename = $show->filename;
 
-        if (!Storage::exists(str_replace('public/', '', $filename))) {
+        // Hapus prefix "public/" agar bisa dicek dan diakses via storage
+        $relativePath = str_replace('public/', '', $filename);
+
+        // Pastikan file benar-benar ada
+        if (!Storage::exists($relativePath)) {
             return response()->json(['message' => 'File tidak ditemukan.'], 404);
         }
+
+        // Buat URL publik dari file (karena storage:link mengarah ke public/storage)
+        $publicUrl = asset('storage/' . $relativePath);
+
+        // Dapatkan ekstensi file
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
         return response()->json([
             'url' => $publicUrl,
