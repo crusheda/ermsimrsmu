@@ -178,6 +178,25 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="previewWord" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Preview <b class="text-info">Dokumen</b>&nbsp;<span class="badge bg-dark badge-sm"><a id="show_id_dokumen"></a></span>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body" id="tampil-preview-word"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="btn-download-preview"><i
+                            class="fa-fw fas fa-download nav-icon"></i> Download</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                            class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function() {
@@ -247,6 +266,7 @@
                             colorBtnCat = 'primary';
                         }
                         content += `<td><center><div class="btn-group">
+                                    <button class='btn btn-dark btn-sm' onclick="showWordPreview(${item.id})" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Preview Laporan"><i class="fa-fw fas fa-file-archive nav-icon"></i></button>
                                     <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
                                     <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>
                                     <button class='btn btn-`+colorBtnCat+` btn-sm' id="btnCatatan`+item.id+`" onclick="showCatatan(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Daftar Catatan Laporan Bulanan"><i class="fa-fw fas fa-sticky-note nav-icon"></i></button>`;
@@ -283,6 +303,67 @@
                     })
                 }
             });
+        }
+
+        function showWordPreview(id) {
+            // Bersihkan konten sebelumnya
+            $('#show_id_dokumen').append('<i class="fa fa-spinner fa-spin fa-fw"></i>');
+            $('#tampil-preview-word').html(`
+                <div class="text-center p-3 text-muted">
+                    <i class="fas fa-spinner fa-spin"></i> Memuat pratinjau dokumen...
+                </div>
+            `);
+
+            $.ajax({
+                url: `/api/laporan/bulanan/preview/${id}`,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    let iframe = '';
+                    const fileUrl = res.url;
+                    const ext = res.ext;
+
+                    if (['pdf'].includes(ext)) {
+                        // PDF: langsung tampil
+                        iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
+                    } 
+                    else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext)) {
+                        // Dokumen Office: gunakan Google Docs Viewer
+                        const encodedUrl = encodeURIComponent(fileUrl);
+                        iframe = `<iframe src="https://docs.google.com/gview?url=${encodedUrl}&embedded=true" style="width:100%; height:600px; border:none;"></iframe>`;
+                    } 
+                    else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+                        // Gambar: langsung tampil
+                        iframe = `<img src="${fileUrl}" alt="Preview Gambar" class="img-fluid mx-auto d-block">`;
+                    } 
+                    else if (['txt', 'csv'].includes(ext)) {
+                        // Text file
+                        iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
+                    } 
+                    else {
+                        // Format lain — tidak bisa di-preview
+                        iframe = `<div class="text-center p-3 text-danger">
+                            Format <b>.${ext}</b> tidak bisa dipratinjau. 
+                            <br><button class="btn btn-primary mt-2" onclick="window.location.href='${fileUrl}'">Download</button>
+                        </div>`;
+                    }
+
+                    // Masukkan iframe ke container
+                    $('#tampil-preview-word').empty().html(iframe);
+                    $('#show_id_dokumen').empty().text(id);
+                    $('#btn-download-preview').off('click').on('click', function() {
+                        window.location.href = `${BASE_URL}/berkas/laporan/bulanan/${id}`;
+                    });
+                    $('#previewWord').modal('show');
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan System!',
+                        message: xhr.responseText,
+                        position: 'topRight'
+                    });
+                }
+            })
         }
 
         function saveData() {

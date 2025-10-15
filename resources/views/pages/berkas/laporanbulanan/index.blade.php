@@ -233,9 +233,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="previewWord" data-bs-backdrop="static"
-        tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal fade" id="previewWord" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
@@ -245,8 +244,8 @@
                 </div>
                 <div class="modal-body" id="tampil-preview-word"></div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" id="btn-download-preview"><i
-                            class="fa-fw fas fa-info nav-icon"></i> Download</button>
+                    <button class="btn btn-success" id="btn-download-preview"><i
+                            class="fa-fw fas fa-download nav-icon"></i> Download</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
                 </div>
@@ -458,26 +457,45 @@
             `);
 
             $.ajax({
-                url: `/api/laporan/bulanan/preview/word/${id}`,
+                url: `/api/laporan/bulanan/preview/${id}`,
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    // Encode URL agar aman di query Google Docs
-                    let encodedUrl = encodeURIComponent(res);
+                    let iframe = '';
+                    const fileUrl = res.url;
+                    const ext = res.ext;
 
-                    // Buat iframe Google Docs Viewer
-                    let iframe = `
-                        <iframe
-                            src="https://docs.google.com/gview?url=${encodedUrl}&embedded=true"
-                            style="width:100%; height:600px; border:none;"
-                            onload="this.previousElementSibling?.remove()"
-                        ></iframe>
-                    `;
+                    if (['pdf'].includes(ext)) {
+                        // PDF: langsung tampil
+                        iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
+                    } 
+                    else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext)) {
+                        // Dokumen Office: gunakan Google Docs Viewer
+                        const encodedUrl = encodeURIComponent(fileUrl);
+                        iframe = `<iframe src="https://docs.google.com/gview?url=${encodedUrl}&embedded=true" style="width:100%; height:600px; border:none;"></iframe>`;
+                    } 
+                    else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+                        // Gambar: langsung tampil
+                        iframe = `<img src="${fileUrl}" alt="Preview Gambar" class="img-fluid mx-auto d-block">`;
+                    } 
+                    else if (['txt', 'csv'].includes(ext)) {
+                        // Text file
+                        iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
+                    } 
+                    else {
+                        // Format lain — tidak bisa di-preview
+                        iframe = `<div class="text-center p-3 text-danger">
+                            Format <b>.${ext}</b> tidak bisa dipratinjau. 
+                            <br><button class="btn btn-primary mt-2" onclick="window.location.href='${fileUrl}'">Download</button>
+                        </div>`;
+                    }
 
                     // Masukkan iframe ke container
                     $('#tampil-preview-word').empty().html(iframe);
                     $('#show_id_dokumen').empty().text(id);
-                    $('#btn-download-preview').attr('onclick', "window.location.href='{{ url('berkas/laporan/bulanan/"+id+"') }}'");
+                    $('#btn-download-preview').off('click').on('click', function() {
+                        window.location.href = `${BASE_URL}/berkas/laporan/bulanan/${id}`;
+                    });
                     $('#previewWord').modal('show');
                 },
                 error: function(xhr) {

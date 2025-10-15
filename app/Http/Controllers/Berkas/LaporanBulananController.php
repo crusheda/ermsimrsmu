@@ -320,31 +320,26 @@ class LaporanBulananController extends Controller
         return response()->json($data, 200);
     }
     
-    function previewWord($id)
+    function previewLaporan($id)
     {
         $show = berkas_laporan_bulanan::find($id);
         
         if (!$show) {
-            return response()->json([
-                'message' => 'Data Laporan Bulanan Tidak Ditemukan.',
-            ], 404);
+            return response()->json(['message' => 'Data tidak ditemukan.'], 404);
         }
 
-        // Hilangkan prefix 'public/' agar sesuai dengan disk 'public'
-        $path = str_replace('public/', '', $show->filename);
+        $filename = $show->filename; // contoh: public/files/laporan-bulanan/2025/8/file.xlsx
+        $publicUrl = asset(str_replace('public/', 'storage/', $filename));
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-        // Pastikan file benar-benar ada
-        if (!Storage::disk('public')->exists($path)) {
-            return response()->json([
-                'message' => 'Dokumen Laporan Bulanan Tidak Ditemukan.',
-            ], 404);
+        if (!Storage::exists(str_replace('public/', '', $filename))) {
+            return response()->json(['message' => 'File tidak ditemukan.'], 404);
         }
 
-        // Buat URL publik (akses melalui symlink /storage)
-        $publicUrl = asset('storage/' . $path);
-
-        // Return URL publik (bisa langsung dipakai di iframe Google Docs)
-        return response()->json($publicUrl, 200);
+        return response()->json([
+            'url' => $publicUrl,
+            'ext' => $extension,
+        ]);
     }
 
     // VERIF LAPORAN BULANAN ----------------------------------------------------------------------------------------------------------------------------------
