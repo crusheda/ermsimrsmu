@@ -329,16 +329,19 @@ class LaporanBulananController extends Controller
                 'message' => 'Data Laporan Bulanan Tidak Ditemukan.',
             ], 404);
         }
-        
-        // Ambil URL publik (storage sudah di-link ke public/storage)
-        $publicUrl = asset(str_replace('public/', 'storage/', $show->filename));
 
-        // Pastikan file ada di storage
-        if (!Storage::exists(str_replace('public/', '', $show->filename))) {
+        // Hilangkan prefix 'public/' agar sesuai dengan disk 'public'
+        $path = str_replace('public/', '', $show->filename);
+
+        // Pastikan file benar-benar ada
+        if (!Storage::disk('public')->exists($path)) {
             return response()->json([
                 'message' => 'Dokumen Laporan Bulanan Tidak Ditemukan.',
             ], 404);
         }
+
+        // Buat URL publik (akses melalui symlink /storage)
+        $publicUrl = asset('storage/' . $path);
 
         // Return URL publik (bisa langsung dipakai di iframe Google Docs)
         return response()->json($publicUrl, 200);
