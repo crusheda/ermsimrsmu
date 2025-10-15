@@ -189,7 +189,7 @@
                 </div>
                 <div class="modal-body" id="tampil-preview-word"></div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" id="btn-download-preview"><i
+                    <button class="btn btn-success" id="btn-download-preview" disabled><i
                             class="fa-fw fas fa-download nav-icon"></i> Download</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
                             class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
@@ -308,11 +308,13 @@
         function showWordPreview(id) {
             // Bersihkan konten sebelumnya
             $('#show_id_dokumen').append('<i class="fa fa-spinner fa-spin fa-fw"></i>');
-            $('#tampil-preview-word').html(`
+            $('#tampil-preview-word').empty().append(`
                 <div class="text-center p-3 text-muted">
                     <i class="fas fa-spinner fa-spin"></i> Memuat pratinjau dokumen...
                 </div>
             `);
+            $('#btn-download-preview').prop('disabled',true);
+            $('#previewWord').modal('show');
 
             $.ajax({
                 url: `/api/laporan/bulanan/preview/${id}`,
@@ -351,10 +353,10 @@
                     // Masukkan iframe ke container
                     $('#tampil-preview-word').empty().html(iframe);
                     $('#show_id_dokumen').empty().text(id);
+                    $('#btn-download-preview').prop('disabled',false);
                     $('#btn-download-preview').off('click').on('click', function() {
-                        window.location.href = `${BASE_URL}/berkas/laporan/bulanan/${id}`;
+                        window.location.href = `{{ url('berkas/laporan/bulanan/${id}') }}`;
                     });
-                    $('#previewWord').modal('show');
                 },
                 error: function(xhr) {
                     iziToast.error({
@@ -362,6 +364,7 @@
                         message: xhr.responseText,
                         position: 'topRight'
                     });
+                    $('#previewWord').modal('hide');
                 }
             })
         }
