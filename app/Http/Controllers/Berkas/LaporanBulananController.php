@@ -332,13 +332,13 @@ class LaporanBulananController extends Controller
         // public/files/laporan-bulanan/2025/8/YzekBgDmSIOgO3nZM7dZXubS6xuxKZFS2wre5JR7.docx
         $filename = $show->filename;
 
-        // Hapus prefix "public/" agar bisa dicek dan diakses via storage
-        $relativePath = str_replace('public/', '', $filename);
-
         // Pastikan file benar-benar ada
-        if (!Storage::exists($relativePath)) {
+        if (!Storage::exists($filename)) {
             return response()->json(['message' => 'File tidak ditemukan.'], 404);
         }
+
+        // Hapus prefix "public/" agar bisa dicek dan diakses via storage
+        $relativePath = str_replace('public/', '', $filename);
 
         // Buat URL publik dari file (karena storage:link mengarah ke public/storage)
         $publicUrl = asset('storage/' . $relativePath);
