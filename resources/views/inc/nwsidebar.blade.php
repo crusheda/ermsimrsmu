@@ -109,7 +109,7 @@
         </a>
     </li>
     @endif
-    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getPermission('admin_kepegawaian_kepala') == true || Auth::user()->getRole('karu-it') == true)
+    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getPermission('admin_kepegawaian_kepala') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
                 <span class="pc-micon">
@@ -122,11 +122,12 @@
             </a>
             <ul class="pc-submenu">
                 <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.absensi.device.index') }}">Perizinan Perangkat</a></li>
+                <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.absensi.dashboard.index') }}">Dashboard Interaktif</a></li>
                 <li class="pc-item"><a class="pc-link" href="{{ route('kepegawaian.absensi.index') }}">Rekapitulasi</a></li>
             </ul>
         </li>
     @endif
-    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('admin_kepegawaian_kepala') == true || Auth::user()->getRole('karu-it') == true)
+    @if (Auth::user()->getPermission('admin_kepegawaian') == true || Auth::user()->getRole('admin_kepegawaian_kepala') == true)
         <li class="pc-item pc-hasmenu">
             <a href="javascript: void(0);" class="pc-link">
                 <span class="pc-micon">

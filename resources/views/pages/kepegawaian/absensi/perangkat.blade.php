@@ -8,12 +8,13 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
+                        <li class="breadcrumb-item">Absensi</li>
                         <li class="breadcrumb-item" aria-current="page">Perizinan Perangkat</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Perangkat Absensi Karyawan</h2>
+                        <h2 class="mb-0">Perangkat <b class="text-primary">Absensi Karyawan</b></h2>
                     </div>
                 </div>
             </div>

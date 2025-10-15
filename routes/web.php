@@ -113,6 +113,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'kepegawaian', 'as' => ''], 
 
     // ABSENSI
     Route::get('absensi', [App\Http\Controllers\Kepegawaian\AbsensiController::class, 'index'])->name('kepegawaian.absensi.index');
+    Route::get('absensi/dashboard', [App\Http\Controllers\Kepegawaian\AbsensiDashboardController::class, 'index'])->name('kepegawaian.absensi.dashboard.index');
     Route::get('absensi/device', [App\Http\Controllers\Kepegawaian\AbsensiDeviceController::class, 'index'])->name('kepegawaian.absensi.device.index');
 
     // SPK RKK

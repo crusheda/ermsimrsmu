@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Absensi Karyawan</h2>
+                        <h2 class="mb-0"><b class="text-primary">Absensi</b> Karyawan</h2>
                     </div>
                 </div>
             </div>
