@@ -317,8 +317,28 @@ class LaporanBulananController extends Controller
             'tglAfter3Day' => $tglAfter3Day,
         ];
 
-
         return response()->json($data, 200);
+    }
+    
+    function previewWord($id)
+    {
+        $show = berkas_laporan_bulanan::find($id);
+        
+        if (!$show) {
+            return response()->json([
+                'message' => 'Data Laporan Bulanan Tidak Ditemukan.',
+            ], 404);
+        }
+        
+        $output = storage_path().'/app/'.$show->filename;
+
+        if (file_exists($output.'.pdf')) {
+            return response()->json([
+                'message' => 'Dokumen Laporan Bulanan Tidak Ditemukan.',
+            ], 500);
+        }
+
+        return response()->json($output, 200);
     }
 
     // VERIF LAPORAN BULANAN ----------------------------------------------------------------------------------------------------------------------------------

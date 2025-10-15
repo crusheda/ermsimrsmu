@@ -25,13 +25,13 @@
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
         <div class="col-sm-12">
-            <div id="show-word" hidden>
+            {{-- <div id="show-word">
                 <iframe
-                    src="https://docs.google.com/gview?url={{ asset('storage/files/laporan-bulanan/2025/8/YzekBgDmSIOgO3nZM7dZXubS6xuxKZFS2wre5JR7.docx') }}&embedded=true"
+                    src="https://docs.google.com/gview?url={{ url('https://simrsmu.com/storage/files/laporan-bulanan/2025/8/YzekBgDmSIOgO3nZM7dZXubS6xuxKZFS2wre5JR7.docx') }}&embedded=true"
                     style="width:100%; height:600px;"
                     frameborder="0">
                 </iframe>
-            </div>
+            </div> --}}
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
                     <h5 class="mb-0">Bulanan <b class="text-primary">x</b> Triwulan <b class="text-primary">x</b> Tahunan</h5>
@@ -233,6 +233,26 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="previewWord" data-bs-backdrop="static"
+        tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Preview <b class="text-info">Dokumen</b>&nbsp;<span class="badge bg-dark badge-sm"><a id="show_id_dokumen"></a></span>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body" id="tampil-preview-word"></div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-download-preview"><i
+                            class="fa-fw fas fa-info nav-icon"></i> Download</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                            class="fa-fw fas fa-times nav-icon"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- <div class="modal fade animate__animated animate__bounceInRight" id="info" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
@@ -344,6 +364,7 @@
                               <div class='btn-group'>
                                 <button type='button' class='btn btn-sm btn-light-${colorBtn} dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>${item.id}</button>
                                 <ul class='dropdown-menu dropdown-menu-end'>
+                                  <li><a href='javascript:void(0);' class='dropdown-item text-info' onclick="showWordPreview(${item.id})"><i class="fa-fw fas fa-file-archive nav-icon"></i> Preview</a></li>
                                   <li><a href='javascript:void(0);' class='dropdown-item text-success' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>`;
                         if (updet == date) {
                             content +=
@@ -427,6 +448,47 @@
             });
         }
 
+        function showWordPreview(id) {
+            // Bersihkan konten sebelumnya
+            $('#show_id_dokumen').append('<i class="fa fa-spinner fa-spin fa-fw"></i>');
+            $('#tampil-preview-word').html(`
+                <div class="text-center p-3 text-muted">
+                    <i class="fas fa-spinner fa-spin"></i> Memuat pratinjau dokumen...
+                </div>
+            `);
+
+            $.ajax({
+                url: `/api/laporan/bulanan/preview/word/${id}`,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    // Encode URL agar aman di query Google Docs
+                    let encodedUrl = encodeURIComponent(res);
+
+                    // Buat iframe Google Docs Viewer
+                    let iframe = `
+                        <iframe
+                            src="https://docs.google.com/gview?url=${encodedUrl}&embedded=true"
+                            style="width:100%; height:600px; border:none;"
+                            onload="this.previousElementSibling?.remove()"
+                        ></iframe>
+                    `;
+
+                    // Masukkan iframe ke container
+                    $('#tampil-preview-word').empty().html(iframe);
+                    $('#show_id_dokumen').empty().text(id);
+                    $('#btn-download-preview').attr('onclick', "window.location.href='{{ url('berkas/laporan/bulanan/"+id+"') }}'");
+                    $('#previewWord').modal('show');
+                },
+                error: function(xhr) {
+                    iziToast.error({
+                        title: 'Pesan System!',
+                        message: xhr.responseText,
+                        position: 'topRight'
+                    });
+                }
+            })
+        }
 
         function tambah() {
             $("#btn-tambah").prop('disabled', true);
