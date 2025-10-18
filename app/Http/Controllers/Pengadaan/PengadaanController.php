@@ -191,10 +191,10 @@ class PengadaanController extends Controller
 
     function checkoutKeranjang(Request $request)
     {
-        if (Carbon::now()->isoFormat('DD') > 15) {
+        if (Carbon::now()->isoFormat('DD') > 20) {
             return response()->json([
                 'success' => false,
-                'message' => 'Pengadaan telah ditutup per Tanggal 15 '.Carbon::now()->isoFormat('MMM YYYY'),
+                'message' => 'Pengadaan telah ditutup per Tanggal 20 '.Carbon::now()->isoFormat('MMM YYYY'),
             ], 400); // status code 400 Bad Request
         } else {
 

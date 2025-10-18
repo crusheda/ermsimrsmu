@@ -245,7 +245,7 @@
                             </h5>
                             <span>
                                 <ul>
-                                    <li>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 15 setiap bulannya</li>
+                                    <li>Selesaikan pengadaan Anda sebelum (Batas Maksimal) tanggal 20 setiap bulannya</li>
                                     {{-- <li></li> --}}
                                 </ul>
                             </span>
@@ -383,7 +383,7 @@
 
     <script>
         $(document).ready(function() {
-            if (moment().format('DD') > 15) {
+            if (moment().format('DD') > 20) {
                 Swal.fire({
                     title: "Mohon Perhatian!",
                     html: "Pengadaan <strong class='text-danger'>TELAH DITUTUP</strong> untuk bulan ini! Silakan melakukan pengadaan pada bulan selanjutnya. Popup akan tertutup dalam <b></b> ms.",
@@ -405,7 +405,7 @@
             } else {
                 Swal.fire({
                     title: "Mohon Perhatian!",
-                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai <strong class='text-primary'>TANGGAL 15</strong> setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
+                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai <strong class='text-primary'>TANGGAL 20</strong> setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
                     icon: "warning",
                     timer: 5000,
                     timerProgressBar: true,
@@ -1044,8 +1044,7 @@
                                         <td>
                                             <div>
                                                 <h5 class="text-truncate font-size-14">` + item.nama_barang + `</h5>
-                                                <p class="text-muted mb-0">` + formatRupiah(item.harga, 'Rp ') +
-                            ` x ` + item.jumlah + `</p>
+                                                <p class="text-muted mb-0">` + formatRupiah(item.harga, 'Rp ') + ` x ` + item.jumlah + `</p>
                                             </div>
                                         </td>
                                         <td>` + formatRupiah(item.total, 'Rp ') + `</td>
