@@ -405,7 +405,7 @@
             } else {
                 Swal.fire({
                     title: "Mohon Perhatian!",
-                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai <strong class='text-primary'>TANGGAL 15</strong> setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
+                    html: "Batas maksimal Pengajuan Pengadaan hanya sampai <strong class='text-primary'>TANGGAL 20</strong> setiap bulannya! Popup akan tertutup dalam <b></b> ms.",
                     icon: "warning",
                     timer: 5000,
                     timerProgressBar: true,
