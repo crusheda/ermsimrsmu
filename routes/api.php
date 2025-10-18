@@ -304,6 +304,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         Route::post('suratkeluar/ubah', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@ubah')->name('suratkeluar.ubah');
         Route::delete('suratkeluar/{id}', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@hapus');
 
+    // KALENDER
+    Route::get('kalender/data', '\App\Http\Controllers\Kalender\KalenderController@dataKalender')->name('kalender.data');
+    Route::post('kalender/store', '\App\Http\Controllers\Kalender\KalenderController@tambahKalender')->name('kalender.tambah');
+
     // PENGADAAN
     Route::get('pengadaan/data/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@dataPengadaan')->name('pengadaan.data');
     Route::get('pengadaan/riwayat/{id}', '\App\Http\Controllers\Pengadaan\PengadaanController@riwayatPengadaan')->name('pengadaan.riwayat');

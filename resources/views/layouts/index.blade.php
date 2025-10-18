@@ -63,6 +63,7 @@
     <link rel="stylesheet" href="{{ asset('css/style-preset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/uikit.css') }}">
     {{-- PLUGIN CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet" />
     <link href="{{ asset('css/plugins/animate.min.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('css/iziToast.css') }}" />
     <!-- Flat Pickr css -->
@@ -187,6 +188,8 @@
     <script src="{{ asset('js/plugins/feather.min.js') }}"></script>
 
     {{-- PLUGIN JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    {{-- <script src="{{ asset('js/plugins/index.global.min.js') }}"></script> --}}
     <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
     <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script> {{-- YANG DIPAKAI INI --}}

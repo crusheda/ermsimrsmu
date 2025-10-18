@@ -155,6 +155,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
             Route::post('suratkeluar', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@store')->name('suratkeluar.store');
 });
 
+Route::get('kalender', '\App\Http\Controllers\Kalender\KalenderController@index')->name('kalender.index');
+
 // PENGADAAN
 Route::group(['middleware' => ['auth'], 'prefix' => 'pengadaan', 'as' => ''], function () {
     Route::post('rekap', '\App\Http\Controllers\Pengadaan\PengadaanRekapController@index')->name('pengadaanrekap.index');
