@@ -392,7 +392,16 @@ class AbsensiController extends Controller
                 'u.id as pegawai_id',
                 'u.nama',
                 'u.nip',
-                'kj.unit',
+                DB::raw('(
+                    SELECT kjx.unit
+                    FROM kepegawaian_jadwal kjx
+                    WHERE JSON_CONTAINS(kjx.staf, JSON_QUOTE(CAST(u.id AS CHAR)))
+                    AND kjx.deleted_at IS NULL
+                    AND kjx.tahun IN (' . implode(',', $tahunList) . ')
+                    AND kjx.bulan IN (' . implode(',', $bulanList) . ')
+                    ORDER BY kjx.tahun DESC, kjx.bulan DESC
+                    LIMIT 1
+                ) as unit'),
                 DB::raw('IFNULL((
                     SELECT COUNT(*) FROM kepegawaian_absensi as a
                     WHERE a.pegawai_id = u.id
@@ -457,7 +466,7 @@ class AbsensiController extends Controller
                                     $join->on('kj2.id_jadwal', '=', 'kj3.id')
                                         ->whereNull('kj3.deleted_at');
                                 })
-                                ->join('referensi_jadwal_users as rju3', 'rju3.id', '=', 'kj3.unit') // ✅ betulnya ke sini
+                                ->join('referensi_jadwal_users as rju3', 'rju3.id', '=', 'kj3.unit')
                                 ->whereNull('rju3.deleted_at')
                                 ->whereRaw('ka2.pegawai_id = u.id')
                                 ->whereIn('rju3.id', $unit_ids)   // filter unit
@@ -467,12 +476,153 @@ class AbsensiController extends Controller
                 });
             })
             ->whereNull('kj.deleted_at')
-            ->whereIn('kj.bulan', $bulanList)
-            ->whereIn('kj.tahun', $tahunList)
-            // ->when(!empty($unit_ids), fn($q) => $q->whereIn('rju.id', $unit_ids))
-            // ->where('kj.pegawai_id',232)
+            ->where(function ($q) use ($request) {
+                $bulan_dari = (int) date('m', strtotime($request->dari));
+                $bulan_sampai = (int) date('m', strtotime($request->sampai));
+                $tahun_dari = (int) date('Y', strtotime($request->dari));
+                $tahun_sampai = (int) date('Y', strtotime($request->sampai));
+
+                $q->where(function ($q2) use ($tahun_dari, $tahun_sampai, $bulan_dari, $bulan_sampai) {
+                    if ($tahun_dari == $tahun_sampai) {
+                        // ⬅️ kalau masih dalam tahun yang sama
+                        $q2->where('kj.tahun', $tahun_dari)
+                        ->whereBetween('kj.bulan', [$bulan_dari, $bulan_sampai]);
+                    } else {
+                        // ⬅️ kalau beda tahun
+                        $q2->where(function ($qq) use ($tahun_dari, $bulan_dari) {
+                            $qq->where('kj.tahun', $tahun_dari)
+                            ->where('kj.bulan', '>=', $bulan_dari);
+                        })
+                        ->orWhere(function ($qq) use ($tahun_sampai, $bulan_sampai) {
+                            $qq->where('kj.tahun', $tahun_sampai)
+                            ->where('kj.bulan', '<=', $bulan_sampai);
+                        })
+                        // ⬅️ tambahan untuk tahun di tengah (misal 2024–2026)
+                        ->orWhereBetween('kj.tahun', [$tahun_dari + 1, $tahun_sampai - 1]);
+                    }
+                });
+            })
             ->groupBy('u.id', 'u.nama', 'u.nip', 'kj.unit')
             ->get();
+
+        // print_r($show);
+        // die();
+
+        // $show = DB::table('users as u')
+        //     ->select(
+        //         'u.id as pegawai_id',
+        //         'u.nama',
+        //         'u.nip',
+        //         DB::raw('(
+        //             SELECT kjx.unit
+        //             FROM kepegawaian_jadwal kjx
+        //             WHERE JSON_CONTAINS(kjx.staf, JSON_QUOTE(CAST(u.id AS CHAR)))
+        //             AND kjx.deleted_at IS NULL
+        //             AND kjx.tahun IN (' . implode(',', $tahunList) . ')
+        //             AND kjx.bulan IN (' . implode(',', $bulanList) . ')
+        //             ORDER BY kjx.tahun DESC, kjx.bulan DESC
+        //             LIMIT 1
+        //         ) as unit'),
+        //         DB::raw('IFNULL((
+        //             SELECT COUNT(*) FROM kepegawaian_absensi as a
+        //             WHERE a.pegawai_id = u.id
+        //             AND a.deleted_at IS NULL
+        //             AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+        //             ' . ($jenis != 0 ? 'AND a.jenis = ' . (int) $jenis : '') . '
+        //         ), 0) as total_absensi'),
+        //         DB::raw('IFNULL((
+        //             SELECT COUNT(*) FROM kepegawaian_absensi as a
+        //             WHERE a.pegawai_id = u.id AND a.jenis = 3
+        //             AND a.deleted_at IS NULL
+        //             AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+        //         ), 0) as total_ijin'),
+        //         DB::raw('IFNULL((
+        //             SELECT COUNT(*) FROM kepegawaian_absensi as a
+        //             WHERE a.pegawai_id = u.id AND a.jenis = 4
+        //             AND a.deleted_at IS NULL
+        //             AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+        //         ), 0) as total_dinas_luar'),
+        //         DB::raw('IFNULL((
+        //             SELECT COUNT(*) FROM kepegawaian_absensi as a
+        //             WHERE a.pegawai_id = u.id AND a.jenis = 1 AND a.tgl_out IS NULL
+        //             AND a.deleted_at IS NULL
+        //             AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+        //         ), 0) as total_alpha'),
+        //         DB::raw('IFNULL((
+        //             SELECT COUNT(*) FROM kepegawaian_absensi as a
+        //             WHERE a.pegawai_id = u.id AND a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 1
+        //             AND a.deleted_at IS NULL
+        //             AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+        //         ), 0) as total_terlambat'),
+        //         DB::raw('IFNULL((
+        //             SELECT COUNT(*) FROM kepegawaian_absensi as a
+        //             WHERE a.pegawai_id = u.id AND a.jenis = 1 AND a.tgl_out IS NOT NULL AND a.terlambat = 0
+        //             AND a.deleted_at IS NULL
+        //             AND a.tgl_in BETWEEN "' . $dari . ' 00:00:00" AND "' . $sampai . ' 23:59:59"
+        //         ), 0) as total_tidak_terlambat')
+        //     )
+        //     ->leftJoin('kepegawaian_jadwal as kj', function ($join) {
+        //         $join->on(DB::raw('JSON_CONTAINS(kj.staf, JSON_QUOTE(CAST(u.id AS CHAR)))'), '=', DB::raw('TRUE'))
+        //             ->whereNull('kj.deleted_at');
+        //     })
+        //     ->when(!empty($unit_ids), function ($q) use ($unit_ids, $bulanList, $tahunList) {
+        //         $q->where(function ($subQuery) use ($unit_ids, $bulanList, $tahunList) {
+        //             $subQuery
+        //                 // kondisi: masih ada di referensi_jadwal_users unit_ids
+        //                 ->whereExists(function ($sub) use ($unit_ids) {
+        //                     $sub->select(DB::raw(1))
+        //                         ->from('referensi_jadwal_users as rju2')
+        //                         ->whereNull('rju2.deleted_at')
+        //                         ->whereIn('rju2.id', $unit_ids)
+        //                         ->whereRaw('JSON_CONTAINS(rju2.staf, JSON_QUOTE(CAST(u.id AS CHAR)))');
+        //                 })
+        //                 // ATAU kondisi: punya absensi di periode filter untuk unit_ids
+        //                 ->orWhereExists(function ($sub) use ($unit_ids, $bulanList, $tahunList) {
+        //                     $sub->select(DB::raw(1))
+        //                         ->from('kepegawaian_absensi as ka2')
+        //                         ->join('kepegawaian_jadwal_detail as kj2', function ($join) {
+        //                             $join->on('kj2.pegawai_id', '=', 'ka2.pegawai_id')
+        //                                 ->whereNull('kj2.deleted_at');
+        //                         })
+        //                         ->join('kepegawaian_jadwal as kj3', function ($join) {
+        //                             $join->on('kj2.id_jadwal', '=', 'kj3.id')
+        //                                 ->whereNull('kj3.deleted_at');
+        //                         })
+        //                         ->join('referensi_jadwal_users as rju3', 'rju3.id', '=', 'kj3.unit')
+        //                         ->whereNull('rju3.deleted_at')
+        //                         ->whereRaw('ka2.pegawai_id = u.id')
+        //                         ->whereIn('rju3.id', $unit_ids)   // filter unit
+        //                         ->whereIn('kj3.bulan', $bulanList)
+        //                         ->whereIn('kj3.tahun', $tahunList);
+        //                 });
+        //         });
+        //     })
+        //     ->where(function ($q) use ($request) {
+        //         $bulan_dari = (int) date('m', strtotime($request->dari));
+        //         $bulan_sampai = (int) date('m', strtotime($request->sampai));
+        //         $tahun_dari = (int) date('Y', strtotime($request->dari));
+        //         $tahun_sampai = (int) date('Y', strtotime($request->sampai));
+
+        //         // Jika rentang tanggal melewati dua bulan (misal 2025-09-21 sampai 2025-10-24)
+        //         if ($tahun_dari === $tahun_sampai) {
+        //             $q->whereBetween('kj.bulan', [$bulan_dari, $bulan_sampai])
+        //             ->where('kj.tahun', $tahun_dari);
+        //         } else {
+        //             // jika beda tahun (misal 2025-12 ke 2026-01)
+        //             $q->where(function ($q2) use ($bulan_dari, $tahun_dari, $bulan_sampai, $tahun_sampai) {
+        //                 $q2->where(function ($qq) use ($bulan_dari, $tahun_dari) {
+        //                     $qq->where('kj.tahun', $tahun_dari)
+        //                     ->where('kj.bulan', '>=', $bulan_dari);
+        //                 })
+        //                 ->orWhere(function ($qq) use ($bulan_sampai, $tahun_sampai) {
+        //                     $qq->where('kj.tahun', $tahun_sampai)
+        //                     ->where('kj.bulan', '<=', $bulan_sampai);
+        //                 });
+        //             });
+        //         }
+        //     })
+        //     ->groupBy('u.id', 'u.nama', 'u.nip', 'kj.unit')
+        //     ->get();
 
         // Iterasi tiap pegawai
         foreach ($show as $item) {
