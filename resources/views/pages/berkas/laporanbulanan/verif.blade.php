@@ -220,7 +220,7 @@
             ];
             return `${namaBulan[parseInt(bln)]} ${thn}`;
         }
-        
+
         function getDateTime() {
             var now = new Date();
             var year = now.getFullYear();
@@ -248,6 +248,8 @@
                 dataType: 'json', // added data type
                 success: function(res) {
                     $("#tampil-tbody").empty();
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_laporan_bulanan_verifall') }}";
                     if ($.fn.DataTable.isDataTable('#dttable')) {
                         $('#dttable').DataTable().clear().destroy();
                     }
@@ -274,10 +276,13 @@
                         if (item.has_catatan) {
                             colorBtnCat = 'primary';
                         }
-                        content += `<td><center><div class="btn-group">
-                                    <button class='btn btn-dark btn-sm' onclick="showWordPreview(${item.id})" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Preview Laporan"><i class="fa-fw fas fa-file-archive nav-icon"></i></button>
-                                    <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>
-                                    <button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>
+                        content += `<td><center><div class="btn-group">`;
+                        content += `<button class='btn btn-dark btn-sm' onclick="showWordPreview(${item.id})" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Preview Laporan"><i class="fa-fw fas fa-file-archive nav-icon"></i></button>
+                                    <button class='btn btn-success btn-sm' onclick="window.location.href='{{ url('berkas/laporan/bulanan/`+item.id+`') }}'" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Unduh Laporan"><i class="fa-fw fas fa-download nav-icon"></i></button>`;
+                                    if (adminID == true) {
+                                        content += `<button class='btn btn-danger btn-sm' id="btnHapus`+item.id+`" onclick="hapus(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Hapus Laporan Bulanan"><i class="fa-fw fas fa-trash nav-icon"></i></button>`;
+                                    }
+                        content += `<button class='btn btn-`+colorBtn+` btn-sm' id="btnVerif`+item.id+`" onclick="showVerif(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Informasi Verifikasi Laporan"><i class="fa-fw fas fa-info-circle nav-icon"></i></button>
                                     <button class='btn btn-`+colorBtnCat+` btn-sm' id="btnCatatan`+item.id+`" onclick="showCatatan(` + item.id + `)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Daftar Catatan Laporan Bulanan"><i class="fa-fw fas fa-sticky-note nav-icon"></i></button>`;
 
                         // if(item.tgl_verif != null) {
@@ -287,7 +292,7 @@
                         content += `</div></center></td>
                         <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + item.nama + `</td>
                         <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + un + `</td>
-                        <td style="white-space: normal; word-wrap: break-word; word-break: break-word;">` + item.judul + `</td>
+                        <td style="white-space: normal; word-wrap: break-word; word-break: break-word;"><a class="text-uppercase" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="Preview Laporan ID # ${item.id}" onclick="showWordPreview(${item.id})"><u>` + item.judul + `</u></a></td>
                         <td>${formatBulanTahun(item.bln, item.thn)}</td><td style="white-space: normal; word-wrap: break-word; word-break: break-word;">`;
                         if (item.ket != null) {
                             content += item.ket;
@@ -337,24 +342,24 @@
                     if (['pdf'].includes(ext)) {
                         // PDF: langsung tampil
                         iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
-                    } 
+                    }
                     else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext)) {
                         // Dokumen Office: gunakan Google Docs Viewer
                         const encodedUrl = encodeURIComponent(fileUrl);
                         iframe = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}&embedded=true" style="width:100%; height:600px;" frameborder="0"></iframe>`;
-                    } 
+                    }
                     else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
                         // Gambar: langsung tampil
                         iframe = `<img src="${fileUrl}" alt="Preview Gambar" class="img-fluid mx-auto d-block">`;
-                    } 
+                    }
                     else if (['txt', 'csv'].includes(ext)) {
                         // Text file
                         iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
-                    } 
+                    }
                     else {
                         // Format lain — tidak bisa di-preview
                         iframe = `<div class="text-center p-3 text-danger">
-                            Format <b>.${ext}</b> tidak bisa dipratinjau. 
+                            Format <b>.${ext}</b> tidak bisa dipratinjau.
                             <br><button class="btn btn-primary mt-2" onclick="window.location.href='${fileUrl}'">Download</button>
                         </div>`;
                     }
@@ -627,6 +632,54 @@
             })
             $("#batalVerif"+id).prop('disabled', false);
             $("#batalVerif"+id).find("i").removeClass("fa-spinner fa-spin").addClass("fa-times");
+        }
+
+        // HAPUS LAPORAN BULANAN USER
+        function hapus(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Hapus Laporan Bulanan ID : ' + id,
+                icon: 'warning',
+                reverseButtons: false,
+                showDenyButton: false,
+                showCloseButton: false,
+                showCancelButton: true,
+                focusCancel: true,
+                confirmButtonColor: '#FF4845',
+                confirmButtonText: `<i class="fa fa-trash me-1" style="font-size:13px"></i> Hapus`,
+                cancelButtonText: `<i class="fa fa-times me-1" style="font-size:13px"></i> Batal`,
+                backdrop: `rgba(26,27,41,0.8)`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/laporan/bulanan/hapus/" + id,
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            iziToast.success({
+                                title: 'Sukses!',
+                                message: 'Hapus Dokumen Laporan Bulanan berhasil pada ' + res,
+                                position: 'topRight'
+                            });
+                            refresh();
+                        },
+                        error: function(res) {
+                            Swal.fire({
+                                title: `Gagal di hapus!`,
+                                text: 'Pada ' + res,
+                                icon: `error`,
+                                showConfirmButton: false,
+                                showCancelButton: false,
+                                allowOutsideClick: true,
+                                allowEscapeKey: true,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                backdrop: `rgba(26,27,41,0.8)`,
+                            });
+                        }
+                    });
+                }
+            })
         }
     </script>
 @endsection

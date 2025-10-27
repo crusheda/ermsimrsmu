@@ -49,6 +49,23 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-secondary m-3">
+                        <h6>Baca <b class="text-danger">Saya</b>!</h6>
+                        <small>
+                            <ul class="mb-0">
+                                <li>Pengubahan atau Penghapusan dokumen laporan hanya berlaku pada <strong class="text-danger">Hari saat Anda mengupload saja</strong></li>
+                                <li>Penghapusan laporan lewat hari hanya dilakukan Oleh Admin Laporan</li>
+                                <li>Tidak ada batasan upload per Bulan, pengguna bebas melakukan upload laporan rutin dengan ketentuan sebagai berikut :
+                                    <ul>
+                                        <li>File Upload yang disarankan berupa Dokumen PDF <mark>(.pdf)</mark> dan Word <mark>(.doc/.docx)</mark></li>
+                                        <li>Batas ukuran maksimum dokumen adalah <mark>5 mb</mark></li>
+                                    </ul>
+                                </li>
+                                <li>Laporan yang sudah diverifikasi tidak bisa diubah atau dihapus kembali</li>
+                                <li>Catatan dan Verifikator diisi oleh Atasan atau bisa juga oleh Admin</li>
+                            </ul>
+                        </small>
+                    </div>
                     <div class="table-responsive">
                         <table id="dttable" class="table dt-responsive table-hover nowrap w-100 align-middle">
                             <thead>
@@ -474,24 +491,24 @@
                     if (['pdf'].includes(ext)) {
                         // PDF: langsung tampil
                         iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
-                    } 
+                    }
                     else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext)) {
                         // Dokumen Office: gunakan Google Docs Viewer
                         const encodedUrl = encodeURIComponent(fileUrl);
                         iframe = `<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}&embedded=true" style="width:100%; height:600px;" frameborder="0"></iframe>`;
-                    } 
+                    }
                     else if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
                         // Gambar: langsung tampil
                         iframe = `<img src="${fileUrl}" alt="Preview Gambar" class="img-fluid mx-auto d-block">`;
-                    } 
+                    }
                     else if (['txt', 'csv'].includes(ext)) {
                         // Text file
                         iframe = `<iframe src="${fileUrl}" style="width:100%; height:600px; border:none;"></iframe>`;
-                    } 
+                    }
                     else {
                         // Format lain — tidak bisa di-preview
                         iframe = `<div class="text-center p-3 text-danger">
-                            Format <b>.${ext}</b> tidak bisa dipratinjau. 
+                            Format <b>.${ext}</b> tidak bisa dipratinjau.
                             <br><button class="btn btn-primary mt-2" onclick="window.location.href='${fileUrl}'">Download</button>
                         </div>`;
                     }
