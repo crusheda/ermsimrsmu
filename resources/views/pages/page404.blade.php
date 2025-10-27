@@ -42,7 +42,7 @@
                             <div class="text-center">
                                 <h1 class="mt-5"><b>Halaman tidak ditemukan</b></h1>
                                 <p class="mt-2 mb-4 text-muted">Halaman yang Anda lihat telah dipindahkan, dihapus, diganti nama, <br>atau mungkin tidak akan pernah ada!</p>
-                                <a href="{{ route('dashboard') }}" class="btn btn-primary mb-3"><i class="fas fa-home me-1"></i> Kembali ke Home</a>
+                                <a href="{{ route('dashboard') }}" class="btn btn-primary mb-3"><i class="fas fa-home me-1"></i> Kembali ke Menu Awal</a>
                             </div>
                         </div>
                     </div>

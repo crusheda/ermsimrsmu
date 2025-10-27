@@ -97,15 +97,32 @@
                                     </div>
                                 @endforeach
                             @else
-                                <div class="card mb-2">
+                                <div class="card mb-3">
                                     <div class="card-body">
                                         <div class="d-flex">
-                                            <div class="flex-shrink-0"><svg class="pc-icon text-primary">
+                                            <div class="flex-shrink-0">
+                                                <svg class="pc-icon text-primary">
                                                 <use xlink:href="#custom-layer"></use>
-                                            </svg></div>
+                                                </svg>
+                                            </div>
                                             <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">∞</span>
                                                 <h5 class="text-body mb-2">Update System v3.1</h5>
                                                 <p class="mb-0">Selamat Beraktivitas..</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-0">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0">
+                                                <svg class="pc-icon text-primary">
+                                                    <use xlink:href="#custom-security-safe"></use>
+                                                </svg>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3"><span class="float-end text-sm text-muted">Coming Soon (Th.2026)</span>
+                                                <h5 class="text-body mb-2">Simrsmu Launching <b class="text-primary">Update V4</b></h5>
+                                                <p class="mb-0">Simrsmu akan meluncurkan Update Besar pada Awal Tahun 2026 dengan tampilan yang baru dan berkesan. Tunggu Update Selanjutnya. Stay Tune!</p>
                                             </div>
                                         </div>
                                     </div>

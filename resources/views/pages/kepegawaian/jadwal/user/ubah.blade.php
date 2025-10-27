@@ -164,7 +164,7 @@
                                 </table>
                             </div>
                             <div class="row p-10">
-                                <div class="col-md-7">
+                                <div class="col-md-6">
                                     <div class="alert alert-light">
                                         <h5>Hal-hal yang perlu <b class="text-danger">diperhatikan</b></h5>
                                         <small>
@@ -197,13 +197,21 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <h5>Keterangan :</h5>
                                     <div class="list-group">
-                                        <label class="list-group-item border-0 p-2">
-                                            <a class="btn btn-light me-2" style="background-color: #fed8b9" href="javascript:void(0);"></a>
+                                        <label class="list-group-item border-0 p-1">
+                                            <a class="btn btn-light me-1" style="background-color: #fed8b9" href="javascript:void(0);"></a>
                                             Hari Minggu
                                         </label>
+                                        @if ($list['ref_ln'] && count($list['ref_ln']) > 0)
+                                            @foreach ($list['ref_ln'] as $item)
+                                                <label class="list-group-item border-0 p-1">
+                                                    <a class="btn btn-light me-1" style="background-color: {{ $item->color }}" href="javascript:void(0);"></a>
+                                                    {{ $item->deskripsi }} {{ $item->keterangan?'('.$item->keterangan.')':'' }} - Tanggal {{ $item->tgl }}
+                                                </label>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             </div>

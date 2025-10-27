@@ -189,13 +189,12 @@
                             <div class="col-md-3">
                                 <h5>Keterangan :</h5>
                                 <div class="list-group">
-                                    <label class="list-group-item border-0 p-2">
-                                        <a class="btn btn-light me-1" style="background-color: #fed8b9" href="javascript:void(0);"></a>
-                                        Hari Minggu
+                                    <label class="list-group-item border-0 p-1">
+                                        <a class="btn btn-light me-1" style="background-color: #fed8b9" href="javascript:void(0);"></a>Hari Minggu
                                     </label>
                                     @if ($list['ref_ln'] && count($list['ref_ln']) > 0)
                                         @foreach ($list['ref_ln'] as $item)
-                                            <label class="list-group-item border-0 p-2">
+                                            <label class="list-group-item border-0 p-1">
                                                 <a class="btn btn-light me-1" style="background-color: {{ $item->color }}" href="javascript:void(0);"></a>
                                                 {{ $item->deskripsi }} {{ $item->keterangan?'('.$item->keterangan.')':'' }} - Tanggal {{ $item->tgl }}
                                             </label>

@@ -210,6 +210,7 @@ class JadwalController extends Controller
                             ->first();
 
         if (!empty($jadwal)) {
+            $idJadwal = $jadwal->id;
             if ($jadwal->progress == 0 || $jadwal->progress == 3) {
                 if ($jadwal->progress == 0) {
                     $status = 'Ditolak';
@@ -231,20 +232,33 @@ class JadwalController extends Controller
                                                 ->orderBy('referensi_jadwal_users_jabatan.urutan','ASC')
                                                 ->get();
 
-                // if ($jadwal->staf != $ref_users->staf) {
-                //     $jadwal->staf = $ref_users->staf;
-                //     $jadwal->save();
-
-                //     // REINITIATE
-                //     $jadwal  = jadwal::join('users','users.id','=','kepegawaian_jadwal.pegawai_id')
-                //                         ->select('users.nama','users.name','kepegawaian_jadwal.*')
-                //                         ->where('kepegawaian_jadwal.id',$id)
-                //                         ->whereNull('kepegawaian_jadwal.deleted_at')
-                //                         ->orderBy('kepegawaian_jadwal.created_at','DESC')
-                //                         ->first();
-                // }
-
                 $users  = users::where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+
+                // Hapus duplikat data pegawai di jadwal_detail (Versi terhapus langsung)
+                // DB::statement("
+                //     DELETE a FROM kepegawaian_jadwal_detail a
+                //     INNER JOIN kepegawaian_jadwal_detail b
+                //         ON a.pegawai_id = b.pegawai_id
+                //         AND a.id_jadwal = b.id_jadwal
+                //         AND a.id > b.id
+                //     WHERE a.id_jadwal = ?
+                // ", [$id]);
+
+                // Hapus duplikat data pegawai di jadwal_detail (Versi aman SoftDeletes)
+                jadwal_detail::whereIn('id', function ($query) use ($idJadwal) {
+                    $query->select('b.id')
+                        ->from('kepegawaian_jadwal_detail as b')
+                        ->join('kepegawaian_jadwal_detail as c', function ($join) {
+                            $join->on('b.pegawai_id', '=', 'c.pegawai_id')
+                                ->on('b.id_jadwal', '=', 'c.id_jadwal')
+                                ->whereRaw('b.id > c.id')
+                                ->whereNull('c.deleted_at');
+                        })
+                        ->where('b.id_jadwal', $idJadwal)
+                        ->whereNull('b.deleted_at');
+                })->delete();
+
+                // Ambil data jadwal terbaru setelah proses delete duplicate
                 $detail = jadwal_detail::join('users','users.id','=','kepegawaian_jadwal_detail.pegawai_id')
                             ->where('kepegawaian_jadwal_detail.id_jadwal',$id)
                             ->select('kepegawaian_jadwal_detail.*','users.nama as nama_pegawai','users.nick','users.name')
@@ -264,7 +278,7 @@ class JadwalController extends Controller
                     'jml_tgl' => $jml_tgl,
                 ];
 
-                // print_r($ref_jabatan->);
+                // print_r($detail);
                 // die();
                 return view('pages.kepegawaian.jadwal.user.ubah')->with('list', $data);
             }
@@ -342,43 +356,21 @@ class JadwalController extends Controller
                                 ->whereIn('pegawai_id', $request->id_staf)
                                 ->get()
                                 ->keyBy('pegawai_id');
-        // $data = jadwal_detail::where('id_jadwal',$request->id_jadwal)->get();
-        // $data = $getData;
-        // print_r($getData.'<br><br><br>');
-        // print_r($data.'<br><br><br>');
-        // for ($i=0; $i < count($getData) ; $i++) {
-        // if (count($getData) !== count($request->id_staf)) {
-        //     dd("Mismatch: DB punya ".count($getData)." record, request punya ".count($request->id_staf)." record");
-        // }
-        // for ($i=0; $i < count($request->id_staf) ; $i++) {
+
         foreach ($request->id_staf as $idx => $pegawaiId) {
-        // print_r($request->nama_staf[$idx].' - '.$pegawaiId.'<br>');
             $row = $getData[$pegawaiId] ?? null;
             if (!$row) continue;
             for ($t = 1; $t <= $totalDay; $t++) {
                 $hit = "tgl{$t}";
                 $value = $request->$hit[$idx] ?? null;
                 $row->$hit = $value ? strtoupper($value) : null;
-                // if ($request->$hit[$i]) {
-                //     $data[$i]->$hit = strtoupper($request->$hit[$i]);
-                // } else {
-                //     $data[$i]->$hit = null;
-                // }
-                // if (isset($request->$hit[$i])) {
-                //     echo "$i - {$request->$hit[$i]} - $hit <br>";
-                // } else {
-                //     echo "$i - (kosong) - $hit <br>";
-                // }
-                // print_r($idx.' - '.$row->$hit.' - '.$hit.'<br>');
             }
             $row->save();
         }
-        // die();
 
         datalogs::record($getJadwal->pegawai_id, 'Baru saja melakukan perubahan Jadwal Dinas Pegawai Bulan '.$getJadwal->bulan.' Tahun '.$getJadwal->tahun, $getJadwal->staf, null, $getJadwal, '["kepala-sumber-daya-insani","staf-sumber-daya-insani"]');
 
         return redirect()->route('kepegawaian.jadwaldinas.index')->with('message','Perubahan Jadwal Dinas Karyawan berhasil dilakukan pada '.$tgl);
-        // return Redirect::route()->with('message','Perubahan Jadwal Dinas Karyawan berhasil dilakukan pada '.$tgl);
     }
 
     // AJAX JSON ---------------------------------------------------------------------------------------------
@@ -871,6 +863,88 @@ class JadwalController extends Controller
         return response()->json($data, 200);
     }
 
+    function tableAllBawahanFilter($user, $month)
+    {
+        list($year, $month) = explode('-', $month); // misal $input = "2025-08"
+        $month = sprintf("%02d", $month); // "08"
+        $year = sprintf("%04d", $year);   // "2025" (opsional)
+
+        $users  = users::select('id','nama')->where('nik','!=',null)->where('nama','!=',null)->orderBy('nama', 'asc')->get();
+        // Ambil data struktur organisasi user tersebut
+        $jabatan = struktur_organisasi::where('id_user', $user)
+                    ->orderBy('updated_at','desc')
+                    ->first();
+
+        if (!$jabatan) {
+            return collect(); // Kosongkan hasil jika tidak ada jabatan
+        }
+
+        $bawahanRoles = json_decode($jabatan->bawahan); // Contoh: ["14","93","94","95","55","56"]
+        $referensi = DB::table('referensi_jadwal_users')->whereNull('deleted_at')->get();
+        $pegawaiUnitMap = [];
+
+        foreach ($referensi as $row) {
+            // unit milik pegawai_id
+            $pegawaiUnitMap[$row->pegawai_id] = $row->unit;
+
+            // unit diwariskan ke staf-nya juga
+            $stafList = json_decode($row->staf, true);
+            if (is_array($stafList)) {
+                foreach ($stafList as $stafId) {
+                    $pegawaiUnitMap[$stafId] = $row->unit;
+                }
+            }
+        }
+
+        // 1. Pegawai yang punya role bawahan (user seperti 164)
+        $pegawaiDenganRole = DB::table('model_has_roles')
+            ->whereIn('role_id', $bawahanRoles)
+            ->pluck('model_id')
+            ->unique();
+
+        // 2. Pegawai penginput (pegawai_id dari referensi_jadwal_users) yang staf-nya mengandung pegawai bawahan
+        $pegawaiPenginput = DB::table('referensi_jadwal_users')
+            ->where(function ($query) use ($pegawaiDenganRole) {
+                foreach ($pegawaiDenganRole as $pegawaiId) {
+                    $query->orWhereRaw("JSON_CONTAINS(staf, JSON_QUOTE(?))", [(string) $pegawaiId]);
+                }
+            })
+            ->whereNull('deleted_at')
+            ->pluck('pegawai_id')
+            ->unique();
+
+        // 3. Gabungkan keduanya — yang bisa input sendiri atau staf dari orang lain
+        $finalPegawaiIds = $pegawaiDenganRole->merge($pegawaiPenginput)->unique();
+
+        // 4. Ambil data jadwal dengan unit
+        $show = DB::table('kepegawaian_jadwal')
+                    ->leftJoin('users as us', 'us.id', '=', 'kepegawaian_jadwal.pegawai_id')
+                    ->leftJoin('users as vr', 'vr.id', '=', 'kepegawaian_jadwal.verif')
+                    ->leftJoin('users as vl', 'vl.id', '=', 'kepegawaian_jadwal.valid')
+                    ->select('kepegawaian_jadwal.*', 'us.nama as nama_pegawai', 'vr.nama as nama_verif', 'vl.nama as nama_valid')
+                    ->where(function ($query) use ($year,$month) {
+                        $query->where('kepegawaian_jadwal.tahun', $year)
+                                ->where('kepegawaian_jadwal.bulan', $month);
+                    })
+                    ->whereIn('kepegawaian_jadwal.pegawai_id', $finalPegawaiIds)
+                    ->whereNull('kepegawaian_jadwal.deleted_at')
+                    ->get();
+
+        // Tambahkan unit berdasarkan mapping
+        // $show->transform(function ($item) use ($pegawaiUnitMap) {
+        //     $item->unit = $pegawaiUnitMap[$item->pegawai_id] ?? null;
+        //     return $item;
+        // });
+
+        $data = [
+            'jabatan' => $jabatan,
+            'users' => $users,
+            'show' => $show,
+        ];
+
+        return response()->json($data, 200);
+    }
+
     function countBawahan($user)
     {
         $jabatan = struktur_organisasi::where('id_user', $user)
@@ -1016,13 +1090,15 @@ class JadwalController extends Controller
                     $hit = "tgl".$i;
                     if (!$value->$hit) {
                         return response()->json([
-                            'message' => $hit . " masih kosong / belum terisi. Periksa Jadwal Dinas sekali lagi."
+                            'message' => "Tgl " . $hit . " belum terisi. Silakan cek secara berkala sampai Unit tersebut melengkapi semua Shift di Jadwal Dinas."
                         ], 404);
                     }
                 }
             }
         } else {
-            return response()->json($tgl, 401);
+            return response()->json([
+                'message' => "Jadwal masih kosong / belum terisi sama sekali. Periksa Jadwal Dinas bawahan Anda secara berkala."
+            ], 404);
         }
 
         // Change

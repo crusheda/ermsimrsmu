@@ -18,7 +18,7 @@
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i></a></li>
                         <li class="breadcrumb-item">Kepegawaian</li>
                         <li class="breadcrumb-item"><a href="{{ route('kepegawaian.jadwaldinas.index') }}">Jadwal Dinas</a></li>
-                        <li class="breadcrumb-item" aria-current="page">Verifikasi</li>
+                        <li class="breadcrumb-item" aria-current="page">Verifikasi Bawahan</li>
                     </ul>
                 </div>
                 <div class="col-md-12">
@@ -34,19 +34,25 @@
     <div class="row pt-1">
         <div class="col-xl-12">
             <div class="card table-card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
+                <div class="card-header d-flex align-items-center justify-content-between py-3 gap-2">
                     <div class="btn-group">
                         <a href="{{ route('kepegawaian.jadwaldinas.index') }}" class="btn btn-light-dark align-items-center" data-bs-toggle="tooltip"
                         data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Kembali ke Halaman Sebelumnya"><i class="ti ti-arrow-back-up me-2"></i> Kembali</a>
-                        <button class="btn btn-light-warning" onclick="showRiwayat()"><i class="ti ti-refresh f-20 me-2"></i> Refresh Tabel</button>
-                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
-                            </li>
-                        </ul> --}}
+                        <button class="btn btn-light-warning" onclick="showRiwayat()" id="btn-refresh-jadwalBawahan" data-bs-toggle="tooltip"
+                            data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Menampilkan Seluruh Jadwal Dinas Bawahan">
+                            <i class="fas fa-sync f-20 me-2"></i> Tampilkan Semua Data
+                        </button>
                     </div>
-                    <h5 class="mb-0">Tabel Verifikasi Jadwal Dinas</h5>
+                    <div>
+                        <div class="input-group">
+                            <input type="month" class="form-control" value="" placeholder="Pilih Bulan & Tahun" id="filterBulan" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true"
+                                title="Pilih Bulan & Tahun"/>
+                            <button class="btn btn-outline-primary" onclick="showRiwayat($('#filterBulan').val())" id="btn-cari" data-bs-toggle="tooltip"
+                                data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" id="btn-refresh-jadwalBawahanFilter"
+                                title="Filter Jadwal Dinas Bawahan Berdasarkan Bulan & Tahun" disabled><i class="fas fa-filter me-1"></i> Filter</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -233,17 +239,36 @@
                 })
             });
 
+            $('#filterBulan').on('change', function() {
+                if ($(this).val()) {
+                    $('#btn-cari').prop('disabled', false); // aktifkan
+                } else {
+                    $('#btn-cari').prop('disabled', true); // nonaktifkan
+                }
+            });
+
             // $('.select2Tambah').select2({
             //     dropdownParent: $('#tambah')
             // });
 
-            showRiwayat();
+            // showRiwayat($('#filterBulan').val());
+            showRiwayat($('#filterBulan').val());
         });
 
-        function showRiwayat() {
+        function showRiwayat(month) {
             $("#tampil-tbody").empty().append(`<tr style='font-size:13px'><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            var regexBulan = /^\d{4}-(0[1-9]|1[0-2])$/;
+            if (!regexBulan.test(month)) {
+                $('#btn-refresh-jadwalBawahan').find("i").addClass("fa-spin");
+                url = "/api/kepegawaian/jadwaldinas/bawahan/table/{{ Auth::user()->id }}";
+                $('#filterBulan').val('');
+                $('#btn-cari').prop('disabled', true);
+            } else {
+                $('#btn-refresh-jadwalBawahanFilter').find("i").addClass("fa-sync fa-spin").removeClass('fa-filter');
+                url = "/api/kepegawaian/jadwaldinas/bawahan/table/{{ Auth::user()->id }}/"+month;
+            }
             $.ajax({
-                url: "/api/kepegawaian/jadwaldinas/bawahan/table/{{ Auth::user()->id }}",
+                url: url,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -375,6 +400,17 @@
                         lengthMenu: [15, 25, 50, 75, 100, 300, 500, 1000],
                         // buttons: ['copy', 'excel', 'pdf', 'colvis']
                     });
+                    $('#btn-refresh-jadwalBawahan').find("i").removeClass("fa-spin");
+                    $('#btn-refresh-jadwalBawahanFilter').find("i").removeClass("fa-sync fa-spin").addClass('fa-filter');
+                },
+                error: function(res) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: 'Seluruh Jadwal Dinas Bawahan gagal dimuat, silakan coba beberapa saat lagi atau Hubungi Admin',
+                        position: 'topRight'
+                    });
+                    $('#btn-refresh-jadwalBawahan').find("i").removeClass("fa-spin");
+                    $('#btn-refresh-jadwalBawahanFilter').find("i").removeClass("fa-sync fa-spin").addClass('fa-filter');
                 }
             })
         }
@@ -395,6 +431,7 @@
                             "{{ asset('images/notification/medium_priority-48.png') }}",
                             4000
                         );
+                        $('#btnoptshow'+id).empty().text(id);
                         return;
                     }
 
@@ -564,6 +601,7 @@
                         message: 'Jadwal Dinas gagal dimuat, silakan coba beberapa saat lagi',
                         position: 'topRight'
                     });
+                    $('#btnoptshow'+id).empty().text(id);
                 }
             })
         }
@@ -622,7 +660,7 @@
                             position: 'topRight'
                         });
                         $('#modalVerif').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(xhr) {
                         // xhr.responseJSON berisi data JSON dari Laravel
@@ -658,7 +696,7 @@
                             position: 'topRight'
                         });
                         $('#modalBatalVerif').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(res) {
                         iziToast.error({
@@ -708,7 +746,7 @@
                             position: 'topRight'
                         });
                         $('#modalTolak').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(res) {
                         iziToast.error({
@@ -743,7 +781,7 @@
                             position: 'topRight'
                         });
                         $('#modalBatalTolak').modal('hide');
-                        showRiwayat();
+                        showRiwayat($('#filterBulan').val());
                     },
                     error: function(res) {
                         iziToast.error({
