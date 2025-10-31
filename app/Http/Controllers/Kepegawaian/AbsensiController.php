@@ -708,9 +708,18 @@ class AbsensiController extends Controller
                 //     ->value('pegawai_id');
 
                 // Ambil peta shift
+                // $shiftMap = DB::table('referensi_jadwal_shift')
+                //     ->where('pegawai_id', $pegawaiInduk)
+                //     // ->whereNull('deleted_at')
+                //     ->pluck('shift', 'singkat')
+                //     ->toArray();
                 $shiftMap = DB::table('referensi_jadwal_shift')
                     ->where('pegawai_id', $pegawaiInduk)
-                    ->whereNull('deleted_at')
+                    ->select('singkat', 'shift')
+                    ->groupBy('singkat', 'shift')
+                    ->orderBy('updated_at', 'desc')
+                    ->get()
+                    ->unique('singkat')
                     ->pluck('shift', 'singkat')
                     ->toArray();
 
@@ -1085,7 +1094,8 @@ class AbsensiController extends Controller
                 $shift = DB::table('referensi_jadwal_shift')
                     ->where('pegawai_id', $pegawaiInduk)
                     ->where('singkat', $kodeShift)
-                    ->whereNull('deleted_at')
+                    // ->whereNull('deleted_at')
+                    ->orderBy('updated_at','DESC')
                     ->first();
 
                 $jamBerangkat = $shift->berangkat ?? '00:00:00';

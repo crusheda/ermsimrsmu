@@ -597,6 +597,7 @@ class JadwalController extends Controller
             // Ambil shift
             $shift = DB::table('referensi_jadwal_shift')
                 ->where('pegawai_id', $pegawaiId)
+                // ->orderBy('')
                 ->whereNull('deleted_at')
                 ->get();
             $jabatan = DB::table('referensi_jadwal_users_jabatan')
@@ -1191,39 +1192,63 @@ class JadwalController extends Controller
         // HITUNG SELISIH
         $berangkat = Carbon::parse($request->berangkat);
         $pulang    = Carbon::parse($request->pulang);
-        // Jika pulang lebih kecil dari berangkat, tambahkan 1 hari ke pulang
+
+        // Jika pulang lebih kecil dari berangkat, tambahkan 1 hari ke pulang (shift malam)
         if ($pulang->lessThan($berangkat)) {
             $pulang->addDay();
         }
-        $selisihJam = $berangkat->diffInHours($pulang);
 
-        if ($selisihJam < 4) {
-            return Response::json(array(
-                'message' => 'Jam Berangkat ('.$berangkat->format('H:i').') dan Jam Pulang ('.$pulang->format('H:i').') tidak valid, periksa data penambahan shift Anda sekali lagi!',
+        // === VALIDASI SHIFT ===
+
+        // 1️⃣ Jam sama
+        if ($berangkat->equalTo($pulang)) {
+            return response()->json([
+                'message' => 'Jam berangkat dan jam pulang tidak boleh sama!',
                 'code' => 500,
-            ));
-        } else {
-            if (!empty($getDuplicate)) {
-                return Response::json(array(
-                    'message' => 'Terdapat datarecord yang sama pada pengisian Nama Singkat Shift ('.$request->singkat.'), mohon ubah shift dengan penamaan lainnya!',
-                    'code' => 500,
-                ));
-            } else {
-                $data = new ref_jadwal_shift;
-                $data->pegawai_id = $request->pegawai;
-                $data->singkat = $request->singkat;
-                $data->shift = $request->shift;
-                $data->berangkat = Carbon::parse($request->berangkat)->isoFormat('HH:mm');
-                $data->pulang = Carbon::parse($request->pulang)->isoFormat('HH:mm');
-                $data->ket = $request->ket;
-                $data->save();
-
-                return Response::json(array(
-                    'message' => $tgl,
-                    'code' => 200,
-                ));
-            }
+            ]);
         }
+
+        // 2️⃣ Hitung durasi jam
+        $selisihJam = $berangkat->diffInMinutes($pulang) / 60; // pakai menit biar presisi (contoh 3.5 jam)
+
+        // 3️⃣ Minimal 4 jam
+        if ($selisihJam < 4) {
+            return response()->json([
+                'message' => 'Durasi shift terlalu singkat ('.$selisihJam.' jam). Minimal 4 jam.',
+                'code' => 500,
+            ]);
+        }
+
+        // 4️⃣ Maksimal 12 jam
+        if ($selisihJam > 18) {
+            return response()->json([
+                'message' => 'Durasi shift terlalu panjang ('.$selisihJam.' jam). Maksimal 18 jam.',
+                'code' => 500,
+            ]);
+        }
+
+        // 5️⃣ Cek duplikat singkat shift
+        if (!empty($getDuplicate)) {
+            return response()->json([
+                'message' => 'Terdapat data record yang sama pada pengisian Nama Singkat Shift ('.$request->singkat.'), mohon ubah shift dengan penamaan lainnya!',
+                'code' => 500,
+            ]);
+        }
+
+        // LOLOS SAVE DATA
+        $data = new ref_jadwal_shift;
+        $data->pegawai_id = $request->pegawai;
+        $data->singkat = $request->singkat;
+        $data->shift = $request->shift;
+        $data->berangkat = Carbon::parse($request->berangkat)->isoFormat('HH:mm');
+        $data->pulang = Carbon::parse($request->pulang)->isoFormat('HH:mm');
+        $data->ket = $request->ket;
+        $data->save();
+
+        return Response::json(array(
+            'message' => $tgl,
+            'code' => 200,
+        ));
     }
 
     function showUbahShift($id)
@@ -1286,11 +1311,27 @@ class JadwalController extends Controller
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        // Inisialisasi
+        // Ambil data shift
         $data = ref_jadwal_shift::find($id);
+        if (!$data) {
+            return response()->json(['message' => 'Data shift tidak ditemukan / sudah terhapus. Silakan cek kembali shift Anda.'], 500);
+        }
+
+        // Hitung selisih bulan antara created_at dan sekarang
+        $selisihBulan = Carbon::parse($data->created_at)->diffInMonths(Carbon::now());
+
+        // Jika selisih < 3 bulan, larang hapus
+        if ($selisihBulan < 3) {
+            return response()->json(['message' => 'Shift tidak dapat dihapus karena belum melewati 3 bulan sejak dibuat ('.$data->created_at->format('d-m-Y').'). Silakan Hubungi Admin untuk penghapusan lebih lanjut.'], 500);
+        }
+
+        // Jika sudah lebih dari 3 bulan, boleh hapus
         $data->delete();
 
-        return response()->json($tgl, 200);
+        return response()->json([
+            'message' => 'Shift berhasil dihapus pada '.$tgl,
+            'code' => 200,
+        ],200);
     }
 
     // REFERENSI STAFF -----------------------------------------------------------------------------------------------------------
@@ -1484,7 +1525,8 @@ class JadwalController extends Controller
                 }
             }
 
-            $data3 = ref_jadwal_shift::where('pegawai_id',$id)->whereNull('deleted_at')->get();
+            // $data3 = ref_jadwal_shift::where('pegawai_id',$id)->whereNull('deleted_at')->get();
+            $data3 = ref_jadwal_shift::withTrashed()->where('pegawai_id', $id)->get();
             if ($data3->count() > 0) {
                 foreach ($data3 as $item) {
                     $newData3 = new ref_jadwal_shift;

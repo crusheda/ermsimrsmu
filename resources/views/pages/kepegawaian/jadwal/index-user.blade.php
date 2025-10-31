@@ -518,6 +518,26 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
+                    moment.locale('id');
+                    let hideJadwal = true;
+
+                    // Data dari API
+                    const bulanAPI = parseInt(res.jadwal.bulan, 10); // contoh: 9
+                    const tahunAPI = parseInt(res.jadwal.tahun, 10); // contoh: 2025
+
+                    // Buat moment dari API
+                    const tanggalAPI = moment(`${tahunAPI}-${bulanAPI}-01`, 'YYYY-MM-DD');
+
+                    // Bulan & tahun sekarang
+                    const tanggalSekarang = moment().startOf('month'); // tanggal awal bulan ini
+
+                    // Bandingkan
+                    if (tanggalAPI.isSameOrAfter(tanggalSekarang)) {
+                        hideJadwal = false;
+                    } else {
+                        hideJadwal = true;
+                    }
+
                     if (res.detail.length === 0) {
                         notifier.show(
                             "Pesan Galat!",
@@ -543,8 +563,8 @@
                                                 <th class="text-center" rowspan="2">NO</th>
                                                 <th class="text-center" rowspan="2">NAMA</th>
                                                 <th class="text-center" colspan="${res.totalDay}">TANGGAL</th>
-                                                <th class="text-center" rowspan="2">JAM KERJA (JAM)</th>
-                                                <th class="text-center" colspan="${res.shift.length + 6}" style="background-color:#eaeeaf;border-top: 3px solid #eaeeaf;border-left: 3px solid #eaeeaf;border-right: 3px solid #eaeeaf;">JUMLAH SHIFT</th>
+                                                <th ${hideJadwal?"hidden":""} class="text-center" rowspan="2">JAM KERJA (JAM)</th>
+                                                <th ${hideJadwal?"hidden":""} class="text-center" colspan="${res.shift.length + 6}" style="background-color:#eaeeaf;border-top: 3px solid #eaeeaf;border-left: 3px solid #eaeeaf;border-right: 3px solid #eaeeaf;">JUMLAH SHIFT</th>
                                             </tr>
                                             <tr>`;
 
@@ -626,22 +646,22 @@
                             let kodeShift = pegawai[`tgl${i}`];
                             if(kodeShift && shiftDurasi[kodeShift]) totalJamKerja += shiftDurasi[kodeShift];
                         }
-                        content += `<td class="p-2">${totalJamKerja}</td>`;
+                        content += `<td class="p-2" ${hideJadwal?"hidden":""}>${totalJamKerja}</td>`;
 
                         // shift counts
                         res.shift.forEach((s,index)=>{
-                            content += `<td class="p-2 text-center" ${index==0?"style='border-left: 3px solid #eaeeaf;'":""}>${pegawaiShiftCounts[s.singkat]}</td>`;
+                            content += `<td class="p-2 text-center" ${index==0?"style='border-left: 3px solid #eaeeaf;'":""} ${hideJadwal?"hidden":""}>${pegawaiShiftCounts[s.singkat]}</td>`;
                         });
                         ['L','C','CM','CU','CH','CD'].forEach(s=>{
                             let border = (s==='CD') ? "style='border-right: 3px solid #eaeeaf;'" : '';
-                            content += `<td class="p-2 text-center" ${border}>${pegawaiShiftCounts[s]}</td>`;
+                            content += `<td class="p-2 text-center" ${border} ${hideJadwal?"hidden":""}>${pegawaiShiftCounts[s]}</td>`;
                         });
 
                         content += `</tr>`;
                     });
 
                     // tfoot
-                    content += `<tfoot style="border:3px solid #eaeeaf;">`;
+                    content += `<tfoot style="border:3px solid #eaeeaf;" ${hideJadwal?"hidden":""}>`;
                     shifts.forEach((shift,index)=>{
                         content += `<tr>${index===0 ? `<th rowspan="${shifts.length}" style="writing-mode: vertical-rl; transform: rotate(180deg); text-align:center;background-color:#eaeeaf;">JUMLAH SHIFT</th>` : '' }
                                         <th>${shift}</th>`;
@@ -653,7 +673,7 @@
                     content += `</tfoot></table></div></div>`;
 
                     // Keterangan shift
-                    content += `<div class="col-md-6"><div class="p-10"><h5>Shift Jaga :</h5><div class="list-group"><label class="list-group-item border-0 p-2"><ul>`;
+                    content += `<div class="col-md-6"><div class="p-10"><h5>Shift Jaga Terbaru :</h5><div class="list-group"><label class="list-group-item border-0 p-2"><ul>`;
                     res.shift.forEach(item=>{
                         content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
                     });
