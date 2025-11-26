@@ -1268,7 +1268,12 @@ class JadwalController extends Controller
     function ubahShift(Request $request)
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
-        $getDuplicate = ref_jadwal_shift::where('pegawai_id', $request->pegawai)->where('singkat',$request->singkat)->whereNull('deleted_at')->count();
+        // $getDuplicate = ref_jadwal_shift::where('pegawai_id', $request->pegawai)->where('singkat',$request->singkat)->whereNull('deleted_at')->count();
+        $getDuplicate = ref_jadwal_shift::where('pegawai_id', $request->pegawai)
+                        ->where('singkat', $request->singkat)
+                        ->whereNull('deleted_at')
+                        ->where('id', '!=', $request->id) // pengecualian ID
+                        ->count();
 
         // HITUNG SELISIH
         $berangkat = Carbon::parse($request->berangkat);
