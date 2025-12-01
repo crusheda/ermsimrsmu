@@ -155,7 +155,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'berkas', 'as' => ''], funct
             Route::post('suratkeluar', '\App\Http\Controllers\Berkas\Surat\SuratKeluarController@store')->name('suratkeluar.store');
 });
 
-Route::get('kalender', '\App\Http\Controllers\Kalender\KalenderController@index')->name('kalender.index');
+// KALENDER
+Route::group(['middleware' => ['auth'], 'prefix' => 'kalender', 'as' => ''], function () {
+    Route::get('/', '\App\Http\Controllers\Kalender\KalenderController@index')->name('kalender.index');
+});
 
 // PENGADAAN
 Route::group(['middleware' => ['auth'], 'prefix' => 'pengadaan', 'as' => ''], function () {
@@ -201,6 +204,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], fu
         // Route::post('ipsrs/terima/ubah', '\App\Http\Controllers\Perbaikan\ipsrsController@ubahTerima')->name('pengaduan.ipsrs.ubah.terima');
         // Route::post('ipsrs/tolak', '\App\Http\Controllers\Perbaikan\ipsrsController@tolak')->name('pengaduan.ipsrs.tolak');
         // Route::get('ipsrs/history', '\App\Http\Controllers\Perbaikan\ipsrsController@history')->name('ipsrs.history');
+
+    // IT
+        // Route::resource('it', '\App\Http\Controllers\Perbaikan\itController');
 });
 
 // E-RUANG

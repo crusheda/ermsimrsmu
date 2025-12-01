@@ -189,6 +189,8 @@
 
     {{-- PLUGIN JS --}}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/id.global.min.js"></script>
     {{-- <script src="{{ asset('js/plugins/index.global.min.js') }}"></script> --}}
     <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>

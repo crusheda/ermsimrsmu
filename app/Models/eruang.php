@@ -12,4 +12,9 @@ class eruang extends Model
     protected $table = 'eruang';
     public $timestamps = true;
     use SoftDeletes;
+
+    public function ruangan()
+    {
+        return $this->belongsTo(eruang_ref::class, 'id_ruangan', 'id');
+    }
 }

@@ -330,7 +330,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         // REKAP PENGADAAN
         Route::get('rekap/{bln}/{thn}/{kategori}', '\App\Http\Controllers\Pengadaan\PengadaanRekapController@table')->name('pengadaan.rekap.table');
 
-    // PENGADUAN
+    // PENGADUAN / PERBAIKAN
         // IPSRS
             // USER
                 Route::get('perbaikan/ipsrs/lokasi', '\App\Http\Controllers\Perbaikan\ipsrsController@autocompleteLokasi')->name('ipsrs.ac.lokasi');
@@ -351,6 +351,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                     Route::post('perbaikan/ipsrs/process/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@process')->name('ipsrs.process');
                     Route::post('perbaikan/ipsrs/finish/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@finish')->name('ipsrs.finish');
                     Route::get('perbaikan/ipsrs/result/{id}', '\App\Http\Controllers\Perbaikan\ipsrsController@result')->name('ipsrs.result');
+        // IT
 
     // E-RUANG
         Route::get('eruang', 'App\Http\Controllers\ERuang\ERuangController@table')->name('eruang.table');

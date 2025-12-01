@@ -29,6 +29,14 @@
             <span class="pc-mtext">Masukan / Saran</span>
         </a>
     </li>
+    <li class="pc-item">
+        <a href="{{ route('kalender.index') }}" class="pc-link">
+            <span class="pc-micon">
+                <i class="fas fa-calendar-day"></i>
+            </span>
+            <span class="pc-mtext">Kalender Digital</span>
+        </a>
+    </li>
     <li class="pc-item pc-caption"><label>Kepegawaian</label></li>
     @if (Auth::user()->getPermission(['admin_kepegawaian']) == true || Auth::user()->getRole('admin_kepegawaian_kepala') == true)
         <li class="pc-item">

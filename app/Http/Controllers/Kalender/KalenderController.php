@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Kalender;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Carbon\CarbonPeriod;
+use App\Models\eruang_ref;
+use App\Models\eruang;
+use Carbon\Carbon;
+use Auth, DB;
+use Validator,Redirect,Response,File,Storage;
 
 class KalenderController extends Controller
 {
@@ -14,12 +21,48 @@ class KalenderController extends Controller
 
     function dataKalender()
     {
-        $events = [
-            ['title' => 'Shift Pagi', 'start' => '2025-10-20'],
-            ['title' => 'Shift Malam', 'start' => '2025-10-21', 'end' => '2025-10-22'],
-            ['title' => 'Meeting Tim IT', 'start' => '2025-10-25T10:00:00']
+        // Mapping warna berdasarkan id_ruangan
+        $colors = [
+            1 => '#007bff', // Aula Ahmad Dahlan
+            2 => '#28a745', // Perpustakaan
+            3 => '#ffc107', // Komite Medik
+            4 => '#dc3545', // Ruang Direksi
         ];
-        return response()->json($events, 200);
+
+        // include relasi ruangan
+        $data = eruang::with('ruangan')->leftJoin('users','eruang.id_user','=','users.id')->select('eruang.*','users.nama as nama_user')->get();
+
+        $events = [];
+
+        foreach ($data as $row) {
+
+            $color = $colors[$row->id_ruangan] ?? '#6c757d'; // default abu-abu
+
+            $start = $row->tgl . 'T' . ($row->jam_mulai ?? '00:00:00');
+            $end   = $row->tgl . 'T' . ($row->jam_selesai ?? $row->jam_mulai ?? '00:00:00');
+
+            $events[] = [
+                'id'    => $row->id,
+                'title' => $row->agenda . ' (' . ($row->ruangan->nama ?? '-') . ')',
+
+                'start' => $start,
+                'end'   => $end,
+
+                'color' => $color,
+                'textColor' => '#fff',
+
+                'extendedProps' => [
+                    'ruangan'    => $row->ruangan->nama ?? '-',
+                    'ket'        => $row->ket,
+                    'added_by'   => $row->nama_user,
+                    'jam_mulai'  => $row->jam_mulai,
+                    'jam_selesai'=> $row->jam_selesai,
+                    'added_at'   => $row->created_at,
+                ],
+            ];
+        }
+
+        return response()->json($events);
     }
 
     function tambahKalender(Request $request)

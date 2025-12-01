@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Surat Perjalanan Dinas</h2>
+                        <h2 class="mb-0">Surat <b class="text-primary">Perjalanan Dinas</b></h2>
                     </div>
                 </div>
             </div>
@@ -430,7 +430,7 @@
                                             content += `<li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
                                         }
                         content += "</div></center></td>";
-                        content += `<td>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
+                        content += `<td class='text-center'>${new Date(item.tgl).toLocaleString("sv-SE")}</td>`;
                         //  onclick="window.open('/kepegawaian/pd/`+item.id+`/download')"
                         if (item.kendaraan == 1) {
                             kendaraan = '[Pribadi] Motor';
@@ -463,7 +463,7 @@
                                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara">` + item.acara + `</u> ${statusPaid}</a>
                                                 </h6>
                                                 <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b> dan Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small>
-                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan == 3?``:`Milik<br>(<a href='javascript:void(0);'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`}</small>
+                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan == 3?``:`Milik<br>(<a href='javascript:void(0);' class='text-wrap'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`}</small>
                                             </div>
                                         </div>
                                     </td>`;
