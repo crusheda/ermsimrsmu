@@ -43,7 +43,7 @@ class KalenderController extends Controller
 
             $events[] = [
                 'id'    => $row->id,
-                'title' => $row->agenda . ' (' . ($row->ruangan->nama ?? '-') . ')',
+                'title' => $row->agenda, // . ' (' . ($row->ruangan->nama ?? '-') . ')',
 
                 'start' => $start,
                 'end'   => $end,

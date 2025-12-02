@@ -238,6 +238,7 @@
                                     </div>
 
                                     <div class="text-center mt-4">
+                                        <button type="button" class="btn btn-info me-1" onclick="window.location='{{ route('kalender.index') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Lihat Kalender Digital"><i class="fas fa-calendar-day"></i>&nbsp;&nbsp;Kalender Digital</button>
                                         <button type="button" class="btn btn-success validasiTgl" id="btn-simpan" onclick="prosesSimpan()" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Ajukan untuk melanjutkan proses Verifikasi Jadwal"><i class="fas fa-stamp"></i>&nbsp;&nbsp;Ajukan Sekarang</button>
                                     </div>
                                 </form>

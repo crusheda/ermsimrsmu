@@ -35,9 +35,10 @@
         <div class="col-xl-12">
             <div class="card mb-3">
                 <div class="card-header d-flex align-items-center justify-content-between py-2 px-2">
-                    <button type="button" class="btn btn-info rounded" onclick="refresh()" disabled><i class="fa-fw fas fa-sort-amount-down nav-icon me-1"></i> Riwayat</button>
+                    {{-- <button type="button" class="btn btn-info rounded" onclick="refresh()" disabled><i class="fa-fw fas fa-sort-amount-down nav-icon me-1"></i></button> --}}
+                    <h6 class="ms-2 mb-0">Klik <span class="badge text-bg-primary">BARIS KALENDER</span> untuk melihat <mark>Detail Acara</mark></h6>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#tambah" disabled><i class="fa-fw fas fa-plus-square nav-icon me-1"></i> Tambah</button>
+                        <button type="button" class="btn btn-info rounded" onclick="window.location='{{ route('eruang.index') }}'" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Acara / Kegiatan"><i class="fa-fw fas fa-plus-square nav-icon me-1"></i> Tambah Acara <span class="badge bg-light text-dark ms-1 p-1">E-Ruang</span></button>
                     </div>
                 </div>
             </div>
@@ -48,7 +49,7 @@
     </div>
 
     <div class="modal fade" id="calendar-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="calendar-modal-title f-w-600 text-truncate">Modal title</h4><a href="#"
@@ -112,7 +113,7 @@
                                 class="avtar avtar-s btn-link-success btn-pc-default" data-bs-toggle="tooltip"
                                 title="Edit"><i class="ti ti-edit-circle f-18"></i></a></li>
                     </ul> --}}
-                    <div class="flex-grow-1 text-end"><button type="button" class="btn btn-primary"
+                    <div class="flex-grow-1 text-end"><button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Tutup</button></div>
                 </div>
             </div>
@@ -166,7 +167,7 @@
                     info.el.style.borderColor = info.event.backgroundColor;
                     info.el.style.color = info.event.textColor;
                 },
-                
+
                 eventClick: function(info) {
                     let ev = info.event;
                     let ket = ev.extendedProps.ket ?? '-';
@@ -195,7 +196,7 @@
                     let finalDateText = `${tglText} Pukul ${jamMulai} - ${jamSelesai} WIB`;
 
                     // Isi modal
-                    $('.calendar-modal-title').text(ev.title);
+                    $('.calendar-modal-title').html('<span class="badge text-bg-dark">Detail Acara</span> '+ev.title);
                     $('.pc-event-title').text(ev.title);
                     $('.pc-event-venue').text(ruangan);
                     $('.pc-event-date').text(finalDateText);

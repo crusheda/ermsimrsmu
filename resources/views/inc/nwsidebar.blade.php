@@ -35,6 +35,7 @@
                 <i class="fas fa-calendar-day"></i>
             </span>
             <span class="pc-mtext">Kalender Digital</span>
+            <span class="pc-badge bg-danger"><i class="fas fa-fire"></i></span>
         </a>
     </li>
     <li class="pc-item pc-caption"><label>Kepegawaian</label></li>
