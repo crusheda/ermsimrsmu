@@ -103,7 +103,10 @@
                         <b>dr. H. Ahmad Sutamat, Sp.OG</b>
                     @elseif ($list['show']->dr == 3)
                         <img src="{{ asset('images/pku/kebidanan/ttd-febrian.png') }}" width="45%"><br>
-                        <b>dr. Febrian Andhika A.,Sp.OG</b>
+                        <b>dr. Febrian Andhika A., Sp.OG</b>
+                    @elseif ($list['show']->dr == 4)
+                        <br><br>
+                        <b>dr. Putri Eka Pratiwi, Sp.OG</b>
                     @endif
                 </p>
             </div>

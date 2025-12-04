@@ -33,14 +33,14 @@
                                     data-bs-placement="bottom" data-bs-html="true" title="<span>Tambah Data SKL</span>"
                                     value="animate__jackInTheBox">
                                     <i class="material-icons-two-tone me-1 text-light">add_box</i>
-                                    <span class="align-middle">Tambah</span>
+                                    <span class="align-middle">Tambah SKL</span>
                                 </button>
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                     data-bs-placement="bottom" data-bs-html="true" title="<span>Tampilkan 30 Data SKL Terbaru</span>" onclick="refresh()">
-                                    <i class="fa-fw fas fa-sync nav-icon"></i></button>
+                                    <i class="fa-fw fas fa-sync nav-icon me-1"></i> 30 Data Terakhir</button>
                                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="tooltip" data-bs-offset="0,4"
                                     data-bs-placement="bottom" id="btn-showall" data-bs-html="true" title="<span>Tampilkan Semua Data SKL</span>" onclick="showAll()">
-                                    <i class="fa-fw fas fa-history"></i>&nbsp;&nbsp;Riwayat</button>
+                                    <i class="fa-fw fas fa-history me-1"></i> Seluruh Data</button>
                             </div>
                         </h5>
                         <div class="flex-shrink-0">
@@ -218,6 +218,7 @@
                                         <option value="1">dr. Gede Sri Dhyana M. A., Sp.OG</option>
                                         <option value="2">dr. H. Ahmad Sutamat, Sp.OG</option>
                                         <option value="3">dr. Febrian Andhika Adiyana, Sp.OG</option>
+                                        <option value="4">dr. Putri Eka Pratiwi, Sp.OG</option>
                                     </select>
                                 </div>
                             </div>
@@ -497,7 +498,7 @@
                             content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                         if (item.kelamin == "perempuan")
                             content += "<kbd style='background-color: #00898E'>P</kbd>&nbsp;";
-                        content +=  " / " + item.bb + " / " + item.tb + "</td><td>" +
+                        content +=  " / " + item.bb + " / " + item.tb + "</td><td class='text-wrap'>" +
                             item.alamat + "</td>";
                         content += `</tr>`;
                         $('#tampil-tbody').append(content);
@@ -660,7 +661,7 @@
                                 content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                             if (item.kelamin == "perempuan")
                                 content += "<kbd style='background-color: #00898E'>P</kbd>&nbsp;";
-                            content +=  " / " + item.bb + " / " + item.tb + "</td><td>" +
+                            content +=  " / " + item.bb + " / " + item.tb + "</td><td class='text-wrap'>" +
                                 item.alamat + "</td>";
                             content += `</tr>`;
                             $('#tampil-tbody').append(content);
@@ -757,7 +758,7 @@
                             content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                         if (item.kelamin == "perempuan")
                             content += "<kbd style='background-color: #00898E'>P</kbd>&nbsp;";
-                        content +=  " / " + item.bb + " / " + item.tb + "</td><td>" +
+                        content +=  " / " + item.bb + " / " + item.tb + "</td><td class='text-wrap'>" +
                             item.alamat + "</td>";
                         content += `</tr>`;
                         $('#tampil-tbody').append(content);
@@ -864,7 +865,7 @@
                             content += "<kbd style='background-color: #3298FF'>L</kbd>&nbsp;";
                         if (item.kelamin == "perempuan")
                             content += "<kbd style='background-color: #00898E'>P</kbd>&nbsp;";
-                        content +=  " / " + item.bb + " / " + item.tb + "</td><td>" +
+                        content +=  " / " + item.bb + " / " + item.tb + "</td><td class='text-wrap'>" +
                             item.alamat + "</td>";
                         content += `</tr>`;
                         $('#tampil-tbody').append(content);
@@ -960,6 +961,7 @@
                         <option value="1" ${res.show.dr == '1'? "selected":""}>dr. Gede Sri Dhyana M. A., Sp.OG</option>
                         <option value="2" ${res.show.dr == '2'? "selected":""}>dr. H. Ahmad Sutamat, Sp.OG</option>
                         <option value="3" ${res.show.dr == '3'? "selected":""}>dr. Febrian Andhika Adiyana, Sp.OG</option>
+                        <option value="4" ${res.show.dr == '4'? "selected":""}>dr. Putri Eka Pratiwi, Sp.OG</option>
                     `);
                 }
             });
