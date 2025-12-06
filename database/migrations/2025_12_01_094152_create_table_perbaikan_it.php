@@ -13,8 +13,37 @@ class CreateTablePerbaikanIt extends Migration
      */
     public function up()
     {
-        Schema::create('table_perbaikan_it', function (Blueprint $table) {
+        Schema::create('perbaikan_it', function (Blueprint $table) {
             $table->id();
+
+                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                $table->foreign('pegawai_id')->references('id')->on('users');
+
+                $table->string('title', 200)->nullable();
+                $table->string('filename', 300)->nullable();
+
+            $table->string('lokasi', 300)->comment('Lokasi Pengaduan (Unit)')->nullable();
+            $table->string('estimasi', 300)->comment('Estimasi Pengerjaan Sampai Selesai')->nullable();
+
+            $table->dateTime('tgl_pengaduan')->nullable();
+            $table->longText('ket_pengaduan')->nullable();
+
+            $table->dateTime('tgl_terima')->nullable();
+            $table->dateTime('tgl_kerjakan')->nullable();
+            $table->dateTime('tgl_selesai')->nullable();
+            $table->dateTime('tgl_tolak')->nullable();
+
+            $table->longText('ket_terima')->nullable();
+            $table->longText('ket_kerjakan')->nullable();
+            $table->longText('ket_selesai')->nullable();
+            $table->longText('ket_tolak')->nullable();
+
+            $table->integer('user_terima')->nullable();
+            $table->integer('user_kerjakan')->nullable();
+            $table->integer('user_selesai')->nullable();
+            $table->integer('user_tolak')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +55,6 @@ class CreateTablePerbaikanIt extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_perbaikan_it');
+        Schema::dropIfExists('perbaikan_it');
     }
 }

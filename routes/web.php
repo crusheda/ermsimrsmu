@@ -15,6 +15,9 @@ use App\Services\WhatsappService;
 |
 */
 
+// DEFINISI
+use App\Http\Controllers\Perbaikan\itController;
+// ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Auth::routes();
 Auth::routes(['register' => false]);
@@ -206,7 +209,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'perbaikan', 'as' => ''], fu
         // Route::get('ipsrs/history', '\App\Http\Controllers\Perbaikan\ipsrsController@history')->name('ipsrs.history');
 
     // IT
-        // Route::resource('it', '\App\Http\Controllers\Perbaikan\itController');
+        Route::get('it', [itController::class, 'index'])->name('perbaikan.it.index');
 });
 
 // E-RUANG
