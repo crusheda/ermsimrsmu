@@ -180,6 +180,7 @@ return [
         App\Providers\ViewServiceProvider::class, // CUSTOM NOTIFICATION FOR SDI
         Milon\Barcode\BarcodeServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        Telegram\Bot\Laravel\TelegramServiceProvider::class,
     ],
 
     /*
@@ -238,6 +239,7 @@ return [
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
+        'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
     ],
 
 ];

@@ -27,7 +27,11 @@
 
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
+        <div class="col-md-6">
+            <div class="card">
 
+            </div>
+        </div>
     </div>
     <!-- [ Main Content ] end -->
 @endsection

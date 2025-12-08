@@ -15,14 +15,16 @@ class CreateTablePerbaikanIt extends Migration
     {
         Schema::create('perbaikan_it', function (Blueprint $table) {
             $table->id();
+            $table->string('tiket_id', 300)->comment('ID Tiket Telegram')->nullable();
 
-                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
-                $table->foreign('pegawai_id')->references('id')->on('users');
+                // $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                // $table->foreign('pegawai_id')->references('id')->on('users');
 
                 $table->string('title', 200)->nullable();
                 $table->string('filename', 300)->nullable();
 
-            $table->string('lokasi', 300)->comment('Lokasi Pengaduan (Unit)')->nullable();
+            $table->string('nama', 300)->comment('Nama Lengkap')->nullable();
+            $table->string('unit', 300)->nullable();
             $table->string('estimasi', 300)->comment('Estimasi Pengerjaan Sampai Selesai')->nullable();
 
             $table->dateTime('tgl_pengaduan')->nullable();

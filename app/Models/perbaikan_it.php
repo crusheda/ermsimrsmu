@@ -12,4 +12,27 @@ class perbaikan_it extends Model
     protected $table = 'perbaikan_it';
     public $timestamps = true;
     use SoftDeletes;
+
+    protected $fillable = [
+        'tiket_id',
+        'title',
+        'filename',
+        'nama',
+        'unit',
+        'estimasi',
+        'tgl_pengaduan',
+        'ket_pengaduan',
+        'tgl_terima',
+        'tgl_kerjakan',
+        'tgl_selesai',
+        'tgl_tolak',
+        'ket_terima',
+        'ket_kerjakan',
+        'ket_selesai',
+        'ket_tolak',
+        'user_terima',
+        'user_kerjakan',
+        'user_selesai',
+        'user_tolak',
+    ];
 }

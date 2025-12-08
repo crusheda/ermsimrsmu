@@ -27,4 +27,24 @@ class itController extends Controller
 
         return view('pages.perbaikan.it.index-user')->with('list', $data);
     }
+
+    public function updateStatus(Request $r)
+    {
+        $tiket = perbaikan_it::find($r->id);
+
+        $chatId = $tiket->tiket_id ? explode("-", $tiket->tiket_id)[2] : null;
+
+        if (!$chatId) return;
+
+        $statusMsg = "🔔 *Update Status Tiket IT*\n\n"
+                    ."🎫 Tiket: {$tiket->tiket_id}\n"
+                    ."📢 Status: {$r->status}\n"
+                    ."📝 Catatan: {$r->catatan}\n"
+                    ."⏰ Waktu: " . now();
+
+        app(TelegramService::class)->sendMessage($chatId, $statusMsg);
+
+        return back()->with("success", "Status berhasil dikirim ke user");
+    }
+
 }

@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// ROUTE TELEGRAM BOT
+use \App\Http\Controllers\Telegram\botTelegramController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -446,3 +449,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             Route::get('manrisk/data','\App\Http\Controllers\Mutu\ManriskController@table');
             Route::get('manrisk/hapus/{id}', '\App\Http\Controllers\Mutu\ManriskController@hapus');
 // });
+
+// Endpoint webhook utama Telegram
+Route::post('simrsmubot/webhook', [botTelegramController::class, 'webhook']);
+
+// (Opsional) Debug endpoint untuk print update ke log
+Route::post('simrsmubot/debug', [botTelegramController::class, 'commandHandlerWebhook']);
+
+// (Opsional) Set webhook manual, kalau Anda mau panggil dari browser
+Route::get('telegram/setWebhook', function () {
+    $token = env('TELEGRAM_BOT_TOKEN');
+    $webhook = env('TELEGRAM_WEBHOOK_URL');
+
+    $url = "https://api.telegram.org/bot{$token}/setWebhook?url={$webhook}";
+
+    return file_get_contents($url);
+});
