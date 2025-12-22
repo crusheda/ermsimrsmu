@@ -8,6 +8,11 @@
             transform-style: preserve-3d;
             transform: translate3d(0,0,10px) !important;
         }
+        .absen-locked {
+            border-width: 2px !important;
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
     </style>
 
     <div class="page-header">
@@ -104,7 +109,17 @@
                                                     <input type="text" class="form-control" name="nama_staf[]" value="{{ $item->pegawai_nama }}" hidden>
                                                     <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
                                                     <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
-                                                    <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $item->nick != null?$item->nick:$item->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div>
+                                                    <div class="d-flex justify-content-start align-items-center">
+                                                        <div class="d-flex flex-column" style="max-width: 150px;">
+                                                            <h6 class="mb-0 text-truncate">
+                                                                {{ $item->nick != null ? $item->nick : $item->name }}
+                                                            </h6>
+                                                            <small class="text-muted text-truncate">
+                                                                {{ $item->jabatan ?? '' }}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                    {{-- <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0 text-truncate'>{{ $item->nick != null?$item->nick:$item->name }}</h6><small class='text-truncate text-muted'>{{ $item->jabatan?$item->jabatan:'' }}</small></div></div> --}}
                                                 </td>
                                                 @for ($i = 1; $i <= $totalDay; $i++)
                                                     @php
@@ -128,37 +143,40 @@
                                                     @else
                                                         <td class="p-2">
                                                     @endif
-                                                            <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required>
+                                                            @php
+                                                                $tanggalFull = sprintf(
+                                                                    '%04d-%02d-%02d',
+                                                                    $list['jadwal']->tahun,
+                                                                    $list['jadwal']->bulan,
+                                                                    $i
+                                                                );
+
+                                                                $isReadonly = isset($list['absensi'][$item->pegawai_id])
+                                                                    && in_array($tanggalFull, $list['absensi'][$item->pegawai_id]);
+                                                            @endphp
+
+                                                            <input type="text"
+                                                                class="form-control inputTgl text-center clearTxt {{ $isReadonly ? 'absen-locked' : '' }}"
+                                                                maxlength="2"
+                                                                name="tgl{{ $i }}[]"
+                                                                id="{{ $n-1 }}tgl{{ $i }}"
+                                                                value="{{ $item->$hit ? $item->$hit : '' }}"
+                                                                placeholder="......."
+                                                                style="
+                                                                    padding: 0;
+                                                                    border-radius: 0;
+                                                                    border-color: {{ $isReadonly ? '#0d6efd' : '#ced4da' }};
+                                                                    {{ $isReadonly ? 'background-color:#f8f9fa; pointer-events:none;' : '' }}
+                                                                "
+                                                                {{ $isReadonly ? 'readonly' : '' }}
+                                                                data-bs-toggle="{{ $isReadonly ? 'tooltip' : '' }}"
+                                                                data-bs-placement="bottom"
+                                                                data-bs-original-title="{{ $isReadonly ? 'User telah melakukan Absensi' : '' }}"
+                                                                required>
+                                                            {{-- <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required> --}}
                                                         </td>
                                                 @endfor
                                             </tr>
-                                            {{-- @foreach ($list['ref_jabatan'] as $jab)
-                                                @if ($jab->id_staf == $item->pegawai_id)
-                                                    <tr style="background-color: @if($jab->color) {{ $jab->color }} @endif">
-                                                        <td>{{ $n++ }}</td>
-                                                        <td>
-                                                            <input type="text" class="form-control" name="id_staf[]" value="{{ $item->pegawai_id }}" hidden>
-                                                            <input type="text" class="form-control" name="nama_staf[]" value="{{ $item->pegawai_nama }}" hidden>
-                                                            <input type="text" class="form-control" name="jabatan_staf[]" value="{{ $item->jabatan?$item->jabatan:'' }}" hidden>
-                                                            <input type="text" class="form-control" name="color_staf[]" value="{{ $item->color?$item->color:'' }}" hidden>
-                                                            <div class='d-flex justify-content-start align-items-center'><div class='d-flex flex-column'><h6 class='mb-0'>{{ $item->nick != null?$item->nick:$item->name }}</h6><small class='text-truncate text-muted'>{{ $jab->jabatan?$jab->jabatan:'' }}</small></div></div>
-                                                        </td>
-                                                        @for ($i = 1; $i <= $totalDay; $i++)
-                                                            @php
-                                                                $dayb = \Carbon\Carbon::create($list['jadwal']->tahun, $list['jadwal']->bulan, $i)->dayName;
-                                                                $hit = 'tgl'.$i;
-                                                            @endphp
-                                                            @if ($dayb == 'Minggu')
-                                                                <td class="p-2" style="background-color: #fed8b9">
-                                                            @else
-                                                                <td class="p-2">
-                                                            @endif
-                                                                    <input type="text" class="form-control inputTgl text-center clearTxt" maxlength="2" name="tgl{{ $i }}[]" id="{{ $n-1 }}tgl{{ $i }}" value="{{ $item->$hit?$item->$hit:'' }}" placeholder="......." style="padding: 0;border-radius: 0" required>
-                                                                </td>
-                                                        @endfor
-                                                    </tr>
-                                                @endif
-                                            @endforeach --}}
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -175,7 +193,9 @@
                                             <i class="ti ti-arrow-narrow-right me-1"></i> Penulisan Huruf pada kolom isian Shift Jaga <i><b>Auto Capslock</b></i> meskipun sudah disimpan sekalipun <br>
                                             <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit<br>
                                             <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut <br>
-                                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengubahan shift pada jadwal dinas diluar per tanggal 1 sampai dengan sebelum hari ini (Kemarin) akan terkunci oleh Sistem (Tidak dapat diubah lagi)
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Pengubahan shift pada jadwal dinas diluar per tanggal 1 sampai dengan sebelum hari ini (Kemarin) akan terkunci oleh Sistem (Tidak dapat diubah lagi) <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> <u>Garis Border</u> berwarna <b style="color:blue">BIRU</b> pada kolom isian menandakan bahwa user telah melakukan absensi pada tanggal tersebut, sehingga kolom isian menjadi terkunci dan tidak dapat diubah lagi <br>
+                                            <i class="ti ti-arrow-narrow-right me-1"></i> Apabila User terkendala dalam pengisian Jadwal Dinas yang sudah terkunci oleh Sistem, silakan menghubungi Bagian SDI untuk dilakukan perubahan pada Sistem
                                         </small>
                                     </div>
                                 </div>
@@ -268,26 +288,82 @@
             $(".pc-sidebar").addClass("pc-sidebar-hide"); // HIDE NAVBAR
 
             const today = new Date();
-            const currentDate = today.getDate();
-            const currentMonth = today.getMonth() + 1; // getMonth() hasilnya 0-11
-            const activeMonth = parseInt("{{ $list['jadwal']->bulan }}", 10); // ini variabel dari backend, contoh: 6 untuk Juni
+            const currentDate  = today.getDate();
+            const currentMonth = today.getMonth() + 1;
+            const currentYear  = today.getFullYear();
+
+            const activeMonth = parseInt("{{ $list['jadwal']->bulan }}", 10);
+            const activeYear  = parseInt("{{ $list['jadwal']->tahun }}", 10);
+
             const totalDay = {{ $totalDay }};
             const currentRowCount = {{ count($list['detail']) }};
-            console.log({{ $totalDay }});
+
             for (let row = 1; row <= currentRowCount; row++) {
                 for (let day = 1; day <= totalDay; day++) {
-                    const id = `#${row}tgl${day}`;
-                    const input = $(id);
-                    if (input.length) {
-                        // readonly hanya jika bulan aktif adalah bulan sekarang atau sebelumnya
-                        if (activeMonth <= currentMonth && day < currentDate && activeMonth === currentMonth) {
-                            input.prop('readonly', true).addClass('bg-light text-muted');
-                        } else if (activeMonth < currentMonth) {
-                            input.prop('readonly', true).addClass('bg-light text-muted');
-                        }
+
+                    const input = $(`#${row}tgl${day}`);
+                    if (!input.length) continue;
+
+                    /**
+                     * RULE:
+                     * 1. Tahun lampau → readonly semua
+                     * 2. Tahun sama & bulan lampau → readonly semua
+                     * 3. Tahun sama & bulan sama → readonly sampai kemarin
+                     * 4. Tahun depan → bebas edit
+                     */
+
+                    // Tahun lampau
+                    if (activeYear < currentYear) {
+                        input.prop('readonly', true).addClass('bg-light text-muted');
+                    }
+
+                    // Tahun sama, bulan lampau
+                    else if (activeYear === currentYear && activeMonth < currentMonth) {
+                        input.prop('readonly', true).addClass('bg-light text-muted');
+                    }
+
+                    // Tahun & bulan sama → lock sampai kemarin
+                    else if (
+                        activeYear === currentYear &&
+                        activeMonth === currentMonth &&
+                        day < currentDate
+                    ) {
+                        input.prop('readonly', true).addClass('bg-light text-muted');
+                    }
+
+                    // Selain itu (bulan & tahun depan) → editable
+                    else {
+                        input.prop('readonly', false).removeClass('bg-light text-muted');
                     }
                 }
             }
+
+            var tooltipTriggerList = [].slice.call(
+                document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            );
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            // const today = new Date();
+            // const currentDate = today.getDate();
+            // const currentMonth = today.getMonth() + 1; // getMonth() hasilnya 0-11
+            // const activeMonth = parseInt("{{ $list['jadwal']->bulan }}", 10); // ini variabel dari backend, contoh: 6 untuk Juni
+            // const totalDay = {{ $totalDay }};
+            // const currentRowCount = {{ count($list['detail']) }};
+            // for (let row = 1; row <= currentRowCount; row++) {
+            //     for (let day = 1; day <= totalDay; day++) {
+            //         const id = `#${row}tgl${day}`;
+            //         const input = $(id);
+            //         if (input.length) {
+            //             // readonly hanya jika bulan aktif adalah bulan sekarang atau sebelumnya
+            //             if (activeMonth <= currentMonth && day < currentDate && activeMonth === currentMonth) {
+            //                 input.prop('readonly', true).addClass('bg-light text-muted');
+            //             } else if (activeMonth < currentMonth) {
+            //                 input.prop('readonly', true).addClass('bg-light text-muted');
+            //             }
+            //         }
+            //     }
+            // }
 
             // SETELAH VALIDASI DI ATAS SELESAI, MEMUNCULKAN INPUT JADWAL
             $('#show-loading').prop('hidden',true);

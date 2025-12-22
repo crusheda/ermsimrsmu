@@ -164,7 +164,10 @@
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Khusus untuk pengisian <b class="text-success">DL (Dinas Luar)</b> hanya dapat dilakukan saat Absen Dinas Luar pada aplikasi absensi / melalui pengajuan ke bagian SDI<br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Penulisan Huruf pada kolom isian Shift Jaga <i><b>Auto Capslock</b></i> meskipun sudah disimpan sekalipun <br>
                                         <i class="ti ti-arrow-narrow-right me-1"></i> Jadwal Dinas akan berpengaruh pada waktu <b>Absensi</b> dikemudian hari, maka dari itu silakan Cek Jadwal kembali sebelum submit<br>
-                                        <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut pada halaman Referensi Staf <a href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}"><u><b>(Klik Disini)</b></u></a>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Apabila terdapat anggota unit yang sudah ditambahkan pada referensi namun belum masuk ke tabel di atas, silakan melengkapi Jabatan dan Urutan pada masing-masing karyawan tersebut pada halaman Referensi Staf <a href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}"><u><b>(Klik Disini)</b></u></a> <br>
+                                        {{-- <i class="ti ti-arrow-narrow-right me-1"></i> Pengubahan shift pada jadwal dinas diluar per tanggal 1 sampai dengan sebelum hari ini (Kemarin) akan terkunci oleh Sistem (Tidak dapat diubah lagi) <br> --}}
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> <u>Garis Border</u> berwarna <b style="color:blue">BIRU</b> pada kolom isian menandakan bahwa user telah melakukan absensi pada tanggal tersebut, sehingga kolom isian menjadi terkunci dan tidak dapat diubah lagi <br>
+                                        <i class="ti ti-arrow-narrow-right me-1"></i> Apabila User terkendala dalam pengisian Jadwal Dinas yang sudah terkunci oleh Sistem, silakan menghubungi Bagian SDI untuk dilakukan perubahan pada Sistem
                                     </small>
                                 </div>
                             </div>

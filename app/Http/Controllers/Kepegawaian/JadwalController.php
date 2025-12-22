@@ -7,6 +7,7 @@ use App\Models\referensi;
 use App\Models\datalogs;
 use App\Models\users;
 use App\Models\users_foto;
+use App\Models\kepegawaian\absensi;
 use App\Models\kepegawaian\jadwal;
 use App\Models\kepegawaian\jadwal_detail;
 use App\Models\kepegawaian\ref_jadwal_shift;
@@ -265,9 +266,27 @@ class JadwalController extends Controller
                             ->orderBy('kepegawaian_jadwal_detail.id','asc')
                             ->get();
                 $jml_tgl = Carbon::create($jadwal->tahun, $jadwal->bulan)->format('t');
+                $pegawaiIds = $detail->pluck('pegawai_id')->unique()->values();
+
+                // print_r($pegawaiIds);
+                // die();
+                $absensi = absensi::selectRaw('pegawai_id, DATE(tgl_in) as tanggal')
+                                    ->whereIn('pegawai_id', $pegawaiIds)
+                                    ->whereYear('tgl_in', $jadwal->tahun)
+                                    ->whereMonth('tgl_in', $jadwal->bulan)
+                                    ->whereNull('deleted_at')
+                                    ->groupBy('pegawai_id', 'tanggal')
+                                    ->get()
+                                    ->groupBy('pegawai_id')
+                                    ->map(function ($items) {
+                                        return $items->pluck('tanggal')->toArray();
+                                    });
+
+                // print_r($absensi);
+                // die();
 
                 $data = [
-                    // 'show' => $show,
+                    'absensi' => $absensi,
                     'jadwal' => $jadwal,
                     'detail' => $detail,
                     'ref_shift' => $ref_shift,

@@ -527,16 +527,31 @@
                             if(kodeShift && pegawaiShiftCounts[kodeShift]!==undefined) pegawaiShiftCounts[kodeShift]++;
                         }
 
-                        content += `<tr class="text-center">
-                                        <td style="background-color: ${pegawai.color}">${n++}</td>
-                                        <td class="text-start" style="background-color: ${pegawai.color}">
-                                            <div class='d-flex justify-content-start align-items-center'>
-                                                <div class='d-flex flex-column'>
-                                                    <h6 class='mb-0 clef'>${pegawai.pegawai_nama}</h6>
-                                                    <small class='text-truncate text-muted clef'>${pegawai.jabatan || ''}</small>
-                                                </div>
-                                            </div>
-                                        </td>`;
+                        content += `
+                        <tr class="text-center">
+                            <td style="background-color: ${pegawai.color}">${n++}</td>
+                            <td class="text-start" style="background-color: ${pegawai.color}">
+                                <div class="d-flex justify-content-start align-items-center">
+                                    <div class="d-flex flex-column" style="max-width:150px;">
+                                        <h6 class="mb-0 text-truncate">
+                                            ${pegawai.pegawai_nama}
+                                        </h6>
+                                        <small class="text-muted text-truncate">
+                                            ${pegawai.jabatan || ''}
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>`;
+                        // content += `<tr class="text-center">
+                        //                 <td style="background-color: ${pegawai.color}">${n++}</td>
+                        //                 <td class="text-start" style="background-color: ${pegawai.color}">
+                        //                     <div class='d-flex justify-content-start align-items-center'>
+                        //                         <div class='d-flex flex-column'>
+                        //                             <h6 class='mb-0 clef'>${pegawai.pegawai_nama}</h6>
+                        //                             <small class='text-truncate text-muted clef'>${pegawai.jabatan || ''}</small>
+                        //                         </div>
+                        //                     </div>
+                        //                 </td>`;
 
                         // tanggal
                         for (let i=1;i<=res.totalDay;i++){
@@ -595,7 +610,7 @@
                                 </label>`;
                     res.ln.forEach(item=>{
                         content += `<label class="list-group-item border-0 p-1">
-                                        <a class="btn btn-light me-2" style="background-color: ${item.color}" href="javascript:void(0);"></a>
+                                        <a class="btn btn-light me-1" style="background-color: ${item.color}" href="javascript:void(0);"></a>
                                         ${item.deskripsi}${item.keterangan ? ' ('+item.keterangan+')' : ''} ${item.tgl ? ' - Tanggal '+item.tgl : ''}
                                     </label>`;
                     });
