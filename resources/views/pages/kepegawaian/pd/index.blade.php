@@ -225,11 +225,11 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="keu-only" hidden>
-                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal"><i class="fas fa-compress-arrows-alt me-1"></i> Tutup</button>
                     @if (Auth::user()->getPermission('admin_pd_keuangan') == true)
-                        <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden>Confirm Paid</button>
+                        <button type="button" class="btn btn-primary" onclick="confirmPaid()" id="btn-confirm" hidden><i class="fas fa-money-bill-wave me-1"></i> Confirm Paid</button>
                         <button type="button" class="btn btn-warning" onclick="cancelPaid()" id="btn-cancel" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden>Cancel Paid</button>
+                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Batal Status menjadi <b>UNPAID</b> hanya berlaku <u>hari ini</u> saja!" hidden><i class="fas fa-times-circle me-1"></i> Cancel Paid</button>
                     @endif
                 </div>
             </div>
@@ -410,9 +410,16 @@
                         var adminID = "{{ Auth::user()->getPermission(['admin_kepegawaian']) }}";
                         var superID = "{{ Auth::user()->getPermission('admin_kepegawaian_kepala') }}";
                         var keuID = "{{ Auth::user()->getPermission(['admin_pd_keuangan']) }}";
+                        if (item.paid == 0) {
+                            statusPaid = `<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>`;
+                            color = 'danger';
+                        } else {
+                            statusPaid = `<span class="badge bg-light-success rounded-pill ms-2">PAID</span>`;
+                            color = 'success';
+                        }
                         content = "<tr id='data" + item.id + "' style='font-size:13px'>";
                         content += `<td><center><div class='btn-group'>
-                                        <button type='button' class='btn btn-sm btn-link text-secondary dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <button type='button' class='btn btn-sm btn-light-${color} dropdown-toggle hide-arrow btn-rounded' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
                                         <ul class='dropdown-menu dropdown-menu-right'>`;
                                         if (superID == true || adminID == true || keuID == true) {
                                             content += `<li><a href="javascript:void(0);" class="dropdown-item text-info" onclick="rincian(${item.id})"><i class="fa-fw fas fa-file-signature me-2"></i> Rincian</a></li>`;
@@ -451,11 +458,6 @@
                                 })
                             })
                         }
-                        if (item.paid == 0) {
-                            statusPaid = `<span class="badge bg-light-danger rounded-pill ms-2">UNPAID</span>`;
-                        } else {
-                            statusPaid = `<span class="badge bg-light-success rounded-pill ms-2">PAID</span>`;
-                        }
                         content += `<td style='white-space: normal !important;word-wrap: break-word;'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <div class='d-flex flex-column'>
@@ -463,7 +465,7 @@
                                                     data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Nama Acara">` + item.acara + `</u> ${statusPaid}</a>
                                                 </h6>
                                                 <small class='text-truncate text-muted'>Bertempat di <b>${item.lokasi}</b> dan Diselenggarakan secara ${item.jenis==1?"<b class='text-danger'>Offline</b>":"<b class='text-success'>Online</b>"} selama ${item.lama1 == 1?'kurang dari 4 jam':'lebih dari 4 jam'}</small>
-                                                <small class='text-truncate text-muted'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan == 3?``:`Milik<br>(<a href='javascript:void(0);' class='text-wrap'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`}</small>
+                                                <small class='text-truncate text-muted text-wrap'>Menggunakan <u><b>Transportasi ${kendaraan}</b></u> ${item.kendaraan == 3?``:`Milik<br>(<a href='javascript:void(0);' class='text-wrap'><b class='text-secondary' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' title='Pemilik Kendaraan'>`+kendaraan_pegawai+`</b></a>)`}</small>
                                             </div>
                                         </div>
                                     </td>`;
@@ -512,7 +514,66 @@
                         displayLength: 7,
                         lengthChange: true,
                         lengthMenu: [7, 10, 25, 50, 75, 100],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: 'Export Excel',
+                                orientation: 'landscape',
+                                exportOptions: {
+                                    columns: [1,2,3,4] // hanya kolom tertentu
+                                },
+                                pageSize: 'A4',
+                                className: 'btn btn-success'
+                            },
+                            {
+                                extend: 'pdf',
+                                text: 'Export PDF',
+                                orientation: 'landscape',
+                                exportOptions: {
+                                    columns: [1,2,3,4] // hanya kolom tertentu
+                                },
+                                pageSize: 'A4',
+                                className: 'btn btn-danger',
+                                customize: function (doc) {
+                                    // Menambahkan judul di atas tabel
+                                    doc.content.unshift({
+                                        text: 'Laporan Data Perjalanan Dinas',  // Judul yang ingin ditambahkan
+                                        fontSize: 18,   // Ukuran font
+                                        bold: true,     // Menebalkan teks
+                                        alignment: 'center', // Menyelaraskan teks ke tengah
+                                        margin: [0, 0, 0, 10]  // Margin bawah (untuk memberi jarak antara judul dan tabel)
+                                    });
+
+                                    // Pastikan header tabel tetap disembunyikan jika diinginkan
+                                    if (doc.content && doc.content[1] && doc.content[1].table) {
+                                        doc.content[1].table.headerRows = 0;
+                                    }
+                                }
+                            },
+                            {
+                                extend: 'print',
+                                text: 'Cetak',
+                                orientation: 'landscape',
+                                pageSize: 'A4',  // F4 dalam milimeter
+                                className: 'btn btn-warning',
+                                customize: function (win) {
+                                    // Sembunyikan semua selain tabel
+                                    $(win.document.body).find('*').not('table, table *').hide();
+
+                                    $(win.document.body).find('table')
+                                        .addClass('compact')
+                                        .css('font-size', 'inherit');
+                                },
+                                exportOptions: {
+                                    columns: [1,2,3,4] // hanya kolom tertentu
+                                },
+                            },
+                            {
+                                extend: 'colvis',
+                                text: 'Sembunyikan Kolom',
+                                className: 'btn btn-dark',
+                            }
+                        ],
                     });
                 }
             })
@@ -634,7 +695,7 @@
                     $('#tbody-rincian').append(`
                         <tr>
                             <th colspan="2">
-                                <div class="shadow-lg p-3 bg-body rounded" role="alert">
+                                <div class="shadow p-3 bg-body rounded" role="alert">
                                     <h5 class="alert-heading fw-bold mb-2 text-center">
                                         Status Pembayaran Dari <b class="text-primary">Bagian Keuangan</b>
                                     </h5>
@@ -644,10 +705,10 @@
                         </tr>
                         <tr><th>Nama Acara</th><td>${res.show.acara} (${res.show.jenis})</td></tr>
                         <tr><th>Lokasi Acara</th><td>${res.show.lokasi}</td></tr>
-                        <tr><th>Tanggal</th><td>Pada ${res.show.tgl} Selama ${res.show.lama1 == 1?'< 4 Jam':'> 4 Jam'} ${res.show.lama2?'('+res.show.lama2+' Jam)':''}</td></tr>
+                        <tr><th>Tanggal</th><td>Pada ${formatTanggalIndo(res.show.tgl)} Selama ${res.show.lama1 == 1?'< 4 Jam':'> 4 Jam'} ${res.show.lama2?'(Lebih tepatnya selama '+res.show.lama2+' Jam)':''}</td></tr>
                         <tr><th>Peserta</th><td>${pegawai}</td></tr>
                         <tr><th>Transportasi</th><td>${kendaraan}</td></tr>
-                        ${res.show.kendaraan_pegawai?`<tr><th>Pemilik Kendaraan</th><td>`+kendaraan_pegawai+`</td></tr>`:``}
+                        ${res.show.kendaraan_pegawai?`<tr><th>Pemilik Kendaraan</th><td class="text-wrap">`+kendaraan_pegawai+`</td></tr>`:``}
                         <tr><th>Deskripsi Perjalanan</th><td>${res.show.deskripsi?res.show.deskripsi:''}</td></tr>
                         ${res.show.paid == 1?`<tr><th class="text-danger">Keterangan Pembayaran</th><td>Dibayarkan oleh `+res.show.nama_user_paid+` pada `+res.show.tgl_paid+`</td></tr>`:``}
                     `);
@@ -970,6 +1031,26 @@
             }
             var dateTime = year + '-' + month + '-' + day;
             return dateTime;
+        }
+
+        function formatTanggalIndo(datetime) {
+            if (!datetime) return '';
+
+            const bulan = [
+                'Januari','Februari','Maret','April','Mei','Juni',
+                'Juli','Agustus','September','Oktober','November','Desember'
+            ];
+
+            const d = new Date(datetime.replace(' ', 'T'));
+
+            const tgl   = d.getDate().toString().padStart(2, '0');
+            const bln   = bulan[d.getMonth()];
+            const thn   = d.getFullYear();
+            const jam   = d.getHours().toString().padStart(2, '0');
+            const menit= d.getMinutes().toString().padStart(2, '0');
+            const detik= d.getSeconds().toString().padStart(2, '0');
+
+            return `${tgl} ${bln} ${thn} Pukul ${jam}:${menit}:${detik}`;
         }
     </script>
 @endsection
