@@ -236,6 +236,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
     // RAPAT
     Route::get('berkas/rapat/data', '\App\Http\Controllers\Berkas\RapatController@getRapat');
+    Route::get('berkas/rapat/dataAll', '\App\Http\Controllers\Berkas\RapatController@getRapatAll');
+    Route::post('berkas/rapat/simpan', '\App\Http\Controllers\Berkas\RapatController@simpanRapat');
     Route::get('berkas/rapat/data/{id}', '\App\Http\Controllers\Berkas\RapatController@detailRapat');
     Route::post('berkas/rapat/data/{id}/ubah', '\App\Http\Controllers\Berkas\RapatController@ubah');
     Route::get('berkas/rapat/data/{id}/hapus', '\App\Http\Controllers\Berkas\RapatController@hapusRapat');

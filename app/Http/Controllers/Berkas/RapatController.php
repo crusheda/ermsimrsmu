@@ -77,7 +77,11 @@ class RapatController extends Controller
             $data->id_user = $user_id;
             $data->nama_user = $user_nama;
             $data->nama = $request->nama;
-            $data->kepala = $request->kepala;
+            if ($request->kepala != null) {
+                $data->kepala = $request->kepala;
+            } else {
+                $data->nama_kepala = $request->kepala_manual;
+            }
             $data->tanggal = $request->tanggal;
             $data->lokasi = $request->lokasi;
 
@@ -98,6 +102,66 @@ class RapatController extends Controller
             $data->save();
 
             return redirect()->back()->with('message','Tambah Berkas Rapat Berhasil');
+        }
+    }
+
+    function simpanRapat(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'file2.*' => 'required|mimes:doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,gif,png,jpeg|max:5000',
+                'keterangan' => 'nullable',
+                'nama' => 'required',
+                'tanggal' => 'required',
+                'lokasi' => 'required',
+            ],
+            [
+                'file2.*.required' => 'File wajib diunggah.',
+                'file2.*.mimes'    => 'Format file tidak didukung. Gunakan: doc, docx, xls, xlsx, ppt, pptx, pdf, jpg, gif, png, atau jpeg.',
+                'file2.*.max'      => 'Ukuran file maksimal 5 MB.',
+                'nama.required'    => 'Nama rapat wajib diisi.',
+                'tanggal.required' => 'Tanggal rapat wajib diisi.',
+                'lokasi.required'  => 'Lokasi rapat wajib diisi.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            $arr = json_encode($validator->errors());
+            return response()->json($arr, 422);
+        } else {
+            $user_id = $request->user_id;
+            $user_nama = $request->user_nama;
+
+            $uploadedFile2 = $request->file('file2');
+
+            $data = new berkas_rapat;
+            $data->id_user = $user_id;
+            $data->nama_user = $user_nama;
+            $data->nama = $request->nama;
+            if ($request->kepala != null) {
+                $data->kepala = $request->kepala;
+            } else {
+                $data->nama_kepala = $request->kepala_manual;
+            }
+            $data->tanggal = $request->tanggal;
+            $data->lokasi = $request->lokasi;
+
+                if ($request->hasFile('file2')) {
+                    foreach ($uploadedFile2 as $file) {
+                        $array_filename2[] = $file->store('public/files/rapat/'.$user_id);
+                        $array_title2[] = $file->getClientOriginalName();
+                    }
+                }
+                $data->title2 = json_encode($array_title2);
+                $data->filename2 = json_encode($array_filename2);
+
+            $data->keterangan = $request->keterangan;
+            $data->user_id = $user_id;
+
+            $data->save();
+
+            return response()->json('Simpan Berkas Rapat Berhasil', 200);
         }
     }
 
@@ -191,23 +255,39 @@ class RapatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request,[
-            'nama' => 'required',
-            'kepala' => 'nullable',
-            'tanggal' => 'nullable',
-            'lokasi' => 'nullable',
-            'keterangan' => 'nullable',
-            ]);
+        // $validator = Validator::make(
+        //     $request->all(),
+        //     [
+        //         'keterangan'  => 'nullable',
+        //         'nama'        => 'required',
+        //         'tanggal'     => 'required',
+        //         'lokasi'      => 'required',
+        //     ],
+        //     [
+        //         'nama.required'    => 'Nama rapat wajib diisi.',
+        //         'tanggal.required' => 'Tanggal rapat wajib diisi.',
+        //         'lokasi.required'  => 'Lokasi rapat wajib diisi.',
+        //     ]
+        // );
 
-        $data = berkas_rapat::find($id);
-        $data->nama = $request->nama;
-        $data->kepala = $request->kepala;
-        $data->tanggal = $request->tanggal;
-        $data->lokasi = $request->lokasi;
-        $data->keterangan = $request->keterangan;
+        // if ($validator->fails()) {
+        //     $arr = json_encode($validator->errors());
+        //     return redirect()->back()->with('error',$arr);
+        // } else {
+        //     $data = berkas_rapat::find($id);
+        //     $data->nama = $request->nama;
+        //     if ($request->kepala != null) {
+        //         $data->kepala = $request->kepala;
+        //     } else {
+        //         $data->nama_kepala = $request->kepala_manual;
+        //     }
+        //     $data->tanggal = $request->tanggal;
+        //     $data->lokasi = $request->lokasi;
+        //     $data->keterangan = $request->keterangan;
 
-        $data->save();
-        return Redirect::back()->with('message','Perubahan Berkas Rapat Berhasil');
+        //     $data->save();
+        //     return Redirect::back()->with('message','Perubahan Berkas Rapat Berhasil');
+        // }
     }
 
     /**
@@ -251,9 +331,31 @@ class RapatController extends Controller
     public function getRapat()
     {
         // $users = Auth::user();
-        $show = berkas_rapat::join('users','berkas_rapat.kepala','=','users.id')
-                        ->select('users.nama as nama_kepala','berkas_rapat.*')
+        $show = berkas_rapat::leftJoin('users','berkas_rapat.kepala','=','users.id')
+                        ->select('users.nama as nama_kepala_user','berkas_rapat.*')
                         // ->where('users.status',null)
+                        ->limit(30)
+                        ->orderBy('berkas_rapat.updated_at','DESC')
+                        ->get();
+        $tgl = Carbon::now();
+        $today = Carbon::now()->isoFormat('YYYY/MM/DD');
+
+        $data = [
+            'show' => $show,
+            'tgl' => $tgl,
+            'today' => $today,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getRapatAll()
+    {
+        // $users = Auth::user();
+        $show = berkas_rapat::leftJoin('users','berkas_rapat.kepala','=','users.id')
+                        ->select('users.nama as nama_kepala_user','berkas_rapat.*')
+                        // ->where('users.status',null)
+                        ->orderBy('berkas_rapat.updated_at','DESC')
                         ->get();
         $tgl = Carbon::now();
         $today = Carbon::now()->isoFormat('YYYY/MM/DD');
@@ -282,17 +384,43 @@ class RapatController extends Controller
 
     public function ubah(Request $request)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'keterangan'  => 'nullable',
+                'nama'        => 'required',
+                'tanggal'     => 'required',
+                'lokasi'      => 'required',
+            ],
+            [
+                'nama.required'    => 'Nama rapat wajib diisi.',
+                'tanggal.required' => 'Tanggal rapat wajib diisi.',
+                'lokasi.required'  => 'Lokasi rapat wajib diisi.',
+            ]
+        );
 
-        $data = berkas_rapat::find($request->id);
-        $data->nama = $request->nama;
-        $data->kepala = $request->kepala;
-        $data->tanggal = $request->tanggal;
-        $data->lokasi = $request->lokasi;
-        $data->keterangan = $request->keterangan;
-        $data->save();
+        if ($validator->fails()) {
+            $arr = json_encode($validator->errors());
+            return response()->json($arr, 422);
+        } else {
+            $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        return response()->json($tgl, 200);
+            $data = berkas_rapat::find($request->id);
+            $data->nama = $request->nama;
+            if ($request->kepala != null) {
+                $data->kepala = $request->kepala;
+                $data->nama_kepala = null;
+            } else {
+                $data-> kepala = null;
+                $data->nama_kepala = $request->kepala_manual;
+            }
+            $data->tanggal = $request->tanggal;
+            $data->lokasi = $request->lokasi;
+            $data->keterangan = $request->keterangan;
+            $data->save();
+
+            return response()->json($tgl, 200);
+        }
     }
 
     public function hapusRapat($id)

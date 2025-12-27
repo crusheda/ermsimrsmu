@@ -27,9 +27,10 @@
         <div class="col-sm-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5 class="mb-0">Tabel</h5>
+                    <h5 class="mb-0">Tabel Riwayat</h5>
                     <div class="btn-group">
-                        <button class="btn btn-warning btn-shadow" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> Segarkan</button>
+                        <button class="btn btn-danger btn-shadow" id="refreshBtnAll" onclick="refreshAll()"><i class="fas fa-sync me-1"></i> Semua Data</button>
+                        <button class="btn btn-warning btn-shadow" id="refreshBtn" onclick="refresh()"><i class="fas fa-sync me-1"></i> 30 Data Terakhir</button>
                         <button class="btn btn-primary btn-shadow" data-bs-toggle="modal" data-bs-target="#tambah"><i
                                 class="fa-fw fas fa-upload nav-icon"></i>&nbsp;&nbsp;Upload Berkas</button>
                     </div>
@@ -94,6 +95,8 @@
                     <form class="form-auth-small" name="formTambah" action="{{ route('rapat.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                        <input type="hidden" name="user_nama" value="{{ Auth::user()->nama }}">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="alert alert-secondary">
@@ -110,18 +113,27 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Ketua Rapat <a class="text-danger">*</a></label>
-                                    <select class="select2 form-control" name="kepala" style="width: 100%" required>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <label class="form-label">Ketua Rapat <a class="text-danger">*</a></label>
+                                        <div class="flex-shrink-0" id="switch-str">
+                                            <div class="form-check form-switch custom-switch-v1 switch-sm">
+                                                <input type="checkbox" class="form-check-input input-primary" id="kepalamanual">
+                                                <label class="form-check-label" for="kepalamanual">Isi Manual ?</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <select class="select2 form-control" id="kepala" name="kepala" style="width: 100%" required>
                                         <option value="">Pilih</option>
                                         @foreach ($list['users'] as $key => $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @endforeach
                                     </select>
+                                    <input type="text" class="form-control" id="kepala_manual" name="kepala_manual" placeholder="Isi Manual Nama Ketua Rapat" hidden>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Tanggal <a class="text-danger">*</a></label>
+                                    <label class="form-label">Tanggal & Waktu <a class="text-danger">*</a></label>
                                     <input class="form-control flatpickr" name="tanggal" type="text" required>
                                 </div>
                             </div>
@@ -135,17 +147,17 @@
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-label">Keterangan</label>
-                            <textarea maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control"
+                            <textarea maxlength="200" rows="3" placeholder="Pengisian keterangan terbatas hanya 200 karakter." class="form-control"
                                 name="keterangan" id="keterangan" placeholder="Optional"></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Upload <a class="text-danger">*</a></label>
+                            <label class="form-label">Multiple Upload <a class="text-danger">*</a></label>
                             <input type="file" class="form-control mb-2" name="file2[]" id="file2" multiple required>
                         </div>
                 </div>
                 <div class="modal-footer">
 
-                    <button class="btn btn-primary" id="btn-simpan" onclick="saveData()"><i
+                    <button class="btn btn-primary" id="btn-simpan" onclick="simpan()"><i
                             class="fa-fw fas fa-upload nav-icon"></i> Upload</button>
                     </form>
 
@@ -183,14 +195,22 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Ketua Rapat <a class="text-danger">*</a></label><br>
-                                <select class="form-control select2" id="kepala_edit" style="width: 100%"
-                                    required></select>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label class="form-label">Ketua Rapat <a class="text-danger">*</a></label>
+                                    <div class="flex-shrink-0" id="switch-str">
+                                        <div class="form-check form-switch custom-switch-v1 switch-sm">
+                                            <input type="checkbox" class="form-check-input input-primary" id="kepalamanualedit">
+                                            <label class="form-check-label" for="kepalamanualedit">Isi Manual ?</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <select class="form-control select2" id="kepala_edit" style="width: 100%" required></select>
+                                <input type="text" class="form-control" id="kepala_manual_edit" name="kepala_manual_edit" placeholder="Isi Manual Nama Ketua Rapat" hidden>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label class="form-label">Tanggal <a class="text-danger">*</a></label>
+                                <label class="form-label">Tanggal & Waktu <a class="text-danger">*</a></label>
                                 <input type="text" id="tanggal_edit" class="form-control flatpickr"
                                     placeholder="Tanggal Rapat" required>
                             </div>
@@ -204,8 +224,13 @@
                     </div>
                     <div class="form-group mb-3">
                         <label class="form-label">Keterangan</label>
-                        <textarea  maxlength="200" rows="3" placeholder="Keterangan terbatas hanya 200 karakter." class="form-control" id="keterangan_edit" ></textarea>
+                        <textarea  maxlength="200" rows="3" placeholder="Pengisian keterangan hanya 200 karakter." class="form-control" id="keterangan_edit" ></textarea>
                     </div>
+                    {{-- <div class="form-group">
+                        <label class="form-label">Multiple Upload <a class="text-danger">*</a></label>
+                        <input type="file" class="form-control mb-2" id="file2_edit" multiple>
+                        <sub><i class="fa-fw fas fa-caret-right nav-icon"></i> Biarkan kosong jika tidak ada perubahan file</sub>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     Ditambahkan oleh&nbsp;<a id="user_edit"></a>
@@ -312,6 +337,30 @@
                 dateFormat: "Y-m-d H:i"
             });
             refresh();
+            $('#kepalamanual').change(function () {
+                const manual = $(this).is(':checked');
+
+                if (manual) {
+                    // reset select2 value
+                    $('#kepala').val(null).trigger('change');
+                    $('#kepala').prop('required', false);
+                    $('#kepala_manual').prop('required', true).prop('hidden', false);
+
+                    // sembunyikan tampilan select2
+                    $('#kepala').next('.select2').prop('hidden', true);
+
+                    // reset input manual dulu (optional)
+                    $('#kepala_manual').val('');
+                } else {
+                    // reset input manual
+                    $('#kepala_manual').val('');
+                    $('#kepala_manual').prop('required', false).prop('hidden', true);
+
+                    // tampilkan kembali select2
+                    $('#kepala').next('.select2').prop('hidden', false);
+                    $('#kepala').prop('required', true);
+                }
+            });
         });
 
         function getDateTime() {
@@ -392,7 +441,7 @@
                         }
                         content += "</div></center></td>";
                         content += "<td>" + item.nama + "</td><td>" +
-                                    item.nama_kepala + "</td><td>" +
+                                    (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td>" +
                                     item.tanggal + "</td><td>" +
                                     item.lokasi + "</td><td>";
                         if (item.keterangan != null) {
@@ -423,17 +472,171 @@
             });
         }
 
+        function refreshAll() {
+            if ($.fn.DataTable.isDataTable('#dttable')) {
+                $('#dttable').DataTable().clear().destroy();
+            }
+            $("#tampil-tbody").empty().append(
+                `<tr><td colspan="10" style="font-size:13px"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`
+            );
+            $.ajax({
+                url: "/api/berkas/rapat/dataAll",
+                type: 'GET',
+                dataType: 'json', // added data type
+                beforeSend: function() {
+                    $("#refreshBtnAll").prop('disabled', true);
+                    $("#refreshBtnAll").find("i").addClass("fa-spinner fa-spin").removeClass("fa-sync");
+                },
+                success: function(res) {
+                    $("#tampil-tbody").empty();
+                    // var date = new Date().toISOString().split('T')[0];
+                    var userID = "{{ Auth::user()->id }}";
+                    var adminID = "{{ Auth::user()->getPermission('admin_rapat') }}";
+                    var date = getDateTime();
+                    res.show.forEach(item => {
+                        if (item.user_id == userID) {
+                            if (updet == date) {
+                                colorBtn = 'primary';
+                            } else {
+                                colorBtn = 'info';
+                            }
+                        } else {
+                            if (adminID == true) {
+                                colorBtn = 'primary';
+                            } else {
+                                colorBtn = 'secondary';
+                            }
+                        }
+                        var updet = new Date(item.updated_at).toLocaleString("sv-SE").substring(0, 10);
+                        content = "<tr id='data" + item.id + "' style='font-size:13px'>";
+                        content += `<td><center><div class='btn-group'>
+                                        <button type='button' class='btn btn-sm btn-light-${colorBtn} rounded dropdown-toggle hide-arrow' data-bs-toggle='dropdown' aria-expanded='false'>`+item.id+`</button>
+                                        <ul class='dropdown-menu dropdown-menu-right'>`;
+                        if (adminID == true) {
+                            content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` + item.id + `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                        } else {
+                            if (item.user_id == userID) {
+                                if (updet == date) {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href="javascript:void(0);" class='dropdown-item text-warning' onclick="showUbah(` + item.id + `)"><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-danger' onclick="hapus(` + item.id + `)"><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                } else {
+                                    content +=
+                                        `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                        <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                        <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                                }
+                            } else {
+                                content += `<li><a href="javascript:void(0);" class='dropdown-item text-success' onclick="showDownload(` + item.id + `)"><i class="fa-fw fas fa-download nav-icon"></i> Download</a></li>
+                                            <li><a href="javascript:void(0);" class='dropdown-item text-secondary'><i class="fa-fw fas fa-edit nav-icon"></i> Ubah</a></li>
+                                            <li><a href='javascript:void(0);' class='dropdown-item text-secondary'><i class="fa-fw fas fa-trash nav-icon"></i> Hapus</a></li>`;
+                            }
+                        }
+                        content += "</div></center></td>";
+                        content += "<td>" + item.nama + "</td><td>" +
+                                    (item.nama_kepala_user?item.nama_kepala_user:item.nama_kepala) + "</td><td>" +
+                                    item.tanggal + "</td><td>" +
+                                    item.lokasi + "</td><td>";
+                        if (item.keterangan != null) {
+                            content += item.keterangan;
+                        }
+                        content += '</td><td>' +
+                            new Date(item.updated_at).toLocaleString("sv-SE") + '</td><td>' +
+                            item.nama_user + '</td>';
+                        content += "</tr>";
+                        $('#tampil-tbody').append(content);
+                    });
+                    var table = $('#dttable').DataTable({
+                        // dom: 'Bfrtip',
+                        order: [
+                            [6, "desc"]
+                        ],
+                        displayLength: 20,
+                        lengthChange: true,
+                        lengthMenu: [20, 35, 50, 75, 100, 500, 1000, 3000, 7000, 10000, 20000],
+                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                }, complete: function() {
+                    $("#refreshBtnAll").prop('disabled', false);
+                    $("#refreshBtnAll").find("i").removeClass("fa-spinner fa-spin").addClass("fa-sync");
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger : 'hover'
+                    })
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                }
+            });
+        }
+
+        function simpan() {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: '/api/berkas/rapat/simpan',
+                data: new FormData(document.forms.namedItem("formTambah")),
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $("#btn-simpan").prop('disabled', true);
+                    $("#btn-simpan").find("i").removeClass("fa-upload").addClass("fa-sync fa-spin");
+                    iziToast.info({
+                        title: 'Pesan Tunggu!',
+                        message: 'Sedang memproses data...',
+                        position: 'topRight'
+                    });
+                },
+                success: function(res) {
+                    if (res) {
+                        $('#tambah').modal('hide');
+                        refresh();
+                    }
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: res,
+                        position: 'topRight'
+                    });
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                }, complete: function() {
+                    $('#kepala').val(null).trigger('change');
+                    document.forms.namedItem("formTambah").reset();
+                    $('#kepala_manual').val('');
+                    $("#btn-simpan").find("i").removeClass("fa-sync fa-spin").addClass("fa-upload");
+                    $("#btn-simpan").prop('disabled', false);
+                }
+            });
+        }
+
         function showUbah(id) {
-            $("#ubah" + id).prop('disabled', true);
-            $("#ubah" + id).find("i").toggleClass("fa-edit fa-sync fa-spin");
             $.ajax({
                 url: "/api/berkas/rapat/data/" + id,
                 type: 'GET',
                 dataType: 'json', // added data type
+                beforeSend: function() {
+                    $("#ubah" + id).prop('disabled', true);
+                    $("#ubah" + id).find("i").toggleClass("fa-edit fa-sync fa-spin");
+                    iziToast.info({
+                        title: 'Pesan Tunggu!',
+                        message: 'Sedang memproses data...',
+                        position: 'topRight'
+                    });
+                },
                 success: function(res) {
                     $('#ubah').modal('show');
-                    // var dt = new Date(res.show.tanggal).toJSON().slice(0,19);
-                    console.log(res.show.tanggal);
+
                     var dt = moment(res.show.tanggal).format('Y-MM-DD HH:mm');
                     document.getElementById('show_edit').innerHTML = "ID : " + res.show.id;
                     document.getElementById('user_edit').innerHTML = res.show.user_nama;
@@ -442,12 +645,74 @@
                     $("#tanggal_edit").val(dt);
                     $("#lokasi_edit").val(res.show.lokasi);
                     $("#keterangan_edit").val(res.show.keterangan);
-                    $("#kepala_edit").find('option').remove();
-                    res.kepala.forEach(item => {
-                        $("#kepala_edit").append(`
-                            <option value="${item.id}" ${item.id == res.show.kepala? "selected":""}>${item.nama}</option>
-                        `);
+                    if (res.show.kepala) {
+                        // MODE SELECT
+                        $('#kepalamanualedit').prop('checked', false);
+
+                        $('#kepala_edit').prop('required', true).prop('hidden', false);
+                        $('#kepala_edit').next('.select2').prop('hidden', false);
+
+                        $('#kepala_manual_edit').prop('required', false).prop('hidden', true).val('');
+
+                        $("#kepala_edit").find('option').remove();
+                        res.kepala.forEach(item => {
+                            $("#kepala_edit").append(`
+                                <option value="${item.id}" ${item.id == res.show.kepala ? "selected":""}>
+                                    ${item.nama}
+                                </option>
+                            `);
+                        });
+
+                        $('#kepala_edit').trigger('change');
+
+                    } else {
+                        // MODE MANUAL
+                        $('#kepalamanualedit').prop('checked', true);
+
+                        $('#kepala_edit').prop('required', false);
+                        $('#kepala_edit').next('.select2').prop('hidden', true);
+
+                        $('#kepala_manual_edit')
+                            .prop('required', true)
+                            .prop('hidden', false)
+                            .val(res.show.nama_kepala ?? '');
+                    }
+                    $('#kepalamanualedit').change(function () {
+                        const manual = $(this).is(':checked');
+
+                        if (manual) {
+                            $("#kepala_edit").find('option').remove();
+                            $('#kepala_edit').val(null).trigger('change');
+                            $('#kepala_edit').prop('required', false);
+                            $('#kepala_manual_edit').prop('required', true).prop('hidden', false);
+
+                            $('#kepala_edit').next('.select2').prop('hidden', true);
+
+                            $('#kepala_manual_edit').val('');
+                        } else {
+                            $('#kepala_manual_edit').val('');
+                            $('#kepala_manual_edit').prop('required', false).prop('hidden', true);
+
+                            $('#kepala_edit').next('.select2').prop('hidden', false);
+                            $('#kepala_edit').prop('required', true);
+                            $("#kepala_edit").find('option').remove();
+
+                            res.kepala.forEach(item => {
+                                $("#kepala_edit").append(`
+                                    <option value="${item.id}" ${item.id == res.show.kepala ? "selected":""}>
+                                        ${item.nama}
+                                    </option>
+                                `);
+                            });
+                        }
                     });
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                }, complete: function() {
                     $("#ubah" + id).find("i").removeClass("fa-sync fa-spin").addClass("fa-edit");
                     $("#ubah" + id).prop('disabled', false);
                 }
@@ -455,56 +720,81 @@
         }
 
         function ubah() {
-            $("#submit_edit").prop('disabled', true);
-            $("#submit_edit").find("i").toggleClass("fa-save fa-sync fa-spin");
             var id = $("#id_edit").val();
             var nama = $("#nama_edit").val();
             var kepala = $("#kepala_edit").val();
+            var kepala_manual = $("#kepala_manual_edit").val();
             var tanggal = $("#tanggal_edit").val();
             var lokasi = $("#lokasi_edit").val();
             var keterangan = $("#keterangan_edit").val();
+            // var file2 = $("#file2_edit").val();
 
-            if (nama == "" || kepala == "" || tanggal == "") {
+            if (nama == "" || tanggal == "" || lokasi == "") {
                 iziToast.error({
                     title: 'Pesan Galat!',
                     message: 'Mohon lengkapi form pengisian',
                     position: 'topRight'
                 });
-            } else {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    method: 'POST',
-                    url: '/api/berkas/rapat/data/' + id + '/ubah',
-                    dataType: 'json',
-                    data: {
-                        id: id,
-                        nama: nama,
-                        kepala: kepala,
-                        tanggal: tanggal,
-                        lokasi: lokasi,
-                        keterangan: keterangan,
-                    },
-                    success: function(res) {
-                        if (res) {
-                            $('#ubah').modal('hide');
-                            // fresh();
-                            // $("#tampil-tbody").empty();
-                            // content += `<tr><td colspan="9"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`;
-                            // $('#tampil-tbody').append(content);
-                            window.location.reload();
-                        }
-                        iziToast.success({
-                            title: 'Pesan Sukses!',
-                            message: 'Berkas Rapat berhasil diubah pada ' + res,
-                            position: 'topRight'
-                        });
-                    }
-                });
+                return false;
             }
-            $("#submit_edit").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
-            $("#submit_edit").prop('disabled', false);
+
+            if (kepala == null && kepala_manual == "") {
+                iziToast.error({
+                    title: 'Pesan Galat!',
+                    message: 'Pengisian ketua rapat wajib diisi',
+                    position: 'topRight'
+                });
+                return false;
+            }
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                method: 'POST',
+                url: '/api/berkas/rapat/data/' + id + '/ubah',
+                dataType: 'json',
+                data: {
+                    id: id,
+                    nama: nama,
+                    kepala: kepala,
+                    kepala_manual: kepala_manual,
+                    tanggal: tanggal,
+                    lokasi: lokasi,
+                    keterangan: keterangan,
+                },
+                beforeSend: function() {
+                    $("#submit_edit").prop('disabled', true);
+                    $("#submit_edit").find("i").toggleClass("fa-save fa-sync fa-spin");
+                    iziToast.info({
+                        title: 'Pesan Tunggu!',
+                        message: 'Sedang memproses data...',
+                        position: 'topRight'
+                    });
+                },
+                success: function(res) {
+                    if (res) {
+                        $('#ubah').modal('hide');
+                        refresh();
+                    }
+                    iziToast.success({
+                        title: 'Pesan Sukses!',
+                        message: 'Berkas Rapat berhasil diubah pada ' + res,
+                        position: 'topRight'
+                    });
+                }, error: function(xhr, status, error) {
+                    iziToast.error({
+                        title: 'Pesan Galat!',
+                        message: xhr.responseJSON.message,
+                        position: 'topRight'
+                    });
+                }, complete: function() {
+                    $('#kepala_edit').val(null).trigger('change');
+                    $('#kepala_manual_edit').val('');
+                    $("#submit_edit").find("i").removeClass("fa-sync fa-spin").addClass("fa-save");
+                    $("#submit_edit").prop('disabled', false);
+                }
+            });
         }
 
         function showDownload(id) {
@@ -572,23 +862,23 @@
             })
         }
 
-        function saveData() {
-            $("#tambah").one('submit', function() {
-                //stop submitting the form to see the disabled button effect
-                let x = document.forms["formTambah"]["tanggal"].value;
-                if (x == "") {
-                    iziToast.error({
-                        title: 'Pesan Galat!',
-                        message: 'Mohon isi tanggal rapat',
-                        position: 'topRight'
-                    });
-                    return false;
-                } else {
-                    $("#btn-simpan").attr('disabled', 'disabled');
-                    $("#btn-simpan").find("i").removeClass("fa-upload").addClass("fa-sync fa-spin");
-                    return true;
-                }
-            });
-        }
+        // function saveData() {
+        //     $("#tambah").one('submit', function() {
+        //         //stop submitting the form to see the disabled button effect
+        //         let x = document.forms["formTambah"]["tanggal"].value;
+        //         if (x == "") {
+        //             iziToast.error({
+        //                 title: 'Pesan Galat!',
+        //                 message: 'Mohon isi tanggal rapat',
+        //                 position: 'topRight'
+        //             });
+        //             return false;
+        //         } else {
+        //             $("#btn-simpan").attr('disabled', 'disabled');
+        //             $("#btn-simpan").find("i").removeClass("fa-upload").addClass("fa-sync fa-spin");
+        //             return true;
+        //         }
+        //     });
+        // }
     </script>
 @endsection
