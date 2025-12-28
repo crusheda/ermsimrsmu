@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0">Daftar <b class="text-primary">Jadwal Dinas</b></h2>
+                        <h2 class="mb-0">Manajemen <b class="text-primary">Jadwal Dinas</b></h2>
                     </div>
                 </div>
             </div>
@@ -30,6 +30,47 @@
     </div><!-- [ breadcrumb ] end -->
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
+        <div class="col-xl-3 mb-3">
+            <div class="card shadow-none border mb-0">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <img src="{{ asset('/images/widget/img-travel.png') }}" alt="img" class="img-fluid">
+                        <div class="dropdown">
+                            <a class="avtar avtar-xs btn-light-secondary dropdown-toggle arrow-none"
+                                href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="ti ti-dots-vertical f-18"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="javascript:void(0);"><s>Riwayat Cuti Tahunan Anda</s></a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="totalCutiUnit()">Cuti Tahunan Di Unit Anda</a>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="mb-3">Total Cuti Tahunan Anda di <b class="text-info">Tahun {{ \Carbon\Carbon::now()->format('Y') }}</b></h6>
+                    <div class="bg-info bg-opacity-75 p-3 pt-4 rounded-4 position-relative">
+                        <div class="progress bg-white bg-opacity-25 mt-2" style="height: 6px; position: relative;">
+                            <div class="progress-bar bg-white" style="width: 0%; transition: width 1s ease;"></div>
+
+                            <!-- indikator angka di tengah -->
+                            <div class="cuti-indicator text-white text-md"
+                                style="position:absolute; top:-25px; left:0%; transform:translateX(-50%);">
+                            </div>
+
+                            <span class="cuti-over badge bg-danger ms-2"
+                                style="position:absolute; top:-28px; right:12px; display:none;">
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-2">
+                            <p class="mb-0 text-white text-opacity-75 text-sm"><b>0x</b></p>
+                            <p class="mb-0 text-white text-opacity-75 text-sm"><b>12x</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-xl-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
@@ -43,7 +84,7 @@
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
                                 <a class="dropdown-item" href="javascript:void(0);" onclick="showRiwayat()">Segarkan Tabel</a>
                                 <div class="divider pb-1"></div>
-                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
+                                <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf <b class="text-danger">[UTAMA]</b></a>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
                                 <div class="divider pb-1"></div>
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}" id="tombol-verif-bawahan">Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span></a>
@@ -94,6 +135,26 @@
     </div>
 
     {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="modalCutiUnit" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Daftar Cuti Tahunan <b class="text-info">Unit Kerja</b>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="tampil-cuti-unit">
+                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalTambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -218,7 +279,118 @@
             // });
             count();
             showRiwayat();
+            totalCuti();
         });
+
+        function totalCuti() {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/totalcuti/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+
+                    var totalReal = parseInt(res);   // nilai asli
+                    var maxCuti   = 12;
+
+                    // nilai untuk progress bar (dibatasi)
+                    var progressValue = Math.min(totalReal, maxCuti);
+                    var percent = (progressValue / maxCuti) * 100;
+
+                    // Animasi progress bar
+                    $('.progress-bar')
+                        .removeClass('bg-danger')
+                        .css('width', '0%')
+                        .delay(50)
+                        .queue(function(next){
+                            $(this).css('width', percent + '%');
+                            next();
+                        });
+
+                    // tampilkan angka REAL (bukan progress)
+                    $('.cuti-indicator')
+                        .text(totalReal + 'x Cuti')
+                        .css('left', percent + '%');
+
+                    // hitung over-limit
+                    var over = totalReal - maxCuti;
+
+                    if (over > 0) {
+
+                        // ubah warna bar (opsional warning)
+                        $('.progress-bar').addClass('bg-danger');
+
+                        // tampilkan badge overlimit
+                        $('.cuti-over')
+                            .text('Over +' + over)
+                            .fadeIn();
+                    } else {
+
+                        // sembunyikan jika normal
+                        $('.cuti-over').hide();
+                    }
+                }, error: function(err) {
+                    Swal.fire({
+                        title: err.statusText + " (Code " + err.status + ")",
+                        html: err.responseText,
+                        icon: "error",
+                        showConfirmButton: true,
+                        backdrop: `rgba(26,27,41,0.8)`,
+                    });
+                }
+            });
+        }
+
+        function totalCutiUnit() {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/totalcutiunit/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#modalCutiUnit').modal('show');
+                    $('#tampil-cuti-unit').empty().html(`<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`);
+                },
+                success: function(res) {
+                    let i = 0;
+                    let tampil = `<div class="table-responsive">
+                                    <table class="table table-hover table-bordered dt-responsive align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2"><center>NO</center></th>
+                                                <th rowspan="2"><center>NAMA PEGAWAI</center></th>
+                                                <th colspan="2"><center>TAHUN {{ \Carbon\Carbon::now()->format('Y') }}</center></th>
+                                            </tr>
+                                            <tr>
+                                                <th><center>TOTAL CUTI</center></th>
+                                                <th><center>SISA CUTI</center></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>`;
+                    res.forEach(item => {
+                        tampil += `<tr>
+                                        <td><center>${++i}</center></td>
+                                        <td>${item.nama}</td>
+                                        <td><center><b class="text-primary">${item.total_cuti}x</b></center></td>
+                                        <td><center><b class="text-danger">${item.sisa_cuti}x</b></center></td>
+                                    </tr>`;
+                    });
+                    tampil +=         `</tbody>
+                                    </table>
+                                </div>`;
+                    $('#tampil-cuti-unit').empty().html(tampil);
+                }, error: function(err) {
+                    $('#modalCutiUnit').modal('hide');
+                    Swal.fire({
+                        title: err.statusText + " (Code " + err.status + ")",
+                        html: err.responseText,
+                        icon: "error",
+                        showConfirmButton: true,
+                        backdrop: `rgba(26,27,41,0.8)`,
+                    });
+                }, complete: function() {
+
+                }
+            });
+        }
 
         function showDeadlineReminder(targetTanggal = 27) {
             let now = new Date();

@@ -135,6 +135,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 Route::get('kepegawaian/jadwaldinas/{id}/shift/user/{user}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'getShift'])->name('kepegawaian.jadwaldinas.getShift');
                 Route::get('kepegawaian/jadwaldinas/table/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'table'])->name('kepegawaian.jadwaldinas.table');
                 Route::get('kepegawaian/jadwaldinas/jadwal/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'jadwal'])->name('kepegawaian.jadwaldinas.jadwal');
+                Route::get('kepegawaian/jadwaldinas/totalcuti/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'totalCuti'])->name('kepegawaian.jadwaldinas.totalCuti');
+                Route::get('kepegawaian/jadwaldinas/totalcutiunit/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'totalCutiUnit'])->name('kepegawaian.jadwaldinas.totalCutiUnit');
                 Route::delete('kepegawaian/jadwaldinas/{id}/hapus', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'hapus'])->name('kepegawaian.jadwaldinas.hapus');
                 Route::get('kepegawaian/dokumentasi/eabsensi', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'dokumentasiAbsensi'])->name('kepegawaian.dokumentasi.absensi');
                 Route::get('kepegawaian/dokumentasi/eabsensi/download', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'downloadDokumentasiAbsensi'])->name('kepegawaian.dokumentasi.absensi.download');

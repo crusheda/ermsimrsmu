@@ -688,6 +688,121 @@ class JadwalController extends Controller
         return response()->json($data, 200);
     }
 
+    function totalCuti($id)
+    {
+        // $ref_users = DB::table('referensi_jadwal_users')
+        //     ->whereJsonContains('staf', (string) $pegawai)
+        //     ->whereNull('deleted_at')
+        //     ->first();
+
+        // $data = jadwal_detail::where('progress','!=',0)
+        //         ->where('pegawai_id', $ref_users->pegawai_id)
+        //         ->whereNull('deleted_at')
+        //         ->get();
+
+        $now   = Carbon::now();
+        $tahun = $now->format('Y');
+
+        // ambil semua jadwal pegawai dalam tahun ini
+        $data = DB::table('kepegawaian_jadwal_detail as kjd')
+            ->join('kepegawaian_jadwal as kj', function ($join) use ($tahun) {
+                $join->on('kj.id', '=', 'kjd.id_jadwal')
+                    ->where('kj.tahun', $tahun)
+                    ->whereIn('kj.progress', [1, 2, 3])
+                    ->whereNull('kj.deleted_at');
+            })
+            ->select('kjd.*', 'kj.id as id_jadwal', 'kj.bulan')
+            ->where('kjd.pegawai_id', $id)
+            ->whereNull('kjd.deleted_at')
+            ->get();
+
+        // hitung total "C"
+        $total = 0;
+        foreach ($data as $row) {
+            for ($i = 1; $i <= 31; $i++) {
+                $kolom = "tgl{$i}";
+                if (($row->$kolom ?? null) === 'C') {
+                    // print_r("IDJADWAL = ".$row->id_jadwal." - \n");
+                    $total++;
+                }
+            }
+        }
+        // die();
+
+        return response()->json($total, 200);
+    }
+
+    function totalCutiUnit($id)
+    {
+        $ref_users = DB::table('referensi_jadwal_users')
+            ->whereJsonContains('staf', (string) $id)
+            ->whereNull('deleted_at')
+            ->first();
+
+        if (!$ref_users) {
+            return response()->json([], 200);
+        }
+
+        $staffArray = json_decode($ref_users->staf, true);
+        // $staffArray = array_map('intval', json_decode($ref_users->staf, true));
+
+        $now   = Carbon::now();
+        $tahun = $now->format('Y');
+        $maxCuti = 12;
+
+        // ambil semua jadwal pegawai dalam tahun ini
+        $data = DB::table('kepegawaian_jadwal_detail as kjd')
+            ->join('kepegawaian_jadwal as kj', function ($join) use ($tahun) {
+                $join->on('kj.id', '=', 'kjd.id_jadwal')
+                    ->where('kj.tahun', $tahun)
+                    ->whereIn('kj.progress', [1, 2, 3])
+                    ->whereNull('kj.deleted_at');
+            })
+            ->join('users as us', function ($join) {
+                $join->on('us.id', '=', 'kjd.pegawai_id')
+                    ->whereNull('us.deleted_at')
+                    ->whereNull('us.status');
+            })
+            ->select('kjd.*', 'us.nama as nama_pegawai', 'kj.id as id_jadwal', 'kj.bulan')
+            ->whereIn('kjd.pegawai_id', $staffArray)
+            ->whereNull('kjd.deleted_at')
+            ->get();
+
+        $rekap = [];
+
+        foreach ($data as $row) {
+
+            // Pastikan array per pegawai ada
+            if (!isset($rekap[$row->pegawai_id])) {
+                $rekap[$row->pegawai_id] = [
+                    'nama' => $row->nama_pegawai,
+                    'total_cuti' => 0,
+                    'sisa_cuti'  => $maxCuti,
+                ];
+            }
+
+            // Hitung C per baris jadwal
+            for ($i = 1; $i <= 31; $i++) {
+                $kolom = "tgl{$i}";
+                if (($row->$kolom ?? null) === 'C') {
+                    $rekap[$row->pegawai_id]['total_cuti']++;
+                    // print_r("IDJADWAL = ".$row->id_jadwal." - \n");
+                }
+            }
+        }
+        // die();
+
+        // Hitung sisa cuti
+        foreach ($rekap as &$r) {
+            $r['sisa_cuti'] = max($maxCuti - $r['total_cuti'], 0);
+        }
+
+        // Convert ke indexed array agar rapi saat di-JSON
+        $hasil = array_values($rekap);
+
+        return response()->json($hasil, 200);
+    }
+
     // TABEL RIWAYAT JADWAL
     function table($id)
     {
@@ -1541,7 +1656,20 @@ class JadwalController extends Controller
 
     function ambilAlihStaf($id,$user)
     {
-        $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
+        $now = Carbon::now();
+        $tgl = $now->isoFormat('dddd, D MMMM Y, HH:mm a');
+        // $bulan = $now->format('m');
+        // $tahun = $now->format('Y');
+
+        // daftar bulan–tahun sampai 3 bulan ke depan (termasuk bulan sekarang)
+        $periode = [];
+        for ($i = 0; $i <= 3; $i++) {
+            $dt = $now->copy()->addMonths($i);
+            $periode[] = [
+                'bulan' => $dt->format('m'),
+                'tahun' => $dt->format('Y')
+            ];
+        }
 
         // Validasi
         $cek = ref_jadwal_users::where('pegawai_id',$user)->whereNull('deleted_at')->first();
@@ -1587,6 +1715,26 @@ class JadwalController extends Controller
                     $newData3->save();
                     $item->delete();
                 }
+            }
+
+            // build query dinamis (karena bulan & tahun dipisah kolom)
+            $query = jadwal::withTrashed()
+                ->where('pegawai_id', $id)
+                ->where(function ($q) use ($periode) {
+                    foreach ($periode as $p) {
+                        $q->orWhere(function ($qq) use ($p) {
+                            $qq->where('bulan', $p['bulan'])
+                            ->where('tahun', $p['tahun']);
+                        });
+                    }
+                });
+
+            // ambil data & update pegawai_id
+            $data4 = $query->get();
+
+            foreach ($data4 as $item) {
+                $item->pegawai_id = $user;
+                $item->save();
             }
 
             return response()->json($tgl, 200);

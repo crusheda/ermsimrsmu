@@ -63,7 +63,7 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="javascript:void(0);" onclick="tambah()">Tambah Jadwal Dinas</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf</a>
+                                    <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexStaf') }}">Referensi Staf <b class="text-danger">[UTAMA]</b></a>
                                     <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexShift') }}">Referensi Jaga Shift</a>
                                     <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexLN') }}">Referensi Libur Nasional</a>
                                     <div class="dropdown-divider"></div>
