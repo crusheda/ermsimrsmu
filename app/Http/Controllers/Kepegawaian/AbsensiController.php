@@ -1109,6 +1109,21 @@ class AbsensiController extends Controller
         return response()->json($data);
     }
 
+    function deteksiPerangkat()
+    {
+        $show = absensi::leftJoin('users','kepegawaian_absensi.pegawai_id','=','users.id')
+                        ->select('kepegawaian_absensi.*','users.nama')
+                        ->whereNull('kepegawaian_absensi.deleted_at')
+                        ->where('kepegawaian_absensi.is_fake_gps',1)
+                        ->get();
+
+        $data = [
+            'show' => $show,
+        ];
+
+        return response()->json($data);
+    }
+
     function detail($id)
     {
         $show = absensi::where('id',$id)->first();

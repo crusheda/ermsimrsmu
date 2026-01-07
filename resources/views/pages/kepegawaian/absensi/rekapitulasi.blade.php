@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h2 class="mb-0"><b class="text-primary">Absensi</b> Karyawan</h2>
+                        <h2 class="mb-0">Manajemen <b class="text-primary">Absensi</b> Karyawan</h2>
                     </div>
                 </div>
             </div>
@@ -130,13 +130,13 @@
                     <h5 class="mb-0 ms-3">Filter <b class="text-primary">Riwayat</b></h5>
                     {{-- @if (Auth::user()->getPermission('admin_surket') == true) --}}
                         <div class="btn-group">
-                            <a href="javascript:void(0);" class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical f-18"></i></a>
-                            {{-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <a href="javascript:void(0);" class="btn btn-link-secondary dropdown-toggle arrow-none"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-grid-dots f-18 me-1"></i> Menu Admin</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showKategori()">Daftar Kategori</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="showDeteksiPerangkat()">Deteksi Kecurangan Pegawai</a>
                                 </li>
-                            </ul> --}}
+                            </ul>
                         </div>
                     {{-- @endif --}}
                 </div>
@@ -298,7 +298,7 @@
                         <table class="table table-bordered" style="width: 100%">
                             <thead class="text-center align-middle">
                                 <tr>
-                                    <th>&nbsp;</th>
+                                    <th>#</th>
                                     <th>Berangkat</th>
                                     <th>Pulang</th>
                                 </tr>
@@ -314,7 +314,43 @@
             </div>
         </div>
     </div>
-    {{-- MODAL HAPUS --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="modalDeteksiPerangkat" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
+        <div class="modal-dialog modal-xxl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Daftar Deteksi <b class="text-danger me-1">Kecurangan</b> <b class="text-info">Perangkat Absensi</b>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered dt-responsive align-middle" style="width: 100%" id="dttable-deteksip">
+                            <thead class="text-center align-middle">
+                                <tr>
+                                    <th class="text-center">ID ABSENSI</th>
+                                    <th class="text-center">Nama Pegawai</th>
+                                    <th class="text-center">Shift Jaga</th>
+                                    <th class="text-center">Jenis Absensi</th>
+                                    <th class="text-center">Tanggal Absensi</th>
+                                    <th class="text-center">Absensi Berangkat</th>
+                                    <th class="text-center">Absensi Pulang</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tampil-tbody-deteksip" class="text-center align-middle">
+                                <tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal">Tutup <i class="fas fa-arrow-right ms-1"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- MODAL EDIT --}}
     <div class="modal animate__animated animate__rubberBand fade" id="modalUbah" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-simple modal-dialog-centered modal-xl">
             <div class="modal-content">
@@ -799,6 +835,113 @@
             $('#btn-simpan-ijin').prop('disabled', true);
         }
 
+        function showDeteksiPerangkat() {
+            $('#modalDeteksiPerangkat').modal('show');
+            $("#tampil-tbody-deteksip").empty().append(`<tr style='font-size:13px'><td colspan="20"><center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center></td></tr>`);
+            // INITIALIZIE
+            $.ajax({
+                url: `/api/kepegawaian/absensi/deteksiperangkat`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    if ($.fn.DataTable.isDataTable('#dttable-deteksip')) {
+                        $('#dttable-deteksip').DataTable().clear().destroy();
+                    }
+                    content = ``;
+                    res.show.forEach(item => {
+                        var dateMasuk = new Date(item.ref_jam_masuk).toLocaleDateString("sv-SE");
+                        jenis = '';
+                        if (item.jenis == 1) {
+                            jenis = `Masuk <b class="text-primary">Shift</b>`;
+                        } else {
+                            if (item.jenis == 3) {
+                                jenis = `Tidak Masuk/<b class="text-warning">Ijin</b>`;
+                            } else {
+                                if (item.jenis == 4) {
+                                    jenis = `Masuk <b class="text-info">Dinas Luar</b>`;
+                                } else {
+                                    jenis = `Tidak <b class="text-danger">Terdefinisi</b>`;
+                                }
+                            }
+                        }
+                        content += "<tr style='font-size:13px'>";
+                        content += `<td class="text-center">${item.id}</td>`;
+                        content += `<td class="text-start">${item.nama}</td>`;
+                        content += `<td class="text-start"><span class="badge rounded-pill text-bg-success me-1">${item.kd_shift}</span> ${item.nm_shift}</td>`;
+                        content += `<td class="text-start"><h6 class="mb-0">${jenis}</h6>${item.keterangan?`<small><b class="text-danger">Keterangan</b> : ${item.keterangan}</small>`:``}</td>`;
+                        content += `<td class="text-center">${dateMasuk}</td>`;
+                        content += `<td class="text-start">
+                                        <div class="align-items-center">
+                                            <h6 class="mb-1">Berangkat : <b class="text-info">${item.tgl_in}</b></h6>
+                                            <p>Lokasi : 
+                                                <a href="${item.lokasi_in?'https://www.google.com/maps?q='+item.lokasi_in:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                                    data-bs-html="true" title="Klik disini untuk melihat Lokasi Berangkat">${item.lokasi_in?item.lokasi_in:'-'}</a>
+                                            </p>
+                                            <p>Bukti Foto : 
+                                                <a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${item.id}/1" data-lightbox="gallery" data-title="Bukti Foto Absensi Berangkat (${item.foto_in?item.foto_in:'-'})" style="width:500px;height:500px">
+                                                    <span class="badge bg-info" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                                    data-bs-html="true" title="Klik disini untuk melihat Bukti Foto Berangkat">KLIK DISINI</span>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </td>`;
+                        content += `<td class="text-start">
+                                        <div class="align-items-center">
+                                            <h6 class="mb-1">Pulang : <b class="text-danger">${item.tgl_out?item.tgl_out:'-'}</b></h6>
+                                            <p>Lokasi : 
+                                                <a href="${item.lokasi_out?'https://www.google.com/maps?q='+item.lokasi_out:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                                    data-bs-html="true" title="Klik disini untuk melihat Lokasi Berangkat">${item.lokasi_out?item.lokasi_out:'-'}</a>
+                                            </p>
+                                            <p>Bukti Foto : 
+                                                ${item.foto_out?`<a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${item.id}/0" data-lightbox="gallery" data-title="Bukti Foto Absensi Pulang (${item.foto_in?item.foto_in:'-'})" style="width:500px;height:500px">
+                                                                        <span class="badge bg-danger" style="cursor:pointer" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
+                                                                        data-bs-html="true" title="Klik disini untuk melihat Bukti Foto Pulang">KLIK DISINI</span>
+                                                                    </a>`:`-`}
+                                            </p>
+                                        </div>
+                                    </td>`;
+                        content += `<td>${item.is_fake_gps?'<span class="badge rounded-pill text-bg-danger me-1">FAKE GPS</span>':'<span class="badge rounded-pill text-bg-info me-1">AMAN</span>'}</td>`;
+                        content += "</tr>";
+                    });
+                    $('#tampil-tbody-deteksip').empty().append(content);
+                    var table = $('#dttable-deteksip').DataTable({
+                        destroy: true,
+                        // dom: 'Bfrtip',
+                        order: [
+                            [4, "desc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%' },
+                            { sWidth: '15%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                            { sWidth: '10%' },
+                            { sWidth: '20%' },
+                            { sWidth: '20%' },
+                            { sWidth: '10%' },
+                        ],
+                        columnDefs: [
+                            // { visible: false, targets: [7] },
+                        ],
+                        displayLength: 100,
+                        lengthChange: true,
+                        lengthMenu: [20,50,100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
+                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                    // iziToast.success({
+                    //     title: 'System Message!',
+                    //     message: 'Berhasil menampilkan data Monitoring Absensi',
+                    //     position: 'topRight'
+                    // });
+                    // Showing Tooltip
+                    $('[data-bs-toggle="tooltip"]').tooltip({
+                        trigger: 'hover'
+                    })
+                }
+            })
+        }
+
         function showMonitoring() {
             $("#tampil-thead").empty().append(`
                 <tr>
@@ -864,7 +1007,7 @@
                                                     src="${item.foto_user?`/storage/`+item.foto_user.substring(7,10000):'/images/pku/user.png'}" alt="user image"
                                                     class="img-radius wid-40 hei-40 align-top m-r-15"></div>
                                             <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-1">${item.nama_pegawai}</h6>
+                                                <h6 class="mb-1">${item.nama_pegawai} ${item.is_fake_gps?'<span class="badge rounded-pill text-bg-danger">FAKE GPS</span>':''}</h6>
                                                 <small class='text-truncate text-muted'>${role}</small>
                                             </div>
                                         </div>
@@ -2016,12 +2159,12 @@
                                 <th class="text-start">Bukti Foto</th>
                                 <td>
                                     <a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/1" data-lightbox="gallery" data-title="Bukti Foto Absensi (${res.show.foto_in?res.show.foto_in:'-'})" style="width:500px;height:500px">
-                                        <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/1" class="img-fluid m-b-10" alt="" style="width:500px;height:500px">
+                                        <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/1" class="img-fluid m-b-10" alt="" style="width:500px;height:auto">
                                     </a>
                                 </td>
                                 <td>
                                     <a href="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/0" data-lightbox="gallery" data-title="Bukti Foto Absensi (${res.show.foto_out?res.show.foto_out:'-'})" style="width:500px;height:500px">
-                                        <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/0" class="img-fluid m-b-10" alt="" style="width:500px;height:500px">
+                                        <img src="https://absensi.simrsmu.com/api/kepegawaian/detail/foto/${res.show.id}/0" class="img-fluid m-b-10" alt="" style="width:500px;height:auto">
                                     </a>
                                 </td>
                             </tr>
@@ -2060,6 +2203,10 @@
                             <tr>
                                 <th class="text-start">Keterangan</th>
                                 <td colspan="2">${res.show.keterangan?res.show.keterangan:'Tidak Ada.'}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-start">Deteksi Perangkat</th>
+                                <td colspan="2">${res.show.is_fake_gps?'<span class="badge rounded-pill text-bg-danger">FAKE GPS</span>':'<span class="badge rounded-pill text-bg-info">AMAN</span>'}</td>
                             </tr>
                         `);
                         // INIT MAP
