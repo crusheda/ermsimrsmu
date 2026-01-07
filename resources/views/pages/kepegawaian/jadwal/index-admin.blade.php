@@ -39,6 +39,82 @@
     </div><!-- [ breadcrumb ] end -->
     <!-- [ Main Content ] start -->
     <div class="row pt-1">
+        <div class="col-xl-6 mb-3">
+            <div class="card shadow-none border mb-0">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <img src="{{ asset('/images/widget/img-travel.png') }}" alt="img" class="img-fluid">
+                        <button class="btn btn-light-success btn-sm" onclick="totalCutiAllUnit()"><i class="fas fa-suitcase-rolling me-1"></i> Lihat Cuti Tahunan <span class="badge bg-danger text-white ms-1">Semua Unit</span></button>
+                        {{-- <div class="dropdown">
+                            <a class="avtar avtar-xs btn-light-secondary dropdown-toggle arrow-none"
+                                href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="ti ti-dots-vertical f-18"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="javascript:void(0);"><s>Riwayat Cuti Tahunan Anda</s></a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="totalCutiUnit()">Cuti Tahunan Di Unit Anda</a>
+                            </div>
+                        </div> --}}
+                    </div>
+                    <h6 class="mb-3">Total Cuti Tahunan Anda di <b class="text-info">Tahun {{ \Carbon\Carbon::now()->format('Y') }}</b></h6>
+                    <div class="bg-teal-300 p-3 pt-4 rounded-4 position-relative">
+                        <div class="progress bg-white bg-opacity-25 mt-2" style="height: 6px; position: relative;">
+                            <div class="progress-bar bg-white" style="width: 0%; transition: width 1s ease;"></div>
+
+                            <!-- indikator angka di tengah -->
+                            <div class="cuti-indicator text-gray-100 text-md"
+                                style="position:absolute; top:-25px; left:0%; transform:translateX(-50%);">
+                            </div>
+
+                            <span class="cuti-over badge bg-danger ms-2"
+                                style="position:absolute; top:-28px; right:12px; display:none;">
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-2">
+                            <p class="mb-0 text-gray-100 text-sm"><b>0x</b></p>
+                            <p class="mb-0 text-gray-100 text-sm"><b>12x</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 mb-3">
+            <div class="card" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Absensi Anda dalam kurun waktu 1 bulan penghitungan BULAN INI (Tidak termasuk Cuti, Libur, Ijin, dll)">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="my-n4" style="width: 130px">
+                                <div id="grafikTotalAbsensi1"></div>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 mx-2">
+                            <p class="mb-1">Total Absensi (Shift Jaga) <span class="badge text-bg-primary">BULAN INI</span></p>
+                            <b><small class="mb-0" id="dateGrafikTotalAbsensi1"></small></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 mb-3">
+            <div class="card">
+                <div class="card-body" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Absensi Anda dalam kurun waktu 1 bulan penghitungan BULAN LALU (Tidak termasuk Cuti, Libur, Ijin, dll)">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="my-n4" style="width: 130px">
+                                <div id="grafikTotalAbsensi0"></div>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 mx-2">
+                            <p class="mb-1">Total Absensi (Shift Jaga) <span class="badge bg-light-danger">BULAN LALU</span></p>
+                            <b><small class="mb-0" id="dateGrafikTotalAbsensi0"></small></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-xl-12">
             <div class="card table-card">
                 <div class="card-header d-flex align-items-center justify-content-between px-3 gap-2">
@@ -118,6 +194,26 @@
     </div>
 
     {{-- MODAL START --}}
+    <div class="modal fade animate__animated animate__rubberBand" id="modalCutiUnit" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xxl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Daftar Cuti Tahunan <b class="text-info">Unit Kerja</b>
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="tampil-cuti-unit">
+                        <center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i> Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade animate__animated animate__rubberBand" id="modalTambah" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -434,7 +530,251 @@
             // });
             count();
             showRiwayat($('#filterBulan').val());
+            totalCuti();
+            graphTotalAbsensi(1); // periode aktif 21→20 (sekarang)
+            graphTotalAbsensi(0); // periode sebelumnya 21→20
         });
+
+        function graphTotalAbsensi(range) {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/totalabsensi/{{ Auth::user()->id }}/" + range,
+                type: "GET",
+                dataType: "json",
+
+                success: function(res) {
+
+                    if (range == 1) {
+                        colorGrafik = "#2563EB"; // biru
+                        colorBackGrafik = "#2563EB30"; // biru muda
+                    } else {
+                        colorGrafik = "#DC2626"; // merah
+                        colorBackGrafik = "#fce9e9"; // merah muda
+                    }
+
+                    let totalAbsensi = parseInt(res.total_absensi ?? 0);
+                    let totalHariKerja = parseInt(res.total_hari_kerja ?? 1);
+
+                    // hitung persentase (untuk grafik radial)
+                    let persen = Math.round((totalAbsensi / totalHariKerja) * 100);
+
+                    let options = {
+                        series: [persen],
+                        chart: {
+                            height: 190,
+                            type: "radialBar"
+                        },
+                        plotOptions: {
+                            radialBar: {
+                                hollow: {
+                                    margin: 0,
+                                    size: "60%",
+                                    background: "transparent"
+                                },
+                                track: {
+                                    background: colorBackGrafik,
+                                    strokeWidth: "50%"
+                                },
+                                dataLabels: {
+                                    show: true,
+                                    name: { show: false },
+                                    value: {
+                                        formatter: function () {
+                                            return totalAbsensi + "x / " + totalHariKerja + "hr"; // teks tengah
+                                        },
+                                        offsetY: 7,
+                                        color: colorGrafik,
+                                        fontSize: "18px",
+                                        fontWeight: "700",
+                                        show: true
+                                    }
+                                }
+                            }
+                        },
+                        colors: [colorGrafik],
+                        fill: { type: "solid" },
+                        stroke: { lineCap: "round" },
+                        tooltip: {
+                            enabled: true,
+                            y: {
+                                formatter: function () {
+                                    return persen + "% (Total Absensi " + totalAbsensi + "x / Total Hari Kerja " + totalHariKerja + "hr)";
+                                }
+                            }
+                        }
+                    };
+
+                    new ApexCharts(
+                        document.querySelector("#grafikTotalAbsensi"+range),
+                        options
+                    ).render();
+
+                    // tampilkan bulan dan tahun
+                    $('#dateGrafikTotalAbsensi'+range).text(
+                        formatTanggalIndo(res.start) + ' - ' + formatTanggalIndo(res.end)
+                    );
+                },
+
+                error: function(err) {
+                    console.error("Gagal load grafik absensi", err);
+                }
+            });
+        }
+
+        function totalCuti() {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/totalcuti/{{ Auth::user()->id }}",
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+
+                    var totalReal = parseInt(res);   // nilai asli
+                    var maxCuti   = 12;
+
+                    // nilai untuk progress bar (dibatasi)
+                    var progressValue = Math.min(totalReal, maxCuti);
+                    var percent = (progressValue / maxCuti) * 100;
+
+                    // Animasi progress bar
+                    $('.progress-bar')
+                        .removeClass('bg-danger')
+                        .css('width', '0%')
+                        .delay(50)
+                        .queue(function(next){
+                            $(this).css('width', percent + '%');
+                            next();
+                        });
+
+                    // tampilkan angka REAL (bukan progress)
+                    $('.cuti-indicator')
+                        .text(totalReal + 'x')
+                        .css('left', percent + '%');
+
+                    // hitung over-limit
+                    var over = totalReal - maxCuti;
+
+                    if (over > 0) {
+
+                        // ubah warna bar (opsional warning)
+                        $('.progress-bar').addClass('bg-danger');
+
+                        // tampilkan badge overlimit
+                        $('.cuti-over')
+                            .text('Over +' + over)
+                            .fadeIn();
+                    } else {
+
+                        // sembunyikan jika normal
+                        $('.cuti-over').hide();
+                    }
+                }, error: function(err) {
+                    Swal.fire({
+                        title: err.statusText + " (Code " + err.status + ")",
+                        html: err.responseText,
+                        icon: "error",
+                        showConfirmButton: true,
+                        backdrop: `rgba(26,27,41,0.8)`,
+                    });
+                }
+            });
+        }
+
+        function totalCutiAllUnit() {
+            $.ajax({
+                url: "/api/kepegawaian/jadwaldinas/totalcutiunit/all",
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#modalCutiUnit').modal('show');
+                    $('#tampil-cuti-unit').empty().html(`<center><i class="fa fa-spinner fa-spin fa-fw"></i> Memproses data...</center>`);
+                },
+                success: function(res) {
+                    const tahunSekarang = {{ \Carbon\Carbon::now()->format('Y') }};
+                    const tahunSebelumnya = tahunSekarang - 1;
+                    let i = 0;
+
+                    $('#dttable-cutiunit').DataTable().clear().destroy();
+
+                    let tampil = `<div class="table-responsive">
+                        <table class="table table-hover table-bordered dt-responsive align-middle" id="dttable-cutiunit">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2"><center>NO</center></th>
+                                    <th rowspan="2"><center>NAMA PEGAWAI</center></th>
+                                    <th rowspan="2"><center>UNIT</center></th>
+                                    <th colspan="2"><center>TAHUN ${tahunSebelumnya}</center></th>
+                                    <th colspan="2"><center>TAHUN ${tahunSekarang} <span class="badge rounded-pill text-bg-primary">SAAT INI</span></center></th>
+                                </tr>
+                                <tr>
+                                    <th><center>TOTAL CUTI <b class="text-primary">TERPAKAI</b></center></th>
+                                    <th><center>SISA CUTI <b class="text-danger">HANGUS</b></center></th>
+                                    <th><center>TOTAL CUTI <b class="text-primary">TERPAKAI</b></center></th>
+                                    <th><center>SISA CUTI <b class="text-danger">TERSEDIA</b></center></th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+
+                    res.forEach(item => {
+
+                        // property dinamis sesuai format API
+                        const keyTotalNow = `total_cuti_${tahunSekarang}`;
+                        const keySisaNow  = `sisa_cuti_${tahunSekarang}`;
+                        const keyTotalPrev = `total_cuti_${tahunSebelumnya}`;
+                        const keySisaPrev  = `sisa_cuti_${tahunSebelumnya}`;
+
+                        tampil += `<tr>
+                            <td><center>${++i}</center></td>
+                            <td>${item.nama}</td>
+                            <td><center>${item.unit}</center></td>
+
+                            <td><center><b class="text-primary">${item[keyTotalPrev]}x</b></center></td>
+                            <td><center><b class="text-danger">${item[keySisaPrev]}x</b></center></td>
+
+                            <td><center><b class="text-primary">${item[keyTotalNow]}x</b></center></td>
+                            <td><center><b class="text-danger">${item[keySisaNow]}x</b></center></td>
+                        </tr>`;
+                    });
+
+                    tampil += `</tbody></table></div>`;
+                    $('#tampil-cuti-unit').empty().html(tampil);
+
+                    // INIT DTTABLE
+                    var table = $('#dttable-cutiunit').DataTable({
+                        dom: 'Bfrtip',
+                        order: [
+                            [2, "asc"]
+                        ],
+                        bAutoWidth: false,
+                        aoColumns : [
+                            { sWidth: '5%'  },  // NO
+                            { sWidth: '25%' },  // NAMA
+                            { sWidth: '10%' },  // UNIT
+                            { sWidth: '10%' },  // TOTAL prev
+                            { sWidth: '10%' },  // SISA prev
+                            { sWidth: '10%' },  // TOTAL now
+                            { sWidth: '10%' },  // SISA now
+                        ],
+                        columnDefs: [
+                            // { visible: false, targets: [7] },
+                        ],
+                        displayLength: 50,
+                        lengthChange: true,
+                        lengthMenu: [50, 75, 100, 300, 500, 1000],
+                        buttons: ['copy', 'excel', 'pdf', 'colvis']
+                    });
+                }, error: function(err) {
+                    $('#modalCutiUnit').modal('hide');
+                    Swal.fire({
+                        title: err.statusText + " (Code " + err.status + ")",
+                        html: err.responseText,
+                        icon: "error",
+                        showConfirmButton: true,
+                        backdrop: `rgba(26,27,41,0.8)`,
+                    });
+                }, complete: function() {
+
+                }
+            });
+        }
 
         function count() {
             $.ajax({
@@ -1261,6 +1601,20 @@
                     }
                 });
             }
+        }
+
+        function formatTanggalIndo(dateStr) {
+            const bulanIndo = [
+                "Jan","Feb","Mar","Apr","Mei","Jun",
+                "Jul","Agu","Sep","Okt","Nov","Des"
+            ];
+
+            let d = new Date(dateStr);
+            let tgl  = d.getDate();
+            let bln  = bulanIndo[d.getMonth()];
+            let thn  = d.getFullYear();
+
+            return `${tgl} ${bln} ${thn}`;
         }
     </script>
 @endsection

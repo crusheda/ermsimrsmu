@@ -131,6 +131,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
             // DASHBOARD / GRAPH
                 Route::get('kepegawaian/jadwaldinas/totalabsensi/{user}/{range}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'totalAbsensi'])->name('kepegawaian.jadwaldinas.totalAbsensi');
                 Route::get('kepegawaian/jadwaldinas/totalcuti/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'totalCuti'])->name('kepegawaian.jadwaldinas.totalCuti');
+                Route::get('kepegawaian/jadwaldinas/totalcutiunit/all', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'totalCutiUnitAll'])->name('kepegawaian.jadwaldinas.totalCutiUnitAll');
                 Route::get('kepegawaian/jadwaldinas/totalcutiunit/{id}', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'totalCutiUnit'])->name('kepegawaian.jadwaldinas.totalCutiUnit');
             // USER
                 Route::post('kepegawaian/jadwaldinas/tambah', [\App\Http\Controllers\Kepegawaian\JadwalController::class, 'storePengajuan'])->name('kepegawaian.jadwaldinas.storePengajuan');

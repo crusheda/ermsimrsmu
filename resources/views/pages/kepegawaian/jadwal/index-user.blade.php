@@ -73,7 +73,7 @@
             </div>
         </div>
         <div class="col-xl-3 mb-3">
-            <div class="card">
+            <div class="card" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Absensi Anda dalam kurun waktu 1 bulan penghitungan (Tidak termasuk Cuti, Libur, Ijin, dll)">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -83,14 +83,14 @@
                         </div>
                         <div class="flex-grow-1 mx-2">
                             <p class="mb-1">Total Absensi <span class="badge text-bg-primary">BULAN INI</span></p>
-                            <h6 class="mb-0" id="dateGrafikTotalAbsensi1"></h6>
+                            <b><small class="mb-0" id="dateGrafikTotalAbsensi1"></small></b>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-xl-3 mb-3">
-            <div class="card">
+            <div class="card" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Jumlah Absensi Anda dalam kurun waktu 1 bulan penghitungan (Tidak termasuk Cuti, Libur, Ijin, dll)">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
@@ -100,7 +100,7 @@
                         </div>
                         <div class="flex-grow-1 mx-2">
                             <p class="mb-1">Total Absensi <span class="badge bg-light-danger">BULAN LALU</span></p>
-                            <h6 class="mb-0" id="dateGrafikTotalAbsensi0"></h6>
+                            <b><small class="mb-0" id="dateGrafikTotalAbsensi0"></small></b>
                         </div>
                     </div>
                 </div>
@@ -125,8 +125,6 @@
                                 <a class="dropdown-item" href="{{ route('kepegawaian.jadwaldinas.indexBawahan') }}" id="tombol-verif-bawahan">Verifikasi Bawahan <span class="badge bg-danger ms-2" id="count-bawahan">0</span></a>
                             </li>
                         </ul>
-                        {{-- <a href="javascript:void(0);" class="avtar avtar-s btn-light-primary" onclick="tambah()" data-bs-toggle="tooltip"
-                        data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="Tambah Ja"><i class="ti ti-refresh f-20"></i></a> --}}
                     </div>
                 </div>
                 <div class="card-body">
