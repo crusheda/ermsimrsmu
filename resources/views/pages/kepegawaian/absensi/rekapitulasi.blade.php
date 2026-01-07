@@ -314,7 +314,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade animate__animated animate__rubberBand" id="modalDeteksiPerangkat" role="dialog" aria-labelledby="confirmFormLabel"aria-hidden="true">
+    <div class="modal fade animate__animated animate__rubberBand" id="modalDeteksiPerangkat" role="dialog" aria-labelledby="confirmFormLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-xxl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -873,7 +873,7 @@
                         content += `<td class="text-start">
                                         <div class="align-items-center">
                                             <h6 class="mb-1">Berangkat : <b class="text-info">${item.tgl_in}</b></h6>
-                                            <p>Lokasi : 
+                                            <p class="mb-1">Lokasi : 
                                                 <a href="${item.lokasi_in?'https://www.google.com/maps?q='+item.lokasi_in:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
                                                     data-bs-html="true" title="Klik disini untuk melihat Lokasi Berangkat">${item.lokasi_in?item.lokasi_in:'-'}</a>
                                             </p>
@@ -888,7 +888,7 @@
                         content += `<td class="text-start">
                                         <div class="align-items-center">
                                             <h6 class="mb-1">Pulang : <b class="text-danger">${item.tgl_out?item.tgl_out:'-'}</b></h6>
-                                            <p>Lokasi : 
+                                            <p class="mb-1">Lokasi : 
                                                 <a href="${item.lokasi_out?'https://www.google.com/maps?q='+item.lokasi_out:'javascript:void(0);'}" target="_blank" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" 
                                                     data-bs-html="true" title="Klik disini untuk melihat Lokasi Berangkat">${item.lokasi_out?item.lokasi_out:'-'}</a>
                                             </p>
@@ -906,7 +906,7 @@
                     $('#tampil-tbody-deteksip').empty().append(content);
                     var table = $('#dttable-deteksip').DataTable({
                         destroy: true,
-                        // dom: 'Bfrtip',
+                        dom: 'Bfrtip',
                         order: [
                             [4, "desc"]
                         ],
@@ -927,7 +927,7 @@
                         displayLength: 100,
                         lengthChange: true,
                         lengthMenu: [20,50,100, 300, 500, 1000, 3000, 5000, 10000, 30000, 50000],
-                        // buttons: ['copy', 'excel', 'pdf', 'colvis']
+                        buttons: ['excel', 'pdf', 'colvis']
                     });
                     // iziToast.success({
                     //     title: 'System Message!',
