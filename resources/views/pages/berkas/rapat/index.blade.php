@@ -47,7 +47,7 @@
                                     <th>KETUA</th>
                                     <th>WAKTU</th>
                                     <th>LOKASI</th>
-                                    <th>KET</th>
+                                    <th>KETERANGAN</th>
                                     <th>UPDATE</th>
                                     <th>USER</th>
                                 </tr>
@@ -68,7 +68,7 @@
                                     <th>KETUA</th>
                                     <th>WAKTU</th>
                                     <th>LOKASI</th>
-                                    <th>KET</th>
+                                    <th>KETERANGAN</th>
                                     <th>UPDATE</th>
                                     <th>USER</th>
                                 </tr>
@@ -628,11 +628,11 @@
                 beforeSend: function() {
                     $("#ubah" + id).prop('disabled', true);
                     $("#ubah" + id).find("i").toggleClass("fa-edit fa-sync fa-spin");
-                    iziToast.info({
-                        title: 'Pesan Tunggu!',
-                        message: 'Sedang memproses data...',
-                        position: 'topRight'
-                    });
+                    // iziToast.info({
+                    //     title: 'Pesan Tunggu!',
+                    //     message: 'Sedang memproses data...',
+                    //     position: 'topRight'
+                    // });
                 },
                 success: function(res) {
                     $('#ubah').modal('show');
