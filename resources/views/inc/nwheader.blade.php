@@ -199,12 +199,12 @@
                 </li>
                 <li class="dropdown pc-h-item header-user-profile">
                     <?php $foto_profil = \DB::table('users_foto')->where('user_id', Auth::user()->id)->first(); ?>
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="javascript:void(0);"
                         role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
                         @if (empty($foto_profil->filename))
-                            <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar" style="width: 30px;height:30px;margin-left: 5px">
+                            <img src="{{ asset('images/pku/user.png') }}" alt="Header Avatar" class="user-avtar wid-30" style="width: 30px;height:30px;margin-left: 5px">
                         @else
-                            <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar" style="width: 30px;height:30px;margin-left: 5px">
+                            <img src="{{ url('storage/'.substr($foto_profil->filename,7,1000)) }}" alt="Header Avatar" class="user-avtar wid-30" style="width: 30px;height:30px;margin-left: 5px">
                         @endif
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">

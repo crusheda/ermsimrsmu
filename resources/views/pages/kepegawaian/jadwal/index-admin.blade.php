@@ -1050,6 +1050,14 @@
                 success: function(res) {
                     moment.locale('id');
                     let hideJadwal = true;
+                    const ketCuti = {
+                        L:  "LIBUR",
+                        C:  "CUTI TAHUNAN",
+                        CM: "CUTI MELAHIRKAN",
+                        CU: "CUTI UMROH",
+                        CH: "CUTI HAJI",
+                        CD: "CUTI DI LUAR TANGGUNGAN"
+                    };
 
                     // Data dari API
                     const bulanAPI = parseInt(res.jadwal.bulan, 10); // contoh: 9
@@ -1223,7 +1231,10 @@
                         content += `<li><b class="me-1">${item.singkat}</b>(<u>${item.shift}</u>) : ${item.berangkat.substring(0,5)} - ${item.pulang.substring(0,5)} WIB</li>`;
                     });
                     ['L','C','CM','CU','CH','CD'].forEach(s=>{
-                        content += `<li><b class="me-1 text-danger">${s}</b>(<u class="text-danger">${s==='L'?'LIBUR':'CUTI'}</u>)</li>`;
+                        content += `<li>
+                            <b class="me-1 text-danger">${s}</b>
+                            (<u class="text-danger">${ketCuti[s]}</u>)
+                        </li>`;
                     });
                     content += `</ul></label></div></div></div>`;
 

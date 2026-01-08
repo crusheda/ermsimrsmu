@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 
@@ -22,12 +23,12 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers, ThrottlesLogins;
 
     public function showLoginForm()
     {
-        // return view('pages.auth.login');
-        return redirect()->route('auth.login');
+        return view('pages.auth.login');
+        // return redirect()->route('auth.login');
         // return redirect()->route('login');
     }
 

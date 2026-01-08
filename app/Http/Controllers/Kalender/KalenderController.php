@@ -30,7 +30,12 @@ class KalenderController extends Controller
         ];
 
         // include relasi ruangan
-        $data = eruang::with('ruangan')->leftJoin('users','eruang.id_user','=','users.id')->select('eruang.*','users.nama as nama_user')->get();
+        $data = eruang::with('ruangan')
+                        ->leftJoin('users','eruang.id_user','=','users.id')
+                        ->select('eruang.*','users.nama as nama_user')
+                        ->whereNull('eruang.deleted_at')
+                        ->whereNull('eruang.status_penolakan')
+                        ->get();
 
         $events = [];
 

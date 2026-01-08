@@ -16,6 +16,11 @@
             </div>
             <div class="card my-4 shadow">
                 <div class="card-body">
+                    @if(session('error'))
+                        <div class="alert alert-danger mb-3">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <h5 class="text-primary">Selamat Datang! 👋</h5>
                     <p class="text-muted">Silakan masuk terlebih dahulu.</p>
                     <form method="POST" action="{{ route('login') }}">
@@ -43,7 +48,7 @@
                         </div>
                         <div class="d-flex mt-1 justify-content-between align-items-center">
                             <div class="form-check">
-                                <input class="form-check-input input-primary" type="checkbox" name="remember" id="remember {{ old('remember') ? 'checked' : '' }}">
+                                <input class="form-check-input input-primary" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                 <label class="form-check-label text-muted" for="customCheckc1">Ingat Saya</label>
                             </div>
                             <h6 class="text-secondary f-w-400 mb-0"><a href="{{ route('lupa.password.get') }}">Lupa Password?</a></h6>
@@ -70,7 +75,7 @@
                             </span>
                         @enderror
                         <div class="d-grid mt-3">
-                            <button class="btn btn-primary" type="submit">Log in</button>
+                            <button id="btn-login" class="btn btn-primary" type="submit">Log in</button>
                         </div>
                     </form>
                     <div class="d-flex justify-content-between align-items-end mt-4">
@@ -103,6 +108,18 @@
             }
         });
 
+        $('form').on('submit', function () {
+            const btn = $('#btn-login');
+
+            btn.prop('disabled', true).text('Memproses...');
+
+            setTimeout(() => {
+                $('#btn-login').prop('disabled', false).text('Log in');
+            }, 7000);
+
+            return true; // tetap submit
+        });
+
         // $("#btn-login").on("click", function() {
         //     console.log('masuk');
         // });
@@ -110,6 +127,9 @@
 
     function reloadCaptcha() {
         $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             url: "/captcha/api/math",
             type: 'GET',
             dataType: 'json', // added data type
