@@ -38,7 +38,8 @@
         }
     </script>
 
-    <title>Simrsmu v3.1 - {{ Auth::user()->name }}</title><!-- [Meta] -->
+    <title>Simrsmu v3.1 - {{ Auth::user()->name }}</title>
+    <!-- [Meta] -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,18 +48,25 @@
     <meta name="author" content="Yussuf Faisal" />
     <link rel="shortcut icon" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/logo/logo_new_light.png') }}">
-    <link rel="icon" type="image/png" sizes="96
-    x96" href="{{ asset('images/logo/logo_new_light.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/logo/logo_new_light.png') }}">
     <link rel="stylesheet" href="{{ asset('fonts/inter/inter.css') }}" id="main-font-link">
+    <!-- dragula css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dragula.min.css') }}">
+    <!-- quill css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/quill.core.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/quill.snow.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/quill.bubble.css') }}">
     <!-- [phosphor Icons] https://phosphoricons.com/ -->
     <link rel="stylesheet" href="{{ asset('fonts/phosphor/duotone/style.css') }}">
     <!-- [Tabler Icons] https://tablericons.com -->
-    <link rel="stylesheet" href="{{ asset('fonts/tabler-icons.min.css') }}"><!-- [Feather Icons] https://feathericons.com -->
+    <link rel="stylesheet" href="{{ asset('fonts/tabler-icons.min.css') }}">
+    <!-- [Feather Icons] https://feathericons.com -->
     <link rel="stylesheet" href="{{ asset('fonts/feather.css') }}">
     <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
     <link rel="stylesheet" href="{{ asset('fonts/fontawesome.css') }}">
     <!-- [Material Icons] https://fonts.google.com/icons -->
-    <link rel="stylesheet" href="{{ asset('fonts/material.css') }}"><!-- [Template CSS Files] -->
+    <link rel="stylesheet" href="{{ asset('fonts/material.css') }}">
+    <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('css/style-preset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/uikit.css') }}">
@@ -82,7 +90,6 @@
     {{-- <link rel="stylesheet" href="{{ asset('css/plugins/croppr.min.css') }}"> --}}
     {{-- LIGHTBOX --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ asset('css/cropper.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/notifier.css') }}">
     <link href="{{ asset('libs/magnific-popup/magnific-popup.css') }}" rel="stylesheet" type="text/css" />
@@ -239,6 +246,9 @@
 
     <!-- DatePicker js -->
     <script src="{{ asset('js/plugins/datepicker-full.min.js') }}"></script>
+
+    <!-- quill js -->
+    <script src="{{ asset('js/plugins/quill.min.js') }}"></script>
 
     {{-- DEARFLIP / 3D FLIPBOOK --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/@dearhive/dearflip-jquery-flipbook@1.7.3/dflip/js/dflip.min.js"></script> --}}
