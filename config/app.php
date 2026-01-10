@@ -178,7 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ViewServiceProvider::class, // CUSTOM NOTIFICATION FOR SDI
-        Milon\Barcode\BarcodeServiceProvider::class,
+        // Milon\Barcode\BarcodeServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
     ],
