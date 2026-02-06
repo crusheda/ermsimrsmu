@@ -15,7 +15,7 @@ class CreateTablePerbaikanIt extends Migration
     {
         Schema::create('perbaikan_it', function (Blueprint $table) {
             $table->id();
-            $table->string('tiket_id', 300)->comment('ID Tiket Telegram')->nullable();
+            $table->string('tiket_id', 300)->comment('ID Tiket Whatsapp')->nullable();
 
                 // $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
                 // $table->foreign('pegawai_id')->references('id')->on('users');
@@ -24,6 +24,7 @@ class CreateTablePerbaikanIt extends Migration
                 $table->string('filename', 300)->nullable();
 
             $table->string('nama', 300)->comment('Nama Lengkap')->nullable();
+            $table->bigInteger('no_wa', 300)->comment('No. Whatsapp')->nullable();
             $table->string('unit', 300)->nullable();
             $table->string('estimasi', 300)->comment('Estimasi Pengerjaan Sampai Selesai')->nullable();
 
@@ -44,6 +45,11 @@ class CreateTablePerbaikanIt extends Migration
             $table->integer('user_kerjakan')->nullable();
             $table->integer('user_selesai')->nullable();
             $table->integer('user_tolak')->nullable();
+
+            $table->string('nama_user_terima',300)->nullable();
+            $table->string('nama_user_kerjakan',300)->nullable();
+            $table->string('nama_user_selesai',300)->nullable();
+            $table->string('nama_user_tolak',300)->nullable();
 
             $table->softDeletes();
             $table->timestamps();
