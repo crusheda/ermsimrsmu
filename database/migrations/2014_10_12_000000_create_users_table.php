@@ -83,6 +83,7 @@ class CreateUsersTable extends Migration
             $table->string('nama')->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->datetime('last_update_password')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
