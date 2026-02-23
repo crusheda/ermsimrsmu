@@ -16,9 +16,7 @@ class CreateTablePerbaikanIt extends Migration
         Schema::create('perbaikan_it', function (Blueprint $table) {
             $table->id();
             $table->string('tiket_id', 300)->comment('ID Tiket Whatsapp')->nullable();
-
-                // $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
-                // $table->foreign('pegawai_id')->references('id')->on('users');
+            $table->integer('kategori_id')->comment('ID Kategori Tiket')->nullable();
 
                 $table->string('title', 200)->nullable();
                 $table->string('filename', 300)->nullable();
