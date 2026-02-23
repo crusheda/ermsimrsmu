@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('deskripsi', 500)->nullable();
             $table->boolean('status')->default(true)->comment('0 = Tidak Aktif, 1 = Aktif');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
