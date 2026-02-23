@@ -18,6 +18,9 @@ class CreateTablePerbaikanIt extends Migration
             $table->string('tiket_id', 300)->comment('ID Tiket Whatsapp')->nullable();
             $table->integer('kategori_id')->comment('ID Kategori Tiket')->nullable();
 
+                $table->unsignedInteger('pegawai_id')->comment('ID from Table Users');
+                $table->foreign('pegawai_id')->references('id')->on('users');
+
                 $table->string('title', 200)->nullable();
                 $table->string('filename', 300)->nullable();
 
