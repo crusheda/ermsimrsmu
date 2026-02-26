@@ -25,7 +25,7 @@ class CreateTablePerbaikanIt extends Migration
                 $table->string('filename', 300)->nullable();
 
             $table->string('nama', 300)->comment('Nama Lengkap')->nullable();
-            $table->bigInteger('no_wa', 300)->comment('No. Whatsapp')->nullable();
+            $table->bigInteger('no_wa')->comment('No. Whatsapp')->nullable();
             $table->string('unit', 300)->nullable();
             $table->string('estimasi', 300)->comment('Estimasi Pengerjaan Sampai Selesai')->nullable();
 
@@ -51,6 +51,9 @@ class CreateTablePerbaikanIt extends Migration
             $table->string('nama_user_kerjakan',300)->nullable();
             $table->string('nama_user_selesai',300)->nullable();
             $table->string('nama_user_tolak',300)->nullable();
+
+            $table->boolean('wa_sent')->default(false);
+            $table->text('wa_error')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
