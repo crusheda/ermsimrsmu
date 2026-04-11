@@ -57,7 +57,8 @@ class SurtugController extends Controller
     {
         $show = surtug::join('users','users.id','=','kepegawaian_surtug.user')
                         ->select('kepegawaian_surtug.*','users.nama as nama_user')
-                        ->where('kepegawaian_surtug.id',$id)
+                        // ->where('kepegawaian_surtug.id',$id)
+                        ->whereJsonContains('kepegawaian_surtug.pegawai_id', (string) $id)
                         ->orderBy('kepegawaian_surtug.updated_at','desc')
                         ->get();
         $users  = users::where('nik','!=',null)->orderBy('nama', 'asc')->get();
