@@ -221,11 +221,7 @@
                         <input type="file" class="form-control mb-2" id="filex" name="filex" accept="application/pdf">
                         <div class="alert alert-secondary">
                             <small>
-                                @if (Auth::user()->getPermission('admin_regulasi_humas'))
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>5 mb</strong><br>
-                                @else
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
-                                @endif
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>10 mb</strong><br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (PDF)
                             </small>
                         </div>
@@ -293,11 +289,7 @@
                             <small>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Apabila terdapat kesalahan File Upload, Anda dapat melakukan <b>Input Dokumen Ulang</b> di bawah ini<br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> Hubungi Admin untuk melakukan penghapusan berkas<br>
-                                @if (Auth::user()->getPermission('admin_regulasi_humas'))
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>10 mb</strong><br>
-                                @else
-                                    <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>2 mb</strong><br>
-                                @endif
+                                <i class="fa-fw fas fa-caret-right nav-icon"></i> Batas ukuran maksimum dokumen adalah <strong>10 mb</strong><br>
                                 <i class="fa-fw fas fa-caret-right nav-icon"></i> File yang diupload berupa Dokumen Scan (<b>PDF</b>)
                             </small>
                         </div>

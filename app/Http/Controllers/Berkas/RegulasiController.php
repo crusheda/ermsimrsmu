@@ -88,7 +88,7 @@ class RegulasiController extends Controller
     {
         $tgl = Carbon::now()->isoFormat('dddd, D MMMM Y, HH:mm a');
 
-        if (
+        if ( // Apabila Jenis Regulasi yang diupload adalah UU, Perpu, PP, Perpres, Perment, atau Perda, maka tidak perlu mengisi kolom Sah, Pembuat, dan Unit (DEWI)
             $request->jns_regulasi == 7 ||
             $request->jns_regulasi == 8 ||
             $request->jns_regulasi == 9 ||
@@ -97,11 +97,11 @@ class RegulasiController extends Controller
             $request->jns_regulasi == 12
             ) {
             $request->validate([
-                'file' => ['max:5000','mimes:pdf'],
+                'file' => ['max:10000','mimes:pdf'],
             ]);
-        } else {
+        } else { // Apabila Jenis Regulasi yang diupload adalah Kebijakan, Panduan, Pedoman, Program, SPO, atau PPK, maka wajib mengisi kolom Sah, Pembuat, dan Unit (KESEKRETARIATAN)
             $request->validate([
-                'file' => ['max:2000','mimes:pdf'],
+                'file' => ['max:10000','mimes:pdf'],
             ]);
         }
 
@@ -175,7 +175,7 @@ class RegulasiController extends Controller
         $tgl = Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:ss');
         $uploadedFile = $request->file('file');
 
-        if (
+        if ( // Apabila Jenis Regulasi yang diupload adalah UU, Perpu, PP, Perpres, Perment, atau Perda, maka tidak perlu mengisi kolom Sah, Pembuat, dan Unit (DEWI)
             $request->jns_regulasi == 7 ||
             $request->jns_regulasi == 8 ||
             $request->jns_regulasi == 9 ||
@@ -188,10 +188,10 @@ class RegulasiController extends Controller
                     'file' => ['max:10000','mimes:pdf'],
                 ]);
             }
-        } else {
+        } else { // Apabila Jenis Regulasi yang diupload adalah Kebijakan, Panduan, Pedoman, Program, SPO, atau PPK, maka wajib mengisi kolom Sah, Pembuat, dan Unit (KESEKRETARIATAN)
             if ($uploadedFile != null) {
                 $request->validate([
-                    'file' => ['max:2000','mimes:pdf'],
+                    'file' => ['max:10000','mimes:pdf'],
                 ]);
             }
         }
